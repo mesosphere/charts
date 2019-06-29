@@ -14,7 +14,7 @@ For issues and support for Helm and Charts see [Support Channels](CONTRIBUTING.m
 To add these charts for your local client, run `helm repo add`:
 
 ```bash
-$ helm repo add mesosphere https://TODO/
+$ helm repo add mesosphere https://raw.githubusercontent.com/mesosphere/charts/master/docs/staging/
 "mesosphere" has been added to your repositories
 ```
 
@@ -28,7 +28,7 @@ Before contributing a Chart, become familiar with the format. Note that the upst
 
 ## Repository Structure
 
-This GitHub repository contains the source for the packaged and versioned charts released in the TODO.
+This GitHub repository contains the source for the packaged and versioned charts released in the [helm repo](https://raw.githubusercontent.com/mesosphere/charts/master/docs/staging/).
 
 The Charts in the `stable/` directory in the master branch of this repository match the latest packaged Chart in the Chart Repository, though there may be previous versions of a Chart available in that Chart Repository.
 
