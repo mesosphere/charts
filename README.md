@@ -5,7 +5,7 @@ Use this repository to submit Mesosphere owned Charts for Helm. Charts are curat
 
 ## Where to find us
 
-For general Helm Chart discussions join the Konvoy (#eng-konvoy) room in [Slack](https://mesosphere.slack.com/).
+For general Helm Chart discussions join the Konvoy (#kubernetes) room in [Slack](https://mesosphere.slack.com/).
 
 For issues and support for Helm and Charts see [Support Channels](CONTRIBUTING.md#support-channels).
 
@@ -14,11 +14,11 @@ For issues and support for Helm and Charts see [Support Channels](CONTRIBUTING.m
 To add these charts for your local client, run `helm repo add`:
 
 ```bash
-$ helm repo add mesosphere https://TODO/
-"mesosphere" has been added to your repositories
+$ helm repo add mesosphere-staging https://mesosphere.github.io/charts/staging
+"mesosphere-staging" has been added to your repositories
 ```
 
-You can then run `helm search mesosphere` to see the charts.
+You can then run `helm search mesosphere-staging` to see the charts.
 
 ## Chart Format
 
@@ -28,7 +28,7 @@ Before contributing a Chart, become familiar with the format. Note that the upst
 
 ## Repository Structure
 
-This GitHub repository contains the source for the packaged and versioned charts released in the TODO.
+This GitHub repository contains the source for the packaged and versioned charts released in the [mesosphere-stable](https://mesosphere.github.io/charts/stable) and [mesosphere-staging](https://mesosphere.github.io/charts/staging) repos.
 
 The Charts in the `stable/` directory in the master branch of this repository match the latest packaged Chart in the Chart Repository, though there may be previous versions of a Chart available in that Chart Repository.
 
@@ -47,8 +47,7 @@ Staging Charts are those that have pending contributions [upstream](https://gith
 
 We'd love for you to contribute a Chart. Please consider contributing upstream first. Please read our [Contribution Guide](CONTRIBUTING.md) for more information on how you can contribute Charts.
 
-Note: We use the same [workflow](https://github.com/kubernetes/community/blob/master/contributors/devel/development.md#workflow),
-and [License](LICENSE).
+Note: We use the same [workflow](https://github.com/kubernetes/community/blob/master/contributors/devel/development.md#workflow).
 
 ## Review Process
 
