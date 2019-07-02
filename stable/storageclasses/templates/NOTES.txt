@@ -1,0 +1,15 @@
+{{- $localUsed := include "storageclasses.localUsed" . -}}
+{{- if $localUsed -}}
+The following directories have been created on worker nodes:
+
+{{- range .Values.storageclasses }}
+{{- if eq .type "local" }}
+/mnt/{{ .name }}
+{{- end }}
+{{- end }}
+
+The directory names match their corresponding storage classes.
+By mounting volumes into these directories, they will be made available
+as persistent volume in their respective storage class.
+{{- end -}}
+

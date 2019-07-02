@@ -1,0 +1,23 @@
+{{- $localUsed := include "storageclasses.localUsed" . -}}
+{{- if $localUsed -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: local-volume-provisioner-kubeaddons-metrics
+  namespace: kubeaddons
+  labels:
+    app: local-volume-provisioner
+    release: local-volume-provisioner-kubeaddons
+    servicemonitor.kubeaddons.mesosphere.io/path: metrics
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+  - port: 8080
+    targetPort: metrics
+    name: metrics
+    protocol: TCP
+  selector:
+    app: local-volume-provisioner
+{{- end -}}
+

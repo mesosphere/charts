@@ -1,0 +1,48 @@
+# The defaultStorageClass is used to set the default storage class annotation
+# on the named storage class.
+defaultStorageClass: converged-std
+
+
+# The storageclasses are a list of StorageClass types to be added to kubernetes.
+# The names need to be unique and satisfy standard Kubernetes
+# [naming conventions](https://kubernetes.io/docs/concepts/overview/working-with-objects/names/).
+#
+# The types need to be one of the supported types of:
+#   - aws
+#   - awsebscsi
+#   - local
+#
+#   Each type may be defined more than once, for instance you may have a
+#   local storageclass for NVMe named `fast` and a local storageclass
+#   on green spinning rust named, `slow`.
+storageclasses:
+
+  # The AWS EBS CSI (Container Storage Interface) StorageClass and controller
+  # allocate and attach ebs volumes when running on the aws cloud.
+  # - name: aws-csi
+  #   type: awsebscsi
+
+  # The aws StorageClass is the legacy ebs allocator from the native provider
+  # implementation. The use of his has been deprecated in favor of
+  # CSI drivers.
+  # - name: legacy-aws
+  #   type: aws
+
+  # The local StorageClass driver and controller associate predefined block
+  # devices with a local storage class. This allows applications to use
+  # storage that is local to the workers.
+  #
+  # The mountPath is the path at which the local volume provisioner will
+  # find the disks to use for allocation.
+  - name: converged-std
+    type: local
+    mountPath: /mnt/disks
+
+  #  - name: fast
+  #    type: local
+  #    mountPath: /mnt/nvme
+
+  #  - name: slow
+  #    type: local
+  #    mountPath: /mnt/rust
+
