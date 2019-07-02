@@ -1,0 +1,5 @@
+storageclasses:
+  - name: disks
+    annotations:
+      storageclass.kubernetes.op/is-default-class: "false"
+      kubernetes.io/description: Local volume storage class

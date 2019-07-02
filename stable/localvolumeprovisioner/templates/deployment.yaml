@@ -1,0 +1,121 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: local-volume-provisioner-service-account
+  namespace: kubeaddons
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: local-volume-provisioner-role
+  namespace: kubeaddons
+rules:
+- apiGroups: [""]
+  resources: ["nodes", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["endpoints", "persistentvolumes", "pods"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["events"]
+  verbs: ["create", "patch"]
+- apiGroups: ["storage.k8s.io"]
+  resources: ["storageclasses"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: local-volume-provisioner-bind
+  namespace: kubeaddons
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: local-volume-provisioner-role
+subjects:
+- kind: ServiceAccount
+  name: local-volume-provisioner-service-account
+  namespace: kubeaddons
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: local-volume-provisioner-config
+  namespace: kubeaddons
+data:
+  storageClassMap: |
+    {{- range .Values.storageclasses }}
+    {{ .name }}:
+       hostDir: /mnt/{{ .name }}
+       mountDir: /mnt/{{ .name }}
+       blockCleanerCommand:
+         - "/scripts/shred.sh"
+         - "2"
+       volumeMode: Filesystem
+       fsType: ext4
+    {{- end }}
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: local-volume-provisioner
+  namespace: kubeaddons
+spec:
+  selector:
+    matchLabels:
+      app: local-volume-provisioner
+  template:
+    metadata:
+      labels:
+        app: local-volume-provisioner
+    spec:
+      serviceAccountName: local-volume-provisioner-service-account
+      containers:
+        - name: local-volume-provisioner
+          image: "quay.io/external_storage/local-volume-provisioner:v2.3.2"
+          securityContext:
+            privileged: true
+          imagePullPolicy: Always
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: JOB_CONTAINER_IMAGE
+              value: "quay.io/external_storage/local-volume-provisioner:v2.3.2"
+          ports:
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: provisioner-config
+              mountPath: /etc/provisioner/config
+              readOnly: true
+            - name: local-volume-provisioner-dev
+              mountPath: /dev
+            {{- range .Values.storageclasses }}
+            - name: {{ .name }}
+              mountPath: /mnt/{{ .name }}
+              mountPropagation: "HostToContainer"
+            {{- end }}
+      volumes:
+        - name: provisioner-config
+          configMap:
+            name: local-volume-provisioner-config
+        - name: local-volume-provisioner-dev
+          hostPath:
+            path: /dev
+        {{- range .Values.storageclasses }}
+        - name: {{ .name }}
+          hostPath:
+            path: /mnt/{{ .name }}
+        {{- end }}

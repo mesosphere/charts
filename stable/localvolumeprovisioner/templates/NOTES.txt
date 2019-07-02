@@ -1,0 +1,9 @@
+The following directories have been created on worker nodes:
+
+{{- range .Values.storageclasses }}
+/mnt/{{ .name }}
+{{- end }}
+
+The directory names match their corresponding storage classes.
+By mounting volumes into these directories, they will be made available
+as persistent volume in their respective storage class.
