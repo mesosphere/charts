@@ -5,8 +5,7 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
-GIT_REMOTE_URL ?= https://mesosphere:$(GITHUB_USER_TOKEN)@github.com/mesosphere/charts.git
-
+GIT_REMOTE_URL := $(shell git remote get-url origin)
 # Extract the github user from the origin remote url.
 # This let's the 'publish' task work with forks.
 # Supports both SSH and HTTPS git url formats:
@@ -42,8 +41,6 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 .PHONY: publish
 publish:
 	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
-	@ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
-	@chmod 0644 /etc/ssh/ssh_known_hosts
 	@git branch -d master >/dev/null 2>&1 || true
 	@git checkout -B master
 	@git pull --rebase publish master -s recursive -X theirs
