@@ -92,6 +92,10 @@ spec:
                   fieldPath: metadata.namespace
             - name: JOB_CONTAINER_IMAGE
               value: "quay.io/external_storage/local-volume-provisioner:v2.3.2"
+          ports:
+            - name: metrics
+              containerPort: 8080
+              protocol: TCP
           volumeMounts:
             - name: provisioner-config
               mountPath: /etc/provisioner/config
