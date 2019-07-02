@@ -38,6 +38,8 @@ publish:
 	@make all
 	@git add .
 	@git commit -m "$(LAST_COMMIT_MESSAGE)"
+	@ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
+	@chmod 0644 /etc/ssh/ssh_known_hosts
 	@git push -f publish master
 	@git checkout -
 
