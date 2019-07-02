@@ -1,16 +1,11 @@
-{{- range .Values.storageclasses }}
 ---
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: {{ .name }}
-  {{- if .annotations }}
+  name: localvolumeprovisioner
   annotations:
-  {{- range $key, $value := .annotations }}
-    {{ $key }}: {{ $value | quote }}
-  {{- end }}
-  {{- end }}
+    storageclass.kubernetes.io/is-default-class: {{ .Values.storageclassdefault | default "true" | quote }}
+    kubernetes.io/description: Local volume provisioner StorageClass
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Delete
-{{- end }}
