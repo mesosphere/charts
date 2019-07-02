@@ -35,7 +35,7 @@ publish:
 	@git checkout -B master
 	@make all
 	@git add .
-	@git commit -m $(LAST_COMMIT_MESSAGE)
+	@git commit -m "$(LAST_COMMIT_MESSAGE)"
 	@git push -f publish master
 	@git checkout -
 
