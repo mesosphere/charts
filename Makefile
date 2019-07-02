@@ -5,6 +5,8 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
+PULL_REQUEST_ID := pullrequest_publish_$(shell /bin/bash -c "echo $$RANDOM")
+
 TMPDIR := $(shell mktemp -d)
 HELM := $(shell bash -c "command -v helm")
 ifeq ($(HELM),)
@@ -21,10 +23,22 @@ clean:
 	@rm -rf docs/staging docs/stable
 
 .PHONY: stagingrepo
-stagingrepo: docs/staging/index.yaml $(STAGING_TARGETS)
+stagingrepo: $(STAGING_TARGETS) | docs/staging/index.yaml
 
 .PHONY: stablerepo
-stablerepo: docs/stable/index.yaml $(STABLE_TARGETS)
+stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
+
+.PHONY: publish-ci
+publish-ci:
+	@git remote add publish git@github.com:mesosphere/charts >/dev/null 2>&1 || true
+	@git branch -d master >/dev/null 2>&1 || true
+	@git checkout -B master
+	@make all
+	@git add .
+	@git commit -m 'docs: publish repo updates'
+	@git push -f publish $(PULL_REQUEST_ID)
+	@git request-pull master ./
+	@git checkout -
 
 .PHONY: publish
 publish:
@@ -33,7 +47,7 @@ publish:
 	@git checkout -B master
 	@make all
 	@git add .
-	@git commit -m 'publish repo'
+	@git commit -m 'docs: publish repo updates'
 	@echo git push -f publish master
 	@git checkout -
 
@@ -50,8 +64,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@)
+	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://mesosphere.github.io/charts/$(patsubst docs/%index.yaml,%,$@)
 
 $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 	$(HELM) --home $(TMPDIR)/.helm init --client-only
-	
