@@ -5,6 +5,8 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
+LAST_COMMIT_MESSAGE := $(shell git reflog -1 | sed 's/^.*: //')
+
 TMPDIR := $(shell mktemp -d)
 HELM := $(shell bash -c "command -v helm")
 ifeq ($(HELM),)
@@ -21,10 +23,10 @@ clean:
 	@rm -rf docs/staging docs/stable
 
 .PHONY: stagingrepo
-stagingrepo: docs/staging/index.yaml $(STAGING_TARGETS)
+stagingrepo: $(STAGING_TARGETS) | docs/staging/index.yaml
 
 .PHONY: stablerepo
-stablerepo: docs/stable/index.yaml $(STABLE_TARGETS)
+stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 
 .PHONY: publish
 publish:
@@ -33,8 +35,8 @@ publish:
 	@git checkout -B master
 	@make all
 	@git add .
-	@git commit -m 'publish repo'
-	@echo git push -f publish master
+	@git commit -m $(LAST_COMMIT_MESSAGE)
+	@git push -f publish master
 	@git checkout -
 
 $(HELM):
@@ -50,8 +52,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@)
+	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://mesosphere.github.io/charts/$(patsubst docs/%index.yaml,%,$@)
 
 $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 	$(HELM) --home $(TMPDIR)/.helm init --client-only
-	
