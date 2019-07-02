@@ -36,7 +36,7 @@ publish:
 	@make all
 	@git add .
 	@git commit -m $(LAST_COMMIT_MESSAGE)
-	@echo git push -f publish master
+	@git push -f publish master
 	@git checkout -
 
 $(HELM):
