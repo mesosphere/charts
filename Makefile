@@ -20,7 +20,9 @@ all: stagingrepo stablerepo
 
 .PHONY: clean
 clean:
-	@rm -rf docs/staging docs/stable
+	@rm -rf docs/staging/*.tgz docs/stable/*.tgz
+	@git checkout 3ea869 docs/staging/index.yaml
+	@git checkout 3ea869 docs/stable/index.yaml
 
 .PHONY: stagingrepo
 stagingrepo: $(STAGING_TARGETS) | docs/staging/index.yaml
