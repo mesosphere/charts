@@ -1,3 +1,13 @@
 apiVersion: v1
-entries: {}
-generated: 1970-01-01T00:00:00.000000000-00:00
+entries:
+  localvolumeprovisioner:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-07-03T14:42:32.746124739Z
+    description: Local persistent volume provisioner for konvoy
+    digest: 726a8d1a9ccc8576b31d3764e8b7db99c1a9dca29043a3e0392644d25267a261
+    name: localvolumeprovisioner
+    urls:
+    - https://mesosphere.github.io/charts/stable/localvolumeprovisioner-0.1.1.tgz
+    version: 0.1.1
+generated: 2019-07-03T14:42:32.745771951Z
