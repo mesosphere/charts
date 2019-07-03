@@ -1,0 +1,28 @@
+{{- range .Values.storageClasses }}
+{{- if eq .type "aws-ebs" }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .name }}
+  annotations:
+    kubernetes.io/description: AWS default Storage class
+  {{- if eq $.Values.defaultStorageClass .name }}
+    storageclass.kubernetes.op/is-default-class: "true"
+  {{- end }}
+  {{- if .annotations }}
+  {{- range $key, $value := .annotations }}
+    {{- if eq $key "storageclass.kubernetes.op/is-default-class" }}
+      {{ fail "cannot set storageclass.kubernetes.op/is-default-class outside of defaultStorageClass value" }}
+    {{- end }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
+provisioner: kubernetes.io/aws-ebs
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+{{- range $key, $value := .parameters }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+reclaimPolicy: Delete
+{{- end }}
+{{- end }}

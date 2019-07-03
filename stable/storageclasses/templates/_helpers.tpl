@@ -36,7 +36,7 @@ Validate StorageClass types
 */}}
 {{- define "storageclasses.validateTypes" -}}
   {{- range .Values.storageClasses -}}
-    {{- if has (.type | lower) (list "local" "aws" "awsebscsi") | not -}}
+    {{- if has (.type | lower) (list "local" "aws-ebs" "awsebscsi") | not -}}
       {{- printf "%s is not a supported type" .type | fail -}}
     {{- end -}}
   {{- end -}}
