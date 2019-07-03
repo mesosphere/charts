@@ -9,7 +9,7 @@ defaultStorageClass: converged-std
 #
 # The types need to be one of the supported types of:
 #   - aws-ebs
-#   - awsebscsi
+#   - ebs-csi-driver
 #   - local
 #
 #   Each type may be defined more than once, for instance you may have a
@@ -20,7 +20,7 @@ storageclasses:
   # The AWS EBS CSI (Container Storage Interface) StorageClass and controller
   # allocate and attach ebs volumes when running on the aws cloud.
   # - name: aws-csi
-  #   type: awsebscsi
+  #   type: ebs-csi-driver
 
   # The aws StorageClass is the legacy ebs allocator from the native provider
   # implementation. The use of his has been deprecated in favor of

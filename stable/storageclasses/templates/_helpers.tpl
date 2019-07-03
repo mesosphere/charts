@@ -36,7 +36,7 @@ Validate StorageClass types
 */}}
 {{- define "storageclasses.validateTypes" -}}
   {{- range .Values.storageClasses -}}
-    {{- if has (.type | lower) (list "local" "aws-ebs" "awsebscsi") | not -}}
+    {{- if has (.type | lower) (list "local" "aws-ebs" "ebs-csi-driver") | not -}}
       {{- printf "%s is not a supported type" .type | fail -}}
     {{- end -}}
   {{- end -}}
@@ -54,4 +54,17 @@ Determine if "local" type is used
     {{- end -}}
   {{- end -}}
 {{ $is_local }}
+{{- end -}}
+
+{{/*
+Determine if "ebs-csi-driver" type is used
+*/}}
+{{- define "storageclasses.ebsCSIDriverUsed" -}}
+  {{- $is_ebscsi := false -}}
+  {{- range .Values.storageClasses -}}
+    {{- if eq (.type | lower) "ebs-csi-driver" -}}
+      {{- $is_ebscsi = true -}}
+    {{- end -}}
+  {{- end -}}
+{{ $is_ebscsi }}
 {{- end -}}
