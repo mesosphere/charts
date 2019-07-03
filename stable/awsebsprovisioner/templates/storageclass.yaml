@@ -1,11 +1,12 @@
----
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: localvolumeprovisioner
+  name: awsebsprovisioner
   annotations:
+    kubernetes.io/description: AWS EBS Storage class
     storageclass.kubernetes.io/is-default-class: {{ .Values.storageclass.isDefault | default "true" | quote }}
-    kubernetes.io/description: Local volume provisioner StorageClass
-provisioner: kubernetes.io/no-provisioner
+provisioner: kubernetes.io/aws-ebs
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
+parameters:
+  type: {{ .Values.storageclass.type | quote }}
