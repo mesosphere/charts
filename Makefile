@@ -5,6 +5,14 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
+GIT_REMOTE_URL := $(shell git remote get-url origin)
+# Extract the github user from the origin remote url.
+# This let's the 'publish' task work with forks.
+# Supports both SSH and HTTPS git url formats:
+# - https://github.com/mesosphere/charts.git
+# - git@github.com:mesosphere/charts.git
+GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
+
 LAST_COMMIT_MESSAGE := $(shell git reflog -1 | sed 's/^.*: //')
 
 TMPDIR := $(shell mktemp -d)
@@ -32,7 +40,7 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 
 .PHONY: publish
 publish:
-	@git remote add publish git@github.com:mesosphere/charts >/dev/null 2>&1 || true
+	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
 	@git branch -d master >/dev/null 2>&1 || true
 	@git checkout -B master
 	@make all
@@ -56,7 +64,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://mesosphere.github.io/charts/$(patsubst docs/%index.yaml,%,$@)
+	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst docs/%index.yaml,%,$@)
 
 $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 	$(HELM) --home $(TMPDIR)/.helm init --client-only
