@@ -46,8 +46,12 @@ publish:
 	@make all
 	@git add .
 	@git commit -m "$(LAST_COMMIT_MESSAGE)"
-	@ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
-	@chmod 0644 /etc/ssh/ssh_known_hosts
+	@mkdir -p $(HOME)/.ssh
+	@chmod 0700 $(HOME)/.ssh
+	@touch $(HOME)/.ssh/known_hosts
+	@ssh-keygen -R github.com -f $(HOME)/.ssh/known_hosts
+	@ssh-keyscan github.com >> $(HOME)/.ssh/known_hosts
+	@chmod 0644 $(HOME)/.ssh/known_hosts
 	@git push -f publish master
 	@git checkout -
 
