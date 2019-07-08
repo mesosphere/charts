@@ -1,38 +1,6 @@
-image:
-  repository: mesosphere/kommander
-  tag: 1.24.2
-  pullPolicy: IfNotPresent
-replicas: 1
-
-extraInitContainers:
-
-resources:
-  requests:
-    memory: "128Mi"
-    cpu: "1000m"
-  limits:
-    memory: "512Mi"
-    cpu: "2000m"
-
-readinessProbe:
-  initialDelaySeconds: 15
-  periodSeconds: 3
-livenessProbe:
-  initialDelaySeconds: 15
-  periodSeconds: 3
-
-### This must match the serviceName set in the ingress backend below
-service:
-  name: kommander
-
-ingress:
-  # extraAnnotations:
-  #   ingress.kubernetes.io/foo: bar
-  paths:
-    # kommander
-    - backend:
-        ### This must match the service name set above
-        serviceName: kommander
-        servicePort: 4000
-      path: /ops/portal/kommander
-
+kommander:
+  image:
+    repository: mesosphere/kommander
+    tag: 1.24.2
+    pullPolicy: IfNotPresent
+  replicas: 1
