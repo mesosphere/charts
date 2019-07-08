@@ -5,7 +5,7 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
-GIT_REMOTE_URL := git@github.com:mesosphere/charts
+GIT_REMOTE_URL := git@github.com:mesosphere/charts.git
 # Extract the github user from the origin remote url.
 # This let's the 'publish' task work with forks.
 # Supports both SSH and HTTPS git url formats:
