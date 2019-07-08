@@ -43,6 +43,7 @@ publish:
 	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
 	@git branch -d master >/dev/null 2>&1 || true
 	@git checkout -B master
+	@git pull --rebase publish master -s recursive -X theirs
 	@make all
 	@git add .
 	@git commit -m "$(LAST_COMMIT_MESSAGE)"
