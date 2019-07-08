@@ -1,0 +1,6 @@
+kommander:
+  image:
+    repository: mesosphere/kommander
+    tag: 1.24.2
+    pullPolicy: IfNotPresent
+  replicas: 1

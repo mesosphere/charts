@@ -1,0 +1,56 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: observableclusters.stable.mesosphere.com
+spec:
+  group: stable.mesosphere.com
+  versions:
+    - name: v1
+      served: true
+      storage: true
+  scope: Cluster
+  names:
+    plural: observableclusters
+    singular: observablecluster
+    kind: ObservableCluster
+    shortNames:
+      - oc
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          properties:
+            apiServer:
+              type: string
+              minLength: 1
+              pattern: ^https?://
+            authenticationSecretName:
+              type: string
+              minLength: 1
+            displayName:
+              type: string
+              minLength: 1
+              maxLength: 64
+          required:
+            - apiServer
+            - authenticationSecretName
+            - displayName
+      required:
+        - spec
+  additionalPrinterColumns:
+    - name: Display Name
+      type: string
+      description: Cluster display name
+      JSONPath: .spec.displayName
+    - name: API Server
+      type: string
+      description: The URL of the Kubernetes API server
+      JSONPath: .spec.apiServer
+    - name: Authentication Secret
+      type: string
+      description: Secret holding the data to authenticate against the Kubernetes API server
+      JSONPath: .spec.authenticationSecretName
+    - name: Age
+      type: date
+      JSONPath: .metadata.creationTimestamp
