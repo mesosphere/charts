@@ -7,5 +7,5 @@ metadata:
     storageclass.kubernetes.io/is-default-class: {{ .Values.storageclass.isDefault | default "true" | quote }}
     kubernetes.io/description: Local volume provisioner StorageClass
 provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: {{ .Values.storageclass.volumeBindingMode quote }}
+volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
