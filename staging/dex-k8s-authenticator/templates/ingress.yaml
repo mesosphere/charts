@@ -8,7 +8,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     app: {{ template "dex-k8s-authenticator.name" . }}
-    env: {{ default "dev" .Values.global.deployEnv }}
+    env: {{ .Values.global.deployEnv }}
     chart: {{ template "dex-k8s-authenticator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}

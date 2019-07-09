@@ -1,0 +1,13 @@
+# A ConfigMap that stores customized `dex-k8s-authenticator` HTML templates.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "dex-k8s-authenticator.fullname" . }}-html-templates
+  labels:
+    app: {{ template "dex-k8s-authenticator.fullname" . }}
+    env: {{ .Values.global.deployEnv }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+{{ (.Files.Glob "html-templates/*").AsConfig | indent 2 }}
