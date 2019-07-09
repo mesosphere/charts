@@ -23,7 +23,7 @@ spec:
       containers:
         - name: kommander
           image: "{{ .Values.kommander.image.repository }}:{{ .Values.kommander.image.tag }}"
-          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          imagePullPolicy: "{{ .Values.kommander.image.pullPolicy }}"
           ports:
             - name: http
               containerPort: 4000
