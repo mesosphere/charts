@@ -1,17 +1,9 @@
 ---
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kommander
-spec:
-  finalizers:
-  - kubernetes
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kommander-deployment
-  namespace: kommander
+  namespace: {{ .Release.Namespace }}
   labels:
     app: kommander
 spec:
@@ -23,7 +15,7 @@ spec:
     metadata:
       labels:
         app: kommander
-      namespace: kommander
+      namespace: {{ .Release.Namespace }}
     spec:
       serviceAccountName: admin-user-kommander
       imagePullSecrets:

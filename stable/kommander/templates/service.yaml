@@ -5,7 +5,7 @@ metadata:
   labels:
     app: kommander
   name: kommander-svc
-  namespace: kommander
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
     - name: metrics
