@@ -10,7 +10,7 @@ metadata:
   name: {{ template "dex-k8s-authenticator.fullname" . }}
   labels:
     app: {{ template "dex-k8s-authenticator.name" . }}
-    env: {{ default "dev" .Values.global.deployEnv }}
+    env: {{ .Values.global.deployEnv }}
     chart: {{ template "dex-k8s-authenticator.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -19,13 +19,13 @@ spec:
   selector:
     matchLabels:
       app: {{ template "dex-k8s-authenticator.name" . }}
-      env: {{ default "dev" .Values.global.deployEnv }}
+      env: {{ .Values.global.deployEnv }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: {{ template "dex-k8s-authenticator.name" . }}
-        env: {{ default "dev" .Values.global.deployEnv }}
+        env: {{ .Values.global.deployEnv }}
         release: {{ .Release.Name }}
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
