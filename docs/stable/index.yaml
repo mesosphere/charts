@@ -1,13 +1,62 @@
 apiVersion: v1
 entries:
+  awsebscsiprovisioner:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-07-09T13:12:34.048053872Z
+    description: AWS EBS CSI storage provisioner for konvoy
+    digest: 1abf84a50a6dec86fd0d3b896897d8f970f853900b1bcc40f367929c95f8c8d7
+    name: awsebscsiprovisioner
+    urls:
+    - https://mesosphere.github.io/charts/stable/awsebscsiprovisioner-0.1.0.tgz
+    version: 0.1.0
+  awsebsprovisioner:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-07-09T13:12:34.048192522Z
+    description: AWS EBS storage provisioner for konvoy
+    digest: 18eb91e2f5d40e974253409ebb8ad389377d47bb85ee4308bfa09aaaa9e035d7
+    name: awsebsprovisioner
+    urls:
+    - https://mesosphere.github.io/charts/stable/awsebsprovisioner-0.1.0.tgz
+    version: 0.1.0
+  kommander:
+  - apiVersion: v1
+    appVersion: 1.24.2
+    created: 2019-07-09T13:12:34.048371429Z
+    description: Kommander
+    digest: 16a9bdfaad9901a1089069ca09196582094713cb6ce910f1a675b2d1c5b219a7
+    name: kommander
+    urls:
+    - https://mesosphere.github.io/charts/stable/kommander-0.1.0.tgz
+    version: 0.1.0
+  localpathprovisioner:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-07-09T13:12:34.048530199Z
+    description: Local path storage provisioner for konvoy
+    digest: b4d3feebc8d4eb369288ef10af0bbb807ef5be0d5cdc54efc9ac904c729dcc35
+    name: localpathprovisioner
+    urls:
+    - https://mesosphere.github.io/charts/stable/localpathprovisioner-0.1.0.tgz
+    version: 0.1.0
   localvolumeprovisioner:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-03T14:42:32.746124739Z
+    created: 2019-07-09T13:12:34.048908413Z
+    description: Local persistent volume provisioner for konvoy
+    digest: 109180595a3e1025028214f7dcefcdfa25356c5adae49616305d6daffe221951
+    name: localvolumeprovisioner
+    urls:
+    - https://mesosphere.github.io/charts/stable/localvolumeprovisioner-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2019-07-09T13:12:34.04870755Z
     description: Local persistent volume provisioner for konvoy
     digest: 726a8d1a9ccc8576b31d3764e8b7db99c1a9dca29043a3e0392644d25267a261
     name: localvolumeprovisioner
     urls:
     - https://mesosphere.github.io/charts/stable/localvolumeprovisioner-0.1.1.tgz
     version: 0.1.1
-generated: 2019-07-03T14:42:32.745771951Z
+generated: 2019-07-09T13:12:34.0476689Z

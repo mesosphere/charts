@@ -3,9 +3,9 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-03T14:42:32.667008092Z
+    created: 2019-07-09T13:12:33.810267611Z
     description: Authenticator for using Dex with Kubernetes
-    digest: 89a1e844a5e116cb84369daa5c209ef84360ee40e068a65ea61a1db2d6a3f40f
+    digest: 9a3816365f9b5db706f671860d62f24b11111c3389756ee5e36a152ad211d56d
     maintainers:
     - email: mhrabovcin.c@mesosphere.com
       name: Martin Hrabovcin
@@ -22,11 +22,11 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-03T14:42:32.667280943Z
+    created: 2019-07-09T13:12:33.810520958Z
     description: A Helm chart for Kubernetes
-    digest: bd2ede89b1776d8bcee0bba0f114c757bfe54b3665948b931b2d1b1f8e6950f2
+    digest: 87d68b9ad902717d921a2f4e3d5e8054c772c641cb46f3b7ff8deacae6e40685
     name: test
     urls:
     - https://mesosphere.github.io/charts/staging/test-0.1.0.tgz
     version: 0.1.0
-generated: 2019-07-03T14:42:32.666328219Z
+generated: 2019-07-09T13:12:33.809662269Z
