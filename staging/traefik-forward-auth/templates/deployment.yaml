@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "traefik-forward-auth.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+    helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      volumes:
+      {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
+      - name: etc-traefik-forward-auth-ca
+        secret:
+          secretName: {{ required "traefikForwardAuth.caCertificate.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.caCertificate.valueFrom.secretKeyRef.name }}
+          items:
+          - key:  {{ required "traefikForwardAuth.caCertificate.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.caCertificate.valueFrom.secretKeyRef.key }}
+            path: ca.crt
+      {{- end }}
+      - name: etc-traefik-forward-auth-config
+        configMap:
+          name: {{ .Release.Name }}-configmap
+          items:
+          - key: config
+            path: config.ini
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          - name: etc-traefik-forward-auth-ca
+            mountPath: "/etc/traefik-forward-auth/ca"
+            readOnly: true
+          - name: etc-traefik-forward-auth-config
+            mountPath: "/etc/traefik-forward-auth/config"
+            readOnly: true
+          env:
+            - name: CONFIG
+              value: "/etc/traefik-forward-auth/config/config.ini"
+            - name: SSL_CERT_FILE
+              value: "/etc/traefik-forward-auth/ca/ca.crt"
+            - name: LOG_LEVEL
+              value: "trace"
+            {{- if .Values.traefikForwardAuth.oidcUri }}
+            - name: PROVIDER_URI
+              value: {{ .Values.traefikForwardAuth.oidcUri | quote }}
+            {{- end }}
+            {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.name }}
+                  key: {{ required "traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.key }}
+            {{- else }}
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}
+                  key: clientSecret
+            {{- end }}
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}
+                  key: secret
+            {{- if .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef }}
+            - name: WHITELIST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name }}
+                  key: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key }}
+            {{- else }}
+            - name: WHITELIST
+              value: {{ join "," .Values.traefikForwardAuth.whitelist | quote }}
+            {{- end }}
+            - name: COOKIE_SECURE
+              value: {{ .Values.traefikForwardAuth.cookieSecure | quote }}
+            {{- if .Values.traefikForwardAuth.domain }}
+            - name: DOMAIN
+              value: {{ .Values.traefikForwardAuth.domain | quote }}
+            {{- end }}
+            {{- if .Values.traefikForwardAuth.authHost }}
+            - name: AUTH_HOST
+              value: {{ .Values.traefikForwardAuth.authHost | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 4181
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
