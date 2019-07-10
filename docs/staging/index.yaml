@@ -3,9 +3,9 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-09T21:51:38.690352904Z
+    created: 2019-07-10T09:27:26.305840958Z
     description: Authenticator for using Dex with Kubernetes
-    digest: 337fab4efb57d391aef7f0a3e417635608bcf967f1f023db2204da8344455fd2
+    digest: 49564c22ce9579dc5b63bac587a44838e9f065c2809cc288cd41685d09317da6
     maintainers:
     - email: mhrabovcin.c@mesosphere.com
       name: Martin Hrabovcin
@@ -21,7 +21,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-09T21:51:38.689757119Z
+    created: 2019-07-10T09:27:26.305237745Z
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -40,11 +40,30 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-09T21:51:38.690631444Z
+    created: 2019-07-10T09:27:26.306102713Z
     description: A Helm chart for Kubernetes
-    digest: 9f759c042f272f43093ad9979171bdad111dabd350b5e303449e4f548420c6b9
+    digest: 8a8501ddbc3bcf13090e27f7e7438823ee7d26e7af1e0f95c624d65f0695b7f1
     name: test
     urls:
     - https://mesosphere.github.io/charts/staging/test-0.1.0.tgz
     version: 0.1.0
-generated: 2019-07-09T21:51:38.689153511Z
+  traefik-forward-auth:
+  - apiVersion: v1
+    appVersion: latest
+    created: 2019-07-10T09:27:26.306489336Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: c44c1f73b743347c4fe6bb7fa2c89357d5f0316fc9dfad37aa6bbea24733e013
+    home: https://github.com/jongiddy/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: Jonathan Giddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.1.1.tgz
+    version: 0.1.1
+generated: 2019-07-10T09:27:26.304617049Z
