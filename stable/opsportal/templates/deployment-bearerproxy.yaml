@@ -1,0 +1,35 @@
+{{- if .Values.bearerproxy.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bearerproxy
+  name: bearerproxy
+spec:
+  selector:
+    matchLabels:
+      app: bearerproxy
+  template:
+    metadata:
+      labels:
+        app: bearerproxy
+    spec:
+      containers:
+        - name: kubernetes-dashboard
+          image: "{{ .Values.bearerproxy.image.repository }}:{{ .Values.bearerproxy.image.tag }}"
+          imagePullPolicy: "{{ .Values.bearerproxy.image.pullPolicy }}"
+          ports:
+            - containerPort: {{ .Values.bearerproxy.port }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "{{ .Values.bearerproxy.port }}"
+            - name: TARGET_URL
+              value: http://kubernetes-dashboard.kube-system:9090/
+            - name: BEARER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: token
+                  name: ops-portal-admin-token
+{{- end }}

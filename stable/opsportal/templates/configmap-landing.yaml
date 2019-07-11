@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: opsportal-landing-html
+  labels:
+    app: opsportal-landing
+data:
+  index.html: '{{ .Values.landing.page }}'
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opsportal-landing-conf
+  labels:
+    app: opsportal-landing
+data:
+  nginx.conf: |
+    worker_processes 1;
+    error_log /dev/stdout info;
+    events {
+        worker_connections 1024;
+    }
+    http {
+      server {
+        access_log /dev/stdout;
+        listen 80;
+        root /usr/share/nginx/html;
+        location / {
+            try_files $uri /index.html;
+        }
+        location = /index.html {
+            expires 30s;
+        }
+      }
+    }
