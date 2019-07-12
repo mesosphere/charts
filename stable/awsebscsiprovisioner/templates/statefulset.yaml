@@ -58,6 +58,7 @@ spec:
             failureThreshold: 5
         - name: cluster-driver-registrar
           image: "{{ .Values.registrar.cluster.image.repository }}:{{ .Values.registrar.cluster.image.tag }}"
+
           args:
             - --csi-address=$(ADDRESS)
             - --driver-requires-attachment=true
