@@ -3,9 +3,9 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-12T16:41:45.779836041Z
+    created: 2019-07-12T17:09:20.679676931Z
     description: Authenticator for using Dex with Kubernetes
-    digest: ff34465484883383ae2453e63c69ac7036aa5d1fc1d0fb19ff66c165c44cfff5
+    digest: f054fc1a6649781f6c14f77087426e9e1eb5ec65d036cdb8a2fda8a5da30a842
     maintainers:
     - email: mhrabovcin.c@mesosphere.com
       name: Martin Hrabovcin
@@ -21,7 +21,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-12T16:41:45.779229027Z
+    created: 2019-07-12T17:09:20.679038783Z
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -40,9 +40,9 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-12T16:41:45.780139357Z
+    created: 2019-07-12T17:09:20.679993852Z
     description: A Helm chart for Kubernetes
-    digest: d37d62bbf0a77ac19a1b5a7f60d80c11a10d18d229dd852c22c315554497f059
+    digest: fb3d08c0229f2364111e62e8020ed7689db977bbca33d05f580e66d309ad18c5
     name: test
     urls:
     - https://mesosphere.github.io/charts/staging/test-0.1.0.tgz
@@ -50,10 +50,10 @@ entries:
   traefik-forward-auth:
   - apiVersion: v1
     appVersion: latest
-    created: 2019-07-12T16:41:45.78054674Z
+    created: 2019-07-12T17:09:20.68040765Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
-    digest: 9c7059ed5c55ec25c93fae2c7d0b0a3bee8d21eee335ab92bf6d35b53e40cd42
+    digest: c772485ffdabd6699054ba74a1e9615f16142051b478c17571948d5b91150d2a
     home: https://github.com/jongiddy/traefik-forward-auth
     keywords:
     - traefik-forward-auth
@@ -66,4 +66,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.1.1.tgz
     version: 0.1.1
-generated: 2019-07-12T16:41:45.778534589Z
+generated: 2019-07-12T17:09:20.678409694Z
