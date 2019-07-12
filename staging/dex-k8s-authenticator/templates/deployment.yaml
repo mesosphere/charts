@@ -40,10 +40,14 @@ spec:
           containerPort: {{ default "5555" .Values.dexK8sAuthenticator.port }}
           protocol: TCP
         livenessProbe:
+          periodSeconds: {{ .Values.dexK8sAuthenticator.livenessProbe.periodSeconds }}
+          initialDelaySeconds: {{ .Values.dexK8sAuthenticator.livenessProbe.initialDelaySeconds }}
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
         readinessProbe:
+          periodSeconds: {{ .Values.dexK8sAuthenticator.readinessProbe.periodSeconds }}
+          initialDelaySeconds: {{ .Values.dexK8sAuthenticator.readinessProbe.initialDelaySeconds }}
           httpGet:
             path: {{ template "dex-k8s-authenticator.healthCheckPath" . }}
             port: http
