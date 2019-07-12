@@ -8,7 +8,7 @@ metadata:
   labels:
     app: opsportal-landing
 data:
-  index.html: '{{ .Values.landing.page }}'
+{{ (.Files.Glob "html-templates/index.html").AsConfig | indent 2 }}
 
 ---
 apiVersion: v1
