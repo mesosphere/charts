@@ -4,6 +4,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ops-portal-admin
+  namespace: {{ .Release.Namespace }}
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -17,4 +18,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: ops-portal-admin
+    namespace: {{ .Release.Namespace }}
 {{- end }}

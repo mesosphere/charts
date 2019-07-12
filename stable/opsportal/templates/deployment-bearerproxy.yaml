@@ -6,6 +6,7 @@ metadata:
   labels:
     app: bearerproxy
   name: bearerproxy
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:

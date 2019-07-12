@@ -9,6 +9,7 @@ metadata:
     ingress.kubernetes.io/auth-type: basic
     ingress.kubernetes.io/auth-header-field: X-WebAuth-User
   name: ops-portal
+  namespace: {{ .Release.Namespace }}
 spec:
   rules:
     - http:

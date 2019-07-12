@@ -5,6 +5,7 @@ metadata:
   labels:
     app: opsportal-landing
   name: opsportal-landing
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:

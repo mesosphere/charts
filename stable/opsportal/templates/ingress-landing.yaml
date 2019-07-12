@@ -9,6 +9,7 @@ metadata:
     ingress.kubernetes.io/auth-secret: ops-portal-htpasswd
     ingress.kubernetes.io/auth-type: basic
   name: opsportal-landing
+  namespace: {{ .Release.Namespace }}
 spec:
   rules:
     - http:
