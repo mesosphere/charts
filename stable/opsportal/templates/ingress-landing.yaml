@@ -1,0 +1,19 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rewrite-target: /
+    traefik.ingress.kubernetes.io/priority: "1"
+    ingress.kubernetes.io/auth-secret: ops-portal-htpasswd
+    ingress.kubernetes.io/auth-type: basic
+  name: opsportal-landing
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: {{ .Values.landing.ingress.backend.serviceName }}
+              servicePort: {{ .Values.landing.ingress.backend.servicePort }}

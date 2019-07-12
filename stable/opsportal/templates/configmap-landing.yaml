@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: opsportal-landing-html
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: opsportal-landing
+data:
+{{ (.Files.Glob "html-templates/index.html").AsConfig | indent 2 }}
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: opsportal-landing-conf
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: opsportal-landing
+data:
+  nginx.conf: |
+    worker_processes 1;
+    error_log /dev/stdout info;
+    events {
+        worker_connections 1024;
+    }
+    http {
+      server {
+        access_log /dev/stdout;
+        listen 80;
+        root /usr/share/nginx/html;
+        location / {
+            try_files $uri /index.html;
+        }
+        location = /index.html {
+            expires 30s;
+        }
+      }
+    }
