@@ -1,0 +1,10 @@
+apiVersion: v1
+name: serving
+version: 0.1.0
+description: "Knative Serving"
+sources:
+- https://github.com/knative/serving
+maintainers:
+- name: Chun-Hung Hsiao
+  email: chhsiao@mesosphere.io
+appVersion: "v0.7.1"
