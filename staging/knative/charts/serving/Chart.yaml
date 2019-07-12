@@ -1,0 +1,10 @@
+apiVersion: v1
+name: serving
+version: 0.1.0
+kubeVersion: ">=1.14.0"
+description: "Knative Serving"
+sources:
+- https://github.com/knative/serving
+maintainers:
+- name: chhsia0
+appVersion: "v0.7.1"
