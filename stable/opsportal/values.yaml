@@ -1,0 +1,52 @@
+bearerproxy:
+  enabled: false
+  port: 9091
+  image:
+    repository: "quay.io/joejulian/bearerproxy"
+    tag: "latest"
+    pullPolicy: "Always"
+  # kubernetes-dashboard
+  ingress:
+    backend:
+      serviceName: bearerproxy
+    path: /ops/portal/kubernetes
+
+opsportal:
+  ingress:
+    paths:
+      # kibana
+      - backend:
+          serviceName: kibana-kubeaddons
+          servicePort: 5601
+        path: /ops/portal/kibana
+      # grafana
+      - backend:
+          serviceName: prometheus-kubeaddons-grafana
+          servicePort: 3000
+        path: /ops/portal/grafana
+      # prometheus
+      - backend:
+          serviceName: prometheus-kubeaddons-prom-prometheus
+          servicePort: 9090
+        path: /ops/portal/prometheus
+      # alertmanager
+      - backend:
+          serviceName: prometheus-kubeaddons-prom-alertmanager
+          servicePort: 9093
+        path: /ops/portal/alertmanager
+      # traefik
+      - backend:
+          serviceName: traefik-kubeaddons-dashboard
+          servicePort: 80
+        path: /ops/portal/traefik
+
+landing:
+  port: 80
+  image:
+    repository: "nginx"
+    tag: "1.15-alpine"
+    pullPolicy: "IfNotPresent"
+  ingress:
+    backend:
+      serviceName: opsportal-landing
+      servicePort: 80

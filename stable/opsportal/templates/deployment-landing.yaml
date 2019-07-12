@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: opsportal-landing
+  name: opsportal-landing
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: opsportal-landing
+  template:
+    metadata:
+      labels:
+        app: opsportal-landing
+    spec:
+      containers:
+        - name: opsportal-landing
+          image: "{{ .Values.landing.image.repository }}:{{ .Values.landing.image.tag }}"
+          imagePullPolicy: "{{ .Values.landing.image.pullPolicy }}"
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - name: landing-html
+              mountPath: /usr/share/nginx/html
+            - name: landing-conf
+              mountPath: /etc/nginx
+      volumes:
+        - name: landing-html
+          configMap:
+            name: opsportal-landing-html
+        - name: landing-conf
+          configMap:
+            name: opsportal-landing-conf

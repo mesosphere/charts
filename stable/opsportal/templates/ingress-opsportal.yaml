@@ -1,0 +1,26 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.frontend.rule.type: PathPrefixStrip
+    ingress.kubernetes.io/auth-secret: ops-portal-htpasswd
+    ingress.kubernetes.io/auth-type: basic
+    ingress.kubernetes.io/auth-header-field: X-WebAuth-User
+  name: ops-portal
+  namespace: {{ .Release.Namespace }}
+spec:
+  rules:
+    - http:
+        paths:
+{{- if .Values.bearerproxy.enabled }}
+          # kubernetes-dashboard
+          - backend:
+              serviceName: {{ .Values.bearerproxy.ingress.backend.serviceName }}
+              servicePort: {{ .Values.bearerproxy.port }}
+            path: {{ .Values.bearerproxy.ingress.path }}
+{{- end }}
+{{- with .Values.opsportal.ingress.paths }}
+{{ toYaml . | indent 10 }}
+{{- end }}
