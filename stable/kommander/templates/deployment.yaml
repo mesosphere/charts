@@ -10,41 +10,50 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kommander-deployment
-  namespace: kommander
+  name: {{ template "kommander.fullname" . }}
   labels:
-    app: kommander
+    app: {{ template "kommander.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
-  replicas: {{ .Values.kommander.replicas }}
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: kommander
   template:
     metadata:
       labels:
-        app: kommander
-      namespace: kommander
+        app: {{ template "kommander.fullname" . }}
+      namespace: {{ .Release.Namespace }}
     spec:
       serviceAccountName: admin-user-kommander
       imagePullSecrets:
         - name: dockerhub
+      initContainers:
+        {{- with .Values.extraInitContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       containers:
-        - name: kommander
-          image: "{{ .Values.kommander.image.repository }}:{{ .Values.kommander.image.tag }}"
-          imagePullPolicy: "{{ .Values.kommander.image.pullPolicy }}"
+        - name: {{ template "kommander.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
           ports:
             - name: http
               containerPort: 4000
           resources:
-            requests:
-              memory: "128Mi"
-              cpu: "1000m"
-            limits:
-              memory: "512Mi"
-              cpu: "4000m"
+            {{ with .Values.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
           livenessProbe:
             httpGet:
               path: /health
               port: 4000
-            initialDelaySeconds: 15
-            periodSeconds: 3
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
