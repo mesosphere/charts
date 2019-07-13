@@ -12,7 +12,7 @@ resources:
     cpu: "1000m"
   limits:
     memory: "512Mi"
-    cpu: "4000m"
+    cpu: "2000m"
 
 readinessProbe:
   initialDelaySeconds: 15
