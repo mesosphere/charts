@@ -38,7 +38,7 @@ data:
         [entryPoints.http.auth.forward]
         address = {{ .Values.forwardAuth.address | quote }}
         trustForwardHeader = {{ .Values.forwardAuth.trustForwardHeader }}
-        {{ template "traefik.authResponseHeaders" . }}
+        authResponseHeaders = {{ .Values.forwardAuth.authResponseHeaders }}
       {{- end }}
       {{- end }}
       {{- if .Values.whiteListSourceRange }}
@@ -72,7 +72,7 @@ data:
         [entryPoints.https.auth.forward]
         address = {{ .Values.forwardAuth.address | quote }}
         trustForwardHeader = {{ .Values.forwardAuth.trustForwardHeader }}
-        {{ template "traefik.authResponseHeaders" . }}
+        authResponseHeaders = {{ .Values.forwardAuth.authResponseHeaders }}
       {{- end }}
       {{- end }}
       {{- if .Values.proxyProtocol.enabled }}
@@ -120,7 +120,7 @@ data:
         [entryPoints.httpn.auth.forward]
         address = {{ .Values.forwardAuth.address | quote }}
         trustForwardHeader = {{ .Values.forwardAuth.trustForwardHeader }}
-        {{ template "traefik.authResponseHeaders" . }}
+        authResponseHeaders = {{ .Values.forwardAuth.authResponseHeaders }}
       {{- end }}
       {{- end }}
       {{- end }}
