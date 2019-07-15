@@ -3,7 +3,25 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-13T15:39:11.19635722Z
+    created: 2019-07-15T09:32:18.640538903Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: 4413caccc0bea35981288cfd1298c25bb7e4b405d1e008f920013b446ecd9cf8
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: Martin Hrabovcin
+    - email: aaron@roydhouse.com
+      name: Aaron Roydhouse
+    - email: nbadger@mintel.com
+      name: Nick Badger
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.3.tgz
+    version: 1.1.3
+  - apiVersion: v1
+    appVersion: v1.1.0
+    created: 2019-07-15T09:32:18.639954663Z
     description: Authenticator for using Dex with Kubernetes
     digest: 2714dd1206327a96e151357b24fe7b412e54c5507fb16990d5e199cc20dde64c
     maintainers:
@@ -21,7 +39,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-07-13T15:39:11.195756062Z
+    created: 2019-07-15T09:32:18.639372512Z
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -40,20 +58,51 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.196651637Z
+    created: 2019-07-15T09:32:18.640824823Z
     description: A Helm chart for Kubernetes
-    digest: a36d64591be92f6192c31fb128d9e8f730f946735e5b1395801c7183d1122891
+    digest: e43784d5f1ed2a1e9cc8846a18c86670f11cef63b5dfcfea37d24c5590add407
     name: test
     urls:
     - https://mesosphere.github.io/charts/staging/test-0.1.0.tgz
     version: 0.1.0
+  traefik:
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2019-07-15T09:32:18.642118516Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 0ae383c15f1acb1e68c4b4389dbf94d742944b1fc6c768b25ae878ffc567fb79
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.71.3.tgz
+    version: 1.71.3
   traefik-forward-auth:
   - apiVersion: v1
     appVersion: latest
-    created: 2019-07-13T15:39:11.197049249Z
+    created: 2019-07-15T09:32:18.64333634Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
-    digest: 45038ceb0d5f0ba6722959c6117b1a8c385aa2cd2a2ff23bba54c47bbf848aed
+    digest: f825b48d33eb5ebf688b510b547ea2f72d04b513f2aae03d4aa4edfc83328991
     home: https://github.com/jongiddy/traefik-forward-auth
     keywords:
     - traefik-forward-auth
@@ -66,4 +115,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.1.1.tgz
     version: 0.1.1
-generated: 2019-07-13T15:39:11.195148852Z
+generated: 2019-07-15T09:32:18.638808185Z

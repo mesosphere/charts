@@ -3,9 +3,9 @@ entries:
   awsebscsiprovisioner:
   - apiVersion: v1
     appVersion: 0.3.0
-    created: 2019-07-13T15:39:11.50496906Z
+    created: 2019-07-15T09:32:18.923961807Z
     description: AWS EBS CSI driver and storage provisioner
-    digest: 4fa31ffaed72056ddf283705ef1e882558ee452f3d7d4a37788f3fe4a3cba07f
+    digest: 03bad18c7ef5bbf9649743071541a4068e053e39f6a3bb8c1e05f6df98f88516
     home: https://github.com/kubernetes-sigs/aws-ebs-csi-driver
     kubeVersion: '>=1.13.0'
     name: awsebscsiprovisioner
@@ -16,7 +16,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.504642307Z
+    created: 2019-07-15T09:32:18.923648516Z
     description: AWS EBS CSI storage provisioner for konvoy
     digest: 14683cf0c3eeb83008289246fbcfcab21039cd331d8e26d688252da126ec8947
     name: awsebscsiprovisioner
@@ -26,9 +26,9 @@ entries:
   awsebsprovisioner:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.505100271Z
+    created: 2019-07-15T09:32:18.924092882Z
     description: AWS EBS storage provisioner for konvoy
-    digest: 4189503f78f1c81312eeea54f1f10a186ea12f8b1f107a3b768257ac8c03d9c6
+    digest: 0424057e2ea77f4f23f54cf61144c87573061cdffc0038665b83e8bbc2eff2a4
     name: awsebsprovisioner
     urls:
     - https://mesosphere.github.io/charts/stable/awsebsprovisioner-0.1.0.tgz
@@ -36,16 +36,16 @@ entries:
   kommander:
   - apiVersion: v1
     appVersion: 1.24.2
-    created: 2019-07-13T15:39:11.505544732Z
+    created: 2019-07-15T09:32:18.924482877Z
     description: Kommander
-    digest: b13320ad25deddc6556b5e0bac377bde29ac1288a8e512933fb355cdaaad291c
+    digest: 19d62135ad67eb2ca2b0f1bd4e34410380fe32d8a78643e7392e4ea10583ed30
     name: kommander
     urls:
     - https://mesosphere.github.io/charts/stable/kommander-0.1.2.tgz
     version: 0.1.2
   - apiVersion: v1
     appVersion: 1.24.2
-    created: 2019-07-13T15:39:11.505318391Z
+    created: 2019-07-15T09:32:18.924267814Z
     description: Kommander
     digest: 4f5fc472c2a90252b3fa897b3f4dd1ddec6890c140592667c09c62053e4f21c8
     name: kommander
@@ -55,9 +55,9 @@ entries:
   localpathprovisioner:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.505704668Z
+    created: 2019-07-15T09:32:18.924685992Z
     description: Local path storage provisioner for konvoy
-    digest: 49e7e51d55749d7d7f024fbe3a455b22a33161ddc437f4f32108d55438d1accf
+    digest: e032425dba9f2ab03bbe1d3b2e63dd0e7818575dafab176747c28152013527e1
     name: localpathprovisioner
     urls:
     - https://mesosphere.github.io/charts/stable/localpathprovisioner-0.1.0.tgz
@@ -65,16 +65,16 @@ entries:
   localvolumeprovisioner:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.506101192Z
+    created: 2019-07-15T09:32:18.92506737Z
     description: Local persistent volume provisioner for konvoy
-    digest: 12ec793c9b2076659d018b3a1c1ec2c8f2d0734f4d93ad80c8b8e5e74216b3bb
+    digest: 9b68e516faba7845fd4d51708dadf223917f93a73eee97aa69e6cee982b196b5
     name: localvolumeprovisioner
     urls:
     - https://mesosphere.github.io/charts/stable/localvolumeprovisioner-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-07-13T15:39:11.505883129Z
+    created: 2019-07-15T09:32:18.924875403Z
     description: Local persistent volume provisioner for konvoy
     digest: 726a8d1a9ccc8576b31d3764e8b7db99c1a9dca29043a3e0392644d25267a261
     name: localvolumeprovisioner
@@ -84,11 +84,11 @@ entries:
   opsportal:
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-07-13T15:39:11.506829957Z
+    created: 2019-07-15T09:32:18.925814541Z
     description: OpsPortal Chart
-    digest: b656d370dfaa9c1abfa4c50fdb060f0d3afa1113a0a47a43b770d53afc317f33
+    digest: 838a9267292f5941284a31cc49729fcd139ed40475ad2f0a6272ebef6bebd328
     name: opsportal
     urls:
     - https://mesosphere.github.io/charts/stable/opsportal-0.0.1.tgz
     version: 0.0.1
-generated: 2019-07-13T15:39:11.504255833Z
+generated: 2019-07-15T09:32:18.923344232Z
