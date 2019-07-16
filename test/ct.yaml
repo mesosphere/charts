@@ -1,0 +1,10 @@
+target-branch: dev
+chart-dirs:
+  - stable
+  - staging
+excluded-charts:
+  - common
+chart-repos:
+  - mesosphere-staging=https://mesosphere.github.io/charts/staging
+  - mesosphere-stable=https://mesosphere.github.io/charts/stable
+helm-extra-args: --timeout 600
