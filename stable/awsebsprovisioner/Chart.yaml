@@ -1,5 +1,8 @@
 apiVersion: v1
+name: awsebsprovisioner
+home: https://kubernetes.io/docs/concepts/storage/storage-classes/
+version: 0.1.1
 appVersion: "1.0"
 description: AWS EBS storage provisioner for konvoy
-name: awsebsprovisioner
-version: 0.1.0
+maintainers:
+  - name: gpaul
