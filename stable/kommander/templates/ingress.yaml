@@ -10,10 +10,7 @@ metadata:
     heritage: "{{ .Release.Service }}"
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.frontend.rule.type: PathPrefixStrip
-    ingress.kubernetes.io/auth-secret: ops-portal-htpasswd
-    ingress.kubernetes.io/auth-type: basic
-    ingress.kubernetes.io/auth-header-field: X-Forwarded-User
+    traefik.frontend.rule.type: {{ .Values.ingress.traefikFrontendRuleType }}
     {{- with .Values.ingress.extraAnnotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
