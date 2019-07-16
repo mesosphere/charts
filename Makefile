@@ -71,6 +71,6 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 	$(HELM) --home $(TMPDIR)/.helm init --client-only
 
-.PHONY: ct.lint
+.PHONY ct.lint
 ct.lint:
 	ct lint --config test/ct.yaml
