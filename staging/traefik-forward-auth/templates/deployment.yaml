@@ -19,6 +19,10 @@ spec:
         app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+{{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+{{- end }}
       volumes:
       {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
       - name: etc-traefik-forward-auth-ca
