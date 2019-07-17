@@ -4,6 +4,9 @@ metadata:
   labels:
     app: autoscaler
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+    {{- with .Values.global.serviceLabels }}
+    {{ toYaml . | indent 4 | trim }}
+    {{- end }}
   name: autoscaler
   namespace: knative-serving
 spec:

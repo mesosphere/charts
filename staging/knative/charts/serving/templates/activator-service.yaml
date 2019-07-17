@@ -4,6 +4,9 @@ metadata:
   labels:
     app: activator
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+    {{- with .Values.global.serviceLabels }}
+    {{ toYaml . | indent 4 | trim }}
+    {{- end }}
   name: activator-service
   namespace: knative-serving
 spec:

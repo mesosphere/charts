@@ -4,6 +4,9 @@ metadata:
   labels:
     app: controller
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+    {{- with .Values.global.serviceLabels }}
+    {{ toYaml . | indent 4 | trim }}
+    {{- end }}
   name: controller
   namespace: knative-serving
 spec:
