@@ -12,7 +12,7 @@ spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: kommander
+      app: {{ template "kommander.fullname" . }}
   template:
     metadata:
       labels:
