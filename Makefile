@@ -42,16 +42,16 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 .PHONY: publish
 publish:
 	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
-	@ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
-	@chmod 0644 /etc/ssh/ssh_known_hosts
+	#@ssh-keyscan github.com >> /etc/ssh/ssh_known_hosts
+	#@chmod 0644 /etc/ssh/ssh_known_hosts
 	@git branch -d master >/dev/null 2>&1 || true
 	@git checkout -B master
 	@git pull --rebase publish master -s recursive -X theirs
 	@make all
 	@git add .
 	@git commit -m "$(LAST_COMMIT_MESSAGE)"
-	@git push -f publish master
-	@git checkout -
+	#@git push -f publish master
+	#@git checkout -
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
