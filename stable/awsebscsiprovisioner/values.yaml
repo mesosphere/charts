@@ -7,7 +7,7 @@ image:
 
 liveness:
   image:
-    respository: "quay.io/k8scsi/livenessprobe"
+    repository: "quay.io/k8scsi/livenessprobe"
     tag: "v1.1.0"
 
 registrar:
