@@ -76,7 +76,6 @@ spec:
               mountPath: /registration
         - name: liveness-probe
           image: "{{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}"
-
           args:
             - --csi-address=/csi/csi.sock
             - --connection-timeout=3s
