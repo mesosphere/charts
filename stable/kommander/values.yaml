@@ -26,6 +26,7 @@ service:
   name: kommander
 
 ingress:
+  traefikFrontendRuleType: PathPrefixStrip
   # extraAnnotations:
   #   ingress.kubernetes.io/foo: bar
   paths:
