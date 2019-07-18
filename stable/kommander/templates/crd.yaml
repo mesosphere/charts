@@ -8,13 +8,16 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.name }}"
     heritage: "{{ .Release.Service }}"
+  annotations:
+    "helm.sh/hook": crd-install
+    "helm.sh/hook-delete-policy": "before-hook-creation"
 spec:
   group: stable.mesosphere.com
   versions:
     - name: v1
       served: true
       storage: true
-  scope: Cluster
+  scope: Namespaced
   names:
     plural: observableclusters
     singular: observablecluster
