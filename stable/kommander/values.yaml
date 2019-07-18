@@ -4,6 +4,9 @@ image:
   pullPolicy: IfNotPresent
 replicas: 1
 
+# Mode must be either production|konvoy
+mode: production
+
 extraInitContainers:
 
 resources:
@@ -29,10 +32,4 @@ ingress:
   traefikFrontendRuleType: PathPrefixStrip
   # extraAnnotations:
   #   ingress.kubernetes.io/foo: bar
-  paths:
-    # kommander
-    - backend:
-        ### This must match the service name set above
-        serviceName: kommander
-        servicePort: 4000
-      path: /ops/portal/kommander
+  path: /ops/portal/kommander
