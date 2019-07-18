@@ -5,6 +5,9 @@ bearerproxy:
     tag: "latest"
     pullPolicy: "Always"
 
+landing:
+  enabled: true
+
 opsportal:
   ingress:
     paths:
