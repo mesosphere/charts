@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    eventing.knative.dev/release: {{ .Chart.AppVersion }}
+  name: sources-controller
+  namespace: knative-eventing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sources-controller
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      labels:
+        app: sources-controller
+        eventing.knative.dev/release: {{ .Chart.AppVersion }}
+    spec:
+      containers:
+      - env:
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: config-logging
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: config-observability
+        - name: METRICS_DOMAIN
+          value: knative.dev/sources
+        - name: CRONJOB_RA_IMAGE
+          value: gcr.io/knative-releases/github.com/knative/eventing/cmd/cronjob_receive_adapter@sha256:9286d6df6447dab94b881aa8decaa173b5dd6d973ebb8069e2333a1c6fd53c29
+        - name: APISERVER_RA_IMAGE
+          value: gcr.io/knative-releases/github.com/knative/eventing/cmd/apiserver_receive_adapter@sha256:158d0faf395dbca0a022e0cc3f96aabac9b9ace40bda61f951493dd1a0cb9cce
+        image: gcr.io/knative-releases/github.com/knative/eventing/cmd/sources_controller@sha256:d0c391fe518c27e41838accd702f0eb7ff8eba4898ea06c3d213b5f6ac22ac3f
+        name: controller
+        ports:
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /etc/config-logging
+          name: config-logging
+      serviceAccountName: eventing-controller
+      volumes:
+      - configMap:
+          name: config-logging
+        name: config-logging
