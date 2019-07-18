@@ -55,8 +55,6 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: LOGOUT_REDIRECT_PATH
-              value: {{ .Values.logoutRedirectPath | quote }}
-            {{- if .Values.isKonvoyUI }}
+              value: {{ .Values.logoutRedirectPath }}
             - name: MODE
-              value: "konvoy"
-            {{- end }}
+              value: {{ .Values.mode }}
