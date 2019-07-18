@@ -16,3 +16,15 @@ rules:
   verbs: ["create", "delete"]
 {{- end -}}
 {{- end -}}
+{{- if .Values.initContainers }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dex-secret-management
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+{{- end -}}
