@@ -1,22 +1,31 @@
-{{- if .Values.bearerproxy.enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: ops-portal-admin
+  name: {{ template "opsportal.fullname" . }}
   namespace: {{ .Release.Namespace }}
-
+  # pre-install for kubernetes.io/service-account-token
+  annotations:
+    helm.sh/hook: pre-install
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: ops-portal-admin
+  name: {{ template "opsportal.fullname" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: cluster-admin
 subjects:
   - kind: ServiceAccount
-    name: ops-portal-admin
+    name: {{ template "opsportal.fullname" . }}
     namespace: {{ .Release.Namespace }}
-{{- end }}
+---
+apiVersion: v1
+kind: Secret
+type: kubernetes.io/service-account-token
+metadata:
+  name: {{ template "opsportal.fullname" . }}-token
+  annotations:
+    kubernetes.io/service-account.name: {{ template "opsportal.fullname" . }}
+  namespace: {{ .Release.Namespace }}

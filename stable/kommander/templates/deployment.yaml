@@ -19,7 +19,7 @@ spec:
         app: {{ template "kommander.fullname" . }}
       namespace: {{ .Release.Namespace }}
     spec:
-      serviceAccountName: admin-user-kommander
+      serviceAccountName: {{ template "kommander.fullname" . }}
       imagePullSecrets:
         - name: dockerhub
       initContainers:

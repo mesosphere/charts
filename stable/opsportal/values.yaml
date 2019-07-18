@@ -1,19 +1,18 @@
 bearerproxy:
-  enabled: false
   port: 9091
   image:
     repository: "quay.io/joejulian/bearerproxy"
     tag: "latest"
     pullPolicy: "Always"
-  # kubernetes-dashboard
-  ingress:
-    backend:
-      serviceName: bearerproxy
-    path: /ops/portal/kubernetes
 
 opsportal:
   ingress:
     paths:
+      # kubernetes-dashboard
+      - backend:
+          serviceName: bearerproxy
+          servicePort: 9091
+        path: /ops/portal/kubernetes
       # kibana
       - backend:
           serviceName: kibana-kubeaddons
@@ -39,14 +38,3 @@ opsportal:
           serviceName: traefik-kubeaddons-dashboard
           servicePort: 80
         path: /ops/portal/traefik
-
-landing:
-  port: 80
-  image:
-    repository: "nginx"
-    tag: "1.15-alpine"
-    pullPolicy: "IfNotPresent"
-  ingress:
-    backend:
-      serviceName: opsportal-landing
-      servicePort: 80
