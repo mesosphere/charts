@@ -1,10 +1,9 @@
 image:
   repository: mesosphere/kommander
-  tag: 1.45.0
+  tag: 1.46.1
   pullPolicy: IfNotPresent
 replicas: 1
-isKonvoyUI: false
-logoutRedirectPath: "/"
+logoutRedirectPath: /
 
 # Mode must be either production|konvoy
 mode: production
