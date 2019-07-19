@@ -4,7 +4,9 @@ kind: StorageClass
 metadata:
   name: localpathprovisioner
   annotations:
-    storageclass.kubernetes.io/is-default-class: {{ .Values.storageclass.isDefault | default "true" | quote }}
+{{- if .Values.storageclass.isDefault }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
     kubernetes.io/description: Local path provisioner storage class
 provisioner: rancher.io/local-path
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
