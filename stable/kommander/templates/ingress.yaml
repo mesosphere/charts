@@ -10,18 +10,10 @@ metadata:
     heritage: "{{ .Release.Service }}"
   annotations:
     kubernetes.io/ingress.class: traefik
-{{- if (eq "konvoy" .Values.mode) }}
-    traefik.ingress.kubernetes.io/priority: "1"
-    traefik.ingress.kubernetes.io/redirect-permanent: "true"
-    traefik.ingress.kubernetes.io/redirect-regex: ^https://([^/]*)/ops/portal$
-    traefik.ingress.kubernetes.io/redirect-replacement: https://$1/ops/portal/
-    traefik.ingress.kubernetes.io/request-modifier: 'ReplacePathRegex: ^/ops/portal/(.*) /$1'
-{{- else }}
     traefik.frontend.rule.type: {{ .Values.ingress.traefikFrontendRuleType }}
     {{- with .Values.ingress.extraAnnotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-{{- end }}
 spec:
   rules:
     - http:
