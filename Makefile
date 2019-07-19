@@ -21,6 +21,14 @@ HELM := $(shell bash -c "command -v helm")
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
+ifeq (,$(wildcard /teamcity/system/git))
+DRUN := docker run -t --rm -v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
+			quay.io/helmpack/chart-testing:v2.3.3
+else
+DRUN := docker run -t --rm -v /teamcity/system/git:/teamcity/system/git -v ${PWD}:/charts \
+			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
+			quay.io/helmpack/chart-testing:v2.3.3
+endif
 
 .SECONDEXPANSION:
 
@@ -71,4 +79,5 @@ $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 
 .PHONY: ct.lint
 ct.lint:
-	ct lint --config test/ct.yaml
+	$(DRUN) git fetch origin dev
+	$(DRUN) ct lint
