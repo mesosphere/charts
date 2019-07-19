@@ -8,6 +8,9 @@ logoutRedirectPath: /
 # Mode must be either production|konvoy
 mode: production
 
+# Konvoy ui should NOT create the CRD if Kommander already did it
+createObservableClusterCRD: true
+
 extraInitContainers:
 
 resources:
