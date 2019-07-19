@@ -4,7 +4,9 @@ metadata:
   name: awsebsprovisioner
   annotations:
     kubernetes.io/description: AWS EBS Storage class
-    storageclass.kubernetes.io/is-default-class: {{ .Values.storageclass.isDefault | default "true" | quote }}
+{{- if .Values.storageclass.isDefault }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
 provisioner: kubernetes.io/aws-ebs
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
