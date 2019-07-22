@@ -53,13 +53,9 @@ spec:
             port: http
         volumeMounts:
         - name: config
-          subPath: config.yaml
           mountPath: /app/config.yaml
-{{- range $path, $bytes :=  .Files.Glob "html-templates/*" }}
         - name: html-templates
-          subPath: {{ base $path }}
-          mountPath: /app/templates/{{ base $path }}
-{{- end }}
+          mountPath: /app/templates/
 {{- if .Values.caCerts.enabled }}
 {{- range .Values.caCerts.secrets }}
         - name: {{ template "dex-k8s-authenticator.fullname" $ }}-{{ .name }}
@@ -84,9 +80,17 @@ spec:
       - name: config
         configMap:
           name: {{ template "dex-k8s-authenticator.fullname" . }}
+          items:
+          - key: config.yaml
+            path: config.yaml
       - name: html-templates
         configMap:
           name: {{ template "dex-k8s-authenticator.fullname" . }}-html-templates
+          items:
+{{- range $path, $bytes :=  .Files.Glob "html-templates/*" }}
+          - key: {{ base $path }}
+            path: {{ base $path }}
+{{- end }}
 {{- if .Values.caCerts.enabled }}
 {{- range .Values.caCerts.secrets }}
       - name: {{ template "dex-k8s-authenticator.fullname" $ }}-{{ .name }}
