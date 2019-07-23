@@ -19,9 +19,10 @@ spec:
     spec:
       hostNetwork: true
       priorityClassName: system-node-critical
+{{- if .Values.tolerations }}
       tolerations:
-        - key: CriticalAddonsOnly
-          operator: Exists
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
       containers:
         - name: ebs-plugin
           securityContext:

@@ -10,6 +10,14 @@ liveness:
     repository: "quay.io/k8scsi/livenessprobe"
     tag: "v1.1.0"
 
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists
+
 registrar:
   node:
     image:

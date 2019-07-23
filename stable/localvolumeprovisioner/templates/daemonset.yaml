@@ -12,6 +12,11 @@ spec:
       labels:
         app: local-volume-provisioner
     spec:
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
       serviceAccountName: local-volume-provisioner-service-account
       containers:
         - name: local-volume-provisioner
