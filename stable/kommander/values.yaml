@@ -4,6 +4,9 @@ image:
   pullPolicy: IfNotPresent
 replicas: 1
 logoutRedirectPath: /ops/landing
+clusterPollingInterval: 3000
+clientPollingInterval: 3000
+
 
 # Mode must be either production|konvoy
 mode: production
