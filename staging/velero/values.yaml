@@ -183,6 +183,9 @@ schedules: {}
 #       image: gcr.io/heptio-images/velero-restic-restore-help
 configMaps: {}
 
+# Deploy a default Minio cluster to use as the backend for Velero.
+minioBackend: false
+
 ##
 ## End of additional Velero resource settings.
 ##

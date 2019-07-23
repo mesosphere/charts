@@ -96,6 +96,7 @@ Parameter | Description | Default
 `restic.privileged` | Whether restic should run as a privileged pod. Only necessary in special cases (SELinux) | `false`
 `restic.resources` | Restic DaemonSet resource requests and limits | `{}`
 `configMaps` | Velero ConfigMaps | `[]`
+`minioBackend` | Enable Minio Backend | `false`
 
 ## How to
 ```
