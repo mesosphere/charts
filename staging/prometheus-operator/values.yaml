@@ -42,6 +42,24 @@ defaultRules:
   ## Annotations for default rules
   annotations: {}
 
+# Create mesosphere specific resources
+mesosphereResources:
+  create: false
+  rules:
+    etcd: true
+  dashboards:
+    apiserver: true
+    controlmanager: true
+    elasticsearch: true
+    fluentbit: true
+    grafana: true
+    kubelet: true
+    localvolumeprovisioner: true
+    localvolumeusage: true
+    prometheusoverview: true
+    scheduler: true
+    trafik: true
+
 ## Provide custom recording or alerting rules to be deployed into the cluster.
 ##
 additionalPrometheusRules: []
