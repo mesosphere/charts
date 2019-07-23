@@ -7,3 +7,13 @@ storageclass:
   isDefault: true
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
+
+priorityClassName: system-node-critical
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists

@@ -12,16 +12,11 @@ spec:
       labels:
         app: local-volume-provisioner
     spec:
+{{- if .Values.tolerations }}
       tolerations:
-        # Make sure csi-node gets scheduled on all nodes.
-        - effect: NoSchedule
-          operator: Exists
-        - effect: NoExecute
-          operator: Exists
-        # Mark the pod as a critical add-on for rescheduling.
-        - key: CriticalAddonsOnly
-          operator: Exists
-      priorityClassName: system-node-critical
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
       serviceAccountName: local-volume-provisioner-service-account
       containers:
         - name: local-volume-provisioner
