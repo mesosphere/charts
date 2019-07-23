@@ -8,6 +8,7 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.name }}"
     heritage: "{{ .Release.Service }}"
+    servicemonitor.kubeaddons.mesosphere.io/path: metrics
 spec:
   ports:
     - name: metrics
