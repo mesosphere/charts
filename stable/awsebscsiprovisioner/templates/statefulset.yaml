@@ -109,7 +109,7 @@ spec:
         {{- end }}
         {{- if .Values.resizer.enabled }}
         - name: csi-resizer
-          image: quay.io/k8scsi/csi-resizer:v0.2.0
+          image: "{{ .Values.resizer.image.repository }}:{{ .Values.resizer.image.tag }}"
           imagePullPolicy: Always
           args:
             - --csi-address=$(ADDRESS)
