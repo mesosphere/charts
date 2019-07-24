@@ -92,9 +92,16 @@ caCerts:
   #   filename: ca2.crt
   #   value: DS1tFA1......X2F
 
-
 nodeSelector: {}
 
 tolerations: []
 
 affinity: {}
+
+# Init containers to add to the Dex K8s Authenticator deployment's pod spec. Optional.
+initContainers: []
+# - name:
+#   image:
+#   volumeMounts:
+#     - name: plugins
+#       mountPath: /target
