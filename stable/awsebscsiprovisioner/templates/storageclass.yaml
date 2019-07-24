@@ -10,3 +10,14 @@ metadata:
 provisioner: ebs.csi.aws.com
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
+parameters:
+  type: {{ .Values.storageclass.type | quote }}
+  {{- if .Values.storageclass.fsType }}
+  fsType: {{ .Values.storageclass.fsType | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.iopsPerGB }}
+  iopsPerGB: {{ .Values.storageclass.iopsPerGB | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.encrypted }}
+  encrypted: {{ .Values.storageclass.encrypted | quote }}
+  {{- end }}

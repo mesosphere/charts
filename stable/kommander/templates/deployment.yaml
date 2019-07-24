@@ -55,6 +55,10 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
             - name: LOGOUT_REDIRECT_PATH
-              value: {{ .Values.logoutRedirectPath }}
+              value: {{ .Values.logoutRedirectPath | quote }}
             - name: MODE
-              value: {{ .Values.mode }}
+              value: {{ .Values.mode | quote }}
+            - name: CLUSTER_POLLING_INTERVAL
+              value: {{ .Values.clusterPollingInterval | quote }}
+            - name: CLIENT_POLLING_INTERVAL
+              value: {{ .Values.clientPollingInterval | quote }}

@@ -1,7 +1,10 @@
 # Helm chart for dex-k8s-authenticator
 
-This chart installs [`dex-k8s-authenticator`](https://github.com/mintel/dex-k8s-authenticator) in a Kubernetes cluster. 
-`dex-k8s-authenticator` is a helper application for [`dex`](https://github.com/coreos/dex). `dex` lets you use external 
+**IMPORTANT**: We have changed the original chart template to avoid using subPaths due to the
+issues while mounting and unmounting this type of volumes in certain OS.
+
+This chart installs [`dex-k8s-authenticator`](https://github.com/mintel/dex-k8s-authenticator) in a Kubernetes cluster.
+`dex-k8s-authenticator` is a helper application for [`dex`](https://github.com/coreos/dex). `dex` lets you use external
 Identify Providers (like Google, Microsoft, GitHUb, LDAP) to authenticate access to Kubernetes cluster
 (e.g. for `kubectl`). This helper makes it easy to provide a web UI for one or more clusters.
 It give uses the information and commands to configure `kubectl` to work with the credentials `dex` provides.
@@ -70,14 +73,14 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-caCerts: 
+caCerts:
   enabled: false
   secrets: {}
   # Array of Self Signed Certificates
   # cat CA.crt | base64 -w 0
   #
-  #     name: The internal k8s name of the secret we create. It's also used in 
-  #     the volumeMount name. It must respect the k8s naming convension (avoid 
+  #     name: The internal k8s name of the secret we create. It's also used in
+  #     the volumeMount name. It must respect the k8s naming convension (avoid
   #     upper-case and '.' to be safe).
   #
   #     filename: The filename of the CA to be mounted. It must end in .crt for
