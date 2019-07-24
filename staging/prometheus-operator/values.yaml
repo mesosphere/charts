@@ -59,6 +59,13 @@ mesosphereResources:
     prometheusoverview: true
     scheduler: true
     trafik: true
+  hooks:
+    grafana:
+      jobName: grafana-default-dashboard
+      image: dwdraju/alpine-curl-jq
+      secretKeyRef: ops-portal-credentials
+      serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
+
 
 ## Provide custom recording or alerting rules to be deployed into the cluster.
 ##
