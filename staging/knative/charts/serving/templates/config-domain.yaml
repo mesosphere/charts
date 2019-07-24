@@ -36,6 +36,7 @@ data:
     svc.cluster.local: |
       selector:
         app: secret
+  {{ .Values.domain }}: ""
 kind: ConfigMap
 metadata:
   labels:
