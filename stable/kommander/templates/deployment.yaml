@@ -58,3 +58,7 @@ spec:
               value: {{ .Values.logoutRedirectPath }}
             - name: MODE
               value: {{ .Values.mode }}
+            - name: CLUSTER_POLLING_INTERVAL
+              value: {{ .Values.clusterPollingInterval }}
+            - name: CLIENT_POLLING_INTERVAL
+              value: {{ .Values.clientPollingInterval }}
