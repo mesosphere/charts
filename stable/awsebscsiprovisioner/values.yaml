@@ -65,3 +65,4 @@ storageclass:
   isDefault: false
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
+  type: gp2
