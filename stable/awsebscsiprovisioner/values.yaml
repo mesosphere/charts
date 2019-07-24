@@ -33,12 +33,12 @@ provisioner:
   enableVolumeScheduling: false
   image:
     repository: "quay.io/k8scsi/csi-provisioner"
-    tag: "v1.1.0"
+    tag: "v1.2.0"
 
 attacher:
   image:
     repository: "quay.io/k8scsi/csi-attacher"
-    tag: "v1.1.0"
+    tag: "v1.1.1"
 
 snapshotter:
   # True if enable volume snapshot
