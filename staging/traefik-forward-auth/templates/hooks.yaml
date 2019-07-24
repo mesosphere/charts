@@ -1,0 +1,64 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{.Release.Name}}-secret-pre-install"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: "{{.Release.Name}}-pre-install"
+        image: "kubeaddons/addon-initializer:tfa-hooks"
+        args:
+        - password-secret
+        - create
+        - --name={{ include "traefik-forward-auth.fullname" . }}-secret
+        - --namespace={{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{.Release.Name}}-secret-post-delete"
+  labels:
+    app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+    app.kubernetes.io/instance: {{.Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{.Release.Name}}"
+      labels:
+        app.kubernetes.io/managed-by: {{.Release.Service | quote }}
+        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: "{{.Release.Name}}-post-delete"
+        image: "kubeaddons/addon-initializer:tfa-hooks"
+        args:
+        - password-secret
+        - delete
+        - --name={{ include "traefik-forward-auth.fullname" . }}-secret
+        - --namespace={{ .Release.Namespace }}
