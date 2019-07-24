@@ -24,7 +24,6 @@ traefikForwardAuth:
       secretKeyRef:
         name: secretName
         key: secretKey
-  secret: "do-not-use"
   # https only?
   cookieSecure: false
   domain:

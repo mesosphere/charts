@@ -70,13 +70,13 @@ spec:
             - name: CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "traefik-forward-auth.fullname" . }}
+                  name: {{ template "traefik-forward-auth.fullname" . }}-clientsecret
                   key: clientSecret
             {{- end }}
             - name: SECRET
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "traefik-forward-auth.fullname" . }}
+                  name: {{ template "traefik-forward-auth.fullname" . }}-secret
                   key: secret
             {{- if .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef }}
             - name: WHITELIST
