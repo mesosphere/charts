@@ -63,7 +63,7 @@ mesosphereResources:
     grafana:
       jobName: grafana-default-dashboard
       image: dwdraju/alpine-curl-jq
-      secretKeyRef: ops-portal-credentials
+      user: admin
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
 
 

@@ -1,3 +1,4 @@
+{{- if .Values.mesosphereResources.create }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -19,10 +20,7 @@ spec:
           command: ["/bin/sh", "-c", "/job/run.sh"]
           env:
             - name: X_FORWARDED_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ .Values.mesosphereResources.hooks.grafana.secretKeyRef }}
-                  key: username
+              value: {{ .Values.mesosphereResources.hooks.grafana.user | quote }}
           volumeMounts:
             - mountPath: /job
               name: job
@@ -43,4 +41,4 @@ data:
     DASHBOARD_ID=$(curl --fail -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query=Kubernetes+%2F+Compute+Resources+%2F+Cluster | jq '.[0].id')
     echo $DASHBOARD_ID
     curl -X PUT -v --fail  -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
-
+{{- end }}
