@@ -29,14 +29,6 @@ To install the chart with the release name `knative-release`:
 $ helm install staging/knative --name knative-release
 ```
 
-After installing the chart, you can use use the commands below to check if Knative is up:
-
-```bash
-$ kubectl get pods --namespace knative-serving
-$ kubectl get pods --namespace knative-eventing
-$ kubectl get pods --namespace knative-sources
-```
-
 ## Uninstalling the Chart
 
 You must remove all Knative services and eventing sources before uninstalling the chart. Use the
