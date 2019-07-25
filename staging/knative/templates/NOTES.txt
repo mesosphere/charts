@@ -1,9 +1,6 @@
 After installing the chart, view the status of the deployment by running the following commands.
-It might take a few seconds, so rerun the commands until all of the components show a `STATUS` of
-`Running`:
+It might take a few seconds, so rerun the commands until all of the components are running:
 
-```bash
-$ kubectl get pods --namespace knative-serving
-$ kubectl get pods --namespace knative-eventing
-$ kubectl get pods --namespace knative-sources
-```
+  kubectl get pods --namespace knative-serving
+  kubectl get pods --namespace knative-eventing
+  kubectl get pods --namespace knative-sources
