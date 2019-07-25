@@ -8,6 +8,14 @@ bearerproxy:
 landing:
   enabled: true
 
+# these secrets are created via hooks
+secrets:
+  create: true
+  name: ops-portal-credentials
+  image:
+    repository: "kubeaddons/addon-initializer"
+    tag: "opsportal-2"
+
 opsportal:
   ingress:
     paths:
