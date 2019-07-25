@@ -74,7 +74,7 @@ spec:
             - --provisioner=ebs.csi.aws.com
             - --csi-address=$(ADDRESS)
             - --v=5
-            {{- if .Values.enableVolumeScheduling }}
+            {{- if .Values.provisioner.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
           env:
