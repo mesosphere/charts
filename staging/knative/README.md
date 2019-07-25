@@ -55,7 +55,6 @@ The following table lists the configurable parameters of the Knative chart and t
 | Parameter               | Description                                                                                    | Default        |
 | ----------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
 | `global.serviceLabels`  | Additional labels for all service definitions in every Knative component, specified as a map.  | `{}`           |
-| `serving.enabled`       | Whether to enable the serving component.                                                       | `true`         |
 | `serving.domain`        | Domain for the serving component.                                                              | `example.com`  |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
