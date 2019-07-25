@@ -17,7 +17,7 @@ metadata:
   name: konvoy
   namespace: {{ .Release.Namespace }}
 spec:
-  displayName: konvoy
+  displayName: {{ .Values.displayName }}
   authenticationSecretName: {{ template "kommander.fullname" . }}-token
   apiServer: https://kubernetes.default
 {{ end }}
