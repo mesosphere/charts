@@ -1,6 +1,8 @@
 The following directory has been created on worker nodes:
 
-/mnt/disks/
+{{- range .Values.storageclasses }}
+/mnt/{{ .name }}/
+{{- end }}
 
 Volumes that are mounted into this directory show up as persistent volumes. Their
-`storageClassName` is set to `"localvolumeprovisioner"`.
+`storageClassName` is set to `"localvolumeprovisioner-*"`.
