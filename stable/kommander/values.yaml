@@ -21,7 +21,7 @@ extraInitContainers:
 resources:
   requests:
     memory: "128Mi"
-    cpu: "1000m"
+    cpu: "100m"
   limits:
     memory: "512Mi"
     cpu: "2000m"
