@@ -6,11 +6,13 @@ metadata:
   namespace: kubeaddons
 data:
   storageClassMap: |
-    localvolumeprovisioner:
-       hostDir: /mnt/disks
-       mountDir: /mnt/disks
-       blockCleanerCommand:
-         - "/scripts/shred.sh"
-         - "2"
-       volumeMode: Filesystem
-       fsType: ext4
+    {{- range .Values.storageclasses }}
+    localvolumeprovisioner-{{ .name }}:
+      hostDir: /mnt/{{ .name }}
+      mountDir: /mnt/{{ .name }}
+      blockCleanerCommand:
+       - "/scripts/shred.sh"
+       - "2"
+      volumeMode: Filesystem
+      fsType: ext4
+    {{- end }}
