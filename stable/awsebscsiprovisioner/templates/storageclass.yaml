@@ -21,3 +21,9 @@ parameters:
   {{- if .Values.storageclass.encrypted }}
   encrypted: {{ .Values.storageclass.encrypted | quote }}
   {{- end }}
+{{- if .Values.storageclass.allowedTopologies }}
+{{- with .Values.storageclass.allowedTopologies }}
+allowedTopologies:
+{{ toYaml . }}
+{{- end }}
+{{- end }}
