@@ -59,7 +59,7 @@ mesosphereResources:
     localvolumeusage: true
     prometheusoverview: true
     scheduler: true
-    trafik: true
+    traefik: true
   hooks:
     grafana:
       jobName: grafana-default-dashboard
