@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: local-volume-provisioner
-  namespace: kubeaddons
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:

@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: local-volume-provisioner-configmap
-  namespace: kubeaddons
+  namespace: {{ .Release.Namespace }}
 data:
   storageClassMap: |
     {{- range .Values.storageclasses }}
