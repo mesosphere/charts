@@ -120,7 +120,7 @@ spec:
       initContainers:
         {{- with .Values.minioBackend }}
         - name: initialize-velero
-          image: kubeaddons/addon-initializer:v0.0.3-alpha
+          image: mesosphere/kubeaddons-addon-initializer:v0.0.2
           args: ["velero"]
           env:
           - name: "VELERO_MINIO_FALLBACK_SECRET_NAME"
