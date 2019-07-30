@@ -13,8 +13,8 @@ secrets:
   create: true
   name: ops-portal-credentials
   image:
-    repository: "mesosphere/kubeaddons-addon-initializer:v0.0.2"
-    tag: "opsportal-2"
+    repository: "mesosphere/kubeaddons-addon-initializer"
+    tag: "v0.0.2"
 
 opsportal:
   ingress:
