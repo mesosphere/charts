@@ -52,12 +52,12 @@ data:
           }
         ]
       },
-      "description": "ElasticSearch cluster stats.\r\n\r\nRevision 1 of this dashboard is the same as the Infinity Dashboard Revision 4 (https://grafana.com/dashboards/2322)\r\n\r\nThis is a cleaned up copy with all control characters removed from the dashboard file.  When downloading version 4 of the original Infinity elasticsearch dashboard via curl, the resulting file is corrupted with a missing final curly brace.\r\n",
+      "description": "ElasticSearch cluster stats",
       "editable": true,
-      "gnetId": 6483,
+      "gnetId": 2322,
       "graphTooltip": 1,
       "id": null,
-      "iteration": 1562973503410,
+      "iteration": 1564423047305,
       "links": [
         {
           "asDropdown": true,
@@ -1623,7 +1623,7 @@ data:
                 "current": false,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "total": true,
                 "values": true
@@ -1710,7 +1710,7 @@ data:
                 "current": true,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "total": false,
                 "values": true
@@ -1803,7 +1803,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 5
+                "y": 21
               },
               "id": 79,
               "legend": {
@@ -1892,7 +1892,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 12
+                "y": 28
               },
               "id": 80,
               "legend": {
@@ -2006,7 +2006,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 6
+                "y": 22
               },
               "height": "400",
               "id": 30,
@@ -2128,7 +2128,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 6
+                "y": 22
               },
               "height": "400",
               "id": 88,
@@ -2228,7 +2228,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 16
+                "y": 32
               },
               "height": "400",
               "id": 31,
@@ -2343,7 +2343,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 16
+                "y": 32
               },
               "height": "400",
               "id": 54,
@@ -2463,7 +2463,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 7
+                "y": 23
               },
               "height": "400",
               "id": 32,
@@ -2577,7 +2577,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 7
+                "y": 23
               },
               "height": "400",
               "id": 47,
@@ -2703,7 +2703,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 8
+                "y": 24
               },
               "height": "400",
               "id": 1,
@@ -2803,7 +2803,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 8
+                "y": 24
               },
               "height": "400",
               "id": 24,
@@ -2901,7 +2901,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 0,
-                "y": 18
+                "y": 34
               },
               "height": "400",
               "id": 25,
@@ -3001,7 +3001,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 8,
-                "y": 18
+                "y": 34
               },
               "height": "400",
               "id": 26,
@@ -3099,7 +3099,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 16,
-                "y": 18
+                "y": 34
               },
               "height": "400",
               "id": 52,
@@ -3212,7 +3212,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 9
+                "y": 25
               },
               "height": "400",
               "id": 33,
@@ -3224,7 +3224,7 @@ data:
                 "hideZero": false,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "total": false,
                 "values": true
@@ -3309,7 +3309,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 9
+                "y": 25
               },
               "height": "400",
               "id": 5,
@@ -3321,7 +3321,7 @@ data:
                 "hideZero": false,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "total": false,
                 "values": true
@@ -3406,7 +3406,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 19
+                "y": 35
               },
               "height": "400",
               "id": 3,
@@ -3418,7 +3418,7 @@ data:
                 "hideZero": false,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "sort": "avg",
                 "sortDesc": true,
@@ -3505,7 +3505,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 19
+                "y": 35
               },
               "height": "400",
               "id": 87,
@@ -3517,7 +3517,7 @@ data:
                 "hideZero": false,
                 "max": true,
                 "min": true,
-                "rightSide": false,
+                "rightSide": true,
                 "show": true,
                 "sort": "avg",
                 "sortDesc": true,
@@ -3619,7 +3619,7 @@ data:
                 "h": 10,
                 "w": 24,
                 "x": 0,
-                "y": 30
+                "y": 26
               },
               "height": "400",
               "id": 48,
@@ -3790,7 +3790,7 @@ data:
                 "h": 10,
                 "w": 24,
                 "x": 0,
-                "y": 40
+                "y": 36
               },
               "height": "400",
               "id": 49,
@@ -3983,7 +3983,7 @@ data:
                 "h": 19,
                 "w": 6,
                 "x": 0,
-                "y": 67
+                "y": 27
               },
               "id": 45,
               "legend": {
@@ -4023,6 +4023,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Thread Pool operations rejected",
               "tooltip": {
@@ -4056,7 +4057,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4071,7 +4076,7 @@ data:
                 "h": 19,
                 "w": 6,
                 "x": 6,
-                "y": 67
+                "y": 27
               },
               "id": 46,
               "legend": {
@@ -4111,6 +4116,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Thread Pool operations queued",
               "tooltip": {
@@ -4144,7 +4150,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4159,7 +4169,7 @@ data:
                 "h": 19,
                 "w": 6,
                 "x": 12,
-                "y": 67
+                "y": 27
               },
               "height": "",
               "id": 43,
@@ -4200,6 +4210,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Thread Pool threads active",
               "tooltip": {
@@ -4233,7 +4244,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4248,7 +4263,7 @@ data:
                 "h": 19,
                 "w": 6,
                 "x": 18,
-                "y": 67
+                "y": 27
               },
               "id": 44,
               "legend": {
@@ -4288,6 +4303,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Thread Pool operations completed",
               "tooltip": {
@@ -4321,7 +4337,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -4352,7 +4372,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 68
+                "y": 28
               },
               "height": "400",
               "id": 4,
@@ -4397,6 +4417,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Field data memory size",
               "tooltip": {
@@ -4405,7 +4426,6 @@ data:
                 "sort": 0,
                 "value_type": "cumulative"
               },
-              "transparent": false,
               "type": "graph",
               "xaxis": {
                 "buckets": null,
@@ -4431,7 +4451,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4447,7 +4471,7 @@ data:
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 68
+                "y": 28
               },
               "height": "400",
               "id": 34,
@@ -4492,6 +4516,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Field data evictions",
               "tooltip": {
@@ -4500,7 +4525,6 @@ data:
                 "sort": 0,
                 "value_type": "cumulative"
               },
-              "transparent": false,
               "type": "graph",
               "xaxis": {
                 "buckets": null,
@@ -4526,7 +4550,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4542,7 +4570,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 0,
-                "y": 75
+                "y": 38
               },
               "height": "400",
               "id": 35,
@@ -4587,6 +4615,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Query cache size",
               "tooltip": {
@@ -4595,7 +4624,6 @@ data:
                 "sort": 0,
                 "value_type": "cumulative"
               },
-              "transparent": false,
               "type": "graph",
               "xaxis": {
                 "buckets": null,
@@ -4621,7 +4649,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4637,7 +4669,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 8,
-                "y": 75
+                "y": 38
               },
               "height": "400",
               "id": 36,
@@ -4682,6 +4714,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Query cache evictions",
               "tooltip": {
@@ -4690,7 +4723,6 @@ data:
                 "sort": 0,
                 "value_type": "cumulative"
               },
-              "transparent": false,
               "type": "graph",
               "xaxis": {
                 "buckets": null,
@@ -4716,7 +4748,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4732,7 +4768,7 @@ data:
                 "h": 10,
                 "w": 8,
                 "x": 16,
-                "y": 75
+                "y": 38
               },
               "height": "400",
               "id": 84,
@@ -4777,6 +4813,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Evictions from filter cache",
               "tooltip": {
@@ -4785,7 +4822,6 @@ data:
                 "sort": 0,
                 "value_type": "cumulative"
               },
-              "transparent": false,
               "type": "graph",
               "xaxis": {
                 "buckets": null,
@@ -4811,7 +4847,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -4839,7 +4879,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 76
+                "y": 29
               },
               "id": 85,
               "legend": {
@@ -4878,6 +4918,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Count of index segments",
               "tooltip": {
@@ -4910,7 +4951,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -4923,7 +4968,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 83
+                "y": 36
               },
               "id": 86,
               "legend": {
@@ -4962,6 +5007,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Current memory size of segments in bytes",
               "tooltip": {
@@ -4994,7 +5040,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -5022,7 +5072,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 84
+                "y": 30
               },
               "id": 75,
               "legend": {
@@ -5061,6 +5111,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Count of documents with only primary shards",
               "tooltip": {
@@ -5093,7 +5144,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5106,7 +5161,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 91
+                "y": 37
               },
               "id": 83,
               "legend": {
@@ -5145,6 +5200,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Total size of stored index data in bytes with only primary shards on all nodes",
               "tooltip": {
@@ -5177,7 +5233,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5190,7 +5250,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 98
+                "y": 44
               },
               "id": 76,
               "legend": {
@@ -5229,6 +5289,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Total size of stored index data in bytes with all shards on all nodes",
               "tooltip": {
@@ -5261,7 +5322,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -5289,7 +5354,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 99
+                "y": 31
               },
               "id": 61,
               "legend": {
@@ -5329,6 +5394,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Index writer with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -5361,7 +5427,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5374,7 +5444,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 106
+                "y": 38
               },
               "id": 62,
               "legend": {
@@ -5414,6 +5484,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Index writer with all shards on all nodes in bytes",
               "tooltip": {
@@ -5446,7 +5517,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -5474,7 +5549,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 107
+                "y": 32
               },
               "id": 55,
               "legend": {
@@ -5513,6 +5588,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Segments with only primary shards on all nodes",
               "tooltip": {
@@ -5545,7 +5621,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5558,7 +5638,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 114
+                "y": 39
               },
               "id": 56,
               "legend": {
@@ -5597,6 +5677,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Segments with all shards on all nodes",
               "tooltip": {
@@ -5629,7 +5710,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5642,7 +5727,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 121
+                "y": 46
               },
               "id": 65,
               "legend": {
@@ -5681,6 +5766,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of segments with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -5713,7 +5799,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5726,7 +5816,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 128
+                "y": 53
               },
               "id": 66,
               "legend": {
@@ -5765,6 +5855,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of segments with all shards on all nodes in bytes",
               "tooltip": {
@@ -5797,7 +5888,11 @@ data:
                   "min": null,
                   "show": true
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -5825,7 +5920,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 129
+                "y": 33
               },
               "id": 57,
               "legend": {
@@ -5864,6 +5959,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Doc values with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -5896,7 +5992,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -5909,7 +6009,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 136
+                "y": 40
               },
               "id": 58,
               "legend": {
@@ -5948,6 +6048,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Doc values with all shards on all nodes in bytes",
               "tooltip": {
@@ -5980,7 +6081,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6008,7 +6113,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 137
+                "y": 34
               },
               "id": 59,
               "legend": {
@@ -6047,6 +6152,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of fields with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6079,7 +6185,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -6092,7 +6202,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 144
+                "y": 41
               },
               "id": 60,
               "legend": {
@@ -6131,6 +6241,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of fields with all shards on all nodes in bytes",
               "tooltip": {
@@ -6163,7 +6274,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6191,7 +6306,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 145
+                "y": 35
               },
               "id": 63,
               "legend": {
@@ -6230,6 +6345,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of fixed bit with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6262,7 +6378,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -6275,7 +6395,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 152
+                "y": 42
               },
               "id": 64,
               "legend": {
@@ -6314,6 +6434,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of fixed bit with all shards on all nodes in bytes",
               "tooltip": {
@@ -6346,7 +6467,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6374,7 +6499,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 153
+                "y": 36
               },
               "id": 67,
               "legend": {
@@ -6413,6 +6538,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of norms with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6445,7 +6571,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -6458,7 +6588,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 160
+                "y": 43
               },
               "id": 68,
               "legend": {
@@ -6497,6 +6627,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of norms with all shards on all nodes in bytes",
               "tooltip": {
@@ -6529,7 +6660,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6557,7 +6692,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 161
+                "y": 37
               },
               "id": 69,
               "legend": {
@@ -6596,6 +6731,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of points with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6628,7 +6764,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -6641,7 +6781,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 168
+                "y": 44
               },
               "id": 70,
               "legend": {
@@ -6680,6 +6820,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of points with all shards on all nodes in bytes",
               "tooltip": {
@@ -6712,7 +6853,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6740,7 +6885,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 169
+                "y": 52
               },
               "id": 71,
               "legend": {
@@ -6779,6 +6924,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of terms with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6811,7 +6957,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -6824,7 +6974,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 176
+                "y": 59
               },
               "id": 72,
               "legend": {
@@ -6863,6 +7013,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Number of terms with all shards on all nodes in bytes",
               "tooltip": {
@@ -6895,7 +7046,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -6923,7 +7078,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 177
+                "y": 67
               },
               "id": 73,
               "legend": {
@@ -6963,6 +7118,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of version map with only primary shards on all nodes in bytes",
               "tooltip": {
@@ -6995,7 +7151,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             },
             {
               "aliasColors": {},
@@ -7008,7 +7168,7 @@ data:
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 184
+                "y": 74
               },
               "id": 74,
               "legend": {
@@ -7048,6 +7208,7 @@ data:
               ],
               "thresholds": [],
               "timeFrom": null,
+              "timeRegions": [],
               "timeShift": null,
               "title": "Size of version map with all shards on all nodes in bytes",
               "tooltip": {
@@ -7080,7 +7241,11 @@ data:
                   "min": null,
                   "show": false
                 }
-              ]
+              ],
+              "yaxis": {
+                "align": false,
+                "alignLevel": null
+              }
             }
           ],
           "repeat": null,
@@ -7093,24 +7258,10 @@ data:
       "style": "dark",
       "tags": [
         "elasticsearch",
-        "elastic
+        "elastic"
       ],
       "templating": {
         "list": [
-          {
-            "current": {
-               "text": "Prometheus",
-               "value": "Prometheus"
-            },
-            "hide": 0,
-            "label": null,
-            "name": "datasource",
-            "options": [ ],
-            "query": "prometheus",
-            "refresh": 1,
-            "regex": "",
-            "type": "datasource"
-          },
           {
             "current": {
               "text": "Prometheus",
@@ -7208,7 +7359,7 @@ data:
             "definition": "",
             "hide": 0,
             "includeAll": false,
-            "label": "Cluster",
+            "label": "Сluster",
             "multi": false,
             "name": "cluster",
             "options": [],
@@ -7300,7 +7451,7 @@ data:
       },
       "timezone": "",
       "title": "ElasticSearch",
-      "uid": "myUIePIWz",
+      "uid": "kX_OVivWz",
       "version": 1
     }
 {{- end }}
