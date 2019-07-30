@@ -3,11 +3,10 @@ image:
   tag: "v2.3.2"
   pullPolicy: "IfNotPresent"
 
-storageclasses:
-  - name: disks
-    isDefault: true
-    reclaimPolicy: Delete
-    volumeBindingMode: WaitForFirstConsumer
+storageclass:
+  isDefault: true
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
 
 priorityClassName: system-node-critical
 

@@ -49,11 +49,9 @@ spec:
               readOnly: true
             - name: local-volume-provisioner-dev
               mountPath: /dev
-            {{- range .Values.storageclasses }}
-            - name: {{ .name }}
-              mountPath: /mnt/{{ .name }}
+            - name: disks
+              mountPath: /mnt/disks
               mountPropagation: "HostToContainer"
-            {{- end }}
       volumes:
         - name: provisioner-config
           configMap:
@@ -61,8 +59,6 @@ spec:
         - name: local-volume-provisioner-dev
           hostPath:
             path: /dev
-        {{- range .Values.storageclasses }}
-        - name: {{ .name }}
+        - name: disks
           hostPath:
-            path: /mnt/{{ .name }}
-        {{- end }}
+            path: /mnt/disks
