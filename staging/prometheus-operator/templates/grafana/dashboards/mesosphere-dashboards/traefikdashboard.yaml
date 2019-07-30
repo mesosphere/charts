@@ -1,4 +1,4 @@
-{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.dashboards.trafik }}
+{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.dashboards.traefik }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
