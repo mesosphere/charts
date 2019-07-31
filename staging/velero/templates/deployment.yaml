@@ -120,11 +120,13 @@ spec:
       initContainers:
         {{- with .Values.minioBackend }}
         - name: initialize-velero
-          image: mesosphere/kubeaddons-addon-initializer:v0.0.2
+          image: mesosphere/kubeaddons-addon-initializer:v0.0.3
           args: ["velero"]
           env:
           - name: "VELERO_MINIO_FALLBACK_SECRET_NAME"
             value: "velero-kubeaddons"
+          - name: "MINIO_CREATE_LOADBALANCER"
+            value: "true"
         {{- end }}
         {{- with .Values.initContainers }}
         {{- toYaml .Values.initContainers | nindent 8 }}
