@@ -1,8 +1,8 @@
-{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.dashboards.konvoyui }}
+{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.dashboards.opsportal }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "konvoyui-dashboard" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "opsportal-dashboard" | trunc 63 | trimSuffix "-" }}
   labels:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
@@ -10,7 +10,7 @@ metadata:
     app: {{ template "prometheus-operator.name" $ }}-grafana
 {{ include "prometheus-operator.labels" $ | indent 4 }}
 data:
-  konvoyuidashboard.json: |-
+  opsportaldashboard.json: |-
     {
       "__inputs": [],
       "__requires": [
@@ -121,7 +121,7 @@ data:
           "tableColumn": "Value",
           "targets": [
             {
-              "expr": "up{job=~\"konvoy-ui\"}",
+              "expr": "up{job=~\"opsportal\"}",
               "format": "table",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -210,7 +210,7 @@ data:
           "tableColumn": "Value",
           "targets": [
             {
-              "expr": "avg((avg_over_time(up{job=~\"konvoy-ui\"}[$interval]) * 100))",
+              "expr": "avg((avg_over_time(up{job=~\"opsportal\"}[$interval]) * 100))",
               "format": "table",
               "hide": false,
               "intervalFactor": 2,
@@ -289,7 +289,7 @@ data:
           "tableColumn": "Value",
           "targets": [
             {
-              "expr": "(time() - process_start_time_seconds{job=~\"konvoy-ui\"})",
+              "expr": "(time() - process_start_time_seconds{job=~\"opsportal\"})",
               "format": "table",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -341,7 +341,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (status_code) (irate(http_requests_total{job=~\"konvoy-ui\"}[5m]))",
+              "expr": "sum by (status_code) (irate(http_requests_total{job=~\"opsportal\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "{{`{{status_code}}`}}",
@@ -425,7 +425,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{service=\"konvoy-ui\"}",
+              "expr": "process_resident_memory_bytes{service=\"opsportal\"}",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "RSS",
@@ -509,14 +509,14 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "nodejs_heap_size_used_bytes{job=~\"konvoy-ui\"}/1024/1024",
+              "expr": "nodejs_heap_size_used_bytes{job=~\"opsportal\"}/1024/1024",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Used",
               "refId": "A"
             },
             {
-              "expr": "nodejs_heap_size_total_bytes{job=~\"konvoy-ui\"}/1024/1024",
+              "expr": "nodejs_heap_size_total_bytes{job=~\"opsportal\"}/1024/1024",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Total",
@@ -601,7 +601,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by (release) (rate(nodejs_eventloop_lag_seconds{job=~\"konvoy-ui\"}[5m]))",
+              "expr": "sum by (release) (rate(nodejs_eventloop_lag_seconds{job=~\"opsportal\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Lag",
@@ -685,7 +685,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum((rate(nodejs_gc_runs_total{job=\"konvoy-ui\"}[5m])))",
+              "expr": "sum((rate(nodejs_gc_runs_total{job=\"opsportal\"}[5m])))",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Rate",
@@ -769,7 +769,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum((rate(nodejs_gc_pause_seconds_total{job=\"konvoy-ui\"}[5m])))",
+              "expr": "sum((rate(nodejs_gc_pause_seconds_total{job=\"opsportal\"}[5m])))",
               "format": "time_series",
               "intervalFactor": 1,
               "legendFormat": "Pause Time",
@@ -821,7 +821,7 @@ data:
       "schemaVersion": 18,
       "style": "dark",
       "tags": [
-        "konvoy-ui"
+        "opsportal"
       ],
       "templating": {
         "list": [
@@ -943,7 +943,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "Konvoy UI",
+      "title": "Ops Portal",
       "uid": "Jw7Mw-HWz",
       "version": 1
     }
