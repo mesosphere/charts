@@ -19,6 +19,10 @@ spec:
         - name: kubernetes-dashboard
           image: "{{ .Values.bearerproxy.image.repository }}:{{ .Values.bearerproxy.image.tag }}"
           imagePullPolicy: "{{ .Values.bearerproxy.image.pullPolicy }}"
+          resources:
+            {{ with .Values.bearerproxy.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           ports:
             - containerPort: {{ .Values.bearerproxy.port }}
               protocol: TCP

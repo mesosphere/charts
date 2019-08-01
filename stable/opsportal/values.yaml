@@ -4,9 +4,23 @@ bearerproxy:
     repository: "quay.io/joejulian/bearerproxy"
     tag: "latest"
     pullPolicy: "Always"
+  resources: {}
+  # requests:
+  #   memory: "128Mi"
+  #   cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+  #   cpu: "200m"
 
 landing:
   enabled: true
+  resources: {}
+  # requests:
+  #   memory: "128Mi"
+  #   cpu: "100m"
+  # limits:
+  #   memory: "256Mi"
+  #   cpu: "200m"
 
 # these secrets are created via hooks
 secrets:
