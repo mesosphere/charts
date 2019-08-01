@@ -104,7 +104,7 @@ kommander:
 
   ### This must match the serviceName set in the ingress backend below
   service:
-    name: konvoy-ui
+    name: opsportal
 
   ingress:
     traefikFrontendRuleType: PathPrefixStrip
