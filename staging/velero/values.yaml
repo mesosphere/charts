@@ -38,11 +38,17 @@ metrics:
   enabled: false
   scrapeInterval: 30s
 
+  service:
+    # labels:
+    #   key: value
+
   # Pod annotations for Prometheus
-  podAnnotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "8085"
-    prometheus.io/path: "/metrics"
+  # Commented out since the Prometheus Operator discourages annotation-based service discovery.
+  # See https://github.com/helm/charts/tree/master/stable/prometheus-operator#prometheusioscrape
+  # podAnnotations:
+  #   prometheus.io/scrape: "true"
+  #   prometheus.io/port: "8085"
+  #   prometheus.io/path: "/metrics"
 
   serviceMonitor:
     enabled: false
