@@ -61,6 +61,7 @@ mesosphereResources:
     prometheusoverview: true
     scheduler: true
     traefik: true
+    velero: true
   hooks:
     grafana:
       jobName: grafana-default-dashboard
