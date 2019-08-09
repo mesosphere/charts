@@ -49,6 +49,7 @@ mesosphereResources:
     etcd: true
   dashboards:
     apiserver: true
+    calico: true
     controlmanager: true
     elasticsearch: true
     fluentbit: true
