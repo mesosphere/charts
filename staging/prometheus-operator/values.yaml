@@ -47,6 +47,7 @@ mesosphereResources:
   create: false
   rules:
     etcd: true
+    velero: false
   dashboards:
     apiserver: true
     calico: true
@@ -61,6 +62,7 @@ mesosphereResources:
     prometheusoverview: true
     scheduler: true
     traefik: true
+    velero: true
   hooks:
     grafana:
       jobName: grafana-default-dashboard

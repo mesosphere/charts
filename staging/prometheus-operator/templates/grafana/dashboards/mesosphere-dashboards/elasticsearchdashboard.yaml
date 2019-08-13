@@ -57,54 +57,8 @@ data:
       "gnetId": 2322,
       "graphTooltip": 1,
       "id": null,
-      "iteration": 1564423047305,
-      "links": [
-        {
-          "asDropdown": true,
-          "icon": "external link",
-          "includeVars": false,
-          "keepTime": true,
-          "tags": [
-            "OS"
-          ],
-          "targetBlank": true,
-          "title": "OS",
-          "type": "dashboards"
-        },
-        {
-          "asDropdown": true,
-          "icon": "external link",
-          "keepTime": true,
-          "tags": [
-            "MySQL"
-          ],
-          "targetBlank": true,
-          "title": "MySQL",
-          "type": "dashboards"
-        },
-        {
-          "asDropdown": true,
-          "icon": "external link",
-          "keepTime": true,
-          "tags": [
-            "MongoDB"
-          ],
-          "targetBlank": true,
-          "title": "MongoDB",
-          "type": "dashboards"
-        },
-        {
-          "asDropdown": true,
-          "icon": "external link",
-          "keepTime": true,
-          "tags": [
-            "App"
-          ],
-          "targetBlank": true,
-          "title": "App",
-          "type": "dashboards"
-        }
-      ],
+      "iteration": 1565201184666,
+      "links": [],
       "panels": [
         {
           "collapsed": false,
@@ -4016,7 +3970,7 @@ data:
                   "expr": "irate(elasticsearch_thread_pool_rejected_count{cluster=\"$cluster\",name=~\"$name\"}[$interval])",
                   "format": "time_series",
                   "intervalFactor": 2,
-                  "legendFormat": "{{`{{name}}`}}: {{`{{ type }}`}}",
+                  "legendFormat": "{{`{{name}}`}}: {{`{{type}}`}}",
                   "refId": "A",
                   "step": 20
                 }
@@ -4109,7 +4063,7 @@ data:
                   "expr": "elasticsearch_thread_pool_active_count{cluster=\"$cluster\",name=~\"$name\"}",
                   "format": "time_series",
                   "intervalFactor": 2,
-                  "legendFormat": "{{`{{name}}`}}: {{`{{ type }}`}}",
+                  "legendFormat": "{{`{{name}}`}}: {{`{{type}}`}}",
                   "refId": "A",
                   "step": 20
                 }
@@ -4203,7 +4157,7 @@ data:
                   "expr": "elasticsearch_thread_pool_active_count{cluster=\"$cluster\",name=~\"$name\"}",
                   "format": "time_series",
                   "intervalFactor": 2,
-                  "legendFormat": "{{`{{name}}`}}: {{`{{ type }}`}}",
+                  "legendFormat": "{{`{{name}}`}}: {{`{{type}}`}}",
                   "refId": "A",
                   "step": 20
                 }
@@ -4296,7 +4250,7 @@ data:
                   "expr": "irate(elasticsearch_thread_pool_completed_count{cluster=\"$cluster\",name=~\"$name\"}[$interval])",
                   "format": "time_series",
                   "intervalFactor": 2,
-                  "legendFormat": "{{`{{name}}`}}: {{`{{ type }}`}}",
+                  "legendFormat": "{{`{{name}}`}}: {{`{{type}}`}}",
                   "refId": "A",
                   "step": 20
                 }

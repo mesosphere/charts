@@ -56,7 +56,7 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1564000019000,
+      "iteration": 1565201483375,
       "links": [],
       "panels": [
         {
@@ -343,7 +343,7 @@ data:
             {
               "expr": "sum by (status_code) (irate(http_requests_total{job=~\"opsportal\"}[5m]))",
               "format": "time_series",
-              "intervalFactor": 1,
+              "intervalFactor": 2,
               "legendFormat": "{{`{{status_code}}`}}",
               "refId": "A"
             }
