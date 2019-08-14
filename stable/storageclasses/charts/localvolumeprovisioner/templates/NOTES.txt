@@ -1,0 +1,9 @@
+The following directory has been created on worker nodes:
+
+{{- range .Values.global.storageClasses }}
+{{- if eq .type "localvolumeprovisioner" }}
+{{ .parameters.mountPath }}
+{{- end }}
+{{- end }}
+
+Volumes that are mounted into this directory show up as persistent volumes.

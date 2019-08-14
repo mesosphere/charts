@@ -1,0 +1,34 @@
+{{- $defaultStorageClass := .Values.global.defaultStorageClass -}}
+{{- range .Values.global.storageClasses }}
+{{- if eq .type "awsebscsiprovisioner" }}
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .name }}
+  annotations:
+    kubernetes.io/description: AWS EBS CSI provisioner StorageClass
+{{- if eq .name $defaultStorageClass }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+provisioner: ebs.csi.aws.com
+volumeBindingMode: {{ .parameters.volumeBindingMode | quote }}
+reclaimPolicy: {{ .parameters.reclaimPolicy | quote }}
+parameters:
+  type: {{ .parameters.type | quote }}
+  {{- if .parameters.fsType }}
+  fsType: {{ .parameters.fsType | quote }}
+  {{- end }}
+  {{- if .parameters.iopsPerGB }}
+  iopsPerGB: {{ .parameters.iopsPerGB | quote }}
+  {{- end }}
+  {{- if .parameters.encrypted }}
+  encrypted: {{ .parameters.encrypted | quote }}
+  {{- end }}
+{{- if .parameters.allowedTopologies }}
+{{- with .parameters.allowedTopologies }}
+allowedTopologies:
+{{ toYaml . }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

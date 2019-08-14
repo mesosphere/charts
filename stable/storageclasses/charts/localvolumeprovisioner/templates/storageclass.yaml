@@ -1,0 +1,18 @@
+{{- $defaultStorageClass := .Values.global.defaultStorageClass -}}
+{{- range .Values.global.storageClasses }}
+{{- if eq .type "localvolumeprovisioner" }}
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: {{ .name }}
+  annotations:
+{{- if eq .name $defaultStorageClass }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+    kubernetes.io/description: Local volume provisioner StorageClass
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: {{ .parameters.volumeBindingMode | quote }}
+reclaimPolicy: {{ .parameters.reclaimPolicy | quote }}
+{{- end }}
+{{- end }}

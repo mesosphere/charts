@@ -1,0 +1,22 @@
+awsebscsiprovisioner:
+  enabled: true
+
+localvolumeprovisioner:
+  enabled: true
+
+global:
+  storageClasses:
+    - name: awsebscsiprovisioner
+      type: awsebscsiprovisioner
+      parameters:
+        type: gp2
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+    - name: localvolumeprovisioner
+      type: localvolumeprovisioner
+      parameters:
+        mountPath: /mnt/disks
+        reclaimPolicy: Delete
+        volumeBindingMode: WaitForFirstConsumer
+
+  defaultStorageClass: awsebscsiprovisioner

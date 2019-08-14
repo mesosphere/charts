@@ -1,0 +1,7 @@
+dependencies:
+  - name: awsebscsiprovisioner
+    condition: awsebscsiprovisioner.enabled
+  - name: awsebsprovisioner
+    condition: awsebsprovisioner.enabled
+  - name: localvolumeprovisioner
+    condition: localvolumeprovisioner.enabled
