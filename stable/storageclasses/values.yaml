@@ -1,9 +1,12 @@
+# Enable this for AWS deployments
 awsebscsiprovisioner:
-  enabled: true
+  enabled: false
 
+# Enable this for on-prem deployments
 localvolumeprovisioner:
-  enabled: true
+  enabled: false
 
+# Common settings used by storageclasses subcharts
 global:
   storageClasses:
     - name: awsebscsiprovisioner
