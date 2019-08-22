@@ -123,7 +123,7 @@ spec:
       serviceAccountName: minio-operator-sa
       containers:
       - name: minio-operator
-        image: mesosphere/kubeaddons-minio-operator:v0.0.2
+        image: minio/k8s-operator:1.0.1
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
