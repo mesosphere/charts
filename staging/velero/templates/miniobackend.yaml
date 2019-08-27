@@ -124,6 +124,10 @@ spec:
       containers:
       - name: minio-operator
         image: minio/k8s-operator:1.0.1
+        command: ["minio-operator"]
+        args:
+        - "-logtostderr=true"
+        - "-v=10"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
