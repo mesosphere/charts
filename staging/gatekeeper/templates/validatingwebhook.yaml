@@ -40,15 +40,14 @@ webhooks:
     {{ end }}
   rules:
   - apiGroups:
-    - '*'
+    {{ toYaml .Values.webhook.apiGroups | nindent 4 }}
     apiVersions:
-    - '*'
+    {{ toYaml .Values.webhook.apiVersions | nindent 4 }}
     operations:
-    - CREATE
-    - UPDATE
+    {{ toYaml .Values.webhook.operations | nindent 4 }}
     resources:
-    - '*'
-    scope: '*'
+    {{ toYaml .Values.webhook.resources | nindent 4 }}
+    scope: {{ .Values.webhook.scope }}
   sideEffects: None
 ---
 apiVersion: v1

@@ -81,3 +81,15 @@ admissionControllerObjectSelector:
   # - {key: foo, operator: NotIn, values: ["bar"]}
   matchLabels: []
   # - foo: bar
+
+webhook:
+  apiGroups:
+  - ""
+  apiVersions:
+  - "*"
+  operations:
+  - CREATE
+  - UPDATE
+  resources:
+  - pods
+  scope: Namespaced
