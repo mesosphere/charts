@@ -74,3 +74,10 @@ admissionControllerFailurePolicy: Ignore
 admissionControllerNamespaceSelector:
   matchExpressions:
   - {key: validation.gatekeeper.sh/disable-validation, operator: NotIn, values: ["true"]}
+
+# Adds an object selector to the admission controller webhook
+admissionControllerObjectSelector:
+  matchExpressions: []
+  # - {key: foo, operator: NotIn, values: ["bar"]}
+  matchLabels: []
+  # - foo: bar

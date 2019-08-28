@@ -27,6 +27,17 @@ webhooks:
   namespaceSelector:
     {{ toYaml . | nindent 4 }}
   {{ end }}
+  objectSelector:
+    matchExpressions:
+    - {key: app.kubernetes.io/name, operator: NotIn, values: ["{{ include "gatekeeper.name" . }}"]}
+    - {key: app.kubernetes.io/instance, operator: NotIn, values: ["{{ .Release.Name }}"]}
+    {{- with .Values.admissionControllerObjectSelector.matchExpressions }}
+    {{ toYaml . | nindent 4 }}
+    {{ end }}
+    {{- with .Values.admissionControllerObjectSelector.matchLabels }}
+    matchLabels:
+    {{ toYaml . | nindent 4 }}
+    {{ end }}
   rules:
   - apiGroups:
     - '*'

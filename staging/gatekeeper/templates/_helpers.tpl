@@ -56,9 +56,9 @@ Create the name of the service account to use
 */}}
 {{- define "gatekeeper.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "gatekeeper.fullname" .) .Values.serviceAccount.name }}
+{{ default (include "gatekeeper.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+{{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -67,8 +67,8 @@ Create the image tag to use
 */}}
 {{- define "gatekeeper.imageTag" -}}
 {{- if .Values.image.tag -}}
-    {{ .Values.image.tag }}
+{{ .Values.image.tag }}
 {{- else -}}
-    v{{ .Chart.AppVersion }}
+v{{ .Chart.AppVersion }}
 {{- end -}}
 {{- end -}}
