@@ -41,7 +41,7 @@ The Charts in this repository are organized into two folders:
 
 Stable Charts meet the criteria in the [technical requirements](CONTRIBUTING.md#technical-requirements).
 
-Staging Charts are those that have pending contributions [upstream](https://github.com/helm/charts) that are not yet merged. Having the staging folder allows charts to be hosted and used until a PR is accepted upstream. A chart PR into the `staging` repository will not be accepted without an accopanying upstream pull request.
+Staging Charts are those that have pending contributions [upstream](https://github.com/helm/charts) that are not yet merged. Having the staging folder allows charts to be hosted and used until a PR is accepted upstream. A chart PR into the `staging` repository will not be accepted without an accompanying upstream pull request.
 
 ## Contributing a Chart
 
