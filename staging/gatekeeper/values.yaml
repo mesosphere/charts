@@ -82,14 +82,19 @@ admissionControllerObjectSelector:
   matchLabels: []
   # - foo: bar
 
+# Webhook configuration
 webhook:
-  apiGroups:
-  - ""
-  apiVersions:
-  - "*"
-  operations:
-  - CREATE
-  - UPDATE
-  resources:
-  - pods
-  scope: Namespaced
+  # Webhook rules
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - "*"
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+    scope: Namespaced
+  # Webhook side effects
+  sideEffects: None

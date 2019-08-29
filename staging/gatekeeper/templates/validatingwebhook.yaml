@@ -41,16 +41,8 @@ webhooks:
     {{ end }}
   {{- end }}
   rules:
-  - apiGroups:
-    {{ toYaml .Values.webhook.apiGroups | nindent 4 }}
-    apiVersions:
-    {{ toYaml .Values.webhook.apiVersions | nindent 4 }}
-    operations:
-    {{ toYaml .Values.webhook.operations | nindent 4 }}
-    resources:
-    {{ toYaml .Values.webhook.resources | nindent 4 }}
-    scope: {{ .Values.webhook.scope }}
-  sideEffects: None
+  {{ toYaml .Values.webhook.rules | nindent 2 }}
+  sideEffects: {{ .Values.webhook.sideEffects }}
 ---
 apiVersion: v1
 kind: Secret
