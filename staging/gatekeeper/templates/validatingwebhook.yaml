@@ -10,11 +10,17 @@ metadata:
   name: {{ template "gatekeeper.fullname" . }}
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  annotations:
+  {{- if .Values.webhook.certManager.enabled }}
+    certmanager.k8s.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace (include "gatekeeper.rootCACertificate" .) | quote }}
+  {{- end }}
 webhooks:
 - admissionReviewVersions:
   - v1beta1
   clientConfig:
+    {{ if not .Values.webhook.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert }}
+    {{ end }}
     service:
       name: {{ template "gatekeeper.fullname" . }}
       namespace: {{ .Release.Namespace }}
@@ -44,15 +50,71 @@ webhooks:
   {{ toYaml .Values.webhook.rules | nindent 2 }}
   sideEffects: {{ .Values.webhook.sideEffects }}
 ---
+{{ if .Values.webhook.certManager.enabled }}
+---
+# Create a selfsigned Issuer, in order to create a root CA certificate for
+# signing webhook serving certificates
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: {{ include "gatekeeper.selfSignedIssuer" . }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+---
+# Generate a CA Certificate used to sign certificates for the webhook
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ include "gatekeeper.rootCACertificate" . }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+spec:
+  secretName: {{ include "gatekeeper.rootCACertificate" . }}
+  duration: 43800h # 5y
+  issuerRef:
+    name: {{ include "gatekeeper.selfSignedIssuer" . }}
+  commonName: "ca.webhook.gatekeeper"
+  isCA: true
+---
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: {{ include "gatekeeper.rootCAIssuer" . }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+spec:
+  ca:
+    secretName: {{ include "gatekeeper.rootCACertificate" . }}
+---
+# Finally, generate a serving certificate for the webhook to use
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ include "gatekeeper.servingCertificate" . }}
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+spec:
+  secretName: {{ template "gatekeeper.fullname" . }}-cert
+  duration: 8760h # 1y
+  issuerRef:
+    name: {{ include "gatekeeper.rootCAIssuer" . }}
+  dnsNames:
+  - {{ include "gatekeeper.fullname" . }}
+  - {{ include "gatekeeper.fullname" . }}.{{ .Release.Namespace }}
+  - {{ include "gatekeeper.fullname" . }}.{{ .Release.Namespace }}.svc
+{{ else }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ template "gatekeeper.fullname" . }}-webhook-server-secret
+  name: {{ template "gatekeeper.fullname" . }}-cert
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
-type: Opaque
+type: kubernetes.io/tls
 data:
-  cert.pem: {{ b64enc $cert.Cert }}
-  key.pem: {{ b64enc $cert.Key }}
-  ca-cert.pem: {{ b64enc $ca.Cert }}
-
+  tls.crt: {{ b64enc $cert.Cert }}
+  tls.key: {{ b64enc $cert.Key }}
+  ca.crt: {{ b64enc $ca.Cert }}
+{{ end }}

@@ -57,7 +57,14 @@ spec:
       - name: cert
         secret:
           defaultMode: 420
-          secretName: {{ template "gatekeeper.fullname" . }}-webhook-server-secret
+          secretName: {{ template "gatekeeper.fullname" . }}-cert
+          items:
+          - key: tls.crt
+            path: cert.pem
+          - key: tls.key
+            path: key.pem
+          - key: ca.crt
+            path: ca-cert.pem
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{ toYaml . | nindent 8 }}
