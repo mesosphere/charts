@@ -5,7 +5,7 @@ Kubernetes.
 
 ## Prerequisites
 
-- Kubernetes 1.15 (or newer) for validating and mutating webhook admission
+- Kubernetes 1.9 (or newer) for validating and mutating webhook admission
   controller support.
 
 ## Overview
