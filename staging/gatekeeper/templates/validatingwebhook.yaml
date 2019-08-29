@@ -27,6 +27,7 @@ webhooks:
   namespaceSelector:
     {{ toYaml . | nindent 4 }}
   {{ end }}
+  {{- if semverCompare ">=1.15.0-0" .Capabilities.KubeVersion.GitVersion }}
   objectSelector:
     matchExpressions:
     - {key: app.kubernetes.io/name, operator: NotIn, values: ["{{ include "gatekeeper.name" . }}"]}
@@ -38,6 +39,7 @@ webhooks:
     matchLabels:
     {{ toYaml . | nindent 4 }}
     {{ end }}
+  {{- end }}
   rules:
   - apiGroups:
     {{ toYaml .Values.webhook.apiGroups | nindent 4 }}
