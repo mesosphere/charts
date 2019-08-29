@@ -84,6 +84,9 @@ admissionControllerObjectSelector:
 
 # Webhook configuration
 webhook:
+  # Setup the webhook using cert-manager
+  certManager:
+    enabled: false
   # Webhook rules
   rules:
   - apiGroups:
