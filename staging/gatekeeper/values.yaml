@@ -101,3 +101,5 @@ webhook:
     scope: Namespaced
   # Webhook side effects
   sideEffects: None
+
+kubectlImage: bitnami/kubectl:1.15
