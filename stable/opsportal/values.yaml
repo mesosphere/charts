@@ -70,20 +70,15 @@ opsportal:
 ###############################################################################
 kommander:
   image:
-    repository: mesosphere/kommander
-    tag: 1.60.0
+    repository: mesosphere/konvoy-ui
+    tag: 1.65.30
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
   clusterPollingInterval: 3000
   clientPollingInterval: 3000
 
-  # Mode must be either production|konvoy
-  mode: konvoy
-
   displayName: Konvoy Cluster
-
-  createObservableClusterCRD: true
 
   extraInitContainers:
 

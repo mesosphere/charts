@@ -1,6 +1,6 @@
 image:
-  repository: mesosphere/kommander
-  tag: 1.60.0
+  repository: mesosphere/konvoy-ui
+  tag: 1.65.30
   pullPolicy: IfNotPresent
 replicas: 1
 logoutRedirectPath: /ops/landing
@@ -28,10 +28,10 @@ livenessProbe:
 
 ### This must match the serviceName set in the ingress backend below
 service:
-  name: kommander
+  name: konvoy-ui
 
 ingress:
   traefikFrontendRuleType: PathPrefixStrip
   # extraAnnotations:
   #   ingress.kubernetes.io/foo: bar
-  path: /ops/portal/kommander
+  path: /ops/portal/konvoy-ui

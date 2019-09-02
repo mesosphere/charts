@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "konvoy-ui.fullname" . }}
+  labels:
+    app: {{ template "konvoy-ui.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "konvoy-ui.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "konvoy-ui.fullname" . }}
+      namespace: {{ .Release.Namespace }}
+    spec:
+      serviceAccountName: {{ template "konvoy-ui.fullname" . }}
+      imagePullSecrets:
+        - name: dockerhub
+      initContainers:
+        {{- with .Values.extraInitContainers }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      containers:
+        - name: {{ template "konvoy-ui.fullname" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - name: http
+              containerPort: 4000
+          resources:
+            {{ with .Values.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: LOGOUT_REDIRECT_PATH
+              value: {{ .Values.logoutRedirectPath | quote }}
+            - name: MODE
+              value: {{ .Values.mode | quote }}
+            - name: CLUSTER_POLLING_INTERVAL
+              value: {{ .Values.clusterPollingInterval | quote }}
+            - name: CLIENT_POLLING_INTERVAL
+              value: {{ .Values.clientPollingInterval | quote }}
