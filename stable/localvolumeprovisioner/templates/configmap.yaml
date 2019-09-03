@@ -6,13 +6,11 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   storageClassMap: |
-    {{- range .Values.storageclasses }}
-    localvolumeprovisioner-{{ .name }}:
-      hostDir: /mnt/{{ .name }}
-      mountDir: /mnt/{{ .name }}
-      blockCleanerCommand:
-       - "/scripts/shred.sh"
-       - "2"
-      volumeMode: Filesystem
-      fsType: ext4
-    {{- end }}
+    localvolumeprovisioner:
+       hostDir: /mnt/disks
+       mountDir: /mnt/disks
+       blockCleanerCommand:
+         - "/scripts/shred.sh"
+         - "2"
+       volumeMode: Filesystem
+       fsType: ext4
