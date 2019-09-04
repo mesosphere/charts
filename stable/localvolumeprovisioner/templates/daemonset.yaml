@@ -50,8 +50,8 @@ spec:
             - name: local-volume-provisioner-dev
               mountPath: /dev
             {{- range .Values.storageclasses }}
-            - name: {{ .name }}
-              mountPath: /mnt/{{ .name }}
+            - name: {{ .dirName }}
+              mountPath: /mnt/{{ .dirName }}
               mountPropagation: "HostToContainer"
             {{- end }}
       volumes:
@@ -62,7 +62,7 @@ spec:
           hostPath:
             path: /dev
         {{- range .Values.storageclasses }}
-        - name: {{ .name }}
+        - name: {{ .dirName }}
           hostPath:
-            path: /mnt/{{ .name }}
+            path: /mnt/{{ .dirName }}
         {{- end }}

@@ -7,9 +7,9 @@ metadata:
 data:
   storageClassMap: |
     {{- range .Values.storageclasses }}
-    localvolumeprovisioner-{{ .name }}:
-      hostDir: /mnt/{{ .name }}
-      mountDir: /mnt/{{ .name }}
+    {{ .name }}:
+      hostDir: /mnt/{{ .dirName }}
+      mountDir: /mnt/{{ .dirName }}
       blockCleanerCommand:
        - "/scripts/shred.sh"
        - "2"
