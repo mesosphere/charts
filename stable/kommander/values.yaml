@@ -42,3 +42,40 @@ ingress:
   # extraAnnotations:
   #   ingress.kubernetes.io/foo: bar
   path: /ops/portal/kommander
+
+federate:
+  addons: true
+  roles: true
+  rolebindings: true
+
+# This name must match the name of the kubefed dep
+# in order to override values.
+kubefed:
+  controllermanager:
+    enabled: true
+    # override value is necessary due to a "featureGates":interface {}(nil)... spec.featureGates in body must be of type array: "null"
+    # bug found
+    featureGates:
+      CrossClusterServiceDiscovery: "Enabled"
+      FederatedIngress: "Enabled"
+      PushReconciler: "Enabled"
+      SchedulerPreferences: "Enabled"
+    global:
+      scope: ""
+    image: kubefed
+    imagePullPolicy: IfNotPresent
+    replicaCount: 2
+    repository: quay.io/kubernetes-multicluster
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    syncController:
+      adoptResources: null
+    tag: v0.1.0-rc6
+
+  global:
+    scope: ""
