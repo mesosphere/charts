@@ -8,4 +8,5 @@ excluded-charts:
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
+  - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
 helm-extra-args: --timeout 600
