@@ -42,3 +42,20 @@ ingress:
   # extraAnnotations:
   #   ingress.kubernetes.io/foo: bar
   path: /ops/portal/kommander
+
+federate:
+  addons: true
+  roles: true
+  rolebindings: true
+
+# This name must match the name of the kubefed dep
+# in order to override values.
+kubefed:
+  controllermanager:
+    # override value is necessary due to a "featureGates":interface {}(nil)... spec.featureGates in body must be of type array: "null"
+    # bug found
+    featureGates:
+      CrossClusterServiceDiscovery: "Disabled"
+      FederatedIngress: "Disabled"
+      PushReconciler: "Enabled"
+      SchedulerPreferences: "Disabled"
