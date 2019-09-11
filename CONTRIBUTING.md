@@ -15,6 +15,8 @@ This repository is used by Mesosphere developers for maintaining charts for Kube
 
 ***NOTE***: In order to make testing and merging of PRs easier, please submit changes to multiple charts in separate PRs.
 
+If you need [initContainer](https://kubernetes.io/docs/concepts/workloads/pods/init-containers/) or [job](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/) support in your chart and need to create new functionality for this (e.g. there's not an existing docker image that would support your needs) see our [Kubeaddons ExtraSteps](https://github.com/mesosphere/kubeaddons-extrasteps) repository which contains custom functionality for these purposes.
+
 ### Technical requirements
 
 * All Chart dependencies should also be submitted independently
