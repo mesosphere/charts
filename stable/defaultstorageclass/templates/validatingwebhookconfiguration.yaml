@@ -1,0 +1,27 @@
+# This file is generated from `update.sh`. DO NOT EDIT.
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    certmanager.k8s.io/inject-ca-from: {{ .Release.Namespace }}/dstorageclass-serving-cert
+  creationTimestamp: null
+  name: dstorageclass-validating-webhook-configuration
+webhooks:
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: dstorageclass-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /validate-storage-k8s-io-v1-storageclass
+  failurePolicy: Fail
+  name: vstorageclasses.kb.io
+  rules:
+  - apiGroups:
+    - storage.k8s.io
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - storageclasses

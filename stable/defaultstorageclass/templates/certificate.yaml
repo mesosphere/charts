@@ -1,0 +1,16 @@
+# This file is generated from `update.sh`. DO NOT EDIT.
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  creationTimestamp: null
+  name: dstorageclass-serving-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  commonName: dstorageclass-webhook-service.{{ .Release.Namespace }}.svc
+  dnsNames:
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: {{ .Values.issuer.name }}
+  secretName: webhook-server-cert
+status: {}
