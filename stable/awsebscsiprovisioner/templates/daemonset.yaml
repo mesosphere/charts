@@ -1,6 +1,6 @@
 ---
 kind: DaemonSet
-apiVersion: apps/v1beta2
+apiVersion: apps/v1
 metadata:
   name: ebs-csi-node
   namespace: {{ .Release.Namespace }}
@@ -17,6 +17,8 @@ spec:
         app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
       hostNetwork: true
       priorityClassName: system-node-critical
 {{- if .Values.tolerations }}
@@ -79,7 +81,6 @@ spec:
           image: "{{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}"
           args:
             - --csi-address=/csi/csi.sock
-            - --connection-timeout=3s
           volumeMounts:
             - name: plugin-dir
               mountPath: /csi
