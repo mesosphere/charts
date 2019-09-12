@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "cert-manager-setup.fullname" . }}
+  labels:
+{{ include "cert-manager-setup.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install
+    # This hook should run as the first one.
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "cert-manager-wait-for-validating-webhook"
+      labels:
+        app.kubernetes.io/managed-by: {{ include "cert-manager-setup.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: bitnami/kubectl:latest
+        imagePullPolicy: IfNotPresent
+        command: ["kubectl", "wait", "--for=condition=Available", "--timeout=300s", "apiservice", "v1beta1.webhook.certmanager.k8s.io"]
