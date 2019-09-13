@@ -6,6 +6,6 @@ metadata:
   annotations:
     "helm.sh/hook": "post-install"
     "helm.sh/hook-weight": "-4"
-  spec:
+spec:
 {{ required "clusterissuer must have a spec" .Values.clusterissuer.spec | toYaml | indent 4 }}
 {{ end }}
