@@ -6,16 +6,12 @@ metadata:
 {{ include "cert-manager-setup.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": post-install
-    # This hook should run as the first one.
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     metadata:
-      name: "cert-manager-wait-for-validating-webhook"
-      labels:
-        app.kubernetes.io/managed-by: {{ include "cert-manager-setup.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+      name: "wait-for-cert-manager-validating-webhook"
     spec:
       restartPolicy: Never
       containers:
