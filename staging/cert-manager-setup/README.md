@@ -6,7 +6,9 @@ TLS certificates from various issuing sources.
 `cert-manager` will ensure certificates are valid and up to date periodically, and attempt
 to renew certificates at an appropriate time before expiry.
 
-In addition to installing `cert-manager`, `cert-manager-setup` provides the capability to specify a `ClusterIssuer` in the `values.yaml` file which will be applied directly after the `cert-manager` installation has completed.
+`cert-manager-setup` deploys the cert-manager
+
+In addition to installing `cert-manager`, `cert-manager-setup` provides the capability to specify a `ClusterIssuer` in the `values.yaml` file which will be applied directly after the `cert-manager` installation has completed. In order for this to happen, `cert-manager-setup` sets up an `Issuer` in the `cert-manager` namespace. It then creates an intermediate certificate from the secret `kubernetes-root-ca` which must already contain ideally the Kubernetes root CA. The `ClusterIssuer` then uses the intermediate certificate derived from the Kubernetes root CA.
 
 # Supported values format
 
