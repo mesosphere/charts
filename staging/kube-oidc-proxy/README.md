@@ -14,7 +14,13 @@ oidc:
   clientId: my-client
   issuerUrl: https://accounts.google.com
   usernameClaim: email
-  # Provide base64 encoded value of CA cert
+```
+
+When a custom root CA certificate is required it should be added as PEM encoded
+text value:
+
+```yaml
+oidc:
   caPEM: |
     -----BEGIN CERTIFICATE-----
     MIIDdTCCAl2gAwIBAgILBAAAAAABFUtaw5QwDQYJKoZIhvcNAQEFBQAwVzELMAkG

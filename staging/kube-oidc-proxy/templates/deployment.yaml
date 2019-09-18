@@ -40,7 +40,9 @@ spec:
           - "--oidc-client-id=$(OIDC_CLIENT_ID)"
           - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
+          {{- if .Values.oidc.caPEM }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
+          {{ end }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         env:
@@ -60,19 +62,23 @@ spec:
               name: {{ include "kube-oidc-proxy.fullname" . }}-config
               key: oidc.username-claim
         volumeMounts:
+          {{ if .Values.oidc.caPEM }}
           - name: kube-oidc-proxy-config
             mountPath: /etc/oidc
             readOnly: true
+          {{ end }}
           - name: kube-oidc-proxy-tls
             mountPath: /etc/oidc/tls
             readOnly: true
       volumes:
+        {{ if .Values.oidc.caPEM }}
         - name: kube-oidc-proxy-config
           secret:
             secretName: {{ include "kube-oidc-proxy.fullname" . }}-config
             items:
             - key: oidc.ca-pem
               path: oidc-ca.pem
+        {{ end }}
         - name: kube-oidc-proxy-tls
           secret:
             secretName: {{ $tlsSecretName }}
