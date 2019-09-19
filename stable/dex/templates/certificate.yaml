@@ -2,7 +2,7 @@ apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: dex
-  namespace: kubeaddons
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install
 spec:
@@ -12,7 +12,7 @@ spec:
     kind: ClusterIssuer
   commonName: dex
   organization:
-    - Mesosphere
+    - D2iQ
   dnsNames:
     - dex-kubeaddons
     - dex-kubeaddons.kubeaddons

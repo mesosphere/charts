@@ -2,10 +2,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: read-apiservices-rolebinding
-  namespace: cert-manager
+  namespace: {{ .Release.Namespace }}
 subjects:
 - kind: ServiceAccount
-  namespace: cert-manager
+  namespace: {{ .Release.Namespace }}
   name: default
 roleRef:
   kind: ClusterRole
