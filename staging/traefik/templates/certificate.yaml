@@ -1,0 +1,17 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: traefik
+  namespace: kubeaddons
+  annotations:
+    "helm.sh/hook": pre-install
+spec:
+  secretName: traefik-certificate
+  issuerRef:
+    name: kubernetes-ca
+    kind: ClusterIssuer
+  commonName: traefik.localhost.localdomain
+  organization:
+  - Mesosphere
+  dnsNames:
+  - "*"

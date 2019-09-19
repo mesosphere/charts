@@ -9,4 +9,5 @@ chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
   - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
+  - jetstack-charts=https://charts.jetstack.io
 helm-extra-args: --timeout 600
