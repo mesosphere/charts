@@ -28,10 +28,11 @@ spec:
         - containerPort: 443
         - containerPort: 8080
         readinessProbe:
-          tcpSocket:
+          httpGet:
+            path: /ready
             port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 1
         command: ["kube-oidc-proxy"]
         args:
           - "--secure-port=443"

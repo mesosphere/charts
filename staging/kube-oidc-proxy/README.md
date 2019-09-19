@@ -71,4 +71,3 @@ service.
 tls:
   secretName: my-tls-secret-with-key-and-cert
 ```
-
