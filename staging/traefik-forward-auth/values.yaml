@@ -35,11 +35,6 @@ traefikForwardAuth:
         name: secretName
         key: secretKey
   # oidcUri: ""
-  caCertificate:
-    valueFrom:
-      secretKeyRef:
-        name: secretName
-        key: secretKey
   extraConfig: ""
   userCookieName: "_forward_auth_name"
 
