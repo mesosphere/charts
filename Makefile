@@ -14,6 +14,7 @@ GIT_REMOTE_URL ?= https://mesosphere:$(GITHUB_USER_TOKEN)@github.com/mesosphere/
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
+GIT_REF = $(shell git show-ref -s HEAD)	
 LAST_COMMIT_MESSAGE := $(shell git reflog -1 | sed 's/^.*: //')
 
 TMPDIR := $(shell mktemp -d)
@@ -50,9 +51,12 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 .PHONY: publish
 publish:
 	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
-	@git branch -d master >/dev/null 2>&1 || true
-	@git checkout -B master
-	@git pull --rebase publish master -s recursive -X theirs
+	@git fetch publish master
+	@git checkout master
+	@mv docs docs~
+	@git reset --hard $(GIT_REF)
+	@rm -rf docs
+	@mv docs~ docs
 	@make all
 	@git add .
 	@git commit -m "$(LAST_COMMIT_MESSAGE)"
