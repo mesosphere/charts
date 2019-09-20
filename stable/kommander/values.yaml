@@ -51,6 +51,8 @@ federate:
 # This name must match the name of the kubefed dep
 # in order to override values.
 kubefed:
+  # set to false if you wish to run kommander without deploying kubefed (not recommended)
+  enabled: true
   controllermanager:
     # override value is necessary due to a "featureGates":interface {}(nil)... spec.featureGates in body must be of type array: "null"
     # bug found
