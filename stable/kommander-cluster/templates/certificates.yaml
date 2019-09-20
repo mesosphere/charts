@@ -1,0 +1,29 @@
+
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: terraform-configmap-backend-serving-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  commonName: terraform-configmap-backend.kcl-system.svc
+  dnsNames:
+    - terraform-configmap-backend.kcl-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: selfsigned-issuer
+  secretName: terraform-configmap-backend-server-cert
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: webhook-serving-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  commonName: webhook-service.kcl-system.svc
+  dnsNames:
+    - webhook-service.kcl-system.svc.cluster.local
+  issuerRef:
+    kind: Issuer
+    name: selfsigned-issuer
+  secretName: webhook-server-cert

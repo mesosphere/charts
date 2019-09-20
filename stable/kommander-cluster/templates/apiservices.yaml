@@ -1,0 +1,16 @@
+
+---
+apiVersion: apiregistration.k8s.io/v1beta1
+kind: APIService
+metadata:
+  annotations:
+    certmanager.k8s.io/inject-ca-from: kcl-system/webhook-serving-cert
+  name: v1alpha2.webhook.kommander.mesosphere.io
+spec:
+  group: webhook.kommander.mesosphere.io
+  groupPriorityMinimum: 1000
+  service:
+    name: webhook-service
+    namespace: kcl-system
+  version: v1alpha2
+  versionPriority: 15

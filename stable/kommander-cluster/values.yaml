@@ -1,9 +1,56 @@
 
+controller:
+  manager:
+    replicas: 1
+    image:
+      repository: mesosphere/kommander-cluster-lifecycle-controller-manager
+      tag: dev
+      pullPolicy: IfNotPresent
+    resources:
+      limits:
+        cpu: 100m
+        memory: 30Mi
+      requests:
+        cpu: 100m
+        memory: 20Mi
+
+  kube-rbac-proxy:
+    image:
+      repository: gcr.io/kubebuilder/kube-rbac-proxy
+      tag: v0.4.0
+      pullPolicy: IfNotPresent
+    resources: {}
+
+terraform-backend:
+  image:
+    repository: jimmidyson/tf-kubernetes-configmap-backend
+    tag: v0.1.0
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 100m
+      memory: 30Mi
+    requests:
+      cpu: 100m
+      memory: 20Mi
+
+webhook:
+  image:
+    repository: mesosphere/kommander-cluster-lifecycle-webhook
+    tag: dev
+    pullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 100m
+      memory: 30Mi
+    requests:
+      cpu: 100m
+      memory: 20Mi
 
 
 crds:
   enableKonvoyClusters: true
   enableKommanderClusters: true
-  enableClouldProviderAcccounts: true
+  enableClouldProviderAccounts: true
 
 

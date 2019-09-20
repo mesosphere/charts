@@ -1,0 +1,158 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    control-plane: controller-manager
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
+  name: "{{ template "kommander.fullname" . }}-controller-manager"
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.controller.manager.replicas }}
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+    spec:
+      serviceAccountName: controller-manager
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: controller-manager
+          image: "{{ .Values.controller.manager.image.repository }}:{{ .Values.controller.manager.image.tag }}"
+          imagePullPolicy: "{{ .Values.controller.manager.image.pullPolicy }}"
+          args:
+            - --enable-leader-election
+            - --terraform-backend-address=https://terraform-configmap-backend.kcl-system.svc
+            - --konvoy-image=mesosphere/konvoy:v1.1.5
+          resources:
+          {{ with .Values.manager.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+        - name: kube-rbac-proxy
+          image: "{{ .Values.controller.kube-rbac-proxy.image.repository }}:{{ .Values.controller.kube-rbac-proxy.image.tag }}"
+          imagePullPolicy: "{{ .Values.kube-rbac-proxy.image.pullPolicy }}"
+          args:
+            - --secure-listen-address=0.0.0.0:8444
+            - --upstream=http://127.0.0.1:8080/
+            - --logtostderr=true
+            - --v=10
+          resources:
+            {{ with .Values.kube-rbac-proxy.resources }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - containerPort: 8444
+              name: https
+            - containerPort: 8080
+              name: metrics
+      securityContext:
+        runAsUser: 65534
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: terraform-configmap-backend
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
+  name: terraform-configmap-backend
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: terraform-configmap-backend
+  template:
+    metadata:
+      labels:
+        name: terraform-configmap-backend
+    spec:
+      serviceAccountName: terraform-configmap-backend
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: server
+          image: "{{ .Values.terraform-backend.image.repository }}:{{ .Values.terraform-backend.image.tag }}"
+          imagePullPolicy: "{{ .Values.terraform-backend.image.pullPolicy }}"
+          args:
+            - --tls-cert-file=/tmp/terraform-configmap-backend/serving-certs/tls.crt
+            - --tls-private-key-file=/tmp/terraform-configmap-backend/serving-certs/tls.key
+            - --compress-state
+            - --minify-state
+          ports:
+            - containerPort: 8443
+              name: https
+          resources:
+          {{ with .Values.terraform-backend.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /tmp/terraform-configmap-backend/serving-certs
+              name: cert
+              readOnly: true
+      securityContext:
+        runAsUser: 65534
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: terraform-configmap-backend-server-cert
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    control-plane: webhook
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
+  name: webhook
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: webhook
+  template:
+    metadata:
+      labels:
+        control-plane: webhook
+    spec:
+      serviceAccountName: webhook
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: webhook
+          image: "{{ .Values.webhook.image.repository }}:{{ .Values.webhook.image.tag }}"
+          imagePullPolicy: "{{ .Values.webhook.image.pullPolicy }}"
+          args:
+            - --secure-port=8443
+            - --tls-cert-file=/certs/tls.crt
+            - --tls-private-key-file=/certs/tls.key
+          ports:
+            - containerPort: 8443
+              name: webhook-server
+              protocol: TCP
+          resources:
+          {{ with .Values.webhook.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /certs
+              name: cert
+              readOnly: true
+      securityContext:
+        runAsUser: 65534
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert

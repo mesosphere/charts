@@ -1,0 +1,34 @@
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    certmanager.k8s.io/inject-ca-from: kcl-system/webhook-serving-cert
+  name: validating-webhook-configuration
+webhooks:
+  - clientConfig:
+      service:
+        name: kubernetes
+        namespace: default
+        path: /apis/webhook.kommander.mesosphere.io/v1alpha2/validations
+    failurePolicy: Fail
+    name: webhook.kommander.mesosphere.io
+    rules:
+      - apiGroups:
+          - kommander.mesosphere.io
+        apiVersions:
+          - v1alpha2
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - cloudprovideraccounts
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - DELETE
+        resources:
+          - secrets
+    sideEffects: None
