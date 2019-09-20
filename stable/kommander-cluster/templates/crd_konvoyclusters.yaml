@@ -1,0 +1,485 @@
+{{- if .Values.enableKonvoyClusters }}
+{{- if not (.Capabilities.APIVersions.Has "kommander.mesosphere.io/v1alpha2") }}
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: konvoyclusters.kommander.mesosphere.io
+spec:
+  additionalPrinterColumns:
+    - JSONPath: .status.phase
+      name: Status
+      type: string
+    - JSONPath: .spec.provisioner.provider
+      name: Provider
+      type: string
+  group: kommander.mesosphere.io
+  names:
+    kind: KonvoyCluster
+    listKind: KonvoyClusterList
+    plural: konvoyclusters
+    shortNames:
+      - konvoy
+      - konvoys
+    singular: konvoycluster
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: KonvoyCluster is the Schema for the Konvoy cluster kind
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: KonvoyClusterSpec defines the desired state of KonvoyCluster
+          properties:
+            cloudProviderAccountRef:
+              description: LocalObjectReference contains enough information to let
+                you locate the referenced object inside the same namespace.
+              properties:
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    TODO: Add other useful fields. apiVersion, kind, uid?'
+                  type: string
+              type: object
+            cluster:
+              description: ClusterConfigurationSpec is the spec that contains the
+                Kubernetes cluster options
+              properties:
+                addons:
+                  properties:
+                    addonsList:
+                      items:
+                        description: Addon describes an addon to be installed on the
+                          cluster
+                        properties:
+                          enabled:
+                            type: boolean
+                          name:
+                            type: string
+                          values:
+                            type: string
+                        required:
+                          - enabled
+                          - name
+                        type: object
+                      type: array
+                    configVersion:
+                      type: string
+                  required:
+                    - configVersion
+                  type: object
+                containerNetworking:
+                  description: ContainerNetworking describes the CNI used by Kubernetes
+                  properties:
+                    calico:
+                      description: CalicoContainerNetworking describes Calico CNI
+                      properties:
+                        version:
+                          type: string
+                      required:
+                        - version
+                      type: object
+                  required:
+                    - calico
+                  type: object
+                containerRuntime:
+                  description: ContainerRuntime describes the runtime used by the
+                    Kubelet
+                  properties:
+                    containerd:
+                      description: ContainerdContainerRuntime describes containerd
+                        runtime options
+                      properties:
+                        configData:
+                          description: ConfigData represents a file configuration
+                            for a Konvoy cluster component, and whether or not that
+                            should be merged into the corresponding data or completely
+                            replace it.
+                          properties:
+                            data:
+                              type: string
+                            replace:
+                              type: boolean
+                          required:
+                            - data
+                            - replace
+                          type: object
+                        version:
+                          type: string
+                      required:
+                        - configData
+                        - version
+                      type: object
+                  required:
+                    - containerd
+                  type: object
+                imageRegistries:
+                  items:
+                    description: ImageRegistry describes the docker image registries
+                      that are automatically configured to be used by the ContainerRuntime
+                    properties:
+                      auth:
+                        type: string
+                      identityToken:
+                        type: string
+                      password:
+                        type: string
+                      server:
+                        type: string
+                      username:
+                        type: string
+                    required:
+                      - auth
+                      - identityToken
+                      - password
+                      - server
+                      - username
+                    type: object
+                  type: array
+                kubernetes:
+                  description: Kubernetes controls the options used by kubeadm and
+                    at other points during installation
+                  properties:
+                    admissionPlugins:
+                      properties:
+                        disabled:
+                          items:
+                            type: string
+                          type: array
+                        enabled:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                        - disabled
+                        - enabled
+                      type: object
+                    cloudProvider:
+                      description: CloudProvider describes the options passed to Kubernets
+                        cloud-provider options
+                      properties:
+                        provider:
+                          type: string
+                      required:
+                        - provider
+                      type: object
+                    controlPlane:
+                      description: ControlPlane contains all control plane related
+                        configurations
+                      properties:
+                        certificate:
+                          description: Certificate contains information about an X.509
+                            certificate
+                          properties:
+                            subjectAlternativeNames:
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                        controlPlaneEndpointOverride:
+                          type: string
+                        keepalived:
+                          description: Keepalived describes different keepalived related
+                            options
+                          properties:
+                            enabled:
+                              type: boolean
+                            interface:
+                              type: string
+                            vrid:
+                              type: integer
+                          required:
+                            - enabled
+                          type: object
+                      required:
+                        - certificate
+                        - controlPlaneEndpointOverride
+                        - keepalived
+                      type: object
+                    networking:
+                      description: Networking describes different networking related
+                        options
+                      properties:
+                        httpProxy:
+                          type: string
+                        httpsProxy:
+                          type: string
+                        noProxy:
+                          items:
+                            type: string
+                          type: array
+                        podSubnet:
+                          type: string
+                        serviceSubnet:
+                          type: string
+                      required:
+                        - httpProxy
+                        - httpsProxy
+                        - podSubnet
+                        - serviceSubnet
+                      type: object
+                    preflightChecks:
+                      description: PreflightChecks describes the set of preflight
+                        checks to be performed.
+                      properties:
+                        errorsToIgnore:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                        - errorsToIgnore
+                      type: object
+                    version:
+                      type: string
+                  required:
+                    - admissionPlugins
+                    - cloudProvider
+                    - controlPlane
+                    - networking
+                    - preflightChecks
+                    - version
+                  type: object
+                nodePools:
+                  items:
+                    description: Nodepool is an object that contains details of a
+                      pool such as its name, taints and labels
+                    properties:
+                      labels:
+                        items:
+                          description: NodeLabel represents a kubernetes node label
+                          properties:
+                            key:
+                              type: string
+                            value:
+                              type: string
+                          required:
+                            - key
+                            - value
+                          type: object
+                        type: array
+                      name:
+                        type: string
+                      taints:
+                        items:
+                          description: NodeTaint represents a kubernetes taint to
+                            be applied to a node
+                          properties:
+                            effect:
+                              type: string
+                            key:
+                              type: string
+                            value:
+                              type: string
+                          required:
+                            - effect
+                            - key
+                            - value
+                          type: object
+                        type: array
+                    required:
+                      - name
+                    type: object
+                  type: array
+                packageRepository:
+                  description: PackageRepository configures the installation of linux
+                    package and related properties
+                  properties:
+                    defaultRepositoryInstallationDisabled:
+                      type: boolean
+                  required:
+                    - defaultRepositoryInstallationDisabled
+                  type: object
+                version:
+                  type: string
+              required:
+                - addons
+                - containerNetworking
+                - containerRuntime
+                - kubernetes
+                - packageRepository
+                - version
+              type: object
+            provisioner:
+              description: ClusterProvisionerSpec is the spec that contains the provisioner
+                options
+              properties:
+                aws:
+                  description: AWSProviderOptions describes AWS provider related options
+                  properties:
+                    availabilityZones:
+                      items:
+                        type: string
+                      type: array
+                    elb:
+                      description: ELB contains details for the kube-apiserver ELB
+                      properties:
+                        internal:
+                          type: boolean
+                        subnetIDs:
+                          items:
+                            type: string
+                          type: array
+                      type: object
+                    region:
+                      type: string
+                    tags:
+                      additionalProperties:
+                        type: string
+                      type: object
+                    vpc:
+                      description: VPC contains the vpc information required if using
+                        an existing vpc
+                      properties:
+                        ID:
+                          type: string
+                        internetGatewayID:
+                          type: string
+                        routeTableID:
+                          type: string
+                      type: object
+                  type: object
+                docker:
+                  description: DockerProviderOptions describes Docker provider related
+                    options
+                  properties:
+                    controlPlaneMappedPortBase:
+                      type: integer
+                    dedicatedNetwork:
+                      type: boolean
+                    disablePortMapping:
+                      type: boolean
+                    sshControlPlaneMappedPortBase:
+                      type: integer
+                    sshWorkerMappedPortBase:
+                      type: integer
+                  type: object
+                nodePools:
+                  description: AdminCIDRBlocks       []string               `json:"adminCIDRBlocks,omitempty"
+                    yaml:"adminCIDRBlocks,omitempty"`
+                  items:
+                    description: MachinePool used by the provisioner to configure
+                      a machine
+                    properties:
+                      bastion:
+                        type: boolean
+                      controlPlane:
+                        type: boolean
+                      count:
+                        type: integer
+                      machine:
+                        description: Machine used by the provisioner to configure
+                          a machine
+                        properties:
+                          aws:
+                            description: AWSMachineOpts is aws specific options for
+                              machine
+                            properties:
+                              iam:
+                                description: IAM contains role information to use
+                                  instead of creating one
+                                properties:
+                                  instanceProfile:
+                                    properties:
+                                      arn:
+                                        type: string
+                                      name:
+                                        type: string
+                                    type: object
+                                type: object
+                              subnetIDs:
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          imageID:
+                            type: string
+                          imageName:
+                            type: string
+                          imagefsVolumeEnabled:
+                            type: boolean
+                          imagefsVolumeSize:
+                            type: integer
+                          imagefsVolumeType:
+                            type: string
+                          rootVolumeSize:
+                            type: integer
+                          rootVolumeType:
+                            type: string
+                          type:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                    required:
+                      - count
+                    type: object
+                  type: array
+                provider:
+                  type: string
+                sshCredentials:
+                  description: SSHCredentials describes the options passed to the
+                    provisioner regarding the ssh keys
+                  properties:
+                    privateKeyFile:
+                      type: string
+                    publicKeyFile:
+                      type: string
+                    user:
+                      type: string
+                  type: object
+                version:
+                  description: not being used right now InventoryPath   string           `json:"inventoryPath,omitempty"
+                    yaml:"inventoryPath,omitempty"`
+                  type: string
+              required:
+                - provider
+              type: object
+          required:
+            - cloudProviderAccountRef
+            - cluster
+            - provisioner
+          type: object
+        status:
+          description: KonvoyClusterStatus defines the observed state of KonvoyCluster
+          properties:
+            adminConfSecretRef:
+              description: AdminConfSecretRef holds a reference to the admin conf
+                secret when it is available.
+              properties:
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    TODO: Add other useful fields. apiVersion, kind, uid?'
+                  type: string
+              type: object
+            phase:
+              description: Phase represents the current phase of Konvoy cluster actuation.
+                E.g. Pending, Provisioning, Provisioned, Deleting, Failed, etc.
+              type: string
+          type: object
+      type: object
+  version: v1alpha2
+  versions:
+    - name: v1alpha2
+      served: true
+      storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+{{- end }}
+{{- end }}

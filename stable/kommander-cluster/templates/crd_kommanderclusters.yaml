@@ -1,0 +1,105 @@
+{{- if .Values.enableKommanderClustersCRD }}
+{{- if not (.Capabilities.APIVersions.Has "kommander.mesosphere.io/v1alpha2") }}
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: kommanderclusters.kommander.mesosphere.io
+spec:
+  additionalPrinterColumns:
+    - JSONPath: .status.phase
+      name: Status
+      type: string
+  group: kommander.mesosphere.io
+  names:
+    kind: KommanderCluster
+    listKind: KommanderClusterList
+    plural: kommanderclusters
+    shortNames:
+      - komm
+      - komms
+      - kommander
+      - kommanders
+    singular: kommandercluster
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: KommanderCluster is the Schema for the kommander clusters API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: KommanderClusterSpec defines the desired state of Cluster
+          properties:
+            clusterRef:
+              description: ClusterReference holds a single reference to clusters provisioned
+                via Kommander. Only one field is allowed to be set. Currently, only
+                Konvoy clusters are creatable, but this is left extensible for other
+                provider types in the future.
+              properties:
+                konvoyCluster:
+                  description: LocalObjectReference contains enough information to
+                    let you locate the referenced object inside the same namespace.
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        TODO: Add other useful fields. apiVersion, kind, uid?'
+                      type: string
+                  type: object
+              type: object
+            kubeconfigRef:
+              description: LocalObjectReference contains enough information to let
+                you locate the referenced object inside the same namespace.
+              properties:
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    TODO: Add other useful fields. apiVersion, kind, uid?'
+                  type: string
+              type: object
+          required:
+            - kubeconfigRef
+          type: object
+        status:
+          description: KommanderClusterStatus defines the observed state of Cluster
+          properties:
+            kubefedclusterRef:
+              description: KubefedClusterRef holds a reference to a kubefedcluster
+                in the same namespace.
+              properties:
+                name:
+                  description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                    TODO: Add other useful fields. apiVersion, kind, uid?'
+                  type: string
+              type: object
+            phase:
+              description: Phase represents the current phase of cluster actuation.
+                E.g. Pending, Provisioning, Provisioned, Deleting, Failed, etc.
+              type: string
+          type: object
+      type: object
+  version: v1alpha2
+  versions:
+    - name: v1alpha2
+      served: true
+      storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+{{- end }}
+{{- end }}
