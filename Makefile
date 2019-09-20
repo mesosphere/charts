@@ -51,6 +51,7 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 .PHONY: publish
 publish:
 	@git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1 || true
+	@git fetch publish master
 	@git checkout master
 	@mv docs docs~
 	@git reset --hard $(GIT_REF)
