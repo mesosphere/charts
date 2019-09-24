@@ -73,7 +73,7 @@ spec:
                 secretKeyRef:
                   name: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name }}
                   key: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key }}
-            {{- else }}
+            {{- else if gt (len .Values.traefikForwardAuth.whitelist) 0 }}
             - name: WHITELIST
               value: {{ join "," .Values.traefikForwardAuth.whitelist | quote }}
             {{- end }}
