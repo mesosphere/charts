@@ -4,7 +4,7 @@ metadata:
   name: traefik
   namespace: kubeaddons
   annotations:
-    "helm.sh/hook": pre-install
+    "helm.sh/hook": pre-install,pre-upgrade
 spec:
   secretName: traefik-certificate
   issuerRef:
