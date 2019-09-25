@@ -18,6 +18,8 @@ tolerations:
   - key: CriticalAddonsOnly
     operator: Exists
 
+env: {}
+
 registrar:
   node:
     image:
