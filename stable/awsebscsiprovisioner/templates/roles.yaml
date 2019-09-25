@@ -170,6 +170,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 {{- end}}
 
+---
 apiVersion: storage.k8s.io/v1beta1
 kind: CSIDriver
 metadata:
