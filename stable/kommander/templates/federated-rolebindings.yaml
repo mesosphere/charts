@@ -1,4 +1,4 @@
-{{- if .Values.federate.rolebindings }}
+{{- if and .Values.federate.rolebindings .Values.kubefed.enabled }}
 ---
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
