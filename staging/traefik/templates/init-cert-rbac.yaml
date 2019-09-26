@@ -1,0 +1,33 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: {{ template "traefik.fullname" . }}-cert-init
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: update-traefik-cert
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["certmanager.k8s.io"]
+  resources: ["certificates"]
+  verbs: ["get", "list", "watch", "create", "update"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "traefik.fullname" . }}-cert-init
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: update-traefik-cert
+subjects:
+- kind: ServiceAccount
+  name: {{ template "traefik.fullname" . }}-cert-init
+  namespace: {{ .Release.Namespace }}

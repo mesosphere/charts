@@ -48,6 +48,8 @@ deploymentStrategy: {}
 securityContext: {}
 env: {}
 
+initContainers: []
+
 nodeSelector: {}
   # key: value
 affinity: {}
