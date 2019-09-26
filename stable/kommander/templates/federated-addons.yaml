@@ -1,4 +1,4 @@
-{{- if .Values.federate.addons }}
+{{- if and .Values.federate.addons .Values.kubefed.enabled }}
 ---
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
