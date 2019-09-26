@@ -116,5 +116,12 @@ kommander:
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
 
+  # disable kubefed to keep all items related to kubefed from being created
   kubefed:
     enabled: false
+
+###############################################################################
+#  Kubefed: Leave disabled as only kommander should deploy
+###############################################################################
+kubefed:
+  enabled: false
