@@ -1,0 +1,14 @@
+apiVersion: v1
+# This chart is not managing any downstream apps, but this field is required for lint to pass
+appVersion: 0.0.1
+description: "Adds a ConfigMap to the kubeaddons namespace containing the values provided to this chart"
+name: konvoyconfig
+home: https://github.com/mesosphere/charts
+version: 0.0.1
+keywords:
+  - konvoy
+  - kommander
+maintainers:
+- name: jr0d
+  email: jrodriguez@d2iq.com
+engine: gotpl
