@@ -26,6 +26,10 @@ spec:
         - name: driver-path
           mountPropagation: Bidirectional
           mountPath: /run/nvidia
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
       volumes:
       - name: update-driver
         hostPath:
