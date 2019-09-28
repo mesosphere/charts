@@ -1,0 +1,6 @@
+# Default values for dex-controller.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+controller:
+  manager:
+    image: mesosphere/dex-controller:v0.1.0
