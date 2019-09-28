@@ -148,7 +148,7 @@ spec:
         {{ end }}
         - name: kube-oidc-proxy-tls
           secret:
-            secretName: {{ $tlsSecretName }}
+            secretName: kube-oidc-proxy-kubeaddons-server-tls
             items:
             - key: tls.crt
               path: crt.pem

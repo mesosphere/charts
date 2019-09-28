@@ -18,9 +18,8 @@ service:
   port: 443
 
 tls:
-  # `secretName` must be a name of Secret of TLS type. If not provided a
-  # self-signed certificate will get generated.
-  secretName:
+  # TLS is enabled by default and requires certificate-manager
+  enabled: true
 
 # These values needs to be set in overrides in order to get kube-oidc-proxy
 # working.
