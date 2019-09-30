@@ -11,6 +11,7 @@ spec:
     name: kubernetes-ca
     kind: ClusterIssuer
   commonName: traefik.localhost.localdomain
+  duration: 87600h
   organization:
   - Mesosphere
   dnsNames:
