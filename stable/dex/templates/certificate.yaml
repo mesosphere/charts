@@ -11,6 +11,7 @@ spec:
     name: kubernetes-ca
     kind: ClusterIssuer
   commonName: dex
+  duration: 87600h
   organization:
     - D2iQ
   dnsNames:
