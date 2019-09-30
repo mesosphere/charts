@@ -475,3 +475,5 @@ tracing:
 #   address: https://authserver.com/auth
 #   trustForwardHeader: true
 #   authResponseHeaders: []
+#
+initCertJobImage: timaa2k/kubeaddons-addon-initializer:v0.0.8

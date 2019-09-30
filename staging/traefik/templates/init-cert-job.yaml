@@ -11,7 +11,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ .Chart.Name }}
-        image: timaa2k/kubeaddons-addon-initializer:v0.0.8
+        image: {{ .Values.initCertJobImage }}
         imagePullPolicy: IfNotPresent
         args: ["traefik"]
         env:
