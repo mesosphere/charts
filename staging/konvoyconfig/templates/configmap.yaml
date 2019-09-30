@@ -6,3 +6,6 @@ metadata:
 {{ include "konvoyaddons.labels" . | indent 4 }}
 data:
   clusterHostname: {{ .Values.config.clusterHostname }}
+  {{- if .Values.config.externalDex }}
+  externalDex: {{ toYaml .Values.config.externalDex | nindent 4 }}
+  {{- end }}

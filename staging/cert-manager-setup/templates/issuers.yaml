@@ -21,6 +21,7 @@ metadata:
 spec:
   isCA: true
   commonName: cert-manager
+  duration: 87600h
   secretName: kubernetes-intermediate-ca
   issuerRef:
     name: kubernetes-root-issuer

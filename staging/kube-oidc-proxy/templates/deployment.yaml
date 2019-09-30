@@ -20,6 +20,10 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ include "kube-oidc-proxy.fullname" . }}
+      {{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+      {{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -148,7 +152,7 @@ spec:
         {{ end }}
         - name: kube-oidc-proxy-tls
           secret:
-            secretName: {{ $tlsSecretName }}
+            secretName: kube-oidc-proxy-kubeaddons-server-tls
             items:
             - key: tls.crt
               path: crt.pem
