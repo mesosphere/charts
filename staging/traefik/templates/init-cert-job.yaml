@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "traefik.fullname" . }}
+spec:
+  template:
+    metadata:
+      name: "update-traefik-certificate"
+    spec:
+      serviceAccountName: {{ template "traefik.fullname" . }}-cert-init
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.initCertJobImage }}
+        imagePullPolicy: IfNotPresent
+        args: ["traefik"]
+        env:
+        - name: "TRAEFIK_INGRESS_NAMESPACE"
+          value: "kubeaddons"
+        - name: "TRAEFIK_INGRESS_SERVICE_NAME"
+          value: "traefik-kubeaddons"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
+          value: "traefik-kubeaddons"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
+          value: "kubernetes-ca"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
+          value: "traefik-kubeaddons-certificate"
+        - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
+          value: "konvoyaddons-kubeaddons"
+        - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
+          value: "clusterHostname"

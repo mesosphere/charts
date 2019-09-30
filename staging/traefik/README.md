@@ -243,6 +243,7 @@ The following table lists the configurable parameters of the Traefik chart and t
 | `forwardAuth.address`                  | URL for forward authentication                                                                                               |                                                   |
 | `forwardAuth.trustForwardHeader`       | Trust X-Forwarded-* headers                                                                                                  |                                                   |
 | `forwardAuth.authResponseHeaders`      | Set authentication response headers                                                                                                  |  `[]`                                                   |
+| `initCertJobImage`                     | Set the Docker image to be used for updating the cert-manager certificate with the load balancer SANs                        | `mesosphere/kubeaddons-addon-initializer:v0.0.7`                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
