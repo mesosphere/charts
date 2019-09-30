@@ -15,6 +15,7 @@ spec:
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
+  duration: 87600h
   organization:
   - D2iQ
   # The commonName will get replaced by kubeaddons-config
