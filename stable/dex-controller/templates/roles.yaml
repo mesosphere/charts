@@ -66,7 +66,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - dex.d2iq.io
+  - dex.mesosphere.io
   resources:
   - connectors
   verbs:
@@ -78,7 +78,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - dex.d2iq.io
+  - dex.mesosphere.io
   resources:
   - connectors/status
   verbs:

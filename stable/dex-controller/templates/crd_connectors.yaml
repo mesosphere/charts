@@ -2,7 +2,7 @@ apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
-  name: connectors.dex.d2iq.io
+  name: connectors.dex.mesosphere.io
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.name }}
@@ -18,7 +18,7 @@ spec:
   - JSONPath: .spec.type
     name: Type
     type: string
-  group: dex.d2iq.io
+  group: dex.mesosphere.io
   names:
     kind: Connector
     listKind: ConnectorList

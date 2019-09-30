@@ -14,12 +14,12 @@ webhooks:
     service:
       name: {{ template "dex-controller.fullname" . }}-webhook-service
       namespace: {{ .Release.Namespace }}
-      path: /validate-dex-d2iq-io-v1alpha1-connector
+      path: /validate-dex-mesosphere-io-v1alpha1-connector
   failurePolicy: Fail
   name: vconnector.kb.io
   rules:
   - apiGroups:
-    - dex.d2iq.io
+    - dex.mesosphere.io
     apiVersions:
     - v1alpha1
     operations:

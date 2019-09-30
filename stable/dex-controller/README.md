@@ -1,6 +1,10 @@
-# Default values for dex-controller.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# Dex controller helm chart
+
+This is a `helm` chart that installs [`dex-controller`](https://github.com/mesosphere/dex-controller).
+
+All the supported values and their defaults are listed below.
+
+```yaml
 controller:
   replicas: 1
   manager:
@@ -17,3 +21,4 @@ controller:
     image: gcr.io/kubebuilder/kube-rbac-proxy:v0.4.0
     imagePullPolicy: IfNotPresent
     resources: {}
+```
