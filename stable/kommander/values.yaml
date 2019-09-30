@@ -39,7 +39,7 @@ service:
 
 ingress:
   traefikFrontendRuleType: PathPrefixStrip
-  # extraAnnotations:
+  extraAnnotations: {}
   #   ingress.kubernetes.io/foo: bar
   path: /ops/portal/kommander
 
