@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: {{ template "dex-controller.fullname" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.name }}
+    heritage: {{ .Release.Service }}
+  name: {{ template "dex-controller.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.controller.replicas }}
+  selector:
+    matchLabels:
+      control-plane: {{ template "dex-controller.fullname" . }}
+  template:
+    metadata:
+      labels:
+        control-plane: {{ template "dex-controller.fullname" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+        release: {{ .Release.name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      serviceAccountName: {{ template "dex-controller.fullname" . }}-sa
+      containers:
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=10
+        image: {{ .Values.controller.proxy.image }}
+        imagePullPolicy: {{ .Values.controller.proxy.imagePullPolicy }}
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+        resources:
+          {{ with .Values.controller.proxy.resources }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+      - args:
+        - --metrics-addr=127.0.0.1:8080
+        - --enable-leader-election
+        command:
+        - /manager
+        image: {{ .Values.controller.manager.image }}
+        imagePullPolicy: {{ .Values.controller.manager.imagePullPolicy }}
+        name: manager
+        ports:
+        - containerPort: 443
+          name: webhook-server
+          protocol: TCP
+        resources:
+          {{ with .Values.controller.manager.resources }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: webhook-server-cert
