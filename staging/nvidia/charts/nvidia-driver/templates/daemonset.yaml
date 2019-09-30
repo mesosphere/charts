@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nvidia-driver-daemonset
-  namespace: default
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:
@@ -12,6 +12,10 @@ spec:
       labels:
         name: nvidia-driver-ds
     spec:
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
       hostPID: true
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
