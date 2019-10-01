@@ -38,3 +38,7 @@ $ helm install staging/nvidia --name nvidia
 ```bash
 $ helm delete nvidia
 ```
+
+## Limitations
+
+- The Nvidia Driver Container requires the kernel version matched with the available kernel-headers on each node that is running on centos7.
