@@ -24,6 +24,14 @@ spec:
         {{- toYaml .Values.initContainers | nindent 8 }}
 {{- end }}
       volumes:
+      {{- if .Values.traefikForwardAuth.caCertificate }}
+      - name: etc-traefik-forward-auth-ca
+        secret:
+          secretName: {{ template "traefik-forward-auth.fullname" . }}-ca-certificate
+          items:
+          - key: ca.crt
+            path: ca.crt
+      {{- end }}
       - name: etc-traefik-forward-auth-config
         configMap:
           name: {{ .Release.Name }}-configmap
@@ -35,6 +43,11 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
+          {{- if .Values.traefikForwardAuth.caCertificate }}
+          - name: etc-traefik-forward-auth-ca
+            mountPath: "/etc/traefik-forward-auth/ca"
+            readOnly: true
+          {{- end }}
           - name: etc-traefik-forward-auth-config
             mountPath: "/etc/traefik-forward-auth/config"
             readOnly: true
@@ -42,13 +55,13 @@ spec:
             - name: CONFIG
               value: "/etc/traefik-forward-auth/config/config.ini"
             - name: SSL_CERT_FILE
+              {{- if .Values.traefikForwardAuth.caCertificate }}
+              value: "/etc/traefik-forward-auth/ca/ca.crt"
+              {{- else}}
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+              {{- end }}
             - name: LOG_LEVEL
               value: "trace"
-            {{- if .Values.traefikForwardAuth.oidcUri }}
-            - name: PROVIDER_URI
-              value: {{ .Values.traefikForwardAuth.oidcUri | quote }}
-            {{- end }}
             {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
             - name: CLIENT_SECRET
               valueFrom:
