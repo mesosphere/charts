@@ -2,3 +2,5 @@ dependencies:
   - name: cert-manager
     version: 0.10.1
     repository: https://charts.jetstack.io
+    condition: installCertManager
+
