@@ -45,10 +45,6 @@ spec:
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
             - name: LOG_LEVEL
               value: "trace"
-            {{- if .Values.traefikForwardAuth.oidcUri }}
-            - name: PROVIDER_URI
-              value: {{ .Values.traefikForwardAuth.oidcUri | quote }}
-            {{- end }}
             {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
             - name: CLIENT_SECRET
               valueFrom:
