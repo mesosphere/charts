@@ -1,0 +1,82 @@
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  name: addonrepositories.kubeaddons.mesosphere.io
+spec:
+  additionalPrinterColumns:
+    - JSONPath: .status.ready
+      name: ready
+      type: string
+  group: kubeaddons.mesosphere.io
+  names:
+    kind: AddonRepository
+    plural: addonrepositories
+  scope: ""
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      description: AddonRepository is the Schema for the addonrepositories API
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          description: AddonRepositorySpec defines the desired state of AddonRepository
+          properties:
+            options:
+              description: AddonRepositoryOptions defines the credentials reference
+                for the repository
+              properties:
+                credentialsRef:
+                  description: LocalObjectReference contains enough information to
+                    let you locate the referenced object inside the same namespace.
+                  properties:
+                    name:
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                        TODO: Add other useful fields. apiVersion, kind, uid?'
+                      type: string
+                  type: object
+              required:
+                - credentialsRef
+              type: object
+            priority:
+              type: string
+            url:
+              type: string
+            version:
+              type: string
+          required:
+            - url
+          type: object
+        status:
+          description: AddonRepositoryStatus defines the observed state of AddonRepository
+          properties:
+            ready:
+              type: boolean
+          required:
+            - ready
+          type: object
+      type: object
+  version: v1alpha1
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
