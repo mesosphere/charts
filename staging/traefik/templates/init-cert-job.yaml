@@ -1,7 +1,12 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "traefik.fullname" . }}
+  # Note, we need to add chart version to the name of the job so that
+  # this Job will get re-run during upgrade. This is because the
+  # certificate object is a helm hook, and will be re-created during
+  # an upgrade. See more details in:
+  # https://github.com/helm/helm/issues/5482
+  name: {{ include "traefik.fullname" . }}-{{ .Chart.Version }}
 spec:
   template:
     metadata:
