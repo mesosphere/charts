@@ -1,0 +1,29 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  annotations:
+    certmanager.k8s.io/inject-ca-from: {{ .Release.Namespace }}/{{ template "dex-controller.fullname" . }}-webhook-serving-cert
+  name: {{ template "dex-controller.fullname" . }}-validating-webhook-configuration
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.name }}
+    heritage: {{ .Release.Service }}
+webhooks:
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: {{ template "dex-controller.fullname" . }}-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /validate-dex-mesosphere-io-v1alpha1-connector
+  failurePolicy: Fail
+  name: vconnector.kb.io
+  rules:
+  - apiGroups:
+    - dex.mesosphere.io
+    apiVersions:
+    - v1alpha1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - connectors
