@@ -2,5 +2,8 @@ dependencies:
 - name: kubefed
   repository: https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
   version: 0.1.0-rc6
-digest: sha256:3b7430822477971dea9700588c5029582af73f0e7857c7d4d7f51e291efc88ab
-generated: "2019-09-25T22:37:58.558786-07:00"
+- name: kommander-cluster-lifecycle
+  repository: https://mesosphere.github.io/kommander-cluster-lifecycle/charts
+  version: 0.1.1
+digest: sha256:426f880984b0aa4671df62ec3986dc94ff262f1fdbe2777167fe20f9a54d56a9
+generated: "2019-10-03T10:32:54.065848-07:00"
