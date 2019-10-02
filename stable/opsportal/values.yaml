@@ -120,8 +120,18 @@ kommander:
   kubefed:
     enabled: false
 
+  # disable kommander-cluster-lifecycle
+  kommander-cluster-lifecycle:
+    enabled: false
+
 ###############################################################################
 #  Kubefed: Leave disabled as only kommander should deploy
 ###############################################################################
 kubefed:
+  enabled: false
+
+###############################################################################
+#  kommander-cluster-lifecycle: Leave disabled as only kommander should deploy
+###############################################################################
+kommander-cluster-lifecycle:
   enabled: false

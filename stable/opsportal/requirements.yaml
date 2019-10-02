@@ -1,5 +1,5 @@
 dependencies:
 - name: kommander
-  version: 0.1.25
+  version: 0.1.29
   repository: https://mesosphere.github.io/charts/stable
   condition: kommander.enabled, global.kommander.enabled
