@@ -13,6 +13,9 @@ service:
   type: ClusterIP
   port: 80
 
+crds:
+  forceDeploy: false
+
 resources: {}
 nodeSelector: {}
 tolerations: []

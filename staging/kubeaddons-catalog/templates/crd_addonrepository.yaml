@@ -1,9 +1,14 @@
+{{- if or (not (.Capabilities.APIVersions.Has "kubeaddons.mesosphere.io/v1alpha1")) .Values.crds.forceDeploy }}
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   name: addonrepositories.kubeaddons.mesosphere.io
+  labels:
+{{ include "kubeaddons-catalog.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": crd-install
 spec:
   additionalPrinterColumns:
     - JSONPath: .status.ready
@@ -80,3 +85,4 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
+{{- end }}

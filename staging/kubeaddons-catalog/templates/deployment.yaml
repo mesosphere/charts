@@ -16,6 +16,7 @@ spec:
         app.kubernetes.io/name: {{ include "kubeaddons-catalog.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      serviceAccountName: {{ template "kubeaddons-catalog.fullname" . }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -28,13 +29,16 @@ spec:
             - name: http
               containerPort: 3000
               protocol: TCP
+            - name: metrics
+              containerPort: 9094
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: /v1alpha1/health
+              path: /v1beta1/health
               port: http
           readinessProbe:
             httpGet:
-              path: /v1alpha1/healthz
+              path: /v1beta1/healthz
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
