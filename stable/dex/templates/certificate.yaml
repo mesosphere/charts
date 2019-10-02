@@ -5,6 +5,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
+    # We have to add the following annotation so that the upgrade does
+    # not fail with "already exists" error. See more details in:
+    # https://github.com/helm/helm/issues/5482
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   secretName: dex
   issuerRef:
