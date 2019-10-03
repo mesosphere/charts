@@ -17,7 +17,7 @@ service:
   port: 4181
 
 traefikForwardAuth:
-  clientId:
+  clientId: traefik-forward-auth
   clientSecret:
     value: "do-not-use"
     valueFrom:
@@ -35,6 +35,11 @@ traefikForwardAuth:
         name: secretName
         key: secretKey
   # oidcUri: ""
+  # If undefined use the Kubernetes root CA certificate
+  # caCertificate: |
+  #   -----BEGIN
+  #   ...
+  #   -----END
   extraConfig: ""
   userCookieName: "_forward_auth_name"
 
