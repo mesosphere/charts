@@ -118,15 +118,24 @@ spec:
     {{- end }}
 {{- if or .Values.initContainers .Values.minioBackend }}
       initContainers:
-        {{- with .Values.minioBackend }}
+        {{- if .Values.minioBackend }}
         - name: initialize-velero
-          image: mesosphere/kubeaddons-addon-initializer:v0.0.5
+          image: mesosphere/kubeaddons-addon-initializer:v0.0.10
           args: ["velero"]
           env:
           - name: "VELERO_MINIO_FALLBACK_SECRET_NAME"
             value: "velero-kubeaddons"
           - name: "MINIO_CREATE_LOADBALANCER"
             value: "true"
+          {{- if and .Values.minioBackendConfiguration.service .Values.minioBackendConfiguration.service.annotations }}
+          {{- if ne (len .Values.minioBackendConfiguration.service.annotations) 0 }}
+          - name: "MINIO_LOADBALANCER_SERVICE_ANNOTATIONS"
+            value: |
+            {{- range $key, $value := .Values.minioBackendConfiguration.service.annotations }}
+              {{ $key }}:{{ $value }}
+            {{- end }}
+          {{- end }}
+          {{- end }}
         {{- end }}
         {{- with .Values.initContainers }}
         {{- toYaml .Values.initContainers | nindent 8 }}
