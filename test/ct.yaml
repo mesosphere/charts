@@ -10,4 +10,5 @@ chart-repos:
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
   - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
   - jetstack-charts=https://charts.jetstack.io
+  - kommander-cluster-lifecycle=https://mesosphere.github.io/kommander-cluster-lifecycle/charts
 helm-extra-args: --timeout 600
