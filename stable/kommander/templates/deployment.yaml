@@ -50,6 +50,10 @@ spec:
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
           env:
+            - name: FED_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: NAMESPACE
               valueFrom:
                 fieldRef:
