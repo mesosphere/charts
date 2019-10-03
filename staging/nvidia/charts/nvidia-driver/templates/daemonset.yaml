@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nvidia-driver-daemonset
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: nvidia-driver-ds
+  template:
+    metadata:
+      labels:
+        name: nvidia-driver-ds
+    spec:
+{{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      hostPID: true
+      containers:
+      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        name: nvidia-driver
+        args: ["--accept-license"]
+        securityContext:
+          privileged: true
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
+        volumeMounts:
+        - name: update-driver
+          mountPath: /run/kernel/postinst.d
+        - name: driver-path
+          mountPropagation: Bidirectional
+          mountPath: /run/nvidia
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+      volumes:
+      - name: update-driver
+        hostPath:
+          path: /etc/kernel/postinst.d
+      - name: driver-path
+        hostPath:
+          path: /run/nvidia
