@@ -24,6 +24,7 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
 {{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         name: nvidia-device-plugin-ctr
@@ -32,6 +33,8 @@ spec:
           capabilities:
             drop: ["ALL"]
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
           - name: device-plugin
             mountPath: /var/lib/kubelet/device-plugins

@@ -43,8 +43,9 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-nodeSelector:
-  konvoy.mesosphere.com/gpu-provider: NVIDIA
+nodeSelector: {}
+
+priorityClassName: system-node-critical
 
 tolerations:
   # Allow this pod to be rescheduled while the node is in "critical add-ons only" mode.

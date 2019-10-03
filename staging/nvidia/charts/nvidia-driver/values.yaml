@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: "nvidia/driver"
-  tag: "418.40.04-ubuntu16.04-aws"
+  tag: "418.40.04-ubuntu16.04"
   pullPolicy: "IfNotPresent"
 
 imagePullSecrets: []
@@ -43,8 +43,9 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
-nodeSelector:
-  konvoy.mesosphere.com/gpu-provider: NVIDIA
+nodeSelector: {}
+
+priorityClassName: system-node-critical
 
 tolerations: []
 

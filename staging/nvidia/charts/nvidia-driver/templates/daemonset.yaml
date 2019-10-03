@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: nvidia-driver-daemonset
-  namespace: {{ .Release.Namespace }}
+  namespace: kube-system
 spec:
   selector:
     matchLabels:
@@ -20,6 +20,7 @@ spec:
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
 {{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
       hostPID: true
       containers:
       - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -28,6 +29,8 @@ spec:
         securityContext:
           privileged: true
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
         - name: update-driver
           mountPath: /run/kernel/postinst.d
