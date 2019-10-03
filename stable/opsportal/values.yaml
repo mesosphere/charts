@@ -72,7 +72,7 @@ kommander:
   enabled: true
   image:
     repository: mesosphere/kommander
-    tag: 1.60.0
+    tag: 1.114.5
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
@@ -120,8 +120,18 @@ kommander:
   kubefed:
     enabled: false
 
+  # disable kommander-cluster-lifecycle
+  kommander-cluster-lifecycle:
+    enabled: false
+
 ###############################################################################
 #  Kubefed: Leave disabled as only kommander should deploy
 ###############################################################################
 kubefed:
+  enabled: false
+
+###############################################################################
+#  kommander-cluster-lifecycle: Leave disabled as only kommander should deploy
+###############################################################################
+kommander-cluster-lifecycle:
   enabled: false
