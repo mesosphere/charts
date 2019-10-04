@@ -52,6 +52,10 @@ spec:
             mountPath: "/etc/traefik-forward-auth/config"
             readOnly: true
           env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ tpl $value $ | quote }}
+            {{- end }}
             - name: CONFIG
               value: "/etc/traefik-forward-auth/config/config.ini"
             - name: SSL_CERT_FILE
