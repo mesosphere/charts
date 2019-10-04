@@ -9,6 +9,12 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
+ingress:
+  enable: true
+  // this is a placeholder, add your own hostname for ingress prior to deployment
+  hostName: catalog.kubeaddons.localhost
+  path: /catalog
+
 service:
   type: ClusterIP
   port: 80
