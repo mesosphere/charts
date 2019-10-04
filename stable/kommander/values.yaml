@@ -50,6 +50,7 @@ federate:
   addons: true
   roles: true
   rolebindings: true
+  clusterrolebindings: true
 
 # This name must match the name of the kubefed dep
 # in order to override values.
