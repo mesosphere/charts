@@ -80,6 +80,8 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+env: {}
+
 initContainers: []
 
 nodeSelector: {}

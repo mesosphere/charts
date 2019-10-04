@@ -75,6 +75,10 @@ spec:
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         env:
+        {{- range $key, $value := .Values.env }}
+        - name: {{ $key | quote }}
+          value: {{ tpl $value $ | quote }}
+        {{- end }}
         - name: OIDC_CLIENT_ID
           valueFrom:
             secretKeyRef:
