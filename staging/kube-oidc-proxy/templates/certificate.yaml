@@ -4,8 +4,6 @@ kind: Certificate
 metadata:
   name: kube-oidc-proxy
   namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
 spec:
   secretName: kube-oidc-proxy-kubeaddons-server-tls
   duration: 87600h
