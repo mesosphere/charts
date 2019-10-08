@@ -7,8 +7,8 @@ global:
 replicaCount: 1
 
 image:
-  repository: mintel/dex-k8s-authenticator
-  tag: 1.1.0
+  repository: mesosphere/dex-k8s-authenticator
+  tag: v1.1.1-5e9e952-mesosphere
   pullPolicy: Always
 
 dexK8sAuthenticator:
