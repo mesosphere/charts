@@ -16,7 +16,14 @@ service:
 crds:
   forceDeploy: false
 
-resources: {}
+resources:
+  limits:
+    cpu: 400m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 20Mi
+
 nodeSelector: {}
 tolerations: []
 affinity: {}
