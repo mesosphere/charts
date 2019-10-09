@@ -30,7 +30,10 @@ spec:
         ports:
         - containerPort: 8443
           name: https
-        resources: {}
+        resources:
+          {{ with .Values.kubeRbacProxy.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
       - args:
         - --metrics-addr=127.0.0.1:8080
         - --enable-leader-election
@@ -43,12 +46,9 @@ spec:
           name: webhook-server
           protocol: TCP
         resources:
-          limits:
-            cpu: 100m
-            memory: 30Mi
-          requests:
-            cpu: 100m
-            memory: 20Mi
+          {{ with .Values.manager.resources }}
+          {{- toYaml . | nindent 12 }}
+          {{- end }}
         volumeMounts:
         - mountPath: /tmp/k8s-webhook-server/serving-certs
           name: cert
@@ -58,5 +58,5 @@ spec:
       - name: cert
         secret:
           defaultMode: 420
-          secretName: webhook-server-cert
+          secretName: dstorageclass-webhook-server-cert
 status: {}

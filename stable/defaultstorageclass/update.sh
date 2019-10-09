@@ -18,6 +18,7 @@ cd ${TEMP}
 git checkout "tags/${TAG}"
 cd config/default
 kustomize edit set namespace namespace-to-replace
+kustomize edit set nameprefix "prefix-replace-"
 kustomize build . -o ${OBJECTS_DIR}
 
 cd ${DIR}

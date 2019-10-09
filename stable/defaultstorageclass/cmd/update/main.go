@@ -10,6 +10,9 @@ import (
 
 	certapi "github.com/jetstack/cert-manager/pkg/api"
 	log "github.com/sirupsen/logrus"
+	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -21,16 +24,23 @@ import (
 
 const outputDir = "templates"
 
-var objectsFilePath string
-
-var scheme *runtime.Scheme
-var decoder runtime.Decoder
+var (
+	scheme         *runtime.Scheme
+	decoder        runtime.Decoder
+	yamlSerializer *json.Serializer
+)
 
 func init() {
 	scheme = runtime.NewScheme()
 	utilruntime.Must(k8scheme.AddToScheme(scheme))
 	utilruntime.Must(certapi.AddToScheme(scheme))
 	decoder = serializer.NewCodecFactory(scheme).UniversalDeserializer()
+
+	yamlSerializer = json.NewSerializerWithOptions(json.DefaultMetaFactory, scheme, scheme, json.SerializerOptions{
+		Yaml:   true,
+		Pretty: false,
+		Strict: false,
+	})
 }
 
 func main() {
@@ -39,9 +49,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	objectsFilePath = os.Args[1]
+	objectsFilePath := os.Args[1]
 
-	if err := run(); err != nil {
+	if err := run(objectsFilePath); err != nil {
 		log.Error(err, "error in run")
 		os.Exit(1)
 	}
@@ -61,12 +71,76 @@ var kindWhitelist = map[string]bool{
 	"ValidatingWebhookConfiguration": true,
 }
 
-var replacements = map[string]string{
-	"namespace-to-replace":            "{{ .Release.Namespace }}",
-	"dstorageclass-selfsigned-issuer": "{{ .Values.issuer.name }}",
+var kindToCustomSerializer = map[string]func(object runtime.Object) (string, error){
+	"Deployment": func(object runtime.Object) (string, error) {
+		deployment, ok := object.(*appsv1.Deployment)
+		if !ok {
+			return "", fmt.Errorf("failed to convert runtime.Object to Deployment")
+		}
+
+		// set temp values for resource requires and replace values after
+		tempValuesToReplacement := map[string]string{}
+		setTempValue := func(container *corev1.Container, key string) {
+			resourceValue := fmt.Sprintf("%vm", len(tempValuesToReplacement)+1)
+
+			container.Resources = corev1.ResourceRequirements{
+				Limits: corev1.ResourceList{
+					"replace-me": resource.MustParse(resourceValue),
+				},
+			}
+			s := "\n          "
+			replaceKey := fmt.Sprintf("resources:%slimits:%s  replace-me: %s", s, s, resourceValue)
+			helmTemplate := []string{
+				fmt.Sprintf("{{ with .Values.%s.resources }}", key),
+				"{{- toYaml . | nindent 12 }}",
+				"{{- end }}",
+			}
+			tempValuesToReplacement[replaceKey] = fmt.Sprintf("resources:%s%s", s, strings.Join(helmTemplate, s))
+		}
+
+		var containersCopy []corev1.Container
+		for _, container := range deployment.Spec.Template.Spec.Containers {
+			switch container.Name {
+			case "kube-rbac-proxy":
+				setTempValue(&container, "kubeRbacProxy")
+			case "manager":
+				setTempValue(&container, "manager")
+			default:
+				return "", fmt.Errorf("did not handle container resource")
+			}
+
+			containersCopy = append(containersCopy, container)
+		}
+		deployment.Spec.Template.Spec.Containers = containersCopy
+
+		buffer := &bytes.Buffer{}
+		if err := yamlSerializer.Encode(deployment, buffer); err != nil {
+			return "", err
+		}
+
+		objString := buffer.String()
+		for old, replacement := range tempValuesToReplacement {
+			found := strings.Count(objString, old)
+			if found != 1 {
+				return "", fmt.Errorf("found %v `%s` in `%s` instead of 1", found, old, objString)
+			}
+			objString = strings.Replace(objString, old, replacement, 1)
+		}
+		return objString, nil
+	},
 }
 
-func run() error {
+var replacements = map[string]string{
+	"namespace-to-replace":             "{{ .Release.Namespace }}",
+	"prefix-replace-selfsigned-issuer": "{{ .Values.issuer.name }}",
+
+	// DO PREFIX REPLACEMNTS LAST
+	// this prefix is short because some names end up getting big and there should only be 1 instance of this chart
+	"prefix-replace-":     "dstorageclass-",
+	"webhook-server-cert": "dstorageclass-webhook-server-cert",
+}
+
+func run(objectsFilePath string) error {
 	allObjects, err := ReadObjects(objectsFilePath)
 	if err != nil {
 		return err
@@ -86,7 +160,7 @@ func run() error {
 
 		yamlString, err := objectsYAMLString(objects)
 		if err != nil {
-			return nil
+			return err
 		}
 
 		for old, replacement := range replacements {
@@ -97,30 +171,37 @@ func run() error {
 
 		err = ioutil.WriteFile(path.Join(outputDir, strings.ToLower(gvk.Kind)+".yaml"), []byte(yamlString), 0644)
 		if err != nil {
-			return nil
+			return err
 		}
 	}
 	return nil
 }
 
-const yamlSeperator = "\n---\n"
+const yamlSeparator = "\n---\n"
 
 func objectsYAMLString(objects []runtime.Object) (string, error) {
-	s := json.NewSerializerWithOptions(json.DefaultMetaFactory, scheme, scheme, json.SerializerOptions{
-		Yaml:   true,
-		Pretty: false,
-		Strict: false,
-	})
-
 	var objectYAMLs []string
 	for _, object := range objects {
+		kind := object.GetObjectKind().GroupVersionKind().Kind
+		customSerializer, hasCustomSerializer := kindToCustomSerializer[kind]
+		if hasCustomSerializer {
+			yaml, err := customSerializer(object)
+			if err != nil {
+				return "", fmt.Errorf("error with custom serializer for kind %s: %w", kind, err)
+			}
+			if yaml != "" {
+				objectYAMLs = append(objectYAMLs, yaml)
+				continue
+			}
+		}
+
 		buffer := &bytes.Buffer{}
-		if err := s.Encode(object, buffer); err != nil {
+		if err := yamlSerializer.Encode(object, buffer); err != nil {
 			return "", err
 		}
 		objectYAMLs = append(objectYAMLs, buffer.String())
 	}
-	return strings.Join(objectYAMLs, yamlSeperator), nil
+	return strings.Join(objectYAMLs, yamlSeparator), nil
 }
 
 func ReadObjects(filename string) ([]runtime.Object, error) {

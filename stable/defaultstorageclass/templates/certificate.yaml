@@ -12,5 +12,5 @@ spec:
   issuerRef:
     kind: Issuer
     name: {{ .Values.issuer.name }}
-  secretName: webhook-server-cert
+  secretName: dstorageclass-webhook-server-cert
 status: {}
