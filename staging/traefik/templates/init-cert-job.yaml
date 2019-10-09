@@ -7,6 +7,11 @@ metadata:
   # an upgrade. See more details in:
   # https://github.com/helm/helm/issues/5482
   name: {{ include "traefik.fullname" . }}-{{ .Chart.Version }}
+  annotations:
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+  labels:
+    chart: {{ template "traefik.chart" . }}
+    app: {{ template "traefik.name" . }}  
 spec:
   template:
     metadata:
