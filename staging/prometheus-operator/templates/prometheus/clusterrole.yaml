@@ -25,6 +25,14 @@ rules:
   - endpoints
   - pods
   verbs: ["get", "list", "watch"]
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get", "create"]
 - apiGroups:
   - extensions
   resources:
