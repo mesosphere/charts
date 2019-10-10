@@ -25,6 +25,17 @@ rules:
   - endpoints
   - pods
   verbs: ["get", "list", "watch"]
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs: ["get", "list", "watch"]
+- nonResourceURLs: ["/metrics"]
+  verbs: ["get"]
+# The following namespaces and configmaps permissions are needed to
+# grab the kube-system namespace uid and write it out to a configmap.
+# This is run in a container in the Prometheus pod,
+# see: https://github.com/mesosphere/kubeaddons-extrasteps/tree/master/pkg/prometheus/prometheus.go
 - apiGroups: [""]
   resources:
   - namespaces
@@ -33,11 +44,4 @@ rules:
   resources:
   - configmaps
   verbs: ["get", "create"]
-- apiGroups:
-  - extensions
-  resources:
-  - ingresses
-  verbs: ["get", "list", "watch"]
-- nonResourceURLs: ["/metrics"]
-  verbs: ["get"]
 {{- end }}
