@@ -69,6 +69,7 @@ rules:
   - dex.mesosphere.io
   resources:
   - connectors
+  - clients
   verbs:
   - create
   - delete
@@ -81,6 +82,7 @@ rules:
   - dex.mesosphere.io
   resources:
   - connectors/status
+  - clients/status
   verbs:
   - get
   - patch

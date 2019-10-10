@@ -4,8 +4,8 @@
 controller:
   replicas: 1
   manager:
-    image: mesosphere/dex-controller:v0.1.1
-    imagePullPolicy: IfNotPresent
+    image: timaa2k/dex-controller:latest
+    imagePullPolicy: Always #IfNotPresent
     resources:
       limits:
         cpu: 100m
