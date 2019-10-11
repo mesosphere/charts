@@ -10,7 +10,7 @@ spec:
   dnsNames:
   - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
   issuerRef:
-    kind: Issuer
+    kind: '{{ .Values.issuer.kind }}'
     name: {{ .Values.issuer.name }}
   secretName: dstorageclass-webhook-server-cert
 status: {}

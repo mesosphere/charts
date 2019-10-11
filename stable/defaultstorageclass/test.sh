@@ -31,7 +31,7 @@ sleep 5
 KUBECONFIG=${KUBECONFIG} kubectl create namespace ${TEST_NAMESPACE}
 KUBECONFIG=${KUBECONFIG} kubectl create -f - <<EOF
 apiVersion: certmanager.k8s.io/v1alpha1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   creationTimestamp: null
   name: dstorageclass-selfsigned-issuer

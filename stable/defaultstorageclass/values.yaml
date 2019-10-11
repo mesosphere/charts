@@ -1,4 +1,5 @@
 issuer:
+  kind: ClusterIssuer
   name: issuer-name
 
 kubeRbacProxy:

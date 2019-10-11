@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	certapi "github.com/jetstack/cert-manager/pkg/api"
+	"github.com/jetstack/cert-manager/pkg/apis/certmanager/v1alpha1"
 	log "github.com/sirupsen/logrus"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -29,6 +30,14 @@ var (
 	decoder        runtime.Decoder
 	yamlSerializer *json.Serializer
 )
+
+func defaultSerialize(object runtime.Object) (string, error) {
+	buffer := &bytes.Buffer{}
+	if err := yamlSerializer.Encode(object, buffer); err != nil {
+		return "", err
+	}
+	return buffer.String(), nil
+}
 
 func init() {
 	scheme = runtime.NewScheme()
@@ -72,6 +81,14 @@ var kindWhitelist = map[string]bool{
 }
 
 var kindToCustomSerializer = map[string]func(object runtime.Object) (string, error){
+	"Certificate": func(object runtime.Object) (string, error) {
+		certificate, ok := object.(*v1alpha1.Certificate)
+		if !ok {
+			return "", fmt.Errorf("failed to convert runtime.Object to Certificate")
+		}
+		certificate.Spec.IssuerRef.Kind = "{{ .Values.issuer.kind }}"
+		return defaultSerialize(certificate)
+	},
 	"Deployment": func(object runtime.Object) (string, error) {
 		deployment, ok := object.(*appsv1.Deployment)
 		if !ok {
@@ -113,12 +130,11 @@ var kindToCustomSerializer = map[string]func(object runtime.Object) (string, err
 		}
 		deployment.Spec.Template.Spec.Containers = containersCopy
 
-		buffer := &bytes.Buffer{}
-		if err := yamlSerializer.Encode(deployment, buffer); err != nil {
+		objString, err := defaultSerialize(deployment)
+		if err != nil {
 			return "", err
 		}
 
-		objString := buffer.String()
 		for old, replacement := range tempValuesToReplacement {
 			found := strings.Count(objString, old)
 			if found != 1 {
@@ -195,11 +211,11 @@ func objectsYAMLString(objects []runtime.Object) (string, error) {
 			}
 		}
 
-		buffer := &bytes.Buffer{}
-		if err := yamlSerializer.Encode(object, buffer); err != nil {
+		objString, err := defaultSerialize(object)
+		if err != nil {
 			return "", err
 		}
-		objectYAMLs = append(objectYAMLs, buffer.String())
+		objectYAMLs = append(objectYAMLs, objString)
 	}
 	return strings.Join(objectYAMLs, yamlSeparator), nil
 }
