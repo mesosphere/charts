@@ -68,6 +68,26 @@ rules:
 - apiGroups:
   - dex.mesosphere.io
   resources:
+  - clients
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - dex.mesosphere.io
+  resources:
+  - clients/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - dex.mesosphere.io
+  resources:
   - connectors
   verbs:
   - create
