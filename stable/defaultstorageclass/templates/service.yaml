@@ -1,0 +1,38 @@
+# This file is generated from `update.sh`. DO NOT EDIT.
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: https
+    prometheus.io/scrape: "true"
+  creationTimestamp: null
+  labels:
+    control-plane: controller-manager
+  name: dstorageclass-controller-manager-metrics-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: https
+    port: 8443
+    targetPort: https
+  selector:
+    control-plane: controller-manager
+status:
+  loadBalancer: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: dstorageclass-webhook-service
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+  selector:
+    control-plane: controller-manager
+status:
+  loadBalancer: {}
