@@ -64,6 +64,8 @@ mesosphereResources:
     scheduler: true
     traefik: true
     velero: true
+  ## Additional permissions to grant to Prometheus
+  additionalPrometheusRBACRules: []
   hooks:
     grafana:
       jobName: grafana-default-dashboard

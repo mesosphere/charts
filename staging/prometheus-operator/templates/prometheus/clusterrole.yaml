@@ -32,4 +32,18 @@ rules:
   verbs: ["get", "list", "watch"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
+{{- range .Values.mesosphereResources.additionalPrometheusRBACRules }}
+- apiGroups:
+  {{- range .apiGroups }}
+  - {{ . }}
+  {{- end }}
+  resources:
+  {{- range .resources }}
+  - {{ . }}
+  {{- end }}
+  verbs:
+  {{- range .verbs }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
 {{- end }}
