@@ -4,7 +4,7 @@
 controller:
   replicas: 1
   manager:
-    image: mesosphere/dex-controller:v0.1.1
+    image: mesosphere/dex-controller:v0.2.0
     imagePullPolicy: IfNotPresent
     resources:
       limits:

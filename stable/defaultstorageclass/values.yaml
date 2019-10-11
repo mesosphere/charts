@@ -1,0 +1,9 @@
+issuer:
+  kind: ClusterIssuer
+  name: issuer-name
+
+kubeRbacProxy:
+  resources: {}
+
+manager:
+  resources: {}
