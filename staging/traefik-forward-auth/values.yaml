@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: jongiddy/traefik-forward-auth
-  tag: latest
+  repository: mesosphere/traefik-forward-auth
+  tag: 1.0.4
   pullPolicy: Always
 
 nameOverride: ""
