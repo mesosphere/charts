@@ -64,8 +64,9 @@ mesosphereResources:
     scheduler: true
     traefik: true
     velero: true
-  ## Additional permissions to grant to Prometheus
-  additionalPrometheusRBACRules: []
+  ## Additional permissions to grant to a container running in the Prometheus pod.
+  ## See: https://github.com/mesosphere/kubeaddons-extrasteps/tree/master/pkg/prometheus/prometheus.go
+  enableAdditionalPrometheusRBACRules: false
   hooks:
     grafana:
       jobName: grafana-default-dashboard

@@ -32,18 +32,18 @@ rules:
   verbs: ["get", "list", "watch"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
-{{- range .Values.mesosphereResources.additionalPrometheusRBACRules }}
-- apiGroups:
-  {{- range .apiGroups }}
-  - {{ . }}
-  {{- end }}
+{{- if .Values.mesosphereResources.enableAdditionalPrometheusRBACRules }}
+# The following namespaces and configmaps permissions are needed to
+# grab the kube-system namespace uid and write it out to a configmap.
+# This is run in a container in the Prometheus pod,
+# see: https://github.com/mesosphere/kubeaddons-extrasteps/tree/master/pkg/prometheus/prometheus.go
+- apiGroups: [""]
   resources:
-  {{- range .resources }}
-  - {{ . }}
-  {{- end }}
-  verbs:
-  {{- range .verbs }}
-  - {{ . }}
-  {{- end }}
+  - namespaces
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get", "create"]
 {{- end }}
 {{- end }}
