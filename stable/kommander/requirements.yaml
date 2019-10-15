@@ -4,6 +4,6 @@ dependencies:
   repository: "https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts"
   condition: kubefed.enabled, global.kubefed.enabled
 - name: kommander-cluster-lifecycle
-  version: "0.1.5"
+  version: "0.1.6"
   repository: "https://mesosphere.github.io/kommander-cluster-lifecycle/charts"
   condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
