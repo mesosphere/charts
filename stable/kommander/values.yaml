@@ -52,6 +52,10 @@ federate:
   rolebindings: true
   clusterrolebindings: true
 
+  systemNamespace:
+    enable: true
+    name: kommander-system
+
 # This name must match the name of the kubefed dep
 # in order to override values.
 kubefed:
