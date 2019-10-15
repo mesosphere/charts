@@ -644,7 +644,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ pod_name }}",
+              "legendFormat": "{{`{{ pod_name }}`}}",
               "refId": "B"
             }
           ],
@@ -734,7 +734,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ pod_name }}",
+              "legendFormat": "{{`{{ pod_name }}`}}",
               "refId": "B"
             }
           ],
@@ -825,7 +825,7 @@ data:
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{ pod_name }}",
+              "legendFormat": "{{`{{ pod_name }}`}}",
               "refId": "B"
             }
           ],
@@ -917,7 +917,7 @@ data:
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{ pod_name }}",
+              "legendFormat": "{{`{{ pod_name }}`}}",
               "refId": "B"
             }
           ],
@@ -1232,7 +1232,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ source_workload }}.{{ source_workload_namespace }} : {{ response_code }} (🔐mTLS)",
+              "legendFormat": "{{`{{ source_workload }}`}}.{{`{{ source_workload_namespace }}`}} : {{`{{ response_code }}`}} (🔐mTLS)",
               "refId": "B",
               "step": 2
             },
@@ -1241,7 +1241,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ source_workload }}.{{ source_workload_namespace }} : {{ response_code }}",
+              "legendFormat": "{{`{{ source_workload }}`}}.{{`{{ source_workload_namespace }}`}} : {{`{{ response_code }}`}}",
               "refId": "A",
               "step": 2
             }
@@ -1331,7 +1331,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ source_workload }}.{{ source_workload_namespace }} : {{ response_code }} (🔐mTLS)",
+              "legendFormat": "{{`{{ source_workload }}`}}.{{`{{ source_workload_namespace }}`}} : {{`{{ response_code }}`}} (🔐mTLS)",
               "refId": "B",
               "step": 2
             },
@@ -1340,7 +1340,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ source_workload }}.{{ source_workload_namespace }} : {{ response_code }}",
+              "legendFormat": "{{`{{ source_workload }}`}}.{{`{{ source_workload_namespace }}`}} : {{`{{ response_code }}`}}",
               "refId": "A",
               "step": 2
             }
@@ -1429,7 +1429,7 @@ data:
               "expr": "round(sum(irate(istio_requests_total{connection_security_policy=\"mutual_tls\", source_workload_namespace=~\"$namespace\", source_workload=~\"$primary\", reporter=\"source\"}[30s])) by (destination_service, response_code), 0.001)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{ destination_service }} : {{ response_code }} (🔐mTLS)",
+              "legendFormat": "{{`{{ destination_service }}`}} : {{`{{ response_code }}`}} (🔐mTLS)",
               "refId": "B",
               "step": 2
             },
@@ -1438,7 +1438,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ destination_service }} : {{ response_code }}",
+              "legendFormat": "{{`{{ destination_service }}`}} : {{`{{ response_code }}`}}",
               "refId": "A",
               "step": 2
             }
@@ -1527,7 +1527,7 @@ data:
               "expr": "round(sum(irate(istio_requests_total{connection_security_policy=\"mutual_tls\", source_workload_namespace=~\"$namespace\", source_workload=~\"$canary\", reporter=\"source\"}[30s])) by (destination_service, response_code), 0.001)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{ destination_service }} : {{ response_code }} (🔐mTLS)",
+              "legendFormat": "{{`{{ destination_service }}`}} : {{`{{ response_code }}`}} (🔐mTLS)",
               "refId": "B",
               "step": 2
             },
@@ -1536,7 +1536,7 @@ data:
               "format": "time_series",
               "hide": false,
               "intervalFactor": 1,
-              "legendFormat": "{{ destination_service }} : {{ response_code }}",
+              "legendFormat": "{{`{{ destination_service }}`}} : {{`{{ response_code }}`}}",
               "refId": "A",
               "step": 2
             }
