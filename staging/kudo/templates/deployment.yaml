@@ -1,0 +1,59 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: kudo-manager
+    control-plane: controller-manager
+    controller-tools.k8s.io: "1.0"
+  name: kudo-controller-manager
+  namespace: kudo-system
+spec:
+  selector:
+    matchLabels:
+      app: kudo-manager
+      control-plane: controller-manager
+      controller-tools.k8s.io: "1.0"
+  serviceName: kudo-controller-manager-service
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kudo-manager
+        control-plane: controller-manager
+        controller-tools.k8s.io: "1.0"
+    spec:
+      containers:
+      - command:
+        - /root/manager
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: SECRET_NAME
+          value: kudo-webhook-server-secret
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        name: manager
+        ports:
+        - containerPort: 9876
+          name: webhook-server
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 100m
+            memory: 50Mi
+        volumeMounts:
+        - mountPath: /tmp/cert
+          name: cert
+          readOnly: true
+      serviceAccountName: kudo-manager
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: kudo-webhook-server-secret
+  updateStrategy: {}
