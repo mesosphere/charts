@@ -5,13 +5,6 @@ image:
   tag: v0.7.4
   pullPolicy: IfNotPresent
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-service:
-  type: ClusterIP
-  port: 80
 
 crds:
   forceDeploy: false
@@ -20,10 +13,6 @@ resources:
   requests:
     cpu: 100m
     memory: 50Mi
-
-nodeSelector: {}
-tolerations: []
-affinity: {}
 
 # When installing addons on a cluster that already has kudo crds
 # installed this value should be set to false. This is necessary because
