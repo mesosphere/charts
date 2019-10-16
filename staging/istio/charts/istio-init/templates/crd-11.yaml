@@ -9,6 +9,7 @@ metadata:
     release: istio
   annotations:
     "helm.sh/resource-policy": keep
+    "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
   names:

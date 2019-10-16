@@ -7,6 +7,8 @@ metadata:
     istio: rbac
     heritage: Tiller
     release: istio
+  annotations:
+    "helm.sh/hook": crd-install
 spec:
   group: rbac.istio.io
   names:
