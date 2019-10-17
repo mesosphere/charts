@@ -18,6 +18,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
 {{- if .Values.initContainers }}
       initContainers:
