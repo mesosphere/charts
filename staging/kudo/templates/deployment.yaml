@@ -1,4 +1,3 @@
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -42,9 +41,9 @@ spec:
           name: webhook-server
           protocol: TCP
         resources:
-          requests:
-            cpu: 100m
-            memory: 50Mi
+          {{ with .Values.resources }}
+          {{- toYaml . | nindent 10 }}
+          {{- end }}
         volumeMounts:
         - mountPath: /tmp/cert
           name: cert
