@@ -1,7 +1,7 @@
 #
 # addon prometheus configuration
 #
-enabled: true
+enabled: false
 replicaCount: 1
 hub: docker.io/prom
 image: prometheus
