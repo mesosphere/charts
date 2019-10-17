@@ -14,6 +14,11 @@ tolerations: []
 # https://istio.io/docs/tasks/security/health-check/
 citadelHealthCheck: false
 # 90*24hour = 2160h
+caCert: /etc/cacerts/ca-cert.pem
+caKey: /etc/cacerts/ca-key.pem
+rootCert: /etc/cacerts/root-cert.pem
+certChain: /etc/cacerts/cert-chain.pem
+
 workloadCertTtl: 2160h
 
 # Determines Citadel default behavior if the ca.istio.io/env or ca.istio.io/override
