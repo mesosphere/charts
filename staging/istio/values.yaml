@@ -53,24 +53,6 @@ security:
   enabled: true
 
 #
-# nodeagent configuration
-#
-nodeagent:
-  enabled: false
-
-#
-# addon grafana configuration
-#
-grafana:
-  enabled: false
-
-#
-# addon prometheus configuration
-#
-prometheus:
-  enabled: true
-
-#
 # addon jaeger tracing configuration
 #
 tracing:
@@ -80,12 +62,6 @@ tracing:
 # addon kiali tracing configuration
 #
 kiali:
-  enabled: false
-
-#
-# addon certmanager configuration
-#
-certmanager:
   enabled: false
 
 #
