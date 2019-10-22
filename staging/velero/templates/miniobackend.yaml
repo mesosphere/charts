@@ -103,7 +103,7 @@ subjects:
   name: minio-operator-sa
   namespace: velero-minio-operator
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: minio-operator
