@@ -14,6 +14,7 @@ ingress:
   // this is a placeholder, add your own hostname for ingress prior to deployment
   hostName: catalog.kubeaddons.localhost
   path: /catalog
+  annotations: {}
 
 service:
   type: ClusterIP
