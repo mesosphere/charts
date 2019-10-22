@@ -1,5 +1,5 @@
 dependencies:
 - name: dex-controller
-  version: 0.2.0
+  version: 0.2.1
   repository: https://mesosphere.github.io/charts/stable
   condition: dex-controller.enabled, global.dex-controller.enabled
