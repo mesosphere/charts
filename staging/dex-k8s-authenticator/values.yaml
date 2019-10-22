@@ -8,7 +8,7 @@ replicaCount: 1
 
 image:
   repository: mesosphere/dex-k8s-authenticator
-  tag: v1.1.1-5e9e952-mesosphere
+  tag: v1.1.1-62a0a92-mesosphere
   pullPolicy: Always
 
 dexK8sAuthenticator:
