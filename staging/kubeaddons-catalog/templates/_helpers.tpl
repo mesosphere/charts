@@ -43,3 +43,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
+
+{{/*
+Self-signed certificate issuer name
+*/}}
+{{- define "kubeaddons-catalog.selfSignedIssuerName" -}}
+{{- if .Values.certificates.issuer.name -}}
+{{ .Values.certificates.issuer.name }}
+{{- else -}}
+{{ template "kubeaddons-catalog.fullname" . }}-selfsigned
+{{- end -}}
+{{- end -}}

@@ -6,11 +6,16 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kubeaddons-catalog.labels" . | indent 4 }}
-{{- with .Values.ingress.annotations }}
   annotations:
+    cert-manager.io/issuer: {{ template "kubeaddons-catalog.selfSignedIssuerName" . }}
+{{- with .Values.ingress.annotations }}
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.hostName }}
+    secretName: {{ include "kubeaddons-catalog.fullname" . }}-tls
   rules:
   - host: {{ .Values.ingress.hostName }}
     http:

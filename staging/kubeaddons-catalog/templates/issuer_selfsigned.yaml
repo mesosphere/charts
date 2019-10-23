@@ -1,0 +1,11 @@
+{{- if .Values.certificates.issuer.selfSigned }}
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: {{ .Values.certificates.issuer.kind }}
+metadata:
+  name: {{ template "kubeaddons-catalog.selfSignedIssuerName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "kubeaddons-catalog.commonLabels" . | nindent 4 }}
+spec:
+  selfSigned: {}
+{{- end }}
