@@ -66,3 +66,7 @@ spec:
               value: {{ .Values.clusterPollingInterval | quote }}
             - name: CLIENT_POLLING_INTERVAL
               value: {{ .Values.clientPollingInterval | quote }}
+            - name: HOST_POLLING_INTERVAL
+              value: {{ .Values.hostPollingInterval | quote }}
+            - name: SUPPORTED_KUBERNETES_VERSIONS
+              value: {{ .Values.kubernetesVersionsSelection | toJson  }}
