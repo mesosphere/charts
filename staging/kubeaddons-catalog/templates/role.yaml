@@ -10,6 +10,9 @@ rules:
   - apiGroups: ["kubeaddons.mesosphere.io"]
     resources: ["addonrepositories"]
     verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
