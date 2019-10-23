@@ -23,7 +23,8 @@ ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
 ifeq (,$(wildcard /teamcity/system/git))
-DRUN := docker run -t --rm -v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
+DRUN := docker run -t --rm -u $(id -u):$(id -g) \
+			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
 			quay.io/helmpack/chart-testing:v2.3.3
 else
 DRUN := docker run -t --rm -v /teamcity/system/git:/teamcity/system/git -v ${PWD}:/charts \
@@ -80,5 +81,7 @@ $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 
 .PHONY: ct.lint
 ct.lint:
+ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch origin dev
+endif	
 	$(DRUN) ct lint
