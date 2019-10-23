@@ -23,9 +23,9 @@ ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
 ifeq (,$(wildcard /teamcity/system/git))
-DRUN := docker run -t --rm -u $(id -u):$(id -g) \
-			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
-			quay.io/helmpack/chart-testing:v2.3.3
+DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
+			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
+			-w /charts quay.io/helmpack/chart-testing:v2.3.3
 else
 DRUN := docker run -t --rm -v /teamcity/system/git:/teamcity/system/git -v ${PWD}:/charts \
 			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \

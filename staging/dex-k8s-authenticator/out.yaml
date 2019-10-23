@@ -29,7 +29,7 @@ items:
     loadBalancer:
       ingress:
       - ip: 192.168.122.205
-- apiVersion: apps/v1
+- apiVersion: networking.k8s.io/v1beta1
   kind: Ingress
   metadata:
     creationTimestamp: 2018-12-12T08:27:36Z
