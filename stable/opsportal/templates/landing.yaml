@@ -16,7 +16,7 @@ spec:
   selector:
     app: opsportal-landing
 ---
-apiVersion: apps/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   annotations:
