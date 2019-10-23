@@ -9,7 +9,7 @@ metadata:
 rules:
   - apiGroups: ["kubeaddons.mesosphere.io"]
     resources: ["addonrepositories"]
-    verbs: ["get", "watch", "list"]
+    verbs: ["get", "watch", "list", "update"]
   - apiGroups: [""]
     resources: ["namespaces"]
     verbs: ["get", "watch", "list"]
