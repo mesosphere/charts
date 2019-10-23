@@ -5,10 +5,6 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   name: addonrepositories.kubeaddons.mesosphere.io
-  labels:
-{{ include "kubeaddons-catalog.labels" . | indent 4 }}
-  annotations:
-    "helm.sh/hook": crd-install
 spec:
   additionalPrinterColumns:
     - JSONPath: .status.ready
@@ -17,7 +13,9 @@ spec:
   group: kubeaddons.mesosphere.io
   names:
     kind: AddonRepository
+    listKind: AddonRepositoryList
     plural: addonrepositories
+    singular: addonrepository
   scope: ""
   subresources:
     status: {}
@@ -58,11 +56,14 @@ spec:
               type: object
             priority:
               type: string
+            ref:
+              type: string
+            type:
+              type: string
             url:
               type: string
-            version:
-              type: string
           required:
+            - ref
             - url
           type: object
         status:
