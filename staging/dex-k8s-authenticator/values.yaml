@@ -100,6 +100,8 @@ tolerations: []
 
 affinity: {}
 
+deploymentAnnotations: {}
+
 # Init containers to add to the Dex K8s Authenticator deployment's pod spec. Optional.
 initContainers: []
 # - name:

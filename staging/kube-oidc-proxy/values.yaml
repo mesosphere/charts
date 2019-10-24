@@ -84,6 +84,8 @@ env: {}
 
 initContainers: []
 
+deploymentAnnotations: {}
+
 nodeSelector: {}
 
 tolerations: []

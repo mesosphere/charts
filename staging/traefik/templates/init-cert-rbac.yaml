@@ -31,3 +31,16 @@ subjects:
 - kind: ServiceAccount
   name: {{ template "traefik.fullname" . }}-cert-init
   namespace: {{ .Release.Namespace }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ template "traefik.fullname" . }}-default-cert-init
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: update-traefik-cert
+subjects:
+- kind: ServiceAccount
+  name: {{ template "traefik.fullname" . }}
+  namespace: {{ .Release.Namespace }}
