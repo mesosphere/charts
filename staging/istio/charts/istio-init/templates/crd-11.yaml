@@ -1,1 +1,3 @@
-.Get "files/crd-11.yaml" }}
+{{- if not (.Capabilities.APIVersions.Has "networking.istio.io/v1alpha3") }}
+{{.Files.Get "files/crd-11.yaml" }}
+{{- end }} 

@@ -8,7 +8,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
@@ -54,7 +53,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
@@ -96,7 +94,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
@@ -146,7 +143,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
@@ -175,7 +171,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: networking.istio.io
@@ -202,7 +197,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: rbac.istio.io
@@ -229,7 +223,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: authentication.istio.io
@@ -256,7 +249,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: authentication.istio.io
@@ -284,7 +276,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -311,7 +302,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -338,7 +328,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -365,7 +354,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -394,7 +382,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -423,7 +410,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -452,7 +438,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: rbac.istio.io
@@ -481,7 +466,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: rbac.istio.io
@@ -510,7 +494,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: rbac.istio.io
@@ -551,7 +534,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -580,7 +562,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -609,7 +590,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
@@ -638,7 +618,6 @@ metadata:
     heritage: Tiller
     release: istio
   annotations:
-    "helm.sh/resource-policy": keep
     "helm.sh/hook": crd-install
 spec:
   group: config.istio.io
