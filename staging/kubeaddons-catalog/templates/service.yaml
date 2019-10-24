@@ -11,7 +11,7 @@ spec:
     protocol: TCP
     targetPort: http
   selector:
-    app.kubernetes.io/instance: {{ include "kubeaddons-catalog.fullname" . }}
-    app.kubernetes.io/name: {{ include "kubeaddons-catalog.fullname" . }}
+    app.kubernetes.io/name: {{ include "kubeaddons-catalog.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
   sessionAffinity: None
   type: {{ .Values.service.type }}
