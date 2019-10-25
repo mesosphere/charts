@@ -28,6 +28,8 @@ kind: CustomResourceDefinition
 metadata:
   generation: 1
   name: federatedrolebindings.types.kubefed.io
+  annotations:
+    "helm.sh/hook": crd-install
 spec:
   conversion:
     strategy: None
