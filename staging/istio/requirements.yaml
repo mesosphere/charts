@@ -11,9 +11,6 @@ dependencies:
   - name: mixer
     version: 1.3.3
     condition: or mixer.policy.enabled mixer.telemetry.enabled
-  - name: nodeagent
-    version: 1.3.3
-    condition: nodeagent.enabled
   - name: pilot
     version: 1.3.3
     condition: pilot.enabled
@@ -35,6 +32,3 @@ dependencies:
   - name: istiocoredns
     version: 1.3.3
     condition: istiocoredns.enabled
-  - name: certmanager
-    version: 1.3.3
-    condition: certmanager.enabled
