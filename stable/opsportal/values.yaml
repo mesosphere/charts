@@ -64,7 +64,6 @@ opsportal:
           servicePort: 80
         path: /ops/portal/traefik
 
-
 ###############################################################################
 #  Konvoy UI
 ###############################################################################
@@ -72,12 +71,11 @@ kommander:
   enabled: true
   image:
     repository: mesosphere/kommander
-    tag: 1.114.5
+    tag: 1.145.6
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
   clusterPollingInterval: 3000
-  clientPollingInterval: 3000
 
   # Mode must be either production|konvoy
   mode: konvoy
@@ -98,10 +96,11 @@ kommander:
 
   readinessProbe:
     initialDelaySeconds: 15
-    periodSeconds: 3
+    periodSeconds: 10
   livenessProbe:
     initialDelaySeconds: 15
-    periodSeconds: 3
+    periodSeconds: 10
+    timeoutSeconds: 3
 
   ### This must match the serviceName set in the ingress backend below
   service:

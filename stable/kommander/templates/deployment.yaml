@@ -49,6 +49,7 @@ spec:
               port: 4000
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
           env:
             - name: FED_NAMESPACE
               valueFrom:
@@ -64,8 +65,8 @@ spec:
               value: {{ .Values.mode | quote }}
             - name: CLUSTER_POLLING_INTERVAL
               value: {{ .Values.clusterPollingInterval | quote }}
-            - name: CLIENT_POLLING_INTERVAL
-              value: {{ .Values.clientPollingInterval | quote }}
+            - name: CLUSTER_POLLING_THROTTLE_FACTOR
+              value: {{ .Values.clusterPollingThrottleFactor | quote }}
             - name: HOST_POLLING_INTERVAL
               value: {{ .Values.hostPollingInterval | quote }}
             - name: SUPPORTED_KUBERNETES_VERSIONS

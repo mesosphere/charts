@@ -1,13 +1,13 @@
 image:
   repository: mesosphere/kommander
-  tag: 1.141.4
+  tag: 1.145.6
   pullPolicy: IfNotPresent
 replicas: 1
 logoutRedirectPath: /ops/landing
 clusterPollingInterval: 3000
-clientPollingInterval: 3000
 hostPollingInterval: 3000
-kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta2","kubeaddonsVersion":"kommander-beta2"},{"kubernetesVersion":"1.15.3","konvoyVersion":"v1.1.5","kubeaddonsVersion":"stable-1.15.3-4"}]'
+clusterPollingThrottleFactor: 1
+kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta3","kubeaddonsVersion":"kommander-beta3"},{"kubernetesVersion":"1.15.3","konvoyVersion":"v1.1.5","kubeaddonsVersion":"stable-1.15.3-4"}]'
 
 # Mode must be either production|konvoy
 mode: production
@@ -21,7 +21,7 @@ extraInitContainers:
 
 resources:
   requests:
-    memory: "128Mi"
+    memory: "256Mi"
     cpu: "100m"
   limits:
     memory: "512Mi"
@@ -29,10 +29,11 @@ resources:
 
 readinessProbe:
   initialDelaySeconds: 15
-  periodSeconds: 3
+  periodSeconds: 10
 livenessProbe:
   initialDelaySeconds: 15
-  periodSeconds: 3
+  periodSeconds: 10
+  timeoutSeconds: 3
 
 ### This must match the serviceName set in the ingress backend below
 service:
