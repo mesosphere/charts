@@ -50,9 +50,12 @@ ingress:
 
 federate:
   addons: true
+  clusteraddons: true
+  clusterrolebindings: true
+  customresourcedefinitions: true
   roles: true
   rolebindings: true
-  clusterrolebindings: true
+
 
   systemNamespace:
     enable: true
