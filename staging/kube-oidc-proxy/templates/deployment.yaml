@@ -7,6 +7,10 @@ metadata:
   name: {{ include "kube-oidc-proxy.fullname" . }}
   labels:
 {{ include "kube-oidc-proxy.labels" . | indent 4 }}
+  {{- if .Values.deploymentAnnotations }}
+  annotations:
+{{ toYaml .Values.deploymentAnnotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

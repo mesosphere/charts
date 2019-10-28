@@ -50,6 +50,8 @@ env: {}
 
 initContainers: []
 
+deploymentAnnotations: {}
+
 nodeSelector: {}
   # key: value
 affinity: {}
