@@ -53,9 +53,12 @@ federate:
   clusteraddons: true
   clusterrolebindings: true
   customresourcedefinitions: true
+  kubeaddons: true
   roles: true
   rolebindings: true
 
+  # set to true if you wish to deploy on a non konvoy cluster
+  createKubeaddonsNamespace: false
 
   systemNamespace:
     enable: true
