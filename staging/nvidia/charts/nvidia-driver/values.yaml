@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: "nvidia/driver"
-  tag: "418.40.04-ubuntu16.04"
+  tag: "418.87.01-ubuntu16.04"
   pullPolicy: "IfNotPresent"
 
 imagePullSecrets: []
