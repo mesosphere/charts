@@ -57,8 +57,8 @@ spec:
       restartPolicy: Never
       containers:
         - name: {{.Release.Name}}-kubeaddons-ns
-          image: "{{.Values.federate.image.repository}}:{{.Values.federate.image.tag}}"
-          imagePullPolicy: {{.Values.federate.image.pullPolicy}}
+          image: "{{.Values.federate.kubeaddonsInitializer.repository}}:{{.Values.federate.kubeaddonsInitializer.tag}}"
+          imagePullPolicy: {{.Values.federate.kubeaddonsInitializer.pullPolicy}}
           args:
             - kommander
             - create-kubeaddons-ns

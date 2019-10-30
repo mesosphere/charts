@@ -57,7 +57,7 @@ federate:
   roles: true
   rolebindings: true
 
-  image:
+  kubeaddonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.1.1"
     pullPolicy: IfNotPresent
