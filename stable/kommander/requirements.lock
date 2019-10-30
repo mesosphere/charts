@@ -5,5 +5,8 @@ dependencies:
 - name: kommander-cluster-lifecycle
   repository: https://mesosphere.github.io/kommander-cluster-lifecycle/charts
   version: v0.1.9
-digest: sha256:553d3c5c6ae5dda10093e5149170e92a0313958d64718add8716f514e912e211
-generated: "2019-10-25T10:30:23.462935-07:00"
+- name: kommander-thanos
+  repository: https://mesosphere.github.io/charts/stable
+  version: 0.1.0
+digest: sha256:8b8373b3c84a2b97cf38693ba6a139630cf1e1a4ec09d12fefbada0cd8e02bdb
+generated: "2019-10-30T10:47:57.704194-07:00"
