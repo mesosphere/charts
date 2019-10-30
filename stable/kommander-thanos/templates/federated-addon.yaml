@@ -1,7 +1,7 @@
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedAddon
 metadata:
-  name: {{ template "kommander-thanos.fullname" . }}-proxy
+  name: {{ include "kommander-thanos.short-name-prefix" . }}-proxy
   namespace: {{ .Values.federate.systemNamespace.name }}
   labels:
 {{ include "kommander-thanos.labels" . | indent 4 }}
@@ -13,7 +13,7 @@ spec:
     metadata:
       namespace: kubeaddons
       labels:
-        kubeaddons.mesosphere.io/name: {{ template "kommander-thanos.fullname" . }}-proxy
+        kubeaddons.mesosphere.io/name: {{ include "kommander-thanos.short-name-prefix" . }}-proxy
     spec:
       namespace: {{ .Values.federate.systemNamespace.name }} 
       chartReference:
