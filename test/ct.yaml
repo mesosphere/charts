@@ -11,4 +11,5 @@ chart-repos:
   - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
   - jetstack-charts=https://charts.jetstack.io
   - kommander-cluster-lifecycle=https://mesosphere.github.io/kommander-cluster-lifecycle/charts
+  - banzaicloud=https://kubernetes-charts.banzaicloud.com
 helm-extra-args: --timeout 600
