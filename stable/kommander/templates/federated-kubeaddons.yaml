@@ -1,12 +1,4 @@
 {{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
-
-{{- if .Values.federate.createKubeaddonsNamespace }}
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kubeaddons
-{{- end}}
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
