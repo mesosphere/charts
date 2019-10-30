@@ -19,7 +19,11 @@ spec:
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
-  duration: 87600h
+  duration: 800d
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
   organization:
   - D2iQ
   # The commonName will get replaced by kubeaddons-config
