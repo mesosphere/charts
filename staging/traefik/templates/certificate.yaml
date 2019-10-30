@@ -19,7 +19,13 @@ spec:
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
-  duration: 87600h
+  # DCOS-60297 Update certificate to comply with Apple security requirements
+  # https://support.apple.com/en-us/HT210176
+  duration: 19200h   # 800 days
+  usages:
+  - digital signature
+  - key encipherment
+  - server auth
   organization:
   - D2iQ
   # The commonName will get replaced by kubeaddons-config
