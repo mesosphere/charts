@@ -53,8 +53,14 @@ federate:
   clusteraddons: true
   clusterrolebindings: true
   customresourcedefinitions: true
+  kubeaddons: true
   roles: true
   rolebindings: true
+
+  kubeaddonsInitializer:
+    repository: "mesosphere/kubeaddons-addon-initializer"
+    tag: "v0.1.1"
+    pullPolicy: IfNotPresent
 
 
   systemNamespace:
