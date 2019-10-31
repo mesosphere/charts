@@ -8,5 +8,8 @@ dependencies:
 - name: kommander-thanos
   repository: https://mesosphere.github.io/charts/stable
   version: 0.1.1
-digest: sha256:94fee4fbb64f83ddfdd4516759560fc7ac332b13aaa98866df18a8cd53acb4f6
-generated: "2019-10-30T18:15:00.649542-07:00"
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com
+  version: 3.8.19
+digest: sha256:891445234171ff433e5cdd1ef0e513679a76ee706ab1ad12c6791fac2895bc23
+generated: 2019-10-30T21:34:24.355389-07:00

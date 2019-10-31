@@ -96,3 +96,96 @@ kommander-cluster-lifecycle:
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
+
+grafana:
+  enabled: true
+
+  ## Do not deploy default dashboards.
+  ##
+  defaultDashboardsEnabled: false
+
+  ## Grafana's primary configuration
+  ## NOTE: values in map will be converted to ini format
+  ## ref: http://docs.grafana.org/installation/configuration/
+  ##
+  grafana.ini:
+    server:
+      protocol: http
+      enable_gzip: true
+      root_url: "%(protocol)s://%(domain)s:%(http_port)s/kommander/grafana"
+    auth.proxy:
+      enabled: true
+      header_name: X-Forwarded-User
+      auto-sign-up: true
+    auth.basic:
+      enabled: false
+    users:
+      auto_assign_org_role: Admin
+
+  ingress:
+    ## If true, Grafana Ingress will be created
+    ##
+    enabled: true
+
+    ## Annotations for Grafana Ingress
+    ##
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      traefik.frontend.rule.type: "PathPrefixStrip"
+      traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
+      traefik.ingress.kubernetes.io/auth-type: "forward"
+      traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
+      traefik.ingress.kubernetes.io/priority: "2"
+
+    ## Labels to be added to the Ingress
+    ##
+    labels: {}
+
+    ## Hostnames.
+    ## Must be provided if Ingress is enable.
+    ##
+    # hosts:
+    #   - grafana.domain.com
+    hosts:
+      - ""
+
+    ## Path for grafana ingress
+    path: /kommander/monitoring/grafana
+
+    ## TLS configuration for grafana Ingress
+    ## Secret must be manually created in the namespace
+    ##
+    tls: []
+    # - secretName: grafana-general-tls
+    #   hosts:
+    #   - grafana.example.com
+
+  ## Configure grafana datasources
+  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
+  ##
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: ThanosQuery
+        type: prometheus
+        url: http://kommander-kubeaddons-thanos-query-http:10902/
+        access: proxy
+        isDefault: true
+
+  ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
+  ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
+  sidecar:
+    dashboards:
+      enabled: true
+      # label that the configmaps with dashboards are marked with
+      label: grafana_dashboard_kommander
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: false
+      # label that the configmaps with datasources are marked with
+      label: grafana_datasource_kommander
+      # If specified, the sidecar will search for datasource config-maps inside this namespace.
+      # Otherwise the namespace in which the sidecar is running will be used.
+      # It's also possible to specify ALL to search in all namespaces
+      searchNamespace: null
