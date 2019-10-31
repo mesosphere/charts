@@ -11,3 +11,7 @@ dependencies:
   version: "0.1.1"
   repository: "https://mesosphere.github.io/charts/stable"
   condition: kommander-thanos.enabled
+- name: grafana
+  version: 3.8.*
+  repository: https://kubernetes-charts.storage.googleapis.com
+  condition: grafana.enabled
