@@ -38,6 +38,9 @@ thanos:
     - "--grpc-client-server-name=server.thanos.localhost.localdomain"
     certSecretName: kommander-thanos-client-tls
     http:
+      service:
+        labels:
+          servicemonitor.kubeaddons.mesosphere.io/path: "metrics"
       ingress:
         enabled: true
         annotations:
