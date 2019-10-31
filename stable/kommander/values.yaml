@@ -112,7 +112,7 @@ grafana:
     server:
       protocol: http
       enable_gzip: true
-      root_url: "%(protocol)s://%(domain)s:%(http_port)s/kommander/grafana"
+      root_url: "%(protocol)s://%(domain)s:%(http_port)s/kommander/monitoring/grafana"
     auth.proxy:
       enabled: true
       header_name: X-Forwarded-User
