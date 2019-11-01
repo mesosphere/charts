@@ -1,3 +1,5 @@
+{{- if .Values.federate.addons }}
+---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedAddon
 metadata:
@@ -15,7 +17,7 @@ spec:
       labels:
         kubeaddons.mesosphere.io/name: {{ include "kommander-thanos.short-name-prefix" . }}-proxy
     spec:
-      namespace: {{ .Values.federate.systemNamespace.name }} 
+      namespace: {{ .Values.federate.systemNamespace.name }}
       chartReference:
         chart: mtls-proxy
         repo: https://mesosphere.github.io/charts/stable
@@ -29,3 +31,4 @@ spec:
           service:
             type: LoadBalancer
             port: 443
+{{ end }}
