@@ -1,13 +1,13 @@
 image:
   repository: mesosphere/kommander
-  tag: 1.145.6
+  tag: 1.149.0
   pullPolicy: IfNotPresent
 replicas: 1
 logoutRedirectPath: /ops/landing
 clusterPollingInterval: 3000
 hostPollingInterval: 3000
 clusterPollingThrottleFactor: 1
-kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta3","kubeaddonsVersion":"kommander-beta3"}]'
+kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta3","kubeaddonsVersion":"kommander-beta4"}]'
 
 # Mode must be either production|konvoy
 mode: production

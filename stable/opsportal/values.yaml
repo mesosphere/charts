@@ -71,7 +71,7 @@ kommander:
   enabled: true
   image:
     repository: mesosphere/kommander
-    tag: 1.145.6
+    tag: 1.149.0
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
