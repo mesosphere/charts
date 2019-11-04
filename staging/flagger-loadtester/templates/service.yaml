@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "loadtester.fullname" . }}
+  name: flagger-loadtester
   labels:
     app.kubernetes.io/name: {{ include "loadtester.name" . }}
     helm.sh/chart: {{ include "loadtester.chart" . }}
