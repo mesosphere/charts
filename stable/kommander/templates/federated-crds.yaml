@@ -1,0 +1,28 @@
+---
+{{- if and .Values.federate.addons .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-addons.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.clusterrolebindings .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-cluster-rolebindings.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.clusteraddons .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-clusteraddons.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-customresourcedefinition.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.kubeaddons .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-kubeaddons.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.rolebindings .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-rolebindings.yaml"}}
+{{- end }}
+---
+{{- if and .Values.federate.roles .Values.kubefed.enabled }}
+{{.Files.Get "files/federated-roles.yaml"}}
+{{- end }}

@@ -1,4 +1,3 @@
-{{- if and .Values.federate.addons .Values.kubefed.enabled }}
 ---
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
@@ -159,4 +158,3 @@ spec:
     - name: v1beta1
       served: true
       storage: true
-{{ end }}
