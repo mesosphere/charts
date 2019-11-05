@@ -77,7 +77,7 @@ kubefed:
     # bug found
     featureGates:
       CrossClusterServiceDiscovery: "Disabled"
-      FederatedIngress: "Disabled"
+      FederatedIngress: "Enabled"
       PushReconciler: "Enabled"
       SchedulerPreferences: "Disabled"
 
