@@ -97,6 +97,10 @@ kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
 
+kommander-karma:
+  enabled: true
+  alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
+
 grafana:
   enabled: true
 
