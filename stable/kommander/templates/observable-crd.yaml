@@ -1,9 +1,28 @@
-{{- if .Values.kubefed.enabled }}
+{{- if .Values.createObservableClusterCRD }}
+{{- if not (.Capabilities.APIVersions.Has "stable.mesosphere.com/v1") }}
+{{.Files.Get "files/observableclusters-crd.yaml" }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: observable-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+data:
+  observableclusters-crd.yaml: |
+{{.Files.Get "files/observableclusters-crd.yaml" | indent 6}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kommander-kubefed-crds
+  name: observable-crds
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
@@ -16,7 +35,8 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kommander-kubefed-crds
+  name: observable-crds
+  namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
@@ -24,29 +44,27 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubefed-crds
+  name: observable-crds
 subjects:
   - kind: ServiceAccount
-    name: kubefed-crds
+    name: observable-crds
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kommander-kubefed-crds
+  name: observable-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded
-{{- end }}
-
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: kubefed-crds
+  name: observable-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-4"
@@ -54,18 +72,18 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: kubefed-crds
+      serviceAccountName: observable-crds
       containers:
-        - name: kubefed-crds
+        - name: observable-crds
           image: "bitnami/kubectl:1.16.2"
           volumeMounts:
-            - name: kubefed-crds
-              mountPath: /etc/kubefed-crds
+            - name: observable-crds
+              mountPath: /etc/observable-crds
               readOnly: true
-          command: ["kubectl", "apply", "-f", "/etc/kubefed-crds"]
+          command: ["kubectl", "apply", "-f", "/etc/c-crds"]
       volumes:
-        - name: kubefed-crds
+        - name: observable-crds
           configMap:
-            name: kubefed-crds
+            name: observable-crds
       restartPolicy: OnFailure
----
+{{- end }}
