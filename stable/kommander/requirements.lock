@@ -1,7 +1,7 @@
 dependencies:
 - name: kubefed
-  repository: https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
-  version: 0.1.0-rc6
+  repository: https://mesosphere.github.io/charts/staging
+  version: 0.0.2
 - name: kommander-cluster-lifecycle
   repository: https://mesosphere.github.io/kommander-cluster-lifecycle/charts
   version: v0.2.1
