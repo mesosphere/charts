@@ -35,7 +35,7 @@ Create chart name and version as used by the chart label.
 Create a truncated name suitable for resources that need shorter names, such as addons.
 */}}
 {{- define "kommander-thanos.short-name-prefix" -}}
-{{- include "kommander-thanos.fullname" . | trunc 30 -}}
+{{- include "kommander-thanos.fullname" . | trunc 36 -}}
 {{- end -}}
 
 {{/*
