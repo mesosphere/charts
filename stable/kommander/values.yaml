@@ -14,9 +14,6 @@ mode: production
 
 displayName: Konvoy Cluster
 
-# Konvoy ui should NOT create the CRD if Kommander already did it
-createObservableClusterCRD: true
-
 extraInitContainers:
 
 resources:
@@ -49,20 +46,10 @@ ingress:
   path: /ops/portal/kommander
 
 federate:
-  addons: true
-  clusteraddons: true
-  clusterrolebindings: true
-  customresourcedefinitions: true
-  kubeaddons: true
-  roles: true
-  rolebindings: true
-
   kubeaddonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.1.1"
     pullPolicy: IfNotPresent
-
-
   systemNamespace:
     enable: true
     name: kommander-system

@@ -1,23 +1,11 @@
 {{- if .Values.kubefed.enabled }}
 {{- if not (.Capabilities.APIVersions.Has "types.kubefed.io/v1beta1") }}
-{{- if .Values.federate.addons }}
 {{.Files.Get "files/federated-addons.yaml" }}
-{{- end }}
-{{- if .Values.federate.clusterrolebindings }}
 {{.Files.Get "files/federated-cluster-rolebindings.yaml" }}
-{{- end }}
-{{- if .Values.federate.clusteraddons }}
 {{.Files.Get "files/federated-clusteraddons.yaml" }}
-{{- end }}
-{{- if .Values.federate.customresourcedefinitions }}
 {{.Files.Get "files/federated-customresourcedefinition.yaml" }}
-{{- end }}
-{{- if .Values.federate.rolebindings }}
 {{.Files.Get "files/federated-rolebindings.yaml" }}
-{{- end }}
-{{- if .Values.federate.roles }}
 {{.Files.Get "files/federated-roles.yaml" }}
-{{- end }}
 {{- end }}
 ---
 apiVersion: v1
@@ -32,35 +20,23 @@ metadata:
   labels:
 {{ include "kommander.labels" . | indent 4 }}
 data:
-{{- if .Values.federate.addons }}
   federated-addons.yaml: |
 {{.Files.Get "files/federated-addons.yaml" | indent 6}}
-{{- end }}
-{{- if .Values.federate.clusterrolebindings }}
   federated-cluster-rolebindings.yaml: |
 {{.Files.Get "files/federated-cluster-rolebindings.yaml" | indent 6}}
-{{- end }}
-{{- if .Values.federate.clusteraddons }}
   federated-clusteraddons.yaml: |
 {{.Files.Get "files/federated-clusteraddons.yaml" | indent 6}}
-{{- end }}
-{{- if .Values.federate.customresourcedefinitions }}
   federated-customresourcedefinition.yaml: |
 {{.Files.Get "files/federated-customresourcedefinition.yaml" | indent 6}}
-{{- end }}
-{{- if .Values.federate.rolebindings }}
   federated-rolebindings.yaml: |
 {{.Files.Get "files/federated-rolebindings.yaml" | indent 6}}
-{{- end }}
-{{- if .Values.federate.roles }}
   federated-roles.yaml: |
 {{.Files.Get "files/federated-roles.yaml" | indent 6}}
-{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kommander-crds
+  name: federated-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -74,7 +50,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kommander-crds
+  name: federated-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -83,16 +59,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kommander-crds
+  name: federated-crds
 subjects:
   - kind: ServiceAccount
-    name: kommander-crds
+    name: federated-crds
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kommander-crds
+  name: federated-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -111,7 +87,7 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: kommander-crds
+      serviceAccountName: federated-crds
       containers:
         - name: federated-crds
           image: "bitnami/kubectl:1.16.2"
