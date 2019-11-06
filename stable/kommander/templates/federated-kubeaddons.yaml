@@ -1,4 +1,4 @@
-{{- if and .Values.federate.kubeaddons .Values.kubefed.enabled }}
+{{- if .Values.kubefed.enabled }}
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace

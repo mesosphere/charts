@@ -1,5 +1,5 @@
+{{- if .Values.kubefed.enabled }}
 ---
-{{- if and .Values.federate.addons .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -24,9 +24,7 @@ spec:
     pluralName: addons
     scope: Namespaced
     version: v1beta1
-{{- end }}
 ---
-{{- if and .Values.federate.clusterrolebindings .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -51,9 +49,7 @@ spec:
     pluralName: clusterrolebindings
     scope: Cluster
     version: v1
-{{- end }}
 ---
-{{- if and .Values.federate.clusteraddons .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -78,9 +74,7 @@ spec:
     pluralName: clusteraddons
     scope: Cluster
     version: v1beta1
-{{- end }}
 ---
-{{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -105,9 +99,7 @@ spec:
     pluralName: customresourcedefinitions
     scope: Cluster
     version: v1beta1
-{{- end }}
 ---
-{{- if and .Values.federate.rolebindings .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
@@ -132,9 +124,7 @@ spec:
     pluralName: rolebindings
     scope: Namespaced
     version: v1
-{{- end }}
 ---
-{{- if and .Values.federate.roles .Values.kubefed.enabled }}
 apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
