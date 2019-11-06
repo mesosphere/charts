@@ -1,28 +1,38 @@
+{{- if .Values.kubefed.enabled }}
 ---
-{{- if and .Values.federate.addons .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-addons.yaml"}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: federeated-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+data:
+{{- if .Values.federate.addons }}
+  federated-addons.yaml: |
+{{.Files.Get "files/federated-addons.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.clusterrolebindings .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-cluster-rolebindings.yaml"}}
+{{- if .Values.federate.clusterrolebindings }}
+  federated-cluster-rolebindings.yaml: |
+{{.Files.Get "files/federated-cluster-rolebindings.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.clusteraddons .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-clusteraddons.yaml"}}
+{{- if .Values.federate.clusteraddons }}
+  federated-clusteraddons.yaml: |
+{{.Files.Get "files/federated-clusteraddons.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-customresourcedefinition.yaml"}}
+{{- if .Values.federate.customresourcedefinitions }}
+  federated-customresourcedefinition.yaml: |
+{{.Files.Get "files/federated-customresourcedefinition.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.kubeaddons .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-kubeaddons.yaml"}}
+{{- if .Values.federate.rolebindings }}
+  federated-rolebindings.yaml: |
+{{.Files.Get "files/federated-rolebindings.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.rolebindings .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-rolebindings.yaml"}}
+{{- if .Values.federate.roles }}
+  federated-roles.yaml: |
+{{.Files.Get "files/federated-roles.yaml" | indent 6}}
 {{- end }}
----
-{{- if and .Values.federate.roles .Values.kubefed.enabled }}
-{{.Files.Get "files/federated-roles.yaml"}}
 {{- end }}

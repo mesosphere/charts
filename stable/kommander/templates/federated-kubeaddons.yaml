@@ -1,9 +1,12 @@
+{{- if and .Values.federate.kubeaddons .Values.kubefed.enabled }}
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
 metadata:
   name: kubeaddons
   namespace: kubeaddons
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -15,6 +18,8 @@ apiVersion: types.kubefed.io/v1beta1
 kind: FederatedCustomResourceDefinition
 metadata:
   name: addons.kubeaddons.mesosphere.io
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -213,6 +218,8 @@ apiVersion: types.kubefed.io/v1beta1
 kind: FederatedCustomResourceDefinition
 metadata:
   name: clusteraddons.kubeaddons.mesosphere.io
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -417,6 +424,8 @@ kind: FederatedServiceAccount
 metadata:
   name: kubeaddons-controller-manager
   namespace: kubeaddons
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -427,6 +436,8 @@ apiVersion: types.kubefed.io/v1beta1
 kind: FederatedClusterRoleBinding
 metadata:
   name: kubeaddons-controller-manager-cluster-admin-binding
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -446,6 +457,8 @@ kind: FederatedDeployment
 metadata:
   name: kubeaddons-controller-manager
   namespace: kubeaddons
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -491,3 +504,4 @@ spec:
           serviceAccount: kubeaddons-controller-manager
           serviceAccountName: kubeaddons-controller-manager
           terminationGracePeriodSeconds: 10
+{{- end }}

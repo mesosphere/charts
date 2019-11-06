@@ -1,0 +1,162 @@
+---
+{{- if and .Values.federate.addons .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: addons.kubeaddons.mesosphere.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedAddon
+    pluralName: federatedaddons
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: kubeaddons.mesosphere.io
+    kind: Addon
+    pluralName: addons
+    scope: Namespaced
+    version: v1beta1
+{{- end }}
+---
+{{- if and .Values.federate.clusterrolebindings .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: clusterrolebindings.rbac.authorization.k8s.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedClusterRoleBinding
+    pluralName: federatedclusterrolebindings
+    scope: Cluster
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+    pluralName: clusterrolebindings
+    scope: Cluster
+    version: v1
+{{- end }}
+---
+{{- if and .Values.federate.clusteraddons .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: clusteraddons.kubeaddons.mesosphere.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedClusterAddon
+    pluralName: federatedclusteraddons
+    scope: Cluster
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: kubeaddons.mesosphere.io
+    kind: ClusterAddon
+    pluralName: clusteraddons
+    scope: Cluster
+    version: v1beta1
+{{- end }}
+---
+{{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: customresourcedefinitions.apiextensions.k8s.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedCustomResourceDefinition
+    pluralName: federatedcustomresourcedefinitions
+    scope: Cluster
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    pluralName: customresourcedefinitions
+    scope: Cluster
+    version: v1beta1
+{{- end }}
+---
+{{- if and .Values.federate.rolebindings .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: rolebindings.rbac.authorization.k8s.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedRoleBinding
+    pluralName: federatedrolebindings
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: rbac.authorization.k8s.io
+    kind: RoleBinding
+    pluralName: rolebindings
+    scope: Namespaced
+    version: v1
+{{- end }}
+---
+{{- if and .Values.federate.roles .Values.kubefed.enabled }}
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
+  name: roles.rbac.authorization.k8s.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedRole
+    pluralName: federatedroles
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: rbac.authorization.k8s.io
+    kind: Role
+    pluralName: roles
+    scope: Namespaced
+    version: v1
+{{- end }}
