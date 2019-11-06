@@ -1,33 +1,9 @@
-{{- if and .Values.federate.customresourcedefinitions .Values.kubefed.enabled }}
----
-apiVersion: core.kubefed.io/v1beta1
-kind: FederatedTypeConfig
-metadata:
-  finalizers:
-    - core.kubefed.io/federated-type-config
-  generation: 1
-  name: customresourcedefinitions.apiextensions.k8s.io
-  namespace: {{ .Release.Namespace }}
-spec:
-  federatedType:
-    group: types.kubefed.io
-    kind: FederatedCustomResourceDefinition
-    pluralName: federatedcustomresourcedefinitions
-    scope: Cluster
-    version: v1beta1
-  propagation: Enabled
-  targetType:
-    group: apiextensions.k8s.io
-    kind: CustomResourceDefinition
-    pluralName: customresourcedefinitions
-    scope: Cluster
-    version: v1beta1
 ---
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
   generation: 1
-  name: federatedcustomresourcedefinitions.types.kubefed.io
+  name: federatedclusterrolebindings.types.kubefed.io
   annotations:
     "helm.sh/hook": crd-install
 spec:
@@ -35,13 +11,10 @@ spec:
     strategy: None
   group: types.kubefed.io
   names:
-    kind: FederatedCustomResourceDefinition
-    listKind: FederatedCustomResourceDefinitionList
-    plural: federatedcustomresourcedefinitions
-    shortNames:
-      - fcrd
-      - fcrds
-    singular: federatedcustomresourcedefinition
+    kind: FederatedClusterRoleBinding
+    listKind: FederatedClusterRoleBindingList
+    plural: federatedclusterrolebindings
+    singular: federatedclusterrolebinding
   preserveUnknownFields: true
   scope: Cluster
   subresources:
@@ -162,4 +135,3 @@ spec:
     - name: v1beta1
       served: true
       storage: true
-{{- end }}
