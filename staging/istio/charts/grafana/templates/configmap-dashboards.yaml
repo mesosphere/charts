@@ -5,7 +5,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: istio-grafana-configuration-dashboards-{{ $filename }}
-  namespace: {{ $.Values.Namespace }}
+  namespace: {{ $.Values.namespace }}
   labels:
     {{- if $.Values.dashboards.label }}
     {{ $.Values.dashboards.label }}: "1"
