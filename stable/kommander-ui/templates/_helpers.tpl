@@ -36,12 +36,6 @@ Common labels
 */}}
 {{- define "kommander.labels" -}}
 app: {{ include "kommander.fullname" . }}
-app.kubernetes.io/name: {{ include "kommander.name" . }}
-helm.sh/chart: {{ include "kommander.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+chart: {{ include "kommander.chart" . }}
 {{- end -}}
 

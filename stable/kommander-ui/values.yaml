@@ -1,0 +1,46 @@
+image:
+  repository: mesosphere/kommander
+  tag: 1.149.0
+  pullPolicy: IfNotPresent
+replicas: 1
+logoutRedirectPath: /ops/landing
+clusterPollingInterval: 3000
+hostPollingInterval: 3000
+clusterPollingThrottleFactor: 1
+kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta6","kubeaddonsVersion":"kommander-beta6"}]'
+
+# Mode must be either production|konvoy
+mode: production
+
+displayName: Konvoy Cluster
+
+extraInitContainers:
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "2000m"
+
+readinessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 10
+livenessProbe:
+  initialDelaySeconds: 15
+  periodSeconds: 10
+  timeoutSeconds: 3
+
+### This must match the serviceName set in the ingress backend below
+service:
+  name: kommander-ui
+
+ingress:
+  traefikFrontendRuleType: PathPrefixStrip
+  extraAnnotations:
+    traefik.ingress.kubernetes.io/priority: "1"
+    traefik.ingress.kubernetes.io/auth-type: forward
+    traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+    traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+  path: /ops/portal/kommander
