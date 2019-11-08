@@ -7,7 +7,7 @@ logoutRedirectPath: /ops/landing
 clusterPollingInterval: 3000
 hostPollingInterval: 3000
 clusterPollingThrottleFactor: 1
-kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.4","konvoyVersion":"v1.3.0-kommander-beta4","kubeaddonsVersion":"kommander-beta4"}]'
+kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.5","konvoyVersion":"v1.3.0-kommander-beta5","kubeaddonsVersion":"kommander-beta5"}]'
 
 # Mode must be either production|konvoy
 mode: production
