@@ -115,6 +115,9 @@ metadata:
     helm.sh/chart: {{ include "velero.chart" . }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: minio-operator
   template:
     metadata:
       labels:
