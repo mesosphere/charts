@@ -17,6 +17,6 @@ spec:
       containers:
         - name: ns-labeler
           image: "{{ .Values.global.hub }}/kubectl:{{ .Values.global.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
           command: ["kubectl", "label", "ns", {{ .Release.Namespace }}, "ca.istio.io/override=true"]
       restartPolicy: OnFailure
