@@ -82,9 +82,11 @@ kommander:
 
   displayName: Konvoy Cluster
 
-  createObservableClusterCRD: true
-
   extraInitContainers:
+
+  federate:
+    systemNamespace:
+      enable: false
 
   resources:
     requests:
@@ -119,18 +121,15 @@ kommander:
   kubefed:
     enabled: false
 
+  grafana:
+    enabled: false
+
   # disable kommander-cluster-lifecycle
   kommander-cluster-lifecycle:
     enabled: false
 
-###############################################################################
-#  Kubefed: Leave disabled as only kommander should deploy
-###############################################################################
-kubefed:
-  enabled: false
+  kommander-thanos:
+    enabled: false
 
-###############################################################################
-#  kommander-cluster-lifecycle: Leave disabled as only kommander should deploy
-###############################################################################
-kommander-cluster-lifecycle:
-  enabled: false
+  kommander-karma:
+    enabled: false
