@@ -97,6 +97,11 @@ data:
           [[entryPoints.https.tls.certificates]]
           CertFile = "/ssl/tls.crt"
           KeyFile = "/ssl/tls.key"
+          {{- if .Values.custom-ssl.enabled }}
+          [[entryPoints.https.tls.certificates]]
+          CertFile = "/custom-ssl/tls.crt"
+          KeyFile = "/custom-ssl/tls.key"
+          {{- end }}
       {{- end }}
         {{- if .Values.ssl.auth }}
         {{- if .Values.ssl.auth.basic }}
