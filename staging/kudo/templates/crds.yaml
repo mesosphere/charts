@@ -22,7 +22,7 @@ spec:
           type: string
         kind:
           type: string
-        meta:
+        metadata:
           type: object
         spec:
           properties:
@@ -47,7 +47,7 @@ spec:
         status:
           type: object
       type: object
-  version: v1alpha1
+  version: v1beta1
 status:
   acceptedNames:
     kind: ""
@@ -78,7 +78,7 @@ spec:
           type: string
         kind:
           type: string
-        meta:
+        metadata:
           type: object
         spec:
           properties:
@@ -88,29 +88,13 @@ spec:
               type: string
             crdVersion:
               type: string
-            dependencies:
-              items:
-                properties:
-                  crdVersion:
-                    description: 'Version captures the requirements for what versions
-                      of the above object are allowed Example: ^3.1.4'
-                    type: string
-                  referenceName:
-                    description: Name specifies the name of the dependency.  Referenced
-                      via this in defaults.config
-                    type: string
-                required:
-                - referenceName
-                - crdVersion
-                type: object
-              type: array
             operator:
               type: object
             parameters:
               items:
                 properties:
                   default:
-                    description: Default is a default value if no paramter is provided
+                    description: Default is a default value if no parameter is provided
                       by the instance
                     type: string
                   description:
@@ -139,7 +123,17 @@ spec:
               description: Plans specify a map a plans that specify how to
               type: object
             tasks:
-              type: object
+              description: List of all tasks available in this OperatorVersions
+              items:
+                properties:
+                  kind:
+                    type: string
+                  name:
+                    type: string
+                  spec:
+                    type: object
+                type: object
+              type: array
             templates:
               description: List of go templates YAML files that define the application
                 operator instance
@@ -154,7 +148,7 @@ spec:
         status:
           type: object
       type: object
-  version: v1alpha1
+  version: v1beta1
 status:
   acceptedNames:
     kind: ""
@@ -185,30 +179,13 @@ spec:
           type: string
         kind:
           type: string
-        meta:
+        metadata:
           type: object
         spec:
           properties:
             OperatorVersion:
               description: Operator specifies a reference to a specific Operator object
               type: object
-            dependencies:
-              description: Dependency references specific
-              items:
-                properties:
-                  crdVersion:
-                    description: 'Version captures the requirements for what versions
-                      of the above object are allowed Example: ^3.1.4'
-                    type: string
-                  referenceName:
-                    description: Name specifies the name of the dependency.  Referenced
-                      via this in defaults.config
-                    type: string
-                required:
-                - referenceName
-                - crdVersion
-                type: object
-              type: array
             parameters:
               type: object
           type: object
@@ -220,7 +197,7 @@ spec:
               type: object
           type: object
       type: object
-  version: v1alpha1
+  version: v1beta1
 status:
   acceptedNames:
     kind: ""
