@@ -1,0 +1,12 @@
+{{ if .Values.pumpkin.watchNamespaces }}
+{{ $releaseNamespace := .Release.Namespace }}
+{{ range $namespace := .Values.pumpkin.watchNamespaces }}
+{{ if ne $namespace $releaseNamespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ $namespace }}
+---
+{{ end }}
+{{ end }}
+{{ end }}

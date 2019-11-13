@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pumpkin-report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pumpkin-report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+rules:
+- apiGroups:
+  - tekton.dev
+  resources:
+  - pipelineruns
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pumpkin-report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pumpkin-report-status
+subjects:
+- kind: ServiceAccount
+  name: pumpkin-report-status
+---
+# Monitor the pipeline run status and update the pull request
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+spec:
+  inputs:
+    params:
+      - name: pipelineRun
+        description: The name of the pipeline run to be monitored
+        type: string
+      - name: scmSecret
+        type: string
+        default: scmtoken
+  steps:
+  - name: status
+    image: "{{ .Values.pumpkin.image }}"
+    imagePullPolicy: {{ .Values.pumpkin.pullPolicy }}
+    env:
+      - name: SCM_TOKEN
+        valueFrom:
+          secretKeyRef:
+            key: password
+            name: $(inputs.params.scmSecret)
+      - name: SCM_URL
+        valueFrom:
+          secretKeyRef:
+            key: scm.provider.url
+            name: $(inputs.params.scmSecret)
+      - name: SCM_PROVIDER
+        valueFrom:
+          secretKeyRef:
+            key: scm.provider.name
+            name: $(inputs.params.scmSecret)
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+    args:
+    - status
+    - $(inputs.params.pipelineRun)
+    - --namespace=$(NAMESPACE)
+    - --watch-namespace=$(NAMESPACE)
+    - --report
+    - --watch
+    - --scm-url=$(SCM_URL)
+    - --scm-provider=$(SCM_PROVIDER)
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
