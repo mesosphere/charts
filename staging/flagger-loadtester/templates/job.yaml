@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: flagger-label-ns
+  namespace: kube-system
+  labels:
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-delete-policy: hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      serviceAccountName: tiller
+      containers:
+        - name: ns-labeler
+          image: "bitnami/kubectl:latest"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args: ["kubectl label ns {{ .Release.Namespace }} istio-injection=enabled; kubectl label ns {{ .Release.Namespace }} ca.istio.io/override=true"]
+      restartPolicy: OnFailure
