@@ -8,8 +8,6 @@ metadata:
     app.kubernetes.io/name: {{ template "flagger.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  annotations:
-    helm.sh/hook: pre-install
 rules:
   - apiGroups:
       - ""
@@ -93,8 +91,6 @@ metadata:
     app.kubernetes.io/name: {{ template "flagger.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
-  annotations:
-    helm.sh/hook: pre-install
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
