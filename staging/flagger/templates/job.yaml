@@ -1,8 +1,8 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: flagger-label-ns
-  namespace: kube-system
+  name: label-ns
+  namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
@@ -13,7 +13,7 @@ spec:
   template:
     spec:
       containers:
-      serviceAccountName: tiller
+      serviceAccountName: {{ template "flagger.fullname" . }}
       containers:
         - name: ns-labeler
           image: "bitnami/kubectl:latest"
