@@ -18,5 +18,5 @@ spec:
           image: "bitnami/kubectl:latest"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
-          args: ["kubectl label ns {{ .Release.Namespace }} istio-injection=enabled; kubectl label ns {{ .Release.Namespace }} ca.istio.io/override=true"]
+          args: ["kubectl label --overwrite ns {{ .Release.Namespace }} istio-injection=enabled; kubectl label --overwrite ns {{ .Release.Namespace }} ca.istio.io/override=true"]
       restartPolicy: OnFailure
