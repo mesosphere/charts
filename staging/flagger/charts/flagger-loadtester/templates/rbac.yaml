@@ -13,6 +13,8 @@ metadata:
     app.kubernetes.io/name: {{ template "loadtester.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: pre-install
 rules:
 {{ toYaml .Values.rbac.rules | indent 2 }}
 ---
@@ -29,6 +31,8 @@ metadata:
     app.kubernetes.io/name: {{ template "loadtester.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: pre-install
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   {{- if eq .Values.rbac.scope "cluster" }}
@@ -51,4 +55,6 @@ metadata:
     app.kubernetes.io/name: {{ template "loadtester.name" . }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    helm.sh/hook: pre-install
 {{- end }}
