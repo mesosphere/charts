@@ -1,0 +1,22 @@
+{{- if .Values.global.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: argocd-application-controller-metrics
+  labels:
+    release: {{ .Values.global.prometheus.release }}
+spec:
+  jobLabel: argocd-application-controller
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "argo-cd.name" . }}-metrics
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/managed-by: {{ .Release.Service }}
+      app.kubernetes.io/part-of: {{ include "argo-cd.name" . }}
+      app.kubernetes.io/component: application-controller
+  endpoints:
+  - port: metrics
+{{- end }}
