@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: label-ns
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      containers:
+      serviceAccountName: istio-citadel-service-account 
+      containers:
+        - name: ns-labeler
+          image: "{{ .Values.global.hub }}/kubectl:{{ .Values.global.tag }}"
+          imagePullPolicy: {{ .Values.global.imagePullPolicy }}
+          command: ["kubectl", "label", "ns", {{ .Release.Namespace }}, "ca.istio.io/override=true"]
+      restartPolicy: OnFailure
