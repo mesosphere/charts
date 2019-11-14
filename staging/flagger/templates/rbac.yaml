@@ -16,6 +16,7 @@ rules:
       - configmaps
       - secrets
       - services
+      - namespaces
     verbs: ["*"]
   - apiGroups:
       - apps
