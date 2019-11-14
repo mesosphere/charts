@@ -6,9 +6,6 @@ metadata:
   labels:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-  annotations:
-    helm.sh/hook: pre-install
-    helm.sh/hook-delete-policy: hook-succeeded
 spec:
   template:
     spec:
