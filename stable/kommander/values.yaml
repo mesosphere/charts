@@ -56,9 +56,10 @@ federate:
     name: kommander-system
 
   kubeaddons:
-    repository: "mesosphere/kubeaddons"
-    tag: "v0.5.3"
-    pullPolicy: IfNotPresent
+    image:
+      repository: "mesosphere/kubeaddons"
+      tag: "v0.5.3"
+      pullPolicy: IfNotPresent
 
 # This name must match the name of the kubefed dep
 # in order to override values.
