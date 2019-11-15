@@ -15,7 +15,7 @@ spec:
       labels:
         component: event-sink
     spec:
-      serviceAccountName: {{ $releaseNamespace }}-cloudbuild-runner
+      serviceAccountName: {{ .Release.Name }}-cloudbuild-runner
       containers:
       - name: cloudbuild
         image: {{ .Values.dispatch.image }}
@@ -43,7 +43,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ $releaseNamespace }}-cloudbuild-runner
+  name: {{ .Release.Name }}-cloudbuild-runner
 ---
 {{ if .Values.dispatch.watchNamespaces }}
 {{ range $namespace := .Values.dispatch.watchNamespaces }}
