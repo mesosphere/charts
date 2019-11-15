@@ -26,6 +26,7 @@ spec:
         - --output=
         - --sync-period={{ .Values.dispatch.syncPeriod }}
         - --namespace={{ $releaseNamespace }}
+        - --ingress={{ .Release.Name }}-tekton-dashboard
         {{- with .Values.dispatch.watchNamespaces }}
         {{- range $namespace := . }}
         - --watch-namespace={{ $namespace }}
