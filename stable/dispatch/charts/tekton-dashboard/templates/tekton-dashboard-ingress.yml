@@ -3,7 +3,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-tekton-dashboard
   labels:
 {{ include "dispatch.labels" . | indent 4 }}
   {{- with .Values.ingress.annotations }}
