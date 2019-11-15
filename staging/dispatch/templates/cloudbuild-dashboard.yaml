@@ -99,7 +99,7 @@ data:
               "expr": "service_uptime{job=\"dispatch-event-sink\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{job}}",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{job}}`}}",
               "refId": "A"
             }
           ],
@@ -185,7 +185,7 @@ data:
               "hide": false,
               "interval": "",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/{{job}}/process_cpu_seconds_total",
+              "legendFormat": "{{`{{namespace}}`}}/{{`{{job}}`}}/process_cpu_seconds_total",
               "refId": "A"
             }
           ],
@@ -270,7 +270,7 @@ data:
               "expr": "(go_memstats_alloc_bytes{namespace=\"dispatch\", job=\"dispatch-event-sink\"})/(1024)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{job}}/go_memstats_alloc_kilobytes",
+              "legendFormat": "{{`{{job}}`}}/go_memstats_alloc_kilobytes",
               "refId": "A"
             }
           ],
@@ -354,7 +354,7 @@ data:
               "expr": "processed_events{job=\"dispatch-event-sink\"}",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/processed_events/{{status}}",
+              "legendFormat": "{{`{{namespace}}`}}/processed_events/{{`{{status}}`}}",
               "refId": "A"
             }
           ],
@@ -442,7 +442,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/outstanding_events",
+              "legendFormat": "{{`{{namespace}}`}}/outstanding_events",
               "refId": "B"
             }
           ],
@@ -530,7 +530,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/active_pipelines/{{status}}",
+              "legendFormat": "{{`{{namespace}}`}}/active_pipelines/{{`{{status}}`}}",
               "refId": "B"
             }
           ],
@@ -619,7 +619,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/completed_pipelines/{{status}}",
+              "legendFormat": "{{`{{namespace}}`}}/completed_pipelines/{{`{{status}}`}}",
               "refId": "B"
             }
           ],
@@ -707,7 +707,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/active_tasks/{{status}}",
+              "legendFormat": "{{`{{namespace}}`}}/active_tasks/{{`{{status}}`}}",
               "refId": "B"
             }
           ],
@@ -795,7 +795,7 @@ data:
               "format": "time_series",
               "instant": false,
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/completed_tasks/{{status}}",
+              "legendFormat": "{{`{{namespace}}`}}/completed_tasks/{{`{{status}}`}}",
               "refId": "B"
             }
           ],
@@ -879,7 +879,7 @@ data:
               "expr": "(rate(event_processing_time_sum{job=\"dispatch-event-sink\"}[5m]) / rate(event_processing_time_count{job=\"dispatch-event-sink\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/event_processing_time",
+              "legendFormat": "{{`{{namespace}}`}}/event_processing_time",
               "refId": "A"
             }
           ],
@@ -963,7 +963,7 @@ data:
               "expr": "(rate(pipeline_completion_time_sum{job=\"dispatch-event-sink\"}[5m]) / rate(pipeline_completion_time_count{job=\"dispatch-event-sink\"}[5m]))",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/pipeline_completion_time",
+              "legendFormat": "{{`{{namespace}}`}}/pipeline_completion_time",
               "refId": "A"
             }
           ],
@@ -1213,7 +1213,7 @@ data:
               "expr": "(\n  sum(rate(event_processing_time_bucket{le=\"10\"}[5m])) by (job)\n+\n  sum(rate(event_processing_time_bucket{le=\"+Inf\"}[5m])) by (job)\n) / 2 / sum(rate(event_processing_time_bucket[5m])) by (job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/event_processing_time_apdex",
+              "legendFormat": "{{`{{namespace}}`}}/event_processing_time_apdex",
               "refId": "A"
             }
           ],
@@ -1297,7 +1297,7 @@ data:
               "expr": "(\n  sum(rate(pipeline_completion_time_bucket{le=\"10\"}[5m])) by (job)\n+\n  sum(rate(pipeline_completion_time_bucket{le=\"+Inf\"}[5m])) by (job)\n) / 2 / sum(rate(pipeline_completion_time_count[5m])) by (job)",
               "format": "time_series",
               "intervalFactor": 1,
-              "legendFormat": "{{namespace}}/pipeline_completion_time_bucket",
+              "legendFormat": "{{`{{namespace}}`}}/pipeline_completion_time_bucket",
               "refId": "A"
             }
           ],
