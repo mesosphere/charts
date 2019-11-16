@@ -133,3 +133,20 @@ kommander:
 
   kommander-karma:
     enabled: false
+
+# BUG due to 2.14 helm
+# this is not seen for 2.15, so when we move to 2.15 remove below
+kommander-cluster-lifecycle:
+  enabled: false
+
+kubefed:
+  enabled: false
+
+grafana:
+  enabled: false
+
+kommander-thanos:
+  enabled: false
+
+kommander-karma:
+  enabled: false
