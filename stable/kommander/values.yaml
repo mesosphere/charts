@@ -72,14 +72,17 @@ kubefed:
 kommander-cluster-lifecycle:
   enabled: true
 
-  konvoy:
-    version: v1.1.5
-
   certificates:
     issuer:
       name:
       kind: Issuer
       selfSigned: false
+  konvoy:
+    allowUnofficialReleases: false
+  kubeaddonsConfigs:
+    versionStrategy: repository-tag  # One of: `repository-tag`, `mapped-kubernetes-version`, `master`,
+    versionCacheRefreshInterval: 1h  # A duration as specified in https://golang.org/pkg/time/#ParseDuration
+    versionMap: {}  # Only applicable for `versionStrategy` of `mapped-kubernetes-version`
 
 kommander-thanos:
   enabled: true
