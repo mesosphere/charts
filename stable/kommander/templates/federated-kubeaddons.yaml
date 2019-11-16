@@ -488,8 +488,8 @@ spec:
           containers:
             - command:
                 - /manager
-              image: mesosphere/kubeaddons:v0.4.5
-              imagePullPolicy: Always
+              image: "{{ .Values.federate.kubeaddons.image.repository }}:{{ .Values.federate.kubeaddons.image.tag }}"
+              imagePullPolicy: "{{ .Values.federate.kubeaddons.image.pullPolicy }}"
               name: manager
               resources:
                 requests:
