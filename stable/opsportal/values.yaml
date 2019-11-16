@@ -135,7 +135,6 @@ kommander:
     enabled: false
 
 # BUG due to 2.14 helm
-# disable kommander-cluster-lifecycle
 # this is not seen for 2.15, so when we move to 2.15 remove below
 kommander-cluster-lifecycle:
   enabled: false
