@@ -1,42 +1,26 @@
-{{- if .Values.kubefed.enabled }}
-{{- if not (.Capabilities.APIVersions.Has "types.kubefed.io/v1beta1") }}
-{{.Files.Get "files/federated-addons.yaml" }}
-{{.Files.Get "files/federated-cluster-rolebindings.yaml" }}
-{{.Files.Get "files/federated-clusteraddons.yaml" }}
-{{.Files.Get "files/federated-customresourcedefinition.yaml" }}
-{{.Files.Get "files/federated-rolebindings.yaml" }}
-{{.Files.Get "files/federated-roles.yaml" }}
+{{- if not (.Capabilities.APIVersions.Has "kubeaddons.mesosphere.io/v1beta1") }}
+{{.Files.Get "files/crd_addonrepository.yaml" }}
 {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: federated-crds
+  name: catalog-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
   labels:
-{{ include "kommander.labels" . | indent 4 }}
+{{ include "kubeaddons-catalog.labels" . | indent 4 }}
 data:
-  federated-addons.yaml: |
-{{.Files.Get "files/federated-addons.yaml" | indent 6}}
-  federated-cluster-rolebindings.yaml: |
-{{.Files.Get "files/federated-cluster-rolebindings.yaml" | indent 6}}
-  federated-clusteraddons.yaml: |
-{{.Files.Get "files/federated-clusteraddons.yaml" | indent 6}}
-  federated-customresourcedefinition.yaml: |
-{{.Files.Get "files/federated-customresourcedefinition.yaml" | indent 6}}
-  federated-rolebindings.yaml: |
-{{.Files.Get "files/federated-rolebindings.yaml" | indent 6}}
-  federated-roles.yaml: |
-{{.Files.Get "files/federated-roles.yaml" | indent 6}}
+  crd_addonsrepository.yaml: |
+{{.Files.Get "files/crd_addonrepository.yaml" | indent 6}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: federated-crds
+  name: catalog-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -50,7 +34,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: federated-crds
+  name: catalog-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -59,16 +43,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: federated-crds
+  name: catalog-crds
 subjects:
   - kind: ServiceAccount
-    name: federated-crds
+    name: catalog-crds
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: federated-crds
+  name: catalog-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
@@ -79,26 +63,25 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: federated-crds
+  name: catalog-crds
   annotations:
-    "helm.sh/hook": post-install, pre-upgrade
+    "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-4"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
     spec:
-      serviceAccountName: federated-crds
+      serviceAccountName: catalog-crds
       containers:
-        - name: federated-crds
+        - name: catalog-crds
           image: "bitnami/kubectl:1.16.2"
           volumeMounts:
-            - name: federated-crds
-              mountPath: /etc/federated-crds
+            - name: catalog-crds
+              mountPath: /etc/catalog-crds
               readOnly: true
-          command: ["kubectl", "apply", "-f", "/etc/federated-crds"]
+          command: ["kubectl", "apply", "-f", "/etc/catalog-crds"]
       volumes:
-        - name: federated-crds
+        - name: catalog-crds
           configMap:
-            name: federated-crds
+            name: catalog-crds
       restartPolicy: OnFailure
-{{- end }}

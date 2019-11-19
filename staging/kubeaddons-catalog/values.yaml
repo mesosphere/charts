@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: mesosphere/kubeaddons-catalog
-  tag: stable
+  tag: v0.5.3
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -19,9 +19,6 @@ ingress:
 service:
   type: ClusterIP
   port: 80
-
-crds:
-  forceDeploy: false
 
 resources:
   limits:
