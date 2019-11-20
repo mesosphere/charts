@@ -133,7 +133,7 @@ spec:
         - mountPath: /ssl
           name: ssl
         {{- end }}
-        {{- if .Values.custom-ssl.enabled }}
+        {{- if .Values.customIngressCert.enabled }}
         - mountPath: /custom-ssl
           name: custom-ssl
         {{- end }}
@@ -188,10 +188,11 @@ spec:
         secret:
           secretName: {{ template "traefik.fullname" . }}-certificate
       {{- end }}
-      {{- if .Values.custom-ssl.enabled }}
+      {{- if .Values.customIngressCert.enabled }}
       - name: custom-ssl
         secret:
           secretName: {{ template "traefik.fullname" . }}-custom-certificate
+      {{- end }}
       {{- if .Values.acme.enabled }}
       - name: acme
       {{- if .Values.acme.persistence.enabled }}
