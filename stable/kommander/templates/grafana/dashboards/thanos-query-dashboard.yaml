@@ -55,7 +55,7 @@ data:
       "gnetId": null,
       "graphTooltip": 1,
       "id": null,
-      "iteration": 1571948617065,
+      "iteration": 1574381793185,
       "links": [],
       "panels": [
         {
@@ -943,8 +943,8 @@ data:
         "list": [
           {
             "current": {
-              "text": "Prometheus",
-              "value": "Prometheus"
+              "text": "KommanderPrometheus",
+              "value": "KommanderPrometheus"
             },
             "hide": 0,
             "includeAll": false,
@@ -954,7 +954,7 @@ data:
             "options": [],
             "query": "prometheus",
             "refresh": 1,
-            "regex": "",
+            "regex": "KommanderPrometheus",
             "skipUrlSync": false,
             "type": "datasource"
           },

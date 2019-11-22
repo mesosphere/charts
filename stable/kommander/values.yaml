@@ -178,9 +178,14 @@ grafana:
       datasources:
       - name: ThanosQuery
         type: prometheus
-        url: http://kommander-kubeaddons-thanos-query-http:10902/
+        url: http://kommander-kubeaddons-thanos-query-http.kommander:10902/
         access: proxy
         isDefault: true
+      - name: KommanderPrometheus
+        type: prometheus
+        url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons:9090/
+        access: proxy
+        isDefault: false
 
   ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
   ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
