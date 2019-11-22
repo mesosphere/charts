@@ -3,3 +3,4 @@ storageclass:
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
   type: gp2
+  allowVolumeExpansion: true
