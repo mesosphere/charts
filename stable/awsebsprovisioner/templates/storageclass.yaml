@@ -8,6 +8,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 {{- end }}
 provisioner: kubernetes.io/aws-ebs
+allowVolumeExpansion: {{ .Values.storageclass.allowVolumeExpansion | quote }}
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
 parameters:

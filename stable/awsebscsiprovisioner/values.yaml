@@ -66,6 +66,7 @@ storageclass:
   volumeBindingMode: WaitForFirstConsumer
   type: gp2
   allowedTopologies: []
+  allowVolumeExpansion: true
   # - matchLabelExpressions:
   #   - key: topology.ebs.csi.aws.com/zone
   #     values:
