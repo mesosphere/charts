@@ -2,5 +2,6 @@ storageclass:
   isDefault: true
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
-  type: gp2
+  type: io1
   allowVolumeExpansion: true
+  iopsPerGB: "1000"

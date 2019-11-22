@@ -64,9 +64,10 @@ storageclass:
   isDefault: false
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
-  type: gp2
+  type: io1
   allowedTopologies: []
   allowVolumeExpansion: true
+  iopsPerGB: "1000"
   # - matchLabelExpressions:
   #   - key: topology.ebs.csi.aws.com/zone
   #     values:
