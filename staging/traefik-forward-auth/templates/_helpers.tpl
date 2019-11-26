@@ -30,3 +30,16 @@ Create chart name and version as used by the chart label.
 {{- define "traefik-forward-auth.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Common labels
+*/}}
+{{- define "traefik-forward-auth.labels" -}}
+app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}

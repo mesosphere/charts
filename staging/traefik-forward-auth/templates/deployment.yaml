@@ -23,6 +23,7 @@ spec:
         app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      serviceAccountName: {{ include "traefik-forward-auth.fullname" . }}
 {{- if .Values.initContainers }}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
@@ -55,6 +56,8 @@ spec:
           - name: etc-traefik-forward-auth-config
             mountPath: "/etc/traefik-forward-auth/config"
             readOnly: true
+          args:
+            - --pass-impersonation-headers
           env:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key | quote }}
@@ -70,6 +73,8 @@ spec:
               {{- end }}
             - name: LOG_LEVEL
               value: "trace"
+            - name: SERVICE_ACCOUNT_TOKEN_PATH
+              value: "/var/run/secrets/kubernetes.io/serviceaccount/token"
             {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
             - name: CLIENT_SECRET
               valueFrom:
