@@ -1,0 +1,33 @@
+# Default values for nvidia-dcgm-exporter.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+enabled: true
+
+namespace: kubeaddons
+
+replicaCount: 1
+
+pod-nvidia-gpu-metrics-exporter:
+  image:
+    repository: nvidia/pod-gpu-metrics-exporter
+    tag: v1.0.0-alpha
+    pullPolicy: IfNotPresent
+  resources: {}
+
+nvidia-dcgm-exporter:
+  image:
+    repository: nvidia/dcgm-exporter
+    tag: 1.4.6
+    pullPolicy: IfNotPresent
+  resources: {}
+
+nodeSelector: {}
+
+priorityClassName: ""
+
+tolerations: []
+
+affinity: {}
+
+initContainers: []
