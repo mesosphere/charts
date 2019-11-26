@@ -9,7 +9,7 @@ metadata:
 {{- end }}
 provisioner: ebs.csi.aws.com
 {{ if .Values.storageclass.allowVolumeExpansion }}
-allowVolumeExpansion: {{ .Values.storageClass.allowVolumeExpansion }}
+allowVolumeExpansion: {{ .Values.storageclass.allowVolumeExpansion }}
 {{ end }}
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
