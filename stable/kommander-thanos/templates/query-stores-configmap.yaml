@@ -1,0 +1,15 @@
+{{ $labels := include "kommander-thanos.labels" . | indent 4  }}
+{{- if .Values.thanos.query.enabled }}
+{{- range .Values.thanos.query.serviceDiscoveryFileConfigMaps }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ . }}
+  labels:
+{{ $labels }}
+data:
+  stores.yaml: |-
+    - targets: []
+{{- end}}
+{{- end }}
