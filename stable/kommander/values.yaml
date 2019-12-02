@@ -8,6 +8,7 @@ clusterPollingInterval: 3000
 hostPollingInterval: 3000
 clusterPollingThrottleFactor: 1
 kubernetesVersionsSelection: '[{"kubernetesVersion":"1.15.5","konvoyVersion":"v1.3.0-beta6","kubeaddonsVersion":"kommander-beta6"}]'
+kubeaddonsAddress: http://kubeaddons-catalog.kubeaddons.svc
 
 # Mode must be either production|konvoy
 mode: production
