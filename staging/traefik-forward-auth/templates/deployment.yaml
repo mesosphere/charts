@@ -57,7 +57,7 @@ spec:
             mountPath: "/etc/traefik-forward-auth/config"
             readOnly: true
           args:
-            - --pass-impersonation-headers
+            - --enable-impersonation
           env:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key | quote }}
