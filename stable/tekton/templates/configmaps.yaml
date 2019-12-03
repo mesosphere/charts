@@ -3,6 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-artifact-bucket
+  namespace: {{ .Release.Namespace }}
   labels:
     dispatch.d2iq.io/catalog: "true"
 data:
@@ -12,12 +13,14 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-artifact-pvc
+  namespace: {{ .Release.Namespace }}
 data: null
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-defaults
+  namespace: {{ .Release.Namespace }}
 data:
   _example: |
     ################################
@@ -43,6 +46,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-logging
+  namespace: {{ .Release.Namespace }}
 data:
   loglevel.controller: info
   loglevel.webhook: info
@@ -76,6 +80,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config-observability
+  namespace: {{ .Release.Namespace }}
 data:
   _example: |
     ################################

@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: tekton-pipelines-admin
+  name: {{ .Release.Name }}-pipelines-admin
 rules:
   - apiGroups:
       - ""
@@ -119,10 +119,10 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: {{ .Release.Name }}-aggregate-edit
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
-  name: tekton-aggregate-edit
 rules:
   - apiGroups:
       - tekton.dev
@@ -146,9 +146,9 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  name: {{ .Release.Name }}-aggregate-view
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-  name: tekton-aggregate-view
 rules:
   - apiGroups:
       - tekton.dev

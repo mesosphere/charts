@@ -6,8 +6,8 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: tekton-pipelines-admin
+  name: {{ .Release.Name }}-pipelines-admin
 subjects:
   - kind: ServiceAccount
-    name: tekton-pipelines-controller
+    name: {{ .Release.Name }}-pipelines-controller
     namespace: {{ .Release.Namespace }}

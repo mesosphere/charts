@@ -2,18 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tekton-pipelines-controller
+  name: {{ .Release.Name }}-pipelines-controller
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: tekton-pipelines-controller
+      app: {{ .Release.Name }}-pipelines-controller
   template:
     metadata:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
       labels:
-        app: tekton-pipelines-controller
+        app: {{ .Release.Name }}-pipelines-controller
     spec:
       containers:
         - args:
@@ -52,7 +53,7 @@ spec:
             - name: METRICS_DOMAIN
               value: tekton.dev/pipeline
           image: index.docker.io/jbarrickmesosphere/controller-10a3e32792f33651396d02b6855a6e36@sha256:74036b1da9e1383c60de0ca03ccb71e29c880977a78707a39862812df74e1cbc
-          name: tekton-pipelines-controller
+          name: {{ .Release.Name }}-pipelines-controller
           {{- with .Values.controller.resources }}
           resources:
             {{ toYaml . | nindent 10 | trim }}
@@ -60,7 +61,7 @@ spec:
           volumeMounts:
             - mountPath: /etc/config-logging
               name: config-logging
-      serviceAccountName: tekton-pipelines-controller
+      serviceAccountName: {{ .Release.Name }}-pipelines-controller
       volumes:
         - configMap:
             name: config-logging
