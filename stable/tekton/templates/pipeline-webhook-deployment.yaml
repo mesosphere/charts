@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-pipelines-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tekton-pipelines-webhook
+  template:
+    metadata:
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+      labels:
+        app: tekton-pipelines-webhook
+    spec:
+      containers:
+        - env:
+            - name: SYSTEM_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          image: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/webhook@sha256:48cfcc0ec4898143a79e6b014f8011781cfffb543a845c4d138886d362d71492
+          name: webhook
+          {{- with .Values.webhook.resources }}
+          resources:
+            {{ toYaml . | nindent 10 | trim }}
+          {{- end }}
+          volumeMounts:
+            - mountPath: /etc/config-logging
+              name: config-logging
+      serviceAccountName: tekton-pipelines-controller
+      volumes:
+        - configMap:
+            name: config-logging
+          name: config-logging
