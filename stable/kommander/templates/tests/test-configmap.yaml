@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "kommander.fullname" . }}-test
+  labels:
+    app: {{ template "kommander.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  run.sh: |-
+    @test "Test UI Access" {
+      curl -D - http://{{ template "kommander.fullname" . }}/
+    }
+
+    @test "Test Health" {
+      url="http://{{ template "kommander.fullname" . }}/health"
+
+      code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
+      [ "$code" == "200" ]
+    }
+

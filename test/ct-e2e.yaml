@@ -10,7 +10,6 @@ excluded-charts:
   - defaultstorageclass   # DCOS-62803
   - dispatch              # DCOS-62802
   - gcpdiskprovisioner    # DCOS-62801
-  - kommander             # DCOS-62800
   - kommander-karma       # DCOS-62799
   - kommander-thanos      # DCOS-62798
   - mtls-proxy            # DCOS-62805

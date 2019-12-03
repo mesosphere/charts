@@ -1,0 +1,9 @@
+kommander-cluster-lifecycle:
+  fullnameOverride: kcl
+
+  certificates:
+    issuer:
+      selfSigned: true
+
+  konvoy:
+    allowUnofficialReleases: true
