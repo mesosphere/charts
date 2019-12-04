@@ -1,0 +1,31 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dispatch-report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+rules:
+- apiGroups:
+  - tekton.dev
+  resources:
+  - pipelineruns
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dispatch-report-status
+  labels:
+    dispatch.d2iq.io/catalog: "true"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: dispatch-report-status
+subjects:
+- kind: ServiceAccount
+  name: dispatch-report-status

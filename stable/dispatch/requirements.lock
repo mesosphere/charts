@@ -1,0 +1,9 @@
+dependencies:
+- name: tekton
+  repository: https://mesosphere.github.io/charts/stable
+  version: 0.1.2
+- name: minio
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 2.5.14
+digest: sha256:4861641f25a2929ead974f17b4e785cbf7ac36de9523fee24ea76c6897b9595d
+generated: "2019-12-04T20:11:08.935463-08:00"

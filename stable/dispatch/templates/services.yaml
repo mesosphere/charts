@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.minio.service.name }}
+spec:
+  ports:
+  - name: service
+    port: 80
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app: minio
+    release: {{ .Release.Name }}
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "dispatch.fullname" . }}-event-sink
+  labels:
+    component: event-sink
+spec:
+  selector:
+    component: event-sink
+  ports:
+    - protocol: TCP
+      port: 9300
+      targetPort: 9300
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "dispatch.fullname" . }}-repository-controller
+  labels:
+    component: repository-controller
+spec:
+  selector:
+    component: repository-controller
+  ports:
+    - protocol: TCP
+      port: 8080
+      name: metrics
+      targetPort: 8080
