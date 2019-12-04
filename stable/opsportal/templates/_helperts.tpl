@@ -25,6 +25,15 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create a pre-install service account name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opsportal.preinstallserviceaccount" -}}
+{{- $prefix := .Release.Name | trunc 26 | trimSuffix "-" -}}
+{{- printf "%s-%s" $prefix "service-account-pre-install" -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "opsportal.chart" -}}
