@@ -5,7 +5,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: "{{.Release.Name}}-service-account-pre-install"
+  name: {{ template "opsportal.fullname" . }}-temp
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
@@ -52,7 +52,7 @@ metadata:
 subjects:
 - apiGroup: ""
   kind: ServiceAccount
-  name: "{{.Release.Name}}-service-account-pre-install"
+  name: {{ template "opsportal.fullname" . }}-temp
   namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
