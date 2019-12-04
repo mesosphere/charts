@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-pipelines-controller-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-pipelines-admin
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-pipelines-controller
+    namespace: {{ .Release.Namespace }}
