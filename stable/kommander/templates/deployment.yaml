@@ -72,4 +72,4 @@ spec:
             - name: SUPPORTED_KUBERNETES_VERSIONS
               value: {{ .Values.kubernetesVersionsSelection | toJson  }}
             - name: KUBEADDONS_ADDRESS
-              value: {{ .Values.kubeaddonsAddress | quote }}
+              value: "http://{{ .Values.kubeaddonsAddress }}.{{ .Release.Namespace }}.svc"
