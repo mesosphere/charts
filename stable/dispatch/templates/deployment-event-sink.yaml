@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "dispatch.fullname" . }}-event-sink
+  labels:
+    component: event-sink
+spec:
+  selector:
+    matchLabels:
+      component: event-sink
+  template:
+    metadata:
+      labels:
+        component: event-sink
+    spec:
+      serviceAccountName: {{ .Release.Name }}-cloudbuild-runner
+      containers:
+      - name: cloudbuild
+        image: {{ .Values.dispatch.image }}
+        imagePullPolicy: {{ .Values.dispatch.pullPolicy }}
+        args:
+          - cloudbuild
+          - --output=
+          - --namespace={{ .Release.Namespace }}
+        {{- with .Values.dispatch.dashboardUrl }}
+          - --dashboard-url={{ . }}
+        {{- end }}
+        {{- with .Values.dispatch.watchNamespaces }}
+        {{- range $namespace := . }}
+          - --watch-namespace={{ $namespace }}
+        {{- end }}
+        {{- end }}
+          - --default-step-resources={{ toJson .Values.eventSink.defaultStepResources }}
+        resources:
+{{ toYaml .Values.eventSink.resources | indent 10 }}

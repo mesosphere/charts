@@ -1,0 +1,34 @@
+{{- if .Values.global.prometheus.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-event-sink
+  labels:
+    release: {{ .Values.global.prometheus.release }}
+spec:
+  endpoints:
+    - path: /metrics
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      component: event-sink
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Release.Name }}-repository-controller
+  labels:
+    release: {{ .Values.global.prometheus.release }}
+spec:
+  endpoints:
+    - path: /metrics
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      component: repository-controller
+{{- end }}
