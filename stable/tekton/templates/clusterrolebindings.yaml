@@ -9,5 +9,5 @@ roleRef:
   name: {{ .Release.Name }}-pipelines-admin
 subjects:
   - kind: ServiceAccount
-    name: tekton-pipelines-controller
+    name: {{ .Release.Name }}-pipelines-controller
     namespace: {{ .Release.Namespace }}
