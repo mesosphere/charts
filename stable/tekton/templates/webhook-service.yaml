@@ -5,10 +5,10 @@ metadata:
   name: {{ .Release.Name }}-pipelines-webhook
   namespace: {{ .Release.Namespace }}
   labels:
-    app: {{ .Release.Name }}-pipelines-webhook
+    app: tekton-pipelines-webhook
 spec:
   ports:
     - port: 443
       targetPort: 8443
   selector:
-    app: {{ .Release.Name }}-pipelines-webhook
+    app: tekton-pipelines-webhook

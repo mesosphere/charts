@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-pipelines-webhook
+  name: tekton-pipelines-webhook
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-pipelines-webhook
+      app: tekton-pipelines-webhook
   template:
     metadata:
       annotations:
         cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
       labels:
-        app: {{ .Release.Name }}-pipelines-webhook
+        app: tekton-pipelines-webhook
     spec:
       containers:
         - env:
