@@ -4,6 +4,10 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "kube-state-metrics.fullname" . }}
   labels:
+    app: {{ template "kube-state-metrics.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"    
     app.kubernetes.io/name: {{ template "kube-state-metrics.name" . }}
     helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     app.kubernetes.io/instance: "{{ .Release.Name }}"
@@ -14,8 +18,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ template "kube-state-metrics.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ template "kube-state-metrics.name" . }}
+      release: {{ .Release.Name }}
   endpoints:
     - port: http
       {{- if .Values.prometheus.monitor.honorLabels }}
