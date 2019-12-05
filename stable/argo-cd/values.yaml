@@ -201,6 +201,10 @@ rbac:
   policyDefault:  # role:readonly
   scopes:  # [groups]
 
+prometheus:
+  enabled: false
+  release: prometheus-kubeaddons
+
 redis:
   image:
     repository: redis

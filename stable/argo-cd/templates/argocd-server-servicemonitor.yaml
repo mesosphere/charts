@@ -1,10 +1,10 @@
-{{- if and .Values.global.prometheus.enabled }}
+{{- if and .Values.prometheus.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: argocd-server-metrics
   labels:
-    release: {{ .Values.global.prometheus.release }}
+    release: {{ .Values.prometheus.release }}
 spec:
   jobLabel: argocd-server
   namespaceSelector:
