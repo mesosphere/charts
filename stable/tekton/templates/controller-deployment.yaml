@@ -61,7 +61,7 @@ spec:
           volumeMounts:
             - mountPath: /etc/config-logging
               name: config-logging
-      serviceAccountName: {{ .Release.Name }}-pipelines-controller
+      serviceAccountName: tekton-pipelines-controller
       volumes:
         - configMap:
             name: config-logging
