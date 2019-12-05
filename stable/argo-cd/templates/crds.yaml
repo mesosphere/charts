@@ -1,0 +1,88 @@
+{{- if not (.Capabilities.APIVersions.Has "argoproj.io/v1alpha1") }}
+{{.Files.Get "files/application-crd.yaml" }}
+{{.Files.Get "files/appproject-crd.yaml" }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argo-cd-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  application-crd.yaml: |
+{{.Files.Get "files/application-crd.yaml" | indent 6}}
+  appproject-crd.yaml: |
+{{.Files.Get "files/appproject-crd.yaml" | indent 6}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: argo-cd-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: argo-cd-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: argo-cd-crds
+subjects:
+  - kind: ServiceAccount
+    name: argo-cd-crds
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: argo-cd-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: argo-cd-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: argo-cd-crds
+      containers:
+        - name: argo-cd-crds
+          image: "bitnami/kubectl:1.16.2"
+          volumeMounts:
+            - name: argo-cd-crds
+              mountPath: /etc/argo-cd-crds
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/argo-cd-crds"]
+      volumes:
+        - name: argo-cd-crds
+          configMap:
+            name: argo-cd-crds
+      restartPolicy: OnFailure
