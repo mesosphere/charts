@@ -88,8 +88,7 @@ dexServer:
 # terminate tls at ArgoCD level
 ingress:
   enabled: false
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -98,8 +97,7 @@ ingress:
 
 webhookIngress:
   enabled: false
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
@@ -170,11 +168,11 @@ config:
     gitlabSecret:
     bitbucketSecret:
   resourceCustomizations:
-  #   certmanager.k8s.io/Certificate:
-  #     health.lua: |
-  #       hs = {}
-  #       ...
-  #       return hs
+    # certmanager.k8s.io/Certificate:
+    #   health.lua: |
+    #     hs = {}
+    #     ...
+    #     return hs
   configManagementPlugins:
     # - name: pluginName
     #   init:                          # Optional command to initialize application source directory
@@ -184,22 +182,22 @@ config:
     #     command: ["sample command"]
     #     args: ["sample args"]
 
+# An RBAC policy .csv file containing additional policy and role definitions.
+# See https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md on how to write RBAC policies.
 rbac:
-  #   # An RBAC policy .csv file containing additional policy and role definitions.
-  #   # See https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md on how to write RBAC policies.
-  #   policy.csv: |
-  #     # Give all members of "my-org:team-alpha" the ability to sync apps in "my-project"
-  #     p, my-org:team-alpha, applications, sync, my-project/*, allow
-  #     # Make all members of "my-org:team-beta" admins
-  #     g, my-org:team-beta, role:admin
+  # policy.csv: |
+  #   # Give all members of "my-org:team-alpha" the ability to sync apps in "my-project"
+  #   p, my-org:team-alpha, applications, sync, my-project/*, allow
+  #   # Make all members of "my-org:team-beta" admins
+  #   g, my-org:team-beta, role:admin
   policyCsv: #|
-  #   p, role:org-admin, applications, *, */*, allow
-  #   p, role:org-admin, clusters, get, *, allow
-  #   p, role:org-admin, repositories, get, *, allow
-  #   p, role:org-admin, repositories, create, *, allow
-  #   p, role:org-admin, repositories, update, *, allow
-  #   p, role:org-admin, repositories, delete, *, allow
-  #   g, your-github-org:your-team, role:org-admin
+    # p, role:org-admin, applications, *, */*, allow
+    # p, role:org-admin, clusters, get, *, allow
+    # p, role:org-admin, repositories, get, *, allow
+    # p, role:org-admin, repositories, create, *, allow
+    # p, role:org-admin, repositories, update, *, allow
+    # p, role:org-admin, repositories, delete, *, allow
+    # g, your-github-org:your-team, role:org-admin
   policyDefault: #role:readonly
   scopes: #[groups]
 
