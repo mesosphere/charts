@@ -7,7 +7,11 @@ metadata:
     app: {{ template "kube-state-metrics.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
-    heritage: "{{ .Release.Service }}"
+    heritage: "{{ .Release.Service }}"    
+    app.kubernetes.io/name: {{ template "kube-state-metrics.name" . }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    app.kubernetes.io/instance: "{{ .Release.Name }}"
+    app.kubernetes.io/managed-by: "{{ .Release.Service }}"
     {{- if .Values.prometheus.monitor.additionalLabels }}
 {{ toYaml .Values.prometheus.monitor.additionalLabels | indent 4 }}
     {{- end }}
@@ -18,4 +22,7 @@ spec:
       release: {{ .Release.Name }}
   endpoints:
     - port: http
+      {{- if .Values.prometheus.monitor.honorLabels }}
+      honorLabels: true
+      {{- end }}
 {{- end }}
