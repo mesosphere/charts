@@ -1,0 +1,13 @@
+storageclass:
+  isDefault: true
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+
+  # pd-ssd, local-ssd or pd-standard
+  type: pd-ssd
+  # none, regional-pd
+  replicationType: none
+  # topology.gke.io/zone that represents availability by zone
+  topologyZone: []
+snapshotclass:
+  isDefault: true

@@ -1,0 +1,58 @@
+image:
+  repository: gcr.io/gke-release/gcp-compute-persistent-disk-csi-driver
+  tag: v0.6.0-gke.0
+  pullPolicy: Always
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+# True if enable volume Topology Zone
+enableTopologyZone: true
+
+liveness:
+  image:
+    repository: quay.io/k8scsi/livenessprobe
+    tag: v1.1.0
+
+registrar:
+  cluster:
+    image:
+      repository: quay.io/k8scsi/csi-cluster-driver-registrar
+      tag: v1.0.1
+  node:
+    image:
+      repository: quay.io/k8scsi/csi-node-driver-registrar
+      tag: v1.2.0
+
+provisioner:
+  image:
+    repository: quay.io/k8scsi/csi-provisioner
+    tag: v1.4.0
+  timeout: 30s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 100
+
+attacher:
+  image:
+    repository: quay.io/k8scsi/csi-attacher
+    tag: v2.0.0
+  timeout: 120s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 20
+
+snapshotter:
+  image:
+    repository: quay.io/k8scsi/csi-snapshotter
+    tag: v1.2.2
+
+resizer:
+  image:
+    repository: quay.io/k8scsi/csi-resizer
+    tag: v0.3.0
+
+cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
