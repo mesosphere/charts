@@ -37,6 +37,9 @@ argo-cd:
     hosts:
       - paths: [/dispatch/hook/argo-cd]
         host: ""
+  prometheus:
+    enabled: false
+    release: prometheus-kubeaddons
 
 dispatch:
   pullPolicy: Always
@@ -69,11 +72,10 @@ eventSink:
       cpu: 250m
       memory: 512Mi
 
-global:
-  prometheus:
-    enabled: false
-    # Service monitor selector used by prometheus operator
-    release: prometheus-kubeaddons
+prometheus:
+  enabled: false
+  # Service monitor selector used by prometheus operator
+  release: prometheus-kubeaddons
 
 ingress:
   enabled: true
