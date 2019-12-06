@@ -1,11 +1,11 @@
-{{- if .Values.global.prometheus.enabled }}
+{{- if .Values.prometheus.enabled }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ .Release.Name }}-event-sink
   labels:
-    release: {{ .Values.global.prometheus.release }}
+    release: {{ .Values.prometheus.release }}
 spec:
   endpoints:
     - path: /metrics
@@ -21,7 +21,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ .Release.Name }}-repository-controller
   labels:
-    release: {{ .Values.global.prometheus.release }}
+    release: {{ .Values.prometheus.release }}
 spec:
   endpoints:
     - path: /metrics
