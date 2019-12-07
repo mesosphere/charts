@@ -128,6 +128,7 @@ The following tables list the configurable parameters of the prometheus-operator
 | `additionalPrometheusRulesMap` | Map of `prometheusRule` objects to create with the key used as the name of the rule spec. If defined, this will take precedence over `additionalPrometheusRules`. See https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusrulespec. | `nil` |
 | `global.rbac.create` | Create RBAC resources | `true` |
 | `global.rbac.pspEnabled` | Create pod security policy resources | `true` |
+| `kubeTargetVersionOverride` | Provide a target gitVersion of K8S, in case .Capabilites.KubeVersion is not available (e.g. `helm template`) |`""`|
 | `global.imagePullSecrets` | Reference to one or more secrets to be used when pulling images | `[]` |
 
 ### Prometheus Operator
