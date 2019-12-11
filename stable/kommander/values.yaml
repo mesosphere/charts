@@ -170,6 +170,16 @@ grafana:
     #   hosts:
     #   - grafana.example.com
 
+  folders: 
+    enabled: true
+    default: 
+      namespace: kommander-default-folder
+      labels:
+        kommanderType: folder
+      annotations:
+        kommander.d2iq.io/description: Default folder
+        kommander.d2iq.io/display-name: Default
+
   ## Configure grafana datasources
   ## ref: http://docs.grafana.org/administration/provisioning/#datasources
   ##

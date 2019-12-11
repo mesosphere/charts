@@ -1,0 +1,8 @@
+{{- if .Values.folders.enabled -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.folders.default.namespace }}
+  {{- with .Values.folders.default.annotations }}
+  {{- with .Values.folders.default.labels }}
+{{- end -}}
