@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nvidia-dcgm-exporter
+  name: {{ template "nvidia-dcgm-exporter.fullname" . }}
   namespace: {{ $.Values.namespace }}
 spec:
   selector:
     matchLabels:
-      name: nvidia-dcgm-exporter
+      name: {{ template "nvidia-dcgm-exporter.fullname" . }}
   template:
     metadata:
       labels:
-        name: nvidia-dcgm-exporter
+        name: {{ template "nvidia-dcgm-exporter.fullname" . }}
     spec:
 {{- if .Values.initContainers }}
       initContainers:
