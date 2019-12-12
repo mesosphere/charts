@@ -1,0 +1,15 @@
+{{- if .Values.kubefed.enabled }}
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedNamespace
+metadata:
+  name: kube-system
+  namespace: kube-system
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  placement:
+    clusterSelector:
+      matchLabels: {}
+  template:
+    spec: {}
+{{- end }}
