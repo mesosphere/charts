@@ -1,0 +1,67 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "nvidia-dcgm-exporter.fullname" . }}
+  namespace: {{ $.Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ template "nvidia-dcgm-exporter.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ template "nvidia-dcgm-exporter.fullname" . }}
+    spec:
+{{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      containers:
+      - image: "{{ .Values.podNvidiaGpuMetricsExporter.image.repository }}:{{ .Values.podNvidiaGpuMetricsExporter.image.tag }}"
+        name: pod-nvidia-gpu-metrics-exporter
+        ports:
+        - name: gpu-metrics
+          containerPort: 9400
+          hostPort: 9400
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        imagePullPolicy: {{ .Values.podNvidiaGpuMetricsExporter.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.podNvidiaGpuMetricsExporter.resources | indent 12 }}
+        volumeMounts:
+        - name: pod-gpu-resources
+          readOnly: true
+          mountPath: /var/lib/kubelet/pod-resources
+        - name: device-metrics
+          readOnly: true
+          mountPath: /run/prometheus
+      - image: "{{ .Values.nvidiaDcgmExporter.image.repository }}:{{ .Values.nvidiaDcgmExporter.image.tag }}"
+        name: nvidia-dcgm-exporter
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        imagePullPolicy: {{ .Values.nvidiaDcgmExporter.image.pullPolicy }}
+        resources:
+{{ toYaml .Values.nvidiaDcgmExporter.resources | indent 12 }}
+        volumeMounts:
+        - name: device-metrics
+          mountPath: /run/prometheus
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+      volumes:
+      - name: pod-gpu-resources
+        hostPath:
+          path: /var/lib/kubelet/pod-resources
+      - name: device-metrics
+        emptyDir:
+          medium: Memory
+{{- end }}
