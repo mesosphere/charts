@@ -22,6 +22,7 @@ spec:
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
       restartPolicy: Never
+      serviceAccountName: {{ include "traefik-forward-auth.fullname" . }}
       containers:
       - name: "{{.Release.Name}}-pre-install"
         image: "mesosphere/kubeaddons-addon-initializer:v0.0.2"
@@ -54,6 +55,7 @@ spec:
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
       restartPolicy: Never
+      serviceAccountName: {{ include "traefik-forward-auth.fullname" . }}
       containers:
       - name: "{{.Release.Name}}-post-delete"
         image: "mesosphere/kubeaddons-addon-initializer:v0.0.2"
