@@ -1,4 +1,46 @@
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "{{.Release.Name}}-secret-cr"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: "{{.Release.Name}}-secret-crb"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "{{.Release.Name}}-secret-cr"
+subjects:
+  - kind: ServiceAccount
+    name: "{{.Release.Name}}-secret-sa"
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{.Release.Name}}-secret-sa"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -10,7 +52,7 @@ metadata:
     helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
   annotations:
     "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-weight": "-4"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
@@ -21,6 +63,7 @@ spec:
         app.kubernetes.io/instance: {{.Release.Name | quote }}
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
+      serviceAccountName: "{{.Release.Name}}-secret-sa"
       restartPolicy: Never
       containers:
       - name: "{{.Release.Name}}-pre-install"
@@ -42,7 +85,7 @@ metadata:
     helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
   annotations:
     "helm.sh/hook": post-delete
-    "helm.sh/hook-weight": "3"
+    "helm.sh/hook-weight": "-4"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
@@ -53,6 +96,7 @@ spec:
         app.kubernetes.io/instance: {{.Release.Name | quote }}
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
+      serviceAccountName: "{{.Release.Name}}-secret-sa"
       restartPolicy: Never
       containers:
       - name: "{{.Release.Name}}-post-delete"
