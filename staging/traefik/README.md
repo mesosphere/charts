@@ -127,6 +127,7 @@ The following table lists the configurable parameters of the Traefik chart and t
 | `ssl.cipherSuites`                     | Specify a non-empty list of TLS ciphers to override the default one | None |
 | `ssl.sniStrict`                        | Enable strict SNI checking, so that connections cannot be made if a matching certificate does not exist.                     | false                                             |
 | `ssl.generateTLS`                      | Generate self sign cert by Helm. If it's `true` the `defaultCert` and the `defaultKey` parameters will be ignored.           | false                                             |
+| `ssl.useCertManager`                   | Whether an external cert manager is being used. If this is `true`, `generateTLS`, `defaultCert`, and `defaultKey` will be ignored.| false                                        |
 | `ssl.defaultCN`                        | Specify generated self sign cert CN                                                                                          | ""                                                |
 | `ssl.defaultSANList`                   | Specify generated self sign cert SAN list                                                                                    | `[]`                                              |
 | `ssl.defaultIPList`                    | Specify generated self sign cert IP list                                                                                     | `[]`                                              |
