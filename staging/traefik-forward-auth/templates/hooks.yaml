@@ -1,4 +1,46 @@
 ---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "{{.Release.Name}}-secret-cr"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: "{{.Release.Name}}-secret-crb"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "{{.Release.Name}}-secret-cr"
+subjects:
+  - kind: ServiceAccount
+    name: "{{.Release.Name}}-secret-sa"
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{.Release.Name}}-secret-sa"
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,post-delete
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -22,6 +64,7 @@ spec:
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
       restartPolicy: Never
+      serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-pre-install"
         image: "mesosphere/kubeaddons-addon-initializer:v0.0.2"
@@ -54,6 +97,7 @@ spec:
         helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
     spec:
       restartPolicy: Never
+      serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-post-delete"
         image: "mesosphere/kubeaddons-addon-initializer:v0.0.2"

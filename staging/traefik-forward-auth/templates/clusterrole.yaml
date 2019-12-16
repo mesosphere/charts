@@ -23,6 +23,7 @@ rules:
   - "list"
   - "watch"
   - "update"
+  - "create"
 - apiGroups:
   - "authentication.k8s.io"
   resources:
