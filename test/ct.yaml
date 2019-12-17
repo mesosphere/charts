@@ -5,6 +5,7 @@ chart-dirs:
   - staging
 excluded-charts:
   - common
+  - dex-controller # Moved to a different helm repo
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
