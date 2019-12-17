@@ -9,6 +9,8 @@ All the supported values and their defaults are listed below:
 # Internal address for the cluster's Thanos gRPC service.
 # thanosAddress: "HOST:PORT"
 thanosAddress: ""
+# Kommander service account used to delete Thanos store configmaps
+kommanderServiceAccount: kommander-kubeaddons
 
 federate:
   systemNamespace:
@@ -33,6 +35,11 @@ thanos:
     sidecarDNSDiscovery: false
     # Addresses of statically configured store API servers (repeatable).
     stores: []
+    # Names of configmaps that contain addresses of store API servers, used for file service discovery.
+    serviceDiscoveryFileConfigMaps:
+    - kommander-thanos-query-stores
+    # Refresh interval to re-read file SD files. It is used as a resync fallback.
+    serviceDiscoveryInterval: 5m
     # Add extra arguments to the compact service
     extraArgs:
     - "--grpc-client-tls-secure"
