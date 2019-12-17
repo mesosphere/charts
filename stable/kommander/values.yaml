@@ -94,6 +94,7 @@ kommander-cluster-lifecycle:
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
+  kommanderServiceAccount: kommander-kubeaddons
 
 kommander-karma:
   enabled: true
