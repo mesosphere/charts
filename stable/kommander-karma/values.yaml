@@ -39,6 +39,9 @@ karma:
 
   configMap:
     enabled: true
+    annotations:
+      helm.sh/hook: pre-install
+      helm.sh/hook-delete-policy: before-hook-creation
     rawConfig:
       alertmanager:
         interval: 30s
