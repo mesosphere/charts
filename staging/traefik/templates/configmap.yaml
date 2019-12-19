@@ -85,6 +85,9 @@ data:
       {{- end }}
       {{- if not .Values.ssl.upstream }}
         [entryPoints.https.tls]
+        [entryPoints.https.tls.defaultCertificate]
+        certFile = "/ssl/tls.crt"
+        keyFile = "/ssl/tls.key"
           {{- if .Values.ssl.tlsMinVersion }}
           minVersion = {{ .Values.ssl.tlsMinVersion | quote }}
           {{- end }}
@@ -94,9 +97,11 @@ data:
           {{- if .Values.ssl.sniStrict }}
           sniStrict = true
           {{- end }}
+          {{- if .Values.ssl.customCert }}
           [[entryPoints.https.tls.certificates]]
-          CertFile = "/ssl/tls.crt"
-          KeyFile = "/ssl/tls.key"
+          certFile = "/custom-ssl/tls.crt"
+          keyFile = "/custom-ssl/tls.key"
+          {{- end }}
       {{- end }}
         {{- if .Values.ssl.auth }}
         {{- if .Values.ssl.auth.basic }}
