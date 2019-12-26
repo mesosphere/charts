@@ -17,7 +17,7 @@ spec:
       serviceAccountName: {{ .Values.kommanderServiceAccount }}
       containers:
         - name: kubectl
-          image: docker.io/bitnami/kubectl:1.14.1
+          image: docker.io/bitnami/kubectl:1.16.2
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
