@@ -9,6 +9,10 @@ All the supported values and their defaults are listed below:
 # Internal address for the cluster's alertmanager.
 # alertmanagerAddress: "HOST:PORT"
 alertmanagerAddress: ""
+# Kommander service account used to delete the karma configmap
+kommanderServiceAccount: kommander-kubeaddons
+# Name of the karma configmap
+kommanderKarmaConfigMap: kommander-kubeaddons-config
 
 federate:
   addons: true
