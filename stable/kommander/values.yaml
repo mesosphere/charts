@@ -86,7 +86,7 @@ kommander-cluster-lifecycle:
       selfSigned: false
   konvoy:
     allowUnofficialReleases: false
-  kubeaddonsConfigs:
+  kubeaddonsRepository:
     versionStrategy: repository-tag  # One of: `repository-tag`, `mapped-kubernetes-version`, `master`,
     versionCacheRefreshInterval: 1h  # A duration as specified in https://golang.org/pkg/time/#ParseDuration
     versionMap: {}  # Only applicable for `versionStrategy` of `mapped-kubernetes-version`
