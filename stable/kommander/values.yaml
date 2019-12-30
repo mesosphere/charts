@@ -99,6 +99,8 @@ kommander-thanos:
 kommander-karma:
   enabled: true
   alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
+  kommanderServiceAccount: kommander-kubeaddons
+  kommanderKarmaConfigMap: kommander-kubeaddons-config
 
 kubeaddons-catalog:
   enabled: true
