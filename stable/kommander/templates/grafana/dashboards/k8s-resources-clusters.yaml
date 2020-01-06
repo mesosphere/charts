@@ -11,16 +11,7 @@ metadata:
 data:
   k8s-resources-clusters-dashboard.json: |-
     {
-      "__inputs": [
-        {
-          "name": "DS_THANOSQUERY",
-          "label": "ThanosQuery",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
+      "__inputs": [],
       "__requires": [
         {
           "type": "grafana",
@@ -69,7 +60,7 @@ data:
       "panels": [
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -454,7 +445,7 @@ data:
         {
           "cacheTimeout": null,
           "columns": [],
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "fontSize": "100%",
           "gridPos": {
             "h": 4,
@@ -528,7 +519,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -634,7 +625,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -927,7 +918,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1033,7 +1024,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1326,7 +1317,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1596,7 +1587,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1702,7 +1693,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1808,7 +1799,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -1915,7 +1906,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -2021,7 +2012,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -2127,7 +2118,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -2233,7 +2224,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
@@ -2339,7 +2330,7 @@ data:
         },
         {
           "collapsed": false,
-          "datasource": "${DS_THANOSQUERY}",
+          "datasource": "$datasource",
           "gridPos": {
             "h": 1,
             "w": 24,
