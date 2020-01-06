@@ -9,7 +9,7 @@ metadata:
     {{- end }}
     app: {{ template "kommander.name" $ }}-grafana
 data:
-  1.16-k8s-resources-clusters-dashboard.json: |-
+  k8s-resources-clusters-dashboard.json: |-
     {
       "__inputs": [
         {
@@ -2555,7 +2555,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "1.16 Kubernetes / Compute Resources / Clusters",
+      "title": "Kubernetes / Compute Resources / Clusters",
       "uid": "efa86fd1d0c121a26444b636a3f509a8",
       "version": 1
     }
