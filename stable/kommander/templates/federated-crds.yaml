@@ -1,6 +1,7 @@
 {{- if .Values.kubefed.enabled }}
 {{- if not (.Capabilities.APIVersions.Has "types.kubefed.io/v1beta1") }}
 {{.Files.Get "files/federated-addons.yaml" }}
+{{.Files.Get "files/federated-addonsdeployments.yaml" }}
 {{.Files.Get "files/federated-cluster-rolebindings.yaml" }}
 {{.Files.Get "files/federated-clusteraddons.yaml" }}
 {{.Files.Get "files/federated-customresourcedefinition.yaml" }}
@@ -22,6 +23,8 @@ metadata:
 data:
   federated-addons.yaml: |
 {{.Files.Get "files/federated-addons.yaml" | indent 6}}
+  federated-addonsdeployments.yaml: |
+{{.Files.Get "files/federated-addonsdeployments.yaml" | indent 6}}
   federated-cluster-rolebindings.yaml: |
 {{.Files.Get "files/federated-cluster-rolebindings.yaml" | indent 6}}
   federated-clusteraddons.yaml: |

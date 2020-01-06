@@ -31,6 +31,31 @@ metadata:
   finalizers:
     - core.kubefed.io/federated-type-config
   generation: 1
+  name: addonsdeployments.kubeaddons.mesosphere.io
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  federatedType:
+    group: types.kubefed.io
+    kind: FederatedAddonsDeployment
+    pluralName: federatedaddonsdeployments
+    scope: Namespaced
+    version: v1beta1
+  propagation: Enabled
+  targetType:
+    group: kubeaddons.mesosphere.io
+    kind: AddonsDeployment
+    pluralName: addonsdeployments
+    scope: Namespaced
+    version: v1beta1
+---
+apiVersion: core.kubefed.io/v1beta1
+kind: FederatedTypeConfig
+metadata:
+  finalizers:
+    - core.kubefed.io/federated-type-config
+  generation: 1
   name: clusterrolebindings.rbac.authorization.k8s.io
   namespace: {{ .Release.Namespace }}
   labels:
