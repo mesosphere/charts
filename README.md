@@ -1,10 +1,3 @@
-# Reason for adding this chart
-
-Kubenetes Federation v2 (kubefed) currently does not support federating out annotations by default.
-The only way to have annotations be included in the per-cluster overrides.
-Since there is no way to target all clusters with an override going this route would require writing a controller.
-Instead we create a new addon that has the necessary annotations applied during addon installation.
-
 # Helm Charts
 
 Use this repository to submit Mesosphere owned Charts for Helm. Charts are curated application definitions for Helm. For more information about installing and using Helm, see its
