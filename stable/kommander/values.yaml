@@ -1,50 +1,51 @@
-image:
-  repository: mesosphere/kommander
-  tag: 1.184.0
-  pullPolicy: IfNotPresent
-replicas: 1
-logoutRedirectPath: /ops/landing
-clusterPollingInterval: 3000
-hostPollingInterval: 3000
-clusterPollingThrottleFactor: 1
-kubernetesVersionsSelection: '["1.16.4", "1.16.3", "1.15.6"]'
-kubeaddonsAddress: kommander-kubeaddons-kubeaddons-catalog
+kommander-ui:
+  image:
+    repository: mesosphere/kommander
+    tag: 1.184.0
+    pullPolicy: IfNotPresent
+  replicas: 1
+  logoutRedirectPath: /ops/landing
+  clusterPollingInterval: 3000
+  hostPollingInterval: 3000
+  clusterPollingThrottleFactor: 1
+  kubernetesVersionsSelection: '["1.16.4", "1.16.3", "1.15.6"]'
+  kubeaddonsAddress: kommander-kubeaddons-kubeaddons-catalog
 
-# Mode must be either production|konvoy
-mode: production
+  # Mode must be either production|konvoy
+  mode: production
 
-displayName: Konvoy Cluster
+  displayName: Konvoy Cluster
 
-extraInitContainers:
+  extraInitContainers:
 
-resources:
-  requests:
-    memory: "256Mi"
-    cpu: "100m"
-  limits:
-    memory: "512Mi"
-    cpu: "2000m"
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "2000m"
 
-readinessProbe:
-  initialDelaySeconds: 15
-  periodSeconds: 10
-livenessProbe:
-  initialDelaySeconds: 15
-  periodSeconds: 10
-  timeoutSeconds: 3
+  readinessProbe:
+    initialDelaySeconds: 15
+    periodSeconds: 10
+  livenessProbe:
+    initialDelaySeconds: 15
+    periodSeconds: 10
+    timeoutSeconds: 3
 
-### This must match the serviceName set in the ingress backend below
-service:
-  name: kommander
+  ### This must match the serviceName set in the ingress backend below
+  service:
+    name: kommander
 
-ingress:
-  traefikFrontendRuleType: PathPrefixStrip
-  extraAnnotations:
-    traefik.ingress.kubernetes.io/priority: "1"
-    traefik.ingress.kubernetes.io/auth-type: forward
-    traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-    traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-  path: /ops/portal/kommander/ui
+  ingress:
+    traefikFrontendRuleType: PathPrefixStrip
+    extraAnnotations:
+      traefik.ingress.kubernetes.io/priority: "1"
+      traefik.ingress.kubernetes.io/auth-type: forward
+      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    path: /ops/portal/kommander/ui
 
 federate:
   kubeaddonsInitializer:
@@ -73,9 +74,12 @@ kommander-cluster-lifecycle:
   konvoy:
     allowUnofficialReleases: false
   kubeaddonsRepository:
-    versionStrategy: repository-tag  # One of: `repository-tag`, `mapped-kubernetes-version`, `master`,
-    versionCacheRefreshInterval: 1h  # A duration as specified in https://golang.org/pkg/time/#ParseDuration
-    versionMap: {}  # Only applicable for `versionStrategy` of `mapped-kubernetes-version`
+    # One of: `repository-tag`, `mapped-kubernetes-version`, `master`,
+    versionStrategy: repository-tag
+    # A duration as specified in https://golang.org/pkg/time/#ParseDuration
+    versionCacheRefreshInterval: 1h
+    # Only applicable for `versionStrategy` of `mapped-kubernetes-version`
+    versionMap: {}
 
 kommander-thanos:
   enabled: true
@@ -166,16 +170,16 @@ grafana:
     datasources.yaml:
       apiVersion: 1
       datasources:
-      - name: ThanosQuery
-        type: prometheus
-        url: http://kommander-kubeaddons-thanos-query-http.kommander:10902/
-        access: proxy
-        isDefault: true
-      - name: KommanderPrometheus
-        type: prometheus
-        url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons:9090/
-        access: proxy
-        isDefault: false
+        - name: ThanosQuery
+          type: prometheus
+          url: http://kommander-kubeaddons-thanos-query-http.kommander:10902/
+          access: proxy
+          isDefault: true
+        - name: KommanderPrometheus
+          type: prometheus
+          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons:9090/
+          access: proxy
+          isDefault: false
 
   ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
   ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
