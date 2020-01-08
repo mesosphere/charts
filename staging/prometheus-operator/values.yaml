@@ -448,7 +448,7 @@ grafana:
     hosts: []
 
     ## Path for grafana ingress
-    path: /
+    path: /ops/portal/grafana
 
     ## TLS configuration for grafana Ingress
     ## Secret must be manually created in the namespace
