@@ -93,6 +93,11 @@ spec:
                 secretKeyRef:
                   name: {{ template "traefik-forward-auth.fullname" . }}-secret
                   key: secret
+            - name: SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}-secret
+                  key: secret
             {{- if .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef }}
             - name: WHITELIST
               valueFrom:
