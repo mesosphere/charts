@@ -1,4 +1,3 @@
-{{- if .Values.kubefed.enabled }}
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
@@ -504,4 +503,3 @@ spec:
           serviceAccount: kubeaddons-controller-manager
           serviceAccountName: kubeaddons-controller-manager
           terminationGracePeriodSeconds: 10
-{{- end }}
