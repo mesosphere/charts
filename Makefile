@@ -14,7 +14,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url origin)
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
-GIT_REF = $(shell git rev-parse HEAD)	
+GIT_REF = $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 NON_DOCS_FILES := $(filter-out docs,$(wildcard *))
 
@@ -105,5 +105,5 @@ $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 ct.lint:
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch origin dev
-endif	
+endif
 	$(DRUN) ct lint
