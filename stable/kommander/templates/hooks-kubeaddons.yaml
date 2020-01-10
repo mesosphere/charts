@@ -1,4 +1,3 @@
-{{- if .Values.kubefed.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -62,4 +61,3 @@ spec:
           args:
             - kommander
             - create-kubeaddons-ns
-{{ end }}
