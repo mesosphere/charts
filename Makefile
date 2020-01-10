@@ -76,7 +76,8 @@ endif
 # - Untarring the package
 # - Recreate the package using `tar`, speficying time of the last git commit to the package
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
-#   content will result in the same output package.
+#   content will result in the same output package
+# - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
 $(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst docs/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst docs/%.tgz,%/*/*,$$@))
 $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(shell dirname $@)
@@ -84,12 +85,12 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
 	$(HELM) --home $(TMPDIR)/.helm package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
-	tar -czf $@ \
-			--owner=root --group=root --numeric-owner \
+	tar -c \
+			--owner=root:0 --group=root:0 --numeric-owner \
 			--no-recursion \
 			--mtime="@$(shell git log -1 --format="%at" $(PACKAGE_SRC))" \
 			-C $(UNPACKED_TMP) \
-			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort)
+			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
 
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
