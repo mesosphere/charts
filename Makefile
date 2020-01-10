@@ -5,7 +5,7 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
-GIT_REMOTE_URL ?= https://mesosphere:$(GITHUB_USER_TOKEN)@github.com/mesosphere/charts.git
+GIT_REMOTE_URL ?= $(shell git remote get-url origin)
 
 # Extract the github user from the origin remote url.
 # This let's the 'publish' task work with forks.
@@ -14,8 +14,9 @@ GIT_REMOTE_URL ?= https://mesosphere:$(GITHUB_USER_TOKEN)@github.com/mesosphere/
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
-GIT_REF = $(shell git show-ref -s HEAD)	
-LAST_COMMIT_MESSAGE := $(shell git reflog -1 | sed 's/^.*: //')
+GIT_REF = $(shell git rev-parse HEAD)	
+LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
+NON_DOCS_FILES := $(filter-out docs,$(wildcard *))
 
 TMPDIR := $(shell mktemp -d)
 HELM := $(shell bash -c "command -v helm")
@@ -52,14 +53,16 @@ stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
 .PHONY: publish
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
-	-@git branch -D master
-	@git checkout -b master
-	@curl -Ls https://github.com/mesosphere/charts/archive/master.tar.gz | tar -xz --strip-components=1 charts-master/docs
-	@make all
-	@git add .
-	@git commit -m "$(LAST_COMMIT_MESSAGE)"
-	@git push -f publish master
-	@git checkout -
+	-git branch -D master
+	git checkout -b master
+	git fetch publish master
+	git reset --hard publish/master
+	git checkout $(GIT_REF) -- $(NON_DOCS_FILES)
+	make all
+	git add -A .
+	git commit -m "$(LAST_COMMIT_MESSAGE)"
+	git push publish master
+	git checkout -
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
