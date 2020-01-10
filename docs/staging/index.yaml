@@ -3,9 +3,30 @@ entries:
   cert-manager-setup:
   - apiVersion: v1
     appVersion: 0.10.1
-    created: 2019-10-04T22:40:29.2983548Z
+    created: 2020-01-10T09:49:31.066555648Z
     description: Install cert-manager and optionally add a ClusterIssuer
-    digest: f911214841773c018a6fa0cf7f0e5ed48b1da6449504391efdd38908cc6abd98
+    digest: 7f41434241cb51368375fdbb4456bb1919f23e30d2d8382b7d1a3efffe386417
+    engine: gotpl
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - cert-manager
+    - issuer
+    - clusterissuer
+    maintainers:
+    - email: tweidner@d2iq.com
+      name: timaa2k
+    name: cert-manager-setup
+    sources:
+    - https://github.com/jetstack/cert-manager
+    - https://github.com/jetstack/cert-manager/tree/master/deploy/charts/cert-manager
+    urls:
+    - https://mesosphere.github.io/charts/staging/cert-manager-setup-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v1
+    appVersion: 0.10.1
+    created: 2020-01-10T09:49:31.062801154Z
+    description: Install cert-manager and optionally add a ClusterIssuer
+    digest: 67c2c2084fbdee96862f6d1b1868186db79ff442b65884373c9848349ebe4199
     engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
@@ -24,7 +45,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: 0.10.1
-    created: 2019-10-04T22:40:29.295280092Z
+    created: 2020-01-10T09:49:31.060123714Z
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a4121b5bc2133d9c79c159039628ab995fb39a10b02702e3304d328fc1fa91e5
     engine: gotpl
@@ -45,7 +66,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 0.10.1
-    created: 2019-10-04T22:40:29.292242342Z
+    created: 2020-01-10T09:49:31.057427245Z
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 9a379453aed5081687389d394d48dea7ce9e539d0721beedb9f6a59cfcd2071c
     engine: gotpl
@@ -66,7 +87,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 0.10.1
-    created: 2019-10-04T22:40:29.288318279Z
+    created: 2020-01-10T09:49:31.053899341Z
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: e432a362ae5afe1c73d914afed0359305e1935a2802f9ed0cfab4f7185115228
     engine: gotpl
@@ -87,7 +108,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.10.0
-    created: 2019-10-04T22:40:29.285418022Z
+    created: 2020-01-10T09:49:31.050866455Z
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a5b53833dfdb6c7faf186516d83b47ae6e81f56db8e9dba1eb147c017b93692e
     engine: gotpl
@@ -108,7 +129,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.10.0
-    created: 2019-10-04T22:40:29.281793819Z
+    created: 2020-01-10T09:49:31.047921292Z
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 4d86a661d64296bc912009a61e1e6f7a5aabdeaab9bb36a4922ba28ad4641672
     engine: gotpl
@@ -129,10 +150,95 @@ entries:
     version: 0.1.0
   dex-k8s-authenticator:
   - apiVersion: v1
-    appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.303774919Z
+    appVersion: v1.1.1
+    created: 2020-01-10T09:49:31.068576051Z
     description: Authenticator for using Dex with Kubernetes
-    digest: 49bd9b866dc5c042c041de0e6fdb37b7fcb4f8aea673e5d1f471ffe1b615b43e
+    digest: b736a020fddaacee44ac893c845d3ff818602fdc15c057fd99b6eb8a27e44592
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.12.tgz
+    version: 1.1.12
+  - apiVersion: v1
+    appVersion: v1.1.1
+    created: 2020-01-10T09:49:31.068024069Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: feff041b1b88f964d0fe7d0c1c3f7ccba7399ea9140d1db8cfb4e4e74216d26e
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.11.tgz
+    version: 1.1.11
+  - apiVersion: v1
+    appVersion: v1.1.1
+    created: 2020-01-10T09:49:31.067490552Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: 4d1868d10111c3aa1eb37645e28c9b26f01fbfd198321bed33ea9af55bf31a9d
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.10.tgz
+    version: 1.1.10
+  - apiVersion: v1
+    appVersion: v1.1.1
+    created: 2020-01-10T09:49:31.07277545Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: 935d7009c589b049220e1fc7019da5d1325746473635fd71bc61644d3ce371a4
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.9.tgz
+    version: 1.1.9
+  - apiVersion: v1
+    appVersion: v1.1.1
+    created: 2020-01-10T09:49:31.072231842Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: 879bbff14b21c67c6f1b3ea3aa80cc043796014d6998fafc2146130a9e545ed8
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.8.tgz
+    version: 1.1.8
+  - apiVersion: v1
+    appVersion: v1.1.0
+    created: 2020-01-10T09:49:31.071702801Z
+    description: Authenticator for using Dex with Kubernetes
+    digest: 722faf9590eb9d6236c36447f192d5f5d98906071120d821dc467461e5b45fce
     home: https://github.com/mesosphere/charts
     maintainers:
     - email: mhrabovcin.c@mesosphere.com
@@ -145,7 +251,7 @@ entries:
     version: 1.1.7
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.302946618Z
+    created: 2020-01-10T09:49:31.071182792Z
     description: Authenticator for using Dex with Kubernetes
     digest: 9d3a4378e4e7fe8b5d29c9e3540b70efd9583224846d3372e54e2626eec4b140
     home: https://github.com/mesosphere/charts
@@ -160,7 +266,7 @@ entries:
     version: 1.1.6
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.302068034Z
+    created: 2020-01-10T09:49:31.070647223Z
     description: Authenticator for using Dex with Kubernetes
     digest: e2aa61bd89adcb15a5c7a4e36789437147c79c27fc05f09dc4a5dab1e784bd98
     home: https://github.com/mesosphere/charts
@@ -175,7 +281,7 @@ entries:
     version: 1.1.5
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.301251978Z
+    created: 2020-01-10T09:49:31.070140758Z
     description: Authenticator for using Dex with Kubernetes
     digest: 0d60186d46680159187e5458c24c6ef18cb1e322b9f28b18b95d55fb0790b444
     home: https://github.com/mesosphere/charts
@@ -190,7 +296,7 @@ entries:
     version: 1.1.4
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.300089311Z
+    created: 2020-01-10T09:49:31.069616534Z
     description: Authenticator for using Dex with Kubernetes
     digest: fb7db6ae0baa802c89fb7cdbdcd45eaeb601a29fc4ca39d713a6bd5517d0d02c
     maintainers:
@@ -208,7 +314,7 @@ entries:
     version: 1.1.3
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.299425322Z
+    created: 2020-01-10T09:49:31.069083917Z
     description: Authenticator for using Dex with Kubernetes
     digest: 2714dd1206327a96e151357b24fe7b412e54c5507fb16990d5e199cc20dde64c
     maintainers:
@@ -226,7 +332,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: 2019-10-04T22:40:29.298804922Z
+    created: 2020-01-10T09:49:31.066947094Z
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -242,12 +348,57 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.1.1.tgz
     version: 1.1.1
+  flagger:
+  - apiVersion: v1
+    appVersion: 0.19.0
+    created: 2020-01-10T09:49:31.07452842Z
+    description: Flagger is a Kubernetes operator that automates the promotion of
+      canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
+      traffic shifting and Prometheus metrics for canary analysis.
+    digest: e3d49d480e9f3a55752b29bb373c4d8bf26d63b0310ebf3f373656be45128b6b
+    engine: gotpl
+    home: https://docs.flagger.app
+    icon: https://raw.githubusercontent.com/weaveworks/flagger/master/docs/logo/flagger-icon.png
+    keywords:
+    - canary
+    - istio
+    - appmesh
+    - linkerd
+    - gitops
+    kubeVersion: '>=1.11.0-0'
+    maintainers:
+    - email: stefanprodan@users.noreply.github.com
+      name: stefanprodan
+      url: https://github.com/stefanprodan
+    name: flagger
+    sources:
+    - https://github.com/weaveworks/flagger
+    urls:
+    - https://mesosphere.github.io/charts/staging/flagger-0.19.0.tgz
+    version: 0.19.0
   gatekeeper:
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: 2019-10-04T22:40:29.30613762Z
+    created: 2020-01-10T09:49:31.077027559Z
     description: Gatekeeper - Policy Controller for Kubernetes
-    digest: a276068e36f86e300b361b4e8db447ff630a331653e219901d4437034ed90879
+    digest: a3e173e335b28177882b28051474c331ab687f361e047fa6a451df3e07d472a1
+    home: https://github.com/open-policy-agent/gatekeeper
+    icon: https://www.openpolicyagent.org/img/opa-logo.svg
+    maintainers:
+    - email: jimmidyson@gmail.com
+      name: jimmidyson
+    name: gatekeeper
+    sources:
+    - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/gatekeeper-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v1
+    appVersion: 3.0.4-beta.1
+    created: 2020-01-10T09:49:31.076512179Z
+    description: Gatekeeper - Policy Controller for Kubernetes
+    digest: 526319a1a287d599f587c28af32baa53305f566b6cdd9d1aa7631c3dabdc2d4c
     home: https://github.com/open-policy-agent/gatekeeper
     icon: https://www.openpolicyagent.org/img/opa-logo.svg
     maintainers:
@@ -262,7 +413,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: 2019-10-04T22:40:29.30560035Z
+    created: 2020-01-10T09:49:31.076004025Z
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: fa78f9c274eefd42fd26c9b88949fa05c3eed3314c7ab6b7def582cd9f523ca2
     home: https://github.com/open-policy-agent/gatekeeper
@@ -279,7 +430,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: 2019-10-04T22:40:29.305106037Z
+    created: 2020-01-10T09:49:31.075481461Z
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: e2d332137417d314db0401aa194c86350ac1fcc5c659b0d382b59bcc911f358a
     home: https://github.com/open-policy-agent/gatekeeper
@@ -296,7 +447,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: 2019-10-04T22:40:29.304496611Z
+    created: 2020-01-10T09:49:31.074992754Z
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 46cfcc10dd9b7f9a172237f33bd57097888e96bf90c457884234b61dba7d0c16
     home: https://github.com/open-policy-agent/gatekeeper
@@ -311,13 +462,141 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.1.0.tgz
     version: 0.1.0
+  generic-ingress:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: 2020-01-10T09:49:31.077238385Z
+    description: Adds an traefik ingress record using the provided values
+    digest: 8b44da4572c9c9b9be753ff2d147da0a11d914aa0340d0a9e954295d7d8c90f7
+    engine: gotpl
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - konvoy
+    - kommander
+    maintainers:
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: generic-ingress
+    urls:
+    - https://mesosphere.github.io/charts/staging/generic-ingress-0.1.0.tgz
+    version: 0.1.0
+  istio:
+  - apiVersion: v1
+    appVersion: 1.3.3
+    created: 2020-01-10T09:49:31.0926935Z
+    description: Helm chart for all istio components
+    digest: 235b459aee5e02f249a173de6f39276a5806ca6a76ad2a68675a9385526e010d
+    engine: gotpl
+    home: http://github.com/istio/istio
+    icon: https://istio.io/favicons/android-192x192.png
+    keywords:
+    - istio
+    - security
+    - sidecarInjectorWebhook
+    - mixer
+    - pilot
+    - galley
+    maintainers:
+    - name: goeldeepak
+    name: istio
+    sources:
+    - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-1.3.5.tgz
+    version: 1.3.5
+  - apiVersion: v1
+    appVersion: 1.3.3
+    created: 2020-01-10T09:49:31.087364418Z
+    description: Helm chart for all istio components
+    digest: 15cb5ec63e3223d954b7c1c93b807a787fda92b327ada2a17a8f5f9067283a15
+    engine: gotpl
+    home: http://github.com/istio/istio
+    icon: https://istio.io/favicons/android-192x192.png
+    keywords:
+    - istio
+    - security
+    - sidecarInjectorWebhook
+    - mixer
+    - pilot
+    - galley
+    maintainers:
+    - name: goeldeepak
+    name: istio
+    sources:
+    - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-1.3.4.tgz
+    version: 1.3.4
+  - apiVersion: v1
+    appVersion: 1.3.3
+    created: 2020-01-10T09:49:31.082864185Z
+    description: Helm chart for all istio components
+    digest: 9c14ff6a7b1568f2b5fae6871c3c9624700fdcce1eb494ad998d5885c14c93ee
+    engine: gotpl
+    home: http://github.com/istio/istio
+    icon: https://istio.io/favicons/android-192x192.png
+    keywords:
+    - istio
+    - security
+    - sidecarInjectorWebhook
+    - mixer
+    - pilot
+    - galley
+    maintainers:
+    - name: goeldeepak
+    name: istio
+    sources:
+    - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-1.3.3.tgz
+    version: 1.3.3
+  karma:
+  - apiVersion: v1
+    appVersion: v0.50
+    created: 2020-01-10T09:49:31.09345911Z
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 391689d45cfc2e5a1c1f6387d5342fae2d479e5980313325c2f4097c8032a497
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: david@davidkarlsen.com
+      name: davidkarlsen
+    - email: l.mierzwa@gmail.com
+      name: prymitive
+    name: karma
+    sources:
+    - https://hub.docker.com/r/lmierzwa/karma/
+    - https://github.com/prymitive/karma
+    urls:
+    - https://mesosphere.github.io/charts/staging/karma-1.3.0.tgz
+    version: 1.3.0
+  - apiVersion: v1
+    appVersion: v0.48
+    created: 2020-01-10T09:49:31.093084069Z
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: 89f5cc5f5d8616a9f3132f5d623cec98f69d266ea2e04c6d21fe5465aa38d24f
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: david@davidkarlsen.com
+      name: davidkarlsen
+    - email: l.mierzwa@gmail.com
+      name: prymitive
+    name: karma
+    sources:
+    - https://hub.docker.com/r/lmierzwa/karma/
+    - https://github.com/prymitive/karma
+    urls:
+    - https://mesosphere.github.io/charts/staging/karma-1.1.21.tgz
+    version: 1.1.21
   knative:
   - apiVersion: v1
     appVersion: v0.7.1
-    created: 2019-10-04T22:40:29.308372896Z
+    created: 2020-01-10T09:49:31.095273997Z
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
-    digest: eb2a5c03df79ae641ce7194f840a93b8c80c0002a6fbb9cc7399d7c7d82b37a8
+    digest: f4ed0cbb6ce97f2d9da8b3db433f0e47fea83d19abde7f0f287b7d1a75839b27
     home: https://knative.dev/
     icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
     maintainers:
@@ -329,10 +608,10 @@ entries:
   konvoyconfig:
   - apiVersion: v1
     appVersion: 0.0.1
-    created: 2019-10-04T22:40:29.308897056Z
+    created: 2020-01-10T09:49:31.095701998Z
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
-    digest: c9f0c357249a31b86a44432cd45e09bc2248e17e45ecee1eb79634b313388cd3
+    digest: 2480d7e620491c66cc79698bf051b9e8b269536b696bf441aa23b5680b088959
     engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
@@ -347,7 +626,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: 0.0.1
-    created: 2019-10-04T22:40:29.308664755Z
+    created: 2020-01-10T09:49:31.095480273Z
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: d31d7c9d63f974bac3a101aa4cf1119a3b4befd075755e204ad890f24e68e06f
@@ -366,7 +645,75 @@ entries:
   kube-oidc-proxy:
   - apiVersion: v1
     appVersion: v0.1.1
-    created: 2019-10-04T22:40:29.311431098Z
+    created: 2020-01-10T09:49:31.100033259Z
+    description: A Helm chart for kube-oidc-proxy
+    digest: 3e665f9d25dc3816d84b6ef0cc5bdf3e5b1cc509c37021a6bf7523b5678cbae6
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v1
+    appVersion: v0.1.1
+    created: 2020-01-10T09:49:31.099484056Z
+    description: A Helm chart for kube-oidc-proxy
+    digest: 3b3a7eb2e5fc158f4ebc7be8a1f1a7db42374e2c6e388c3f6571c2d9887a84ed
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v1
+    appVersion: v0.1.1
+    created: 2020-01-10T09:49:31.098937761Z
+    description: A Helm chart for kube-oidc-proxy
+    digest: 103cca053d89f445da8e1a1f5a9a6e209b9b45ff7bb3fb8e8a20a00cf4f8e71e
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v1
+    appVersion: v0.1.1
+    created: 2020-01-10T09:49:31.098404515Z
+    description: A Helm chart for kube-oidc-proxy
+    digest: d40a6565dd85f6c7fad3eb58fa4bc126e677d991b2acd953f6fda9a0650b4f50
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v1
+    appVersion: v0.1.1
+    created: 2020-01-10T09:49:31.097835845Z
     description: A Helm chart for kube-oidc-proxy
     digest: 341397d1bc84332fbd82a16ecab4679f38954fc59af3f43e974220747ec68334
     home: https://github.com/mesosphere/charts
@@ -383,7 +730,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: v0.1.1
-    created: 2019-10-04T22:40:29.310800734Z
+    created: 2020-01-10T09:49:31.097298216Z
     description: A Helm chart for kube-oidc-proxy
     digest: 973b2417054e80962b2e8b8ad5fb3de4a8c9898419bcaabcd9578bb6051d3e17
     home: https://github.com/mesosphere/charts
@@ -400,7 +747,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: v0.1.1
-    created: 2019-10-04T22:40:29.310161801Z
+    created: 2020-01-10T09:49:31.096761366Z
     description: A Helm chart for kube-oidc-proxy
     digest: d3c8e291ea01df0ac0727cfc80f407ff028627664fb8eb7cb56f189133784c5c
     home: https://github.com/mesosphere/charts
@@ -417,7 +764,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: v0.1.1
-    created: 2019-10-04T22:40:29.309538036Z
+    created: 2020-01-10T09:49:31.096226803Z
     description: A Helm chart for kube-oidc-proxy
     digest: 8e3b0437e4a921b16d6ddebbd380ea39909520371a55d6be5d23d042d3bdc9bf
     home: https://github.com/mesosphere/charts
@@ -432,10 +779,162 @@ entries:
     version: 0.1.0
   kubeaddons-catalog:
   - apiVersion: v1
-    appVersion: v0.0.1-alpha1
-    created: 2019-10-04T22:40:29.312813841Z
+    appVersion: v0.3.0
+    created: 2020-01-10T09:49:31.104448086Z
     description: A Catalog service for Kubeaddons
-    digest: d9852046785ef35f51d7c81b32468c25259e025f75e4466362211abe1a33694a
+    digest: b60f70eec5da4b8d648b754147a4dfdd9433fc92f66bcfbb76419b36fb4f3772
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v1
+    appVersion: v0.3.0
+    created: 2020-01-10T09:49:31.104164104Z
+    description: A Catalog service for Kubeaddons
+    digest: 74c8ada08225a19164863988ec35612d45ae5df55257667babaaffb6a601695e
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v1
+    appVersion: v0.3.0
+    created: 2020-01-10T09:49:31.103880479Z
+    description: A Catalog service for Kubeaddons
+    digest: 2d429aeb4998e5b2829ab4bde3303d4edd3e3c9ab2ecd1dcb8a079441c2e7a3b
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: v0.3.0
+    created: 2020-01-10T09:49:31.103617545Z
+    description: A Catalog service for Kubeaddons
+    digest: 2c129b1fc602bd272f1df65d97adc54cb3d0a48fd5783ee8948a49f3d16732fd
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
+    appVersion: v0.3.0
+    created: 2020-01-10T09:49:31.103354985Z
+    description: A Catalog service for Kubeaddons
+    digest: 312c9b06c0c136c6ff123f004ba672b3e2af27eb838ac0f0c74dea8610c5ee07
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.1.0.tgz
+    version: 0.1.0
+  - apiVersion: v1
+    appVersion: v0.0.1-alpha1
+    created: 2020-01-10T09:49:31.103063094Z
+    description: A Catalog service for Kubeaddons
+    digest: a8b21207b670a093cdf96da8987f98f53388382981ac53922703c379e4dba08a
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.9.tgz
+    version: 0.0.9
+  - apiVersion: v1
+    appVersion: v0.0.1-alpha1
+    created: 2020-01-10T09:49:31.102803373Z
+    description: A Catalog service for Kubeaddons
+    digest: 9511a7408b97623700b27f2035cfd9b4ac9865cb4fdcc5dc87df7e2d9807f549
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v1
+    appVersion: v0.0.1-alpha1
+    created: 2020-01-10T09:49:31.102527289Z
+    description: A Catalog service for Kubeaddons
+    digest: 5c660e69e45b5ba32619c056a7884c09655105f7498abff92ffba5e5550cf43d
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    - name: s12chung
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v1
+    appVersion: v0.0.1-alpha1
+    created: 2020-01-10T09:49:31.10225456Z
+    description: A Catalog service for Kubeaddons
+    digest: a74980d375a10a903c0d67ca7a8b129a48c5d97f009aa7817392db18bf657a27
+    home: https://github.com/mesosphere/kubeaddons
+    maintainers:
+    - email: shaneutt@linux.com
+      name: shaneutt
+    - name: alejandroEsc
+    name: kubeaddons-catalog
+    sources:
+    - https://github.com/mesosphere/kubeaddons/tools/catalog
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v1
+    appVersion: v0.0.1-alpha1
+    created: 2020-01-10T09:49:31.101984857Z
+    description: A Catalog service for Kubeaddons
+    digest: 83b5d35df68eb031f1d45aefaf6b92196543e4ab1a3592bf5108407aa959f320
     home: https://github.com/mesosphere/kubeaddons
     maintainers:
     - email: shaneutt@linux.com
@@ -449,7 +948,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: 2019-10-04T22:40:29.312492142Z
+    created: 2020-01-10T09:49:31.101743673Z
     description: A Catalog service for Kubeaddons
     digest: 64f7828e4eb713b009f82c5d319e9c529aa1cfc8325cd1cbdd0f9cc0a7cb5559
     home: https://github.com/mesosphere/kubeaddons
@@ -465,7 +964,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: 2019-10-04T22:40:29.312199506Z
+    created: 2020-01-10T09:49:31.101495728Z
     description: A Catalog service for Kubeaddons
     digest: fec05f09c5776775cfad6987102663708255d027f7be642304a561f200df4b22
     home: https://github.com/mesosphere/kubeaddons
@@ -481,7 +980,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: 2019-10-04T22:40:29.311910952Z
+    created: 2020-01-10T09:49:31.10124314Z
     description: A Catalog service for Kubeaddons
     digest: 0ecefd29fe2416d97d08441211a914913a3ee32719a4f16902ca7155ba830cc7
     home: https://github.com/mesosphere/kubeaddons
@@ -497,7 +996,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: 2019-10-04T22:40:29.311673592Z
+    created: 2020-01-10T09:49:31.100623726Z
     description: A Catalog service for Kubeaddons
     digest: 6c9b61341e069bc5d4b876e183bf5e3a65b18ee9ddfe32da3315439d9a11e607
     home: https://github.com/mesosphere/kubeaddons
@@ -510,12 +1009,194 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.1.tgz
     version: 0.0.1
+  kubefed:
+  - apiVersion: v1
+    appVersion: v0.1.0-rc6
+    created: 2020-01-10T09:49:31.105419899Z
+    description: KubeFed helm chart
+    digest: 87c5fb7c913aeb9dd1cbbf9a5ba69e5bf6037d8559c46acc86eff37ceb19822d
+    home: https://github.com/kubernetes-sigs/kubefed
+    maintainers:
+    - name: s12chung
+    name: kubefed
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubefed-0.0.2.tgz
+    version: 0.0.2
+  kubernetes-dashboard:
+  - apiVersion: v1
+    appVersion: 2.0.0-beta6
+    created: 2020-01-10T09:49:31.105990942Z
+    description: General-purpose web UI for Kubernetes clusters
+    digest: 648e35b60d0b4c1b0bb9ca58e98a9a6c29de6b3d85fd959ba76ddc9ab2041beb
+    home: https://github.com/kubernetes/dashboard
+    icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
+    keywords:
+    - kubernetes
+    - dashboard
+    maintainers:
+    - email: Kevin.Fox@pnnl.gov
+      name: kfox1111
+    - email: cdesaintmartin@wiremind.fr
+      name: desaintmartin
+    name: kubernetes-dashboard
+    sources:
+    - https://github.com/kubernetes/dashboard
+    urls:
+    - https://mesosphere.github.io/charts/staging/kubernetes-dashboard-2.0.0.tgz
+    version: 2.0.0
+  kudo:
+  - apiVersion: v1
+    appVersion: 0.9.0
+    created: 2020-01-10T09:49:31.107668872Z
+    description: Kubernetes Universal Declarative Operator
+    digest: a3e73e0539689fc8525d6e6408f263d08b24d65f39663e84042f82dcbdf9cac6
+    home: https://kudo.dev
+    icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
+    maintainers:
+    - email: kensipe@gmail.com
+      name: kensipe
+    - email: avarkockova@mesosphere.com
+      name: alenkacz
+    - email: gdillon@d2iq.com
+      name: gerred
+    - email: adukhovniy@d2iq.com
+      name: zen-dog
+    name: kudo
+    sources:
+    - https://github.com/kudobuilder/kudo
+    urls:
+    - https://mesosphere.github.io/charts/staging/kudo-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v1
+    appVersion: 0.9.0
+    created: 2020-01-10T09:49:31.107337322Z
+    description: Kubernetes Universal Declarative Operator
+    digest: f5e19f546abc3476a7a36872417c448200cc0b3f6038202fe8435beb2d5b561e
+    home: https://kudo.dev
+    icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
+    maintainers:
+    - email: kensipe@gmail.com
+      name: kensipe
+    - email: avarkockova@mesosphere.com
+      name: alenkacz
+    - email: gdillon@d2iq.com
+      name: gerred
+    - email: adukhovniy@d2iq.com
+      name: zen-dog
+    name: kudo
+    sources:
+    - https://github.com/kudobuilder/kudo
+    urls:
+    - https://mesosphere.github.io/charts/staging/kudo-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v1
+    appVersion: 0.8.0
+    created: 2020-01-10T09:49:31.107019178Z
+    description: Kubernetes Universal Declarative Operator
+    digest: 59c27b800d7d5169a8c6b1ce17859025358d603f7641e2db5c70fb642bfe3556
+    home: https://kudo.dev
+    icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
+    maintainers:
+    - email: kensipe@gmail.com
+      name: kensipe
+    - email: avarkockova@mesosphere.com
+      name: alenkacz
+    - email: gdillon@d2iq.com
+      name: gerred
+    - email: adukhovniy@d2iq.com
+      name: zen-dog
+    name: kudo
+    sources:
+    - https://github.com/kudobuilder/kudo
+    urls:
+    - https://mesosphere.github.io/charts/staging/kudo-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: 0.7.4
+    created: 2020-01-10T09:49:31.106686593Z
+    description: Kubernetes Universal Declarative Operator
+    digest: 66b804a3f6b760faa8e5e52c63b6808f3fb66373aa02406b0f331360cb416bf8
+    home: https://kudo.dev
+    icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
+    maintainers:
+    - email: kensipe@gmail.com
+      name: kensipe
+    - email: avarkockova@mesosphere.com
+      name: alenkacz
+    - email: gdillon@d2iq.com
+      name: gerred
+    - email: adukhovniy@d2iq.com
+      name: zen-dog
+    name: kudo
+    sources:
+    - https://github.com/kudobuilder/kudo
+    urls:
+    - https://mesosphere.github.io/charts/staging/kudo-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
+    appVersion: 0.7.4
+    created: 2020-01-10T09:49:31.106353587Z
+    description: Kubernetes Universal Declarative Operator
+    digest: dcb5a200294857d6cb88a73d460f43d404e8af72400d3c504cb70b34dc205530
+    home: https://kudo.dev
+    icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
+    maintainers:
+    - email: kensipe@gmail.com
+      name: kensipe
+    - email: avarkockova@mesosphere.com
+      name: alenkacz
+    - email: gdillon@d2iq.com
+      name: gerred
+    - email: adukhovniy@d2iq.com
+      name: zen-dog
+    name: kudo
+    sources:
+    - https://github.com/kudobuilder/kudo
+    urls:
+    - https://mesosphere.github.io/charts/staging/kudo-0.1.0.tgz
+    version: 0.1.0
   nvidia:
   - apiVersion: v1
-    appVersion: 0.1.0
-    created: 2019-10-04T22:40:29.313530559Z
+    appVersion: 0.2.0
+    created: 2020-01-10T09:49:31.111372967Z
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
-    digest: f90461efadd391b36db999015508c3d6d8bbf3595ee82807409c5cef9b348f52
+    digest: bdede080dc0a6a3c6de38308f67c5a306fd2fbf0b0ac69c3b7f87a1d13f91d61
+    home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
+    maintainers:
+    - name: gilbert88
+    name: nvidia
+    urls:
+    - https://mesosphere.github.io/charts/staging/nvidia-0.2.0.tgz
+    version: 0.2.0
+  - apiVersion: v1
+    appVersion: 0.1.1
+    created: 2020-01-10T09:49:31.110323494Z
+    description: Nvidia GPU driver and device plugin for running Nvidia GPU
+    digest: 48a3eca7afdd16ac9c85bd6a1eb72182fb275287b4c7a81c035a0a2d62e6961b
+    home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
+    maintainers:
+    - name: gilbert88
+    name: nvidia
+    urls:
+    - https://mesosphere.github.io/charts/staging/nvidia-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: 2020-01-10T09:49:31.109712258Z
+    description: Nvidia GPU driver and device plugin for running Nvidia GPU
+    digest: 13c678990450e32fd5c2e6d369803dcff1d809c9803d54c5959cc979666344f8
+    home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
+    maintainers:
+    - name: gilbert88
+    name: nvidia
+    urls:
+    - https://mesosphere.github.io/charts/staging/nvidia-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: 2020-01-10T09:49:31.108744978Z
+    description: Nvidia GPU driver and device plugin for running Nvidia GPU
+    digest: ebd5ccf36730afda48709d070d704b66e6f1c43e4bbf313f8d19a946c0ed202f
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
     maintainers:
     - name: gilbert88
@@ -525,11 +1206,233 @@ entries:
     version: 0.1.0
   prometheus-operator:
   - apiVersion: v1
-    appVersion: 0.31.1
-    created: 2019-10-04T22:40:29.426497057Z
+    appVersion: 0.34.0
+    created: 2020-01-10T09:49:31.333913549Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
-    digest: 4d1951ace5663128011ecfde7b895b8969196f4f82ec42c93f34affd46cd509a
+    digest: 19b69164cd73b2d760a4f8feb86700136113415c06e8bd653692ccf7f1e1c3cf
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - name: vsliouniaev
+    - name: bismarck
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/kube-prometheus
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.5.tgz
+    version: 8.3.5
+  - apiVersion: v1
+    appVersion: 0.34.0
+    created: 2020-01-10T09:49:31.317909106Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: feec94ca9895169878579a3dd20c02051be4001f1fcc853967f6106fd40109b7
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - name: vsliouniaev
+    - name: bismarck
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/kube-prometheus
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.4.tgz
+    version: 8.3.4
+  - apiVersion: v1
+    appVersion: 0.34.0
+    created: 2020-01-10T09:49:31.302292634Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: 471016586932b0123d36920c20e835ab4535e13c5b0d6b56e1446d4a96ed4df6
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - name: vsliouniaev
+    - name: bismarck
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/kube-prometheus
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.3.tgz
+    version: 8.3.3
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.287986312Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: d61689d7e429209500706e68c8d68207f2ce01b83cb961e8baba91e9bf8beb87
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.7.tgz
+    version: 5.19.7
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.276029384Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: 1e751d9968deff5f3fcac461eac7a6ff8283ed52865dc1b9369f610cc33cc60a
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.6.tgz
+    version: 5.19.6
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.264628471Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: cf4c3ca8588b4f94e38b4c2178b15daa7d761f2d4119d33c044b04bd6119c34a
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.5.tgz
+    version: 5.19.5
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.253067781Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: 2aeb8698c2c58f69b0e9ef46759fbdebb7cb0538b20ef45ac3181b5af40d40d9
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.4.tgz
+    version: 5.19.4
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.241477718Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: 97cdc51c1d359b5ac5a3a2e7aca658c07bba7d6baa9a9aef8c5e8478220e1c8a
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.3.tgz
+    version: 5.19.3
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.23075188Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: f860fc969f6a9b5fe7d6f7bcdfea214edeb76254d4c90961e63aa0b670ed895d
+    engine: gotpl
+    home: https://github.com/coreos/prometheus-operator
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    maintainers:
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - name: anothertobi
+    - name: vsliouniaev
+    name: prometheus-operator
+    sources:
+    - https://github.com/coreos/prometheus-operator
+    - https://coreos.com/operators/prometheus
+    urls:
+    - https://mesosphere.github.io/charts/staging/prometheus-operator-5.19.2.tgz
+    version: 5.19.2
+  - apiVersion: v1
+    appVersion: 0.31.1
+    created: 2020-01-10T09:49:31.218643663Z
+    description: Provides easy monitoring definitions for Kubernetes services, and
+      deployment and management of Prometheus instances.
+    digest: a5cc60cc6b93002a1dc77e1c090e7fe93acef1e347feb737ff01f35a00389315
     engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
@@ -550,7 +1453,7 @@ entries:
     version: 5.19.1
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.416172159Z
+    created: 2020-01-10T09:49:31.209416161Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 055fc59a8950888594b2492b6c41abbecbb8f61eb8d9328008f50f677f5b7ba2
@@ -572,7 +1475,7 @@ entries:
     version: 5.10.9
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.405714147Z
+    created: 2020-01-10T09:49:31.2001882Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 0bedf6edc04136d93331fb1843f47817f8ca4b17b85460a9d0bc5627907abe3f
@@ -594,7 +1497,7 @@ entries:
     version: 5.10.8
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.395619677Z
+    created: 2020-01-10T09:49:31.190799054Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: ad37143ebb687bb1ac9529da72c97f423820a0d755778f74c71c35e6db16d0ce
@@ -616,7 +1519,7 @@ entries:
     version: 5.10.7
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.385618127Z
+    created: 2020-01-10T09:49:31.181827194Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 88c4250a6a28dfc9a249b8b17bbb3c6209de270ad6721c9e79aa63361b7b5ecc
@@ -638,7 +1541,7 @@ entries:
     version: 5.10.6
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.375657363Z
+    created: 2020-01-10T09:49:31.172114334Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 9bdd15570e4c9bb6d9fe6fb58f9f51948ff1ad3c650b84b8e3837e8a898b1cd2
@@ -660,7 +1563,7 @@ entries:
     version: 5.10.5
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.36563394Z
+    created: 2020-01-10T09:49:31.163500824Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 07d9a370120ebf873e0e4f02ae7588a874bb13aa133dd4dbb2c761e7356e0d1e
@@ -682,7 +1585,7 @@ entries:
     version: 5.10.4
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.355221799Z
+    created: 2020-01-10T09:49:31.154698842Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: adb71ee73a50c2ab5f0e229fe93267f1f2af6480d00f8bae43fa4e50a5ec61fc
@@ -704,7 +1607,7 @@ entries:
     version: 5.10.3
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.345277032Z
+    created: 2020-01-10T09:49:31.14104199Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 03a9f9b0f3f314c36ade5d4c0753907f270e4e5ca8093381aa013c26f34a7d1a
@@ -726,7 +1629,7 @@ entries:
     version: 5.10.2
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.334810325Z
+    created: 2020-01-10T09:49:31.130094888Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1263d0f1261bfc84c34504c3f44bcb2e1d936551a733aa8fe31effd3f9035266
@@ -748,7 +1651,7 @@ entries:
     version: 5.10.1
   - apiVersion: v1
     appVersion: 0.29.0
-    created: 2019-10-04T22:40:29.324640498Z
+    created: 2020-01-10T09:49:31.120400681Z
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: c34186f40539eace19bd69793140e4bd79572362b68881f22eb99466079485e2
@@ -771,7 +1674,7 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: 2019-10-04T22:40:29.426820924Z
+    created: 2020-01-10T09:49:31.334325624Z
     description: A Helm chart for Kubernetes
     digest: d07d36886354e77838f74ca60211e8246dd4575267e59527ede41513b5cc1ae6
     name: test
@@ -781,10 +1684,220 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 1.7.12
-    created: 2019-10-04T22:40:29.43322992Z
+    created: 2020-01-10T09:49:31.341512486Z
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
-    digest: 44411d4bbc103807dd86058c18ef9284bb0de5a804d8da666f9f51ca7417d008
+    digest: e65449eb556b862e69a7e9fc72b35b94e6d9724643f35cde3941eb3535a30629
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.10.tgz
+    version: 1.72.10
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.35637121Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 21fbc53064b2a0db764ded916681dfbb91ee31abba483094f7e7d6b27b9dfde2
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.9.tgz
+    version: 1.72.9
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.354511498Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 6f3d6fcbe8a87abe7d303fd719af932b37cf3ad4fa857d5875d3db1bf1b859ef
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.8.tgz
+    version: 1.72.8
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.35266472Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: e8d3a17a4f20aa1ea198d9cde5d94fc72637565c3f31b26131b0b037197c45c8
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.7.tgz
+    version: 1.72.7
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.35081356Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 13bf931e58c5aa940a609d4f27b1a1160ce0a9071aef9deb3a2cb9225390f0eb
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.6.tgz
+    version: 1.72.6
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.348952076Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: efde17f47542af4f16d0a38ecc458b06a7bff1fa2e48c119fa719bda5533364b
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.5.tgz
+    version: 1.72.5
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.347098812Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 01a94519c3d28def7052ec283501b622d11078f11fe7ad9737b472a2f5f3cbe6
+    engine: gotpl
+    home: https://traefik.io/
+    icon: https://docs.traefik.io/img/traefik.logo.png
+    keywords:
+    - traefik
+    - ingress
+    - acme
+    - letsencrypt
+    maintainers:
+    - email: kent.rancourt@microsoft.com
+      name: krancour
+    - email: emile@vauge.com
+      name: emilevauge
+    - email: daniel.tomcej@gmail.com
+      name: dtomcej
+    - email: ludovic@containo.us
+      name: ldez
+    name: traefik
+    sources:
+    - https://github.com/containous/traefik
+    - https://github.com/helm/charts/tree/master/stable/traefik
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-1.72.4.tgz
+    version: 1.72.4
+  - apiVersion: v1
+    appVersion: 1.7.12
+    created: 2020-01-10T09:49:31.345217947Z
+    description: A Traefik based Kubernetes ingress controller with Let's Encrypt
+      support
+    digest: 6b729f5ae8792ea6077a3c6e6709bfa7d6e594cec41fbbf4c8a3fd1fddc125b8
     engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
@@ -811,7 +1924,7 @@ entries:
     version: 1.72.3
   - apiVersion: v1
     appVersion: 1.7.12
-    created: 2019-10-04T22:40:29.431899801Z
+    created: 2020-01-10T09:49:31.343370275Z
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2452a70ae7bff1ffbdb74a97303f1b25cbd34e59d27140a602af02881626b9bd
@@ -841,7 +1954,7 @@ entries:
     version: 1.72.2
   - apiVersion: v1
     appVersion: 1.7.12
-    created: 2019-10-04T22:40:29.430609097Z
+    created: 2020-01-10T09:49:31.339664876Z
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: b920941d7e7e9c435d367616a81eb71a9ea619a158f2baee07e44952b16a92e5
@@ -871,7 +1984,7 @@ entries:
     version: 1.72.1
   - apiVersion: v1
     appVersion: 1.7.12
-    created: 2019-10-04T22:40:29.429359061Z
+    created: 2020-01-10T09:49:31.337853369Z
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: c8a356700064625fb7d39d57907254a49f95a12b640facce5cafbb6aa795643e
@@ -901,7 +2014,7 @@ entries:
     version: 1.72.0
   - apiVersion: v1
     appVersion: 1.7.12
-    created: 2019-10-04T22:40:29.428093138Z
+    created: 2020-01-10T09:49:31.336091391Z
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2ad3ff530f0d01fb81d8c75a2fb6fff82eb4994a6a34994c0cbe76349c56dc18
@@ -932,10 +2045,160 @@ entries:
   traefik-forward-auth:
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.43739118Z
+    created: 2020-01-10T09:49:31.362066858Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
-    digest: e06d4d6f6416d29822e5cb7920efa25cf6f4b811d10c446ca73acebd7c525e28
+    digest: 742052ed7a287d0ea1a22fa9b63c222b6465009b7a200b91af751d70cfcb097d
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@d2iq.com
+      name: jongiddy
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.11.tgz
+    version: 0.2.11
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.361629158Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: f080c9e6c89d94474f856edaadec32e145f973f2629c04934caed85141366fa3
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@d2iq.com
+      name: jongiddy
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.36520831Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: 019b13fbe2b65c16c7a8b43c42073c64925b2a22619632e2655c65991001d01a
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@d2iq.com
+      name: jongiddy
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.364791199Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: 8ed471e88df5b6a4afd26748f0803673ebb9270ba7c76a75fc67bd331b9f0e1e
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: jongiddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.8.tgz
+    version: 0.2.8
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.364408766Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: a05adfd3d961534df0ce78d4428b67ff6573f1d4e071c97df33e57dcd6ce390d
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: jongiddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.364014847Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: fba05f0133974fa1bc870db3069c113308c6a6bdb82fb6563f36958be2039ffc
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: jongiddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.6.tgz
+    version: 0.2.6
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.363630211Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: 0a93e9b541782f02dd3a54eba204afd61292209d60b875b254379d2a7d5527e8
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: jongiddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.5.tgz
+    version: 0.2.5
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.36324887Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: aee2ed78945566fc4636d09bac6926b15bd67f9e028c30bb13ec4bd88be96a4d
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: jgiddy@mesosphere.com
+      name: jongiddy
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.2.4.tgz
+    version: 0.2.4
+  - apiVersion: v1
+    appVersion: latest
+    created: 2020-01-10T09:49:31.362870874Z
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: 4837e0d7e4193902c0633acee9dc878c215bc2ae6b1fcac8ca10682487513226
     home: https://github.com/jongiddy/traefik-forward-auth
     keywords:
     - traefik-forward-auth
@@ -950,7 +2213,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.436958047Z
+    created: 2020-01-10T09:49:31.362481363Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 271c3f61e53a2c46437f0c169e6ac844f8e4fcc607e9cf1567424988b2d8e3cd
@@ -968,7 +2231,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.436536238Z
+    created: 2020-01-10T09:49:31.361207559Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 7290faed495ea9dcef68546bbe36a24fc5496005a9c78095cc6683e0aad604ec
@@ -986,7 +2249,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.436123082Z
+    created: 2020-01-10T09:49:31.360836077Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 0268d932f2e9158e0eddd75c92437b40fcf756a417f3988bb108ca06f3074ce8
@@ -1004,7 +2267,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.435692315Z
+    created: 2020-01-10T09:49:31.360426847Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 1f414c4ed835a24b2dffa9c0aea556c570c7b27b5fb01f3d1a180a52714fa427
@@ -1022,7 +2285,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.435252694Z
+    created: 2020-01-10T09:49:31.35949687Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 00fcc7e35fc3ca79c8dbfa6da2f4e8fecac63b33cb8c20674e649a38bdd61d73
@@ -1040,7 +2303,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.43482567Z
+    created: 2020-01-10T09:49:31.358645009Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 319e36602dec4508c19a3b106703730a3cc4042905cc60acb59339bb1d2c0c1a
@@ -1058,7 +2321,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.434423609Z
+    created: 2020-01-10T09:49:31.358061279Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c58c8f7bdd0ee2d267809e9089d32cdcef7e81f614d3f4bbc730b884bc2620df
@@ -1076,7 +2339,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.434014257Z
+    created: 2020-01-10T09:49:31.357486114Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c88663f8cfca74df65d9a298fe59a649aa01f096edf85bbfa3cd4295b3d169e1
@@ -1094,7 +2357,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: latest
-    created: 2019-10-04T22:40:29.433626606Z
+    created: 2020-01-10T09:49:31.356930727Z
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: f825b48d33eb5ebf688b510b547ea2f72d04b513f2aae03d4aa4edfc83328991
@@ -1113,9 +2376,124 @@ entries:
   velero:
   - apiVersion: v1
     appVersion: 1.0.1
-    created: 2019-10-04T22:40:29.444350311Z
+    created: 2020-01-10T09:49:31.368871175Z
     description: A Helm chart for velero
-    digest: 59344e7c4fd9eb2cd873a3829a1af47617ab0f363a50e821b5710a45b37146aa
+    digest: 6a0c85e50a4247e65f3ea747e35704314009dab78cd2caa97956c76c0fd3b0e1
+    home: https://github.com/heptio/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    name: velero
+    sources:
+    - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-2.2.10.tgz
+    version: 2.2.10
+  - apiVersion: v1
+    appVersion: 1.0.1
+    created: 2020-01-10T09:49:31.374879288Z
+    description: A Helm chart for velero
+    digest: 340e343fdc922a57756943322782d7db90b4031a5e2f120073396fb949770076
+    home: https://github.com/heptio/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    name: velero
+    sources:
+    - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-2.2.9.tgz
+    version: 2.2.9
+  - apiVersion: v1
+    appVersion: 1.0.1
+    created: 2020-01-10T09:49:31.374187108Z
+    description: A Helm chart for velero
+    digest: 24b65e520c94696010f5887a9c5c8501d25bc291ab7acd3641307f0cca44b972
+    home: https://github.com/heptio/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    name: velero
+    sources:
+    - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-2.2.8.tgz
+    version: 2.2.8
+  - apiVersion: v1
+    appVersion: 1.0.1
+    created: 2020-01-10T09:49:31.373478836Z
+    description: A Helm chart for velero
+    digest: e514308f2b319071fd335f7e98fcb8e8ceff01c115960027c43a2efe1c205226
+    home: https://github.com/heptio/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    name: velero
+    sources:
+    - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-2.2.7.tgz
+    version: 2.2.7
+  - apiVersion: v1
+    appVersion: 1.0.1
+    created: 2020-01-10T09:49:31.372799879Z
+    description: A Helm chart for velero
+    digest: 22d9ed7600d9d9046d881b2359c64248b93ccccda2bc3ba7727491390ace2c37
+    home: https://github.com/heptio/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    name: velero
+    sources:
+    - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-2.2.6.tgz
+    version: 2.2.6
+  - apiVersion: v1
+    appVersion: 1.0.1
+    created: 2020-01-10T09:49:31.372116413Z
+    description: A Helm chart for velero
+    digest: f7f9ac7c42dc4aad5434b56fc2bf293abd53e319f73f126be965b8627ed6ace7
     home: https://github.com/heptio/velero
     icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
     maintainers:
@@ -1136,7 +2514,7 @@ entries:
     version: 2.2.5
   - apiVersion: v1
     appVersion: 1.0.1
-    created: 2019-10-04T22:40:29.443558847Z
+    created: 2020-01-10T09:49:31.371405155Z
     description: A Helm chart for velero
     digest: 1373abbd685dfa45d60b8bd579e24e94221f4cca18d8e5a59688bff0d076bf36
     home: https://github.com/heptio/velero
@@ -1159,7 +2537,7 @@ entries:
     version: 2.2.4
   - apiVersion: v1
     appVersion: 1.0.1
-    created: 2019-10-04T22:40:29.442796895Z
+    created: 2020-01-10T09:49:31.370729482Z
     description: A Helm chart for velero
     digest: 5664b64db004d6da7e7904453ae0fbe806232fa9208eb30742f88b7ac26bdd25
     home: https://github.com/heptio/velero
@@ -1182,7 +2560,7 @@ entries:
     version: 2.2.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-10-04T22:40:29.442034251Z
+    created: 2020-01-10T09:49:31.370009208Z
     description: A Helm chart for velero
     digest: 6535cdc66856ed7eb74b30fdcecba995f9701b89a04a9da28fd4830d9171c5f9
     home: https://github.com/heptio/velero
@@ -1205,7 +2583,7 @@ entries:
     version: 2.2.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-10-04T22:40:29.441255831Z
+    created: 2020-01-10T09:49:31.367961838Z
     description: A Helm chart for velero
     digest: 064ba88232436c98bf435ac9202792907149e0226532c86f97c29f953e2a1136
     home: https://github.com/heptio/velero
@@ -1228,7 +2606,7 @@ entries:
     version: 2.2.1
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-10-04T22:40:29.439655682Z
+    created: 2020-01-10T09:49:31.367291641Z
     description: A Helm chart for velero
     digest: c7222c0d16638eca14deed9c38c877931a9857e12c817d3db9feafff2f90a7bb
     home: https://github.com/heptio/velero
@@ -1251,7 +2629,7 @@ entries:
     version: 2.2.0
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-10-04T22:40:29.438911444Z
+    created: 2020-01-10T09:49:31.366615424Z
     description: A Helm chart for velero
     digest: 94f0397a43ecac7e621c242e6fb8c61f5c322d6bbd9fd1413e17fe24956f33e1
     home: https://github.com/heptio/velero
@@ -1274,7 +2652,7 @@ entries:
     version: 2.1.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: 2019-10-04T22:40:29.438143627Z
+    created: 2020-01-10T09:49:31.365907722Z
     description: A Helm chart for velero
     digest: fab1defd2987463b4be58a2d90e8f7dabbcc444e9d9fe393b7aa1b232c1b426c
     home: https://github.com/heptio/velero
@@ -1295,4 +2673,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.2.tgz
     version: 2.1.2
-generated: 2019-10-04T22:40:29.278199584Z
+generated: 2020-01-10T09:49:31.044139536Z
