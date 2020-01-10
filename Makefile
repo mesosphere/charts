@@ -66,10 +66,28 @@ ifeq ($(HELM),$(TMPDIR)/helm)
 	curl -Ls https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
 endif
 
+# Deterministically create helm packages by:
+#
+# - Using `helm package` to create the initial package (useful for including chart dependencies
+#   properly)
+# - Untarring the package
+# - Recreate the package using `tar`, speficying time of the last git commit to the package
+#   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
+#   content will result in the same output package.
 $(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst docs/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst docs/%.tgz,%/*/*,$$@))
 $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(shell dirname $@)
-	$(HELM) --home $(TMPDIR)/.helm package $(shell echo $@ | sed 's@docs/\(.*\)-[v0-9][0-9.]*.tgz@\1@') -d $(shell dirname $@)
+	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@docs/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
+	$(eval UNPACKED_TMP := $(shell mktemp -d))
+	$(HELM) --home $(TMPDIR)/.helm package $(PACKAGE_SRC) -d $(shell dirname $@)
+	tar -xzmf $@ -C $(UNPACKED_TMP)
+	tar -czf $@ \
+			--owner=root --group=root --numeric-owner \
+			--no-recursion \
+			--mtime="@$(shell git log -1 --format="%at" $(PACKAGE_SRC))" \
+			-C $(UNPACKED_TMP) \
+			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort)
+	rm -rf $(UNPACKED_TMP)
 
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
