@@ -12,9 +12,14 @@ tmp=$(mktemp -d)
 
 run_ct_container() {
     echo 'Running ct container...'
+    teamcity_volume=()
+    if [[ -n ${TEAMCITY_VERSION+x} ]]; then
+        teamcity_volume=(-v /teamcity/system/git:/teamcity/system/git)
+    fi
     docker run --rm --interactive --detach --network host --name ct \
         --volume "$(pwd)/test/ct-e2e.yaml:/etc/ct/ct.yaml" \
         --volume "$(pwd):/workdir" \
+        "${teamcity_volume[@]}" \
         --workdir /workdir \
         "quay.io/helmpack/chart-testing:$1" \
         cat
