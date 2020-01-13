@@ -58,7 +58,7 @@ thanos:
           traefik.ingress.kubernetes.io/auth-type: "forward"
           traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
           traefik.ingress.kubernetes.io/priority: "2"
-        path: "/kommander/monitoring/query"
+        path: "ops/portal/kommander/monitoring/query"
         hosts:
           - ""
         tls: []
