@@ -107,3 +107,16 @@ ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch origin dev
 endif
 	$(DRUN) ct lint
+
+.PHONY: ct.test
+ct.test:
+ifneq (,$(wildcard /teamcity/system/git))
+	$(DRUN) git fetch origin dev
+endif
+	test/e2e-kind.sh
+
+.PHONY: lint
+lint: ct.lint
+
+.PHONY: test
+test: ct.test
