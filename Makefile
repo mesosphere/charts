@@ -17,6 +17,7 @@ GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^
 GIT_REF = $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 NON_DOCS_FILES := $(filter-out docs,$(wildcard *))
+CT_VERSION ?= v2.4.0
 
 TMPDIR := $(shell mktemp -d)
 HELM := $(shell bash -c "command -v helm")
@@ -26,11 +27,11 @@ endif
 ifeq (,$(wildcard /teamcity/system/git))
 DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
 			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
-			-w /charts quay.io/helmpack/chart-testing:v2.3.3
+			-w /charts quay.io/helmpack/chart-testing:$(CT_VERSION)
 else
 DRUN := docker run -t --rm -v /teamcity/system/git:/teamcity/system/git -v ${PWD}:/charts \
 			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
-			quay.io/helmpack/chart-testing:v2.3.3
+			quay.io/helmpack/chart-testing:$(CT_VERSION)
 endif
 
 .SECONDEXPANSION:
@@ -113,7 +114,7 @@ ct.test:
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch origin dev
 endif
-	test/e2e-kind.sh
+	test/e2e-kind.sh $(CT_VERSION)
 
 .PHONY: lint
 lint: ct.lint
