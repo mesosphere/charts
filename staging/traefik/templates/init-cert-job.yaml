@@ -1,3 +1,4 @@
+{{- if .Values.ssl.useCertManager }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -39,3 +40,4 @@ spec:
           value: "konvoyconfig-kubeaddons"
         - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
           value: "clusterHostname"
+{{- end }}
