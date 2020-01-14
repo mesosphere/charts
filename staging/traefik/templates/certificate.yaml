@@ -1,3 +1,4 @@
+{{- if .Values.ssl.useCertManager }}
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
@@ -31,4 +32,4 @@ spec:
   # The commonName will get replaced by kubeaddons-config
   # init-container for traefik
   commonName: traefik.localhost.localdomain
-
+{{- end }}
