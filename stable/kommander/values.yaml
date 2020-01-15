@@ -24,7 +24,7 @@ kommander-ui:
       cpu: "100m"
     limits:
       memory: "512Mi"
-      cpu: "2000m"
+      cpu: "500m"
 
   readinessProbe:
     initialDelaySeconds: 15
