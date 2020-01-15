@@ -1,9 +1,8 @@
-{{- if .Values.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ template "nvidia-dcgm-exporter.fullname" . }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   selector:
     matchLabels:
@@ -19,12 +18,23 @@ spec:
 {{- end }}
 {{- if .Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+{{- toYaml .Values.tolerations | indent 8 }}
 {{- end }}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml .Values.nodeSelector | indent 8 }}
+{{- end }}
+{{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
+{{- end }}
       containers:
-      - image: "{{ .Values.podNvidiaGpuMetricsExporter.image.repository }}:{{ .Values.podNvidiaGpuMetricsExporter.image.tag }}"
-        name: pod-nvidia-gpu-metrics-exporter
+      - name: pod-nvidia-gpu-metrics-exporter
+        image: "{{ .Values.podNvidiaGpuMetricsExporter.image.repository }}:{{ .Values.podNvidiaGpuMetricsExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.podNvidiaGpuMetricsExporter.image.pullPolicy }}
+{{- if .Values.podNvidiaGpuMetricsExporter.resources }}
+        resources:
+{{ toYaml .Values.podNvidiaGpuMetricsExporter.resources | indent 12 }}
+{{- end }}
         ports:
         - name: gpu-metrics
           containerPort: 9400
@@ -32,9 +42,6 @@ spec:
         securityContext:
           runAsNonRoot: false
           runAsUser: 0
-        imagePullPolicy: {{ .Values.podNvidiaGpuMetricsExporter.image.pullPolicy }}
-        resources:
-{{ toYaml .Values.podNvidiaGpuMetricsExporter.resources | indent 12 }}
         volumeMounts:
         - name: pod-gpu-resources
           readOnly: true
@@ -42,21 +49,19 @@ spec:
         - name: device-metrics
           readOnly: true
           mountPath: /run/prometheus
-      - image: "{{ .Values.nvidiaDcgmExporter.image.repository }}:{{ .Values.nvidiaDcgmExporter.image.tag }}"
-        name: nvidia-dcgm-exporter
+      - name: nvidia-dcgm-exporter
+        image: "{{ .Values.nvidiaDcgmExporter.image.repository }}:{{ .Values.nvidiaDcgmExporter.image.tag }}"
+        imagePullPolicy: {{ .Values.nvidiaDcgmExporter.image.pullPolicy }}
+{{- if .Values.nvidiaDcgmExporter.resources }}
+        resources:
+{{- toYaml .Values.nvidiaDcgmExporter.resources | indent 12 }}
+{{- end }}
         securityContext:
           runAsNonRoot: false
           runAsUser: 0
-        imagePullPolicy: {{ .Values.nvidiaDcgmExporter.image.pullPolicy }}
-        resources:
-{{ toYaml .Values.nvidiaDcgmExporter.resources | indent 12 }}
         volumeMounts:
         - name: device-metrics
           mountPath: /run/prometheus
-{{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-{{- end }}
       volumes:
       - name: pod-gpu-resources
         hostPath:
@@ -64,4 +69,3 @@ spec:
       - name: device-metrics
         emptyDir:
           medium: Memory
-{{- end }}
