@@ -6,6 +6,9 @@
 ##
 nameOverride: ""
 
+## Number of replicas by default
+replicas: 1
+
 ## Provide a name to substitute for the full names of resources
 ##
 fullnameOverride: ""
