@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['{{ include "nvidia-driver.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['{{ include "nvidia-driver.fullname" . }}:80']
   restartPolicy: Never

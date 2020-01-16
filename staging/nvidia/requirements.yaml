@@ -1,0 +1,13 @@
+dependencies:
+  - name: grafana
+    version: 0.1.1
+    condition: grafana.enabled
+  - name: nvidia-dcgm-exporter
+    version: 0.1.1
+    condition: nvidia-dcgm-exporter.enabled
+  - name: nvidia-device-plugin
+    version: 0.1.2
+    condition: nvidia-device-plugin.enabled
+  - name: nvidia-driver
+    version: 0.1.2
+    condition: nvidia-driver.enabled
