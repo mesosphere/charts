@@ -52,30 +52,8 @@ federate:
     tag: "v0.1.1"
     pullPolicy: IfNotPresent
 
-  systemNamespace:
-    enable: true
-    name: kommander-system
-
-  kubeaddons:
-    image:
-      repository: "mesosphere/kubeaddons"
-      tag: "v0.5.3"
-      pullPolicy: IfNotPresent
-
 kommander-cluster-lifecycle:
   enabled: true
-
-  certificates:
-    issuer:
-      name:
-      kind: Issuer
-      selfSigned: false
-  konvoy:
-    allowUnofficialReleases: false
-  kubeaddonsRepository:
-    versionStrategy: repository-tag  # One of: `repository-tag`, `mapped-kubernetes-version`, `master`,
-    versionCacheRefreshInterval: 1h  # A duration as specified in https://golang.org/pkg/time/#ParseDuration
-    versionMap: {}  # Only applicable for `versionStrategy` of `mapped-kubernetes-version`
 
 kommander-thanos:
   enabled: true
