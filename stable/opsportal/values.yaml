@@ -48,7 +48,7 @@ opsportal:
 ###############################################################################
 #  Konvoy UI
 ###############################################################################
-kommander:
+kommander-ui:
   enabled: true
   image:
     repository: mesosphere/kommander
@@ -97,26 +97,6 @@ kommander:
       traefik.ingress.kubernetes.io/auth-type: forward
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-
-  # disable kubefed to keep all items related to kubefed from being created
-  kubefed:
-    enabled: false
-
-  grafana:
-    enabled: false
-
-  # disable kommander-cluster-lifecycle
-  kommander-cluster-lifecycle:
-    enabled: false
-
-  kommander-thanos:
-    enabled: false
-
-  kommander-karma:
-    enabled: false
-
-  kubeaddons-catalog:
-    enabled: false
 
 # BUG due to 2.14 helm
 # this is not seen for 2.15, so when we move to 2.15 remove below
