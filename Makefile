@@ -58,6 +58,7 @@ publish:
 	git checkout -b master
 	git fetch publish master
 	git reset --hard publish/master
+	rm -rf $(NON_DOCS_FILES)
 	git checkout $(GIT_REF) -- $(NON_DOCS_FILES)
 	make all
 	git add -A .
