@@ -14,7 +14,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url origin)
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
-GIT_REF = $(shell git rev-parse HEAD)
+GIT_REF ?= $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 NON_DOCS_FILES := $(filter-out docs,$(wildcard *))
 CT_VERSION ?= v2.4.0
@@ -60,7 +60,9 @@ publish:
 	git reset --hard publish/master
 	rm -rf $(NON_DOCS_FILES)
 	git checkout $(GIT_REF) -- $(NON_DOCS_FILES)
-	make all
+	$(MAKE) GIT_REF=$(GIT_REF) all
+	git reset $(NON_DOCS_FILES)
+	git clean -fdx
 	git add -A .
 	git commit -m "$(LAST_COMMIT_MESSAGE)"
 	git push publish master
@@ -90,7 +92,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 	tar -c \
 			--owner=root:0 --group=root:0 --numeric-owner \
 			--no-recursion \
-			--mtime="@$(shell git log -1 --format="%at" $(PACKAGE_SRC))" \
+			--mtime="@$(shell git log -1 --format="%at" $(GIT_REF) -- $(PACKAGE_SRC))" \
 			-C $(UNPACKED_TMP) \
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
