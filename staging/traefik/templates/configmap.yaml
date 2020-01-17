@@ -97,7 +97,7 @@ data:
           {{- if .Values.ssl.sniStrict }}
           sniStrict = true
           {{- end }}
-          {{- if .Values.ssl.customCert }}
+          {{- if .Values.ssl.caSecretName }}
           [[entryPoints.https.tls.certificates]]
           certFile = "/custom-ssl/tls.crt"
           keyFile = "/custom-ssl/tls.key"

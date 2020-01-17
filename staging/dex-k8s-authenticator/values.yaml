@@ -73,6 +73,8 @@ resources: {}
 
 caCerts:
   enabled: false
+  # specify either caSecretName or secrets
+  caSecretName:
   secrets: {}
   # Array of Self Signed Certificates
   # cat CA.crt | base64 -w 0
