@@ -37,6 +37,18 @@ spec:
 {{- if .Values.initContainers }}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
+          volumeMounts:
+{{- if .Values.caCerts.enabled }}
+{{- if .Values.caCerts.secrets }}
+{{- range .Values.caCerts.secrets }}
+          - name: {{ template "dex-k8s-authenticator.fullname" $ }}-{{ .name }}
+            mountPath: /certs/
+{{- end }}
+{{- else if .Values.caCerts.caSecretName }}
+          - name: {{ template "dex-k8s-authenticator.fullname" $ }}-ca-certificate
+            mountPath: /certs/
+{{- end }}
+{{- end }}
 {{- end }}
       containers:
       - name: {{ .Chart.Name }}
