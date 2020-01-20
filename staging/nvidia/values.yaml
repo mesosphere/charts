@@ -3,7 +3,10 @@ grafana:
 
 nvidia-dcgm-exporter:
   enabled: true
-  resources: {}
+  podNvidiaGpuMetricsExporter:
+    resources: {}
+  nvidiaDcgmExporter:
+    resources: {}
   nodeSelector: {}
   tolerations: []
   initContainers: []

@@ -12,17 +12,17 @@ spec:
       labels:
         name: {{ template "nvidia-driver.fullname" . }}
     spec:
+{{- if .Values.tolerations }}
+      tolerations:
+{{- toYaml .Values.tolerations | nindent 8 }}
+{{- end }}
 {{- if .Values.nodeSelector }}
       nodeSelector:
-{{- toYaml .Values.nodeSelector | indent 8 }}
+{{- toYaml .Values.nodeSelector | nindent 8 }}
 {{- end }}
 {{- if .Values.initContainers }}
       initContainers:
 {{- toYaml .Values.initContainers | nindent 8 }}
-{{- end }}
-{{- if .Values.tolerations }}
-      tolerations:
-{{- toYaml .Values.tolerations | indent 8 }}
 {{- end }}
       priorityClassName: {{ .Values.priorityClassName }}
       hostPID: true
@@ -35,7 +35,7 @@ spec:
           privileged: true
 {{- if .Values.resources }}
         resources:
-{{- toYaml .Values.resources | indent 12 }}
+{{- toYaml .Values.resources | nindent 12 }}
 {{- end }}
         volumeMounts:
         - name: update-driver
