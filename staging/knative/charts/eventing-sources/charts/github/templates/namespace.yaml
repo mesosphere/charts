@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  labels:
-    contrib.eventing.knative.dev/release: {{ .Chart.AppVersion }}
-  name: knative-sources

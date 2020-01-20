@@ -1,7 +1,0 @@
-The following directories have been created on worker nodes:
-
-{{- range .Values.storageclasses }}
-For storage class "{{ .name }}": /mnt/{{ .dirName }}/
-{{- end }}
-
-Volumes that are mounted into this directory show up as persistent volumes of the respective storage class.
