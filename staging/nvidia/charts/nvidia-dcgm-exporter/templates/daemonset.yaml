@@ -12,17 +12,17 @@ spec:
       labels:
         name: {{ template "nvidia-dcgm-exporter.fullname" . }}
     spec:
-{{- if .Values.initContainers }}
-      initContainers:
-        {{- toYaml .Values.initContainers | nindent 8 }}
-{{- end }}
 {{- if .Values.tolerations }}
       tolerations:
-{{- toYaml .Values.tolerations | indent 8 }}
+{{- toYaml .Values.tolerations | nindent 8 }}
 {{- end }}
 {{- if .Values.nodeSelector }}
       nodeSelector:
-{{- toYaml .Values.nodeSelector | indent 8 }}
+{{- toYaml .Values.nodeSelector | nindent 8 }}
+{{- end }}
+{{- if .Values.initContainers }}
+      initContainers:
+{{- toYaml .Values.initContainers | nindent 8 }}
 {{- end }}
 {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: {{ .Values.podNvidiaGpuMetricsExporter.image.pullPolicy }}
 {{- if .Values.podNvidiaGpuMetricsExporter.resources }}
         resources:
-{{ toYaml .Values.podNvidiaGpuMetricsExporter.resources | indent 12 }}
+{{- toYaml .Values.podNvidiaGpuMetricsExporter.resources | nindent 12 }}
 {{- end }}
         ports:
         - name: gpu-metrics
@@ -54,7 +54,7 @@ spec:
         imagePullPolicy: {{ .Values.nvidiaDcgmExporter.image.pullPolicy }}
 {{- if .Values.nvidiaDcgmExporter.resources }}
         resources:
-{{- toYaml .Values.nvidiaDcgmExporter.resources | indent 12 }}
+{{- toYaml .Values.nvidiaDcgmExporter.resources | nindent 12 }}
 {{- end }}
         securityContext:
           runAsNonRoot: false
