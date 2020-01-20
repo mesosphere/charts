@@ -1,9 +1,0 @@
-# Reviewer and approver configuration for charts.
-# Implemented using GitHub's CODEOWNERS file.
-# All repos are to require TWO approvals before merge.
-# Reference: https://help.github.com/en/articles/about-code-owners
-# Order is important: later rules override preceding rules
-
-# These owners will be the default owners for everything in the repo unless a later match takes precedence
-* @mesosphere-eng-noctilucent
-/stable/dispatch @devx

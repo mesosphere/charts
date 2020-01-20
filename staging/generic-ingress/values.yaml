@@ -1,9 +1,0 @@
-# Default values for generic-ingress.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-nameOverride: ""
-fullnameOverride: ""
-
-ingress:
-  enabled: false

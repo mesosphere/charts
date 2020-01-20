@@ -1,5 +1,0 @@
-clusterissuer:
-  name: kubernetes-ca
-  spec:
-    ca:
-      secretName: kubernetes-intermediate-ca
