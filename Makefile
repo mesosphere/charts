@@ -61,9 +61,9 @@ publish:
 	rm -rf $(NON_DOCS_FILES)
 	git checkout $(GIT_REF) -- $(NON_DOCS_FILES)
 	$(MAKE) GIT_REF=$(GIT_REF) all
+	git add -A docs
 	git reset $(NON_DOCS_FILES)
 	git clean -fdx
-	git add -A .
 	git commit -m "$(LAST_COMMIT_MESSAGE)"
 	git push publish master
 	git checkout -
