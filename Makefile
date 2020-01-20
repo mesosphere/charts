@@ -16,7 +16,6 @@ GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^
 
 GIT_REF ?= $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
-NON_DOCS_FILES := $(filter-out docs,$(wildcard *))
 CT_VERSION ?= v2.4.0
 
 TMPDIR := $(shell mktemp -d)
@@ -41,32 +40,27 @@ all: stagingrepo stablerepo
 
 .PHONY: clean
 clean:
-	@rm -rf docs/staging/*.tgz docs/stable/*.tgz
-	@git checkout 3ea869 docs/staging/index.yaml
-	@git checkout 3ea869 docs/stable/index.yaml
+	rm -rf gh-pages
 
 .PHONY: stagingrepo
-stagingrepo: $(STAGING_TARGETS) | docs/staging/index.yaml
+stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
 
 .PHONY: stablerepo
-stablerepo: $(STABLE_TARGETS) | docs/stable/index.yaml
+stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 .PHONY: publish
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
-	-git branch -D master
-	git checkout -b master
-	git fetch publish master
-	git reset --hard publish/master
-	rm -rf $(NON_DOCS_FILES)
-	git checkout $(GIT_REF) -- $(NON_DOCS_FILES)
+	rm -rf gh-pages
+	git fetch publish gh-pages
+	git worktree add gh-pages/ publish/gh-pages
 	$(MAKE) GIT_REF=$(GIT_REF) all
-	git add -A docs
-	git reset $(NON_DOCS_FILES)
-	git clean -fdx
-	git commit -m "$(LAST_COMMIT_MESSAGE)"
-	git push publish master
-	git checkout -
+	cd gh-pages && \
+		git add -A . && \
+		git commit -m "$(LAST_COMMIT_MESSAGE)" && \
+		git push publish HEAD:gh-pages
+	git worktree remove gh-pages/
+	rm -rf gh-pages
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
@@ -82,10 +76,10 @@ endif
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst docs/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst docs/%.tgz,%/*/*,$$@))
+$(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst gh-pages/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst gh-pages/%.tgz,%/*/*,$$@))
 $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(shell dirname $@)
-	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@docs/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
+	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
 	$(HELM) --home $(TMPDIR)/.helm package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
@@ -100,7 +94,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 %/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst docs/%index.yaml,%,$@)
+	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
 $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 	$(HELM) --home $(TMPDIR)/.helm init --client-only
