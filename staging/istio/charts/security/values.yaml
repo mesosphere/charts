@@ -10,6 +10,8 @@ selfSigned: true # indicate if self-signed CA is used.
 createMeshPolicy: true
 nodeSelector: {}
 tolerations: []
+podAnnotations: {}
+
 # Enable health checking on the Citadel CSR signing API.
 # https://istio.io/docs/tasks/security/health-check/
 citadelHealthCheck: false
@@ -20,6 +22,8 @@ rootCert: /etc/cacerts/root-cert.pem
 certChain: /etc/cacerts/cert-chain.pem
 
 workloadCertTtl: 2160h
+# Environment variables that configure Citadel.
+env: {}
 
 # Determines Citadel default behavior if the ca.istio.io/env or ca.istio.io/override
 # labels are not found on a given namespace.

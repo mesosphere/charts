@@ -36,6 +36,13 @@ spec:
           items:
           - key: ca.crt
             path: ca.crt
+      {{- else if .Values.traefikForwardAuth.caSecretName }}
+      - name: etc-traefik-forward-auth-ca
+        secret:
+          secretName: {{ .Values.traefikForwardAuth.caSecretName }}
+          items:
+          - key: ca.crt
+            path: ca.crt
       {{- end }}
       - name: etc-traefik-forward-auth-config
         configMap:
@@ -48,7 +55,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
-          {{- if .Values.traefikForwardAuth.caCertificate }}
+          {{- if or .Values.traefikForwardAuth.caCertificate .Values.traefikForwardAuth.caSecretName }}
           - name: etc-traefik-forward-auth-ca
             mountPath: "/etc/traefik-forward-auth/ca"
             readOnly: true
@@ -66,7 +73,7 @@ spec:
             - name: CONFIG
               value: "/etc/traefik-forward-auth/config/config.ini"
             - name: SSL_CERT_FILE
-              {{- if .Values.traefikForwardAuth.caCertificate }}
+              {{- if or .Values.traefikForwardAuth.caCertificate .Values.traefikForwardAuth.caSecretName }}
               value: "/etc/traefik-forward-auth/ca/ca.crt"
               {{- else}}
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"

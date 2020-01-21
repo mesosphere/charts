@@ -49,8 +49,10 @@ spec:
           - "--oidc-client-id=$(OIDC_CLIENT_ID)"
           - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
-          {{- if .Values.oidc.caPEM }}
+          {{- if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
+          {{- else }}
+          - "--oidc-ca-file=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
           {{ end }}
           {{- if .Values.oidc.usernamePrefix }}
           - "--oidc-username-prefix=$(OIDC_USERNAME_PREFIX)"
@@ -141,7 +143,7 @@ spec:
               key: api-audiences
         {{ end }}
         volumeMounts:
-          {{ if .Values.oidc.caPEM }}
+          {{ if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
           - name: kube-oidc-proxy-config
             mountPath: /etc/oidc
             readOnly: true
@@ -156,6 +158,13 @@ spec:
             secretName: {{ include "kube-oidc-proxy.fullname" . }}-config
             items:
             - key: oidc.ca-pem
+              path: oidc-ca.pem
+        {{- else if .Values.oidc.caSecretName }}
+        - name: kube-oidc-proxy-config
+          secret:
+            secretName: {{ .Values.oidc.caSecretName }}
+            items:
+            - key: ca.crt
               path: oidc-ca.pem
         {{ end }}
         - name: kube-oidc-proxy-tls
