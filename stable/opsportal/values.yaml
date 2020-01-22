@@ -46,10 +46,8 @@ opsportal:
           servicePort: 80
         path: /ops/portal/traefik
 
-###############################################################################
-#  Konvoy UI
-###############################################################################
-kommander:
+# We need to override certain values from default kommander values here
+kommander-ui:
   enabled: true
   image:
     repository: mesosphere/kommander
@@ -59,32 +57,10 @@ kommander:
   logoutRedirectPath: /ops/landing
   clusterPollingInterval: 3000
 
-  # Mode must be either production|konvoy
-  mode: konvoy
+  # Mode must be either production|konvoy, konvoy forcing ui in "konvoy mode"
+  mode: production
 
   displayName: Konvoy Cluster
-
-  extraInitContainers:
-
-  federate:
-    systemNamespace:
-      enable: false
-
-  resources:
-    requests:
-      memory: "128Mi"
-      cpu: "100m"
-    limits:
-      memory: "512Mi"
-      cpu: "2000m"
-
-  readinessProbe:
-    initialDelaySeconds: 15
-    periodSeconds: 10
-  livenessProbe:
-    initialDelaySeconds: 15
-    periodSeconds: 10
-    timeoutSeconds: 3
 
   ### This must match the serviceName set in the ingress backend below
   service:
@@ -98,43 +74,3 @@ kommander:
       traefik.ingress.kubernetes.io/auth-type: forward
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-
-  # disable kubefed to keep all items related to kubefed from being created
-  kubefed:
-    enabled: false
-
-  grafana:
-    enabled: false
-
-  # disable kommander-cluster-lifecycle
-  kommander-cluster-lifecycle:
-    enabled: false
-
-  kommander-thanos:
-    enabled: false
-
-  kommander-karma:
-    enabled: false
-
-  kubeaddons-catalog:
-    enabled: false
-
-# BUG due to 2.14 helm
-# this is not seen for 2.15, so when we move to 2.15 remove below
-kommander-cluster-lifecycle:
-  enabled: false
-
-kubefed:
-  enabled: false
-
-grafana:
-  enabled: false
-
-kommander-thanos:
-  enabled: false
-
-kommander-karma:
-  enabled: false
-
-kubeaddons-catalog:
-  enabled: false
