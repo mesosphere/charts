@@ -15,4 +15,5 @@ chart-repos:
   - banzaicloud=https://kubernetes-charts.banzaicloud.com
   - helm-stable=https://kubernetes-charts.storage.googleapis.com/
   - dex-controller=https://mesosphere.github.io/dex-controller/charts
+  - kommander=https://mesosphere.github.io/kommander/charts
 helm-extra-args: --timeout 600

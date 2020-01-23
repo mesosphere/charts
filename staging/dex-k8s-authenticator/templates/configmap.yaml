@@ -30,4 +30,12 @@ data:
     clusters:
 {{ toYaml .clusters | indent 4 }}
     {{- end }}
+    {{- if .Values.caCerts.enabled }}
+    caCerts: "true"
+    {{- if .Values.caCerts.secrets }}
+    caCertPath: /certs/{{ .filename }}
+    {{- else }}
+    caCertPath: /certs/ca.crt
+    {{- end }}
+    {{- end }}
 

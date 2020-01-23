@@ -5,6 +5,7 @@ metadata:
   labels:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
 spec:
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       {{- include "gatekeeper.selectorLabels" . | nindent 6 }}

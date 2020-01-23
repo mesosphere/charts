@@ -38,6 +38,7 @@ oidc:
   #           ...
   #    -----END CERTIFICATE-----
   caPEM:
+  caSecretName:   # specify caPEM or caSecretName
 
   usernamePrefix:
   groupsClaim:

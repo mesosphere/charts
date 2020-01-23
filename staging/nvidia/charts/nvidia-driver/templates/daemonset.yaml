@@ -1,46 +1,48 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: nvidia-driver-daemonset
+  name: {{ template "nvidia-driver.fullname" . }}
   namespace: kube-system
 spec:
   selector:
     matchLabels:
-      name: nvidia-driver-ds
+      name: {{ template "nvidia-driver.fullname" . }}
   template:
     metadata:
       labels:
-        name: nvidia-driver-ds
+        name: {{ template "nvidia-driver.fullname" . }}
     spec:
-{{- if .Values.initContainers }}
-      initContainers:
-        {{- toYaml .Values.initContainers | nindent 8 }}
-{{- end }}
 {{- if .Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+{{- toYaml .Values.tolerations | nindent 8 }}
+{{- end }}
+{{- if .Values.nodeSelector }}
+      nodeSelector:
+{{- toYaml .Values.nodeSelector | nindent 8 }}
+{{- end }}
+{{- if .Values.initContainers }}
+      initContainers:
+{{- toYaml .Values.initContainers | nindent 8 }}
 {{- end }}
       priorityClassName: {{ .Values.priorityClassName }}
       hostPID: true
       containers:
-      - image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        name: nvidia-driver
+      - name: nvidia-driver
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         args: ["--accept-license"]
         securityContext:
           privileged: true
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{- if .Values.resources }}
         resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{- toYaml .Values.resources | nindent 12 }}
+{{- end }}
         volumeMounts:
         - name: update-driver
           mountPath: /run/kernel/postinst.d
         - name: driver-path
           mountPropagation: Bidirectional
           mountPath: /run/nvidia
-{{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-{{- end }}
       volumes:
       - name: update-driver
         hostPath:

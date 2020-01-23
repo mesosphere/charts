@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: label-ns
+  name: label-ns-{{ .Values.global.tag | printf "%v" | trunc 32 }}
   namespace: {{ .Release.Namespace }}
   labels:
     release: {{ .Release.Name }}
@@ -18,5 +18,5 @@ spec:
         - name: ns-labeler
           image: "{{ .Values.global.hub }}/kubectl:{{ .Values.global.tag }}"
           imagePullPolicy: {{ .Values.global.imagePullPolicy }}
-          command: ["kubectl", "label", "ns", {{ .Release.Namespace }}, "ca.istio.io/override=true"]
+          command: ["kubectl", "label", "ns", {{ .Release.Namespace }}, "ca.istio.io/override=true", "--overwrite=true"]
       restartPolicy: OnFailure

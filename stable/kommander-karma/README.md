@@ -32,14 +32,14 @@ karma:
       traefik.ingress.kubernetes.io/auth-type: "forward"
       traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
       traefik.ingress.kubernetes.io/priority: "2"
-    path: "/kommander/monitoring/karma"
+    path: "/ops/portal/kommander/monitoring/karma"
     hosts:
       - ""
 
   livenessProbe:
     delay: 5
     period: 5
-    path: /kommander/monitoring/karma/
+    path: /ops/portal/kommander/monitoring/karma/
 
   configMap:
     enabled: true
@@ -74,7 +74,7 @@ karma:
       listen:
         address: "0.0.0.0"
         port: 8080
-        prefix: /kommander/monitoring/karma/
+        prefix: /ops/portal/kommander/monitoring/karma/
       log:
         config: true
         level: info

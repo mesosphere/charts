@@ -1,12 +1,8 @@
-# Generated from 'nodes' from https://raw.githubusercontent.com/coreos/kube-prometheus/master/manifests/grafana-dashboardDefinitions.yaml
-# Do not change in-place! In order to change this file first read following link:
-# https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
-{{- if .Values.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "grafana.fullname" . }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- if $.Values.dashboards.label }}
     {{ $.Values.dashboards.label }}: "1"
@@ -93,7 +89,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU SM Clocks",
+                        "title": "SM Clock Frequency",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -169,7 +165,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU Memory Clocks",
+                        "title": "Memory Clock Frequency",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -256,7 +252,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU Utilization",
+                        "title": "Utilization",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -334,7 +330,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU Mem Cpy Utilization",
+                        "title": "Memory Copy Utilization",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -422,7 +418,7 @@ data:
                                 "refId": "A"
                             }
                         ],
-                        "title": "GPU Power Usage",
+                        "title": "Power Usage",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -509,7 +505,7 @@ data:
                             }
                         ],
                         "thresholds": "1800, 2200",
-                        "title": "GPU Power Total",
+                        "title": "Power Total",
                         "transparent": false,
                         "type": "singlestat",
                         "valueFontSize": "80%",
@@ -581,7 +577,7 @@ data:
                                 "refId": "A"
                             }
                         ],
-                        "title": "GPU Temperature",
+                        "title": "Temperature",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -669,7 +665,7 @@ data:
                             }
                         ],
                         "thresholds": "83, 87",
-                        "title": "GPU Avg. Temp",
+                        "title": "Average Temperature",
                         "transparent": false,
                         "type": "singlestat",
                         "valueFontSize": "80%",
@@ -741,7 +737,7 @@ data:
                                 "refId": "A"
                             }
                         ],
-                        "title": "GPU Memory Temperature",
+                        "title": "Memory Temperature",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -829,7 +825,7 @@ data:
                             }
                         ],
                         "thresholds": "83, 87",
-                        "title": "GPU Avg. Memory Temp",
+                        "title": "Average Memory Temperature",
                         "transparent": false,
                         "type": "singlestat",
                         "valueFontSize": "80%",
@@ -902,7 +898,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU Framebuffer Mem Used",
+                        "title": "Framebuffer Memory Used",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -980,7 +976,7 @@ data:
                                 "step": 50
                             }
                         ],
-                        "title": "GPU Framebuffer Mem Free",
+                        "title": "Framebuffer Memory Free",
                         "tooltip": {
                             "msResolution": false,
                             "shared": true,
@@ -1016,7 +1012,10 @@ data:
         "schemaVersion": 14,
         "sharedCrosshair": false,
         "style": "dark",
-        "tags": [],
+        "tags": [
+          "Nvidia",
+          "GPU"
+        ],
         "templating": {
             "list": [
                 {
@@ -1119,7 +1118,6 @@ data:
             ]
         },
         "timezone": "browser",
-        "title": "GPU",
+        "title": "GPUs / Nvidia",
         "version": 2
     }
-{{- end }}

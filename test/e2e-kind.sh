@@ -4,7 +4,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-readonly CT_VERSION=v2.4.0
 readonly KIND_VERSION=v0.6.1
 readonly CLUSTER_NAME=chart-testing
 readonly K8S_VERSION=v1.16.3
@@ -13,11 +12,16 @@ tmp=$(mktemp -d)
 
 run_ct_container() {
     echo 'Running ct container...'
+    teamcity_volume=()
+    if [[ -n ${TEAMCITY_VERSION+x} ]]; then
+        teamcity_volume=(-v /teamcity/system/git:/teamcity/system/git)
+    fi
     docker run --rm --interactive --detach --network host --name ct \
         --volume "$(pwd)/test/ct-e2e.yaml:/etc/ct/ct.yaml" \
         --volume "$(pwd):/workdir" \
+        "${teamcity_volume[@]}" \
         --workdir /workdir \
-        "quay.io/helmpack/chart-testing:$CT_VERSION" \
+        "quay.io/helmpack/chart-testing:$1" \
         cat
     echo
 }
@@ -104,7 +108,8 @@ install_certmanager() {
 }
 
 main() {
-    run_ct_container
+    run_ct_container "$1"
+    shift
     trap cleanup EXIT
 
     create_kind_cluster
