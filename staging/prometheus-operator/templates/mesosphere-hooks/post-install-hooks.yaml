@@ -40,7 +40,11 @@ metadata:
 data:
   run.sh: |-
     #!/bin/bash
-    DASHBOARD_ID=$(curl --fail -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query=Kubernetes+%2F+Compute+Resources+%2F+Cluster | jq '.[0].id')
-    echo $DASHBOARD_ID
-    curl -X PUT -v --fail  -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
+    set -o nounset
+    set -o errexit
+    set -o pipefail
+    CURL="curl --verbose --fail --max-time 60 --retry 10 --retry-connrefused"
+    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query=Kubernetes+%2F+Compute+Resources+%2F+Cluster | jq '.[0].id')
+    echo "setting home dashboard to ID" $DASHBOARD_ID
+    $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
 
