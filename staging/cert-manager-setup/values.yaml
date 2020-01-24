@@ -5,6 +5,51 @@
 nameOverride: ""
 fullnameOverride: ""
 
+issuers: []
+#  - name: kubernetes-root-issuer
+#    secretName: kubernetes-root-ca
+
+certificates: []
+#  - name: kubernetes-intermediate-ca
+#    # where to store this certificate
+#    secretName: my-certificate-secret
+#    issuerRef:
+#      name: kubernetes-root-issuer
+#      kind: Issuer
+#      # These are the default usages for reference
+#      usages:
+#        - "digital signature"
+#        - "key encipherment"
+#    commonName: cert-manager
+#    duration: 87600h
+#    dnsNames: []
+#  - name: my-certificate
+#    # where to store this certificate
+#    secretName: my-certificate-secret
+#    issuerRef:
+#      name: kubernetes-root-issuer
+#      kind: Issuer
+#      # These are the default usages for reference
+#      usages:
+#        - "digital signature"
+#        - "key encipherment"
+#    commonName: cert-manager
+#    duration: 87600h
+#    dnsNames:
+#      - example.com
+#      - www.example.com
+
+clusterissuers: []
+#  - name: kubernetes-ca
+#    spec:
+#      ca:
+#        secretName: kubernetes-intermediate-ca
+#  - name: my-ca
+#    spec:
+#      ca:
+#        secretName: my-certificate-secret
+
+# DEPRECATED, please use the above issuers, certificates and clusterissuers
 clusterissuer: {}
   # name: kubernetes-ca
   # spec:

@@ -3,6 +3,10 @@ kind: ClusterRoleBinding
 metadata:
   name: read-apiservices-rolebinding
   namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-delete-policy: "before-hook-creation"
+    "helm.sh/hook-weight": "-3"
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
