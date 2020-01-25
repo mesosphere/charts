@@ -16,6 +16,7 @@ secrets:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.1.6"
 
+# DEPRECATED, DO NOT USE
 opsportal:
   ingress:
     paths:
