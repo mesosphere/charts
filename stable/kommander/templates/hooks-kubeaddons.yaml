@@ -14,6 +14,11 @@ rules:
 - apiGroups: [""]
   resources: ["namespaces"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+{{- if .Values.grafana.enabled }}
+- apiGroups: [""]
+  resources: ["secrets", "configmaps"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
