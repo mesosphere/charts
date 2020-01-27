@@ -29,6 +29,13 @@ kubeaddons-catalog:
 grafana:
   enabled: true
 
+  hooks:
+    jobName: grafana-home-dashboard
+    image: dwdraju/alpine-curl-jq
+    secretKeyRef: ops-portal-credentials
+    serviceURL: http://kommander-kubeaddons-grafana.kommander:3000
+    homeDashboardUID: efa86fd1d0c121a26444b636a3f509a8
+
   ## Do not deploy default dashboards.
   ##
   defaultDashboardsEnabled: false
