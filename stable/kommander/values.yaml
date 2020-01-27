@@ -1,7 +1,7 @@
 kommander-ui:
   image:
     repository: mesosphere/kommander
-    tag: 1.184.0
+    tag: 1.192.0
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
