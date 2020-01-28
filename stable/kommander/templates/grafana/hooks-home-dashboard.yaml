@@ -1,5 +1,9 @@
 {{- if .Values.grafana.enabled }}
 ---
+# Unable to get post-install job hook working, which is why
+# this is a regular Job. The retries in the configmap script
+# should ensure that this successfully runs once the Grafana
+# server is up.
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -7,10 +11,6 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kommander.labels" . | indent 4 }}
-  annotations:
-    helm.sh/hook: post-install
-    helm.sh/hook-weight: "-4"
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 spec:
   template:
     metadata:
@@ -18,7 +18,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: post-install-job
+        - name: {{ .Values.grafana.hooks.jobName | quote }}
           image: {{ .Values.grafana.hooks.image | quote }}
           command: ["/bin/sh", "-c", "/job/run.sh"]
           env:
@@ -46,7 +46,7 @@ data:
     set -o nounset
     set -o errexit
     set -o pipefail
-    CURL="curl --verbose --fail --max-time 60 --retry 10 --retry-connrefused"
+    CURL="curl --verbose --fail --max-time 30 --retry 20 --retry-connrefused""
     DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/dashboards/uid/{{ .Values.grafana.hooks.homeDashboardUID }} | jq '.dashboard.id')
     echo "setting home dashboard to ID" $DASHBOARD_ID
     $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' {{ .Values.grafana.hooks.serviceURL }}/api/org/preferences
