@@ -35,6 +35,7 @@ grafana:
     secretKeyRef: ops-portal-credentials
     serviceURL: http://kommander-kubeaddons-grafana.kommander
     homeDashboardUID: efa86fd1d0c121a26444b636a3f509a8
+    kommanderServiceAccount: kommander-kubeaddons
 
   ## Do not deploy default dashboards.
   ##
