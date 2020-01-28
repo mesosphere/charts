@@ -24,7 +24,8 @@ spec:
   - host: {{ .Values.dashboard.domain }}
     http:
       paths:
-      - backend:
+      - path: {{ .Values.dashboard.ingress.path }}
+        backend:
           serviceName: {{ template "traefik.fullname" . }}-dashboard
           servicePort: dashboard-http
   {{- if .Values.dashboard.ingress.tls }}
