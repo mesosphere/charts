@@ -30,7 +30,7 @@ grafana:
   enabled: true
 
   hooks:
-    jobName: grafana-home-dashboard
+    jobName: set-kommander-grafana-home-dashboard
     image: dwdraju/alpine-curl-jq
     secretKeyRef: ops-portal-credentials
     serviceURL: http://kommander-kubeaddons-grafana.kommander
