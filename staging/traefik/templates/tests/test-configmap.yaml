@@ -13,4 +13,4 @@ data:
     @test "Test Access" {
       curl -D - http://{{ template "traefik.fullname" . }}/
     }
-{{end}}
+{{- end }}
