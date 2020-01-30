@@ -5,7 +5,7 @@ metadata:
   annotations:
     helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
-    "helm.sh/hook-weight": "-7"
+    helm.sh/hook-weight: "-7"
 rules:
 - apiGroups:
   - "apiregistration.k8s.io"
