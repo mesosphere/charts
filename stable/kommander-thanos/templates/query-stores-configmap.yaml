@@ -27,7 +27,7 @@ metadata:
 {{ $labels }}
   annotations:
     "helm.sh/hook": pre-delete
-    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-weight": "5"
     "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
@@ -37,7 +37,7 @@ spec:
       serviceAccountName: {{ $sa }}
       containers:
         - name: kubectl
-          image: docker.io/bitnami/kubectl:1.16.2
+          image: bitnami/kubectl:1.16.2
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
