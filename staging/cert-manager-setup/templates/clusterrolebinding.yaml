@@ -1,17 +1,17 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: read-apiservices-rolebinding
+  name: cert-manager-setup-apiservices
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install,pre-upgrade
-    helm.sh/hook-delete-policy: "before-hook-creation"
-    "helm.sh/hook-weight": "-3"
+    helm.sh/hook-delete-policy: before-hook-creation
+    "helm.sh/hook-weight": "-7"
 subjects:
 - kind: ServiceAccount
   namespace: {{ .Release.Namespace }}
   name: default
 roleRef:
   kind: ClusterRole
-  name: read-apiservices
+  name: cert-manager-setup-apiservices
   apiGroup: rbac.authorization.k8s.io
