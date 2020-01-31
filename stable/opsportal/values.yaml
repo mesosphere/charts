@@ -16,35 +16,6 @@ secrets:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.1.6"
 
-# DEPRECATED, DO NOT USE
-opsportal:
-  ingress:
-    paths:
-      # kibana
-      - backend:
-          serviceName: kibana-kubeaddons
-          servicePort: 5601
-        path: /ops/portal/kibana
-      # grafana
-      - backend:
-          serviceName: prometheus-kubeaddons-grafana
-          servicePort: 3000
-        path: /ops/portal/grafana
-      # prometheus
-      - backend:
-          serviceName: prometheus-kubeaddons-prom-prometheus
-          servicePort: 9090
-        path: /ops/portal/prometheus
-      # alertmanager
-      - backend:
-          serviceName: prometheus-kubeaddons-prom-alertmanager
-          servicePort: 9093
-        path: /ops/portal/alertmanager
-      # traefik
-      - backend:
-          serviceName: traefik-kubeaddons-dashboard
-          servicePort: 80
-        path: /ops/portal/traefik
 
 # We need to override certain values from default kommander values here
 kommander-ui:
