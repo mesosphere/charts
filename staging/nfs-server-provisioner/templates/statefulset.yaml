@@ -119,6 +119,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        namespace: {{ .Release.Namespace }}
       spec:
         accessModes: [ {{ .Values.persistence.accessMode | quote }} ]
       {{- if .Values.persistence.storageClass }}
