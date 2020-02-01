@@ -36,6 +36,42 @@ spec:
             name: {{ .Values.grafana.hooks.jobName }}
             defaultMode: 0777
 ---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: post-upgrade
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+          image: {{ .Values.grafana.hooks.image | quote }}
+          command: ["/bin/sh", "-c", "/job/run.sh"]
+          env:
+            - name: X_FORWARDED_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.grafana.hooks.secretKeyRef }}
+                  key: username
+          volumeMounts:
+            - mountPath: /job
+              name: job
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Values.grafana.hooks.jobName }}
+            defaultMode: 0777
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
