@@ -18,6 +18,8 @@ secrets:
 
 # DEPRECATED, DO NOT USE
 opsportal:
+  rbac:
+    enabled: true
   ingress:
     paths:
       # kibana

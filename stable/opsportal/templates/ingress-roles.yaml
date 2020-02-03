@@ -1,0 +1,310 @@
+{{- if .Values.opsportal.rbac.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-kibana-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/kibana
+  - /ops/portal/kibana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-kibana-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/kibana
+  - /ops/portal/kibana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-kibana-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/kibana
+  - /ops/portal/kibana/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-traefik-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/traefik
+  - /ops/portal/traefik/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-traefik-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/traefik
+  - /ops/portal/traefik/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-traefik-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/traefik
+  - /ops/portal/traefik/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-prometheus-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/prometheus
+  - /ops/portal/prometheus/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-prometheus-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/prometheus
+  - /ops/portal/prometheus/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-prometheus-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/prometheus
+  - /ops/portal/prometheus/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-grafana-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/grafana
+  - /ops/portal/grafana/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-grafana-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/grafana
+  - /ops/portal/grafana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-grafana-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/grafana
+  - /ops/portal/grafana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-alertmanager-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/alertmanager
+  - /ops/portal/alertmanager/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-alertmanager-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/alertmanager
+  - /ops/portal/alertmanager/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-alertmanager-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/alertmanager
+  - /ops/portal/alertmanager/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-portal-view
+rules:
+- nonResourceURLs:
+  - /ops/portal
+  - /ops/portal/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-portal-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal
+  - /ops/portal/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-portal-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal
+  - /ops/portal/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-graphql-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/graphql
+  - /ops/portal/graphql/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-graphql-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/graphql
+  - /ops/portal/graphql/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-graphql-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/graphql
+  - /ops/portal/graphql/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+{{- end }}

@@ -1,0 +1,265 @@
+{{- if .Values.rbac.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-base-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander
+  - /ops/portal/kommander/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-base-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander
+  - /ops/portal/kommander/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-base-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander
+  - /ops/portal/kommander/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-ui-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/ui
+  - /ops/portal/kommander/ui/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-ui-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/ui
+  - /ops/portal/kommander/ui/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-ui-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/ui
+  - /ops/portal/kommander/ui/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-monitoring-view
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring
+  - /ops/portal/kommander/monitoring/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-monitoring-edit
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring
+  - /ops/portal/kommander/monitoring/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-monitoring-admin
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring
+  - /ops/portal/kommander/monitoring/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-grafana-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/grafana
+  - /ops/portal/kommander/monitoring/grafana/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-grafana-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/grafana
+  - /ops/portal/kommander/monitoring/grafana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-grafana-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/grafana
+  - /ops/portal/kommander/monitoring/grafana/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-karma-view
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/karma
+  - /ops/portal/kommander/monitoring/karma/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-karma-edit
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/karma
+  - /ops/portal/kommander/monitoring/karma/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-karma-admin
+rules:
+- nonResourceURLs:
+  - /ops/portal/kommander/monitoring/karma
+  - /ops/portal/kommander/monitoring/karma/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-query-view
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring/query
+  - /ops/portal/kommander/monitoring/query/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-query-edit
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring/query
+  - /ops/portal/kommander/monitoring/query/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kommander-query-admin
+rules:
+- nonResourceURLs:
+  - /ops/poratl/kommander/monitoring/query
+  - /ops/portal/kommander/monitoring/query/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+{{- end }}
