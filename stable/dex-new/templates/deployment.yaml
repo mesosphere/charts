@@ -13,6 +13,10 @@ metadata:
   labels:
 {{ include "dex.labels" . | indent 4 }}
     app.kubernetes.io/component: dex
+  {{- if .Values.deploymentAnnotations }}
+  annotations:
+{{ toYaml .Values.deploymentAnnotations | indent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicas }}
   strategy:

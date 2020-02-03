@@ -1,0 +1,37 @@
+commit 8c26e2cb07f87566d98a642a4eaf387be5b10d7a
+Author: Jie Yu <yujie.jay@gmail.com>
+Date:   Mon Feb 3 13:55:19 2020 -0800
+
+    dex: support deployment annotations
+    
+    Add support for deployment annotations. This allows us to support
+    configuration reload using reloader.
+
+diff --git a/stable/dex-new/templates/deployment.yaml b/stable/dex-new/templates/deployment.yaml
+index e2ad39c..ec28528 100644
+--- a/stable/dex-new/templates/deployment.yaml
++++ b/stable/dex-new/templates/deployment.yaml
+@@ -13,6 +13,10 @@ metadata:
+   labels:
+ {{ include "dex.labels" . | indent 4 }}
+     app.kubernetes.io/component: dex
++  {{- if .Values.deploymentAnnotations }}
++  annotations:
++{{ toYaml .Values.deploymentAnnotations | indent 4 }}
++  {{- end }}
+ spec:
+   replicas: {{ .Values.replicas }}
+   strategy:
+diff --git a/stable/dex-new/values.yaml b/stable/dex-new/values.yaml
+index c824c1b..f3279e8 100644
+--- a/stable/dex-new/values.yaml
++++ b/stable/dex-new/values.yaml
+@@ -15,6 +15,8 @@ podLabels: {}
+ 
+ podAnnotations: {}
+ 
++deploymentAnnotations: {}
++
+ initContainers: []
+ 
+ tolerations: []
