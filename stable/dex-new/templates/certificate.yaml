@@ -1,0 +1,24 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: dex
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    # We have to add the following annotation so that the upgrade does
+    # not fail with "already exists" error. See more details in:
+    # https://github.com/helm/helm/issues/5482
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  secretName: dex
+  issuerRef:
+    name: kubernetes-ca
+    kind: ClusterIssuer
+  commonName: dex
+  duration: 87600h
+  organization:
+    - D2iQ
+  dnsNames:
+    - dex-kubeaddons
+    - dex-kubeaddons.kubeaddons
+    - dex-kubeaddons.kubeaddons.svc.cluster.local
