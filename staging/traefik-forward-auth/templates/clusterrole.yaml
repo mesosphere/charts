@@ -32,9 +32,14 @@ rules:
   - "impersonate"
 # kube-oidc-proxy init container requires to list services in order to get
 # load balancer hostname
-- apiGroups: [""]
-  resources: ["services"]
-  verbs: ["get", "list", "watch"]
+- apiGroups:
+  - ""
+  resources:
+  - "services"
+  verbs:
+  - "get"
+  - "list"
+  - "watch"
 - apiGroups:
   - "rbac.authorization.k8s.io"
   resources:
