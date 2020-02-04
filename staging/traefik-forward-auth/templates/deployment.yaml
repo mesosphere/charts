@@ -64,7 +64,12 @@ spec:
             mountPath: "/etc/traefik-forward-auth/config"
             readOnly: true
           args:
+            {{- if .Values.traefikForwardAuth.enableImpersonation }}
             - --enable-impersonation
+            {{- end }}
+            {{- if .Values.traefikForwardAuth.enableRBAC }}
+            - --enable-rbac
+            {{- end }}
           env:
             {{- range $key, $value := .Values.env }}
             - name: {{ $key | quote }}
@@ -105,13 +110,7 @@ spec:
                 secretKeyRef:
                   name: {{ template "traefik-forward-auth.fullname" . }}-secret
                   key: secret
-            {{- if .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef }}
-            - name: WHITELIST
-              valueFrom:
-                secretKeyRef:
-                  name: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.name }}
-                  key: {{ required "traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.allowedUser.valueFrom.secretKeyRef.key }}
-            {{- else if gt (len .Values.traefikForwardAuth.whitelist) 0 }}
+            {{- if gt (len .Values.traefikForwardAuth.whitelist) 0 }}
             - name: WHITELIST
               value: {{ join "," .Values.traefikForwardAuth.whitelist | quote }}
             {{- end }}
@@ -124,6 +123,10 @@ spec:
             {{- if .Values.traefikForwardAuth.authHost }}
             - name: AUTH_HOST
               value: {{ .Values.traefikForwardAuth.authHost | quote }}
+            {{- end }}
+            {{- if gt (len .Values.traefikForwardAuth.rbacPassThroughPaths) 0 }}
+            - name: AUTHZ_PASS_THROUGH
+              value: {{ join "," .Values.traefikForwardAuth.rbacPassThroughPaths | quote }}
             {{- end }}
           ports:
             - name: http

@@ -29,11 +29,6 @@ traefikForwardAuth:
   domain:
   authHost:
   whitelist: []
-  allowedUser:
-    valueFrom:
-      secretKeyRef:
-        name: secretName
-        key: secretKey
   # oidcUri: ""
   # If undefined use the Kubernetes root CA certificate
   # caCertificate: |
@@ -43,6 +38,9 @@ traefikForwardAuth:
   # or caSecretName: < name of the secret >
   extraConfig: ""
   userCookieName: "_forward_auth_name"
+  enableRBAC: false
+  enableImpersonation: false
+  rbacPassThroughPaths: []
 
 ingress:
   enabled: false
