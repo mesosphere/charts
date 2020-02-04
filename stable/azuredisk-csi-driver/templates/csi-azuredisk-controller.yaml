@@ -22,7 +22,7 @@ spec:
         - name: csi-provisioner
           image: "{{ .Values.image.csiProvisioner.repository }}:{{ .Values.image.csiProvisioner.tag }}"
           args:
-            - "--provisioner=disk.csi.azure.com"
+            - --provisioner=disk.csi.azure.com
             - --csi-address=$(ADDRESS)
             - --timeout=120s
             - --retry-interval-start=1s
@@ -33,7 +33,7 @@ spec:
             {{- end}}
             - --enable-leader-election
             - --leader-election-type=leases
-            - "--v=5"
+            - --v=5
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -50,8 +50,8 @@ spec:
             - --retry-interval-start=1s
             - --retry-interval-max=5m
             - --worker-threads=20
-            - "-leader-election"
-            - "-leader-election-type=leases"
+            - -leader-election
+            - -leader-election-type=leases
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -75,7 +75,7 @@ spec:
           image: "{{ .Values.image.csiSnapshotter.repository }}:{{ .Values.image.csiSnapshotter.tag }}"
           args:
             - --csi-address=$(ADDRESS)
-            - "-leader-election"
+            - -leader-election
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -85,9 +85,9 @@ spec:
         - name: csi-resizer
           image: "{{ .Values.image.csiResizer.repository }}:{{ .Values.image.csiResizer.tag }}"
           args:
-            - "-csi-address=$(ADDRESS)"
-            - "-v=5"
-            - "-leader-election"
+            - -csi-address=$(ADDRESS)
+            - -v=5
+            - -leader-election
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -106,9 +106,9 @@ spec:
         - name: azuredisk
           image: "{{ .Values.image.azuredisk.repository }}:{{ .Values.image.azuredisk.tag }}"
           args:
-            - "--v=5"
-            - "--endpoint=$(CSI_ENDPOINT)"
-            - "--nodeid=$(KUBE_NODE_NAME)"
+            - --v=5
+            - --endpoint=$(CSI_ENDPOINT)
+            - --nodeid=$(KUBE_NODE_NAME)
           ports:
             - containerPort: 9602
               name: healthz
