@@ -45,3 +45,13 @@ controller:
 enableVolumeScheduling: false
 
 cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
+azuredisk:
+  node:
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists

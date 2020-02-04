@@ -16,6 +16,10 @@ spec:
       hostNetwork: true
       nodeSelector:
         beta.kubernetes.io/os: linux
+{{- if .Values.azuredisk.node.tolerations }}
+      tolerations:
+{{ toYaml .Values.azuredisk.node.tolerations | indent 8 }}
+{{- end }}
       priorityClassName: system-node-critical
       containers:
         - name: liveness-probe
