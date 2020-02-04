@@ -74,3 +74,11 @@ kommander-ui:
       traefik.ingress.kubernetes.io/auth-type: forward
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+
+opsportalRBAC:
+  enabled: true
+  path: /ops/portal
+
+kibanaRBAC:
+  enabled: true
+  path: /ops/portal/kibana
