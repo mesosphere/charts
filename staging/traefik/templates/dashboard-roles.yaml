@@ -1,5 +1,4 @@
-{{- if .Values.dashboardRBAC.enabled }}
-{{- if .Values.dashboard.enabled }}
+{{- if and .Values.dashboardRBAC.enabled .Values.dashboard.enabled }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -12,8 +11,8 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 rules:
 - nonResourceURLs:
-  - {{ .Values.dashboard.ingress.path }}
-  - {{ .Values.dashboard.ingress.path }}/*
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}/*
   verbs:
   - get
   - head
@@ -30,8 +29,8 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 rules:
 - nonResourceURLs:
-  - {{ .Values.dashboard.ingress.path }}
-  - {{ .Values.dashboard.ingress.path }}/*
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}/*
   verbs:
   - get
   - head
@@ -50,13 +49,12 @@ metadata:
     heritage: {{ .Release.Service | quote }}
 rules:
 - nonResourceURLs:
-  - {{ .Values.dashboard.ingress.path }}
-  - {{ .Values.dashboard.ingress.path }}/*
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}
+  - {{ .Values.dashboard.ingress.path | trimSuffix "/" }}/*
   verbs:
   - get
   - head
   - post
   - put
   - delete
-{{- end}}
-{{- end}}
+{{- end }}
