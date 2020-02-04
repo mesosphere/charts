@@ -1,0 +1,62 @@
+{{- if .Values.dashboardRBAC.enabled }}
+{{- if .Values.dashboard.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "traefik.fullname" . }}-dashboard-view
+  labels:
+    app: {{ template "traefik.name" . }}
+    chart: {{ template "traefik.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.dashboard.ingress.path }}
+  - {{ .Values.dashboard.ingress.path }}/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "traefik.fullname" . }}-dashboard-edit
+  labels:
+    app: {{ template "traefik.name" . }}
+    chart: {{ template "traefik.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.dashboard.ingress.path }}
+  - {{ .Values.dashboard.ingress.path }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "traefik.fullname" . }}-dashboard-admin
+  labels:
+    app: {{ template "traefik.name" . }}
+    chart: {{ template "traefik.chart" . }}
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.dashboard.ingress.path }}
+  - {{ .Values.dashboard.ingress.path }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+{{- end}}
+{{- end}}
