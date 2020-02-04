@@ -1,0 +1,57 @@
+{{- if .Values.opsportalRBAC.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-admin
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-view
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-edit
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
+  - {{ .Values.opsportalRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+{{- end }}

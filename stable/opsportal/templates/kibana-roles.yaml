@@ -1,0 +1,60 @@
+## Kibana is deployed from an upstream chart so we must introduce a temporary
+## cross application dependency
+## This template should be removed in 1.4 https://jira.d2iq.com/browse/D2IQ-63746
+{{- if .Values.kibanaRBAC.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-kibana-edit
+  lables:
+    app: {{ template "opsportal.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-kibana-admin
+  lables:
+    app: {{ template "opsportal.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "opsportal.fullname" . }}-kibana-view
+  lables:
+    app: {{ template "opsportal.fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+rules:
+- nonResourceURLs:
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/*
+  verbs:
+  - get
+  - head
+{{- end }}
