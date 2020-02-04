@@ -76,6 +76,8 @@ mesosphereResources:
       image: dwdraju/alpine-curl-jq
       secretKeyRef: ops-portal-credentials
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
+  ingressRBAC:
+    enabled: true
 
 
 ## Provide custom recording or alerting rules to be deployed into the cluster.
