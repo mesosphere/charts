@@ -49,7 +49,6 @@ spec:
             - --timeout=120s
             - --retry-interval-start=1s
             - --retry-interval-max=5m
-            - --worker-threads=20
             - -leader-election
             - -leader-election-type=leases
           env:
