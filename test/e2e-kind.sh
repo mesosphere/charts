@@ -108,12 +108,8 @@ install_certmanager() {
 }
 
 install_metallb() {
-    echo 'Installing metallb...'
-    docker_exec kubectl create namespace metallb
-    docker_exec helm repo update
-    docker_exec helm install \
-    --values test/metallb-values.yaml \
-    --namespace metallb stable/metallb
+    echo 'Installing dummylb...'
+    docker_exec kubectl apply -f https://gitlab.com/joejulian/dummylb/-/raw/master/dummylb.yaml
     echo
 }
 
