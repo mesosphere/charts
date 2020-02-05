@@ -107,7 +107,7 @@ install_certmanager() {
     echo
 }
 
-install_metallb() {
+install_dummylb() {
     echo 'Installing dummylb...'
     docker_exec kubectl apply -f https://gitlab.com/joejulian/dummylb/-/raw/master/dummylb.yaml
     echo
@@ -121,7 +121,7 @@ main() {
     create_kind_cluster
     install_local-path-provisioner
     install_tiller
-    install_metallb
+    install_dummylb
     install_certmanager
 
     docker_exec ct lint-and-install --upgrade --debug "$@"
