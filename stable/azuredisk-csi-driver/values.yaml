@@ -1,7 +1,36 @@
 image:
-  repository: mcr.microsoft.com/k8s/csi/azuredisk-csi
-  tag: v0.4.0
-  pullPolicy: Always
+  azuredisk:
+    repository: mcr.microsoft.com/k8s/csi/azuredisk-csi
+    tag: v0.5.0
+    pullPolicy: Always
+  csiProvisioner:
+    repository: quay.io/k8scsi/csi-provisioner
+    tag: v1.4.0
+    pullPolicy: Always
+  csiAttacher:
+    repository: quay.io/k8scsi/csi-attacher
+    tag: v1.2.0
+    pullPolicy: Always
+  clusterDriverRegistrar:
+    repository: quay.io/k8scsi/csi-cluster-driver-registrar
+    tag: v1.0.1
+    pullPolicy: Always
+  csiSnapshotter:
+    repository: quay.io/k8scsi/csi-snapshotter
+    tag: v1.1.0
+    pullPolicy: Always
+  csiResizer:
+    repository: quay.io/k8scsi/csi-resizer
+    tag: v0.3.0
+    pullPolicy: Always
+  livenessProbe:
+    repository: quay.io/k8scsi/livenessprobe
+    tag: v1.1.0
+    pullPolicy: Always
+  nodeDriverRegistrar:
+    repository: quay.io/k8scsi/csi-node-driver-registrar
+    tag: v1.1.0
+    pullPolicy: Always
 
 serviceAccount:
   create: true
@@ -9,7 +38,20 @@ serviceAccount:
 rbac:
   create: true
 
+controller:
+  replicas: 3
+
 # True if enable volume scheduling for dynamic volume provisioning
 enableVolumeScheduling: false
 
 cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
+azuredisk:
+  node:
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
