@@ -49,6 +49,7 @@ kommander-ui:
 opsportalRBAC:
   enabled: true
   path: /ops/portal
+  graphqlPath: /ops/portal/graphql
 
 kibanaRBAC:
   enabled: true
