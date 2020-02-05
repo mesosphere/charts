@@ -32,9 +32,17 @@ rules:
 - nonResourceURLs:
   - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
   - {{ .Values.opsportalRBAC.path | trimSuffix "/" }}/*
+  - {{ .Values.opsportalRBAC.graphqlPath | trimSuffix "/"}}
   verbs:
   - get
   - head
+# Posting to graphql is required for ops portal viewing
+- nonResourceURLs:
+    - {{ .Values.opsportalRBAC.graphqlPath | trimSuffix "/"}}
+  verbs:
+    - get
+    - head
+    - post
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
