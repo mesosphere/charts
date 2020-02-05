@@ -26,6 +26,8 @@ excluded-charts:
   - prometheus-operator   # DCOS-62817
   - traefik               # DCOS-62818
   - traefik-forward-auth  # DCOS-62819
+  - traefik2              # TODO related to 62818
+
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable

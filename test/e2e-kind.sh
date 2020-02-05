@@ -107,6 +107,16 @@ install_certmanager() {
     echo
 }
 
+install_metallb() {
+    echo 'Installing metallb...'
+    docker_exec kubectl create namespace metallb
+    docker_exec helm repo update
+    docker_exec helm install \
+    --values test/metallb-values.yaml \
+    --namespace metallb stable/metallb
+    echo
+}
+
 main() {
     run_ct_container "$1"
     shift
@@ -115,6 +125,7 @@ main() {
     create_kind_cluster
     install_local-path-provisioner
     install_tiller
+    install_metallb
     install_certmanager
 
     docker_exec ct lint-and-install --upgrade --debug "$@"
