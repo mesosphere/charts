@@ -34,5 +34,5 @@ spec:
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
 {{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "dex.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
+    app: {{ template "dex.name" . }}
+    release: "{{ .Release.Name }}"

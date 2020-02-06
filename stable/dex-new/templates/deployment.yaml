@@ -26,12 +26,13 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "dex.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: dex
+      app: {{ template "dex.name" . }}
+      release: "{{ .Release.Name }}"
   template:
     metadata:
       labels:
+        app: {{ template "dex.name" . }}
+        release: "{{ .Release.Name }}"
         app.kubernetes.io/name: {{ include "dex.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/component: dex

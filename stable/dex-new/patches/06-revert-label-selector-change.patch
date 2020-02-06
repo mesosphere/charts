@@ -1,0 +1,56 @@
+commit 6ed01144cf1574e7059009d5427bc4b79797302e
+Author: Jie Yu <yujie.jay@gmail.com>
+Date:   Wed Feb 5 17:43:39 2020 -0800
+
+    dex: revert the label selector change
+    
+    This is to make upgrade possible. The label selector field is immmutable
+    in Deployment.
+
+diff --git a/stable/dex-new/templates/deployment.yaml b/stable/dex-new/templates/deployment.yaml
+index ec28528..037a30c 100644
+--- a/stable/dex-new/templates/deployment.yaml
++++ b/stable/dex-new/templates/deployment.yaml
+@@ -26,12 +26,13 @@ spec:
+     type: RollingUpdate
+   selector:
+     matchLabels:
+-      app.kubernetes.io/name: {{ include "dex.name" . }}
+-      app.kubernetes.io/instance: {{ .Release.Name }}
+-      app.kubernetes.io/component: dex
++      app: {{ template "dex.name" . }}
++      release: "{{ .Release.Name }}"
+   template:
+     metadata:
+       labels:
++        app: {{ template "dex.name" . }}
++        release: "{{ .Release.Name }}"
+         app.kubernetes.io/name: {{ include "dex.name" . }}
+         app.kubernetes.io/instance: {{ .Release.Name }}
+         app.kubernetes.io/component: dex
+diff --git a/stable/dex-new/templates/poddisruptionbudget.yaml b/stable/dex-new/templates/poddisruptionbudget.yaml
+index 0757558..bf16967 100644
+--- a/stable/dex-new/templates/poddisruptionbudget.yaml
++++ b/stable/dex-new/templates/poddisruptionbudget.yaml
+@@ -8,7 +8,7 @@ metadata:
+ spec:
+   selector:
+     matchLabels:
+-      app.kubernetes.io/name: {{ include "dex.name" . }}
+-      app.kubernetes.io/instance: {{ .Release.Name }}
++      app: {{ template "dex.name" . }}
++      release: "{{ .Release.Name }}"
+ {{ toYaml .Values.podDisruptionBudget | indent 2 }}
+ {{- end -}}
+diff --git a/stable/dex-new/templates/service.yaml b/stable/dex-new/templates/service.yaml
+index d69ec11..3e9fe16 100644
+--- a/stable/dex-new/templates/service.yaml
++++ b/stable/dex-new/templates/service.yaml
+@@ -34,5 +34,5 @@ spec:
+   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+ {{- end }}
+   selector:
+-    app.kubernetes.io/name: {{ include "dex.name" . }}
+-    app.kubernetes.io/instance: {{ .Release.Name }}
++    app: {{ template "dex.name" . }}
++    release: "{{ .Release.Name }}"
