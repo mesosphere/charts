@@ -6,7 +6,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-kibana-edit
+  name: opsportal-kibana-edit
   lables:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -25,7 +25,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-kibana-admin
+  name: opsportal-kibana-admin
   lables:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -45,7 +45,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-kibana-view
+  name: opsportal-kibana-view
   lables:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
