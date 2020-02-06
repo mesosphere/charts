@@ -81,6 +81,7 @@ mesosphereResources:
       image: dwdraju/alpine-curl-jq
       secretKeyRef: ops-portal-credentials
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
+      dashboardName: "Kubernetes / Compute Resources / Cluster"
   ingressRBAC:
     enabled: true
 
