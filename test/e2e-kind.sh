@@ -107,6 +107,16 @@ install_certmanager() {
     echo
 }
 
+install_dummylb() {
+    echo 'Installing dummylb...'
+    DUMMYLB_SHA="cb4c17d70e63393f8de7cfa97d186aa06e781b3cd25bfff1f374b9d57159e80f"
+    DUMMYLB_REG="registry.gitlab.com/joejulian/dummylb"
+    curl -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
+      sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
+      docker_exec kubectl apply -f -
+    echo
+}
+
 main() {
     run_ct_container "$1"
     shift
@@ -115,6 +125,7 @@ main() {
     create_kind_cluster
     install_local-path-provisioner
     install_tiller
+    install_dummylb
     install_certmanager
 
     docker_exec ct lint-and-install --upgrade --debug "$@"

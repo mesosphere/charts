@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-admin
+  name: opsportal-admin
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
@@ -23,7 +23,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-view
+  name: opsportal-view
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
@@ -35,12 +35,19 @@ rules:
   verbs:
   - get
   - head
+# Posting to graphql is required for ops portal viewing
+- nonResourceURLs:
+    - {{ .Values.opsportalRBAC.graphqlPath | trimSuffix "/"}}
+  verbs:
+    - get
+    - head
+    - post
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "opsportal.fullname" . }}-edit
+  name: opsportal-edit
   labels:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
