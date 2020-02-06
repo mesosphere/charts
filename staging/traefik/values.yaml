@@ -10,6 +10,7 @@ imageTag: 1.7.12
 
 
 testFramework:
+  enabled: false
   image: "dduportal/bats"
   tag: "0.4.0"
 
@@ -344,6 +345,7 @@ dashboard:
     # annotations:
     #   key: value
   ingress: {}
+    # path: /my/path
     # annotations:
     #   key: value
     # labels:
@@ -484,3 +486,6 @@ tracing:
 # to point to a secret name that traefik is waiting on to
 # be mounted before being able to successfully start up.
 initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.0.7
+
+dashboardRBAC:
+  enabled: true

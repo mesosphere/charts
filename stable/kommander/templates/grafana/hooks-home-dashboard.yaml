@@ -1,0 +1,116 @@
+{{- if .Values.grafana.enabled }}
+---
+# Unable to get post-install job hook working, which is why
+# this is a regular Job. The retries in the configmap script
+# should ensure that this successfully runs once the Grafana
+# server is up.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.grafana.hooks.jobName | quote }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+spec:
+  template:
+    metadata:
+      name: {{ .Values.grafana.hooks.jobName | quote }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ .Values.grafana.hooks.jobName | quote }}
+          image: {{ .Values.grafana.hooks.image | quote }}
+          command: ["/bin/sh", "-c", "/job/run.sh"]
+          env:
+            - name: X_FORWARDED_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.grafana.hooks.secretKeyRef }}
+                  key: username
+          volumeMounts:
+            - mountPath: /job
+              name: job
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Values.grafana.hooks.jobName }}
+            defaultMode: 0777
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: post-upgrade
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: {{ .Values.grafana.hooks.jobName }}-upgrade-hook
+          image: {{ .Values.grafana.hooks.image | quote }}
+          command: ["/bin/sh", "-c", "/job/run.sh"]
+          env:
+            - name: X_FORWARDED_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.grafana.hooks.secretKeyRef }}
+                  key: username
+          volumeMounts:
+            - mountPath: /job
+              name: job
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Values.grafana.hooks.jobName }}
+            defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.grafana.hooks.jobName }}
+data:
+  run.sh: |-
+    #!/bin/bash
+    set -o nounset
+    set -o errexit
+    set -o pipefail
+    CURL="curl --verbose --fail --max-time 30 --retry 20 --retry-connrefused"
+    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/dashboards/uid/{{ .Values.grafana.hooks.homeDashboardUID }} | jq '.dashboard.id')
+    echo "setting home dashboard to ID" $DASHBOARD_ID
+    $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' {{ .Values.grafana.hooks.serviceURL }}/api/org/preferences
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cleanup-{{ .Values.grafana.hooks.jobName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kommander.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    metadata:
+      name: cleanup-{{ .Values.grafana.hooks.jobName }}
+    spec:
+      serviceAccountName: {{ .Values.grafana.hooks.kommanderServiceAccount }}
+      containers:
+        - name: kubectl
+          image: bitnami/kubectl:1.16.2
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - kubectl delete configmap {{ .Values.grafana.hooks.jobName }} --namespace={{ .Release.Namespace }}
+      restartPolicy: OnFailure
+{{- end }}

@@ -20,10 +20,11 @@ spec:
       priorityClassName: system-cluster-critical
       containers:
         - name: csi-provisioner
-          image: quay.io/k8scsi/csi-provisioner:v1.4.0
+          image: "{{ .Values.image.csiProvisioner.repository }}:{{ .Values.image.csiProvisioner.tag }}"
           args:
+            - --provisioner=disk.csi.azure.com
             - --csi-address=$(ADDRESS)
-            - --timeout=30s
+            - --timeout=120s
             - --retry-interval-start=1s
             - --retry-interval-max=5m
             - --worker-threads=100
@@ -32,6 +33,7 @@ spec:
             {{- end}}
             - --enable-leader-election
             - --leader-election-type=leases
+            - --v=5
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -40,14 +42,15 @@ spec:
             - mountPath: /csi
               name: socket-dir
         - name: csi-attacher
-          image: quay.io/k8scsi/csi-attacher:v2.0.0
+          image: "{{ .Values.image.csiAttacher.repository }}:{{ .Values.image.csiAttacher.tag }}"
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
             - --timeout=120s
             - --retry-interval-start=1s
             - --retry-interval-max=5m
-            - --worker-threads=20
+            - -leader-election
+            - -leader-election-type=leases
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -56,7 +59,7 @@ spec:
           - mountPath: /csi
             name: socket-dir
         - name: cluster-driver-registrar
-          image: quay.io/k8scsi/csi-cluster-driver-registrar:v1.0.1
+          image: "{{ .Values.image.clusterDriverRegistrar.repository }}:{{ .Values.image.clusterDriverRegistrar.tag }}"
           args:
             - --csi-address=$(ADDRESS)
             - --driver-requires-attachment=true
@@ -68,9 +71,22 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: csi-snapshotter
-          image: quay.io/k8scsi/csi-snapshotter:v1.2.2
+          image: "{{ .Values.image.csiSnapshotter.repository }}:{{ .Values.image.csiSnapshotter.tag }}"
           args:
             - --csi-address=$(ADDRESS)
+            - -leader-election
+          env:
+            - name: ADDRESS
+              value: /csi/csi.sock
+          volumeMounts:
+            - name: socket-dir
+              mountPath: /csi
+        - name: csi-resizer
+          image: "{{ .Values.image.csiResizer.repository }}:{{ .Values.image.csiResizer.tag }}"
+          args:
+            - -csi-address=$(ADDRESS)
+            - -v=5
+            - -leader-election
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -78,7 +94,7 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: liveness-probe
-          image: quay.io/k8scsi/livenessprobe:v1.1.0
+          image: "{{ .Values.image.livenessProbe.repository }}:{{ .Values.image.livenessProbe.tag }}"
           args:
             - --csi-address=/csi/csi.sock
             - --connection-timeout=3s
@@ -87,11 +103,11 @@ spec:
             - name: socket-dir
               mountPath: /csi
         - name: azuredisk
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.azuredisk.repository }}:{{ .Values.image.azuredisk.tag }}"
           args:
-            - "--v=5"
-            - "--endpoint=$(CSI_ENDPOINT)"
-            - "--nodeid=$(KUBE_NODE_NAME)"
+            - --v=5
+            - --endpoint=$(CSI_ENDPOINT)
+            - --nodeid=$(KUBE_NODE_NAME)
           ports:
             - containerPort: 9602
               name: healthz

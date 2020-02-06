@@ -1,0 +1,28 @@
+# This test ensures we can create an issuer, a certificate and a clusterissuer
+
+issuers:
+  - name: my-root-issuer
+    secretName: kubernetes-root-ca
+
+certificates:
+  - name: my-certificate
+    # where to store this certificate
+    secretName: my-certificate-secret
+    issuerRef:
+      name: my-root-issuer
+      kind: Issuer
+      # These are the default usages for reference
+      usages:
+        - "digital signature"
+        - "key encipherment"
+    commonName: cert-manager
+    duration: 87600h
+    dnsNames:
+      - example.com
+      - www.example.com
+
+clusterissuers:
+  - name: my-ca
+    spec:
+      ca:
+        secretName: my-certificate-secret

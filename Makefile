@@ -102,14 +102,14 @@ $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 .PHONY: ct.lint
 ct.lint:
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch origin dev
+	$(DRUN) git fetch origin master
 endif
 	$(DRUN) ct lint
 
 .PHONY: ct.test
 ct.test:
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch origin dev
+	$(DRUN) git fetch origin master
 endif
 	test/e2e-kind.sh $(CT_VERSION)
 

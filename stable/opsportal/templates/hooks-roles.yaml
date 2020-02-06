@@ -20,7 +20,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ template "opsportal.fullname" . }}-admin
-  # namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -33,14 +32,11 @@ rules:
 - apiGroups: ["*"]
   resources: ["*"]
   verbs: ["*"]
-
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: {{ template "opsportal.fullname" . }}
-  # namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
