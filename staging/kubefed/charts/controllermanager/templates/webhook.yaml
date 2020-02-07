@@ -17,9 +17,6 @@ metadata:
   {{- if .Values.certManager.enabled }}
     certmanager.k8s.io/inject-ca-from: {{ printf "%s/%s%s" .Release.Namespace .Release.Name "-root-certificate" | quote }}
   {{- end }}
-  {{- if .Values.annotations }}
-{{ toYaml .Values.annotations | indent 4 }}
-  {{- end }}
 webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
   clientConfig:
