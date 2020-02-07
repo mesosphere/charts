@@ -1,0 +1,37 @@
+# Default values for controllermanager.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+repository: quay.io/kubernetes-multicluster
+image: kubefed
+tag: canary
+imagePullPolicy: IfNotPresent
+resources: {}
+clusterAvailableDelay:
+clusterUnavailableDelay:
+leaderElectLeaseDuration:
+leaderElectRenewDeadline:
+leaderElectRetryPeriod:
+clusterHealthCheckPeriod:
+clusterHealthCheckFailureThreshold:
+clusterHealthCheckSuccessThreshold:
+clusterHealthCheckTimeout:
+## Supported options are `configmaps` and `endpoints`
+leaderElectResourceLock:
+syncController:
+  adoptResources:
+## Value of feature gates item should be either `Enabled` or `Disabled`
+featureGates:
+  PushReconciler:
+  SchedulerPreferences:
+  CrossClusterServiceDiscovery:
+  FederatedIngress:
+
+controllermanager:
+  annotations: {}
+
+webhook:
+  annotations: {}
+  certManager:
+    enabled: true

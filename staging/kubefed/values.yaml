@@ -33,10 +33,19 @@ controllermanager:
     adoptResources:
   ## Value of feature gates item should be either `Enabled` or `Disabled`
   featureGates:
-    PushReconciler:
-    SchedulerPreferences:
-    CrossClusterServiceDiscovery:
-    FederatedIngress:
+    featureGates:
+      CrossClusterServiceDiscovery: "Disabled"
+      FederatedIngress: "Enabled"
+      PushReconciler: "Enabled"
+      SchedulerPreferences: "Disabled"
+
+  controllermanager:
+    annotations: {}
+
+  webhook:
+    annotations: {}
+    certManager:
+      enabled: true
 
 ## Configuration global values for all charts
 ##
