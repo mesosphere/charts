@@ -3,8 +3,8 @@
 # Declare name/value pairs to be passed into your templates.
 # name: value
 
-image: quay.io/dexidp/dex
-imageTag: "v2.21.0"
+image: mesosphere/dex
+imageTag: "v2.22.0-2-g3657-d2iq"
 imagePullPolicy: "IfNotPresent"
 
 inMiniKube: false
@@ -215,7 +215,9 @@ config:
 #     username: "admin"
 #     userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
 
-# frontend:
+  frontend:
+    issuer: Kubernetes
+    theme: d2iq
 #   logoURL: https://example.com/yourlogo.png
 
 dex-controller:
