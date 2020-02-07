@@ -14,7 +14,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: post-install-job
+        - name: {{ .Values.mesosphereResources.hooks.grafana.jobName | quote }}
           image: {{ .Values.mesosphereResources.hooks.grafana.image | quote }}
           command: ["/bin/sh", "-c", "/job/run.sh"]
           env:
