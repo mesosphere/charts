@@ -6,6 +6,7 @@
 ##
 controllermanager:
   enabled: true
+  annotations: {}
   replicaCount: 2
   repository: quay.io/kubernetes-multicluster
   image: kubefed
@@ -34,18 +35,16 @@ controllermanager:
   ## Value of feature gates item should be either `Enabled` or `Disabled`
   featureGates:
     featureGates:
-      CrossClusterServiceDiscovery: "Disabled"
-      FederatedIngress: "Enabled"
-      PushReconciler: "Enabled"
-      SchedulerPreferences: "Disabled"
+      CrossClusterServiceDiscovery:
+      FederatedIngress:
+      PushReconciler:
+      SchedulerPreferences:
 
-  controllermanager:
-    annotations: {}
+  certManager:
+    enabled: false
 
   webhook:
     annotations: {}
-    certManager:
-      enabled: true
 
 ## Configuration global values for all charts
 ##

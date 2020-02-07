@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+annotations: {}
 replicaCount: 2
 repository: quay.io/kubernetes-multicluster
 image: kubefed
@@ -28,10 +29,9 @@ featureGates:
   CrossClusterServiceDiscovery:
   FederatedIngress:
 
-controllermanager:
-  annotations: {}
+certManager:
+  enabled: false
 
 webhook:
   annotations: {}
-  certManager:
-    enabled: true
+

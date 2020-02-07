@@ -14,8 +14,11 @@ metadata:
   name: validations.core.kubefed.io
 {{- end }}
   annotations:
-  {{- if .Values.webhook.certManager.enabled }}
+  {{- if .Values.certManager.enabled }}
     certmanager.k8s.io/inject-ca-from: {{ printf "%s/%s%s" .Release.Namespace .Release.Name "-root-certificate" | quote }}
+  {{- end }}
+  {{- if .Values.annotations }}
+{{ toYaml .Values.annotations | indent 4 }}
   {{- end }}
 webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
@@ -24,7 +27,7 @@ webhooks:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/federatedtypeconfigs
-    {{- if not .Values.webhook.certManager.enabled }}
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
   rules:
@@ -56,7 +59,7 @@ webhooks:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedclusters
-    {{- if not .Values.webhook.certManager.enabled }}
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
   rules:
@@ -83,7 +86,7 @@ webhooks:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
       path: /apis/validation.core.kubefed.io/v1beta1/kubefedconfigs
-    {{- if not .Values.webhook.certManager.enabled }}
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
   rules:
@@ -121,7 +124,7 @@ webhooks:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
       path: /apis/mutation.core.kubefed.io/v1beta1/kubefedconfigs
-    {{- if not .Values.webhook.certManager.enabled }}
+    {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
   rules:
@@ -139,7 +142,7 @@ webhooks:
     matchLabels:
       name: {{ .Release.Namespace }}
 {{ end }}
-{{- if not .Values.webhook.certManager.enabled }}
+{{- if not .Values.certManager.enabled }}
 ---
 apiVersion: v1
 kind: Secret
@@ -166,7 +169,7 @@ metadata:
   name: {{ .Release.Name}}-root-certificate
 spec:
   secretName: {{ .Release.Name }}-root-ca
-  duration: 43800h # 5y
+  duration: 8760h # 1y
   issuerRef:
     name: {{ .Release.Name }}-ca-issuer
   commonName: "ca.webhook.kubefed"
