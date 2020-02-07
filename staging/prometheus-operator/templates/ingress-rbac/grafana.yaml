@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "prometheus-operator.name" . }}-grafana-admin
+  name: opsportal-grafana-admin
   labels:
     app: {{ template "prometheus-operator.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
@@ -25,7 +25,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "prometheus-operator.name" . }}-grafana-view
+  name: opsportal-grafana-view
   labels:
     app: {{ template "prometheus-operator.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
@@ -44,7 +44,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "prometheus-operator.name" . }}-grafana-edit
+  name: opsportal-grafana-edit
   labels:
     app: {{ template "prometheus-operator.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
