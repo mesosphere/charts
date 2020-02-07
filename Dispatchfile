@@ -1,0 +1,68 @@
+#!starlark
+# vi:syntax=python
+#
+
+git = "src-git"
+
+def secretVar(name, key):
+    return k8s.corev1.EnvVarSource(secretKeyRef=k8s.corev1.SecretKeySelector(localObjectReference=k8s.corev1.LocalObjectReference(name=name), key=key))
+
+def volume(name, **kwargs):
+    return k8s.corev1.Volume(name=name, volumeSource=k8s.corev1.VolumeSource(**kwargs))
+
+def dindTask(*args, **kwargs):
+    volumes = kwargs.get('volumes', [])
+    volumes.append(volume("docker", emptyDir=k8s.corev1.EmptyDirVolumeSource()))
+    volumes.append(volume("modules", hostPath=k8s.corev1.HostPathVolumeSource(path="/lib/modules", type="Directory")))
+    volumes.append(volume("cgroups", hostPath=k8s.corev1.HostPathVolumeSource(path="/sys/fs/cgroup", type="Directory")))
+    kwargs['volumes'] = volumes
+    for index, step in enumerate(kwargs.get('steps', [])):
+        if step.image == "":
+            step.image = "mesosphere/dispatch-dind:v0.5.2"
+        step.command = [ "/entrypoint.sh" ] + step.command
+        step.volumeMounts.append(k8s.corev1.VolumeMount(name="docker", mountPath="/var/lib/docker"))
+        step.volumeMounts.append(k8s.corev1.VolumeMount(name="modules", mountPath="/lib/modules", readOnly=True))
+        step.volumeMounts.append(k8s.corev1.VolumeMount(name="cgroups", mountPath="/sys/fs/cgroup"))
+        step.env.append(k8s.corev1.EnvVar(name="DOCKER_RANGE", value="172.17.1.1/24"))
+        step.securityContext = k8s.corev1.SecurityContext(privileged=True)
+        kwargs['steps'][index] = step
+    return task(*args, **kwargs)
+
+gitResource(git,
+    url="$(context.git.url)",
+    revision="$(context.git.commit)")
+
+dindTask("publish", inputs=[git], steps=[
+  v1.Container(
+        name = "publish-charts",
+        image = "mesosphere/dispatch-dind:mesosphere-charts",
+        securityContext = k8s.corev1.SecurityContext(privileged=True),
+        workingDir =  "/workspace/src-git",
+        command = ["GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git", "make", "publish"],
+        env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
+  )
+])
+
+dindTask("lint", inputs=[git], steps=[
+  v1.Container(
+        name = "lint-charts",
+        image = "mesosphere/dispatch-dind:mesosphere-charts",
+        securityContext = k8s.corev1.SecurityContext(privileged=True),
+        workingDir =  "/workspace/src-git",
+        command = ["make", "lint"]
+  )
+])
+
+dindTask("test", inputs=[git], deps=["lint"], steps=[
+  v1.Container(
+        name = "test-charts",
+        image = "mesosphere/dispatch-dind:mesosphere-charts",
+        securityContext = k8s.corev1.SecurityContext(privileged=True),
+        workingDir =  "/workspace/src-git",
+        command = ["make", "test"]
+  )
+])
+
+action(tasks=["test"], on=pullRequest(branches=["*"]))
+action(tasks=["test"], on=push(branches=["dispatchfile"]))
+action(tasks=["publish"], on=push(branches=["master"]))

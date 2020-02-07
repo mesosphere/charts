@@ -1,0 +1,5 @@
+FROM mesosphere/dispatch-dind:v0.4.4
+
+MAINTAINER Mesosphere <devprod@mesosphere.com>
+
+RUN apt-get update && apt-get install -qq git build-essential
