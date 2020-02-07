@@ -4,10 +4,6 @@
 
 annotations: {}
 replicaCount: 2
-repository: quay.io/kubernetes-multicluster
-image: kubefed
-tag: canary
-imagePullPolicy: IfNotPresent
 resources: {}
 clusterAvailableDelay:
 clusterUnavailableDelay:
@@ -28,10 +24,3 @@ featureGates:
   SchedulerPreferences:
   CrossClusterServiceDiscovery:
   FederatedIngress:
-
-certManager:
-  enabled: false
-
-webhook:
-  annotations: {}
-

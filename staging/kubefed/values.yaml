@@ -8,10 +8,6 @@ controllermanager:
   enabled: true
   annotations: {}
   replicaCount: 2
-  repository: quay.io/kubernetes-multicluster
-  image: kubefed
-  tag: canary
-  imagePullPolicy: IfNotPresent
   resources:
     limits:
       cpu: 100m
@@ -34,17 +30,27 @@ controllermanager:
     adoptResources:
   ## Value of feature gates item should be either `Enabled` or `Disabled`
   featureGates:
-    featureGates:
-      CrossClusterServiceDiscovery:
-      FederatedIngress:
-      PushReconciler:
-      SchedulerPreferences:
+    CrossClusterServiceDiscovery:
+    FederatedIngress:
+    PushReconciler:
+    SchedulerPreferences:
 
   certManager:
     enabled: false
 
-  webhook:
-    annotations: {}
+webhook:
+  enabled: true
+  annotations: {}
+  certManager:
+    enabled: true
+  replicaCount: 2
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
 
 ## Configuration global values for all charts
 ##
@@ -54,3 +60,8 @@ global:
   ## all namespaces) and `Namespaced` (only watch resources in the
   ## kubefed system namespace). If unset, will default to `Cluster`.
   scope: ""
+
+  repository: quay.io/kubernetes-multicluster
+  image: kubefed
+  tag: canary
+  imagePullPolicy: IfNotPresent
