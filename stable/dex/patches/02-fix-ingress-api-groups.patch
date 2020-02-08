@@ -1,0 +1,22 @@
+commit afed317d43f15f380f3d9d7d36b8f2cbaca620bf
+Author: Jie Yu <yujie.jay@gmail.com>
+Date:   Mon Feb 3 13:50:04 2020 -0800
+
+    dex: use networking.k8s.io/v1beta1 for Ingress
+    
+    The old API group ("extensions/v1beta1") has been deprecated. Use the
+    new API group ("networking.k8s.io/v1beta1") instead for Ingress.
+
+diff --git a/stable/dex-new/templates/ingress.yaml b/stable/dex-new/templates/ingress.yaml
+index 22eef95..b870b69 100644
+--- a/stable/dex-new/templates/ingress.yaml
++++ b/stable/dex-new/templates/ingress.yaml
+@@ -2,7 +2,7 @@
+ {{- $fullName := include "dex.fullname" . -}}
+ {{- $servicePort := .Values.ports.web.servicePort -}}
+ {{- $ingressPath := .Values.ingress.path -}}
+-apiVersion: extensions/v1beta1
++apiVersion: networking.k8s.io/v1beta1
+ kind: Ingress
+ metadata:
+   name: {{ $fullName }}

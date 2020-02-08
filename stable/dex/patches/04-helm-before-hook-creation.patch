@@ -1,0 +1,35 @@
+commit 9274fef716bdd684419280ff6d6e76c745086d67
+Author: Jie Yu <yujie.jay@gmail.com>
+Date:   Mon Feb 3 14:02:26 2020 -0800
+
+    dex: Use "before-hook-creation" hook delete policy
+    
+    Use "before-hook-creation" helm hook delete policy consistently to make
+    it more robust.
+
+diff --git a/stable/dex-new/templates/job-grpc-certs.yaml b/stable/dex-new/templates/job-grpc-certs.yaml
+index dd75768..da29aaa 100644
+--- a/stable/dex-new/templates/job-grpc-certs.yaml
++++ b/stable/dex-new/templates/job-grpc-certs.yaml
+@@ -14,7 +14,7 @@ metadata:
+   annotations:
+     "helm.sh/hook": post-install
+     "helm.sh/hook-weight": "2"
+-    "helm.sh/hook-delete-policy": hook-succeeded
++    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+   name: {{ $fullname }}-grpc-certs
+   labels:
+ {{ include "dex.labels" . | indent 4 }}
+diff --git a/stable/dex-new/templates/job-web-certs.yaml b/stable/dex-new/templates/job-web-certs.yaml
+index bf02e15..a8ff6d3 100644
+--- a/stable/dex-new/templates/job-web-certs.yaml
++++ b/stable/dex-new/templates/job-web-certs.yaml
+@@ -11,7 +11,7 @@ metadata:
+   annotations:
+     "helm.sh/hook": post-install
+     "helm.sh/hook-weight": "1"
+-    "helm.sh/hook-delete-policy": hook-succeeded
++    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+   name: {{ $fullname  }}-web-certs
+   labels:
+ {{ include "dex.labels" . | indent 4 }}

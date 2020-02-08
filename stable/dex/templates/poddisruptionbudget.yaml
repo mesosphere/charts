@@ -4,10 +4,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ template "dex.fullname" . }}
   labels:
-    app: {{ template "dex.name" . }}
-    chart: {{ template "dex.chart" . }}
-    heritage: "{{ .Release.Service }}"
-    release: "{{ .Release.Name }}"
+{{ include "dex.labels" . | indent 4 }}
 spec:
   selector:
     matchLabels:
