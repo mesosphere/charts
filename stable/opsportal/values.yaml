@@ -55,9 +55,8 @@ opsportalRBAC:
   ## have access to ops portal resources unless an appropriate role binding existed. To prevent breakage,
   ## the allowAllAuthenticated option, when true, will result in the group `system:allauthenticated` being bound to
   ## to the opsportal-admin role. This mimics the existing security policy where any authenticated and whitelisted user
-  ## has full access to the opsportal. In 1.4, this option will be removed and users will be expected to create
-  ## role bindings for specific users and groups.
-  allowAllAuthenticated: true
+  ## has full access to the opsportal. This option will be removed in the 0.3 release of this chart.
+  allowAllAuthenticated: false
 
 kibanaRBAC:
   enabled: true
