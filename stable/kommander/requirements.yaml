@@ -4,11 +4,11 @@ dependencies:
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-cluster-lifecycle
-    version: "0.4.2"
+    version: "0.4.3"
     repository: "https://mesosphere.github.io/kommander-cluster-lifecycle/charts"
     condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
   - name: kommander-ui
-    version: "2.21.0"
+    version: "2.24.2"
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
   - name: kommander-thanos
