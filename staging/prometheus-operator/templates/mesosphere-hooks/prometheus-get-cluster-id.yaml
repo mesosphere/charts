@@ -1,4 +1,47 @@
-{{- if .Values.grafana.enabled }}
+{{- if .Values.prometheus.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "prometheus-operator.fullname" . }}-hook
+  labels:
+    app: {{ template "prometheus-operator.name" . }}-hook
+{{ include "prometheus-operator.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+rules:
+# The following namespaces and configmaps permissions are needed to
+# grab the kube-system namespace uid and write it out to a configmap.
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get", "create", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "prometheus-operator.fullname" . }}-hook
+  labels:
+    app: {{ template "prometheus-operator.name" . }}-hook
+{{ include "prometheus-operator.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "-1"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "prometheus-operator.fullname" . }}-hook
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
+    namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -6,14 +49,15 @@ metadata:
   name: {{ .Values.mesosphereResources.hooks.prometheus.jobName }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-weight": "5"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "3"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 spec:
   template:
     metadata:
       name: {{ .Values.mesosphereResources.hooks.prometheus.jobName }}
     spec:
+      serviceAccountName: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
       containers:
         - name: kubectl
           image: bitnami/kubectl:1.16.2
@@ -21,6 +65,6 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl create configmap {{ .Values.mesosphereResources.hooks.prometheus.configmapName }} -n {{ .Release.Namespace }} -oyaml --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}")
+            - kubectl create configmap {{ .Values.mesosphereResources.hooks.prometheus.configmapName }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
       restartPolicy: OnFailure
 {{- end }}
