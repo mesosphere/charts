@@ -16,13 +16,12 @@ secrets:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.2.0"
 
-
 # We need to override certain values from default kommander values here
 kommander-ui:
   enabled: true
   image:
     repository: mesosphere/kommander
-    tag: 1.192.0
+    tag: 2.25.4
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
