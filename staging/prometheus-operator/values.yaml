@@ -81,7 +81,7 @@ mesosphereResources:
       dashboardName: "Kubernetes / Compute Resources / Cluster"
     prometheus:
       jobName: prom-get-cluster-id
-      image: dwdraju/alpine-curl-jq
+      kubectlImage: bitnami/kubectl:1.16.2
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true
