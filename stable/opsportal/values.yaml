@@ -22,7 +22,7 @@ kommander-ui:
   enabled: true
   image:
     repository: mesosphere/kommander
-    tag: 1.192.0
+    tag: 2.26.1
     pullPolicy: IfNotPresent
   replicas: 1
   logoutRedirectPath: /ops/landing
