@@ -16,35 +16,17 @@ secrets:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.2.0"
 
-
 # We need to override certain values from default kommander values here
 kommander-ui:
   enabled: true
-  image:
-    repository: mesosphere/kommander
-    tag: 2.26.1
-    pullPolicy: IfNotPresent
-  replicas: 1
-  logoutRedirectPath: /ops/landing
-  clusterPollingInterval: 3000
-
-  # Mode must be either production|konvoy, konvoy forcing ui in "konvoy mode"
-  mode: konvoy
-
+  mode: konvoy # production|konvoy, konvoy forcing ui in "konvoy mode"
   displayName: Konvoy Cluster
-
-  ### This must match the serviceName set in the ingress backend below
   service:
-    name: opsportal
-
+    name: opsportal # must match serviceName in ingress backend below
   ingress:
-    traefikFrontendRuleType: PathPrefixStrip
-    path: /ops/portal/
+    path: /ops/portal/ # konvoy ui path
     extraAnnotations:
-      traefik.ingress.kubernetes.io/priority: "1"
-      traefik.ingress.kubernetes.io/auth-type: forward
-      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+      traefik.ingress.kubernetes.io/priority: "1" # kommander runs with 2, would override opsportal related ingress
 
 opsportalRBAC:
   enabled: true
