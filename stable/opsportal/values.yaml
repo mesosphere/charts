@@ -18,8 +18,8 @@ secrets:
 
 opsportalRBAC:
   enabled: true
-  path: /ops/portal/console
-  graphqlPath: /ops/portal/console/graphql
+  path: /ops/portal/console/
+  graphqlPath: /ops/portal/console/graphql/
   ## traefik-forward-auth 2.0 introduces RBAC support and now requires that users, regardless of whitelist,
   ## be allowed access to a resource via explicit RBAC policy. Upon upgrade, whitelisted users would no longer
   ## have access to ops portal resources unless an appropriate role binding existed. To prevent breakage,
