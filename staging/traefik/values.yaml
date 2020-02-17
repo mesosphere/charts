@@ -35,6 +35,9 @@ podDisruptionBudget: {}
 
 resources: {}
 
+## detault is false, which caused some trouble with "broken" urls when trailing slash wasnt added manuelly, this will add it automatically
+keepTrailingSlashes: true
+
 debug:
   enabled: false
 
