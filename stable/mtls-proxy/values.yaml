@@ -47,3 +47,6 @@ target: ""
 # Secret containing server and CA certificates.
 # Must contain tls.crt, tls.key, and ca.crt.
 certSecretName: ""
+
+deployment:
+  annotations: {}
