@@ -4,6 +4,10 @@ metadata:
   name: {{ include "mtls-proxy.fullname" . }}
   labels:
 {{ include "mtls-proxy.labels" . | indent 4 }}
+{{- with .Values.deployment.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -32,7 +36,7 @@ spec:
             - "--key=/etc/certs/tls.key"
             - "--cacert=/etc/certs/ca.crt"
             # Allow targets outside localhost and unix domain sockets.
-            - "--unsafe-target" 
+            - "--unsafe-target"
             # Don't check cert subject.
             - "--allow-all"
           ports:
