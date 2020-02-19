@@ -33,5 +33,5 @@ spec:
             port: 443
           deployment:
             annotations:
-              secret.reloader.stakater.com/reload: {{ template "kommander-thanos.fullname" . }}-server-tls
+              secret.reloader.stakater.com/reload: {{ template "kommander-karma.fullname" . }}-server-tls
 {{- end }}
