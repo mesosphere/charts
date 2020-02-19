@@ -1,10 +1,10 @@
 dependencies:
 - name: kubeaddons-catalog
   repository: https://mesosphere.github.io/charts/staging
-  version: 0.1.4
+  version: 0.1.5
 - name: kommander-cluster-lifecycle
   repository: https://mesosphere.github.io/kommander-cluster-lifecycle/charts
-  version: 0.4.6
+  version: v0.4.6
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
   version: 2.27.8
@@ -17,5 +17,5 @@ dependencies:
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.5.1
-digest: sha256:a53ffe2d64dc9cb4451a69a7197e14e5712297dca00fa9746feba2908becab74
-generated: "2020-02-19T13:43:05.060027+01:00"
+digest: sha256:5a942bc0bfe00b7a3b655557041dd7f6b228d0ea8a17b56be8b179cdc7f8c426
+generated: "2020-02-19T17:12:14.900503+01:00"
