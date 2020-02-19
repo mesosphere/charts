@@ -20,13 +20,6 @@ secrets:
 # We need to override certain values from default kommander values here
 kommander-ui:
   enabled: true
-  image:
-    repository: mesosphere/kommander
-    tag: 1.192.0
-    pullPolicy: IfNotPresent
-  replicas: 1
-  logoutRedirectPath: /ops/landing
-  clusterPollingInterval: 3000
 
   # Mode must be either production|konvoy, konvoy forcing ui in "konvoy mode"
   mode: konvoy
