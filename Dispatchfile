@@ -1,0 +1,71 @@
+#!starlark
+# vi:syntax=python
+#
+
+git = "src-git"
+
+def secretVar(name, key):
+    return k8s.corev1.EnvVarSource(secretKeyRef=k8s.corev1.SecretKeySelector(localObjectReference=k8s.corev1.LocalObjectReference(name=name), key=key))
+
+gitResource(git,
+    url="$(context.git.url)",
+    revision="$(context.git.commit)")
+
+dindTask("publish", inputs=[git], steps=[
+  v1.Container(
+    name = "publish-charts",
+    workingDir =  "/workspace/src-git",
+    args = [
+      "/bin/bash", "-c",
+      """
+      apt-get update
+      apt-get install -qq git build-essential
+      git fetch origin master --unshallow
+      export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
+      make publish
+      """
+    ],
+    env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
+  )
+])
+
+dindTask("lint", inputs=[git], steps=[
+  v1.Container(
+    name = "lint-charts",
+    workingDir =  "/workspace/src-git",
+    args = [
+      "/bin/bash", "-c",
+      """
+      apt-get update
+      apt-get install -qq git build-essential
+      git fetch origin master --unshallow
+      make lint
+      """
+    ]
+  )
+])
+
+dindTask("test", inputs=[git], deps=["lint"], steps=[
+  v1.Container(
+    name = "test-charts",
+    workingDir =  "/workspace/src-git",
+    args = [
+      "/bin/bash", "-c",
+      """
+      apt-get update
+      apt-get install -qq git build-essential
+      git fetch origin master --unshallow
+      make test
+      """
+    ],
+    resources = k8s.corev1.ResourceRequirements(
+      limits = {
+        "cpu": k8s.resource_quantity("1000m"),
+        "memory": k8s.resource_quantity("6Gi")
+      }
+    )
+  )
+])
+
+action(tasks=["test"], on=pullRequest(branches=["*"]))
+action(tasks=["publish"], on=push(branches=["master"]))

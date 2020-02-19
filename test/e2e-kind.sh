@@ -3,6 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set -x
 
 readonly KIND_VERSION=v0.6.1
 readonly CLUSTER_NAME=chart-testing
@@ -45,8 +46,18 @@ create_kind_cluster() {
         "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-$(uname)-amd64"
     chmod +x "${tmp}/kind"
 
+    curl -sSLo "${tmp}/entrypoint.sh" "https://raw.githubusercontent.com/mesosphere/dispatch/f74d477930e8cf05b84eb8a0f98c3866b66e1125/docker/kind/entrypoint.sh?token=ACIQJHWXERD34NEOUHGOWIS6KWQO6"
+    chmod +x "${tmp}/entrypoint.sh"
+
+    cat << EOF > tmp_dockerfile
+FROM kindest/node:$K8S_VERSION
+ADD ./entrypoint.sh /usr/local/bin/entrypoint
+EOF
+
+    docker build -t tmp-dispatch-kind:latest -f tmp_dockerfile "${tmp}"
+
     "${tmp}/kind" create cluster --name "$CLUSTER_NAME" \
-        --config test/kind-config.yaml --image "kindest/node:$K8S_VERSION" \
+        --config test/kind-config.yaml --image "tmp-dispatch-kind:latest" \
         --wait 60s
 
     docker_exec mkdir -p /root/.kube
