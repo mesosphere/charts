@@ -4060,7 +4060,7 @@ data:
               "steppedLine": false,
               "targets": [
                 {
-                  "expr": "elasticsearch_thread_pool_active_count{cluster=\"$cluster\",name=~\"$name\"}",
+                  "expr": "elasticsearch_thread_pool_queue_count{cluster=\"$cluster\",name=~\"$name\"}",
                   "format": "time_series",
                   "intervalFactor": 2,
                   "legendFormat": "{{`{{name}}`}}: {{`{{type}}`}}",
