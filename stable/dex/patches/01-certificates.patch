@@ -13,7 +13,7 @@ index 0000000..247af5a
 --- /dev/null
 +++ b/stable/dex-new/templates/certificate.yaml
 @@ -0,0 +1,24 @@
-+apiVersion: certmanager.k8s.io/v1alpha1
++apiVersion: cert-manager.io/v1alpha2
 +kind: Certificate
 +metadata:
 +  name: dex

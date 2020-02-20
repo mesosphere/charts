@@ -1,6 +1,6 @@
 # DEPRECATED, this file should be deleted soon
 {{ if .Values.clusterissuer }}
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: kubernetes-root-issuer
@@ -13,7 +13,7 @@ spec:
   ca:
     secretName: kubernetes-root-ca
 ---
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: kubernetes-intermediate-ca
@@ -34,7 +34,7 @@ spec:
       - "digital signature"
       - "key encipherment"
 ---
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
   name: {{ required "clusterissuer must have a name" .Values.clusterissuer.name }}

@@ -1,4 +1,4 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
   name: {{ template "dex-controller.fullname" . }}-webhook-serving-cert
@@ -16,7 +16,7 @@ spec:
     name: {{ template "dex-controller.fullname" . }}-selfsigned-issuer
   secretName: webhook-server-cert
 ---
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
   name: {{ template "dex-controller.fullname" . }}-selfsigned-issuer
