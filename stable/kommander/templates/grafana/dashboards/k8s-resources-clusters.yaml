@@ -11,13 +11,22 @@ metadata:
 data:
   k8s-resources-clusters-dashboard.json: |-
     {
-      "__inputs": [],
+      "__inputs": [
+        {
+          "name": "DS_KOMMANDERPROMETHEUS",
+          "label": "KommanderPrometheus",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
+      ],
       "__requires": [
         {
           "type": "grafana",
           "id": "grafana",
           "name": "Grafana",
-          "version": "6.3.5"
+          "version": "6.6.0"
         },
         {
           "type": "panel",
@@ -30,6 +39,12 @@ data:
           "id": "prometheus",
           "name": "Prometheus",
           "version": "1.0.0"
+        },
+        {
+          "type": "panel",
+          "id": "stat",
+          "name": "Stat",
+          "version": ""
         },
         {
           "type": "panel",
@@ -55,9 +70,69 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1577832029955,
+      "iteration": 1582226941429,
       "links": [],
       "panels": [
+        {
+          "cacheTimeout": null,
+          "datasource": "${DS_KOMMANDERPROMETHEUS}",
+          "gridPos": {
+            "h": 6,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 35,
+          "links": [],
+          "options": {
+            "colorMode": "value",
+            "fieldOptions": {
+              "calcs": [
+                "last"
+              ],
+              "defaults": {
+                "mappings": [
+                  {
+                    "id": 0,
+                    "op": "=",
+                    "text": "N/A",
+                    "type": 1,
+                    "value": "null"
+                  }
+                ],
+                "max": 100,
+                "min": 0,
+                "nullValueMode": "connected",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    }
+                  ]
+                },
+                "unit": "none"
+              },
+              "overrides": [],
+              "values": false
+            },
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal"
+          },
+          "pluginVersion": "6.6.0",
+          "targets": [
+            {
+              "expr": "count(thanos_store_nodes_grpc_connections)",
+              "refId": "A"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Managed Clusters",
+          "type": "stat"
+        },
         {
           "collapsed": false,
           "datasource": "$datasource",
@@ -65,7 +140,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 0
+            "y": 6
           },
           "id": 20,
           "panels": [],
@@ -82,7 +157,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 0,
-            "y": 1
+            "y": 7
           },
           "id": 1,
           "links": [],
@@ -97,6 +172,7 @@ data:
           "styles": [
             {
               "alias": "",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "decimals": 2,
               "mappingType": 1,
@@ -106,6 +182,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -123,7 +200,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) by (cluster)",
+              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\",cluster=~\"$cluster\"}[1m])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -146,7 +223,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 8,
-            "y": 1
+            "y": 7
           },
           "id": 2,
           "links": [],
@@ -161,12 +238,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Cluster",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -181,6 +260,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -198,7 +278,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_requests_cpu_cores) by (cluster) / sum(kube_node_status_allocatable_cpu_cores) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster=~\"$cluster\"}) by (cluster) / sum(kube_node_status_allocatable_cpu_cores{cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -221,7 +301,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 16,
-            "y": 1
+            "y": 7
           },
           "id": 3,
           "links": [],
@@ -236,12 +316,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Cluster",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -256,6 +338,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -273,7 +356,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "(sum(kube_pod_container_resource_limits_cpu_cores) by (cluster)) / (sum(kube_node_status_allocatable_cpu_cores) by (cluster))",
+              "expr": "(sum(kube_pod_container_resource_limits_cpu_cores{cluster=~\"$cluster\"}) by (cluster)) / (sum(kube_node_status_allocatable_cpu_cores{cluster=~\"$cluster\"}) by (cluster))",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -301,7 +384,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 0,
-            "y": 5
+            "y": 11
           },
           "id": 4,
           "links": [],
@@ -316,12 +399,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Cluster",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -336,6 +421,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -353,7 +439,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "1 - sum(:node_memory_MemAvailable_bytes:sum) by (cluster) / sum(kube_node_status_allocatable_memory_bytes) by (cluster)",
+              "expr": "1 - sum(:node_memory_MemAvailable_bytes:sum{cluster=~\"$cluster\"}) by (cluster) / sum(kube_node_status_allocatable_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -376,7 +462,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 8,
-            "y": 5
+            "y": 11
           },
           "id": 5,
           "links": [],
@@ -391,12 +477,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Cluster",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -411,6 +499,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -428,7 +517,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_requests_memory_bytes) by (cluster) / sum(kube_node_status_allocatable_memory_bytes) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster=~\"$cluster\"}) by (cluster) / sum(kube_node_status_allocatable_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -451,7 +540,7 @@ data:
             "h": 4,
             "w": 8,
             "x": 16,
-            "y": 5
+            "y": 11
           },
           "id": 6,
           "links": [],
@@ -466,12 +555,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Cluster",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -486,6 +577,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
@@ -503,7 +595,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "sum(kube_pod_container_resource_limits_memory_bytes) by (cluster) / sum(kube_node_status_allocatable_memory_bytes) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_limits_memory_bytes{cluster=~\"$cluster\"}) by (cluster) / sum(kube_node_status_allocatable_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -524,7 +616,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 9
+            "y": 15
           },
           "id": 21,
           "panels": [],
@@ -544,8 +636,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 10
+            "y": 16
           },
+          "hiddenSeries": false,
           "id": 7,
           "legend": {
             "avg": false,
@@ -573,7 +666,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate) by (cluster)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -630,7 +723,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 17
+            "y": 23
           },
           "id": 22,
           "panels": [],
@@ -651,7 +744,7 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 18
+            "y": 24
           },
           "id": 8,
           "legend": {
@@ -686,12 +779,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Pods",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -706,6 +801,7 @@ data:
             },
             {
               "alias": "Workloads",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -720,6 +816,7 @@ data:
             },
             {
               "alias": "CPU Usage",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -734,6 +831,7 @@ data:
             },
             {
               "alias": "CPU Requests",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -748,6 +846,7 @@ data:
             },
             {
               "alias": "CPU Requests %",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -762,6 +861,7 @@ data:
             },
             {
               "alias": "CPU Limits",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -776,6 +876,7 @@ data:
             },
             {
               "alias": "CPU Limits %",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -790,6 +891,7 @@ data:
             },
             {
               "alias": "Namespace",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -804,6 +906,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -816,7 +919,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "count(mixin_pod_workload) by (cluster)",
+              "expr": "count(mixin_pod_workload{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -825,7 +928,7 @@ data:
               "step": 10
             },
             {
-              "expr": "count(avg(mixin_pod_workload) by (workload, namespace)) by (cluster)",
+              "expr": "count(avg(mixin_pod_workload{cluster=~\"$cluster\"}) by (workload, namespace)) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -834,7 +937,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate) by (cluster)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -843,7 +946,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(kube_pod_container_resource_requests_cpu_cores) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_requests_cpu_cores{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -852,7 +955,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate) by (cluster) / sum(kube_pod_container_resource_requests_cpu_cores) by (cluster)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=~\"$cluster\"}) by (cluster) / sum(kube_pod_container_resource_requests_cpu_cores{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -861,7 +964,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(kube_pod_container_resource_limits_cpu_cores) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_limits_cpu_cores{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -870,7 +973,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate) by (namespace) / sum(kube_pod_container_resource_limits_cpu_cores) by (cluster)",
+              "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{cluster=~\"$cluster\"}) by (namespace) / sum(kube_pod_container_resource_limits_cpu_cores{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -923,7 +1026,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 25
+            "y": 31
           },
           "id": 23,
           "panels": [],
@@ -943,8 +1046,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 26
+            "y": 32
           },
+          "hiddenSeries": false,
           "id": 9,
           "legend": {
             "avg": false,
@@ -972,7 +1076,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(container_memory_rss{container!=\"\"}) by (cluster)",
+              "expr": "sum(container_memory_rss{container!=\"\",cluster=~\"$cluster\"}) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -1029,7 +1133,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 33
+            "y": 39
           },
           "id": 24,
           "panels": [],
@@ -1050,7 +1154,7 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 34
+            "y": 40
           },
           "id": 10,
           "legend": {
@@ -1085,12 +1189,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Pods",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1105,6 +1211,7 @@ data:
             },
             {
               "alias": "Workloads",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1119,6 +1226,7 @@ data:
             },
             {
               "alias": "Memory Usage",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1133,6 +1241,7 @@ data:
             },
             {
               "alias": "Memory Requests",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1147,6 +1256,7 @@ data:
             },
             {
               "alias": "Memory Requests %",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1161,6 +1271,7 @@ data:
             },
             {
               "alias": "Memory Limits",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1175,6 +1286,7 @@ data:
             },
             {
               "alias": "Memory Limits %",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1189,6 +1301,7 @@ data:
             },
             {
               "alias": "Namespace",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1203,6 +1316,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1215,7 +1329,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "count(mixin_pod_workload) by (cluster)",
+              "expr": "count(mixin_pod_workload{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1224,7 +1338,7 @@ data:
               "step": 10
             },
             {
-              "expr": "count(avg(mixin_pod_workload) by (workload, namespace)) by (cluster)",
+              "expr": "count(avg(mixin_pod_workload{cluster=~\"$cluster\"}) by (workload, namespace)) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1233,7 +1347,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(container_memory_rss{container!=\"\"}) by (cluster)",
+              "expr": "sum(container_memory_rss{container!=\"\",cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1242,7 +1356,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(kube_pod_container_resource_requests_memory_bytes) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_requests_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1251,7 +1365,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(container_memory_rss{container!=\"\"}) by (namespace) / sum(kube_pod_container_resource_requests_memory_bytes{cluster=\"$cluster\"}) by (cluster)",
+              "expr": "sum(container_memory_rss{container!=\"\",cluster=~\"$cluster\"}) by (namespace) / sum(kube_pod_container_resource_requests_memory_bytes{cluster=\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1260,7 +1374,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(kube_pod_container_resource_limits_memory_bytes) by (cluster)",
+              "expr": "sum(kube_pod_container_resource_limits_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1269,7 +1383,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(container_memory_rss{container!=\"\"}) by (namespace) / sum(kube_pod_container_resource_limits_memory_bytes{cluster=\"$cluster\"}) by (cluster)",
+              "expr": "sum(container_memory_rss{container!=\"\",cluster=~\"$cluster\"}) by (namespace) / sum(kube_pod_container_resource_limits_memory_bytes{cluster=~\"$cluster\"}) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1322,7 +1436,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 41
+            "y": 47
           },
           "id": 25,
           "panels": [],
@@ -1343,7 +1457,7 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 42
+            "y": 48
           },
           "id": 11,
           "legend": {
@@ -1378,12 +1492,14 @@ data:
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "hidden"
             },
             {
               "alias": "Current Receive Bandwidth",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1398,6 +1514,7 @@ data:
             },
             {
               "alias": "Current Transmit Bandwidth",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1412,6 +1529,7 @@ data:
             },
             {
               "alias": "Rate of Received Packets",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1426,6 +1544,7 @@ data:
             },
             {
               "alias": "Rate of Transmitted Packets",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1440,6 +1559,7 @@ data:
             },
             {
               "alias": "Rate of Received Packets Dropped",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1454,6 +1574,7 @@ data:
             },
             {
               "alias": "Rate of Transmitted Packets Dropped",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1468,6 +1589,7 @@ data:
             },
             {
               "alias": "Namespace",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1482,6 +1604,7 @@ data:
             },
             {
               "alias": "",
+              "align": "auto",
               "colorMode": null,
               "colors": [],
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -1494,7 +1617,7 @@ data:
           ],
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1503,7 +1626,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1512,7 +1635,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1521,7 +1644,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_packets_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_transmit_packets_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1530,7 +1653,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_receive_packets_dropped_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_packets_dropped_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1539,7 +1662,7 @@ data:
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_packets_dropped_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_transmit_packets_dropped_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1592,7 +1715,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 49
+            "y": 55
           },
           "id": 26,
           "panels": [],
@@ -1612,8 +1735,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 50
+            "y": 56
           },
+          "hiddenSeries": false,
           "id": 12,
           "legend": {
             "avg": false,
@@ -1641,7 +1765,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -1698,7 +1822,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 57
+            "y": 63
           },
           "id": 27,
           "panels": [],
@@ -1718,8 +1842,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 58
+            "y": 64
           },
+          "hiddenSeries": false,
           "id": 13,
           "legend": {
             "avg": false,
@@ -1747,7 +1872,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_transmit_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -1804,7 +1929,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 65
+            "y": 71
           },
           "id": 28,
           "panels": [],
@@ -1824,8 +1949,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 66
+            "y": 72
           },
+          "hiddenSeries": false,
           "id": 14,
           "legend": {
             "avg": false,
@@ -1853,7 +1979,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(irate(container_network_receive_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "avg(irate(container_network_receive_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "hide": false,
               "intervalFactor": 2,
@@ -1911,7 +2037,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 73
+            "y": 79
           },
           "id": 29,
           "panels": [],
@@ -1931,8 +2057,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 74
+            "y": 80
           },
+          "hiddenSeries": false,
           "id": 15,
           "legend": {
             "avg": false,
@@ -1960,7 +2087,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(irate(container_network_transmit_bytes_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "avg(irate(container_network_transmit_bytes_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -2017,7 +2144,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 81
+            "y": 87
           },
           "id": 30,
           "panels": [],
@@ -2037,8 +2164,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 82
+            "y": 88
           },
+          "hiddenSeries": false,
           "id": 16,
           "legend": {
             "avg": false,
@@ -2066,7 +2194,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -2123,7 +2251,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 89
+            "y": 95
           },
           "id": 31,
           "panels": [],
@@ -2143,8 +2271,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 90
+            "y": 96
           },
+          "hiddenSeries": false,
           "id": 17,
           "legend": {
             "avg": false,
@@ -2172,7 +2301,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_packets_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -2229,7 +2358,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 97
+            "y": 103
           },
           "id": 32,
           "panels": [],
@@ -2249,8 +2378,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 98
+            "y": 104
           },
+          "hiddenSeries": false,
           "id": 18,
           "legend": {
             "avg": false,
@@ -2278,7 +2408,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_dropped_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_receive_packets_dropped_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -2335,7 +2465,7 @@ data:
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 105
+            "y": 111
           },
           "id": 33,
           "panels": [],
@@ -2355,8 +2485,9 @@ data:
             "h": 7,
             "w": 24,
             "x": 0,
-            "y": 106
+            "y": 112
           },
+          "hiddenSeries": false,
           "id": 19,
           "legend": {
             "avg": false,
@@ -2384,7 +2515,7 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_transmit_packets_dropped_total{namespace=~\".+\"}[$interval])) by (cluster)",
+              "expr": "sum(irate(container_network_transmit_packets_dropped_total{namespace=~\".+\",cluster=~\"$cluster\"}[$interval])) by (cluster)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{`{{cluster}}`}}",
@@ -2436,14 +2567,13 @@ data:
         }
       ],
       "refresh": "10s",
-      "schemaVersion": 19,
+      "schemaVersion": 22,
       "style": "dark",
       "tags": [],
       "templating": {
         "list": [
           {
             "current": {
-              "selected": true,
               "text": "ThanosQuery",
               "value": "ThanosQuery"
             },
@@ -2460,11 +2590,11 @@ data:
             "type": "datasource"
           },
           {
-            "allValue": null,
+            "allValue": ".*",
             "current": {},
             "datasource": "$datasource",
             "definition": "",
-            "hide": 2,
+            "hide": 0,
             "includeAll": true,
             "label": "cluster",
             "multi": false,
@@ -2487,6 +2617,7 @@ data:
             "auto_count": 30,
             "auto_min": "10s",
             "current": {
+              "selected": false,
               "text": "4h",
               "value": "4h"
             },
