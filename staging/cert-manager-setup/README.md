@@ -25,3 +25,9 @@ In the given example we create a `ClusterIssuer` named `clusterissuer-name` with
 # Notes
 
 In order to submit the `ClusterIssuer` post installation, `cert-manager-setup` runs a post-install `Job` hook. In case that the hook fails the Job will not be cleaned up by Helm. This behavior is intended to ease debugging.
+
+# Upgrading from an earlier version
+
+Read, understand and execute
+1. https://cert-manager.io/docs/installation/upgrading/upgrading-0.10-0.11/
+2. https://cert-manager.io/docs/installation/upgrading/upgrading-0.11-0.12/
