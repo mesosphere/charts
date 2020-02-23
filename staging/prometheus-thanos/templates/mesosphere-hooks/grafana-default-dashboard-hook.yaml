@@ -1,0 +1,50 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.mesosphereResources.hooks.grafana.jobName | quote }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ .Values.mesosphereResources.hooks.grafana.jobName | quote }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: {{ .Values.mesosphereResources.hooks.grafana.jobName | quote }}
+          image: {{ .Values.mesosphereResources.hooks.grafana.image | quote }}
+          command: ["/bin/sh", "-c", "/job/run.sh"]
+          env:
+            - name: X_FORWARDED_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mesosphereResources.hooks.grafana.secretKeyRef }}
+                  key: username
+          volumeMounts:
+            - mountPath: /job
+              name: job
+      volumes:
+        - name: job
+          configMap:
+            name: {{ .Values.mesosphereResources.hooks.grafana.jobName }}
+            defaultMode: 0777
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.mesosphereResources.hooks.grafana.jobName }}
+data:
+  run.sh: |-
+    #!/bin/bash
+    set -o nounset
+    set -o errexit
+    set -o pipefail
+    CURL="curl --verbose --fail --max-time 60 --retry 10 --retry-connrefused"
+    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query={{ .Values.mesosphereResources.hooks.grafana.dashboardName | urlquery }} | jq '.[0].id')
+    echo "setting home dashboard to ID" $DASHBOARD_ID
+    $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
+

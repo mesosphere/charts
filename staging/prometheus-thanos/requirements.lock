@@ -1,0 +1,15 @@
+dependencies:
+- name: kube-state-metrics
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 2.6.4
+- name: prometheus-node-exporter
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 1.8.2
+- name: grafana
+  repository: https://kubernetes-charts.storage.googleapis.com/
+  version: 4.3.2
+- name: thanos
+  repository: https://kubernetes-charts.banzaicloud.com
+  version: 0.3.17
+digest: sha256:03abf251ae61042bf8fd68a66c36931f36edf11b689c59f7021b549e855d55ff
+generated: "2020-02-29T15:16:58.206412-05:00"

@@ -1,0 +1,22 @@
+dependencies:
+
+  - name: kube-state-metrics
+    version: 2.6.*
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: kubeStateMetrics.enabled
+
+  - name: prometheus-node-exporter
+    version: 1.8.*
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: nodeExporter.enabled
+
+  - name: grafana
+    version: 4.3.*
+    repository: https://kubernetes-charts.storage.googleapis.com/
+    condition: grafana.enabled
+
+  - name: thanos
+    version: 0.3.*
+    repository: https://kubernetes-charts.banzaicloud.com/
+    condition: thanos.enabled
+
