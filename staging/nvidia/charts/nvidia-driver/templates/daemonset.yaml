@@ -29,7 +29,7 @@ spec:
       containers:
       - name: nvidia-driver
         command:
-          - /usr/bin/wrapper.sh
+          - /usr/local/bin/wrapper.sh
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         securityContext:
@@ -68,3 +68,4 @@ spec:
       - name: wrapper-sh
         configMap:
           name: {{ template "nvidia-driver.fullname" . }}-wrapper-sh
+          defaultMode: 755

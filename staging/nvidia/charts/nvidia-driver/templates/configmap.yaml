@@ -264,7 +264,7 @@ data:
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: {{ template "nvidia-driver.fullname" . }}-centos7-vault-repo
+  name: {{ template "nvidia-driver.fullname" . }}-wrapper-sh
   namespace: kube-system
 data:
   wrapper.sh: |
