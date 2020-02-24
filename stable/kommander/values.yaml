@@ -34,8 +34,7 @@ grafana:
     image: dwdraju/alpine-curl-jq
     secretKeyRef: ops-portal-username
     serviceURL: http://kommander-kubeaddons-grafana.kommander
-    # This is the UID of the "Kubernetes / Compute Resources / Clusters" summary dashboard
-    homeDashboardUID: efa86fd1d0c121a26444b636a3f509a8
+    dashboardName: "Kubernetes / Compute Resources / Clusters"
     kommanderServiceAccount: kommander-kubeaddons
 
   ## Do not deploy default dashboards.
