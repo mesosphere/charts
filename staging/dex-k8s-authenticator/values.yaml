@@ -15,11 +15,15 @@ dexK8sAuthenticator:
   port: 5555
   debug: false
   livenessProbe:
-    periodSeconds: 10
-    initialDelaySeconds: 10
+    failureThreshold: 6
+    periodSeconds: 60
+    initialDelaySeconds: 15
+    timeoutSeconds: 30
   readinessProbe:
-    periodSeconds: 10
-    initialDelaySeconds: 10
+    failureThreshold: 3
+    periodSeconds: 30
+    initialDelaySeconds: 15
+    timeoutSeconds: 30
   web_path_prefix: /
   # logoUrl: http://<path-to-your-logo.png>
   # tlsCert: /path/to/dex-client.crt
