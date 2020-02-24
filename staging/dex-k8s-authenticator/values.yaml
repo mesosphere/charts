@@ -15,11 +15,15 @@ dexK8sAuthenticator:
   port: 5555
   debug: false
   livenessProbe:
-    periodSeconds: 10
-    initialDelaySeconds: 10
+    failureThreshold: 3   # Under high load use 'failureThreshold: 6'
+    periodSeconds: 10   # Under high load use 'periodSeconds: 30'
+    initialDelaySeconds: 10   # Under high load use 'initialDelaySeconds: 15'
+    timeoutSeconds: 10   # Under high load use 'timeoutSeconds: 30'
   readinessProbe:
-    periodSeconds: 10
-    initialDelaySeconds: 10
+    failureThreshold: 3
+    periodSeconds: 10   # Under high load use 'periodSeconds: 30'
+    initialDelaySeconds: 10   # Under high load use 'initialDelaySeconds: 15'
+    timeoutSeconds: 10   # Under high load use 'timeoutSeconds: 30'
   web_path_prefix: /
   # logoUrl: http://<path-to-your-logo.png>
   # tlsCert: /path/to/dex-client.crt
