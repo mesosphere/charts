@@ -11,14 +11,6 @@ dependencies:
     version: "2.30.3"
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
-  - name: kommander-thanos
-    version: "0.1.9"
-    repository: "https://mesosphere.github.io/charts/stable"
-    condition: kommander-thanos.enabled
-  - name: kommander-karma
-    version: "0.3.4"
-    repository: "https://mesosphere.github.io/charts/stable"
-    condition: kommander-karma.enabled
   - name: grafana
     version: 4.5.*
     repository: https://kubernetes-charts.storage.googleapis.com
