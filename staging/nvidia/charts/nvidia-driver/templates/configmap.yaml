@@ -270,5 +270,5 @@ data:
   wrapper.sh: |
     #!/bin/bash
     mkdir -p /lib/modules/$(uname -r)/proc
-    cp /proc/version /lib/modules/proc/version
+    cp /proc/version /lib/modules/$(uname -r)/proc/version
     /usr/local/bin/nvidia-driver init -a
