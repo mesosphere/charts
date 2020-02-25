@@ -74,6 +74,7 @@ grafana:
       traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
       traefik.ingress.kubernetes.io/priority: "2"
 
+
     ## Labels to be added to the Ingress
     ##
     labels: {}
@@ -131,3 +132,19 @@ grafana:
       # Otherwise the namespace in which the sidecar is running will be used.
       # It's also possible to specify ALL to search in all namespaces
       searchNamespace: null
+
+kommander-ui:
+  ingress:
+    traefikFrontendRuleType: PathPrefixStrip
+    extraAnnotations:
+      traefik.ingress.kubernetes.io/priority: "2"
+      traefik.ingress.kubernetes.io/auth-type: forward
+      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    path: /ops/portal/kommander/ui
+
+portalRBAC:
+  grafana:
+    enabled: true
+  kommanderUserInterface:
+    enabled: true
