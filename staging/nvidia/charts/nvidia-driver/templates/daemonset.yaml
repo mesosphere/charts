@@ -68,4 +68,4 @@ spec:
       - name: wrapper-sh
         configMap:
           name: {{ template "nvidia-driver.fullname" . }}-wrapper-sh
-          defaultMode: 755
+          defaultMode: 0755
