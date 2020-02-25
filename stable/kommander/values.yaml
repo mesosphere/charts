@@ -142,7 +142,28 @@ grafana:
   extraInitContainers:
     - name: grafana-plugins-install
       image: mesosphere/grafana-plugins:v0.0.1
-      command: ["/bin/sh", "-c", "cp -a /var/lib/grafana/plugins/. /var/lib/grafana/shared-plugins/"]
+      command:
+        [
+          "/bin/sh",
+          "-c",
+          "cp -a /var/lib/grafana/plugins/. /var/lib/grafana/shared-plugins/",
+        ]
       volumeMounts:
-      - name: plugins
-        mountPath: /var/lib/grafana/shared-plugins/
+        - name: plugins
+          mountPath: /var/lib/grafana/shared-plugins/
+
+kommander-ui:
+  ingress:
+    traefikFrontendRuleType: PathPrefixStrip
+    extraAnnotations:
+      traefik.ingress.kubernetes.io/priority: "2"
+      traefik.ingress.kubernetes.io/auth-type: forward
+      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    path: /ops/portal/kommander/ui
+
+portalRBAC:
+  grafana:
+    enabled: true
+  kommanderUserInterface:
+    enabled: true
