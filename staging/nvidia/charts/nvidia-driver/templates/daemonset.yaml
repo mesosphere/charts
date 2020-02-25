@@ -28,9 +28,10 @@ spec:
       hostPID: true
       containers:
       - name: nvidia-driver
+        command:
+          - /usr/local/bin/wrapper.sh
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
-        args: ["--accept-license"]
         securityContext:
           privileged: true
 {{- if .Values.resources }}
@@ -43,6 +44,12 @@ spec:
         - name: driver-path
           mountPropagation: Bidirectional
           mountPath: /run/nvidia
+        - name: vault-repo
+          mountPath: /etc/yum.repos.d/CentOS-Vault.repo
+          subPath: CentOS-Vault.repo
+        - name: wrapper-sh
+          mountPath: /usr/local/bin/wrapper.sh
+          subPath: wrapper.sh
       volumes:
       - name: update-driver
         hostPath:
@@ -50,3 +57,10 @@ spec:
       - name: driver-path
         hostPath:
           path: /run/nvidia
+      - name: vault-repo
+        configMap:
+          name: {{ template "nvidia-driver.fullname" . }}-centos7-vault-repo
+      - name: wrapper-sh
+        configMap:
+          name: {{ template "nvidia-driver.fullname" . }}-wrapper-sh
+          defaultMode: 0755
