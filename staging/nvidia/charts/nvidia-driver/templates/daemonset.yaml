@@ -44,8 +44,6 @@ spec:
         - name: driver-path
           mountPropagation: Bidirectional
           mountPath: /run/nvidia
-        - name: modules
-          mountPath: /lib/modules
         - name: vault-repo
           mountPath: /etc/yum.repos.d/CentOS-Vault.repo
           subPath: CentOS-Vault.repo
@@ -59,9 +57,6 @@ spec:
       - name: driver-path
         hostPath:
           path: /run/nvidia
-      - name: modules
-        hostPath:
-          path: /lib/modules
       - name: vault-repo
         configMap:
           name: {{ template "nvidia-driver.fullname" . }}-centos7-vault-repo
