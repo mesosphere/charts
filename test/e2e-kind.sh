@@ -3,6 +3,7 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+set -x
 
 readonly KIND_VERSION=v0.6.1
 readonly CLUSTER_NAME=chart-testing
@@ -41,12 +42,24 @@ docker_exec() {
 create_kind_cluster() {
     echo 'Downloading kind...'
 
-    curl -sSLo "${tmp}/kind" \
+    curl -fsSLo "${tmp}/kind" \
         "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-$(uname)-amd64"
     chmod +x "${tmp}/kind"
 
+    # This gist link is a temporary solution until that file is contributed to github.com/kubernetes-sigs/kind.
+    # See https://jira.d2iq.com/browse/D2IQ-65095
+    curl -fsSLo "${tmp}/entrypoint.sh" "https://gist.githubusercontent.com/d2iq-dispatch/9f67e6a97aafac7f8524dc8d4631ae98/raw/291543d4de29c85f9699c1b11d9c4643cce0f77a/gistfile1.txt"
+    chmod +x "${tmp}/entrypoint.sh"
+
+    cat << EOF > tmp_dockerfile
+FROM kindest/node:$K8S_VERSION
+ADD ./entrypoint.sh /usr/local/bin/entrypoint
+EOF
+
+    docker build -t tmp-dispatch-kind:latest -f tmp_dockerfile "${tmp}"
+
     "${tmp}/kind" create cluster --name "$CLUSTER_NAME" \
-        --config test/kind-config.yaml --image "kindest/node:$K8S_VERSION" \
+        --config test/kind-config.yaml --image "tmp-dispatch-kind:latest" \
         --wait 60s
 
     docker_exec mkdir -p /root/.kube
