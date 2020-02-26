@@ -17,6 +17,11 @@ service:
   port: 4181
 
 traefikForwardAuth:
+  # If set to false, do not install the TFA deployment.
+  # TFA will refuse to start up if the OIDC provider is not ready.
+  # This chart option allows us to stage TFA to the cluster and then
+  # later update it with proper OIDC provider information.
+  enabled: true
   clientId: traefik-forward-auth
   clientSecret:
     value: "do-not-use"
