@@ -4,10 +4,10 @@ dependencies:
   version: 0.1.6
 - name: kommander-cluster-lifecycle
   repository: https://mesosphere.github.io/kommander-cluster-lifecycle/charts
-  version: 0.4.7
+  version: 0.4.8
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
-  version: 2.34.1
+  version: 2.35.0
 - name: kommander-thanos
   repository: https://mesosphere.github.io/charts/stable
   version: 0.1.9
@@ -17,5 +17,5 @@ dependencies:
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.5.1
-digest: sha256:978d306706bba4a6c01b910aae1aa8d414e1c6acab6f23d84c74faaec80c8dd2
-generated: "2020-02-25T18:50:42.212323+01:00"
+digest: sha256:a350b5fcb772b74b35ecd65800358b42e594b4e6e9b6832c5425087b019d2421
+generated: "2020-02-26T09:45:48.444208+01:00"
