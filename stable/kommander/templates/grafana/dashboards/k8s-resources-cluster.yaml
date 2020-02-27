@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "kommander.fullname" $) "k8s-resources-clusters-dashboard" | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" (include "kommander.fullname" $) "k8s-resources-cluster" | trunc 63 | trimSuffix "-" }}
   labels:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
     {{- end }}
     app: {{ template "kommander.name" $ }}-grafana
 data:
-  k8s-resources-clusters-dashboard.json: |-
+  k8s-resources-cluster.json: |-
     {
       "__inputs": [],
       "__requires": [
