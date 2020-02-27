@@ -1,8 +1,8 @@
 apiVersion: v1
-appVersion: "v0.8.2"
+appVersion: "v0.8.3"
 description: "A Catalog service for Kubeaddons"
 name: kubeaddons-catalog
-version: 0.1.6
+version: 0.1.7
 home: https://github.com/mesosphere/kommander-catalog-api
 sources:
 - https://github.com/mesosphere/kommander-catalog-api
@@ -10,3 +10,4 @@ maintainers:
 - name: shaneutt
   email: shaneutt@linux.com
 - name: alejandroEsc
+  email: aescobar@d2iq.com
