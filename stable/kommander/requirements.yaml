@@ -12,11 +12,11 @@ dependencies:
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
   - name: kommander-thanos
-    version: "0.1.9"
+    version: "0.1.11"
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kommander-thanos.enabled
   - name: kommander-karma
-    version: "0.3.4"
+    version: "0.3.6"
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kommander-karma.enabled
   - name: grafana
