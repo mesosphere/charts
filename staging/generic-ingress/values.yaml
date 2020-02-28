@@ -19,5 +19,5 @@ ingresses: []
 #     paths:
 #       - backend:
 #           serviceName: service
-#           servicePort: test
+#           servicePort: 8080
 #         path: /test
