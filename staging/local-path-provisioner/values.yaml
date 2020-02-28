@@ -1,0 +1,24 @@
+image:
+  repository: rancher/local-path-provisioner
+  tag: v0.0.12
+  pullPolicy: IfNotPresent
+
+# WARNING: enabling this will disable default storage class for any existing storage class that has been configured as the default
+defaultStorageClass: false
+
+config:
+  name: "config-volume"
+
+replicaCount: 1
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+  create: true
+
+podSecurityContext: {}
+securityContext: {}
+resources: {}
