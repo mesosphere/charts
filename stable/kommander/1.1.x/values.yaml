@@ -1,0 +1,169 @@
+federate:
+  kubeaddonsInitializer:
+    repository: "mesosphere/kubeaddons-addon-initializer"
+    tag: "v0.1.1"
+    pullPolicy: IfNotPresent
+
+kommander-cluster-lifecycle:
+  enabled: true
+
+kommander-thanos:
+  enabled: true
+  thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
+  kommanderServiceAccount: kommander-kubeaddons
+
+kommander-karma:
+  enabled: true
+  alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
+  kommanderServiceAccount: kommander-kubeaddons
+  kommanderKarmaConfigMap: kommander-kubeaddons-config
+
+kubeaddons-catalog:
+  enabled: true
+
+  image:
+    repository: mesosphere/kubeaddons-catalog
+    tag: "v0.8.2"
+    pullPolicy: IfNotPresent
+
+grafana:
+  enabled: true
+
+  hooks:
+    jobName: set-kommander-grafana-home-dashboard
+    image: dwdraju/alpine-curl-jq
+    secretKeyRef: ops-portal-username
+    serviceURL: http://kommander-kubeaddons-grafana.kommander
+    dashboardName: "Kubernetes / Compute Resources / Cluster [Global]"
+    kommanderServiceAccount: kommander-kubeaddons
+
+  ## Do not deploy default dashboards.
+  ##
+  defaultDashboardsEnabled: false
+
+  ## Grafana's primary configuration
+  ## NOTE: values in map will be converted to ini format
+  ## ref: http://docs.grafana.org/installation/configuration/
+  ##
+  grafana.ini:
+    server:
+      protocol: http
+      enable_gzip: true
+      root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kommander/monitoring/grafana"
+    auth.proxy:
+      enabled: true
+      header_name: X-Forwarded-User
+      auto-sign-up: true
+    auth.basic:
+      enabled: false
+    users:
+      auto_assign_org_role: Admin
+
+  ingress:
+    ## If true, Grafana Ingress will be created
+    ##
+    enabled: true
+
+    ## Annotations for Grafana Ingress
+    ##
+    annotations:
+      kubernetes.io/ingress.class: "traefik"
+      traefik.frontend.rule.type: "PathPrefixStrip"
+      traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
+      traefik.ingress.kubernetes.io/auth-type: "forward"
+      traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
+      traefik.ingress.kubernetes.io/priority: "2"
+
+    ## Labels to be added to the Ingress
+    ##
+    labels: {}
+
+    ## Hostnames.
+    ## Must be provided if Ingress is enable.
+    ##
+    # hosts:
+    #   - grafana.domain.com
+    hosts:
+      - ""
+
+    ## Path for grafana ingress
+    path: /ops/portal/kommander/monitoring/grafana
+
+    ## TLS configuration for grafana Ingress
+    ## Secret must be manually created in the namespace
+    ##
+    tls: []
+    # - secretName: grafana-general-tls
+    #   hosts:
+    #   - grafana.example.com
+
+  ## Configure grafana datasources
+  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
+  ##
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: ThanosQuery
+          type: prometheus
+          url: http://kommander-kubeaddons-thanos-query-http.kommander:10902/
+          access: proxy
+          isDefault: true
+        - name: KommanderPrometheus
+          type: prometheus
+          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons:9090/
+          access: proxy
+          isDefault: false
+
+  ## Sidecars that collect the configmaps with specified label and stores the included files them into the respective folders
+  ## Requires at least Grafana 5 to work and can't be used together with parameters dashboardProviders, datasources and dashboards
+  sidecar:
+    dashboards:
+      enabled: true
+      # label that the configmaps with dashboards are marked with
+      label: grafana_dashboard_kommander
+    datasources:
+      enabled: true
+      defaultDatasourceEnabled: false
+      # label that the configmaps with datasources are marked with
+      label: grafana_datasource_kommander
+      # If specified, the sidecar will search for datasource config-maps inside this namespace.
+      # Otherwise the namespace in which the sidecar is running will be used.
+      # It's also possible to specify ALL to search in all namespaces
+      searchNamespace: null
+
+  # to avoid needing to download any plugins at runtime, use a container and a shared volume
+  # do not enable the plugins here, instead rebuild the mesosphere/grafana-plugins image with the new plugins
+  plugins: []
+  #  - grafana-piechart-panel
+  extraEmptyDirMounts:
+    - name: plugins
+      mountPath: /var/lib/grafana/plugins/
+  extraInitContainers:
+    - name: grafana-plugins-install
+      image: mesosphere/grafana-plugins:v0.0.1
+      command:
+        [
+          "/bin/sh",
+          "-c",
+          "cp -a /var/lib/grafana/plugins/. /var/lib/grafana/shared-plugins/",
+        ]
+      volumeMounts:
+        - name: plugins
+          mountPath: /var/lib/grafana/shared-plugins/
+
+kommander-ui:
+  ingress:
+    traefikFrontendRuleType: PathPrefixStrip
+    extraAnnotations:
+      traefik.ingress.kubernetes.io/priority: "4"
+      traefik.ingress.kubernetes.io/auth-type: forward
+      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    path: /ops/portal/kommander/ui
+
+portalRBAC:
+  grafana:
+    enabled: true
+  kommanderUserInterface:
+    enabled: true
