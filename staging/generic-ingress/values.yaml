@@ -5,5 +5,19 @@
 nameOverride: ""
 fullnameOverride: ""
 
+# single `ingress` definition is now deprecated and `ingresses` should be used
+# instead.
 ingress:
   enabled: false
+
+ingresses: []
+
+# ingresses:
+#   - name: scoped-test
+#     annotations:
+#       annotation-1: test
+#     paths:
+#       - backend:
+#           serviceName: service
+#           servicePort: test
+#         path: /test
