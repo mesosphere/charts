@@ -42,11 +42,13 @@ docker_exec() {
 create_kind_cluster() {
     echo 'Downloading kind...'
 
-    curl -sSLo "${tmp}/kind" \
+    curl -fsSLo "${tmp}/kind" \
         "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-$(uname)-amd64"
     chmod +x "${tmp}/kind"
 
-    curl -sSLo "${tmp}/entrypoint.sh" "https://raw.githubusercontent.com/mesosphere/dispatch/f74d477930e8cf05b84eb8a0f98c3866b66e1125/docker/kind/entrypoint.sh?token=ACIQJHWXERD34NEOUHGOWIS6KWQO6"
+    # This gist link is a temporary solution until that file is contributed to github.com/kubernetes-sigs/kind.
+    # See https://jira.d2iq.com/browse/D2IQ-65095
+    curl -fsSLo "${tmp}/entrypoint.sh" "https://gist.githubusercontent.com/d2iq-dispatch/9f67e6a97aafac7f8524dc8d4631ae98/raw/291543d4de29c85f9699c1b11d9c4643cce0f77a/gistfile1.txt"
     chmod +x "${tmp}/entrypoint.sh"
 
     cat << EOF > tmp_dockerfile

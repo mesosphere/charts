@@ -19,6 +19,12 @@ LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 CT_VERSION ?= v2.4.0
 
 TMPDIR := $(shell mktemp -d)
+ifeq ($(shell uname),Darwin)
+	# OSX requires /private prefix as symlink doesn't work when
+	# mounting /var/folders/
+	TMPDIR := /private${TMPDIR}
+endif
+
 HELM := $(shell bash -c "command -v helm")
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
