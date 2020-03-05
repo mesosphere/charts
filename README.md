@@ -49,6 +49,10 @@ We'd love for you to contribute a Chart. Please consider contributing upstream f
 
 Note: We use the same [workflow](https://github.com/kubernetes/community/blob/master/contributors/devel/development.md#workflow).
 
+## Testing
+
+For instructions on testing chart changes, see [TESTING.md](./TESTING.md)
+
 ## Review Process
 
 For information related to the review procedure used by the Chart repository maintainers, see [Merge approval and release process](CONTRIBUTING.md#merge-approval-and-release-process).
