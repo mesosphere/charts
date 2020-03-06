@@ -34,7 +34,7 @@ spec:
             set -o errexit
             set -o pipefail
             CURL="curl --verbose --fail --max-time 30 --retry 20 --retry-connrefused"
-            DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/dashboards/uid/{{ .Values.grafana.hooks.homeDashboardUID }} | jq '.dashboard.id')
+            DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/search/?query={{ .Values.grafana.hooks.dashboardName | urlquery }} | jq '.[0].id')
             echo "setting home dashboard to ID" $DASHBOARD_ID
             $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' {{ .Values.grafana.hooks.serviceURL }}/api/org/preferences
             EOF
