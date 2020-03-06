@@ -8,7 +8,7 @@ image:
 liveness:
   image:
     repository: "quay.io/k8scsi/livenessprobe"
-    tag: "v1.1.0"
+    tag: "v1.2.0"
 
 tolerations:
   - effect: NoSchedule
