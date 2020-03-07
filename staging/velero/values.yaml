@@ -192,11 +192,6 @@ configMaps: {}
 # Deploy a default Minio cluster to use as the backend for Velero.
 minioBackend: false
 
-minioBackendConfiguration:
-  service:
-    annotations: {}
-    #   key: value
-
 ##
 ## End of additional Velero resource settings.
 ##
