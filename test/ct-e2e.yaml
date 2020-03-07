@@ -24,6 +24,7 @@ excluded-charts:
   - kudo                  # DCOS-62815
   - nvidia                # DCOS-62816
   - prometheus-operator   # DCOS-62817
+  - prometheus-thanos     # DCOS-62817
   - traefik               # DCOS-62818
   - traefik-forward-auth  # DCOS-62819
   - local-path-provisioner
