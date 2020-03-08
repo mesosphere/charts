@@ -145,6 +145,9 @@ data:
         {{- end }}
         {{- end }}
       {{- end }}
+      {{- if .Values.extraConfigEntrypoints }}
+      {{- .Values.extraConfigEntrypoints | nindent 6 }}
+      {{- end }}
     [ping]
     entryPoint = "http"
     [kubernetes]
