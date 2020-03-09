@@ -36,7 +36,7 @@ provisioner:
 attacher:
   image:
     repository: "quay.io/k8scsi/csi-attacher"
-    tag: "v1.2.0"
+    tag: "v1.2.1"
 
 snapshotter:
   # True if enable volume snapshot
