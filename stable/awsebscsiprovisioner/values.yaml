@@ -43,7 +43,7 @@ snapshotter:
   enabled: false
   image:
     repository: "quay.io/k8scsi/csi-snapshotter"
-    tag: "v1.1.0"
+    tag: "v1.2.2"
 
 resizer:
   # True if enable volume resizing
