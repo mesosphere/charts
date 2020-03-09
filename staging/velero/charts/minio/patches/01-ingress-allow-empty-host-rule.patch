@@ -1,0 +1,10 @@
+diff -r minio/templates/ingress.yaml minio-velero/templates/ingress.yaml
+35,36c35
+<     - host: {{ . | quote }}
+<       http:
+---
+>     - http:
+41a41,43
+>       {{- if . }}
+>       host: {{ . | quote }}
+>       {{- end }}
