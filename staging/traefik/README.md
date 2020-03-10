@@ -87,9 +87,10 @@ The following table lists the configurable parameters of the Traefik chart and t
 | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | `fullnameOverride`                     | Override the full resource names                                                                                             | `{release-name}-traefik` (or traefik if release-name is traefik) |
 | `image`                                | Traefik image name                                                                                                           | `traefik`                                         |
-| `imageTag`                             | The version of the official Traefik image to use                                                                             | `1.7.12`                                           |
-| `imagePullSecrets`                     | A list of image pull secrets (if needed)                                                                                     | None                                           |
+| `imageTag`                             | The version of the official Traefik image to use                                                                             | `1.7.12`                                          |
+| `imagePullSecrets`                     | A list of image pull secrets (if needed)                                                                                     | None                                              |
 | `serviceType`                          | A valid Kubernetes service type                                                                                              | `LoadBalancer`                                    |
+| `extraServicePorts`                    | Extra ports in the service record                                                                                            | `[]`                                              |
 | `loadBalancerIP`                       | An available static IP you have reserved on your cloud platform                                                              | None                                              |
 | `startupArguments`                       | A list of startup arguments which are passed to traefik                                                              | `[]`                                              |
 | `loadBalancerSourceRanges`             | List of IP CIDRs allowed access to load balancer (if supported)                                                              | None                                              |
@@ -243,8 +244,9 @@ The following table lists the configurable parameters of the Traefik chart and t
 | `forwardAuth.entryPoints`              | Enable forward authentication for these entryPoints: "http", "https", "httpn"                                                |                                                   |
 | `forwardAuth.address`                  | URL for forward authentication                                                                                               |                                                   |
 | `forwardAuth.trustForwardHeader`       | Trust X-Forwarded-* headers                                                                                                  |                                                   |
-| `forwardAuth.authResponseHeaders`      | Set authentication response headers                                                                                                  |  `[]`                                                   |
-| `initCertJobImage`                     | Set the Docker image to be used for updating the cert-manager certificate with the load balancer SANs                        | `mesosphere/kubeaddons-addon-initializer:v0.0.7`                 |
+| `forwardAuth.authResponseHeaders`      | Set authentication response headers                                                                                                  |  `[]`                                     |
+| `initCertJobImage`                     | Set the Docker image to be used for updating the cert-manager certificate with the load balancer SANs                        | `mesosphere/kubeaddons-addon-initializer:v0.0.7`  |
+| `extraConfigEntrypoints`               | Extra configurations for the entrypoints.                                                                                    | None                                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 

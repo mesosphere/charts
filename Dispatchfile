@@ -18,8 +18,6 @@ dindTask("publish", inputs=[git], steps=[
     args = [
       "/bin/bash", "-c",
       """
-      apt-get update
-      apt-get install -qq git build-essential
       git fetch origin master --unshallow
       export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
       make publish
@@ -36,8 +34,6 @@ dindTask("lint", inputs=[git], steps=[
     args = [
       "/bin/bash", "-c",
       """
-      apt-get update
-      apt-get install -qq git build-essential
       git fetch origin master --unshallow
       make lint
       """
@@ -52,8 +48,6 @@ dindTask("test", inputs=[git], deps=["lint"], steps=[
     args = [
       "/bin/bash", "-c",
       """
-      apt-get update
-      apt-get install -qq git build-essential
       git fetch origin master --unshallow
       make test
       """

@@ -1,0 +1,4 @@
+dependencies:
+- name: minio
+  version: 5.0.12
+  condition: minioBackend
