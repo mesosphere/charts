@@ -6,3 +6,10 @@
 
 # These owners will be the default owners for everything in the repo unless a later match takes precedence
 * @mesosphere/sig-ksphere-catalog
+
+# Prometheus
+staging/prometheus* @gracedo @branden
+
+# Kommander
+stable/kommander-karma/* @gracedo @branden
+stable/kommander-thanos/* @gracedo @branden
