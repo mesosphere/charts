@@ -154,6 +154,7 @@ grafana:
 
 kommander-ui:
   ingress:
+    enabled: true
     traefikFrontendRuleType: PathPrefixStrip
     extraAnnotations:
       traefik.ingress.kubernetes.io/priority: "4"
