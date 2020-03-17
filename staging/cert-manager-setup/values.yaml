@@ -38,6 +38,19 @@ certificates: []
 #    dnsNames:
 #      - example.com
 #      - www.example.com
+#    ipAddresses:
+#      - 127.0.0.1
+#    # rsa or ecdsa
+#    keyAlgorithm: ecdsa
+#    # pkcs1 or pkcs8
+#    keyEncoding: pkcs8
+#    # rsa -> 2048 ... 8192 or ecdsa -> 256, 384, 521
+#    keySize: 521
+#    # array of strings
+#    organization:
+#      - MyCompany, Inc.
+#      - MyCompanyKnowOldNaming, Inc.
+#    renewBefore: 360h
 
 clusterissuers: []
 #  - name: kubernetes-ca
