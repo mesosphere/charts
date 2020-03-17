@@ -1,5 +1,12 @@
 {{- if .Values.federate.addons }}
 ---
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    {{- include "kommander-kubecost.labels" . | nindent 4 }}
+  name: kubecost
+---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
 metadata:
