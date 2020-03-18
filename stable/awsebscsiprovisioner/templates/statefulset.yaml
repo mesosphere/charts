@@ -28,6 +28,7 @@ spec:
         - name: ebs-plugin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args :
+            - controller
             - --endpoint=$(CSI_ENDPOINT)
             - --logtostderr
             - --v=5
@@ -74,6 +75,8 @@ spec:
             {{- if .Values.provisioner.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
+            - --enable-leader-election
+            - --leader-election-type=leases
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -85,6 +88,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
+            - --leader-election=true
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -97,6 +101,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --connection-timeout=15s
+            - --leader-election=true
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
