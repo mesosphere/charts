@@ -18,7 +18,7 @@ kommander-karma:
   kommanderServiceAccount: kommander-kubeaddons
   kommanderKarmaConfigMap: kommander-kubeaddons-config
 
-kommander-kubecost:
+kubecost:
   enabled: true
   thanosAddress: "kommander-kubeaddons-kommander-ku-prom-server.kubecost.svc.cluster.local:10901"
   # kommanderServiceAccount: kommander-kubeaddons

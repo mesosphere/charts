@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    {{- include "kommander-kubecost.labels" . | nindent 4 }}
+    {{- include "kubecost.labels" . | nindent 4 }}
   name: kubecost
 ---
 apiVersion: types.kubefed.io/v1beta1
@@ -13,7 +13,7 @@ metadata:
   name: kubecost
   namespace: kubecost
   labels:
-    {{- include "kommander-kubecost.labels" . | nindent 4 }}
+    {{- include "kubecost.labels" . | nindent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -24,10 +24,10 @@ spec:
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedAddon
 metadata:
-  name: {{ include "kommander-kubecost.short-name-prefix" . }}-proxy
+  name: {{ include "kubecost.short-name-prefix" . }}-proxy
   namespace: {{ .Values.federate.systemNamespace.name }}
   labels:
-{{ include "kommander-kubecost.labels" . | indent 4 }}
+{{ include "kubecost.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -36,7 +36,7 @@ spec:
     metadata:
       namespace: kubeaddons
       labels:
-        kubeaddons.mesosphere.io/name: {{ include "kommander-kubecost.short-name-prefix" . }}-proxy
+        kubeaddons.mesosphere.io/name: {{ include "kubecost.short-name-prefix" . }}-proxy
     spec:
       namespace: {{ .Values.federate.systemNamespace.name }}
       chartReference:
@@ -46,7 +46,7 @@ spec:
         values: |
           ---
           target: {{ required "thanos address must be set" .Values.thanosAddress }}
-          certSecretName: {{ template "kommander-kubecost.fullname" . }}-server-tls
+          certSecretName: {{ template "kubecost.fullname" . }}-server-tls
           ingress:
             enabled: false
           service:
@@ -54,15 +54,15 @@ spec:
             port: 443
           deployment:
             annotations:
-              secret.reloader.stakater.com/reload: {{ template "kommander-kubecost.fullname" . }}-server-tls
+              secret.reloader.stakater.com/reload: {{ template "kubecost.fullname" . }}-server-tls
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedAddon
 metadata:
-  name: {{ include "kommander-kubecost.short-name-prefix" . }}-kubecost
+  name: {{ include "kubecost.short-name-prefix" . }}-kubecost
   namespace: kubecost
   labels:
-{{ include "kommander-kubecost.labels" . | indent 4 }}
+{{ include "kubecost.labels" . | indent 4 }}
 spec:
   placement:
     clusterSelector:
@@ -71,7 +71,7 @@ spec:
     metadata:
       namespace: kubecost
       labels:
-        kubeaddons.mesosphere.io/name: {{ include "kommander-kubecost.short-name-prefix" . }}-kubecost
+        kubeaddons.mesosphere.io/name: {{ include "kubecost.short-name-prefix" . }}-kubecost
     spec:
       namespace: kubecost
       chartReference:
@@ -127,6 +127,8 @@ spec:
             serviceAccounts:
               nodeExporter:
                 create: false
+            kubeStateMetrics:
+              fullnameOverride: {{ include "kommander-kubecost.short-name-prefix" . }}-prom-kubestatemetr
             extraScrapeConfigs: |
               - job_name: kubecost
                 honor_labels: true
@@ -136,7 +138,7 @@ spec:
                 scheme: http
                 dns_sd_configs:
                 - names:
-                  - {{ template "kommander-kubecost.serviceName" . }}
+                  - {{ template "kubecost.serviceName" . }}
                   type: 'A'
                   port: 9003
               - job_name: kubecost-networking
@@ -146,7 +148,7 @@ spec:
                 # Scrape only the the targets matching the following metadata
                   - source_labels: [__meta_kubernetes_pod_label_app]
                     action: keep
-                    regex:  {{ template "kommander-kubecost.networkCostsName" . }}
+                    regex:  {{ template "kubecost.networkCostsName" . }}
             server:
               global:
                 scrape_interval: 1m
