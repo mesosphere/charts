@@ -16,6 +16,9 @@ spec:
         app: ebs-csi-node
         app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- if .Values.node.podAnnotations }}
+      annotations: {{ toYaml .Values.node.podAnnotations | nindent 8 }}
+    {{- end }}
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux

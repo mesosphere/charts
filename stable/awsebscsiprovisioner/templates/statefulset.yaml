@@ -6,12 +6,18 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   serviceName: ebs-csi-controller
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: ebs-csi-controller
   template:
     metadata:
+    {{- if .Values.statefulSetCSIController.podAnnotations }}
+      annotations:
+      {{- range $key, $value := .Values.statefulSetCSIController.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    {{- end }}
       labels:
         app: ebs-csi-controller
         app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
@@ -30,6 +36,7 @@ spec:
           args :
             - controller
             - --endpoint=$(CSI_ENDPOINT)
+            {{ include "aws-ebs-csi-driver.extra-volume-tags" . }}
             - --logtostderr
             - --v=5
           env:
