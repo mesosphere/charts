@@ -49,6 +49,8 @@ spec:
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
           {{- if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
+          {{- else if and .Values.oidc.caKubernetesDefault }}
+          # disabled --oidc-ca-file to use container image available root CAs
           {{- else }}
           - "--oidc-ca-file=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
           {{ end }}
@@ -145,6 +147,10 @@ spec:
           - name: kube-oidc-proxy-config
             mountPath: /etc/oidc
             readOnly: true
+          {{ else if .Values.oidc.caCertPemHostPath }}
+          - name: ca-cert-pem
+            mountPath: {{ .Values.oidc.caCertPemMountPath }}
+            readOnly: true
           {{ end }}
           - name: kube-oidc-proxy-tls
             mountPath: /etc/oidc/tls
@@ -164,6 +170,11 @@ spec:
             items:
             - key: ca.crt
               path: oidc-ca.pem
+        {{- else if .Values.oidc.caCertPemHostPath }}
+        - name: ca-cert-pem
+          hostPath:
+            path: {{ .Values.oidc.caCertPemHostPath }}
+            type: File
         {{ end }}
         - name: kube-oidc-proxy-tls
           secret:

@@ -27,14 +27,32 @@ oidc:
   usernameClaim: ""
 
   # CA cert that will verify TLS connection to OIDC issuer URL.
-  # If not provided default hosts root CA's will be used. This
-  # should be provided in PEM format, for example:
+  # If not provided service account CA will be used.
+  #
+  # Specify only one of the following values.
+  # ---
+  # caPEM
+  # This should be provided in PEM format, for example:
   # caPEM: |
   #    -----BEGIN CERTIFICATE-----
   #           ...
   #    -----END CERTIFICATE-----
   caPEM:
-  caSecretName:   # specify caPEM or caSecretName
+  # ---
+  # caSecretName, which includes ca.crt, tls.crt and tls.key
+  caSecretName:
+  # ---
+  # caKubernetesDefault, will disable (not set) the --oidc-ca-file flag
+  # to be able to use container image available root CA's
+  caKubernetesDefault: false
+  # ---
+  # caCertPemHostPath, which points to a cert.pem including CA's on your hostMachine
+  # should be used if you issue an certificate from an ACME provider like letsencrypt
+  # it will be mounted read-only and only one file e.g. /etc/ssl/cert.pem.
+  # you can define the target within the container through caCertPemMountPath.
+  # This should be used in combination with caKubernetesDefault: true
+  caCertPemHostPath:
+  caCertPemMountPath: /etc/ssl/cert.pem
 
   usernamePrefix:
   groupsClaim:
