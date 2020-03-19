@@ -22,6 +22,9 @@ clusterissuer:
 
 In the given example we create a `ClusterIssuer` named `clusterissuer-name` with the `ca` type. The `ca` type expects a secret that contains the Certificate Authority (CA) to be used by this `ClusterIssuer`. The spec follows the original `cert-manager` [spec](https://docs.cert-manager.io/en/latest/tasks/issuers/setup-ca.html#creating-an-issuer-referencing-the-secret).
 
+See [reference documentation](https://docs.cert-manager.io/en/release-0.10/reference/index.html#reference-documentation) for all available definitions `from cert-manager`.
+Consider a look into the [API documentation](https://docs.cert-manager.io/en/release-0.10/reference/api-docs/index.html)
+
 # Notes
 
 In order to submit the `ClusterIssuer` post installation, `cert-manager-setup` runs a post-install `Job` hook. In case that the hook fails the Job will not be cleaned up by Helm. This behavior is intended to ease debugging.
