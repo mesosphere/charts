@@ -6,12 +6,18 @@ metadata:
   namespace: {{ .Release.Namespace }}
 spec:
   serviceName: ebs-csi-controller
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: ebs-csi-controller
   template:
     metadata:
+    {{- if .Values.statefulSetCSIController.podAnnotations }}
+      annotations:
+      {{- range $key, $value := .Values.statefulSetCSIController.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    {{- end }}
       labels:
         app: ebs-csi-controller
         app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
@@ -28,7 +34,9 @@ spec:
         - name: ebs-plugin
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args :
+            - controller
             - --endpoint=$(CSI_ENDPOINT)
+            {{ include "aws-ebs-csi-driver.extra-volume-tags" . }}
             - --logtostderr
             - --v=5
           env:
@@ -74,6 +82,8 @@ spec:
             {{- if .Values.provisioner.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
+            - --enable-leader-election
+            - --leader-election-type=leases
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -85,6 +95,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
+            - --leader-election=true
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -97,6 +108,7 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --connection-timeout=15s
+            - --leader-election=true
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock

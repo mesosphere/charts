@@ -1,0 +1,35 @@
+{{- if .Values.snapshotter.enabled }}
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: ebs-csi-snapshot-controller
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: ebs-csi-snapshot-controller
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ebs-csi-snapshot-controller
+      app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+    {{- if .Values.statefulSetCSISnapshotController.podAnnotations }}
+      annotations:
+      {{- range $key, $value := .Values.statefulSetCSISnapshotController.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    {{- end }}
+      labels:
+        app: ebs-csi-snapshot-controller
+        app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccount: ebs-csi-snapshot-controller
+      containers:
+        - name: ebs-csi-snapshot-controller
+          image: "{{ .Values.snapshotter.image.repository }}:{{ .Values.snapshotter.image.tag }}"
+          args:
+            - --v=5
+            - --leader-election=false
+{{- end }}

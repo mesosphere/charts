@@ -130,6 +130,12 @@ install_dummylb() {
     echo
 }
 
+replace_priority_class_name_system_x_critical() {
+    echo 'Replacing priorityClassName: system-X-critical'
+    grep -rl "priorityClassName: system-" . | xargs sed -i 's/system-.*-critical/null/g'
+    echo
+}
+
 main() {
     run_ct_container "$1"
     shift
@@ -141,7 +147,11 @@ main() {
     install_dummylb
     install_certmanager
 
-    docker_exec ct lint-and-install --upgrade --debug "$@"
+    docker_exec ct lint --debug "$@"
+
+    replace_priority_class_name_system_x_critical
+
+    docker_exec ct install --upgrade --debug "$@"
     echo
 }
 
