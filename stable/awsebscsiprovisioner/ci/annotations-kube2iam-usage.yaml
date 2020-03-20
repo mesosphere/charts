@@ -1,0 +1,7 @@
+# Check that statefulSet.podAnnoations is rendered
+statefulSetCSIController:
+  podAnnotations:
+    iam.amazonaws.com/role: ebs-csi-driver-role
+statefulSetCSISnapshotController:
+  podAnnotations:
+    iam.amazonaws.com/role: ebs-csi-snapshot-controller-role
