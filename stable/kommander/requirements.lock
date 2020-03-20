@@ -8,14 +8,8 @@ dependencies:
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
   version: 3.12.3
-- name: kommander-thanos
-  repository: https://mesosphere.github.io/charts/stable
-  version: 0.1.13
-- name: kommander-karma
-  repository: https://mesosphere.github.io/charts/stable
-  version: 0.3.8
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.5.1
-digest: sha256:aebf4f9dfb4fbe9393652cd1b6356eafbbc19dacbb023d2e1e88ce86ea50e7d4
-generated: "2020-03-17T14:52:19.647824+01:00"
+digest: sha256:e8bc9c0e256140b725e7fb2d82b0a8eb9330c77729fb5ebb6b816d9899ac19e3
+generated: "2020-03-19T10:34:40.737587-07:00"

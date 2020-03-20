@@ -9,6 +9,7 @@ excluded-charts:
   - azuredisk-csi-driver  # DCOS-62804
   - defaultstorageclass   # DCOS-62803
   - dispatch              # DCOS-62802
+  - gcpdisk-csi-driver    # D2IQ-65765
   - gcpdiskprovisioner    # DCOS-62801
   - kommander             # DCOS-62800
   - kommander-karma       # DCOS-62799

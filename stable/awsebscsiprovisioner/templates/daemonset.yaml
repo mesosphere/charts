@@ -16,6 +16,9 @@ spec:
         app: ebs-csi-node
         app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+    {{- if .Values.node.podAnnotations }}
+      annotations: {{ toYaml .Values.node.podAnnotations | nindent 8 }}
+    {{- end }}
     spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
@@ -31,6 +34,7 @@ spec:
             privileged: true
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           args:
+            - node
             - --endpoint=$(CSI_ENDPOINT)
             - --logtostderr
             - --v=5
