@@ -21,7 +21,6 @@ kommander-karma:
 kubecost:
   enabled: true
   thanosAddress: "kommander-kubeaddons-kubecost-kubecost-kubeaddons-prometheus-se.kubecost.svc.cluster.local:10901"
-  # kommanderServiceAccount: kommander-kubeaddons
 
 kubeaddons-catalog:
   enabled: true

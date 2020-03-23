@@ -9,10 +9,8 @@ All the supported values and their defaults are listed below:
 # Internal address for the cluster's Thanos gRPC service.
 # thanosAddress: "HOST:PORT"
 thanosAddress: ""
-# Kommander service account
-kommanderServiceAccount: kommander-kubeaddons
 
 federate:
   systemNamespace:
-    name: kubecost
+    name: kommander-system
 ```

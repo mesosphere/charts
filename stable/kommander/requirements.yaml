@@ -15,7 +15,8 @@ dependencies:
     version: 4.5.*
     repository: https://kubernetes-charts.storage.googleapis.com
     condition: grafana.enabled
-  - name: kubecost
-    repository: file://./charts/
-    version: "0.X.X"
-    condition: global.kubecost.enabled
+  # Bug with `helm dep update` on local subchart: https://github.com/helm/helm/issues/3742
+  # - name: kubecost
+  #   repository: file://./charts/
+  #   version: "0.X.X"
+  #   condition: kubecost.enabled

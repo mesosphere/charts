@@ -124,8 +124,6 @@ spec:
             serviceAccounts:
               nodeExporter:
                 create: false
-            kubeStateMetrics:
-              fullnameOverride: {{ include "kommander-kubecost.short-name-prefix" . }}-prom-kubestatemetr
             extraScrapeConfigs: |
               - job_name: kubecost
                 honor_labels: true
@@ -151,7 +149,7 @@ spec:
                 scrape_interval: 1m
                 scrape_timeout: 10s
                 evaluation_interval: 1m
-                # external_labels:
+                # external_labels: # TODO
                 #   cluster_id: $(CLUSTER_ID)
               persistentVolume:
                 size: 32Gi
@@ -160,7 +158,7 @@ spec:
                 storage.tsdb.min-block-duration: 2h
                 storage.tsdb.max-block-duration: 2h
                 storage.tsdb.retention: 2w
-              # extraVolumes:
+              # extraVolumes: # TODO
               # - name: object-store-volume
               #   secret:
               #     # Ensure this secret name matches thanos.storeSecretName
@@ -174,7 +172,7 @@ spec:
                 - --log.level=debug
                 - --tsdb.path=/data/
                 - --prometheus.url=http://127.0.0.1:9090
-                # - --objstore.config-file=/etc/config/object-store.yaml
+                # - --objstore.config-file=/etc/config/object-store.yaml # TODO
                 # Start of time range limit to serve. Thanos sidecar will serve only metrics, which happened
                 # later than this value. Option can be a constant time in RFC3339 format or time duration
                 # relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.
@@ -197,7 +195,7 @@ spec:
                 - name: storage-volume
                   mountPath: /data
                   subPath: ""
-                # - name: object-store-volume
+                # - name: object-store-volume # TODO
                 #   mountPath: /etc/config
             alertmanager:
               persistentVolume:
@@ -222,5 +220,5 @@ spec:
               enabled: false
             # This secret name should match the sidecar configured secret name volume
             # in the prometheus.server.extraVolumes entry
-            # storeSecretName: kubecost-thanos
+            # storeSecretName: kubecost-thanos # TODO
 {{ end }}
