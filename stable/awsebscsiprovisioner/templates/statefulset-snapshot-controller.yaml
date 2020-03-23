@@ -1,4 +1,4 @@
-{{- if .Values.snapshotter.enabled }}
+{{- if and .Values.snapshotter.enabled (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) }}
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
