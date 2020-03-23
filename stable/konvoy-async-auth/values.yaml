@@ -1,0 +1,11 @@
+replicaCount: 1
+image:
+  repository: mesosphere/konvoy-async-auth
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
