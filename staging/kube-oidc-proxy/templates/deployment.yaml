@@ -1,6 +1,4 @@
 {{ $fullname := include "kube-oidc-proxy.fullname" . }}
-{{ $defaultTlsSecretName := printf "%s-tls" $fullname }}
-{{ $tlsSecretName := .Values.tls.secretName | default $defaultTlsSecretName }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -169,7 +167,7 @@ spec:
         {{ end }}
         - name: kube-oidc-proxy-tls
           secret:
-            secretName: kube-oidc-proxy-kubeaddons-server-tls
+            secretName: {{ include "kube-oidc-proxy.fullname" . }}-server-tls
             items:
             - key: tls.crt
               path: crt.pem
