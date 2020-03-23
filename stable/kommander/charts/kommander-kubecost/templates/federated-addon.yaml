@@ -1,0 +1,258 @@
+{{- if .Values.federate.addons }}
+---
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedNamespace
+metadata:
+  name: kubecost
+  namespace: kubecost
+  labels:
+    {{- include "kommander-kubecost.labels" . | nindent 4 }}
+spec:
+  placement:
+    clusterSelector:
+      matchLabels: {}
+  template:
+    spec: {}
+---
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedAddon
+metadata:
+  name: {{ include "kommander-kubecost.short-name-prefix" . }}-proxy
+  namespace: {{ .Values.federate.systemNamespace.name }}
+  labels:
+{{ include "kommander-kubecost.labels" . | indent 4 }}
+spec:
+  placement:
+    clusterSelector:
+      matchLabels: {}
+  template:
+    metadata:
+      namespace: kubeaddons
+      labels:
+        kubeaddons.mesosphere.io/name: {{ include "kommander-kubecost.short-name-prefix" . }}-proxy
+    spec:
+      namespace: {{ .Values.federate.systemNamespace.name }}
+      chartReference:
+        chart: mtls-proxy
+        repo: https://mesosphere.github.io/charts/stable
+        version: 0.1.1
+        values: |
+          ---
+          target: {{ required "thanos address must be set" .Values.thanosAddress }}
+          certSecretName: {{ template "kommander-kubecost.fullname" . }}-server-tls
+          ingress:
+            enabled: false
+          service:
+            type: LoadBalancer
+            port: 443
+          deployment:
+            annotations:
+              secret.reloader.stakater.com/reload: {{ template "kommander-kubecost.fullname" . }}-server-tls
+---
+apiVersion: types.kubefed.io/v1beta1
+kind: FederatedAddon
+metadata:
+  name: {{ include "kommander-kubecost.short-name-prefix" . }}-kubecost
+  namespace: kubecost
+  labels:
+{{ include "kommander-kubecost.labels" . | indent 4 }}
+spec:
+  placement:
+    clusterSelector:
+      matchLabels: {}
+  template:
+    metadata:
+      namespace: kubecost
+      labels:
+        kubeaddons.mesosphere.io/name: {{ include "kommander-kubecost.short-name-prefix" . }}-kubecost
+    spec:
+      namespace: kubecost
+      chartReference:
+        chart: cost-analyzer
+        repo: https://kubecost.github.io/cost-analyzer
+        version: 1.54.0
+        values: |
+          ---
+          global:
+            prometheus:
+              enabled: true # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
+              fqdn: http://cost-analyzer-prometheus-server.default.svc #example fqdn. Ignored if enabled: true
+
+            thanos:
+              enabled: false
+
+            grafana:
+              enabled: true # If false, Grafana will not be installed
+              domainName: cost-analyzer-grafana.default.svc #example grafana domain Ignored if enabled: true
+              scheme: "http" # http or https, for the domain name above.
+
+          ingress:
+            enabled: true
+            annotations:
+              # kubernetes.io/ingress.class: nginx
+              # kubernetes.io/tls-acme: "true"
+              kubernetes.io/ingress.class: "traefik"
+              traefik.frontend.rule.type: "PathPrefixStrip"
+              traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
+              traefik.ingress.kubernetes.io/auth-type: "forward"
+              traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
+              traefik.ingress.kubernetes.io/priority: "2"
+            paths: ["/ops/portal/kubecost/ui/"]
+            hosts: [""]
+            #   - cost-analyzer.local
+            tls: []
+            #  - secretName: cost-analyzer-tls
+            #    hosts:
+            #      - cost-analyzer.local
+
+          # Define persistence volume for cost-analyzer
+          persistentVolume:
+            size: 0.2Gi
+            enabled: true # Note that setting this to false means configurations will be wiped out on pod restart.
+            # storageClass: "-" #
+
+          service:
+            type: ClusterIP
+
+          prometheus:
+            nodeExporter:
+              enabled: false
+            serviceAccounts:
+              nodeExporter:
+                create: false
+            extraScrapeConfigs: |
+              - job_name: kubecost
+                honor_labels: true
+                scrape_interval: 1m
+                scrape_timeout: 10s
+                metrics_path: /metrics
+                scheme: http
+                dns_sd_configs:
+                - names:
+                  - {{ template "kommander-kubecost.serviceName" . }}
+                  type: 'A'
+                  port: 9003
+              - job_name: kubecost-networking
+                kubernetes_sd_configs:
+                  - role: pod
+                relabel_configs:
+                # Scrape only the the targets matching the following metadata
+                  - source_labels: [__meta_kubernetes_pod_label_app]
+                    action: keep
+                    regex:  {{ template "kommander-kubecost.networkCostsName" . }}
+            server:
+              global:
+                scrape_interval: 1m
+                scrape_timeout: 10s
+                evaluation_interval: 1m
+                # external_labels:
+                #   cluster_id: $(CLUSTER_ID)
+              persistentVolume:
+                size: 32Gi
+                enabled: true
+              extraArgs:
+                storage.tsdb.min-block-duration: 2h
+                storage.tsdb.max-block-duration: 2h
+                storage.tsdb.retention: 2w
+              # extraVolumes:
+              # - name: object-store-volume
+              #   secret:
+              #     # Ensure this secret name matches thanos.storeSecretName
+              #     secretName: kubecost-thanos
+              enableAdminApi: true
+              sidecarContainers:
+              - name: thanos-sidecar
+                image: thanosio/thanos:v0.10.1
+                args:
+                - sidecar
+                - --log.level=debug
+                - --tsdb.path=/data/
+                - --prometheus.url=http://127.0.0.1:9090
+                # - --objstore.config-file=/etc/config/object-store.yaml
+                # Start of time range limit to serve. Thanos sidecar will serve only metrics, which happened
+                # later than this value. Option can be a constant time in RFC3339 format or time duration
+                # relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.
+                - --min-time=-3h
+                env:
+                - name: POD_NAME
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.name
+                ports:
+                - name: sidecar-http
+                  containerPort: 10902
+                - name: grpc
+                  containerPort: 10901
+                - name: cluster
+                  containerPort: 10900
+                volumeMounts:
+                - name: config-volume
+                  mountPath: /etc/prometheus
+                - name: storage-volume
+                  mountPath: /data
+                  subPath: ""
+                # - name: object-store-volume
+                #   mountPath: /etc/config
+            alertmanager:
+              persistentVolume:
+                enabled: true
+            pushgateway:
+              persistentVolume:
+                enabled: true
+
+          grafana:
+            sidecar:
+              dashboards:
+                enabled: true
+                # label that the configmaps with datasources are marked with
+                # label: grafana_dashboard_kubecost
+              datasources:
+                enabled: true
+                defaultDatasourceEnabled: true
+                dataSourceName: Prometheus
+                # label that the configmaps with datasources are marked with
+                # label: grafana_datasource
+            ingress:
+              enabled: true
+              annotations:
+                kubernetes.io/ingress.class: traefik
+                ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+                traefik.frontend.rule.type: PathPrefixStrip
+                traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+                traefik.ingress.kubernetes.io/auth-type: forward
+                traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+                traefik.ingress.kubernetes.io/priority: "2"
+              hosts: [""]
+              path: /ops/portal/kubecost/grafana
+            grafana.ini:
+              server:
+                protocol: http
+                enable_gzip: true
+                root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
+              auth.proxy:
+                enabled: true
+                header_name: X-Forwarded-User
+                auto-sign-up: true
+              auth.basic:
+                enabled: false
+              users:
+                auto_assign_org_role: Admin
+
+          serviceAccount:
+            create: true
+
+          thanos:
+            store:
+              enabled: false
+            query:
+              enabled: false
+            sidecar:
+              enabled: false
+            bucket:
+              enabled: false
+            compact:
+              enabled: false
+            # This secret name should match the sidecar configured secret name volume
+            # in the prometheus.server.extraVolumes entry
+            # storeSecretName: kubecost-thanos
+{{ end }}
