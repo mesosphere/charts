@@ -94,7 +94,7 @@ spec:
               #scheme: "http" # http or https, for the domain name above.
 
           ingress:
-            enabled: true
+            enabled: false
             annotations:
               kubernetes.io/ingress.class: traefik
               ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
