@@ -89,9 +89,9 @@ spec:
               enabled: false
 
             grafana:
-              enabled: true # If false, Grafana will not be installed
-              domainName: cost-analyzer-grafana.default.svc #example grafana domain Ignored if enabled: true
-              scheme: "http" # http or https, for the domain name above.
+              enabled: false # If false, Grafana will not be installed
+              #domainName: cost-analyzer-grafana.default.svc #example grafana domain Ignored if enabled: true
+              #scheme: "http" # http or https, for the domain name above.
 
           ingress:
             enabled: true
@@ -208,45 +208,6 @@ spec:
             pushgateway:
               persistentVolume:
                 enabled: true
-
-          grafana:
-            namespace_dashboards: kubeaddons
-            sidecar:
-              dashboards:
-                enabled: true
-                # label that the configmaps with dashboards are marked with
-                label: grafana_dashboard
-              datasources:
-                enabled: true
-                defaultDatasourceEnabled: true
-                dataSourceName: Prometheus
-                # label that the configmaps with datasources are marked with
-                label: grafana_datasource
-            ingress:
-              enabled: true
-              annotations:
-                kubernetes.io/ingress.class: traefik
-                ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-                traefik.frontend.rule.type: PathPrefixStrip
-                traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-                traefik.ingress.kubernetes.io/auth-type: forward
-                traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-                traefik.ingress.kubernetes.io/priority: "2"
-              hosts: [""]
-              path: /ops/portal/kubecost/grafana
-            grafana.ini:
-              server:
-                protocol: http
-                enable_gzip: true
-                root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
-              auth.proxy:
-                enabled: true
-                header_name: X-Forwarded-User
-                auto-sign-up: true
-              auth.basic:
-                enabled: false
-              users:
-                auto_assign_org_role: Admin
 
           serviceAccount:
             create: true
