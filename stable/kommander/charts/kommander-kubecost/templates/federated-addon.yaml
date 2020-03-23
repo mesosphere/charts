@@ -77,7 +77,7 @@ spec:
       chartReference:
         chart: cost-analyzer
         repo: https://kubecost.github.io/cost-analyzer
-        version: 1.54.0
+        version: 1.54.1
         values: |
           ---
           global:
@@ -208,17 +208,18 @@ spec:
                 enabled: true
 
           grafana:
+            namespace_dashboards: kubeaddons
             sidecar:
               dashboards:
                 enabled: true
-                # label that the configmaps with datasources are marked with
-                # label: grafana_dashboard_kubecost
+                # label that the configmaps with dashboards are marked with
+                label: grafana_dashboard
               datasources:
                 enabled: true
                 defaultDatasourceEnabled: true
                 dataSourceName: Prometheus
                 # label that the configmaps with datasources are marked with
-                # label: grafana_datasource
+                label: grafana_datasource
             ingress:
               enabled: true
               annotations:
