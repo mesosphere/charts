@@ -47,10 +47,10 @@ spec:
           - "--oidc-client-id=$(OIDC_CLIENT_ID)"
           - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
-          {{- if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
+          {{- if .Values.oidc.caSystemDefault }}
+          # Not setting `--oidc-ca-file` to use CA bundle from the image
+          {{- else if or .Values.oidc.caPEM .Values.oidc.caSecretName .Values.oidc.caCertPemHostPath }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
-          {{- else if and .Values.oidc.caKubernetesDefault }}
-          # disabled --oidc-ca-file to use container image available root CAs
           {{- else }}
           - "--oidc-ca-file=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
           {{ end }}
@@ -143,20 +143,24 @@ spec:
               key: api-audiences
         {{ end }}
         volumeMounts:
-          {{ if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
+          {{- if .Values.oidc.caSystemDefault }}
+          # No need to mount volumes. Use the CA bundle in the image.
+          {{- else if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
           - name: kube-oidc-proxy-config
             mountPath: /etc/oidc
             readOnly: true
-          {{ else if .Values.oidc.caCertPemHostPath }}
+          {{- else if .Values.oidc.caCertPemHostPath }}
           - name: ca-cert-pem
-            mountPath: {{ .Values.oidc.caCertPemMountPath }}
+            mountPath: /etc/oidc/oidc-ca.pem
             readOnly: true
           {{ end }}
           - name: kube-oidc-proxy-tls
             mountPath: /etc/oidc/tls
             readOnly: true
       volumes:
-        {{ if .Values.oidc.caPEM }}
+        {{- if .Values.oidc.caSystemDefault }}
+        # No need to mount volumes. Use the CA bundle in the image.
+        {{- else if .Values.oidc.caPEM }}
         - name: kube-oidc-proxy-config
           secret:
             secretName: {{ include "kube-oidc-proxy.fullname" . }}-config
