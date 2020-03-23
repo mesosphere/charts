@@ -52,12 +52,12 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{- define "kubecost.serviceName" -}}
-{{- printf "%s-%s" .Release.Name "cost-analyzer" | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s-%s-%s" ( include "kubecost.fullname" . ) "kubecost-kubeaddons" "cost-analyzer" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Network Costs name used to tie autodiscovery of metrics to daemon set pods
 */}}
 {{- define "kubecost.networkCostsName" -}}
-{{- printf "%s-%s" .Release.Name "network-costs" -}}
+{{- printf "%s-%s-%s" ( include "kubecost.fullname" . ) "kubecost-kubeaddons" "network-costs" -}}
 {{- end -}}

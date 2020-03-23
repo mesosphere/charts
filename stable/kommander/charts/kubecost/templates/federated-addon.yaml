@@ -90,27 +90,24 @@ spec:
 
             grafana:
               enabled: false # If false, Grafana will not be installed
-              #domainName: cost-analyzer-grafana.default.svc #example grafana domain Ignored if enabled: true
+              domainName: prometheus-kubeaddons-grafana.kubeaddons.svc # Ignored if enabled: true
               #scheme: "http" # http or https, for the domain name above.
 
           ingress:
             enabled: true
             annotations:
-              # kubernetes.io/ingress.class: nginx
-              # kubernetes.io/tls-acme: "true"
-              kubernetes.io/ingress.class: "traefik"
-              traefik.frontend.rule.type: "PathPrefixStrip"
-              traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
-              traefik.ingress.kubernetes.io/auth-type: "forward"
-              traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
+              kubernetes.io/ingress.class: traefik
+              ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+              traefik.frontend.rule.type: PathPrefixStrip
+              traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+              traefik.ingress.kubernetes.io/auth-type: forward
+              traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
               traefik.ingress.kubernetes.io/priority: "2"
-            paths: ["/ops/portal/kubecost/ui/"]
-            hosts: [""]
-            #   - cost-analyzer.local
+            paths:
+              - "/ops/portal/kubecost/ui"
+            hosts:
+              - ""
             tls: []
-            #  - secretName: cost-analyzer-tls
-            #    hosts:
-            #      - cost-analyzer.local
 
           # Define persistence volume for cost-analyzer
           persistentVolume:
@@ -148,7 +145,7 @@ spec:
                 # Scrape only the the targets matching the following metadata
                   - source_labels: [__meta_kubernetes_pod_label_app]
                     action: keep
-                    regex:  {{ template "kubecost.networkCostsName" . }}
+                    regex: {{ template "kubecost.networkCostsName" . }}
             server:
               global:
                 scrape_interval: 1m
