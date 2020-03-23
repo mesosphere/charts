@@ -10,6 +10,8 @@ thanosAddress: ""
 
 federate:
   addons: true
+  addonNamespace:
+    name: kubecost
   systemNamespace:
     name: kommander-system
 

@@ -5,13 +5,13 @@ kind: Namespace
 metadata:
   labels:
     {{- include "kubecost.labels" . | nindent 4 }}
-  name: kubecost
+  name: {{ .Values.federate.addonNamespace.name }}
 ---
 apiVersion: types.kubefed.io/v1beta1
 kind: FederatedNamespace
 metadata:
   name: kubecost
-  namespace: kubecost
+  namespace: {{ .Values.federate.addonNamespace.name }}
   labels:
     {{- include "kubecost.labels" . | nindent 4 }}
 spec:
@@ -60,7 +60,7 @@ apiVersion: types.kubefed.io/v1beta1
 kind: FederatedAddon
 metadata:
   name: {{ include "kubecost.short-name-prefix" . }}-kubecost
-  namespace: kubecost
+  namespace: {{ .Values.federate.addonNamespace.name }}
   labels:
 {{ include "kubecost.labels" . | indent 4 }}
 spec:
@@ -69,11 +69,11 @@ spec:
       matchLabels: {}
   template:
     metadata:
-      namespace: kubecost
+      namespace: {{ .Values.federate.addonNamespace.name }}
       labels:
         kubeaddons.mesosphere.io/name: {{ include "kubecost.short-name-prefix" . }}-kubecost
     spec:
-      namespace: kubecost
+      namespace: {{ .Values.federate.addonNamespace.name }}
       chartReference:
         chart: cost-analyzer
         repo: https://kubecost.github.io/cost-analyzer
