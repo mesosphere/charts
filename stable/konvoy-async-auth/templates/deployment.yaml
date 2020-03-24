@@ -22,6 +22,76 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
+          ports:
+          - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          command: ["konvoy-auth-server"]
+          args:
+          {{- if .Values.konvoyAsyncAuth.debug }}
+          - "-gc-debug=true"
+          {{ end }}
+          {{- if or .Values.konvoyAsyncAuth.caPEM .Values.konvoyAsyncAuth.caSecretName }}
+          - "-issuer-ca-file=/etc/konvoy-async-auth/issuer-ca.pem"
+          {{- else }}
+          - "-issuer-ca-file=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+          {{ end }}
+          env:
+          {{- range $key, $value := .Values.env }}
+          - name: {{ $key | quote }}
+            value: {{ tpl $value $ | quote }}
+          {{- end }}
+          - name: KAUTH_ISSUER_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "konvoy-async-auth.fullname" . }}-config
+                key: issuerURL
+          - name: KAUTH_ISSUER_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "konvoy-async-auth.fullname" . }}-config
+                key: issuerClientID
+          - name: KAUTH_ISSUER_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "konvoy-async-auth.fullname" . }}-config
+                key: issuerClientSecret
+          - name: KAUTH_REDIRECT_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "konvoy-async-auth.fullname" . }}-config
+                key: redirectURL
+          - name: KAUTH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "konvoy-async-auth.fullname" . }}-config
+                key: secret
+          volumeMounts:
+            {{ if or .Values.konvoyAsyncAuth.caPEM .Values.konvoyAsyncAuth.caSecretName }}
+            - name: konvoy-async-auth-config
+              mountPath: /etc/konvoy-async-auth
+              readOnly: true
+            {{ end }}
+          volumes:
+            {{ if .Values.konvoyAsyncAuth.caPEM }}
+            - name: konvoy-async-auth-config
+              secret:
+                secretName: {{ include "konvoy-async-auth.fullname" }}-config
+                items:
+                - key: issuer-ca-pem
+                  path: issuer-ca.pem
+            {{- else if .Values.konvoyAsyncAuth.caSecretNae }}
+            - name: konvoy-async-auth-config
+              secret:
+                secretName: {{ .Values.konvoyAsyncAuth.caSecretName }}
+                items:
+                - key: ca.crt
+                  path: issuer-ca.pem
+            {{ end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
