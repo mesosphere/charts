@@ -2,6 +2,24 @@ replicaCount: 1
 image:
   repository: mesosphere/konvoy-async-auth
   pullPolicy: IfNotPresent
+konvoyAsyncAuth:
+  debug: false
+  issuerURL: ""
+  issuerClientID: ""
+  redirectURL: ""
+  secret: ""
+  caPEM:
+  caSecretName:
+
+ingress:
+  enabled: true
+  annotaionts: {}
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+tls: []
+
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
