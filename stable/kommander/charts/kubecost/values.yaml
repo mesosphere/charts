@@ -10,6 +10,12 @@ thanosAddress: ""
 
 federate:
   addons: true
+  addonsInitializer:
+    repository: "mesosphere/kubeaddons-addon-initializer"
+    tag: "v0.1.1"
+    pullPolicy: IfNotPresent
+  prometheus:
+    configmapName: cluster-info-configmap
   addonNamespace:
     name: kubecost
   systemNamespace:
