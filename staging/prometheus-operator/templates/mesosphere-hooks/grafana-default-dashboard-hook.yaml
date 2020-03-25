@@ -1,3 +1,4 @@
+{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -47,4 +48,4 @@ data:
     DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query={{ .Values.mesosphereResources.hooks.grafana.dashboardName | urlquery }} | jq '.[0].id')
     echo "setting home dashboard to ID" $DASHBOARD_ID
     $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
-
+{{- end }}
