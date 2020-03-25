@@ -1,6 +1,4 @@
 {{ $fullname := include "kube-oidc-proxy.fullname" . }}
-{{ $defaultTlsSecretName := printf "%s-tls" $fullname }}
-{{ $tlsSecretName := .Values.tls.secretName | default $defaultTlsSecretName }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -49,7 +47,9 @@ spec:
           - "--oidc-client-id=$(OIDC_CLIENT_ID)"
           - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
-          {{- if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
+          {{- if .Values.oidc.caSystemDefault }}
+          # Not setting `--oidc-ca-file` to use CA bundle from the image
+          {{- else if or .Values.oidc.caPEM .Values.oidc.caSecretName .Values.oidc.caCertPemHostPath }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
           {{- else }}
           - "--oidc-ca-file=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
@@ -143,16 +143,24 @@ spec:
               key: api-audiences
         {{ end }}
         volumeMounts:
-          {{ if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
+          {{- if .Values.oidc.caSystemDefault }}
+          # No need to mount volumes. Use the CA bundle in the image.
+          {{- else if or .Values.oidc.caPEM .Values.oidc.caSecretName }}
           - name: kube-oidc-proxy-config
             mountPath: /etc/oidc
+            readOnly: true
+          {{- else if .Values.oidc.caCertPemHostPath }}
+          - name: ca-cert-pem
+            mountPath: /etc/oidc/oidc-ca.pem
             readOnly: true
           {{ end }}
           - name: kube-oidc-proxy-tls
             mountPath: /etc/oidc/tls
             readOnly: true
       volumes:
-        {{ if .Values.oidc.caPEM }}
+        {{- if .Values.oidc.caSystemDefault }}
+        # No need to mount volumes. Use the CA bundle in the image.
+        {{- else if .Values.oidc.caPEM }}
         - name: kube-oidc-proxy-config
           secret:
             secretName: {{ include "kube-oidc-proxy.fullname" . }}-config
@@ -166,10 +174,15 @@ spec:
             items:
             - key: ca.crt
               path: oidc-ca.pem
+        {{- else if .Values.oidc.caCertPemHostPath }}
+        - name: ca-cert-pem
+          hostPath:
+            path: {{ .Values.oidc.caCertPemHostPath }}
+            type: File
         {{ end }}
         - name: kube-oidc-proxy-tls
           secret:
-            secretName: kube-oidc-proxy-kubeaddons-server-tls
+            secretName: {{ include "kube-oidc-proxy.fullname" . }}-server-tls
             items:
             - key: tls.crt
               path: crt.pem

@@ -75,8 +75,14 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
+# By default, Kubernetes CA will be used. If `caCerts.enabled` is set to
+# `true`, one can choose one of the following:
+# 1. Using system defaults by setting `caCerts.useSystemDefault` to `true`
+# 2. Using custom CA from a secret
+# If both are set, using system default would take precedence.
 caCerts:
   enabled: false
+  useSystemDefault: false
   # specify either caSecretName or secrets
   caSecretName:
   secrets: {}
