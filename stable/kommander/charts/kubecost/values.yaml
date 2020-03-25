@@ -1,21 +1,17 @@
-# Default values for kommander-kubecost.
+# Default values for kubecost deployed as subhart of kommander.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 # Internal address for the cluster's Kubecost Thanos gRPC service.
 # thanosAddress: "HOST:PORT"
 thanosAddress: ""
-# # Kommander service account used to delete Thanos store configmaps
-# kommanderServiceAccount: kommander-kubeaddons
 
 federate:
-  addons: true
+  addons: false
   addonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
     tag: "v0.1.1"
     pullPolicy: IfNotPresent
-  prometheus:
-    configmapName: cluster-info-configmap
   addonNamespace:
     name: kubecost
   systemNamespace:
