@@ -21,7 +21,7 @@ dindTask("publish", inputs=[git], steps=[
       git fetch origin master --unshallow
       export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
       git config --global user.name 'Dispatch CI'
-      git config --global user.email '<>'
+      git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
       make publish
       """
     ],
