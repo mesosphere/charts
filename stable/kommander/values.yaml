@@ -1,7 +1,3 @@
-ingress:
-  extraAnnotations:
-    traefik.ingress.kubernetes.io/priority: "2"
-
 federate:
   kubeaddonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
@@ -10,45 +6,24 @@ federate:
 
 kommander-cluster-lifecycle:
   enabled: true
-  certificates:
-    issuer:
-      name: kubernetes-ca
-      kind: ClusterIssuer
-  konvoy:
-    allowUnofficialReleases: true
-  kubefed:
-    controllermanager:
-      annotations:
-        secret.reloader.stakater.com/reload: "kubefed-admission-webhook-serving-cert"
-      webhook:
-        annotations:
-          secret.reloader.stakater.com/reload: "kubefed-admission-webhook-serving-cert"
 
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
   kommanderServiceAccount: kommander-kubeaddons
-  thanos:
-    query:
-      deploymentAnnotations:
-        secret.reloader.stakater.com/reload: kommander-thanos-client-tls
 
 kommander-karma:
   enabled: true
   alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
   kommanderServiceAccount: kommander-kubeaddons
   kommanderKarmaConfigMap: kommander-kubeaddons-config
-  karma:
-    deployment:
-      annotations:
-        configmap.reloader.stakater.com/reload: kommander-kubeaddons-config
-        secret.reloader.stakater.com/reload: kommander-karma-client-tls
 
 kubeaddons-catalog:
   enabled: true
+
   image:
     repository: mesosphere/kubeaddons-catalog
-    tag: "v0.8.3"
+    tag: "v0.8.2"
     pullPolicy: IfNotPresent
 
 grafana:
@@ -187,7 +162,6 @@ kommander-ui:
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
     path: /ops/portal/kommander/ui
-  kubernetesVersionsSelection: '["1.16.4", "1.16.3"]'
 
 portalRBAC:
   grafana:
