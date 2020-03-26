@@ -4,4 +4,7 @@ metadata:
   labels:
     istio-injection: enabled
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+    {{- if .Values.namespace.additionalLabels }}
+{{ toYaml .Values.namespace.additionalLabels | indent 4 }}
+    {{- end }}
   name: knative-serving

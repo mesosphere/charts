@@ -1,3 +1,13 @@
 global:
   serviceLabels: {}
 domain: example.com
+
+customMetricsApiservice:
+  enabled: true
+
+gateway:
+  https:
+    enabled: true
+
+namespace:
+  additionalLabels: {}

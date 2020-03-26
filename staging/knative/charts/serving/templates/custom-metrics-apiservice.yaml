@@ -1,3 +1,4 @@
+{{- if .Values.customMetricsApiservice }}
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
@@ -14,3 +15,4 @@ spec:
     namespace: knative-serving
   version: v1beta1
   versionPriority: 100
+{{- end }}
