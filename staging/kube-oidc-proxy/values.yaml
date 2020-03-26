@@ -26,15 +26,37 @@ oidc:
   issuerUrl: ""
   usernameClaim: ""
 
+  # The following `caXXX` options affect the `--oidc-ca-file` flag to
+  # the proxy. One can choose one of the following:
+  # 1. Use system defaults by setting `caSystemDefault` to `true`
+  # 2. Use a custom CA by setting `caPEM` or `caSecretName`
+  # 3. Use a custom CA mounted from the host using `caCertPemHostPath`
+  # The earlier item in this list will take precedence over the later
+  # items in this list. For instance, if `caSystemDefault` is set to
+  # `true`, the `caPEM`, `caSecretName` or `caCertPemHostPath` will be
+  # ignored even if they are set.
+  # -----------------------------------------------------------------
+  # caSystemDefault, will disable (not set) the --oidc-ca-file flag
+  # to be able to use container image available root CA's
+  caSystemDefault: false
   # CA cert that will verify TLS connection to OIDC issuer URL.
-  # If not provided default hosts root CA's will be used. This
-  # should be provided in PEM format, for example:
+  # If not provided service account CA will be used.
+  #
+  # Specify only one of the following values.
+  # ---
+  # caPEM
+  # This should be provided in PEM format, for example:
   # caPEM: |
   #    -----BEGIN CERTIFICATE-----
   #           ...
   #    -----END CERTIFICATE-----
   caPEM:
-  caSecretName:   # specify caPEM or caSecretName
+  # caSecretName, which includes ca.crt, tls.crt and tls.key
+  caSecretName:
+  # caCertPemHostPath, which points to a CA bundle on your host
+  # machine to use for the proxy. For example:
+  # caCertPemHostPath: /etc/ssl/certs/ca-bundle.crt
+  caCertPemHostPath:
 
   usernamePrefix:
   groupsClaim:

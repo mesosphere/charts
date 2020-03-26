@@ -29,10 +29,10 @@ spec:
   issuerRef:
     name: kubernetes-root-issuer
     kind: Issuer
-    # These are the default usages for reference
-    usages:
-      - "digital signature"
-      - "key encipherment"
+  # These are the default usages for reference
+  usages:
+    - "digital signature"
+    - "key encipherment"
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: ClusterIssuer
