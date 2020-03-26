@@ -11,10 +11,10 @@ certificates:
     issuerRef:
       name: my-root-issuer
       kind: Issuer
-      # These are the default usages for reference
-      usages:
-        - "digital signature"
-        - "key encipherment"
+    # These are the default usages for reference
+    usages:
+      - "digital signature"
+      - "key encipherment"
     commonName: cert-manager
     duration: 87600h
     dnsNames:
