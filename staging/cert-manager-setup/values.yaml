@@ -17,9 +17,9 @@ certificates: []
 #      name: kubernetes-root-issuer
 #      kind: Issuer
 #      # These are the default usages for reference
-#      usages:
-#        - "digital signature"
-#        - "key encipherment"
+#    usages:
+#      - "digital signature"
+#      - "key encipherment"
 #    commonName: cert-manager
 #    duration: 87600h
 #    dnsNames: []
