@@ -1,3 +1,4 @@
+{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -43,8 +44,19 @@ data:
     set -o nounset
     set -o errexit
     set -o pipefail
-    CURL="curl --verbose --fail --max-time 60 --retry 10 --retry-connrefused"
-    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/search/?query={{ .Values.mesosphereResources.hooks.grafana.dashboardName | urlquery }} | jq '.[0].id')
+    GRAFANA_API_URL="http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}:{{ .Values.grafana.service.port }}"
+    CURL="curl --verbose --max-time 60 --retry 10 --retry-connrefused --fail"
+    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" $GRAFANA_API_URL/api/search/?query={{ .Values.mesosphereResources.hooks.grafana.dashboardName | urlquery }} | jq '.[0].id' || true )
+    if [ "$DASHBOARD_ID" == "" ]; then
+      echo "error: Could not retrieve dashboard id"
+      exit 0
+    fi
+    # we want to fail silently as this assumes a user exists or that grafana is set up to create a user if it doesnt
+    # not all installations of prometheus should be expected to, so we should not hold up a prometheus install because of this
     echo "setting home dashboard to ID" $DASHBOARD_ID
-    $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' {{ .Values.mesosphereResources.hooks.grafana.serviceURL }}/api/org/preferences
-
+    SET_DEFAULT=$($CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' $GRAFANA_API_URL/api/org/preferences || true )
+    if [ "SET_DEFAULT" == "" ]; then
+      echo "error: Could not set default dashboard for user $X_FORWARDED_USER"
+      exit 0
+    fi
+{{- end }}

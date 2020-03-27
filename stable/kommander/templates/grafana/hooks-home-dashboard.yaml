@@ -34,8 +34,16 @@ spec:
             set -o errexit
             set -o pipefail
             CURL="curl --verbose --fail --max-time 30 --retry 20 --retry-connrefused"
-            DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/search/?query={{ .Values.grafana.hooks.dashboardName | urlquery }} | jq '.[0].id')
+            DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" {{ .Values.grafana.hooks.serviceURL }}/api/search/?query={{ .Values.grafana.hooks.dashboardName | urlquery }} | jq '.[0].id' || true)
+            if [ "$DASHBOARD_ID" == "" ]; then
+                  echo "error: Could not retrieve dashboard id"
+                  exit 0
+            fi
             echo "setting home dashboard to ID" $DASHBOARD_ID
-            $CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' {{ .Values.grafana.hooks.serviceURL }}/api/org/preferences
+            SET_DEFAULT=$($CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' {{ .Values.grafana.hooks.serviceURL }}/api/org/preferences || true )
+            if [ "SET_DEFAULT" == "" ]; then
+            echo "error: Could not set default dashboard for user $X_FORWARDED_USER"
+            exit 0
+            fi
             EOF
 {{- end }}

@@ -20,9 +20,9 @@ spec:
   issuerRef:
     name: {{ .issuerRef.name }}
     kind: {{ .issuerRef.kind }}
-{{- if .issuerRef.usages }}
-    usages:
-  {{- range .issuerRef.usages }}
+{{- if .usages }}
+  usages:
+  {{- range .usages }}
     - {{ . | quote -}}
   {{- end }}
 {{- end }}
