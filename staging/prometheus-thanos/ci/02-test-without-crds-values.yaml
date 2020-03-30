@@ -1,6 +1,7 @@
-prometheusOperator:
-  createCustomResource: false
-  namespaces:
-    releaseNamespace: true
-    additional:
-      - kube-system
+prometheus-operator:
+  prometheusOperator:
+    createCustomResource: false
+    namespaces:
+      releaseNamespace: true
+      additional:
+        - kube-system

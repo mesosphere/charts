@@ -1,15 +1,9 @@
 dependencies:
-- name: kube-state-metrics
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 2.6.4
-- name: prometheus-node-exporter
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 1.8.2
-- name: grafana
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 4.3.2
+- name: prometheus-operator
+  repository: https://mesosphere.github.io/charts/staging/
+  version: 8.3.11
 - name: thanos
   repository: https://kubernetes-charts.banzaicloud.com/
   version: 0.3.18
-digest: sha256:b27d8898d07a93996a6ac025eb9a955251d13b3f797b290edfb23337cb713d6a
-generated: "2020-03-05T23:35:07.277569+04:00"
+digest: sha256:c7fa33c507dbeea09d949ad3ec1eb8d49c79bd2d56866bf5e4d52f78afb9041c
+generated: "2020-03-21T21:53:59.919508-04:00"
