@@ -16,6 +16,7 @@ spec:
       name: http
       number: 80
       protocol: HTTP
+{{- if .Values.gateway.https.enabled }}
   - hosts:
     - '*'
     port:
@@ -24,3 +25,4 @@ spec:
       protocol: HTTPS
     tls:
       mode: PASSTHROUGH
+{{- end }}

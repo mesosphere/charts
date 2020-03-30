@@ -1,4 +1,19 @@
 global:
   serviceLabels: {}
+
+eventing:
+  enabled: true
+
+eventing-sources:
+  enabled: true
+
 serving:
+  enabled: true
   domain: example.com
+  customMetricsApiservice:
+    enabled: true
+  gateway:
+    https:
+      enabled: true
+  namespaceKnativeServing:
+    additionalLabels: {}
