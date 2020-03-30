@@ -30,7 +30,7 @@ spec:
       volumes:
         - name: job
           configMap:
-            name: {{ .Values.mesosphereResources.hooks.grafana.jobName }}
+            name: {{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.grafana.jobName }}
             defaultMode: 0777
 
 ---
