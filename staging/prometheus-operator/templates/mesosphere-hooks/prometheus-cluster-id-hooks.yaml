@@ -59,7 +59,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Values.mesosphereResources.hooks.prometheus.jobName }}
+  name: {{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.jobName }}
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install
@@ -68,7 +68,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Values.mesosphereResources.hooks.prometheus.jobName }}
+      name: {{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.jobName }}
     spec:
       serviceAccountName: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
       containers:
@@ -84,7 +84,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cleanup-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
+  name: cleanup-{{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-delete
@@ -93,7 +93,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: cleanup-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
+      name: cleanup-{{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
     spec:
       serviceAccountName: {{ template "prometheus-operator.prometheus.serviceAccountName" . }}
       containers:
