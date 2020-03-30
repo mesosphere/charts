@@ -30,8 +30,12 @@ spec:
           image: "{{ .Values.image.livenessProbe.repository }}:{{ .Values.image.livenessProbe.tag }}"
           args:
             - --csi-address=/csi/csi.sock
-            - --connection-timeout=3s
-            - --health-port=9602
+            - --health-port=29603
+            - --v=5
+          resources:
+{{- if .Values.azuredisk.node.resources }}
+{{ toYaml .Values.azuredisk.node.resources | indent 12 }}
+{{- end }}
         - name: node-driver-registrar
           image: "{{ .Values.image.nodeDriverRegistrar.repository }}:{{ .Values.image.nodeDriverRegistrar.tag }}"
           args:
@@ -52,15 +56,23 @@ spec:
               mountPath: /csi
             - name: registration-dir
               mountPath: /registration
+          resources:
+{{- if .Values.azuredisk.node.resources }}
+{{ toYaml .Values.azuredisk.node.resources | indent 12 }}
+{{- end }}
         - name: azuredisk
           image: "{{ .Values.image.azuredisk.repository }}:{{ .Values.image.azuredisk.tag }}"
           args:
-            - --v=5
-            - --endpoint=$(CSI_ENDPOINT)
-            - --nodeid=$(KUBE_NODE_NAME)
+            - "--v=5"
+            - "--endpoint=$(CSI_ENDPOINT)"
+            - "--nodeid=$(KUBE_NODE_NAME)"
+            - "--metrics-address=0.0.0.0:{{ .Values.node.metricsPort }}"
           ports:
-            - containerPort: 9602
+            - containerPort: 29603
               name: healthz
+              protocol: TCP
+            - containerPort: {{ .Values.node.metricsPort }}
+              name: metrics
               protocol: TCP
           livenessProbe:
             failureThreshold: 5
@@ -100,6 +112,10 @@ spec:
               name: sys-devices-dir
             - mountPath: /sys/class/scsi_host/
               name: scsi-host-dir
+          resources:
+{{- if .Values.azuredisk.node.resources }}
+{{ toYaml .Values.azuredisk.node.resources | indent 12 }}
+{{- end }}
       volumes:
         - hostPath:
             path: /var/lib/kubelet/plugins/disk.csi.azure.com
