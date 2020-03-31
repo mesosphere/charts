@@ -123,6 +123,9 @@ rules:
     - leases
     verbs:
     - create
+  - apiGroups: ["kommander.mesosphere.io"]
+    resources: ["konvoyclusters"]
+    verbs: ["watch", "list", "get", "update"]    
   - apiGroups:
     - coordination.k8s.io
     resourceNames:
