@@ -64,6 +64,10 @@ spec:
             - --node-group-auto-discovery=mig:namePrefix={{ .name }},min={{ .minSize }},max={{ .maxSize }}
             {{- end }}
           {{- end }}
+          {{- else if eq .Values.cloudProvider "konvoy" }}
+            {{- if .Values.autoDiscovery.clusterName }}
+            - --node-group-auto-discovery=konvoy:namespace={{ .Values.autoDiscovery.konvoyClusterNamespace }}
+            {{- end }}
           {{- end }}
           {{- if eq .Values.cloudProvider "gce" }}
             - --cloud-config={{ .Values.cloudConfigPath }}
