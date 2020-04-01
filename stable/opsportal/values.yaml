@@ -30,6 +30,7 @@ kommander-ui:
     name: opsportal
 
   ingress:
+    enabled: true
     traefikFrontendRuleType: PathPrefixStrip
     path: /ops/portal
     extraAnnotations:
