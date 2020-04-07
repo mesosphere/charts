@@ -16,10 +16,10 @@
 
 <body class="theme-body">
 <div class="plugin-kubeconfig-container">
-  <h1>Konvoy kubectl Credentials Plugin</h1>
-  <p>This document describes the process of configuring kubectl to use the Konvoy Credentials Plugin.
+  <h1>Konvoy kubectl credentials plugin</h1>
+  <p>This document describes the process of configuring kubectl to use the Konvoy credentials plugin.
     This credentials plugin makes it easy to use external identity provider accounts with the kubernetes API.
-    When enabled the plugin will initiate authentication sessions and store identity tokens automatically.</p>
+    When enabled the plugin initiates authentication sessions and stores identity tokens automatically.</p>
   <div id="plugin-select-cluster" style="display: none">
     <p><label for="plugin-select-provider-id">Select Provider:</label>
       <select id="plugin-select-provider-id" onchange="providerOnChange()"></select></p>
@@ -29,12 +29,10 @@
   </div>
   <div id="plugin-download-kubeconfig">
     <h2>Generate a kubeconfig</h2>
-    <p>Follow the instructions below to configure a kubectl context for the currently selected cluster.
-      You may also generate a kubeconfig for all clusters by downloading this
-      <a href="{{ .Config.Web_Path_Prefix}}/plugin/kubeconfig">kubeconfig
-      </a>.
+    <p>The following instructions describe how to configure a kubectl context for the currently selected cluster.
+      You can also generate a kubeconfig for all clusters by downloading this <a href="{{ .Config.Web_Path_Prefix}}/plugin/kubeconfig">kubeconfig</a>.
     </p>
-<p>For more information on using and managing kubeconfig files, take a look at this documentation:
+<p>For more information on using and managing kubeconfig files, refer to this documentation:
     </p>
     <p>
       <a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/">
@@ -48,7 +46,7 @@
   </div>
   <div id="plugin-config-form"></div>
   <h2>Wrapping up</h2>
-  <p>At this point you can may begin using the kubectl. Try running a simple kubectl command: </p>
+  <p>At this point you can start using kubectl. Try running a simple kubectl command: </p>
   <div class="command">
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Config.Web_Path_Prefix }}static/clippy.svg" alt=""/>
@@ -57,18 +55,15 @@
     kubectl get pods -A
     </code></pre>
     <p>
-      If this is the first time you've attempted authenticate using the plugin, a browser window should open
-      to the Konvoy authentication page. After successfully authentication, you should see a pod listing in your
-      terminal. The plugin will store your identity token for subsequent requests. Once your identity token
-      expires (24 hours by default) the plugin will once again direct you to the Konvoy authentication page where
-      you may re-authenticate.
+      If this is the first time you've attempted to authenticate using the plugin, a browser window opens
+      to the Konvoy authentication page. After successful authentication, you should see a pod listing in your
+      terminal. The plugin stores your identity token for subsequent requests. After your identity token
+      expires, by default 24 hours, the plugin directs you to the Konvoy authentication page where
+      you can re-authenticate.
     </p>
   </div>
 </div>
 <script>
-    // var instructionEventName = "instruction-data-ready";
-    // var eventDataReady = new Event(instructionEventName);
-    // document.addEventListener(instructionEventName, renderInstructionsHandler, false);
     var profileName = "";
     var clusterHostname = "";
 
@@ -93,18 +88,15 @@
         R.open('GET', url);
         R.onload = function () {
             let instructionsData = R.responseText;
-            // document.dispatchEvent(eventDataReady);
             renderInstructionsHandler(instructionsData);
         };
         R.send();
     }
 
     function renderInstructionsHandler(data) {
-        // let content = document.getElementById("plugin-config-form");
-        // content.insertAdjacentHTML("beforeend", instructionsData);
         document.getElementById("plugin-config-form").innerHTML = data;
 
-        // Sets creates a listener so we can just hit enter when using our text box
+        // Creates a listener so we can just hit enter when using our text box
         document.getElementById("plugin-profile-name-input").addEventListener(
             "keyup", function (event) {
                 event.preventDefault();

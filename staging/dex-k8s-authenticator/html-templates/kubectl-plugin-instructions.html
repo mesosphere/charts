@@ -1,9 +1,9 @@
 <h1>Build kubeconfig with kubectl</h1>
 {{ if .caPem }}
-    <h2>Copy Cluster CA Certificate</h2>
+    <h2>Copy cluster CA certificate</h2>
     <p>This is the CA certificate needed to validate connections to your cluster. If your cluster is using a well known
         certificate authority, such as Let's Encrypt, or you have added your CA certificate to your system certificate pool;
-        you may skip this section.</p>
+        you can skip this section.</p>
     <div class="command">
 
         <button class="btn" style="float:right" data-clipboard-snippet="">
@@ -15,9 +15,9 @@ EOF</code></pre>
     </div>
 {{ end }}
 
-<h2>Download and Install the Konvoy credentials plugin</h2>
+<h2>Download and Install Konvoy credentials plugin</h2>
 <p>The plugin is currently available for Linux and MacOSX. Use the following command appropriate
-  for your operating system< to download and install the plugin</p>
+  for your operating system to download and install the plugin</p>
 <h3>OSX:</h3>
 <div class="command">
   <button class="btn" style="float:right" data-clipboard-snippet="">
@@ -53,8 +53,8 @@ EOF</code></pre>
     {{ end }}
 </div>
 
-<h2>Configure kubect to Use the Plugin</h2>
-<p>These commands will crate a new kubeconfig context that instruct kubectl to delegate authentication tasks to
+<h2>Configure kubectl to use the Plugin</h2>
+<p>These commands create a new kubeconfig context instructing kubectl to delegate authentication tasks to
 the Konvoy credentials plugin</p>
 
 <h3>Create a cluster configuration</h3>
@@ -74,8 +74,8 @@ the Konvoy credentials plugin</p>
   </code></pre>
 </div>
 
-<h3>Create a kubeconfig User Profile</h3>
-<p>If you plan on authenticating to the same cluster with multiple users, you should created multiple user profiles</p>
+<h3>Create kubeconfig user Profile</h3>
+<p>If you are authenticating to the same cluster, with multiple users, you should created multiple user profiles</p>
 <label for="plugin-profile-name-input">Set profile name:</label>
 <input type="text" id="plugin-profile-name-input" value="{{ .profileName }}" onsubmit="SetProfileName()">
 <button type="button" id="plugin-profile-name-button" onclick="SetProfileName()">Ok</button>
