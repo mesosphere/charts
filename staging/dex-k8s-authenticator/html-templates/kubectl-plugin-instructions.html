@@ -97,7 +97,7 @@ the Konvoy credentials plugin</p>
   <button class="btn" style="float:right" data-clipboard-snippet="">
     <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
   </button>
-  <pre><code>kubectl config set-context {{ .clusterName }} \
+  <pre><code>kubectl config set-context {{ .profileName }}-{{ .clusterName }} \
       --cluster={{ .clusterName }} \
       --user={{ .profileName }}
   </code></pre>
