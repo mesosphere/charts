@@ -1,7 +1,7 @@
 federate:
   kubeaddonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
-    tag: "v0.1.1"
+    tag: "v0.2.8"
     pullPolicy: IfNotPresent
 
 kommander-cluster-lifecycle:
