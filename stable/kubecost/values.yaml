@@ -3,8 +3,9 @@
 # Declare variables to be passed into your templates.
 
 hooks:
-  # This hook modifies the prometheus configmap to set the prometheus cluster_id
+  # Modifies the prometheus configmap to set the prometheus cluster_id
   # external label to the cluster's kube-system ns uid.
+  # Creates configmap to pass kube-system ns uid as envvar to kubecost.
   clusterID:
     enabled: true
     kubectlImage: "bitnami/kubectl:1.16.2"
@@ -59,7 +60,7 @@ cost-analyzer:
         scheme: http
         dns_sd_configs:
         - names:
-          - kubecost-cost-analyzer
+          - {{ .Release.Name }}-cost-analyzer
           type: 'A'
           port: 9003
       - job_name: kubecost-networking
@@ -69,7 +70,7 @@ cost-analyzer:
         # Scrape only the the targets matching the following metadata
           - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
-            regex: kubecost-network-costs
+            regex: {{ .Release.Name }}-network-costs
     server:
       global:
         scrape_interval: 1m

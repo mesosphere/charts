@@ -5,8 +5,9 @@ This is a parent chart that deploys [Kubecost](https://kubecost.com/) along with
 
 ```yaml
 hooks:
-  # This hook modifies the prometheus configmap to set the prometheus cluster_id
+  # Modifies the prometheus configmap to set the prometheus cluster_id
   # external label to the cluster's kube-system ns uid.
+  # Creates configmap to pass kube-system ns uid as envvar to kubecost.
   clusterID:
     enabled: true
     kubectlImage: "bitnami/kubectl:1.16.2"
@@ -17,15 +18,28 @@ cost-analyzer:
   global:
     prometheus:
       enabled: true # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
-      fqdn: http://cost-analyzer-prometheus-server.default.svc #example fqdn. Ignored if enabled: true
 
     thanos:
       enabled: false
 
     grafana:
-      enabled: false # If false, Grafana will not be installed
-      domainName: prometheus-kubeaddons-grafana.kubeaddons.svc # Ignored if enabled: true
-      #scheme: "http" # http or https, for the domain name above.
+      enabled: true # If false, Grafana will not be installed
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+      traefik.frontend.rule.type: PathPrefixStrip
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+      traefik.ingress.kubernetes.io/auth-type: forward
+      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+      traefik.ingress.kubernetes.io/priority: "2"
+    paths:
+      - "/ops/portal/kubecost"
+    hosts:
+      - ""
+    tls: []
 
   # Define persistence volume for cost-analyzer
   persistentVolume:
@@ -48,7 +62,7 @@ cost-analyzer:
         scheme: http
         dns_sd_configs:
         - names:
-          - kubecost-kubeaddons-cost-analyzer
+          - {{ .Release.Name }}-cost-analyzer
           type: 'A'
           port: 9003
       - job_name: kubecost-networking
@@ -58,7 +72,7 @@ cost-analyzer:
         # Scrape only the the targets matching the following metadata
           - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
-            regex: kubecost-kubeaddons-network-costs
+            regex: {{ .Release.Name }}-network-costs
     server:
       global:
         scrape_interval: 1m
@@ -66,6 +80,7 @@ cost-analyzer:
         evaluation_interval: 1m
         external_labels:
           cluster_id: $CLUSTER_ID
+          configmap_key_ref: kubecost-cluster-info-configmap
       persistentVolume:
         size: 32Gi
         enabled: true
@@ -90,6 +105,7 @@ cost-analyzer:
         - --log.level=debug
         - --tsdb.path=/data/
         - --prometheus.url=http://127.0.0.1:9090
+        - --reloader.config-file=/etc/config/prometheus.yml
         # - --objstore.config-file=/etc/config/object-store.yaml # TODO
         # Start of time range limit to serve. Thanos sidecar will serve only metrics, which happened
         # later than this value. Option can be a constant time in RFC3339 format or time duration
@@ -109,7 +125,7 @@ cost-analyzer:
           containerPort: 10900
         volumeMounts:
         - name: config-volume
-          mountPath: /etc/prometheus
+          mountPath: /etc/config
         - name: storage-volume
           mountPath: /data
           subPath: ""
@@ -119,6 +135,43 @@ cost-analyzer:
       enabled: false
     pushgateway:
       enabled: false
+      persistentVolume:
+        enabled: false
+
+  grafana:
+    sidecar:
+      dashboards:
+        enabled: true
+        label: kubecost_grafana_dashboard
+      datasources:
+        enabled: true
+        defaultDatasourceEnabled: true
+        label: kubecost_grafana_datasource
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+        traefik.frontend.rule.type: PathPrefixStrip
+        traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+        traefik.ingress.kubernetes.io/auth-type: forward
+        traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+        traefik.ingress.kubernetes.io/priority: "2"
+      hosts: [""]
+      path: /ops/portal/kubecost/grafana
+    grafana.ini:
+      server:
+        protocol: http
+        enable_gzip: true
+        root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
+      auth.proxy:
+        enabled: true
+        header_name: X-Forwarded-User
+        auto-sign-up: true
+      auth.basic:
+        enabled: false
+      users:
+        auto_assign_org_role: Admin
 
   thanos:
     store:
