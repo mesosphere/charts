@@ -33,7 +33,7 @@ cost-analyzer:
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/priority: "2"
     paths:
-      - "/ops/portal/kubecost/ui"
+      - "/ops/portal/kubecost"
     hosts:
       - ""
     tls: []
@@ -77,6 +77,7 @@ cost-analyzer:
         evaluation_interval: 1m
         external_labels:
           cluster_id: $CLUSTER_ID
+          configmap_key_ref: kubecost-cluster-info-configmap
       persistentVolume:
         size: 32Gi
         enabled: true
@@ -131,6 +132,8 @@ cost-analyzer:
       enabled: false
     pushgateway:
       enabled: false
+      persistentVolume:
+        enabled: false
 
   grafana:
     sidecar:
