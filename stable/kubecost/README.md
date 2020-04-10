@@ -33,6 +33,7 @@ cost-analyzer:
       traefik.frontend.rule.type: PathPrefixStrip
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
       traefik.ingress.kubernetes.io/auth-type: forward
+        # traefik rules need to be overridden to use kommander auth if federated from kommander
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/priority: "2"
     paths:
@@ -155,6 +156,7 @@ cost-analyzer:
         traefik.frontend.rule.type: PathPrefixStrip
         traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
         traefik.ingress.kubernetes.io/auth-type: forward
+        # traefik rules need to be overridden to use kommander auth if federated from kommander
         traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
         traefik.ingress.kubernetes.io/priority: "2"
       hosts: [""]
