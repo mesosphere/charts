@@ -174,6 +174,7 @@ kommander-ui:
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Impersonate-User,Impersonate-Group
     path: /ops/portal/kommander/ui
+    graphqlPath: /ops/portal/kommander/ui/graphql
 
 portalRBAC:
   grafana:

@@ -30,6 +30,13 @@ rules:
   verbs:
   - get
   - head
+- nonResourceURLs:
+  - /ops/portal/kommander/ui/graphql
+  - {{ index .Values "kommander-ui" "ingress" "graphqlPath" | trimSuffix "/" }}
+  verbs:
+  - get
+  - head
+  - post
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
