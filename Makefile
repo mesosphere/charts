@@ -1,4 +1,4 @@
-HELM_VERSION := v2.13.0
+HELM_VERSION := v2.16.5
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -16,7 +16,7 @@ GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^
 
 GIT_REF ?= $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
-CT_VERSION ?= v2.4.0
+CT_VERSION ?= v2.4.1
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
