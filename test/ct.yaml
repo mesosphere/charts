@@ -16,4 +16,5 @@ chart-repos:
   - helm-stable=https://kubernetes-charts.storage.googleapis.com/
   - dex-controller=https://mesosphere.github.io/dex-controller/charts
   - kommander=https://mesosphere.github.io/kommander/charts
+  - kubecost=https://kubecost.github.io/cost-analyzer
 helm-extra-args: --timeout 600
