@@ -7,7 +7,7 @@ set -x
 
 readonly KIND_VERSION=v0.7.0
 readonly CLUSTER_NAME=chart-testing
-readonly K8S_VERSION=v1.17.0
+readonly K8S_VERSION=v1.17.2
 
 tmp=$(mktemp -d)
 
@@ -117,7 +117,7 @@ install_dummylb() {
 
 replace_priority_class_name_system_x_critical() {
     echo 'Replacing priorityClassName: system-X-critical'
-    grep -rl "priorityClassName: system-" . | xargs sed -i 's/system-.*-critical/null/g'
+    grep -rl "priorityClassName: system-" --exclude-dir=test . | xargs sed -i 's/system-.*-critical/null/g'
     echo
 }
 
