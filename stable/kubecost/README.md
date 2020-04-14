@@ -17,36 +17,40 @@ cost-analyzer:
 
   global:
     prometheus:
-      enabled: true # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
+      # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
+      enabled: true
 
     thanos:
       enabled: false
 
     grafana:
-      enabled: true # If false, Grafana will not be installed
+      # If false, Grafana will not be installed
+      enabled: true
 
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: traefik
-      ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-      traefik.frontend.rule.type: PathPrefixStrip
-      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-      traefik.ingress.kubernetes.io/auth-type: forward
-        # traefik rules need to be overridden to use kommander auth if federated from kommander
-      traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-      traefik.ingress.kubernetes.io/priority: "2"
-    paths:
-      - "/ops/portal/kubecost"
-    hosts:
-      - ""
-    tls: []
+  # Enable kubecost ingress with below annotations to use Konvoy traefik auth
+  # ingress:
+  #   enabled: true
+  #   annotations:
+  #     kubernetes.io/ingress.class: traefik
+  #     ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+  #     traefik.frontend.rule.type: PathPrefixStrip
+  #     traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+  #     traefik.ingress.kubernetes.io/auth-type: forward
+  #     # traefik rules need to be overridden to use kommander auth if federated from kommander
+  #     traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+  #     traefik.ingress.kubernetes.io/priority: "2"
+  #   paths:
+  #     - "/ops/portal/kubecost"
+  #   hosts:
+  #     - ""
+  #   tls: []
 
   # Define persistence volume for cost-analyzer
   persistentVolume:
     size: 0.2Gi
-    enabled: true # Note that setting this to false means configurations will be wiped out on pod restart.
-    # storageClass: "-" #
+    # Note that setting this to false means configurations will be wiped out on pod restart.
+    enabled: true
+    # storageClass: "-"
 
   prometheus:
     nodeExporter:
@@ -148,19 +152,20 @@ cost-analyzer:
         enabled: true
         defaultDatasourceEnabled: true
         label: kubecost_grafana_datasource
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: traefik
-        ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-        traefik.frontend.rule.type: PathPrefixStrip
-        traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-        traefik.ingress.kubernetes.io/auth-type: forward
-        # traefik rules need to be overridden to use kommander auth if federated from kommander
-        traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-        traefik.ingress.kubernetes.io/priority: "2"
-      hosts: [""]
-      path: /ops/portal/kubecost/grafana
+    # Enable grafana ingress with below annotations to use Konvoy traefik auth
+    # ingress:
+    #   enabled: true
+    #   annotations:
+    #     kubernetes.io/ingress.class: traefik
+    #     ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    #     traefik.frontend.rule.type: PathPrefixStrip
+    #     traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
+    #     traefik.ingress.kubernetes.io/auth-type: forward
+    #     # traefik rules need to be overridden to use kommander auth if federated from kommander
+    #     traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+    #     traefik.ingress.kubernetes.io/priority: "2"
+    #   hosts: [""]
+    #   path: /ops/portal/kubecost/grafana
     grafana.ini:
       server:
         protocol: http
