@@ -5,9 +5,9 @@ set -o nounset
 set -o pipefail
 set -x
 
-readonly KIND_VERSION=v0.6.1
+readonly KIND_VERSION=v0.7.0
 readonly CLUSTER_NAME=chart-testing
-readonly K8S_VERSION=v1.16.3
+readonly K8S_VERSION=v1.17.0
 
 tmp=$(mktemp -d)
 
