@@ -5,9 +5,9 @@ set -o nounset
 set -o pipefail
 set -x
 
-readonly KIND_VERSION=v0.6.1
+readonly KIND_VERSION=v0.7.0
 readonly CLUSTER_NAME=chart-testing
-readonly K8S_VERSION=v1.16.3
+readonly K8S_VERSION=v1.17.0
 
 tmp=$(mktemp -d)
 
@@ -78,21 +78,6 @@ EOF
     echo
 }
 
-install_local-path-provisioner() {
-    # kind doesn't support Dynamic PVC provisioning yet, this is one ways to
-    # get it working
-    # https://github.com/rancher/local-path-provisioner
-
-    # Remove default storage class. It will be recreated by
-    # local-path-provisioner
-    docker_exec kubectl delete storageclass standard
-
-    echo 'Installing local-path-provisioner...'
-    docker_exec kubectl apply -f \
-        https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
-    echo
-}
-
 install_tiller() {
     echo 'Installing tiller...'
     docker_exec kubectl --namespace kube-system create serviceaccount tiller
@@ -142,7 +127,6 @@ main() {
     trap cleanup EXIT
 
     create_kind_cluster
-    install_local-path-provisioner
     install_tiller
     install_dummylb
     install_certmanager
