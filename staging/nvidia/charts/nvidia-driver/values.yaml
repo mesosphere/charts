@@ -28,3 +28,7 @@ tolerations: []
 affinity: {}
 
 initContainers: []
+
+# The vault repo adds the Centos 7.6.1810 Base and Updates repositories.
+vaultRepo:
+  enabled: true
