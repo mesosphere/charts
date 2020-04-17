@@ -61,7 +61,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-edit-prometheus-config-cluster-id-label
+  name: {{ .Release.Name }}-edit-prom-cluster-id
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
@@ -70,7 +70,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-edit-prometheus-config-cluster-id-label
+      name: {{ .Release.Name }}-edit-prom-cluster-id
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
@@ -97,7 +97,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-create-kubecost-cluster-id-configmap
+  name: {{ .Release.Name }}-cluster-id-configmap
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install,pre-upgrade
@@ -106,7 +106,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-create-kubecost-cluster-id-configmap
+      name: {{ .Release.Name }}-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
@@ -122,7 +122,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-cleanup-kubecost-cluster-id-configmap
+  name: {{ .Release.Name }}-cleanup-cluster-id-configmap
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: post-delete
@@ -131,7 +131,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-cleanup-kubecost-cluster-id-configmap
+      name: {{ .Release.Name }}-cleanup-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
