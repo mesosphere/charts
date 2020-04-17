@@ -57,7 +57,11 @@ rules:
 - nonResourceURLs:
   - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
   - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/*
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/api/saved_objects/*
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/elasticsearch/*
+  - {{ .Values.kibanaRBAC.path | trimSuffix "/" }}/api/timelion/run
   verbs:
   - get
   - head
+  - post
 {{- end }}
