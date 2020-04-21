@@ -169,7 +169,7 @@ service:
   loadBalancerIP: ""
   loadBalancerSourceRanges: []
   servicePort: 8085
-  portName: http
+  portName: metrics
   type: ClusterIP
 
 spotinst:
@@ -182,10 +182,10 @@ spotinst:
 
 ## Are you using Prometheus Operator?
 serviceMonitor:
-  enabled: false
+  enabled: true
   interval: "10s"
    # Namespace Prometheus is installed in
-  namespace: monitoring
+  namespace: kubeaddons
    ## Defaults to whats used if you follow CoreOS [Prometheus Install Instructions](https://github.com/helm/charts/tree/master/stable/prometheus-operator#tldr)
    ## [Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#prometheus-operator-1)
    ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
