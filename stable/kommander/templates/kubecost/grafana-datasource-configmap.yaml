@@ -1,0 +1,36 @@
+{{- if index .Values "kubecost" "cost-analyzer" "grafana" -}}
+{{- if index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" -}}
+{{- if index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" "datasources" -}}
+{{- if index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" "datasources" "enabled" -}}
+{{ $datasourceName := index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" "datasources" "dataSourceName" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource
+  {{- if index .Values "kubecost" "cost-analyzer" "grafana" "namespace_datasources" }}
+  namespace: {{ index .Values "kubecost" "cost-analyzer" "grafana" " namespace_datasources" }}
+  {{- end }}
+  labels:
+    {{- if index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" "datasources" "label" }}
+    {{ index .Values "kubecost" "cost-analyzer" "grafana" "sidecar" "datasources" "label" }}: "1"
+    {{- else }}
+    grafana_datasource: "1"
+    {{- end }}
+data:
+  datasource.yaml: |-
+    # config file version
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      isDefault: false
+      name: {{ default "Prometheus" $datasourceName }}
+      type: prometheus
+{{- if index .Values "kubecost" "cost-analyzer" "global" "prometheus" "enabled" }}
+      url: http://{{ .Release.Name }}-prometheus-server.{{ .Release.Namespace  }}
+{{ else }}
+      url: {{ index .Values "kubecost" "cost-analyzer" "global" "prometheus" "fqdn" }}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
