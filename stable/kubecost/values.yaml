@@ -164,19 +164,20 @@ cost-analyzer:
     #     traefik.ingress.kubernetes.io/priority: "2"
     #   hosts: [""]
     #   path: /ops/portal/kubecost/grafana
-    grafana.ini:
-      server:
-        protocol: http
-        enable_gzip: true
-        root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
-      auth.proxy:
-        enabled: true
-        header_name: X-Forwarded-User
-        auto-sign-up: true
-      auth.basic:
-        enabled: false
-      users:
-        auto_assign_org_role: Admin
+    # Configure grafana.ini server.root_url properly if ingress is enabled
+    # grafana.ini:
+    #   server:
+    #     protocol: http
+    #     enable_gzip: true
+    #     root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
+    #   auth.proxy:
+    #     enabled: true
+    #     header_name: X-Forwarded-User
+    #     auto-sign-up: true
+    #   auth.basic:
+    #     enabled: false
+    #   users:
+    #     auto_assign_org_role: Admin
 
   thanos:
     store:
