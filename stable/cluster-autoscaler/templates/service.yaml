@@ -26,7 +26,7 @@ spec:
   ports:
     - port: {{ .Values.service.servicePort }}
       protocol: TCP
-      targetPort: 8085
+      targetPort: {{ .Values.service.portName }}
       name: {{ .Values.service.portName }}
   selector:
 {{ include "cluster-autoscaler.instance-name" . | indent 4 }}
