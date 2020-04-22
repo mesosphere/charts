@@ -175,6 +175,7 @@ spec:
               port: 8085
           ports:
             - containerPort: 8085
+              name: metrics
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           {{- if .Values.containerSecurityContext }}
