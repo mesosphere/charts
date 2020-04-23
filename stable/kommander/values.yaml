@@ -7,6 +7,13 @@ federate:
 kommander-cluster-lifecycle:
   enabled: true
 
+  clusterAutoscaler:
+    chartName: cluster-autoscaler
+    chartRepo: https://mesosphere.github.io/charts/stable
+    chartVersion: 7.1.4
+    imageRepository: mesosphere/cluster-autoscaler
+    imageTag: v0.1.0
+
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
