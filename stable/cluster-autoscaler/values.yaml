@@ -191,6 +191,7 @@ serviceMonitor:
    ## [Kube Prometheus Selector Label](https://github.com/helm/charts/tree/master/stable/prometheus-operator#exporters)
   selector:
     prometheus: kube-prometheus
+    release: prometheus-kubeaddons
   # The metrics path to scrape - autoscaler exposes /metrics (standard)
   path: /metrics
 
