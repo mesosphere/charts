@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
@@ -28,6 +29,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
@@ -37,11 +39,11 @@ rules:
   - head
 # Posting to graphql is required for ops portal viewing
 - nonResourceURLs:
-    - {{ .Values.opsportalRBAC.graphqlPath | trimSuffix "/"}}
+  - {{ .Values.opsportalRBAC.graphqlPath | trimSuffix "/"}}
   verbs:
-    - get
-    - head
-    - post
+  - get
+  - head
+  - post
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -52,6 +54,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.opsportalRBAC.path | trimSuffix "/"}}
