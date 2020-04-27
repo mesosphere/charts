@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
 - nonResourceURLs:
   - {{ index .Values "kommander-ui" "ingress" "path" | trimSuffix "/" }}
@@ -23,6 +24,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
 - nonResourceURLs:
   - {{ index .Values "kommander-ui" "ingress" "path" | trimSuffix "/" }}
@@ -30,6 +32,12 @@ rules:
   verbs:
   - get
   - head
+- nonResourceURLs:
+  - {{ index .Values "kommander-ui" "ingress" "graphqlPath" | trimSuffix "/" }}
+  verbs:
+  - get
+  - head
+  - post
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -39,6 +47,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - nonResourceURLs:
   - {{ index .Values "kommander-ui" "ingress" "path" | trimSuffix "/" }}
