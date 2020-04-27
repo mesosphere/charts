@@ -11,6 +11,7 @@ metadata:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
@@ -30,6 +31,7 @@ metadata:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
@@ -50,6 +52,7 @@ metadata:
     app: {{ template "opsportal.fullname" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
 - nonResourceURLs:
   - {{ .Values.kibanaRBAC.path | trimSuffix "/"}}
