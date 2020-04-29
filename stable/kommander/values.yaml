@@ -287,3 +287,10 @@ kubecost:
       # in the prometheus.server.extraVolumes entry
       # storeSecretName: kubecost-thanos # TODO
 
+    kubecostProductConfigs:
+      grafanaURL: "/ops/portal/kommander/monitoring/grafana"
+      # used for display in Kubecost UI
+      clusterName: "Kommander Host"
+      # productKey: # apply business or enterprise product license
+      #   key: ""
+      #   enabled: false
