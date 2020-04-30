@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: konvoysoaktests-cron
+spec:
+  schedule: {{ .Values.konvoysoakjob.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: {{ .Values.konvoysoakjob.name }}
+            image: "{{ .Values.konvoysoakjob.container.image }}:{{ .Values.konvoysoakjob.container.tag }}"
+            imagePullPolicy: {{ .Values.konvoysoakjob.container.imagePullPolicy }}
+            env:
+            {{- range $key, $val := .Values.konvoysoakjob.env }}
+            - name: {{ $key }}
+              value: "{{ $val }}"
+            {{- with .Values.konvoysoakjob.args }}
+            args:
+{{ toYaml . | indent 12 }}
+              {{- end }}
+          restartPolicy: {{.Values.konvoysoakjob.restartPolicy}}
