@@ -1,18 +1,11 @@
 federate:
   kubeaddonsInitializer:
     repository: "mesosphere/kubeaddons-addon-initializer"
-    tag: "v0.2.8"
+    tag: "v0.1.1"
     pullPolicy: IfNotPresent
 
 kommander-cluster-lifecycle:
   enabled: true
-
-  clusterAutoscaler:
-    chartName: cluster-autoscaler
-    chartRepo: https://mesosphere.github.io/charts/stable
-    chartVersion: 7.1.4
-    imageRepository: mesosphere/cluster-autoscaler
-    imageTag: v0.1.0
 
 kommander-thanos:
   enabled: true
@@ -36,15 +29,10 @@ kubeaddons-catalog:
 grafana:
   enabled: true
 
-  service:
-    type: ClusterIP
-    port: 80
-
   hooks:
     jobName: set-kommander-grafana-home-dashboard
     image: dwdraju/alpine-curl-jq
     secretKeyRef: ops-portal-username
-    # Do not use, this will be deprecated
     serviceURL: http://kommander-kubeaddons-grafana.kommander
     dashboardName: "Kubernetes / Compute Resources / Cluster [Global]"
     kommanderServiceAccount: kommander-kubeaddons
@@ -166,15 +154,13 @@ grafana:
 
 kommander-ui:
   ingress:
-    enabled: true
     traefikFrontendRuleType: PathPrefixStrip
     extraAnnotations:
       traefik.ingress.kubernetes.io/priority: "4"
       traefik.ingress.kubernetes.io/auth-type: forward
       traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Impersonate-User,Impersonate-Group
+      traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
     path: /ops/portal/kommander/ui
-    graphqlPath: /ops/portal/kommander/ui/graphql
 
 portalRBAC:
   grafana:
