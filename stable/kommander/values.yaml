@@ -244,10 +244,20 @@ kubecost:
         maxConcurrent: 10
         # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
         webPrefixHeader: "X-Forwarded-Prefix"
+        labels:
+          app.kubernetes.io/parent-component: kubecost
+        deploymentMatchLabels:
+          app.kubernetes.io/parent-component: kubecost
+        grpc:
+          service:
+            matchLabels:
+              app.kubernetes.io/parent-component: kubecost
         http:
           service:
             labels:
               servicemonitor.kubeaddons.mesosphere.io/path: "metrics"
+            matchLabels:
+              app.kubernetes.io/parent-component: kubecost
           ingress:
             enabled: true
             annotations:
