@@ -202,7 +202,9 @@ kubecost:
 
       grafana:
         # If false, Grafana will not be installed
-        enabled: true
+        enabled: false
+        # Use kommander monitoring Grafana instance
+        domainName: kommander-kubeaddons-grafana.kommander.svc.cluster.local
 
     ingress:
       enabled: true
@@ -221,39 +223,16 @@ kubecost:
       tls: []
 
     grafana:
+      # These values are set so that kubecost grafana dashboards are installed.
+      # Grafana itself is not installed.
       sidecar:
         dashboards:
           enabled: true
-          label: kubecost_grafana_dashboard
+          label: grafana_dashboard_kommander
         datasources:
           enabled: true
           defaultDatasourceEnabled: true
-          label: kubecost_grafana_datasource
-      ingress:
-        enabled: true
-        annotations:
-          kubernetes.io/ingress.class: traefik
-          ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-          traefik.frontend.rule.type: PathPrefixStrip
-          traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-          traefik.ingress.kubernetes.io/auth-type: forward
-          traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-          traefik.ingress.kubernetes.io/priority: "2"
-        hosts: [""]
-        path: /ops/portal/kommander/kubecost/grafana
-      grafana.ini:
-        server:
-          protocol: http
-          enable_gzip: true
-          root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kommander/kubecost/grafana"
-        auth.proxy:
-          enabled: true
-          header_name: X-Forwarded-User
-          auto-sign-up: true
-        auth.basic:
-          enabled: false
-        users:
-          auto_assign_org_role: Admin
+          label: grafana_datasource_kommander
 
     thanos:
       store:
