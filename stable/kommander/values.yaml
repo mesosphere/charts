@@ -236,6 +236,7 @@ kubecost:
           label: grafana_datasource_kommander
 
     thanos:
+      fullnameOverride: "kommander-kubecost-thanos"
       store:
         enabled: false
       query:
