@@ -195,7 +195,7 @@ kubecost:
     global:
       prometheus:
         # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
-        enabled: false
+        enabled: true
 
       thanos:
         enabled: true
