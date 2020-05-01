@@ -92,7 +92,7 @@ spec:
               echo "Done replacing \$CLUSTER_ID with $CLUSTERID"
               EOF
       restartPolicy: OnFailure
-{{- if index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }}
+{{- if index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -116,7 +116,7 @@ spec:
           command:
             - sh
             - "-c"
-            - kubectl create configmap {{ index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
+            - kubectl create configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
       restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
@@ -141,7 +141,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }} -n {{ .Release.Namespace }}
+            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }}
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}

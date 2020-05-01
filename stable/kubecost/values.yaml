@@ -77,13 +77,17 @@ cost-analyzer:
             action: keep
             regex: {{ .Release.Name }}-network-costs
     server:
+      # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
+      # to use as unique cluster ID in kubecost cost-analyzer deployment.
+      # This overrides the cluster_id set in prometheus.server.global.external_labels.
+      # NOTE: This does not affect the external_labels set in prometheus config.
+      clusterIDConfigmap: kubecost-cluster-info-configmap
       global:
         scrape_interval: 1m
         scrape_timeout: 10s
         evaluation_interval: 1m
         external_labels:
           cluster_id: $CLUSTER_ID
-          configmap_key_ref: kubecost-cluster-info-configmap
       persistentVolume:
         size: 32Gi
         enabled: true
