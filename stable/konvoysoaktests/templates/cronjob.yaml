@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: konvoysoaktests-cron
 spec:
-  schedule: {{ .Values.konvoysoakjob.schedule }}
+  schedule: "{{ .Values.konvoysoakjob.schedule }}"
   jobTemplate:
     spec:
       template:
@@ -16,8 +16,9 @@ spec:
             {{- range $key, $val := .Values.konvoysoakjob.env }}
             - name: {{ $key }}
               value: "{{ $val }}"
-            {{- with .Values.konvoysoakjob.args }}
+            {{- end }}
             args:
-{{ toYaml . | indent 12 }}
-              {{- end }}
-          restartPolicy: {{.Values.konvoysoakjob.restartPolicy}}
+            {{- range $arg:= .Values.konvoysoakjob.args }}
+            - "{{ $arg }}"
+            {{- end }}
+          restartPolicy: {{ .Values.konvoysoakjob.restartPolicy }}
