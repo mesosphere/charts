@@ -237,6 +237,7 @@ kubecost:
 
     thanos:
       fullnameOverride: "kommander-kubecost-thanos"
+      nameOverride: "kubecost-thanos"
       store:
         enabled: false
       query:
