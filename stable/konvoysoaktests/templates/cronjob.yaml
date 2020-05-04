@@ -1,7 +1,9 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: konvoysoaktests-cron
+  labels:
+{{ include "konvoysoaktests.labels" . | indent 4 }}
+  name: {{ template "konvoysoaktests.fullname" . }}
 spec:
   schedule: "{{ .Values.konvoysoakjob.schedule }}"
   jobTemplate:
@@ -22,3 +24,4 @@ spec:
             - "{{ $arg }}"
             {{- end }}
           restartPolicy: {{ .Values.konvoysoakjob.restartPolicy }}
+          serviceAccountName: {{ template "serviceaccount.name" . }}
