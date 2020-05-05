@@ -55,6 +55,7 @@ stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
 stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 .PHONY: publish
+publish: export LC_COLLATE := C
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
 	rm -rf gh-pages
