@@ -61,7 +61,7 @@ data:
       "gnetId": null,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1582323837127,
+      "iteration": 1588637701877,
       "links": [],
       "panels": [
         {
@@ -186,6 +186,23 @@ data:
               "pattern": "Time",
               "thresholds": [],
               "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "Cluster",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "cluster",
+              "thresholds": [],
+              "type": "string",
               "unit": "short"
             }
           ],
@@ -896,6 +913,23 @@ data:
               "unit": "short"
             },
             {
+              "alias": "Cluster",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "cluster",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            },
+            {
               "alias": "",
               "align": "auto",
               "colorMode": null,
@@ -1306,6 +1340,23 @@ data:
               "unit": "short"
             },
             {
+              "alias": "Cluster",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "cluster",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            },
+            {
               "alias": "",
               "align": "auto",
               "colorMode": null,
@@ -1589,6 +1640,23 @@ data:
               "linkTooltip": "Drill down to pods",
               "linkUrl": "./d/85a562078cdf77779eaa1add43ccec1e/k8s-resources-namespace?var-datasource=$datasource&var-cluster=$cluster&var-namespace=$__cell",
               "pattern": "namespace",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "Cluster",
+              "align": "auto",
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "mappingType": 1,
+              "pattern": "cluster",
               "thresholds": [],
               "type": "number",
               "unit": "short"
@@ -2565,6 +2633,7 @@ data:
         "list": [
           {
             "current": {
+              "selected": true,
               "text": "ThanosQuery",
               "value": "ThanosQuery"
             },
