@@ -1,0 +1,33 @@
+konvoysoakjob:
+  name: konvoysoaktests
+  container:
+    image: mesosphere/konvoy-soak
+    tag: 843492a47
+    imagePullPolicy: IfNotPresent
+  schedule: "0 8 * * 1,3"
+  env:
+    PROVISIONER: "aws"
+    SOAK_TEST: "konvoy-soak"
+  args:
+  - "make"
+  - "-f"
+  - "soak.mk soak.test.e2e-host"
+  restartPolicy: OnFailure
+
+rbac:
+  ## If true, create & use RBAC resources
+  ##
+  create: true
+  ## if rbac.create is false or (if rbac.create is true and rbac.serviceAccount.create is false)
+  ## the service account rbac.serviceAccount.name will be used instead
+  serviceAccount:
+    create: true
+    name: default
+  ## Annotations for the Service Account
+  ##
+  serviceAccountAnnotations: {}
+
+## String to fully override konvoysoaktests.name template
+nameOverride: ""
+## String to fully override konvoysoaktests.fullname template
+fullnameOverride: ""
