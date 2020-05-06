@@ -14,4 +14,13 @@ rules:
       - list
       - get
       - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+    verbs:
+      - list
+      - get
+      - create
+      - delete
 {{- end -}}
