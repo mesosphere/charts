@@ -189,7 +189,7 @@ rules:
     verbs: ["update"]
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
-    verbs: ["create", "list", "watch", "delete"]
+    verbs: ["create", "list", "get"]
 
 ---
 kind: ClusterRoleBinding
