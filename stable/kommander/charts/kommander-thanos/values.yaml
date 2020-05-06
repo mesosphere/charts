@@ -20,6 +20,8 @@ thanos:
     enabled: false
   bucket:
     enabled: false
+  rule:
+    enabled: false
   sidecar:
     enabled: false
 
