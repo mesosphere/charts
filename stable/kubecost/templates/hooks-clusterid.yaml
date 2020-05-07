@@ -61,7 +61,7 @@ subjects:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-edit-prometheus-config-cluster-id-label
+  name: {{ .Release.Name }}-edit-prom-cluster-id
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
@@ -70,7 +70,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-edit-prometheus-config-cluster-id-label
+      name: {{ .Release.Name }}-edit-prom-cluster-id
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
@@ -86,18 +86,18 @@ spec:
               set -o errexit
               set -o pipefail
               CLUSTERID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}")
-              kubectl get configmap/{{ template "kubecost.fullname" . }}-prometheus-server -oyaml > /tmp/override.yaml
+              kubectl get configmap/{{ .Release.Name }}-prometheus-server -oyaml > /tmp/override.yaml
               sed -e 's/\$CLUSTER_ID/"'$CLUSTERID'"/g' /tmp/override.yaml > /tmp/final.yaml
               kubectl apply -f /tmp/final.yaml
               echo "Done replacing \$CLUSTER_ID with $CLUSTERID"
               EOF
       restartPolicy: OnFailure
-{{- if index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }}
+{{- if index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-create-kubecost-cluster-id-configmap
+  name: {{ .Release.Name }}-cluster-id-configmap
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: pre-install,pre-upgrade
@@ -106,7 +106,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-create-kubecost-cluster-id-configmap
+      name: {{ .Release.Name }}-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
@@ -116,13 +116,13 @@ spec:
           command:
             - sh
             - "-c"
-            - kubectl create configmap {{ index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
+            - kubectl create configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
       restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-cleanup-kubecost-cluster-id-configmap
+  name: {{ .Release.Name }}-cleanup-cluster-id-configmap
   namespace: {{ .Release.Namespace }}
   annotations:
     helm.sh/hook: post-delete
@@ -131,7 +131,7 @@ metadata:
 spec:
   template:
     metadata:
-      name: {{ .Release.Name }}-cleanup-kubecost-cluster-id-configmap
+      name: {{ .Release.Name }}-cleanup-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
       containers:
@@ -141,7 +141,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "global" "external_labels" "configmap_key_ref" }} -n {{ .Release.Namespace }}
+            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }}
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}

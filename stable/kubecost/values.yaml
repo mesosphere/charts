@@ -77,13 +77,17 @@ cost-analyzer:
             action: keep
             regex: {{ .Release.Name }}-network-costs
     server:
+      # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
+      # to use as unique cluster ID in kubecost cost-analyzer deployment.
+      # This overrides the cluster_id set in prometheus.server.global.external_labels.
+      # NOTE: This does not affect the external_labels set in prometheus config.
+      clusterIDConfigmap: kubecost-cluster-info-configmap
       global:
         scrape_interval: 1m
         scrape_timeout: 10s
         evaluation_interval: 1m
         external_labels:
           cluster_id: $CLUSTER_ID
-          configmap_key_ref: kubecost-cluster-info-configmap
       persistentVolume:
         size: 32Gi
         enabled: true
@@ -164,19 +168,20 @@ cost-analyzer:
     #     traefik.ingress.kubernetes.io/priority: "2"
     #   hosts: [""]
     #   path: /ops/portal/kubecost/grafana
-    grafana.ini:
-      server:
-        protocol: http
-        enable_gzip: true
-        root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
-      auth.proxy:
-        enabled: true
-        header_name: X-Forwarded-User
-        auto-sign-up: true
-      auth.basic:
-        enabled: false
-      users:
-        auto_assign_org_role: Admin
+    # Configure grafana.ini server.root_url properly if ingress is enabled
+    # grafana.ini:
+    #   server:
+    #     protocol: http
+    #     enable_gzip: true
+    #     root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
+    #   auth.proxy:
+    #     enabled: true
+    #     header_name: X-Forwarded-User
+    #     auto-sign-up: true
+    #   auth.basic:
+    #     enabled: false
+    #   users:
+    #     auto_assign_org_role: Admin
 
   thanos:
     store:
