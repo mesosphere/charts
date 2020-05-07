@@ -11,9 +11,9 @@ metadata:
     app: {{ template "kubecost.name" . }}-kubecost
 {{ include "kubecost.labels" . | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install,pre-upgrade,post-install,post-upgrade,post-delete
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
     helm.sh/hook-weight: "-5"
-    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+    helm.sh/hook-delete-policy: before-hook-creation
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
