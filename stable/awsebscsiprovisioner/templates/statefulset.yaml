@@ -82,8 +82,10 @@ spec:
             {{- if .Values.provisioner.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
+            {{- if (gt (.Values.replicas | int) 1) }}
             - --enable-leader-election
             - --leader-election-type=leases
+            {{- end }}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -95,7 +97,9 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
+            {{- if (gt (.Values.replicas | int) 1) }}
             - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -104,11 +108,12 @@ spec:
               mountPath: /var/lib/csi/sockets/pluginproxy/
         {{- if .Values.snapshotter.enabled }}
         - name: csi-snapshotter
-          image: "{{ .Values.snapshotter.image.repository }}:{{ .Values.snapshotter.image.tag }}"
+          image: "{{ .Values.snapshotter.image.repository }}:{{ include "aws-ebs-csi-driver.snapshotter.tag" . }}"
           args:
             - --csi-address=$(ADDRESS)
-            - --connection-timeout=15s
+            {{- if (gt (.Values.replicas | int) 1) }}
             - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock
@@ -123,6 +128,9 @@ spec:
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
+            {{- if (gt (.Values.replicas | int) 1) }}
+            - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /var/lib/csi/sockets/pluginproxy/csi.sock

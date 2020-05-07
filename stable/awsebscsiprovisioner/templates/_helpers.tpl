@@ -56,3 +56,15 @@ Convert the `--extra-volume-tags` command line arg from a map.
 - --extra-volume-tags={{- join "," $result.pairs -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+To keep compability we need to set snapshotter tag to the same tag as snapshot-controller.
+They are released in combination and depend on each other on newer kubernetes versions >= Minor 17
+*/}}
+{{- define "aws-ebs-csi-driver.snapshotter.tag" -}}
+{{- if and .Values.snapshotter.enabled (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) -}}
+{{- .Values.snapshotController.image.tag -}}
+{{- else -}}
+{{- .Values.snapshotter.image.tag -}}
+{{- end -}}
+{{- end -}}
