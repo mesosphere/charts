@@ -28,7 +28,9 @@ spec:
           image: "{{ .Values.image.csiSnapshotController.repository }}:{{ .Values.image.csiSnapshotController.tag }}"
           args:
             - "--v=5"
+            {{- if (gt (.Values.snapshotController.replicas | int) 1) }}
             - "-leader-election"
+            {{- end }}
           resources:
 {{- if .Values.snapshot.controller.resources }}
 {{ toYaml .Values.snapshot.controller.resources | indent 12 }}
