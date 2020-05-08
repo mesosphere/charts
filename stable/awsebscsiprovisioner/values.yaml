@@ -4,6 +4,9 @@ fullnameOverride: ""
 # replicas of the CSI-Controller
 replicas: 1
 
+# replicas of the CSI-Snapshot-Controller
+replicasSnapshotController: 1
+
 image:
   repository: "amazon/aws-ebs-csi-driver"
   tag: "v0.5.0"
@@ -39,26 +42,26 @@ registrar:
   node:
     image:
       repository: "quay.io/k8scsi/csi-node-driver-registrar"
-      tag: "v1.2.0"
+      tag: "v1.3.0"
 
 provisioner:
   # True if enable volume scheduling for dynamic volume provisioning
   enableVolumeScheduling: false
   image:
     repository: "quay.io/k8scsi/csi-provisioner"
-    tag: "v1.5.0"
+    tag: "v1.6.0"
 
 attacher:
   image:
     repository: "quay.io/k8scsi/csi-attacher"
-    tag: "v2.0.0"
+    tag: "v2.2.0"
 
 resizer:
   # True if enable volume resizing
   enabled: false
   image:
     repository: "quay.io/k8scsi/csi-resizer"
-    tag: "v0.4.0"
+    tag: "v0.5.0"
 
 snapshotter:
   # True if enable volume snapshot
@@ -67,10 +70,10 @@ snapshotter:
     repository: "quay.io/k8scsi/csi-snapshotter"
     tag: "v1.2.2"
 
-snapshot-controller:
+snapshotController:
   image:
     repository: "quay.io/k8scsi/snapshot-controller"
-    tag: "v2.0.1"
+    tag: "v2.1.1"
 
 # Extra volume tags to attach to each dynamically provisioned volume.
 # ---
