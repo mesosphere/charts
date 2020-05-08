@@ -1,0 +1,35 @@
+{{- if or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17) }}
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: csi-gce-pd-snapshot-controller
+  namespace: {{ .Release.Namespace }}
+{{ include "gcpdisk.labels" . | indent 2 }}
+spec:
+  serviceName: csi-gce-pd-snapshot-controller
+  replicas: {{ .Values.replicasSnapshotController }}
+  selector:
+    matchLabels:
+      app: gcp-compute-persistent-disk-csi-driver
+  template:
+    metadata:
+{{ include "gcpdisk.labels" . | indent 6 }}
+        app: gcp-compute-persistent-disk-csi-driver
+    spec:
+      serviceAccount: csi-gce-pd-snapshot-controller-sa
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      priorityClassName: system-cluster-critical
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      containers:
+        - name: csi-gce-pd-snapshot-controller
+          image: "{{ .Values.snapshotController.image.repository }}:{{ .Values.snapshotController.image.tag }}"
+          args:
+            - --v=5
+            {{- if (gt (.Values.replicasSnapshotController | int) 1) }}
+            - --leader-election=true
+            {{- end }}
+{{- end }}
