@@ -1,8 +1,8 @@
 {{ $ns := .Release.Namespace }}
 {{ $labels := include "kommander.labels" . | indent 4  }}
 {{ $sa := .Values.kubecost.kommanderServiceAccount }}
-{{- if index .Values.kubecost "cost-analyzer" "thanos" "query" "enabled" }}
-{{- range index .Values.kubecost "cost-analyzer" "thanos" "query" "serviceDiscoveryFileConfigMaps" }}
+{{- if index .Values "kubecost" "cost-analyzer" "thanos" "query" "enabled" }}
+{{- range index .Values "kubecost" "cost-analyzer" "thanos" "query" "serviceDiscoveryFileConfigMaps" }}
 ---
 apiVersion: v1
 kind: ConfigMap
