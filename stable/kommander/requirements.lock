@@ -8,6 +8,9 @@ dependencies:
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
   version: 3.58.0
+- name: kubecost
+  repository: https://mesosphere.github.io/charts/stable
+  version: 0.1.2
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.5.1
