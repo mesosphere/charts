@@ -16,7 +16,7 @@ data:
     datasources:
     - access: proxy
       isDefault: false
-      name: KubecostThanosQuery
+      name: Prometheus
       type: prometheus
       url: http://kommander-kubecost-thanos-query-http.kommander:10902
 {{- end -}}
