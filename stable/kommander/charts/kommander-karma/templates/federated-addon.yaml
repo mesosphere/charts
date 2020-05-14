@@ -10,9 +10,7 @@ metadata:
 spec:
   placement:
     clusterSelector:
-      matchExpressions:
-        - {key: kommander.mesosphere.io/cluster-type, operator: Exists, values: []}
-        - {key: kommander.mesosphere.io/cluster-type, operator: In, values: [Konvoy]}
+      matchLabels: {}
   template:
     metadata:
       namespace: kubeaddons
