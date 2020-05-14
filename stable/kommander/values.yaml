@@ -199,6 +199,7 @@ kubecost:
 
       thanos:
         enabled: true
+        queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
 
       grafana:
         # If false, Grafana will not be installed
