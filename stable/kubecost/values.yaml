@@ -25,6 +25,10 @@ cost-analyzer:
       # If false, Grafana will not be installed
       enabled: true
 
+    notifications:
+      alertmanager: # Supply an alertmanager FQDN to receive notifications from the app.
+        enabled: true # If true, allow kubecost to write to your alertmanager
+
   # Enable kubecost ingress with below annotations to use Konvoy traefik auth
   # ingress:
   #   enabled: true
@@ -139,11 +143,53 @@ cost-analyzer:
         # - name: object-store-volume # TODO
         #   mountPath: /etc/config
     alertmanager:
-      enabled: false
+      enabled: true
+      persistentVolume:
+        enabled: true
     pushgateway:
       enabled: false
       persistentVolume:
         enabled: false
+    serverFiles:
+      rules:
+        groups:
+          - name: CPU
+            rules:
+              - expr: sum(rate(container_cpu_usage_seconds_total{container_name!=""}[5m]))
+                record: cluster:cpu_usage:rate5m
+              - expr: rate(container_cpu_usage_seconds_total{container_name!=""}[5m])
+                record: cluster:cpu_usage_nosum:rate5m
+              - expr: avg(irate(container_cpu_usage_seconds_total{container_name!="POD", container_name!=""}[5m])) by (container_name,pod_name,namespace)
+                record: kubecost_container_cpu_usage_irate
+              - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""}) by (container_name,pod_name,namespace)
+                record: kubecost_container_memory_working_set_bytes
+              - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""})
+                record: kubecost_cluster_memory_working_set_bytes
+      alerts:
+        groups:
+          - name: Kubecost
+            rules:
+              - alert: kubecostDown
+                expr: up{job="kubecost"} == 0
+                annotations:
+                  message: 'Kubecost metrics endpoint is not being scraped successfully.'
+                for: 10m
+                labels:
+                  severity: warning
+              - alert: kubecostMetricsUnavailable
+                expr: sum(sum_over_time(node_cpu_hourly_cost[5m])) == 0
+                annotations:
+                  message: 'Kubecost metrics are not available in Prometheus.'
+                for: 10m
+                labels:
+                  severity: warning
+              - alert: kubecostRecordingRulesNotEvaluated
+                expr: avg_over_time(kubecost_cluster_memory_working_set_bytes[5m]) == 0
+                annotations:
+                  message: 'Kubecost recording rules are not being successfully evaluated.'
+                for: 10m
+                labels:
+                  severity: warning
 
   grafana:
     sidecar:
