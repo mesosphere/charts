@@ -1,0 +1,24 @@
+{{- if index .Values "kubecost" "cost-analyzer" "enabled" -}}
+{{- if index .Values "kubecost" "cost-analyzer" "thanos" "query" "enabled" }}
+{{- if .Values.grafana.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubecost-thanos-query-grafana-datasource
+  labels:
+    {{- if $.Values.grafana.sidecar.datasources.label }}
+    {{ $.Values.grafana.sidecar.datasources.label }}: "1"
+    {{- end }}
+data:
+  kubecost-datasource.yaml: |-
+    # config file version
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      isDefault: false
+      name: Prometheus
+      type: prometheus
+      url: http://kommander-kubecost-thanos-query-http.kommander:10902
+{{- end -}}
+{{- end -}}
+{{- end -}}

@@ -181,3 +181,119 @@ portalRBAC:
     enabled: true
   kommanderUserInterface:
     enabled: true
+
+kubecost:
+  thanosAddress: "kubecost-kubeaddons-prometheus-server.kubecost.svc.cluster.local:10901"
+  kommanderServiceAccount: kommander-kubeaddons
+  federate:
+    addons: true
+    systemNamespace:
+      name: kommander-system
+
+  cost-analyzer:
+    enabled: true
+    global:
+      prometheus:
+        # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
+        enabled: true
+
+      thanos:
+        enabled: true
+        queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
+
+      grafana:
+        # If false, Grafana will not be installed
+        enabled: false
+        # Use kommander monitoring Grafana instance
+        domainName: kommander-kubeaddons-grafana.kommander.svc.cluster.local
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: traefik
+        ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+        traefik.frontend.rule.type: PathPrefixStrip
+        traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+        traefik.ingress.kubernetes.io/auth-type: forward
+        traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
+        traefik.ingress.kubernetes.io/priority: "2"
+      paths:
+        - "/ops/portal/kommander/kubecost"
+      hosts:
+        - ""
+      tls: []
+
+    grafana:
+      # These values are set so that kubecost grafana dashboards are installed.
+      # Grafana itself is not installed.
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard_kommander
+        datasources:
+          enabled: true
+          defaultDatasourceEnabled: false
+          # dataSourceName: KubecostPrometheus
+          label: grafana_datasource_kommander
+
+    thanos:
+      fullnameOverride: "kommander-kubecost-thanos"
+      nameOverride: "kubecost-thanos"
+      store:
+        enabled: false
+      query:
+        enabled: true
+        timeout: 3m
+        maxConcurrent: 10
+        # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
+        webPrefixHeader: "X-Forwarded-Prefix"
+        http:
+          service:
+            labels:
+              servicemonitor.kubeaddons.mesosphere.io/path: "metrics"
+          ingress:
+            enabled: true
+            annotations:
+              kubernetes.io/ingress.class: "traefik"
+              traefik.frontend.rule.type: "PathPrefixStrip"
+              traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
+              traefik.ingress.kubernetes.io/auth-type: "forward"
+              traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
+              traefik.ingress.kubernetes.io/priority: "2"
+            path: "/ops/portal/kommander/kubecost/query"
+            hosts:
+              - ""
+            tls: []
+        # Enable DNS discovery for stores
+        storeDNSDiscovery: false
+        # Enable DNS discovery for sidecars (this is for the chart built-in sidecar service)
+        sidecarDNSDiscovery: false
+        # Names of configmaps that contain addresses of store API servers, used for file service discovery.
+        serviceDiscoveryFileConfigMaps:
+        - kubecost-thanos-query-stores
+        # Refresh interval to re-read file SD files. It is used as a resync fallback.
+        serviceDiscoveryInterval: 5m
+        extraArgs:
+          - "--grpc-client-tls-secure"
+          - "--grpc-client-tls-cert=/etc/certs/tls.crt"
+          - "--grpc-client-tls-key=/etc/certs/tls.key"
+          - "--grpc-client-tls-ca=/etc/certs/ca.crt"
+          - "--grpc-client-server-name=server.thanos.localhost.localdomain"
+        certSecretName: kommander-kubecost-thanos-client-tls
+      sidecar:
+        enabled: false
+      bucket:
+        enabled: false
+      compact:
+        enabled: false
+      # This secret name should match the sidecar configured secret name volume
+      # in the prometheus.server.extraVolumes entry
+      # storeSecretName: kubecost-thanos # TODO
+
+    kubecostProductConfigs:
+      grafanaURL: "/ops/portal/kommander/monitoring/grafana"
+      # used for display in Kubecost UI
+      clusterName: "Kommander Host"
+      # productKey: # apply business or enterprise product license
+      #   key: ""
+      #   enabled: false
