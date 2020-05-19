@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
 rules:
   - nonResourceURLs:
       - {{ .Values.grafana.ingress.path | trimSuffix "/"}}
@@ -23,6 +24,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-view: "true"
 rules:
   - nonResourceURLs:
       - {{ .Values.grafana.ingress.path | trimSuffix "/"}}
@@ -39,6 +41,7 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
     app.kubernetes.io/instance: {{ .Release.Name | quote }}
     app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    rbac.authorization.k8s.io/aggregate-to-edit: "true"
 rules:
   - nonResourceURLs:
       - {{ .Values.grafana.ingress.path | trimSuffix "/"}}
