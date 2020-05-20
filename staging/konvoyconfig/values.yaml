@@ -8,4 +8,10 @@ fullnameOverride: ""
 # The ConfigMap
 config:
   # The cluster hostname is a FQDN which should resolve to the clusters ingress VIP
+  # (Deprecated, use ClusterDomainNames)
   clusterHostname: ""
+
+# clusterHostNames is a list of domain names
+# ClusterDomainNames:
+#   - name1.example.com
+#   - name2.example.com
