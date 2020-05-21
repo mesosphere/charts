@@ -492,6 +492,10 @@ initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.0.7
 dashboardRBAC:
   enabled: true
 
+# extraSSLEntrypoints:
+#   velero-minio:
+#     address: ":9000"
+
 # extraConfigEntrypoints: |
 # 	[entryPoints.velero]
 # 		address = ":9000"
