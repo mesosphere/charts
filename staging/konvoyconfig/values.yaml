@@ -7,11 +7,21 @@ fullnameOverride: ""
 
 # The ConfigMap
 config:
-  # The cluster hostname is a FQDN which should resolve to the clusters ingress VIP
+  # The cluster hostname is a FQDN which should resolve to the clusters
+  # ingress VIP
   # (Deprecated, use ClusterDomainNames)
   clusterHostname: ""
 
-# clusterHostNames is a list of domain names
-# ClusterDomainNames:
+# clusterDomainNames is a list of domain names which you will use to access
+#  your cluster. Certificates generated for the cluster ingress will be valid
+# for these names.
+# clusterDomainNames:
 #   - name1.example.com
 #   - name2.example.com
+
+# The hostname used by dex for issuing tokens
+# clusterIssuerHostname: name1.example.com
+
+# It's possible to set the full Dex issuer URL, however, this is usually not
+# necessary. Only use this if you know what you are doing.
+# clusterIssuerURL: https://name1.example.com/custom/dex
