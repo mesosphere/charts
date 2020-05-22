@@ -10,6 +10,9 @@ yakcl-federation:
 yakcl-licensing:
   enabled: true
 
+yakcl-provisioning:
+  enabled: true
+
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
