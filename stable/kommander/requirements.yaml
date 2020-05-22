@@ -1,10 +1,10 @@
 dependencies:
   - name: kubeaddons-catalog
-    version: "0.1.6"
+    version: "0.1.9"
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-cluster-lifecycle
-    version: "0.5.8"
+    version: "0.5.9"
     repository: "https://mesosphere.github.io/kommander-cluster-lifecycle/charts"
     condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
   - name: kommander-ui
