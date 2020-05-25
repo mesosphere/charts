@@ -3,9 +3,17 @@ dependencies:
     version: "0.1.9"
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
-  - name: kommander-cluster-lifecycle
-    version: "0.5.9"
-    repository: "https://mesosphere.github.io/kommander-cluster-lifecycle/charts"
+  - name: yakcl-federation
+    version: "0.0.1"
+    repository: "https://mesosphere.github.io/yakcl/charts"
+    condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
+  - name: yakcl-licensing
+    version: "0.0.1"
+    repository: "https://mesosphere.github.io/yakcl/charts"
+    condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
+  - name: yakcl-provisioning
+    version: "0.0.1"
+    repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-cluster-lifecycle.enabled, global.kommander-cluster-lifecycle.enabled
   - name: kommander-ui
     version: "3.58.0"
