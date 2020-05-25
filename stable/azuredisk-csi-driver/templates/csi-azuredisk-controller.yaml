@@ -19,20 +19,24 @@ spec:
       nodeSelector:
         beta.kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
+{{- if .Values.azuredisk.controller.tolerations }}
+      tolerations:
+{{ toYaml .Values.azuredisk.controller.tolerations | indent 8 }}
+{{- end }}
       containers:
         - name: csi-provisioner
           image: "{{ .Values.image.csiProvisioner.repository }}:{{ .Values.image.csiProvisioner.tag }}"
           args:
-            - "--provisioner=disk.csi.azure.com"
             - "--csi-address=$(ADDRESS)"
-            - "--connection-timeout=15s"
             - "--v=5"
             - "--timeout=120s"
             {{- if .Values.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
+            {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "--enable-leader-election"
             - "--leader-election-type=leases"
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -50,8 +54,9 @@ spec:
             - "-v=5"
             - "-csi-address=$(ADDRESS)"
             - "-timeout=120s"
+            {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "-leader-election"
-            - "-leader-election-type=leases"
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -63,27 +68,13 @@ spec:
 {{- if .Values.azuredisk.controller.resources }}
 {{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
 {{- end }}
-        - name: cluster-driver-registrar
-          image: "{{ .Values.image.clusterDriverRegistrar.repository }}:{{ .Values.image.clusterDriverRegistrar.tag }}"
-          args:
-            - --csi-address=$(ADDRESS)
-            - --driver-requires-attachment=true
-            - --v=5
-          env:
-            - name: ADDRESS
-              value: /csi/csi.sock
-          volumeMounts:
-            - name: socket-dir
-              mountPath: /csi
-          resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
-{{- end }}
         - name: csi-snapshotter
-          image: "{{ .Values.image.csiSnapshotter.repository }}:{{ .Values.image.csiSnapshotter.tag }}"
+          image: "{{ .Values.image.csiSnapshotter.repository }}:{{ include "azuredisk.csiSnapshotter.tag" . }}"
           args:
             - "-csi-address=$(ADDRESS)"
+            {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "-leader-election"
+            {{- end }}
             - "-v=5"
           env:
             - name: ADDRESS
@@ -100,7 +91,9 @@ spec:
           args:
             - "-csi-address=$(ADDRESS)"
             - "-v=5"
+            {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "-leader-election"
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
