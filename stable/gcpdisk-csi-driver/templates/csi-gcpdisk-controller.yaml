@@ -53,7 +53,9 @@ spec:
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
+            {{- if or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17) }}
             - --metrics-address=:22014
+            {{- end }}
             {{- if (gt (.Values.replicas | int) 1) }}
             - --leader-election=true
             {{- end }}
