@@ -4,15 +4,15 @@ dependencies:
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: yakcl-federation
-    version: "0.0.3"
+    version: "0.0.4"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: yakcl-federation.enabled, global.yakcl-federation.enabled
   - name: yakcl-licensing
-    version: "0.0.3"
+    version: "0.0.4"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: yakcl-licensing.enabled, global.yakcl-licensing.enabled
   - name: yakcl-provisioning
-    version: "0.0.3"
+    version: "0.0.4"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: yakcl-provisioning.enabled, global.yakcl-provisioning.enabled
   - name: kommander-ui
