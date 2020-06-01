@@ -44,15 +44,41 @@ spec:
               #!/bin/bash
               set -ex
               {{- if .Values.cleanupVolumeSnapshotCRDV1alpha1 }}
-              delete_v1alpha1_crd_if_found () {
+              crds=(
+                volumesnapshotclasses.snapshot.storage.k8s.io
+                volumesnapshotcontents.snapshot.storage.k8s.io
+                volumesnapshots.snapshot.storage.k8s.io
+              )
+              is_crd_v1alpha1 () {
                 VERSION=$(kubectl get crd $1 --ignore-not-found -o jsonpath='{.spec.versions[0].name}')
                 if [ "${VERSION}" == "v1alpha1" ]; then
-                  kubectl delete crd $1
+                  echo "true"
+                else
+                  echo "false"
                 fi
               }
-              delete_v1alpha1_crd_if_found volumesnapshotclasses.snapshot.storage.k8s.io
-              delete_v1alpha1_crd_if_found volumesnapshotcontents.snapshot.storage.k8s.io
-              delete_v1alpha1_crd_if_found volumesnapshots.snapshot.storage.k8s.io
+              exists_crd_v1alpha1 () {
+                for crd in "${crds[@]}"; do
+                  if [ "$(is_crd_v1alpha1 ${crd})" == "true" ]; then
+                    echo "true"
+                    return 0
+                  fi
+                done
+                echo "false"
+              }
+              # The controller might re-create the CRD if it gets
+              # restarted. Thus, we need to make sure it is not
+              # running first. We conditionally perform this step so
+              # that we don't unnecessarily stop the controller for
+              # future upgrades.
+              if [ "$(exists_crd_v1alpha1)" == "true" ]; then
+                kubectl delete statefulset -n {{ .Release.Namespace }} ebs-csi-controller
+              fi
+              for crd in "${crds[@]}"; do
+                if [ "$(is_crd_v1alpha1 ${crd})" == "true" ]; then
+                  kubectl delete crd $crd
+                fi
+              done
               {{- end }}
               kubectl apply -f /etc/awsebscsiprovisioner-snapshot-crds
       volumes:
@@ -75,6 +101,20 @@ rules:
     verbs: ["create", "delete", "get", "list", "watch", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: awsebscsiprovisioner-snapshot-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apps"]
+    resources: ["statefulsets"]
+    verbs: ["delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: awsebscsiprovisioner-snapshot-crds
@@ -90,6 +130,23 @@ subjects:
   - kind: ServiceAccount
     name: awsebscsiprovisioner-snapshot-crds
     namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: awsebscsiprovisioner-snapshot-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: awsebscsiprovisioner-snapshot-crds
+subjects:
+  - kind: ServiceAccount
+    name: awsebscsiprovisioner-snapshot-crds
 ---
 apiVersion: v1
 kind: ServiceAccount
