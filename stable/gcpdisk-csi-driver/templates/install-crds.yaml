@@ -1,0 +1,87 @@
+{{- if or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17) }}
+{{- if not (.Capabilities.APIVersions.Has "snapshot.storage.k8s.io/v1beta1") }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: gcpdisk-csi-driver-snapshot-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  crds.yaml: |-
+{{ range $path, $_ := .Files.Glob "files/snapshot*.yaml" }}
+    ---
+{{ $.Files.Get $path | printf "%s" | indent 4 }}
+{{ end }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: gcpdisk-csi-driver-snapshot-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: gcpdisk-csi-driver-snapshot-crds
+      containers:
+        - name: gcpdisk-csi-driver-snapshot-crds
+          image: "bitnami/kubectl:1.17"
+          volumeMounts:
+            - name: gcpdisk-csi-driver-snapshot-crds
+              mountPath: /etc/gcpdisk-csi-driver-snapshot-crds
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/gcpdisk-csi-driver-snapshot-crds"]
+      volumes:
+        - name: gcpdisk-csi-driver-snapshot-crds
+          configMap:
+            name: gcpdisk-csi-driver-snapshot-crds
+      restartPolicy: OnFailure
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: gcpdisk-csi-driver-snapshot-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: gcpdisk-csi-driver-snapshot-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gcpdisk-csi-driver-snapshot-crds
+subjects:
+  - kind: ServiceAccount
+    name: gcpdisk-csi-driver-snapshot-crds
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gcpdisk-csi-driver-snapshot-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+{{- end }}
+{{- end }}

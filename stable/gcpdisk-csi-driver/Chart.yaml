@@ -1,10 +1,10 @@
 apiVersion: v1
-appVersion: 0.6.0
+appVersion: 0.7.0
 description: Google Compute Engine Persistent Disk (GCE PD) Container Storage Interface (CSI) Storage Plugin
 name: gcpdisk-csi-driver
 maintainers:
   - name: sebbrandt87
-version: 0.6.0
+version: 0.7.1
 kubeVersion: ">=1.15.0"
 home: https://github.com/kubernetes-sigs/gcp-compute-persistent-disk-csi-driver
 sources:

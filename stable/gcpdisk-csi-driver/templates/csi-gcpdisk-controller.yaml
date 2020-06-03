@@ -6,7 +6,7 @@ metadata:
 {{ include "gcpdisk.labels" . | indent 2 }}
 spec:
   serviceName: "csi-gce-pd"
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: gcp-compute-persistent-disk-csi-driver
@@ -15,20 +15,21 @@ spec:
 {{ include "gcpdisk.labels" . | indent 6 }}
         app: gcp-compute-persistent-disk-csi-driver
     spec:
-      # Host network must be used for interaction with Workload Identity in GKE
-      # since it replaces GCE Metadata Server with GKE Metadata Server. Remove
-      # this requirement when issue is resolved and before any exposure of
-      # metrics ports
-      hostNetwork: true
       serviceAccountName: csi-gce-pd-controller-sa
       nodeSelector:
         beta.kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
       containers:
         - name: csi-provisioner
           image: {{ .Values.provisioner.image.repository }}:{{ .Values.provisioner.image.tag }}
           args:
+            - --v=5
             - --csi-address=$(ADDRESS)
+            - --metrics-address=:22011
             - --timeout={{ .Values.provisioner.timeout }}
             - --retry-interval-start={{ .Values.provisioner.retryIntervalStart }}
             - --retry-interval-max={{ .Values.provisioner.retryIntervalMax }}
@@ -36,8 +37,10 @@ spec:
             {{- if .Values.enableTopologyZone }}
             - --feature-gates=Topology=true
             {{- end}}
+            {{- if (gt (.Values.replicas | int) 1) }}
             - --enable-leader-election
             - --leader-election-type=leases
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -45,22 +48,17 @@ spec:
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
-        - name: cluster-driver-registrar
-          image: {{ .Values.registrar.cluster.image.repository }}:{{ .Values.registrar.cluster.image.tag }}
-          args:
-            - --csi-address=$(ADDRESS)
-            - --driver-requires-attachment=true
-            - --v=5
-          env:
-            - name: ADDRESS
-              value: /csi/csi.sock
-          volumeMounts:
-            - name: socket-dir
-              mountPath: /csi
         - name: csi-snapshotter
-          image: {{ .Values.snapshotter.image.repository }}:{{ .Values.snapshotter.image.tag }}
+          image: "{{ .Values.snapshotter.image.repository }}:{{ include "gcpdisk.snapshotter.image.tag" . }}"
           args:
+            - --v=5
             - --csi-address=$(ADDRESS)
+            {{- if or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17) }}
+            - --metrics-address=:22014
+            {{- end }}
+            {{- if (gt (.Values.replicas | int) 1) }}
+            - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -72,10 +70,14 @@ spec:
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
+            - --metrics-address=:22012
             - --timeout={{ .Values.attacher.timeout }}
             - --retry-interval-start={{ .Values.attacher.retryIntervalStart }}
             - --retry-interval-max={{ .Values.attacher.retryIntervalMax }}
             - --worker-threads={{ .Values.attacher.workerThreads }}
+            {{- if (gt (.Values.replicas | int) 1) }}
+            - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -88,6 +90,10 @@ spec:
           args:
             - --v=5
             - --csi-address=$(ADDRESS)
+            - --metrics-address=:22013
+            {{- if (gt (.Values.replicas | int) 1) }}
+            - --leader-election=true
+            {{- end }}
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -98,7 +104,7 @@ spec:
         - name: gce-pd-driver
           # Don't change base image without changing pdImagePlaceholder in
           # test/k8s-integration/main.go
-          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          image: {{ .Values.image.repository }}:{{ include "gcpdisk.image.tag" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
             - "--v=5"

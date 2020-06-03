@@ -1,4 +1,4 @@
-apiVersion: snapshot.storage.k8s.io/v1alpha1
+apiVersion: snapshot.storage.k8s.io/{{ include "gcpdiskprovisioner.snapshotclass.apiversion" . }}
 kind: VolumeSnapshotClass
 metadata:
   name: gcpdisksnapshot
@@ -7,4 +7,9 @@ metadata:
 {{- if .Values.snapshotclass.isDefault }}
     snapshot.storage.kubernetes.io/is-default-class: "true"
 {{- end }}
+{{- if or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17) }}
+driver: pd.csi.storage.gke.io
+deletionPolicy: {{ .Values.snapshotclass.deletionPolicy }}
+{{- else }}
 snapshotter: pd.csi.storage.gke.io
+{{- end }}

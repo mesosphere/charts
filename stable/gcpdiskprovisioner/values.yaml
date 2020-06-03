@@ -11,3 +11,4 @@ storageclass:
   topologyZone: []
 snapshotclass:
   isDefault: true
+  deletionPolicy: Delete
