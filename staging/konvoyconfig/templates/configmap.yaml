@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -5,7 +6,39 @@ metadata:
   labels:
 {{ include "konvoyaddons.labels" . | indent 4 }}
 data:
+  {{- if .Values.config.clusterHostname }}
   clusterHostname: {{ .Values.config.clusterHostname }}
+  {{- else }}
+  clusterHostname: ""
+  {{- end }}
   {{- if .Values.config.externalDex }}
   externalDex: {{ toYaml .Values.config.externalDex | nindent 4 }}
   {{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: konvoy-kubeaddons
+  namespace: kubeaddons
+  labels:
+    app.kubernetes.io/name: kubeaddons
+    app.kubernetes.io/component: controller
+    kubeaddons.d2iq.com/priority: "0"
+  data: |
+    ---
+    {{- if .Values.clusterDomainNames }}
+    clusterDomainNames:
+    {{- range $name := .Values.clusterDomainNames }}
+      - {{ $name }}
+    {{- end }}
+    {{- else if .Values.config.clusterHostname }}
+    clusterDomainNames:
+      - {{ .Values.config.clusterHostname }}
+    {{- else }}
+    clusterDomainNames: []
+    {{- end }}
+    {{- if .Values.clusterIssuerURL }}
+    issuerURL: {{ .Values.clusterIssuerURL }}
+    {{- else if .Values.clusterIssuerHostname }}
+    issuerURL: https://{{ .Values.clusterIssuerHostname }}/dex
+    {{- end }}
