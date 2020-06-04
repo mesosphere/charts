@@ -68,3 +68,5 @@ snapshotController:
     tag: v2.1.1
 
 cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
+cleanupVolumeSnapshotCRDV1alpha1: true

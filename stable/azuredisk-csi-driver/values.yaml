@@ -54,6 +54,7 @@ cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
 
 snapshot:
   enabled: false
+  cleanupVolumeSnapshotCRDV1alpha1: true
   controller:
     resources:
       requests:

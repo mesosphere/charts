@@ -164,6 +164,8 @@ grafana:
           mountPath: /var/lib/grafana/shared-plugins/
 
 kommander-ui:
+  showCost: true
+  impersonateUser: true
   ingress:
     enabled: true
     traefikFrontendRuleType: PathPrefixStrip
