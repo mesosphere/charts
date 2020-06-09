@@ -65,3 +65,4 @@ dindTask("test", inputs=[git], deps=["lint"], steps=[
 
 action(tasks=["test"], on=pullRequest(branches=["*"]))
 action(tasks=["publish"], on=push(branches=["master"]))
+action(tasks = ["test"], on = pullRequest(chatops = ["test"]))
