@@ -193,6 +193,7 @@ kubecost:
 
   cost-analyzer:
     enabled: true
+    fullnameOverride: "kommander-kubecost-cost-analyzer"
     global:
       prometheus:
         # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
@@ -236,6 +237,15 @@ kubecost:
           defaultDatasourceEnabled: false
           # dataSourceName: KubecostPrometheus
           label: grafana_datasource_kommander
+
+    prometheus:
+      fullnameOverride: "kommander-kubecost-prometheus"
+      server:
+        fullnameOverride: "kommander-kubecost-prometheus-server"
+      alertmanager:
+        fullnameOverride: "kommander-kubecost-prometheus-alertmanager"
+      kube-state-metrics:
+        fullnameOverride: "kommander-kubecost-prometheus-kube-state-metrics"
 
     thanos:
       fullnameOverride: "kommander-kubecost-thanos"
