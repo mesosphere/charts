@@ -2,15 +2,15 @@ dependencies:
 - name: kubeaddons-catalog
   repository: https://mesosphere.github.io/charts/staging
   version: 0.1.9
-- name: yakcl-federation
+- name: kommander-federation
   repository: https://mesosphere.github.io/yakcl/charts
-  version: 0.0.7
-- name: yakcl-licensing
+  version: 0.1.0
+- name: kommander-licensing
   repository: https://mesosphere.github.io/yakcl/charts
-  version: 0.0.7
-- name: yakcl-provisioning
+  version: 0.1.0
+- name: auto-provisioning
   repository: https://mesosphere.github.io/yakcl/charts
-  version: 0.0.7
+  version: 0.1.0
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
   version: 3.100.0
@@ -20,5 +20,5 @@ dependencies:
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.5.1
-digest: sha256:f556bfaf433aef4cf3d4208bff333e4cf03fb2e5638c632a1ff308fbaaaad15c
-generated: "2020-06-04T17:41:03.638767-07:00"
+digest: sha256:0d45fc31f8a4e82b4bd06de03477c27af5a6eb2751fc2ca37f7b1016cd563516
+generated: "2020-06-10T08:08:51.950098129-07:00"
