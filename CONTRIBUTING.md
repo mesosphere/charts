@@ -1,5 +1,5 @@
 # Contributing Guidelines
-
+ILOVECONTRIBUTIN
 The Kubernetes Charts project accepts contributions via GitHub pull requests. This document outlines the process to help get your contribution accepted.
 
 ## Reporting a Bug in Helm
