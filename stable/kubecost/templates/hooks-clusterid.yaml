@@ -86,7 +86,7 @@ spec:
               set -o errexit
               set -o pipefail
               CLUSTERID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}")
-              kubectl get configmap/{{ .Release.Name }}-prometheus-server -oyaml > /tmp/override.yaml
+              kubectl get configmap/{{ template "kubecost.prometheus-server-cm-name" . }} -oyaml > /tmp/override.yaml
               sed -e 's/\$CLUSTER_ID/"'$CLUSTERID'"/g' /tmp/override.yaml > /tmp/final.yaml
               kubectl apply -f /tmp/final.yaml
               echo "Done replacing \$CLUSTER_ID with $CLUSTERID"
