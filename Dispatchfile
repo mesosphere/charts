@@ -1,17 +1,19 @@
-#!starlark
+#!mesosphere/dispatch-starlark:v0.5-beta2
 # vi:syntax=python
 #
 
-git = "src-git"
 
-def secretVar(name, key):
-    return k8s.corev1.EnvVarSource(secretKeyRef=k8s.corev1.SecretKeySelector(localObjectReference=k8s.corev1.LocalObjectReference(name=name), key=key))
+load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.4", "gitResource", "pullRequest", "push", "secretVar")
+#TODO @faiq: once 0.0.5 of this package is released switch to that ref
+load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
+
+git = "src-git"
 
 gitResource(git,
     url="$(context.git.url)",
     revision="$(context.git.commit)")
 
-dindTask("publish", inputs=[git], steps=[
+dind_task("publish", inputs=[git], steps=[
   v1.Container(
     name = "publish-charts",
     workingDir =  "/workspace/src-git",
@@ -29,7 +31,7 @@ dindTask("publish", inputs=[git], steps=[
   )
 ])
 
-dindTask("lint", inputs=[git], steps=[
+dind_task("lint", inputs=[git], steps=[
   v1.Container(
     name = "lint-charts",
     workingDir =  "/workspace/src-git",
@@ -43,7 +45,7 @@ dindTask("lint", inputs=[git], steps=[
   )
 ])
 
-dindTask("test", inputs=[git], deps=["lint"], steps=[
+dind_task("test", inputs=[git], deps=["lint"], steps=[
   v1.Container(
     name = "test-charts",
     workingDir =  "/workspace/src-git",
@@ -63,6 +65,6 @@ dindTask("test", inputs=[git], deps=["lint"], steps=[
   )
 ])
 
-action(tasks=["test"], on=pullRequest(branches=["*"]))
+action(tasks=["test"], on=pullRequest())
 action(tasks=["publish"], on=push(branches=["master"]))
 action(tasks = ["test"], on = pullRequest(chatops = ["test"]))
