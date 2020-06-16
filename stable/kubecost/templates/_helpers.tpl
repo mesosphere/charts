@@ -25,6 +25,17 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{/*
+Create prometheus server configmap name
+*/}}
+{{- define "kubecost.prometheus-server-cm-name" -}}
+{{- if index .Values "cost-analyzer" "prometheus" "server" "fullnameOverride" -}}
+{{- index .Values "cost-analyzer" "prometheus" "server" "fullnameOverride" | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-prometheus-server" .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "kubecost.chart" -}}

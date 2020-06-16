@@ -83,7 +83,7 @@ grafana:
       traefik.ingress.kubernetes.io/auth-response-headers: "X-Forwarded-User"
       traefik.ingress.kubernetes.io/auth-type: "forward"
       traefik.ingress.kubernetes.io/auth-url: "http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/"
-      traefik.ingress.kubernetes.io/priority: "2"
+      traefik.ingress.kubernetes.io/priority: "4"
 
     ## Labels to be added to the Ingress
     ##
