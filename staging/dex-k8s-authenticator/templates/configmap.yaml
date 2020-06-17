@@ -15,6 +15,7 @@ data:
     web_path_prefix: {{ default "/" .web_path_prefix }}
     debug: {{ default "false" .debug }}
     pluginVersion: {{ .pluginVersion }}
+    useClusterHostnameForClusterName: {{ default "false" .useClusterHostnameForClusterName }}
     {{- if .logoUrl }}
     logo_uri: {{ .logoUrl }}
     {{- end }}

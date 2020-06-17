@@ -47,7 +47,7 @@ EOF</code></pre>
     </code></pre>
     {{ else }}
         <pre><code>curl --create-dirs {{ .linuxURL }} \
-      -o ${HOME}/{{ .installPath}}} && \
+      -o ${HOME}/{{ .installPath}} && \
       chmod +x ${HOME}/{{ .installPath }}
     </code></pre>
     {{ end }}
