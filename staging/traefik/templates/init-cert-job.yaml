@@ -9,7 +9,7 @@ metadata:
   # https://github.com/helm/helm/issues/5482
   name: {{ include "traefik.fullname" . }}-{{ .Chart.Version }}
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": "post-install"
     "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
   labels:
     chart: {{ template "traefik.chart" . }}
