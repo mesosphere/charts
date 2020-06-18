@@ -8,7 +8,7 @@
       <button class="btn" style="float:right" data-clipboard-snippet="">
         <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
       </button>
-      <pre><code>curl --create-dirs -s {{ .IDPCaURI }} -o ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/idp-ca.crt</code></pre>
+      <pre><code>curl --create-dirs -s {{ .IDPCaURI }} -o ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/idp-ca.crt</code></pre>
     </div>
   {{ end }}
 
@@ -22,7 +22,7 @@
       <button class="btn" style="float:right" data-clipboard-snippet="">
         <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
       </button>
-      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/idp-ca.crt
+      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/idp-ca.crt
 {{ .IDPCaPem }}
 EOF</code></pre>
     </div>
@@ -38,7 +38,7 @@ EOF</code></pre>
       <button class="btn" style="float: right" data-clipboard-snippet="">
         <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
       </button>
-      <pre><code>curl --create-dirs -s {{ .K8sCaURI }} -o ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/k8s-ca.crt</code></pre>
+      <pre><code>curl --create-dirs -s {{ .K8sCaURI }} -o ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/k8s-ca.crt</code></pre>
     </div>
   {{ end }}
 
@@ -52,7 +52,7 @@ EOF</code></pre>
       <button class="btn" style="float:right" data-clipboard-snippet="">
         <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
       </button>
-      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/k8s-ca.crt
+      <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/k8s-ca.crt
 {{ .K8sCaPem }}
 EOF</code></pre>
     </div>
@@ -67,9 +67,9 @@ EOF</code></pre>
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt="">
     </button>
-  <pre><code>kubectl config set-cluster {{ .Username }}-{{ .ClusterName }} \
+  <pre><code>kubectl config set-cluster {{ .Username }}-{{ .ClusterHostname }} \
   {{- if or .K8sCaPem .K8sCaURI }}
-    --certificate-authority=${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName}}/k8s-ca.crt \
+    --certificate-authority=${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname}}/k8s-ca.crt \
   {{- end }}
     --server={{ .K8sMasterURI }}</code></pre>
   </div>
@@ -79,10 +79,10 @@ EOF</code></pre>
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
     </button>
-  <pre><code>kubectl config set-credentials {{ .Username }}-{{ .ClusterName }} \
+  <pre><code>kubectl config set-credentials {{ .Username }}-{{ .ClusterHostname }} \
     --token={{ .IDToken }}
   {{- if or (.IDPCaURI) (.IDPCaPem) }} \
-    --auth-provider-arg=idp-certificate-authority=${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterName }}/idp-ca.crt
+    --auth-provider-arg=idp-certificate-authority=${HOME}/.kube/certs/{{ .Username }}-{{ .ClusterHostname }}/idp-ca.crt
   {{- end }}</code></pre>
   </div>
 
@@ -91,9 +91,9 @@ EOF</code></pre>
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt="">
     </button>
-    <pre><code class="hljs">kubectl config set-context {{ .Username }}-{{ .ClusterName }} \
-    --cluster={{ .Username }}-{{ .ClusterName }} \
-    --user={{ .Username }}-{{.ClusterName }}</code></pre>
+    <pre><code class="hljs">kubectl config set-context {{ .Username }}-{{ .ClusterHostname }} \
+    --cluster={{ .Username }}-{{ .ClusterHostname }} \
+    --user={{ .Username }}-{{.ClusterHostname }}</code></pre>
   </div>
 
   <div class="command">
@@ -101,7 +101,7 @@ EOF</code></pre>
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt=""/>
     </button>
-    <pre><code class="hljs">kubectl config use-context {{ .Username }}-{{ .ClusterName}}</code></pre>
+    <pre><code class="hljs">kubectl config use-context {{ .Username }}-{{ .ClusterHostname}}</code></pre>
   </div>
 
 {{ end }}

@@ -7,6 +7,7 @@
 # These owners will be the default owners for everything in the repo unless a later match takes precedence
 * @mesosphere/sig-ksphere-catalog
 
+/Dispatchfile @mesosphere/devprod
 /stable/argo-cd @mesosphere/devx
 /stable/awsebscsiprovisioner @mesosphere/sig-ksphere-cluster
 /stable/awsebsprovisioner @mesosphere/sig-ksphere-cluster
