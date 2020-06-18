@@ -87,6 +87,13 @@ cost-analyzer:
       # This overrides the cluster_id set in prometheus.server.global.external_labels.
       # NOTE: This does not affect the external_labels set in prometheus config.
       clusterIDConfigmap: kubecost-cluster-info-configmap
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 2500Mi
+        requests:
+          cpu: 300m
+          memory: 1500Mi
       global:
         scrape_interval: 1m
         scrape_timeout: 10s
@@ -145,6 +152,13 @@ cost-analyzer:
         #   mountPath: /etc/config
     alertmanager:
       enabled: true
+      resources:
+        limits:
+          cpu: 50m
+          memory: 100Mi
+        requests:
+          cpu: 10m
+          memory: 50Mi
       persistentVolume:
         enabled: true
     pushgateway:
