@@ -7,9 +7,7 @@ metadata:
   # certificate object is a helm hook, and will be re-created during
   # an upgrade. See more details in:
   # https://github.com/helm/helm/issues/5482
-  name: {{ include "traefik.fullname" . }}-{{ .Chart.Version }}
-  annotations:
-    "helm.sh/hook-delete-policy": "hook-succeeded,before-hook-creation"
+  name: {{ include "traefik.fullname" . }}-{{ .Chart.Version }}-{{ randAlphaNum 5 | lower }}
   labels:
     chart: {{ template "traefik.chart" . }}
     app: {{ template "traefik.name" . }}
