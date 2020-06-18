@@ -2,6 +2,7 @@
 # vi:syntax=python
 #
 
+
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.4", "gitResource", "pullRequest", "push", "secretVar")
 #TODO @faiq: once 0.0.5 of this package is released switch to that ref
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
@@ -64,6 +65,6 @@ dind_task("test", inputs=[git], deps=["lint"], steps=[
   )
 ])
 
-action(tasks=["test"], on=pullRequest(branches=["*"]))
+action(tasks=["test"], on=pullRequest())
 action(tasks=["publish"], on=push(branches=["master"]))
 action(tasks = ["test"], on = pullRequest(chatops = ["test"]))
