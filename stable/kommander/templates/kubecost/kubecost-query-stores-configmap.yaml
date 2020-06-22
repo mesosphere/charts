@@ -20,7 +20,7 @@ spec:
     metadata:
       name: create-{{ . }}-configmap
     spec:
-      serviceAccountName: kommander-kubeaddons
+      serviceAccountName: {{ $sa }}
       restartPolicy: OnFailure
       containers:
         - name: kubectl
