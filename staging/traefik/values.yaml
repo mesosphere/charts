@@ -1,6 +1,6 @@
 ## Default values for Traefik
 image: traefik
-imageTag: 1.7.23
+imageTag: 1.7.24
 imagePullPolicy: IfNotPresent
 
 ## Optionally specify an array of imagePullSecrets.
@@ -17,7 +17,6 @@ testFramework:
 
 ## can switch the service type to NodePort if required
 serviceType: LoadBalancer
-extraServicePorts: []
 # loadBalancerIP: ""
 # loadBalancerSourceRanges: []
 whiteListSourceRange: []
@@ -26,6 +25,9 @@ replicas: 1
 # startupArguments:
 #   - "--ping"
 #   - "--ping.entrypoint=http"
+
+# /ping health-check entry point.
+# pingEntryPoint: http
 
 podDisruptionBudget: {}
   # maxUnavailable: 1
@@ -42,6 +44,8 @@ debug:
 
 # logLevel: error
 
+# maxIdleConnsPerHost: 200
+
 deploymentStrategy: {}
   # rollingUpdate:
   #   maxSurge: 1
@@ -49,11 +53,8 @@ deploymentStrategy: {}
   # type: RollingUpdate
 
 securityContext: {}
+useNonPriviledgedPorts: false
 env: {}
-
-initContainers: []
-
-deploymentAnnotations: {}
 
 nodeSelector: {}
   # key: value
@@ -149,6 +150,22 @@ ssl:
     # basic:
     #   testuser: $apr1$JXRA7j2s$LpVns9vsme8FHN0r.aSt11
 
+  # a list of any extra certificate/key filenames you want included in the traefik instance. This must be used in conjunction with
+  # the "secretFiles" parameter to include the certs on each traefik pod. the expected format is:
+  # extraCerts:
+  #   - certFile: /secrets/cert1.crt
+  #     keyFile: /secrets/key1.key
+  #   - certFile: /secrets/cert2.crt
+  #     keyFile: /secrets/key2.key
+
+  # mtls:
+  #   enabled: true
+  #   optional: false
+  #   clientCaCerts: []
+  #   # When mTLS is enabled, the set of CA certificates used to validate client TLS certificates.
+  #   # https://docs.traefik.io/configuration/entrypoints/#tls-mutual-authentication
+  #   # CA certificates should be in PEM format.
+
 kvprovider:
   ## If you want to run Traefik in HA mode, you will need to setup a KV Provider. Therefore you can choose one of
   ## * etcd
@@ -160,6 +177,7 @@ kvprovider:
 
   ## storeAcme has to be enabled to support HA Support using acme, but at least one kvprovider is needed
   storeAcme: false
+  acmeStorageLocation: traefik/acme/account
   importAcme: false
 
   # etcd:
@@ -208,6 +226,9 @@ acme:
   email: admin@example.com
   onHostRule: true
   staging: true
+  ## Specify a custom ACME server endpoint
+  ## Optional
+  # caServer: https://acme-staging-v02.api.letsencrypt.org/directory
   logging: false
   # Configure a Let's Encrypt certificate to be managed by default.
   # This is the only way to request wildcard certificates (works only with dns challenge).
@@ -224,19 +245,18 @@ acme:
       #   - "test1.example2.com"
       #   - "test2.example2.com"
   ## ACME challenge type: "tls-sni-01", "tls-alpn-01", "http-01" or "dns-01"
-  ## Note the chart's default of tls-sni-01 has been DEPRECATED and (except in
-  ## certain circumstances) DISABLED by Let's Encrypt. It remains as a default
-  ## value in this chart to preserve legacy behavior and avoid a breaking
-  ## change. Users of this chart should strongly consider making the switch to
-  ## the recommended "tls-alpn-01" (available since v1.7), dns-01 or http-01
-  ## (available since v1.5) challenge.
-  challengeType: tls-sni-01
+  ## Note that "tls-sni-01" has been DEPRECATED.
+  challengeType: tls-alpn-01
   ## Configure dnsProvider to perform domain verification using dns challenge
   ## Applicable only if using the dns-01 challenge type
   delayBeforeCheck: 0
   resolvers: []
     # - 1.1.1.1:53
     # - 8.8.8.8:53
+  ## Configure the endpoint used for the HTTP challenge
+  ## Applicable only if using the http-01 challenge type
+  httpChallenge:
+    entrypoint: http
   dnsProvider:
     name: nil
     existingSecretName: ""
@@ -347,7 +367,6 @@ dashboard:
     # annotations:
     #   key: value
   ingress: {}
-    # path: /my/path
     # annotations:
     #   key: value
     # labels:
@@ -383,6 +402,12 @@ gzip:
 traefikLogFormat: json
 accessLogs:
   enabled: false
+  filters: {}
+    # statusCodes:
+    #   - "200"
+    #   - "300-302"
+    # retryAttempts: true
+    # minDuration: "10ms"
   ## Path to the access logs file. If not provided, Traefik defaults it to stdout.
   # filePath: ""
   format: common  # choices are: common, json
@@ -405,10 +430,28 @@ rbac:
 metrics:
   prometheus:
     enabled: false
-    ## If true, prevents exposing port 8080 on the main Traefik service, reserving
-    ## it to the dashboard service only
-    restrictAccess: false
     # buckets: [0.1,0.3,1.2,5]
+    service:
+      # Set a custom service name
+      name:
+      annotations:
+        prometheus.io/scrape: "true"
+      port: 9100
+      type: ClusterIP
+      # loadBalancerIP: ""
+      # loadBalancerSourceRanges: []
+      # externalIP: ""
+      # externalTrafficPolicy: Cluster
+      # nodePort: 9100
+   # serviceMonitor:
+    # When set true and if Prometheus Operator is installed then use a ServiceMonitor to configure scraping
+    # enabled: false
+    # Set the namespace the ServiceMonitor should be deployed
+    # namespace: monitoring
+    # Set how frequently Prometheus should scrape
+    # interval: 30s
+    # Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator
+    # labels:
   datadog:
     enabled: false
     # address: localhost:8125
@@ -418,6 +461,11 @@ metrics:
     # address: localhost:8125
     # pushinterval: 10s
 deployment:
+  # labels to add to the deployment
+  # labels:
+  #   key: value
+  # annotations:
+  #   key: value
   # labels to add to the pod container metadata
   # podLabels:
   #   key: value
@@ -503,3 +551,14 @@ dashboardRBAC:
 # 			[entryPoints.velero.tls.defaultCertificate]
 # 			certFile = "/ssl/tls.crt"
 # 			keyFile = "/ssl/tls.key"
+# Any extra volumes to define for the pod
+extraVolumes: []
+  # - name: example-name
+  #   hostPath:
+  #     path: /path/on/host
+  #     type: DirectoryOrCreate
+
+# Any extra volume mounts to define for the Traefik container
+extraVolumeMounts: []
+#   - name: example-name
+#     mountPath: /path/in/container
