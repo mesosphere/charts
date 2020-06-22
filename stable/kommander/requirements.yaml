@@ -16,7 +16,7 @@ dependencies:
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: auto-provisioning.enabled, global.auto-provisioning.enabled
   - name: kommander-ui
-    version: "3.106.2"
+    version: "3.111.0"
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
   - name: kubecost
