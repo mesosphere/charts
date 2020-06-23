@@ -4,19 +4,48 @@
 {{- if .Values.thanos.query.enabled }}
 {{- range .Values.thanos.query.serviceDiscoveryFileConfigMaps }}
 ---
-apiVersion: v1
-kind: ConfigMap
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: {{ . }}
+  name: create-{{ . }}-configmap
   namespace: {{ $ns }}
   labels:
 {{ $labels }}
   annotations:
-    helm.sh/hook: pre-install
-    helm.sh/hook-delete-policy: before-hook-creation
-data:
-  stores.yaml: |-
-    - targets: []
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "4"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      name: create-{{ . }}-configmap
+    spec:
+      serviceAccountName: {{ $sa }}
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: bitnami/kubectl:1.16.2
+          command:
+          - sh
+          - "-c"
+          - |
+            /bin/bash <<'EOF'
+            set -o nounset
+            set -o errexit
+            set -o pipefail
+
+            echo "checking if {{ . }} configmap exists"
+
+            RES=$(kubectl get configmap --ignore-not-found {{ . }})
+            if [[ $RES == "" ]]; then
+              echo "{{ . }} configmap does not exist - creating"
+              printf '%s\n' "apiVersion: v1" "kind: ConfigMap" "metadata:" "  name: {{ . }}" "data:" "  stores.yaml: |-" "    - targets: []" > /tmp/{{ . }}.yaml
+              kubectl apply -f /tmp/{{ . }}.yaml
+              exit 0
+            fi
+
+            echo "{{ . }} configmap already exists - no need to create"
+            EOF
 ---
 apiVersion: batch/v1
 kind: Job
