@@ -115,13 +115,6 @@ install_dummylb() {
     echo
 }
 
-# kubeaddons namespace necessary for cluster-autoscaler to install grafana dashboards into
-create_kubeaddons_namespace() {
-    echo 'Creating kubeaddons namespace...'
-    docker_exec kubectl create namespace kubeaddons
-    echo
-}
-
 replace_priority_class_name_system_x_critical() {
     echo 'Replacing priorityClassName: system-X-critical'
     grep -rl "priorityClassName: system-" --exclude-dir=test . | xargs sed -i 's/system-.*-critical/null/g'
@@ -137,7 +130,6 @@ main() {
     install_tiller
     install_dummylb
     install_certmanager
-    create_kubeaddons_namespace
 
     docker_exec ct lint --debug "$@"
 
