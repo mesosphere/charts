@@ -36,7 +36,7 @@ spec:
 
             echo "checking if {{ . }} configmap exists"
 
-            RES=$(kubectl get configmap {{ . }} || true)
+            RES=$(kubectl get configmap --ignore-not-found {{ . }})
             if [[ $RES == "" ]]; then
               echo "{{ . }} configmap does not exist - creating"
               printf '%s\n' "apiVersion: v1" "kind: ConfigMap" "metadata:" "  name: {{ . }}" "data:" "  stores.yaml: |-" "    - targets: []" > /tmp/{{ . }}.yaml
