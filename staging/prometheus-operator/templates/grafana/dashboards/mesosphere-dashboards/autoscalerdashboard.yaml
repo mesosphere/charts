@@ -1,18 +1,16 @@
-{{- if .Values.enabled }}
+{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.dashboards.autoscaler }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-%s" (include "grafana.fullname" $) "k8s-autoscaler" | trunc 63 | trimSuffix "-" }}
-  namespace: {{ $.Values.namespace }}
+  name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "autoscaler-dashboard" | trunc 63 | trimSuffix "-" }}
   labels:
-    {{- if $.Values.dashboards.label }}
-    {{ $.Values.dashboards.label }}: "1"
+    {{- if $.Values.grafana.sidecar.dashboards.label }}
+    {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
     {{- end }}
-    app: {{ template "grafana.name" $ }}
-    chart: {{ template "grafana.chart" $ }}
-    release: {{ $.Release.Name }}
+    app: {{ template "prometheus-operator.name" $ }}-grafana
+{{ include "prometheus-operator.labels" $ | indent 4 }}
 data:
-  k8s-autoscaler.json: |-
+  autoscalerdashboard.json: |-
     {
       "__inputs": [],
       "__requires": [
