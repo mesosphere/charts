@@ -64,6 +64,7 @@ mesosphereResources:
     velero: false
   dashboards:
     apiserver: true
+    autoscaler: true
     calico: true
     controlmanager: true
     elasticsearch: true
