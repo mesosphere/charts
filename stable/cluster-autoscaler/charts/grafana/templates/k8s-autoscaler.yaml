@@ -103,6 +103,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -148,9 +149,9 @@ data:
           "colorBackground": false,
           "colorValue": true,
           "colors": [
-            "rgba(245, 54, 54, 0.9)",
+            "rgba(50, 172, 45, 0.97)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
+            "rgba(245, 54, 54, 0.9)"
           ],
           "datasource": "$datasource",
           "decimals": null,
@@ -187,6 +188,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -269,6 +271,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -358,6 +361,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -435,6 +439,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -518,6 +523,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -579,7 +585,6 @@ data:
             "y": 4
           },
           "height": "250px",
-          "hiddenSeries": false,
           "id": 11,
           "legend": {
             "avg": false,
@@ -687,7 +692,6 @@ data:
             "y": 4
           },
           "height": "250px",
-          "hiddenSeries": false,
           "id": 10,
           "legend": {
             "avg": false,
@@ -802,7 +806,6 @@ data:
             "y": 11
           },
           "height": "250px",
-          "hiddenSeries": false,
           "id": 3,
           "legend": {
             "avg": false,
@@ -941,6 +944,7 @@ data:
           "maxDataPoints": 100,
           "nullPointMode": "connected",
           "nullText": null,
+          "options": {},
           "postfix": "",
           "postfixFontSize": "50%",
           "prefix": "",
@@ -994,7 +998,7 @@ data:
         }
       ],
       "refresh": "1m",
-      "schemaVersion": 22,
+      "schemaVersion": 20,
       "style": "dark",
       "tags": [
         "cluster-autoscaler",
@@ -1004,7 +1008,7 @@ data:
         "list": [
           {
             "current": {
-              "selected": false,
+              "selected": true,
               "text": "Prometheus",
               "value": "Prometheus"
             },
@@ -1020,7 +1024,7 @@ data:
             "skipUrlSync": false,
             "type": "datasource"
           }
-        ]
+    	  ]
       },
       "time": {
         "from": "now-6h",
@@ -1054,9 +1058,6 @@ data:
       "timezone": "browser",
       "title": "Kubernetes / Autoscaler",
       "uid": "AEXdQjkMz",
-      "variables": {
-        "list": []
-      },
-      "version": 3
+      "version": 1
     }
 {{- end }}
