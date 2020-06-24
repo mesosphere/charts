@@ -37,10 +37,17 @@ spec:
       annotations:
         message: Pod {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.pod {{`}}`}} has been in a non-ready state for longer than 15 minutes.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}alert-name-kubepodnotready
-      expr: sum by (namespace, pod) (max by(namespace, pod) (kube_pod_status_phase{job="kube-state-metrics", namespace=~"{{ $targetNamespace }}", phase=~"Pending|Unknown"}) * on(namespace, pod) group_left(owner_kind) max by(namespace, pod, owner_kind) (kube_pod_owner{owner_kind!="Job"})) > 0
+      expr: |-
+        sum by (namespace, pod) (
+          max by(namespace, pod) (
+            kube_pod_status_phase{job="kube-state-metrics", namespace=~"{{ $targetNamespace }}", phase=~"Pending|Unknown"}
+          ) * on(namespace, pod) group_left(owner_kind) topk by(namespace, pod) (
+            1, max by(namespace, pod, owner_kind) (kube_pod_owner{owner_kind!="Job"})
+          )
+        ) > 0
       for: 15m
       labels:
-        severity: critical
+        severity: warning
     - alert: KubeDeploymentGenerationMismatch
       annotations:
         message: Deployment generation for {{`{{`}} $labels.namespace {{`}}`}}/{{`{{`}} $labels.deployment {{`}}`}} does not match, this indicates that the Deployment has failed but has not been rolled back.
