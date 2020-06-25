@@ -13,11 +13,7 @@ This chart bootstraps all Istio [components](https://istio.io/docs/concepts/what
 This chart can install multiple Istio components as subcharts:
 - ingressgateway
 - egressgateway
-- sidecarInjectorWebhook
-- galley
-- mixer
 - pilot
-- security(citadel)
 - grafana
 - prometheus
 - tracing(jaeger)
