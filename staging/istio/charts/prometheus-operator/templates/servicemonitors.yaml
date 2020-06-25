@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     monitoring: istio-proxies
-    release: {{ .Release.Name }}
+    release: prometheus-kubeaddons
 spec:
   selector:
     matchExpressions:
@@ -38,7 +38,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     monitoring: kube-pods
-    release: {{ .Release.Name }}
+    release: prometheus-kubeaddons
 spec:
   selector:
     matchExpressions:
@@ -83,7 +83,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     monitoring: kube-services
-    release: {{ .Release.Name }}
+    release: prometheus-kubeaddons
 spec:
   selector:
     matchExpressions:
