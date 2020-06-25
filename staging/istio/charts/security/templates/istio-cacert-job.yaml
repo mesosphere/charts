@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cacert-job-{{ .Values.tag | printf "%v" | trunc 32 }}
+  name: cacert-job-{{ randAlphaNum 5 | lower }}
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
