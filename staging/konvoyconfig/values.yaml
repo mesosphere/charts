@@ -25,3 +25,7 @@ config:
 # It's possible to set the full Dex issuer URL, however, this is usually not
 # necessary. Only use this if you know what you are doing.
 # clusterIssuerURL: https://name1.example.com/custom/dex
+
+# caSecretName takes the name of the secret that holds the CA bundle for the
+# custom certificate.
+# caSecretName: custom-cert
