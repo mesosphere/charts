@@ -14,12 +14,15 @@ data:
   {{- if .Values.config.externalDex }}
   externalDex: {{ toYaml .Values.config.externalDex | nindent 4 }}
   {{- end }}
+  {{- if .Values.config.caSecretName }}
+  caSecretName: {{ .Values.config.caSecretName }}
+  {{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: konvoy-kubeaddons
-  namespace: kubeaddons
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: kubeaddons
     app.kubernetes.io/component: controller
@@ -41,4 +44,7 @@ metadata:
     issuerURL: {{ .Values.clusterIssuerURL }}
     {{- else if .Values.clusterIssuerHostname }}
     issuerURL: https://{{ .Values.clusterIssuerHostname }}/dex
+    {{- end }}
+    {{- if .Values.config.caSecretName }}
+    caSecretName: {{ .Values.config.caSecretName }}
     {{- end }}
