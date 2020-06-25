@@ -187,7 +187,11 @@ spec:
       {{- if and .Values.ssl.enabled (not .Values.ssl.upstream) }}
       - name: ssl
         secret:
+          {{- if not .Values.ssl.useCertManager }}
+          secretName: {{ template "traefik.fullname" . }}-default-cert
+          {{- else }}
           secretName: {{ template "traefik.fullname" . }}-certificate
+          {{- end }}
       {{- end }}
       {{- if .Values.ssl.caSecretName }}
       - name: custom-ssl
