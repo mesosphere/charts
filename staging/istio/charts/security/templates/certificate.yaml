@@ -1,8 +1,11 @@
+---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
 metadata:
   name: istio-ca
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install
 spec:
   isCA: true
   commonName: istio-ca
@@ -11,7 +14,7 @@ spec:
   duration: 87600h
   organization:
   - D2iQ
-  secretName: cacerts
+  secretName: istio-ca
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
