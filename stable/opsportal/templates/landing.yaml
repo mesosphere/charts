@@ -41,6 +41,7 @@ metadata:
   name: opsportal-landing
   namespace: {{ .Release.Namespace }}
 spec:
+  replicas: {{ .Values.landing.replicas }}
   selector:
     matchLabels:
       app: opsportal-landing
