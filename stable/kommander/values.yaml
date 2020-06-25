@@ -215,15 +215,15 @@ kubecost:
         kubernetes.io/ingress.class: traefik
         ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
         traefik.frontend.rule.type: "PathPrefix"
-        traefik.frontend.redirect.regex: "^(.*)/ops/portal/kommander/kubecost$"
-        traefik.frontend.redirect.replacement: "$1/ops/portal/kommander/kubecost/"
-        traefik.ingress.kubernetes.io/request-modifier: 'ReplacePathRegex: ^/ops/portal/kommander/kubecost/(.*) /$1'
+        traefik.frontend.redirect.regex: "^(.*)/ops/portal/kommander/kubecost/frontend$"
+        traefik.frontend.redirect.replacement: "$1/ops/portal/kommander/kubecost/frontend/"
+        traefik.ingress.kubernetes.io/request-modifier: 'ReplacePathRegex: ^/ops/portal/kommander/kubecost/frontend/(.*) /$1'
         traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
         traefik.ingress.kubernetes.io/auth-type: forward
         traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-        traefik.ingress.kubernetes.io/priority: "2"
+        traefik.ingress.kubernetes.io/priority: "4"
       paths:
-        - "/ops/portal/kommander/kubecost"
+        - "/ops/portal/kommander/kubecost/frontend"
       hosts:
         - ""
       tls: []
