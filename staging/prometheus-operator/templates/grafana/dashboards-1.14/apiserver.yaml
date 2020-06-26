@@ -106,7 +106,7 @@ data:
                         "tableColumn": "",
                         "targets": [
                             {
-                                "expr": "apiserver_request:availability30d{verb=\"all\"}",
+                                "expr": "apiserver_request:availability7d{verb=\"all\"}",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "",
@@ -114,7 +114,7 @@ data:
                             }
                         ],
                         "thresholds": "",
-                        "title": "Availability (30d) > 99.000",
+                        "title": "Availability (7d) > 99.000",
                         "tooltip": {
                             "shared": false
                         },
@@ -174,7 +174,7 @@ data:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "100 * (apiserver_request:availability30d{verb=\"all\"} - 0.990000)",
+                                "expr": "100 * (apiserver_request:availability7d{verb=\"all\"} - 0.990000)",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "errorbudget",
@@ -186,7 +186,7 @@ data:
                         ],
                         "timeFrom": null,
                         "timeShift": null,
-                        "title": "ErrorBudget (30d) > 99.000",
+                        "title": "ErrorBudget (7d) > 99.000",
                         "tooltip": {
                             "shared": false,
                             "sort": 0,
@@ -298,7 +298,7 @@ data:
                         "tableColumn": "",
                         "targets": [
                             {
-                                "expr": "apiserver_request:availability30d{verb=\"read\"}",
+                                "expr": "apiserver_request:availability7d{verb=\"read\"}",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "",
@@ -306,7 +306,7 @@ data:
                             }
                         ],
                         "thresholds": "",
-                        "title": "Read Availability (30d)",
+                        "title": "Read Availability (7d)",
                         "tooltip": {
                             "shared": false
                         },
@@ -669,7 +669,7 @@ data:
                         "tableColumn": "",
                         "targets": [
                             {
-                                "expr": "apiserver_request:availability30d{verb=\"write\"}",
+                                "expr": "apiserver_request:availability7d{verb=\"write\"}",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "",
@@ -677,7 +677,7 @@ data:
                             }
                         ],
                         "thresholds": "",
-                        "title": "Write Availability (30d)",
+                        "title": "Write Availability (7d)",
                         "tooltip": {
                             "shared": false
                         },
