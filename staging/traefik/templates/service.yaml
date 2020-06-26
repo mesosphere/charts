@@ -56,3 +56,11 @@ spec:
     nodePort: {{ .Values.service.nodePorts.http }}
     {{- end }}
     targetPort: http
+  {{- if (and (.Values.metrics.prometheus.enabled) (not (.Values.metrics.prometheus.restrictAccess)))}}
+  - port: 8080
+    name: metrics
+    targetPort: dash
+  {{- end }}
+  {{- if .Values.extraServicePorts }}
+  {{- toYaml .Values.extraServicePorts | nindent 2 }}
+  {{- end }}    
