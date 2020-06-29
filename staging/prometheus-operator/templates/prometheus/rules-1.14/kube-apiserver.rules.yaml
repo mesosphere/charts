@@ -287,74 +287,74 @@ spec:
         1 - (
           (
             # write too slow
-            sum(increase(apiserver_request_duration_seconds_count{verb=~"POST|PUT|PATCH|DELETE"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_count{verb=~"POST|PUT|PATCH|DELETE"}[7d]))
             -
-            sum(increase(apiserver_request_duration_seconds_bucket{verb=~"POST|PUT|PATCH|DELETE",le="1"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_bucket{verb=~"POST|PUT|PATCH|DELETE",le="1"}[7d]))
           ) +
           (
             # read too slow
-            sum(increase(apiserver_request_duration_seconds_count{verb=~"LIST|GET"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_count{verb=~"LIST|GET"}[7d]))
             -
             (
-              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="resource",le="0.1"}[30d])) +
-              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="namespace",le="0.5"}[30d])) +
-              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="cluster",le="5"}[30d]))
+              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="resource",le="0.1"}[7d])) +
+              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="namespace",le="0.5"}[7d])) +
+              sum(increase(apiserver_request_duration_seconds_bucket{verb=~"LIST|GET",scope="cluster",le="5"}[7d]))
             )
           ) +
           # errors
-          sum(code:apiserver_request_total:increase30d{code=~"5.."})
+          sum(code:apiserver_request_total:increase7d{code=~"5.."})
         )
         /
-        sum(code:apiserver_request_total:increase30d)
+        sum(code:apiserver_request_total:increase7d)
       labels:
         verb: all
-      record: apiserver_request:availability30d
+      record: apiserver_request:availability7d
     - expr: |-
         1 - (
-          sum(increase(apiserver_request_duration_seconds_count{job="apiserver",verb=~"LIST|GET"}[30d]))
+          sum(increase(apiserver_request_duration_seconds_count{job="apiserver",verb=~"LIST|GET"}[7d]))
           -
           (
             # too slow
-            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="resource",le="0.1"}[30d])) +
-            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="namespace",le="0.5"}[30d])) +
-            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="cluster",le="5"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="resource",le="0.1"}[7d])) +
+            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="namespace",le="0.5"}[7d])) +
+            sum(increase(apiserver_request_duration_seconds_bucket{job="apiserver",verb=~"LIST|GET",scope="cluster",le="5"}[7d]))
           )
           +
           # errors
-          sum(code:apiserver_request_total:increase30d{verb="read",code=~"5.."})
+          sum(code:apiserver_request_total:increase7d{verb="read",code=~"5.."})
         )
         /
-        sum(code:apiserver_request_total:increase30d{verb="read"})
+        sum(code:apiserver_request_total:increase7d{verb="read"})
       labels:
         verb: read
-      record: apiserver_request:availability30d
+      record: apiserver_request:availability7d
     - expr: |-
         1 - (
           (
             # too slow
-            sum(increase(apiserver_request_duration_seconds_count{verb=~"POST|PUT|PATCH|DELETE"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_count{verb=~"POST|PUT|PATCH|DELETE"}[7d]))
             -
-            sum(increase(apiserver_request_duration_seconds_bucket{verb=~"POST|PUT|PATCH|DELETE",le="1"}[30d]))
+            sum(increase(apiserver_request_duration_seconds_bucket{verb=~"POST|PUT|PATCH|DELETE",le="1"}[7d]))
           )
           +
           # errors
-          sum(code:apiserver_request_total:increase30d{verb="write",code=~"5.."})
+          sum(code:apiserver_request_total:increase7d{verb="write",code=~"5.."})
         )
         /
-        sum(code:apiserver_request_total:increase30d{verb="write"})
+        sum(code:apiserver_request_total:increase7d{verb="write"})
       labels:
         verb: write
-      record: apiserver_request:availability30d
-    - expr: sum by (code, verb) (increase(apiserver_request_total{job="apiserver"}[30d]))
-      record: code_verb:apiserver_request_total:increase30d
-    - expr: sum by (code) (code_verb:apiserver_request_total:increase30d{verb=~"LIST|GET"})
+      record: apiserver_request:availability7d
+    - expr: sum by (code, verb) (increase(apiserver_request_total{job="apiserver"}[7d]))
+      record: code_verb:apiserver_request_total:increase7d
+    - expr: sum by (code) (code_verb:apiserver_request_total:increase7d{verb=~"LIST|GET"})
       labels:
         verb: read
-      record: code:apiserver_request_total:increase30d
-    - expr: sum by (code) (code_verb:apiserver_request_total:increase30d{verb=~"POST|PUT|PATCH|DELETE"})
+      record: code:apiserver_request_total:increase7d
+    - expr: sum by (code) (code_verb:apiserver_request_total:increase7d{verb=~"POST|PUT|PATCH|DELETE"})
       labels:
         verb: write
-      record: code:apiserver_request_total:increase30d
+      record: code:apiserver_request_total:increase7d
     - expr: sum by (code,resource) (rate(apiserver_request_total{job="apiserver",verb=~"LIST|GET"}[5m]))
       labels:
         verb: read
