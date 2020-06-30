@@ -79,7 +79,6 @@ spec:
       expr: sum by(name, namespace)(increase(aggregator_unavailable_apiservice_count[5m])) > 2
       labels:
         severity: warning
-{{- if semverCompare ">=1.18.0-0" $kubeTargetVersion }}
     - alert: AggregatedAPIDown
       annotations:
         message: An aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} is down. It has not been available at least for the past five minutes.
@@ -88,7 +87,6 @@ spec:
       for: 5m
       labels:
         severity: warning
-{{- end }}
 {{- if .Values.kubeApiServer.enabled }}
     - alert: KubeAPIDown
       annotations:
