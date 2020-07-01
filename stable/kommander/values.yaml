@@ -238,7 +238,6 @@ kubecost:
         datasources:
           enabled: true
           defaultDatasourceEnabled: false
-          # dataSourceName: KubecostPrometheus
           label: grafana_datasource_kommander
 
     prometheus:
