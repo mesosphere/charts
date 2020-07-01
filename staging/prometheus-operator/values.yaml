@@ -1577,7 +1577,7 @@ prometheus:
     ##
     image:
       repository: quay.io/prometheus/prometheus
-      tag: v2.19.2
+      tag: v2.17.2
 
     ## Tolerations for use with node taints
     ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -1730,7 +1730,7 @@ prometheus:
 
     ## Enable compression of the write-ahead log using Snappy.
     ##
-    walCompression: true
+    walCompression: false
 
     ## If true, the Operator won't process any Prometheus configuration changes
     ##
