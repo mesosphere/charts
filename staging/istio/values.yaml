@@ -1,3 +1,7 @@
+global:
+  image: docker.io/bitnami/kubectl
+  tag: 1.16.2
+
 grafana:
   enabled: true
 security:

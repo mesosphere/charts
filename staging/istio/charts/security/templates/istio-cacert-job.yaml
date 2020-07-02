@@ -18,7 +18,7 @@ spec:
       serviceAccountName: istio-cacert-job
       containers:
       - name: istio-cacert-job
-        image: docker.io/bitnami/kubectl:1.16.2 
+        image: {{.Values.global.image}}:{{.Values.global.tag}} 
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh", "-c",
             "kubectl", "create", "secret", "generic", "cacerts",
