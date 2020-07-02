@@ -10,6 +10,7 @@ metadata:
     release: "{{ .Release.Name }}"
   annotations:
     "helm.sh/hook": test-success
+    "helm.sh/hook-weight": "7"
 spec:
   initContainers:
     - name: test-framework

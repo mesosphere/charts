@@ -1,4 +1,4 @@
-HELM_VERSION := v2.16.6
+HELM_VERSION := v2.16.9
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -118,7 +118,7 @@ ct.test:
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch origin master
 endif
-	test/e2e-kind.sh $(CT_VERSION)
+	test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION)
 
 .PHONY: lint
 lint: ct.lint

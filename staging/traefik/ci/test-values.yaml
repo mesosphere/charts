@@ -1,0 +1,16 @@
+# These test values are used for chart testing
+# DO NOT EDIT unless you know what you are doing
+testFramework:
+  enabled: true
+
+rbac:
+  enabled: true
+ssl:
+  enabled: true
+  enforced: false
+  insecureSkipVerify: true
+  useCertManager: true
+  caSecretName: konvoy-company-cert
+deploymentAnnotations:
+  configmap.reloader.stakater.com/reload: test-only-reload-trigger
+initCertJobImage: null

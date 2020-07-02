@@ -104,7 +104,7 @@ data:
           optional = {{ .Values.ssl.mtls.optional }}
           {{- end }}
           {{- end }}
-          [[entryPoints.https.tls.certificates]]
+          [entryPoints.https.tls.defaultCertificate]
           CertFile = "/ssl/tls.crt"
           KeyFile = "/ssl/tls.key"
           {{- if .Values.ssl.extraCerts }}
