@@ -1,10 +1,22 @@
 # These test values are used for chart testing
 # DO NOT EDIT unless you know what you are doing
+
+# We enable the testFramework here, you find it in the templates/tests folder.
+# We adapted the very simple bats test from upstream to check now also that
+# defaultCertificate and custom certificate are working and can both be defined.
 testFramework:
   enabled: true
 
+# For test we need to enable rbac, only on older clusters non rbac is working!
 rbac:
   enabled: true
+
+# We enable ssl and configure to let the certManager create an initial certificate
+# it will get updated by templates/test/test-certificate defined resources to mimic what
+# we do with konvoy-kubeaddons configmap, for that wealso trigger a reload with
+# templates/test/test-reloadTrigger to create the test-only-reload-trigger configmap.
+# We define the caSecretName which will contain after deployment of
+# templates/test/test-customCertificate certificate content.
 ssl:
   enabled: true
   enforced: false
