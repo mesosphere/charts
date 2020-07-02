@@ -64,12 +64,12 @@ the Konvoy credentials plugin</p>
   </button>
   <pre><code>
 {{- if .caPem }}
-  kubectl config set-cluster {{ .clusterName }} \
-      --certificate-authority=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt \
-      --server={{ .kubeAPI }}
+kubectl config set-cluster {{ .clusterName }} \
+    --certificate-authority=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt \
+    --server={{ .kubeAPI }}
 {{- else }}
-  kubectl config set-cluster {{ .clusterName }} \
-      --server={{ .kubeAPI }}
+kubectl config set-cluster {{ .clusterName }} \
+    --server={{ .kubeAPI }}
 {{- end }}
   </code></pre>
 </div>
@@ -83,12 +83,21 @@ the Konvoy credentials plugin</p>
   <button class="btn" style="float:right" data-clipboard-snippet="">
     <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
   </button>
-  <pre><code>kubectl config set-credentials {{ .profileName }} \
-      --exec-command={{ .runPath }} \
-      --exec-api-version=client.authentication.k8s.io/v1beta1 \
-      --exec-arg="-auth-url={{ .asyncAuthURL }}" \
-      --exec-arg="-kubeconfig-user={{ .profileName }}" \
-      --exec-arg="-ca-file=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt"
+  <pre><code>
+{{- if .caPem  }}
+kubectl config set-credentials {{ .profileName }} \
+  --exec-command={{ .runPath }} \
+  --exec-api-version=client.authentication.k8s.io/v1beta1 \
+  --exec-arg="-auth-url={{ .asyncAuthURL }}" \
+  --exec-arg="-kubeconfig-user={{ .profileName }}" \
+  --exec-arg="-ca-file=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt"
+{{- else }}
+kubectl config set-credentials {{ .profileName }} \
+  --exec-command={{ .runPath }} \
+  --exec-api-version=client.authentication.k8s.io/v1beta1 \
+  --exec-arg="-auth-url={{ .asyncAuthURL }}" \
+  --exec-arg="-kubeconfig-user={{ .profileName }}"
+{{- end }}
     </code></pre>
 </div>
 <h3>Create the context</h3>
