@@ -7,7 +7,9 @@ set -x
 
 readonly KIND_VERSION=v0.7.0
 readonly CLUSTER_NAME=chart-testing
-readonly K8S_VERSION=v1.17.2
+readonly K8S_VERSION=v1.17.5
+CT_VERSION=$1
+HELM_VERSION=$2
 
 tmp=$(mktemp -d)
 
@@ -22,7 +24,7 @@ run_ct_container() {
         --volume "$(pwd):/workdir" \
         "${teamcity_volume[@]}" \
         --workdir /workdir \
-        "quay.io/helmpack/chart-testing:$1" \
+        "quay.io/helmpack/chart-testing:${CT_VERSION}" \
         cat
     echo
 }
@@ -80,10 +82,14 @@ EOF
 
 install_tiller() {
     echo 'Installing tiller...'
+
     docker_exec kubectl --namespace kube-system create serviceaccount tiller
     docker_exec kubectl create clusterrolebinding tiller-cluster-rule \
         --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-    docker_exec helm init --history-max 10 --service-account tiller --wait
+    docker_exec /bin/sh -c "curl -fsSL \
+        https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
+            | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
+            && helm init --history-max 10 --service-account tiller --wait"
     echo
 }
 
@@ -115,6 +121,14 @@ install_dummylb() {
     echo
 }
 
+install_reloader() {
+    echo 'Installing reloader...'
+    LATEST_TAG=$(curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
+    curl -sL https://raw.githubusercontent.com/stakater/Reloader/${LATEST_TAG}/deployments/kubernetes/reloader.yaml |
+      docker_exec kubectl apply -f -
+    echo
+}
+
 replace_priority_class_name_system_x_critical() {
     echo 'Replacing priorityClassName: system-X-critical'
     grep -rl "priorityClassName: system-" --exclude-dir=test . | xargs sed -i 's/system-.*-critical/null/g'
@@ -122,7 +136,7 @@ replace_priority_class_name_system_x_critical() {
 }
 
 main() {
-    run_ct_container "$1"
+    run_ct_container
     shift
     trap cleanup EXIT
 
@@ -130,6 +144,7 @@ main() {
     install_tiller
     install_dummylb
     install_certmanager
+    install_reloader
 
     docker_exec ct lint --debug "$@"
 
