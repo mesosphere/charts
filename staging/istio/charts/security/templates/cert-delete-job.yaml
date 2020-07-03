@@ -2,38 +2,38 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: istio-delete-job
+  name: cert-delete-job
   namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: istio-delete-job
+  name: cert-delete-job
   namespace: {{ .Release.Namespace }}
 rules:
-- apiGroups: ["install.istio.io"]
-  resources: ["istiooperators"]
+- apiGroups: ["certmanager.k8s.io"]
+  resources: ["certificates"]
   verbs: ["get", "list", "watch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: istio-delete-job
+  name: cert-delete-job
   namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: istio-delete-job
+  name: cert-delete-job
 subjects:
   - kind: ServiceAccount
-    name: istio-delete-job
+    name: cert-delete-job
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: istio-delete-{{ .Values.istioOperator.tag | printf "%v" }}-{{ randAlphaNum 5 | lower }}
+  name: cert-delete-{{ randAlphaNum 5 | lower }}
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
@@ -41,11 +41,11 @@ spec:
   template:
     metadata:
       annotations:
-        sidecar.istio.io/inject: "false" 
+        sidecar.istio.io/inject: "false"
     spec:
-      serviceAccountName: istio-delete-job
+      serviceAccountName: cert-delete-job
       containers:
-      - name: istio-crd
+      - name: istio-ca-delete
         image: {{.Values.global.image}}:{{.Values.global.tag}}
-        command: ["kubectl",  "delete", "istiooperator", "istio-default", "-n", "{{ .Release.Namespace }}", "--ignore-not-found"]
+        command: ["kubectl",  "delete", "certificate", "istio-ca", "-n", "{{ .Release.Namespace }}", "--ignore-not-found"]
       restartPolicy: OnFailure
