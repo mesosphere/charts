@@ -27,11 +27,6 @@ kommander-karma:
 kubeaddons-catalog:
   enabled: true
 
-  image:
-    repository: mesosphere/kubeaddons-catalog
-    tag: "v0.8.2"
-    pullPolicy: IfNotPresent
-
 grafana:
   enabled: true
 
