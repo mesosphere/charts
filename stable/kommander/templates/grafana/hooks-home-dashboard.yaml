@@ -42,7 +42,7 @@ spec:
             fi
             echo "setting home dashboard to ID" $DASHBOARD_ID
             SET_DEFAULT=$($CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"homeDashboardId":'"$DASHBOARD_ID"'}' $GRAFANA_API_URL/api/org/preferences || true )
-            if [ "SET_DEFAULT" == "" ]; then
+            if [ "$SET_DEFAULT" == "" ]; then
               echo "error: Could not set default dashboard for user $X_FORWARDED_USER"
               exit 0
             fi
