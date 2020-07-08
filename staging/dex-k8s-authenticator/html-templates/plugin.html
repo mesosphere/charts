@@ -16,23 +16,39 @@
 
 <body class="theme-body">
 <div class="plugin-kubeconfig-container">
-  <h1>Konvoy kubectl credentials plugin</h1>
-  <p>This document describes the process of configuring kubectl to use the Konvoy credentials plugin.
-    This credentials plugin makes it easy to use external identity provider accounts with the kubernetes API.
-    When enabled the plugin initiates authentication sessions and stores identity tokens automatically.</p>
-  <div id="plugin-select-cluster" style="display: none">
-    <p><label for="plugin-select-provider-id">Select Provider:</label>
-      <select id="plugin-select-provider-id" onchange="providerOnChange()"></select></p>
+  <h1>Configure the Konvoy credentials plugin</h1>
+  <p>The Konvoy credentials plugin makes it easy to use external identity providers with <i>kubectl</i>.
+    When using the plugin, <i>kubectl</i> initiates an authentication session in your browser and stores identity tokens locally.
+    When a token expires, the plugin will start a new authentication session and refresh the token.</p>
 
-    <p><label for="plugin-select-cluster-id">Select Cluster:</label>
-      <select id="plugin-select-cluster-id" onchange="clusterOnChange()"></select></p>
-  </div>
   <div id="plugin-download-kubeconfig">
-    <h2>Generate a kubeconfig</h2>
-    <p>The following instructions describe how to configure a kubectl context for the currently selected cluster.
-      You can also generate a configuration file for all clusters by downloading this <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig">kubeconfig</a>.
+    <h2><b>Method 1</b>: Download a kubectl configuration file</h2>
+    <p>The easiest way to get up and running is to download the plugin binary and a cluster generated kubectl configuration file.
+      If you are using Kommander and add a new cluster, come back to the page download an updated kubeconfig.
     </p>
-<p>For more information on using and managing kubeconfig files, refer to this documentation:
+    <ul>
+      <li>Plugin binary (Choose the appropriate link for your platform): <a href="{{ .DarwinURL }}">Darwin</a> <a href="{{ .LinuxURL }}">Linux</a></li>
+      <li>Kubectl configuration: <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig">kubeconfig</a></li>
+    </ul>
+    <p>Download both files to your computer. The plugin is a binary and must be marked as executable on Linux and MacOS. To do so, run the following command: </p>
+    <p><code>chmod +x konvoy-async-auth</code></p>
+    <p>Copy the binary to a location in your PATH environment variable, <i>/usr/local/bin</i> is a good candidate on most platforms.</p>
+    <h3>Running kubectl</h3>
+    <p>To configure <i>kubectl</i> to use the plugin, run <i>kubectl</i> with the --kubeconfig CLI option</p>
+    <p><code>kubectl --kubeconfig /path/to/downloaded/config get pods -A</code></p>
+    <p>You may also set the KUBECONFIG environment variable so you do not have to type --kubeconfig every time you run the command.</p>
+    <p><code>export KUBECONFIG=/path/to/downloaded/config</code></p>
+    <h3>Using Contexts</h3>
+    <p>If this cluster is managing authentication for external clusters deployed by Kommander you must set the correct kubectl <b>context</b>.
+    The generated kubeconfig will contain contexts for each cluster managed by Kommander.
+    </p>
+
+    <p>You can list each context using the <i>config get-contexts</i> command:
+    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config get-contexts </code></p>
+    <p>To select a different context, use the <i>config use-context</i> command: 
+    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig use-context context-name</code></p>
+
+<p>For more information on using and managing kubeconfig files, refer to this documentation
     </p>
     <p>
       <a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/">
@@ -44,6 +60,21 @@
       </a>
     </p>
   </div>
+  <h2><b>Method 2</b>: Manual configuration</h2>
+  <p>The following commands can be pasted directly into a terminal. These instructions will configure your global kubeconfig, located at <i>${HOME}/.kube/config.</i></p>
+  <!-- Only visible when multiple clusters are present -->
+  <div id="plugin-select-cluster" style="display: none">
+    <h3>Select Cluster</h3>
+    <p>This cluster handles authentication for multiple clusters via Kommander. Please select which cluster you would like to configure.
+      You can run these command multiple times if you need to configure multiple clusters.
+    </p>
+    <p><label for="plugin-select-provider-id">Select Provider:</label>
+      <select id="plugin-select-provider-id" onchange="providerOnChange()"></select></p>
+
+    <p><label for="plugin-select-cluster-id">Select Cluster:</label>
+      <select id="plugin-select-cluster-id" onchange="clusterOnChange()"></select></p>
+  </div>
+  <!-- This div is populated via ajax -->
   <div id="plugin-config-form"></div>
   <h2>Wrapping up</h2>
   <p>At this point you can start using kubectl. Try running a simple kubectl command: </p>
@@ -55,11 +86,7 @@
     kubectl get pods -A
     </code></pre>
     <p>
-      If this is the first time you've attempted to authenticate using the plugin, a browser window opens
-      to the Konvoy authentication page. After successful authentication, you should see a pod listing in your
-      terminal. The plugin stores your identity token for subsequent requests. After your identity token
-      expires, by default 24 hours, the plugin directs you to the Konvoy authentication page where
-      you can re-authenticate.
+    This should open a browser window and let you authenticate. If you are using a remote terminal, a link will be displayed which you can copy and paste into local browser window.
     </p>
   </div>
 </div>
