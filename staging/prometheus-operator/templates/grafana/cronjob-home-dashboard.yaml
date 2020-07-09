@@ -51,7 +51,7 @@ data:
     DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" $GRAFANA_API_URL/api/search/?query={{ .Values.mesosphereResources.homeDashboard.name | urlquery }} | jq '.[0].id' || true )
     if [ "$DASHBOARD_ID" == "" ]; then
       echo "error: Could not retrieve dashboard id"
-      exit 0
+      exit 1
     fi
     # we want to fail silently as this assumes a user exists or that grafana is set up to create a user if it doesnt
     # not all installations of prometheus should be expected to, so we should not hold up a prometheus install because of this
@@ -59,6 +59,6 @@ data:
     SET_DEFAULT=$($CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' $GRAFANA_API_URL/api/org/preferences || true )
     if [ "$SET_DEFAULT" == "" ]; then
       echo "error: Could not set default dashboard for user $X_FORWARDED_USER"
-      exit 0
+      exit 1
     fi
 {{- end }}
