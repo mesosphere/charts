@@ -85,7 +85,7 @@ kubectl config set-credentials {{ .profileName }} \
   --exec-api-version=client.authentication.k8s.io/v1beta1 \
   --exec-arg="-auth-url={{ .asyncAuthURL }}" \
   --exec-arg="-kubeconfig-user={{ .profileName }}" \
-  --exec-arg="-ca-file=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt"
+  --exec-arg="-ca-data={{ .authCAData }}"
 {{- else }}
 kubectl config set-credentials {{ .profileName }} \
   --exec-command={{ .runPath }} \
