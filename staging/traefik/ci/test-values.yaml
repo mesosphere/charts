@@ -25,4 +25,13 @@ ssl:
   caSecretName: konvoy-company-cert
 deploymentAnnotations:
   configmap.reloader.stakater.com/reload: test-only-reload-trigger
+# needed because of new annotations notation
+deployment:
+  annotations:
+    configmap.reloader.stakater.com/reload: test-only-reload-trigger
 initCertJobImage: null
+
+# Enable prometheus
+metrics:
+  prometheus:
+    enabled: true
