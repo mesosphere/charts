@@ -83,7 +83,6 @@ kubeadmConfigPatches:
       cgroup-root: "/kubelet"
 EOF
 
-
       KINDEST_NODE_IMAGE=dispatch-kind
       KINDEST_NODE_VERSION=${KINDEST_NODE_VERSION%@*}
       docker build -t ${KINDEST_NODE_IMAGE}:${KINDEST_NODE_VERSION} -f tmp_dockerfile "${tmp}"
@@ -159,8 +158,14 @@ install_reloader() {
 }
 
 replace_priority_class_name_system_x_critical() {
-    echo 'Replacing priorityClassName: system-X-critical'
-    grep -rl "priorityClassName: system-" --exclude-dir=test . | xargs sed -i 's/system-.*-critical/null/g'
+    # only change if needed
+    set +o pipefail
+    REPLACE_CHARTS=$(git diff --name-only "$(git merge-base origin/master HEAD)" -- stable staging | egrep -e "(stable/)(aws|local|azure|gcp)" | xargs -I {} dirname {} | uniq)
+    set -o pipefail
+    if [[ ! -z ${REPLACE_CHARTS} ]]; then
+      echo 'Replacing priorityClassName: system-X-critical'
+      ${REPLACE_CHARTS} | xargs -I {} grep -rl "priorityClassName: system-" {} | xargs sed -i 's/system-.*-critical/null/g'
+    fi
     echo
 }
 
