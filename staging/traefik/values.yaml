@@ -431,9 +431,6 @@ rbac:
 metrics:
   prometheus:
     enabled: false
-    ## If true, prevents exposing port 8080 on the main Traefik service, reserving
-    ## it to the dashboard service only
-    restrictAccess: false
     # buckets: [0.1,0.3,1.2,5]
     service:
       # Set a custom service name
@@ -549,12 +546,13 @@ dashboardRBAC:
 #     address: ":9000"
 
 # extraConfigEntrypoints: |
-# 	[entryPoints.velero]
-# 		address = ":9000"
-# 			[entryPoints.velero.tls]
-# 			[entryPoints.velero.tls.defaultCertificate]
-# 			certFile = "/ssl/tls.crt"
-# 			keyFile = "/ssl/tls.key"
+#   [entryPoints.velero]
+#     address = ":9000"
+#       [entryPoints.velero.tls]
+#       [entryPoints.velero.tls.defaultCertificate]
+#       certFile = "/ssl/tls.crt"
+#       keyFile = "/ssl/tls.key"
+
 # Any extra volumes to define for the pod
 extraVolumes: []
   # - name: example-name
