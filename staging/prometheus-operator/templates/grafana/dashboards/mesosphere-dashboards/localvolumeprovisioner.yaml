@@ -666,7 +666,10 @@ data:
       "refresh": false,
       "schemaVersion": 18,
       "style": "dark",
-      "tags": [],
+      "tags": [
+        "localvolumeprovisioner",
+        "addons"
+      ],
       "templating": {
         "list": [
           {
@@ -723,7 +726,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "Local Volume Provisioner",
+      "title": "Addons / Local Volume Provisioner",
       "uid": "YvfWbASZz",
       "version": 1
     }

@@ -63,20 +63,14 @@ mesosphereResources:
     etcd: true
     velero: false
   dashboards:
-    apiserver: true
     autoscaler: true
     calico: true
-    controlmanager: true
     elasticsearch: true
     fluentbit: true
     grafana: true
     opsportal: true
     kibana: true
-    kubelet: true
     localvolumeprovisioner: true
-    localvolumeusage: true
-    prometheusoverview: true
-    scheduler: true
     traefik: true
     velero: true
   homeDashboard:
