@@ -437,6 +437,7 @@ metrics:
       name:
       annotations:
         prometheus.io/scrape: "true"
+      # labels:
       port: 9100
       type: ClusterIP
       # loadBalancerIP: ""
