@@ -5,7 +5,7 @@ metadata:
   name: connectors.dex.mesosphere.io
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   additionalPrinterColumns:

@@ -4,7 +4,7 @@ metadata:
   labels:
     control-plane: {{ template "dex-controller.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   name: {{ template "dex-controller.fullname" . }}
   namespace: {{ .Release.Namespace }}
@@ -18,7 +18,7 @@ spec:
       labels:
         control-plane: {{ template "dex-controller.fullname" . }}
         chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-        release: {{ .Release.name }}
+        release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
       serviceAccountName: {{ template "dex-controller.fullname" . }}-sa

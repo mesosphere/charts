@@ -8,7 +8,7 @@ metadata:
   labels:
     control-plane: {{ template "dex-controller.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   name: {{ template "dex-controller.fullname" . }}-manager-metrics-service
   namespace: {{ .Release.Namespace }}
@@ -28,7 +28,7 @@ metadata:
   labels:
     control-plane: {{ template "dex-controller.fullname" . }}
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   ports:
