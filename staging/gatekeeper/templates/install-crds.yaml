@@ -1,27 +1,26 @@
-{{ if or (not .Values.global.scope) (eq .Values.global.scope "Cluster") }}
-{{if not (.Capabilities.APIVersions.Has "types.kubefed.io/v1beta1") }}
+{{if not (.Capabilities.APIVersions.Has "config.gatekeeper.sh/v1alpha1") }}
 ---
-{{.Files.Get "files/crds.yaml"}}
+{{.Files.Get "crds/config-crd.yaml"}}
 {{ end }}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: kubefed-crds
+  name: gatekeeper-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 data:
   crds.yaml: |-
-{{.Files.Get "files/crds.yaml" | printf "%s" | indent 4}}
+{{.Files.Get "crds/config-crd.yaml" | printf "%s" | indent 4}}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: kubefed-crds
+  name: gatekeeper-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-4"
@@ -29,25 +28,25 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: kubefed-crds
+      serviceAccountName: gatekeeper-crds
       containers:
-        - name: kubefed-crds
+        - name: gatekeeper-crds
           image: "bitnami/kubectl:1.16.2"
           volumeMounts:
-            - name: kubefed-crds
-              mountPath: /etc/kubefed-crds
+            - name: gatekeeper-crds
+              mountPath: /etc/gatekeeper-crds
               readOnly: true
-          command: ["kubectl", "apply", "-f", "/etc/kubefed-crds"]
+          command: ["kubectl", "apply", "-f", "/etc/gatekeeper-crds"]
       volumes:
-        - name: kubefed-crds
+        - name: gatekeeper-crds
           configMap:
-            name: kubefed-crds
+            name: gatekeeper-crds
       restartPolicy: OnFailure
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: kubefed-crds
+  name: gatekeeper-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
@@ -60,7 +59,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: kubefed-crds
+  name: gatekeeper-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
@@ -68,19 +67,18 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: kubefed-crds
+  name: gatekeeper-crds
 subjects:
   - kind: ServiceAccount
-    name: kubefed-crds
+    name: gatekeeper-crds
     namespace: {{ .Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: kubefed-crds
+  name: gatekeeper-crds
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
-{{ end }}
