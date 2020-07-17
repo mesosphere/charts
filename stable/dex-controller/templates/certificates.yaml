@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   commonName: {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc
@@ -23,7 +23,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   selfSigned: {}

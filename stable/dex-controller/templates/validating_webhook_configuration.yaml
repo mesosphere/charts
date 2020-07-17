@@ -6,7 +6,7 @@ metadata:
   name: {{ template "dex-controller.fullname" . }}-validating-webhook-configuration
   labels:
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    release: {{ .Release.name }}
+    release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 webhooks:
 - clientConfig:
