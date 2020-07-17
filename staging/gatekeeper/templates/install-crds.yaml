@@ -1,5 +1,4 @@
 {{if not (.Capabilities.APIVersions.Has "config.gatekeeper.sh/v1alpha1") }}
----
 {{.Files.Get "crds/config-crd.yaml"}}
 {{ end }}
 ---
