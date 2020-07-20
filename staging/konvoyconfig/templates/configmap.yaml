@@ -27,24 +27,24 @@ metadata:
     app.kubernetes.io/name: kubeaddons
     app.kubernetes.io/component: controller
     kubeaddons.d2iq.com/priority: "0"
-  data: |
-    ---
-    {{- if .Values.clusterDomainNames }}
-    clusterDomainNames:
-    {{- range $name := .Values.clusterDomainNames }}
-      - {{ $name }}
-    {{- end }}
-    {{- else if .Values.config.clusterHostname }}
-    clusterDomainNames:
-      - {{ .Values.config.clusterHostname }}
-    {{- else }}
-    clusterDomainNames: []
-    {{- end }}
-    {{- if .Values.clusterIssuerURL }}
-    issuerURL: {{ .Values.clusterIssuerURL }}
-    {{- else if .Values.clusterIssuerHostname }}
-    issuerURL: https://{{ .Values.clusterIssuerHostname }}/dex
-    {{- end }}
-    {{- if .Values.config.caSecretName }}
-    caSecretName: {{ .Values.config.caSecretName }}
-    {{- end }}
+data: |
+  ---
+  {{- if .Values.clusterDomainNames }}
+  clusterDomainNames:
+  {{- range $name := .Values.clusterDomainNames }}
+    - {{ $name }}
+  {{- end }}
+  {{- else if .Values.config.clusterHostname }}
+  clusterDomainNames:
+    - {{ .Values.config.clusterHostname }}
+  {{- else }}
+  clusterDomainNames: []
+  {{- end }}
+  {{- if .Values.clusterIssuerURL }}
+  issuerURL: {{ .Values.clusterIssuerURL }}
+  {{- else if .Values.clusterIssuerHostname }}
+  issuerURL: https://{{ .Values.clusterIssuerHostname }}/dex
+  {{- end }}
+  {{- if .Values.config.caSecretName }}
+  caSecretName: {{ .Values.config.caSecretName }}
+  {{- end }}
