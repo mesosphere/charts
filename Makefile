@@ -112,7 +112,7 @@ ct.lint:
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
-	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME}
+	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
 ct.test:
