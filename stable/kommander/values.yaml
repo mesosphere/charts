@@ -27,11 +27,6 @@ kommander-karma:
 kubeaddons-catalog:
   enabled: true
 
-  image:
-    repository: mesosphere/kubeaddons-catalog
-    tag: "v0.8.2"
-    pullPolicy: IfNotPresent
-
 grafana:
   enabled: true
 
@@ -39,13 +34,17 @@ grafana:
     type: ClusterIP
     port: 80
 
+  homeDashboard:
+    name: "Kubernetes / Compute Resources / Cluster [Global]"
+    cronJob:
+      name: set-grafana-home-dashboard
+      image: dwdraju/alpine-curl-jq
+
   hooks:
-    jobName: set-kommander-grafana-home-dashboard
     image: dwdraju/alpine-curl-jq
     secretKeyRef: ops-portal-username
     # Do not use, this will be deprecated
     serviceURL: http://kommander-kubeaddons-grafana.kommander
-    dashboardName: "Kubernetes / Compute Resources / Cluster [Global]"
     kommanderServiceAccount: kommander-kubeaddons
 
   ## Do not deploy default dashboards.
@@ -215,15 +214,15 @@ kubecost:
         kubernetes.io/ingress.class: traefik
         ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
         traefik.frontend.rule.type: "PathPrefix"
-        traefik.frontend.redirect.regex: "^(.*)/ops/portal/kommander/kubecost$"
-        traefik.frontend.redirect.replacement: "$1/ops/portal/kommander/kubecost/"
-        traefik.ingress.kubernetes.io/request-modifier: 'ReplacePathRegex: ^/ops/portal/kommander/kubecost/(.*) /$1'
+        traefik.frontend.redirect.regex: "^(.*)/ops/portal/kommander/kubecost/frontend$"
+        traefik.frontend.redirect.replacement: "$1/ops/portal/kommander/kubecost/frontend/"
+        traefik.ingress.kubernetes.io/request-modifier: 'ReplacePathRegex: ^/ops/portal/kommander/kubecost/frontend/(.*) /$1'
         traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
         traefik.ingress.kubernetes.io/auth-type: forward
         traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-        traefik.ingress.kubernetes.io/priority: "2"
+        traefik.ingress.kubernetes.io/priority: "4"
       paths:
-        - "/ops/portal/kommander/kubecost"
+        - "/ops/portal/kommander/kubecost/frontend"
       hosts:
         - ""
       tls: []
@@ -238,7 +237,7 @@ kubecost:
         datasources:
           enabled: true
           defaultDatasourceEnabled: false
-          # dataSourceName: KubecostPrometheus
+          dataSourceName: KubecostPrometheus
           label: grafana_datasource_kommander
 
     prometheus:

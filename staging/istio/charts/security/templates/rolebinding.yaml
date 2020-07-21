@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: istio-cacert-job
+subjects:
+- kind: ServiceAccount
+  name: istio-cacert-job
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: istio-cacert-job
+  apiGroup: rbac.authorization.k8s.io

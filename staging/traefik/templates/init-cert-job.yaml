@@ -1,4 +1,4 @@
-{{- if .Values.ssl.useCertManager }}
+{{- if and .Values.ssl.useCertManager .Values.initCertJobImage }}
 apiVersion: batch/v1
 kind: Job
 metadata:

@@ -1,0 +1,139 @@
+{{- if .Values.testFramework.enabled  }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoyconfig-setup
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: konvoyconfig-setup
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: konvoyconfig-setup
+subjects:
+  - kind: ServiceAccount
+    name: konvoyconfig-setup
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: konvoyconfig-setup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-config
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  resource.yml: |
+    apiVersion: v1
+    data:
+      clusterHostname: custom.whalesdolphines.tld
+    kind: ConfigMap
+    metadata:
+      name: konvoyconfig-kubeaddons
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-job
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      serviceAccountName: konvoyconfig-setup
+      restartPolicy: Never
+      containers:
+      - name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-job-pod
+        image: bitnami/kubectl:latest
+        command:
+        - kubectl
+        - apply
+        - -f
+        - /etc/config/resource.yml
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          defaultMode: 420
+          name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-config
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "traefik.fullname" . }}-initialize-traefik-certificate
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "3"
+spec:
+  template:
+    metadata:
+      name: "update-traefik-certificate"
+    spec:
+      serviceAccountName: {{ template "traefik.fullname" . }}-cert-init
+      restartPolicy: Never
+      containers:
+      - name: initialize-traefik-certificate
+        image: mesosphere/kubeaddons-addon-initializer:v0.2.10
+        args: ["traefik"]
+        env:
+        - name: "TRAEFIK_INGRESS_NAMESPACE"
+          value: "{{ template "traefik.fullname" . }}"
+        - name: "TRAEFIK_INGRESS_SERVICE_NAME"
+          value: "{{ template "traefik.fullname" . }}"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
+          value: "{{ template "traefik.fullname" . }}"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
+          value: "kubernetes-ca"
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
+          value: "{{ template "traefik.fullname" . }}-certificate"
+        - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
+          value: "konvoyconfig-kubeaddons"
+        - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
+          value: "clusterHostname"
+{{- end }}

@@ -17,6 +17,7 @@ testFramework:
 
 ## can switch the service type to NodePort if required
 serviceType: LoadBalancer
+extraServicePorts: []
 # loadBalancerIP: ""
 # loadBalancerSourceRanges: []
 whiteListSourceRange: []
@@ -436,6 +437,7 @@ metrics:
       name:
       annotations:
         prometheus.io/scrape: "true"
+      labels: {}
       port: 9100
       type: ClusterIP
       # loadBalancerIP: ""
@@ -545,12 +547,13 @@ dashboardRBAC:
 #     address: ":9000"
 
 # extraConfigEntrypoints: |
-# 	[entryPoints.velero]
-# 		address = ":9000"
-# 			[entryPoints.velero.tls]
-# 			[entryPoints.velero.tls.defaultCertificate]
-# 			certFile = "/ssl/tls.crt"
-# 			keyFile = "/ssl/tls.key"
+#   [entryPoints.velero]
+#     address = ":9000"
+#       [entryPoints.velero.tls]
+#       [entryPoints.velero.tls.defaultCertificate]
+#       certFile = "/ssl/tls.crt"
+#       keyFile = "/ssl/tls.key"
+
 # Any extra volumes to define for the pod
 extraVolumes: []
   # - name: example-name

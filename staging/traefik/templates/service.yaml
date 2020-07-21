@@ -56,3 +56,6 @@ spec:
     nodePort: {{ .Values.service.nodePorts.http }}
     {{- end }}
     targetPort: http
+  {{- if .Values.extraServicePorts }}
+  {{- toYaml .Values.extraServicePorts | nindent 2 }}
+  {{- end }}

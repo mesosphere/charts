@@ -104,7 +104,7 @@ data:
           optional = {{ .Values.ssl.mtls.optional }}
           {{- end }}
           {{- end }}
-          [[entryPoints.https.tls.certificates]]
+          [entryPoints.https.tls.defaultCertificate]
           CertFile = "/ssl/tls.crt"
           KeyFile = "/ssl/tls.key"
           {{- if .Values.ssl.extraCerts }}
@@ -209,10 +209,10 @@ data:
       {{- end }}
       {{- if .Values.extraConfigEntrypoints }}
       {{- .Values.extraConfigEntrypoints | nindent 6 }}
+      {{- end }}
       {{- if .Values.metrics.prometheus.enabled }}
       [entryPoints.prometheus]
       address = ":9100"
-      {{- end }}
       {{- end }}
     [ping]
     entryPoint = "{{ .Values.pingEntryPoint | default "http" }}"
