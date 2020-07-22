@@ -5,14 +5,15 @@ STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
 STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
 STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 
-GIT_REMOTE_URL ?= $(shell git remote get-url origin)
+GIT_REMOTE_NAME ?= origin
+GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 
-# Extract the github user from the origin remote url.
+# Extract the github user from the ${GIT_REMOTE_NAME} remote url.
 # This let's the 'publish' task work with forks.
 # Supports both SSH and HTTPS git url formats:
 # - https://github.com/mesosphere/charts.git
 # - git@github.com:mesosphere/charts.git
-GITHUB_USER := $(shell git remote get-url origin | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
+GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
@@ -109,16 +110,16 @@ $(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
 .PHONY: ct.lint
 ct.lint:
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch origin master
+	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
-	$(DRUN) ct lint
+	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
 ct.test:
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch origin master
+	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
-	test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION)
+	test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
 
 .PHONY: lint
 lint: ct.lint
