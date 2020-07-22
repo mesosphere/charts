@@ -180,8 +180,6 @@ main() {
     install_certmanager
     install_reloader
 
-    docker_exec ct lint --debug "$@"
-
     replace_priority_class_name_system_x_critical
 
     docker_exec ct install --upgrade --debug "$@"
