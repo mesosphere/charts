@@ -147,6 +147,7 @@ install_dummylb() {
     curl -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
       sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
       docker_exec kubectl apply -f -
+      docker_exec kubectl wait --for=condition=Available --selector=app=dummylb deploy
     echo
 }
 
@@ -155,6 +156,7 @@ install_reloader() {
     LATEST_TAG=$(set -o pipefail; curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
     curl -sL https://raw.githubusercontent.com/stakater/Reloader/${LATEST_TAG}/deployments/kubernetes/reloader.yaml |
       docker_exec kubectl apply -f -
+      docker_exec kubectl wait --for=condition=Available --selector=app=reloader-reloader deploy
     echo
 }
 
