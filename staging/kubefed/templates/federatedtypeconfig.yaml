@@ -7,6 +7,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation"
 spec:
   federatedType:
     group: types.kubefed.io
@@ -30,6 +31,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation"
 spec:
   federatedType:
     group: types.kubefed.io
@@ -52,6 +54,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -75,6 +78,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -98,6 +102,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -121,6 +126,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -143,6 +149,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -166,6 +173,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -188,6 +196,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -210,6 +219,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
