@@ -23,13 +23,15 @@ run_ct_container() {
         teamcity_volume=(-v /teamcity/system/git:/teamcity/system/git)
     fi
     docker run --rm --interactive --detach --network host --name ct \
-        --volume "$(pwd)/test/ct-e2e.yaml:/etc/ct/ct.yaml" \
-        --volume "$(pwd):/workdir" \
         "${teamcity_volume[@]}" \
-        --workdir /workdir \
+        --workdir /charts \
         "quay.io/helmpack/chart-testing:${CT_VERSION}" \
         cat
     echo
+
+    docker cp "$(pwd)/test/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
+    docker cp "$(pwd)" "ct:/charts"
+    docker_exec chown -R root:root /charts
 }
 
 cleanup() {
@@ -118,7 +120,7 @@ install_tiller() {
     docker_exec /bin/sh -c "curl -fsSL \
         https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
             | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
-            && helm init --history-max 10 --service-account tiller --wait"
+            && helm init --debug --history-max 10 --service-account tiller --wait"
     echo
 }
 
@@ -134,7 +136,7 @@ install_certmanager() {
     docker_exec kubectl create namespace cert-manager
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
-    docker_exec helm install \
+    docker_exec helm install --debug \
         --values staging/cert-manager-setup/ci/test-values.yaml \
         --namespace cert-manager staging/cert-manager-setup
     echo
