@@ -5,7 +5,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-weight": "-3"
 spec:
   scope: {{ .Values.global.scope | default "Cluster" | quote }}
   controllerDuration:
