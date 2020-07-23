@@ -152,7 +152,7 @@ install_dummylb() {
 
 install_reloader() {
     echo 'Installing reloader...'
-    LATEST_TAG=$(curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
+    LATEST_TAG=$(set -o pipefail; curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
     curl -sL https://raw.githubusercontent.com/stakater/Reloader/${LATEST_TAG}/deployments/kubernetes/reloader.yaml |
       docker_exec kubectl apply -f -
     echo
@@ -161,7 +161,7 @@ install_reloader() {
 replace_priority_class_name_system_x_critical() {
     # only change if needed
     set +o pipefail
-    REPLACE_CHARTS=$(git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | egrep -e "(stable/)(aws|local|azure|gcp)" | xargs -I {} dirname {} | uniq)
+    REPLACE_CHARTS=$(set -o pipefail; git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | { egrep -e "(stable/)(aws|local|azure|gcp)" || test $? = 1; } | xargs -I {} dirname {} | uniq)
     set -o pipefail
     if [[ ! -z ${REPLACE_CHARTS} ]]; then
       echo 'Replacing priorityClassName: system-X-critical'
