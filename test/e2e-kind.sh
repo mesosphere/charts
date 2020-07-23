@@ -32,6 +32,8 @@ run_ct_container() {
     docker cp "$(pwd)/test/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
     docker cp "$(pwd)" "ct:/charts"
     docker_exec chown -R root:root /charts
+    # TODO(dlipovetsky) Debugging
+    docker_exec ls -l /charts
 }
 
 cleanup() {
