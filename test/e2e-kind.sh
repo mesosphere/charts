@@ -56,7 +56,7 @@ create_kind_cluster() {
 
     # if we are running inside of a kubernetes cluster with /kubepods cgroup
     # being used for pods --> add kubeadmConfigPatches
-    if cat /proc/1/cgroup 2>/dev/null | tail -1 | grep -q /kubepods; then
+    if tail -1 /proc/1/cgroup 2>/dev/null | grep -q /kubepods; then
 
       cat << EOF > tmp_dockerfile
 FROM kindest/node:$KINDEST_NODE_VERSION
@@ -156,7 +156,7 @@ install_dummylb() {
 install_reloader() {
     echo 'Installing reloader...'
     LATEST_TAG=$(set -o pipefail; curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
-    curl -sL https://raw.githubusercontent.com/stakater/Reloader/${LATEST_TAG}/deployments/kubernetes/reloader.yaml |
+    curl -sL "https://raw.githubusercontent.com/stakater/Reloader/$LATEST_TAG/deployments/kubernetes/reloader.yaml" |
       docker_exec kubectl apply -f -
       docker_exec kubectl wait --for=condition=Available --selector=app=reloader-reloader deploy
     echo
@@ -165,9 +165,9 @@ install_reloader() {
 replace_priority_class_name_system_x_critical() {
     # only change if needed
     set +o pipefail
-    REPLACE_CHARTS=$(set -o pipefail; git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | { egrep -e "(stable/)(aws|local|azure|gcp)" || test $? = 1; } | xargs -I {} dirname {} | uniq)
+    REPLACE_CHARTS=$(set -o pipefail; git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | { grep -E "(stable/)(aws|local|azure|gcp)" || test $? = 1; } | xargs -I {} dirname {} | uniq)
     set -o pipefail
-    if [[ ! -z ${REPLACE_CHARTS} ]]; then
+    if [[ -n ${REPLACE_CHARTS} ]]; then
       echo 'Replacing priorityClassName: system-X-critical'
       ${REPLACE_CHARTS} | xargs -I {} grep -rl "priorityClassName: system-" {} | xargs sed -i 's/system-.*-critical/null/g'
     fi
