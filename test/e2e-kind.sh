@@ -12,6 +12,7 @@ KINDEST_NODE_VERSION=v1.18.4@sha256:d8ff5fc405fc679dd3dd0cccc01543ba4942ed908238
 readonly CLUSTER_NAME=chart-testing
 CT_VERSION=$1
 HELM_VERSION=$2
+GIT_REMOTE_NAME=${GIT_REMOTE_NAME:=origin}
 
 tmp=$(mktemp -d)
 
@@ -160,7 +161,7 @@ install_reloader() {
 replace_priority_class_name_system_x_critical() {
     # only change if needed
     set +o pipefail
-    REPLACE_CHARTS=$(git diff --name-only "$(git merge-base origin/master HEAD)" -- stable staging | egrep -e "(stable/)(aws|local|azure|gcp)" | xargs -I {} dirname {} | uniq)
+    REPLACE_CHARTS=$(git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | egrep -e "(stable/)(aws|local|azure|gcp)" | xargs -I {} dirname {} | uniq)
     set -o pipefail
     if [[ ! -z ${REPLACE_CHARTS} ]]; then
       echo 'Replacing priorityClassName: system-X-critical'
