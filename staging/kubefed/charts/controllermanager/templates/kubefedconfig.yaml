@@ -3,6 +3,9 @@ kind: KubeFedConfig
 metadata:
   name: kubefed
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-4"
 spec:
   scope: {{ .Values.global.scope | default "Cluster" | quote }}
   controllerDuration:
