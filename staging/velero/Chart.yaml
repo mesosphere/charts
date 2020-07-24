@@ -12,8 +12,12 @@ maintainers:
   name: nrb
 - email: aadnan@vmware.com
   name: prydonius
+- email: dlipovetsky@d2iq.com
+  name: dlipovetsky
+- email: jieyu@d2iq.com
+  name: jieyu
 name: velero
 sources:
 - https://github.com/heptio/velero
 tillerVersion: '>=2.10.0'
-version: 3.0.4
+version: 3.0.5
