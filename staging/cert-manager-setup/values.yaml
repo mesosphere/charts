@@ -8,6 +8,9 @@ fullnameOverride: ""
 issuers: []
 #  - name: kubernetes-root-issuer
 #    secretName: kubernetes-root-ca
+#  - name: my-issuer
+#    namespace: kube-system
+#    secretName: my-issuer-ca
 
 certificates: []
 #  - name: kubernetes-intermediate-ca
@@ -24,6 +27,7 @@ certificates: []
 #    duration: 87600h
 #    dnsNames: []
 #  - name: my-certificate
+#    namespace: kube-system
 #    # where to store this certificate
 #    secretName: my-certificate-secret
 #    issuerRef:
