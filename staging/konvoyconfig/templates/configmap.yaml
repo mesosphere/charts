@@ -27,8 +27,8 @@ metadata:
     app.kubernetes.io/name: kubeaddons
     app.kubernetes.io/component: controller
     kubeaddons.d2iq.com/priority: "0"
-  data: |
-    ---
+data:
+  values: |
     {{- if .Values.clusterDomainNames }}
     clusterDomainNames:
     {{- range $name := .Values.clusterDomainNames }}
