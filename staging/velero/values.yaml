@@ -39,8 +39,8 @@ metrics:
   scrapeInterval: 30s
 
   service:
-    # labels:
-    #   key: value
+    labels:
+      key: value
 
   # Pod annotations for Prometheus
   # Commented out since the Prometheus Operator discourages annotation-based service discovery.
