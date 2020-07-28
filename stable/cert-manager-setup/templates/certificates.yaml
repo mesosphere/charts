@@ -1,0 +1,53 @@
+{{- if .Values.certificates }}
+{{- range .Values.certificates }}
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace | default $.Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+{{- if .acme }}
+{{ . | toYaml | indent 2 }}
+{{- end }}
+  isCA: {{ .isCA | default "true" }}
+  commonName: {{ .commonName | default "cert-manager" }}
+  duration: {{ .duration | default "87600h" }}
+  secretName: {{ .secretName }}
+  issuerRef:
+    name: {{ .issuerRef.name }}
+    kind: {{ .issuerRef.kind }}
+{{- if .usages }}
+  usages:
+  {{- range .usages }}
+    - {{ . | quote -}}
+  {{- end }}
+{{- end }}
+{{- if .dnsNames }}
+  dnsNames:
+  {{- range .dnsNames }}
+    - {{ . | quote -}}
+  {{- end }}
+{{- end }}
+{{- if .ipAddresses }}
+  ipAddresses:
+  {{- range .ipAddresses }}
+    - {{ . | quote -}}
+  {{- end }}
+{{- end }}
+  keyAlgorithm: {{ .keyAlgorithm | default "rsa" }}
+  keyEncoding: {{ .keyEncoding | default "pkcs1" }}
+  keySize: {{ .keySize | default "2048" }}
+{{- if .organization }}
+  organization:
+  {{- range .organization }}
+    - {{ . | quote -}}
+  {{- end }}
+{{- end }}
+  renewBefore: {{ .renewBefore | default "null" }}
+{{- end }}
+{{- end }}
