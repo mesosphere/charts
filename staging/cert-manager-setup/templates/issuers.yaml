@@ -11,7 +11,11 @@ metadata:
     "helm.sh/hook-weight": "-3"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
+{{- if .secretName }}
   ca:
     secretName: {{ .secretName }}
+{{- else }}
+{{ required "issuer must have a spec" .spec | toYaml | indent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}

@@ -17,7 +17,13 @@ the values.
 issuers:
   - name: my-issuer
     namespace: kube-system
-    ...
+    # for a predefined secret with ca.crt and ca.key. See https://docs.cert-manager.io/en/release-0.10/tasks/issuers/setup-ca.html
+    secretName: my-issuer-ca
+  - name: my-issuer-self-signed
+    namespace: kube-system
+    # for defining full issuer spec. Like selfSigned: {}. See https://docs.cert-manager.io/en/release-0.10/tasks/issuers/index.html#supported-issuer-types
+    spec:
+      selfSigned: {}
 
 certificates:
  - name: my-certificate

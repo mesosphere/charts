@@ -11,6 +11,10 @@ issuers: []
 #  - name: my-issuer
 #    namespace: kube-system
 #    secretName: my-issuer-ca
+#  - name: my-issuer-self-signed
+#    namespace: kube-system
+#    spec:
+#      selfSigned: {}
 
 certificates: []
 #  - name: kubernetes-intermediate-ca
@@ -55,6 +59,17 @@ certificates: []
 #      - MyCompany, Inc.
 #      - MyCompanyKnowOldNaming, Inc.
 #    renewBefore: 360h
+#   - name: my-certificate-self-signed
+#     namespace: kube-system
+#     secretName: my-certificate-self-signed-secret
+#     issuerRef:
+#       name: my-issuer-self-signed
+#       kind: Issuer
+#     usages:
+#       - "digital signature"
+#     commonName: all-mine
+#     duration: 240h
+#     dnsNames: []
 
 clusterissuers: []
 #  - name: kubernetes-ca

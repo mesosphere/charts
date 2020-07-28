@@ -10,6 +10,6 @@ metadata:
     "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
-{{ required "clusterissuer must have a spec" .spec | toYaml | indent 4 }}
+{{ required "clusterissuer must have a spec" .spec | toYaml | indent 2 }}
 {{- end }}
 {{- end }}
