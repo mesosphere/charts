@@ -10,6 +10,21 @@ to renew certificates at an appropriate time before expiry.
 
 In addition to installing `cert-manager`, `cert-manager-setup` provides the capability to specify a `ClusterIssuer` in the `values.yaml` file which will be applied directly after the `cert-manager` installation has completed. In order for this to happen, `cert-manager-setup` sets up an `Issuer` in the `cert-manager` namespace. It then creates an intermediate certificate from the secret `kubernetes-root-ca` which must already contain ideally the Kubernetes root CA. The `ClusterIssuer` then uses the intermediate certificate derived from the Kubernetes root CA.
 
+You can also create `Issuer` and `Certificate` in other namespaces, just define `namespace` within
+the values.
+
+```yaml
+issuers:
+  - name: my-issuer
+    namespace: kube-system
+    ...
+
+certificates:
+ - name: my-certificate
+   namespace: kube-system
+   ...
+```
+
 # Supported values format
 
 ```yaml

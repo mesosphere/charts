@@ -1,15 +1,17 @@
 # This test ensures we can create an issuer, a certificate and a clusterissuer
 
 issuers:
-  - name: my-root-issuer
-    secretName: kubernetes-root-ca
+  - name: my-issuer
+    namespace: kube-system
+    secretName: my-issuer-ca
 
 certificates:
   - name: my-certificate
+    namespace: kube-system
     # where to store this certificate
     secretName: my-certificate-secret
     issuerRef:
-      name: my-root-issuer
+      name: my-issuer
       kind: Issuer
     # These are the default usages for reference
     usages:
