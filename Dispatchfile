@@ -58,7 +58,7 @@ dind_task("test", inputs=[git], deps=["lint"], steps=[
     ],
     resources = k8s.corev1.ResourceRequirements(
       limits = {
-        "cpu": k8s.resource_quantity("1000m"),
+        "cpu": k8s.resource_quantity("1500m"),
         "memory": k8s.resource_quantity("6Gi")
       }
     )
