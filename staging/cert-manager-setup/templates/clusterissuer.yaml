@@ -7,7 +7,7 @@ metadata:
   namespace: {{ .Release.Namespace }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-weight": "-3"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   ca:
@@ -19,7 +19,7 @@ metadata:
   name: kubernetes-intermediate-ca
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-weight": "-2"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   isCA: true
@@ -40,7 +40,7 @@ metadata:
   name: {{ required "clusterissuer must have a name" .Values.clusterissuer.name }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "-2"
+    "helm.sh/hook-weight": "-1"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
 {{ required "clusterissuer must have a spec" .Values.clusterissuer.spec | toYaml | indent 4 }}
