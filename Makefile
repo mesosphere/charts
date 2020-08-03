@@ -119,7 +119,7 @@ ct.test:
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
-	test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
+	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
 
 .PHONY: lint
 lint: ct.lint

@@ -12,6 +12,7 @@ KINDEST_NODE_VERSION=v1.18.4@sha256:d8ff5fc405fc679dd3dd0cccc01543ba4942ed908238
 readonly CLUSTER_NAME=chart-testing
 CT_VERSION=$1
 HELM_VERSION=$2
+GIT_REMOTE_NAME=${GIT_REMOTE_NAME:=origin}
 
 tmp=$(mktemp -d)
 
@@ -22,13 +23,15 @@ run_ct_container() {
         teamcity_volume=(-v /teamcity/system/git:/teamcity/system/git)
     fi
     docker run --rm --interactive --detach --network host --name ct \
-        --volume "$(pwd)/test/ct-e2e.yaml:/etc/ct/ct.yaml" \
-        --volume "$(pwd):/workdir" \
         "${teamcity_volume[@]}" \
-        --workdir /workdir \
+        --workdir /charts \
         "quay.io/helmpack/chart-testing:${CT_VERSION}" \
         cat
     echo
+
+    docker cp "$(pwd)/test/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
+    docker cp "$(pwd)/." "ct:/charts"
+    docker_exec chown -R root:root /charts
 }
 
 cleanup() {
@@ -53,7 +56,7 @@ create_kind_cluster() {
 
     # if we are running inside of a kubernetes cluster with /kubepods cgroup
     # being used for pods --> add kubeadmConfigPatches
-    if cat /proc/1/cgroup 2>/dev/null | tail -1 | grep -q /kubepods; then
+    if tail -1 /proc/1/cgroup 2>/dev/null | grep -q /kubepods; then
 
       cat << EOF > tmp_dockerfile
 FROM kindest/node:$KINDEST_NODE_VERSION
@@ -117,7 +120,7 @@ install_tiller() {
     docker_exec /bin/sh -c "curl -fsSL \
         https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
             | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
-            && helm init --history-max 10 --service-account tiller --wait"
+            && helm init --debug --history-max 10 --service-account tiller --wait"
     echo
 }
 
@@ -133,7 +136,7 @@ install_certmanager() {
     docker_exec kubectl create namespace cert-manager
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
-    docker_exec helm install \
+    docker_exec helm install --debug \
         --values staging/cert-manager-setup/ci/test-values.yaml \
         --namespace cert-manager staging/cert-manager-setup
     echo
@@ -146,23 +149,25 @@ install_dummylb() {
     curl -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
       sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
       docker_exec kubectl apply -f -
+      docker_exec kubectl wait --for=condition=Available --selector=app=dummylb deploy
     echo
 }
 
 install_reloader() {
     echo 'Installing reloader...'
-    LATEST_TAG=$(curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
-    curl -sL https://raw.githubusercontent.com/stakater/Reloader/${LATEST_TAG}/deployments/kubernetes/reloader.yaml |
+    LATEST_TAG=$(set -o pipefail; curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
+    curl -sL "https://raw.githubusercontent.com/stakater/Reloader/$LATEST_TAG/deployments/kubernetes/reloader.yaml" |
       docker_exec kubectl apply -f -
+      docker_exec kubectl wait --for=condition=Available --selector=app=reloader-reloader deploy
     echo
 }
 
 replace_priority_class_name_system_x_critical() {
     # only change if needed
     set +o pipefail
-    REPLACE_CHARTS=$(git diff --name-only "$(git merge-base origin/master HEAD)" -- stable staging | egrep -e "(stable/)(aws|local|azure|gcp)" | xargs -I {} dirname {} | uniq)
+    REPLACE_CHARTS=$(set -o pipefail; git diff --name-only "$(git merge-base $GIT_REMOTE_NAME/master HEAD)" -- stable staging | { grep -E "(stable/)(aws|local|azure|gcp)" || test $? = 1; } | xargs -I {} dirname {} | uniq)
     set -o pipefail
-    if [[ ! -z ${REPLACE_CHARTS} ]]; then
+    if [[ -n ${REPLACE_CHARTS} ]]; then
       echo 'Replacing priorityClassName: system-X-critical'
       ${REPLACE_CHARTS} | xargs -I {} grep -rl "priorityClassName: system-" {} | xargs sed -i 's/system-.*-critical/null/g'
     fi
