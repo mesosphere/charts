@@ -1,4 +1,4 @@
-HELM_VERSION := v2.16.9
+HELM_VERSION ?= v3.2.4
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -17,7 +17,7 @@ GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*githu
 
 GIT_REF ?= $(shell git rev-parse HEAD)
 LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
-CT_VERSION ?= v2.4.1
+CT_VERSION ?= v3.0.0
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
@@ -124,5 +124,22 @@ endif
 .PHONY: lint
 lint: ct.lint
 
+.PHONY: test.helm2
+test.helm2: HELM_VERSION = v2.16.9
+test.helm2:
+ifneq (,$(wildcard /teamcity/system/git))
+	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
+endif
+	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
+
+.PHONY: test.helm3
+test.helm3: HELM_VERSION = v3.2.4
+test.helm3:
+ifneq (,$(wildcard /teamcity/system/git))
+	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
+endif
+	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
+
 .PHONY: test
-test: ct.test
+test: test.helm2 test.helm3
+
