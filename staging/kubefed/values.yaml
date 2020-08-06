@@ -12,6 +12,7 @@ controllermanager:
   image: kubefed
   tag: canary
   imagePullPolicy: IfNotPresent
+  logLevel: 2
   resources:
     limits:
       cpu: 100m
@@ -45,6 +46,19 @@ controllermanager:
 
   webhook:
     annotations: {}
+    repository: quay.io/kubernetes-multicluster
+    image: kubefed
+    tag: canary
+    imagePullPolicy: IfNotPresent
+    logLevel: 8
+    env: {}
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
 
 ## Configuration global values for all charts
 ##

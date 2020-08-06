@@ -14,16 +14,16 @@ metadata:
   name: validations.core.kubefed.io
 {{- end }}
   annotations:
-  {{- if .Values.certManager.enabled }}
+{{- if .Values.certManager.enabled }}
     certmanager.k8s.io/inject-ca-from: {{ printf "%s/%s%s" .Release.Namespace .Release.Name "-root-certificate" | quote }}
-  {{- end }}
+{{- end }}
 webhooks:
 - name: federatedtypeconfigs.core.kubefed.io
   clientConfig:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/federatedtypeconfigs
+      path: /validate-federatedtypeconfigs
     {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
@@ -55,7 +55,7 @@ webhooks:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/kubefedclusters
+      path: /validate-kubefedcluster
     {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
@@ -82,7 +82,7 @@ webhooks:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/validation.core.kubefed.io/v1beta1/kubefedconfigs
+      path: /validate-kubefedconfig
     {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}
@@ -120,7 +120,7 @@ webhooks:
     service:
       namespace: {{ .Release.Namespace | quote }}
       name: kubefed-admission-webhook
-      path: /apis/mutation.core.kubefed.io/v1beta1/kubefedconfigs
+      path: /default-kubefedconfig
     {{- if not .Values.certManager.enabled }}
     caBundle: {{ b64enc $ca.Cert | quote }}
     {{- end }}

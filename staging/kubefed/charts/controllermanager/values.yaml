@@ -7,8 +7,15 @@ replicaCount: 2
 repository: quay.io/kubernetes-multicluster
 image: kubefed
 tag: canary
+logLevel: 2
 imagePullPolicy: IfNotPresent
-resources: {}
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
 clusterAvailableDelay:
 clusterUnavailableDelay:
 leaderElectLeaseDuration:
@@ -34,4 +41,16 @@ certManager:
 
 webhook:
   annotations: {}
-
+  repository: quay.io/kubernetes-multicluster
+  image: kubefed
+  tag: canary
+  imagePullPolicy: IfNotPresent
+  logLevel: 8
+  env: {}
+  resources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 64Mi
