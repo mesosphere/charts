@@ -11,7 +11,7 @@ provisioner: disk.csi.azure.com
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
 parameters:
-  skuname: {{ .Values.storageclass.type | quote }}
+  skuname: {{ .Values.storageclass.skuname | quote }}
   {{- if .Values.storageclass.fsType }}
   fsType: {{ .Values.storageclass.fsType | quote }}
   {{- end }}
