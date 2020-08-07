@@ -258,6 +258,7 @@ kubecost:
         enabled: false
       query:
         enabled: true
+        logLevel: error
         timeout: 3m
         maxConcurrent: 10
         # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
@@ -289,6 +290,7 @@ kubecost:
         # Refresh interval to re-read file SD files. It is used as a resync fallback.
         serviceDiscoveryInterval: 5m
         extraArgs:
+          - "--log.format=json"
           - "--grpc-client-tls-secure"
           - "--grpc-client-tls-cert=/etc/certs/tls.crt"
           - "--grpc-client-tls-key=/etc/certs/tls.key"
