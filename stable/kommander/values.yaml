@@ -201,7 +201,7 @@ kubecost:
       thanos:
         enabled: true
         queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
-        # The offset to apply to all thanos queries in order to achieve syncronization on all cluster block stores
+        # The wait time before Kommander begins querying cost data for all attached clusters
         queryOffset: 5m
 
       grafana:
