@@ -1,4 +1,4 @@
-HELM_VERSION := v3.2.4
+HELM_VERSION ?= v3.2.4
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
