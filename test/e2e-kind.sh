@@ -169,7 +169,7 @@ replace_priority_class_name_system_x_critical() {
     set -o pipefail
     if [[ -n ${REPLACE_CHARTS} ]]; then
       echo 'Replacing priorityClassName: system-X-critical'
-      grep -rl "priorityClassName: system-" ${REPLACE_CHARTS} | xargs sed -i 's/system-.*-critical/null/g' 2>/dev/null || true
+      grep -rl "priorityClassName: system-" ${REPLACE_CHARTS} | xargs sed -i 's/system-.*-critical/null/g' 2>/dev/null || echo "Nothing to update"
     fi
     echo
 }
