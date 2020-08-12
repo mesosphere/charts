@@ -38,6 +38,7 @@ cleanup() {
     echo 'Removing ct container...'
     docker kill ct > /dev/null 2>&1
     "${tmp}/kind" delete cluster --name "$CLUSTER_NAME"
+    git checkout $(pwd)/test/kind-config.yaml
     rm -rf "${tmp}"
     echo 'Done!'
 }
@@ -111,16 +112,26 @@ EOF
     echo
 }
 
-install_tiller() {
-    echo 'Installing tiller...'
+install_helm() {
+    echo 'Installing helm...'
 
-    docker_exec kubectl --namespace kube-system create serviceaccount tiller
-    docker_exec kubectl create clusterrolebinding tiller-cluster-rule \
-        --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-    docker_exec /bin/sh -c "curl -fsSL \
-        https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
-            | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
-            && helm init --debug --history-max 10 --service-account tiller --wait"
+    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
+        echo 'Installing tiller...'
+        docker_exec kubectl --namespace kube-system create serviceaccount tiller
+        docker_exec kubectl create clusterrolebinding tiller-cluster-rule \
+            --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+        echo 'Installing helm v2...'
+        docker_exec /bin/sh -c "curl -fsSL \
+            https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
+                | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
+                && helm init --debug --history-max 10 --service-account tiller --wait"
+    else
+        echo 'Installing helm v3...'
+        docker_exec /bin/sh -c "curl -fsSL \
+            https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
+                | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm"
+    fi
+
     echo
 }
 
@@ -136,9 +147,17 @@ install_certmanager() {
     docker_exec kubectl create namespace cert-manager
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
-    docker_exec helm install --debug \
-        --values staging/cert-manager-setup/ci/test-values.yaml \
-        --namespace cert-manager staging/cert-manager-setup
+
+    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
+        docker_exec helm install --debug \
+            --values staging/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager staging/cert-manager-setup
+    else
+        docker_exec helm install cert-manager --debug \
+            --values staging/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager staging/cert-manager-setup
+    fi
+
     echo
 }
 
@@ -180,7 +199,7 @@ main() {
     trap cleanup EXIT
 
     create_kind_cluster
-    install_tiller
+    install_helm
     install_dummylb
     install_certmanager
     install_reloader
