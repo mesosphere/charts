@@ -126,10 +126,12 @@ lint: ct.lint
 
 .PHONY: test.helm2
 test.helm2: HELM_VERSION = v2.16.9
+test.helm2: CT_VERSION = v2.4.1
 test.helm2: ct.test
 
 .PHONY: test.helm3
 test.helm3: HELM_VERSION = v3.3.0
+test.helm3: CT_VERSION = v3.0.0
 test.helm3: ct.test
 
 .PHONY: test
