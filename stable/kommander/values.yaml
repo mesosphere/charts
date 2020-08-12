@@ -201,6 +201,8 @@ kubecost:
       thanos:
         enabled: true
         queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
+        # The wait time before Kommander begins querying cost data for all attached clusters
+        queryOffset: 5m
 
       grafana:
         # If false, Grafana will not be installed
@@ -256,6 +258,7 @@ kubecost:
         enabled: false
       query:
         enabled: true
+        logLevel: error
         timeout: 3m
         maxConcurrent: 10
         # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
@@ -287,6 +290,7 @@ kubecost:
         # Refresh interval to re-read file SD files. It is used as a resync fallback.
         serviceDiscoveryInterval: 5m
         extraArgs:
+          - "--log.format=json"
           - "--grpc-client-tls-secure"
           - "--grpc-client-tls-cert=/etc/certs/tls.crt"
           - "--grpc-client-tls-key=/etc/certs/tls.key"
