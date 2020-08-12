@@ -4,7 +4,7 @@ storageclass:
   volumeBindingMode: WaitForFirstConsumer
 
   # Standard_LRS, Premium_LRS, StandardSSD_LRS, UltraSSD_LRS
-  skuname: Standard_LRS
+  skuname: StandardSSD_LRS
   kind: managed
   # None, ReadOnly, or ReadWrite
   cachingMode: ReadOnly
