@@ -1,4 +1,4 @@
-HELM_VERSION ?= v3.2.4
+HELM_VERSION ?= v3.3.0
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -126,20 +126,12 @@ lint: ct.lint
 
 .PHONY: test.helm2
 test.helm2: HELM_VERSION = v2.16.9
-test.helm2:
-ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
-endif
-	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
+test.helm2: ct.test
 
 .PHONY: test.helm3
-test.helm3: HELM_VERSION = v3.2.4
-test.helm3:
-ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
-endif
-	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
+test.helm3: HELM_VERSION = v3.3.0
+test.helm3: ct.test
 
 .PHONY: test
-test: test.helm2 test.helm3
+test: ct.test
 

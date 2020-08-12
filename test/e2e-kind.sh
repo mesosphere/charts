@@ -38,6 +38,7 @@ cleanup() {
     echo 'Removing ct container...'
     docker kill ct > /dev/null 2>&1
     "${tmp}/kind" delete cluster --name "$CLUSTER_NAME"
+    git checkout $(pwd)/test/kind-config.yaml
     rm -rf "${tmp}"
     echo 'Done!'
 }
