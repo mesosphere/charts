@@ -104,9 +104,6 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
 	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
-$(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
-	$(HELM) --home $(TMPDIR)/
-
 .PHONY: ct.lint
 ct.lint:
 ifneq (,$(wildcard /teamcity/system/git))
