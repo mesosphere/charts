@@ -26,7 +26,7 @@ dind_task("publish",
               export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
               git config --global user.name 'Dispatch CI'
               git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-              make publish
+              make publish HELM_VERSION=v2.16.9
               """
             ],
             env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
