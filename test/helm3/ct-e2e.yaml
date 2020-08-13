@@ -1,0 +1,41 @@
+debug: true
+target-branch: master
+chart-dirs:
+  - stable
+  - staging
+excluded-charts:
+  - common
+  - dex-controller # Moved to a different helm repo
+  - azuredisk-csi-driver  # DCOS-62804
+  - defaultstorageclass   # DCOS-62803
+  - dispatch              # DCOS-62802
+  - gcpdisk-csi-driver    # D2IQ-65765
+  - gcpdiskprovisioner    # DCOS-62801
+  - kommander             # DCOS-62800
+  - kommander-karma       # DCOS-62799
+  - kommander-thanos      # DCOS-62798
+  - mtls-proxy            # DCOS-62805
+  - dex-k8s-authenticator # DCOS-62806
+  - flagger               # DCOS-62809
+  - gatekeeper            # DCOS-62810
+  - generic-ingress       # DCOS-62811
+  - istio                 # DCOS-62812
+  - knative               # DCOS-62813
+  - kube-oidc-proxy       # DCOS-62814
+  - kudo                  # DCOS-62815
+  - nvidia                # DCOS-62816
+  - prometheus-operator   # DCOS-62817
+  - traefik-forward-auth  # DCOS-62819
+  - local-path-provisioner
+chart-repos:
+  - mesosphere-staging=https://mesosphere.github.io/charts/staging
+  - mesosphere-stable=https://mesosphere.github.io/charts/stable
+  - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
+  - jetstack-charts=https://charts.jetstack.io
+  - banzaicloud=https://kubernetes-charts.banzaicloud.com
+  - helm-stable=https://kubernetes-charts.storage.googleapis.com/
+  - dex-controller=https://mesosphere.github.io/dex-controller/charts
+  - kommander=https://mesosphere.github.io/kommander/charts
+  - kubecost=https://kubecost.github.io/cost-analyzer
+  - yakcl=https://mesosphere.github.io/yakcl/charts
+helm-extra-args: --timeout 600s
