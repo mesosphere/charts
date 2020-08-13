@@ -55,7 +55,9 @@ stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
 .PHONY: stablerepo
 stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
+# TODO: Publish uses helm v2 we should consider testing with helm3 soon.
 .PHONY: publish
+publish: HELM_VERSION = v2.16.9
 publish: export LC_COLLATE := C
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
