@@ -1,5 +1,7 @@
 #/usr/bin/env bash
 
+source $(dirname "$0")/helpers.sh
+
 set -x
 
 cat << EOF >> ${BASEDIR}/values.yaml
@@ -39,3 +41,5 @@ mesosphereResources:
   ingressRBAC:
     enabled: true
 EOF
+
+git_add_and_commit ${BASEDIR}/values.yaml
