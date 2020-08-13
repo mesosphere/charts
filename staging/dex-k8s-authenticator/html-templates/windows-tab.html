@@ -85,8 +85,14 @@ EOF</code></pre>
     <button class="btn" style="float:right" data-clipboard-snippet="">
       <img class="clippy" width="13" src="{{ .Web_Path_Prefix }}static/clippy.svg" alt="">
     </button>
+
+    {{ if .K8sCaPem }}
   <pre><code>kubectl config set-cluster {{ .ClusterHostname }} --certificate-authority=${HOME}/.kube/certs/{{ .ClusterHostname}}/k8s-ca.crt --server={{ .K8sMasterURI }}</code></pre>
-  </div>
+{{ else }}
+  <pre><code>kubectl config set-cluster {{ .ClusterHostname }} --server={{ .K8sMasterURI }}</code></pre>  
+{{ end }}
+
+</div>
 
   <div class="command">
 
