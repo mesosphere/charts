@@ -1,14 +1,30 @@
 #!/bin/bash
 
+source $(dirname "$0")/helpers.sh
+
 set -x
 
-if [[ -z $(command -v yq) ]]; then
-    echo "$0 requires the 'yq' command line tool which is not installed. Please install this and start again."
-    exit 1
-fi
+SRCFILE=crds/crd-prometheus.yaml
+TMPFILE=crds/tmp-prom.yaml
 
-SRCFILE="${BASEDIR}/crds/crd-prometheus.yaml"
-TMPFILE=$(mktemp)
-yq -y '.spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name = {"description": "Name is the name used in the PVC claim", "type": "string"}' ${SRCFILE} >> ${TMPFILE}
-mv ${TMPFILE} ${SRCFILE}
+docker run --rm -it \
+  -v ${BASEDIR}:/basedir \
+  -w /basedir \
+  -e SRCFILE=${SRCFILE} \
+  -e TMPFILE=${TMPFILE} \
+  mikefarah/yq:3.3.2 \
+  yq read -P "${SRCFILE}" > "${TMPFILE}" && mv "${TMPFILE}" "${SRCFILE}"
+
+git_add_and_commit_with_msg ${SRCFILE} "reformat yaml with yq"
+
+docker run --rm -it \
+  -v ${BASEDIR}:/basedir \
+  -w /basedir \
+  -e SRCFILE=${SRCFILE} \
+  -e TMPFILE=${TMPFILE} \
+  mikefarah/yq:3.3.2 \
+  yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.description "Name is the name used in the PVC claim" && \
+  yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.type "string"
+
+git_add_and_commit_with_msg ${SRCFILE} "update volumeClaimTemplate"
 
