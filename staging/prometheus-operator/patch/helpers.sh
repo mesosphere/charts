@@ -14,4 +14,3 @@ function git_add_and_commit_with_msg {
   FILENAME=$(basename "$0")
   git commit -m "chore: apply ${FILENAME} - ${MSG}"
 }
-

@@ -27,4 +27,3 @@ docker run --rm -it \
   yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.type "string"
 
 git_add_and_commit_with_msg ${SRCFILE} "update volumeClaimTemplate"
-
