@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This patch adds all of our custom hooks
+
 source $(dirname "$0")/helpers.sh
 
 set -x

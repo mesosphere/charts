@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This patch adds all our custom cronjobs
+
 source $(dirname "$0")/helpers.sh
 
 set -x

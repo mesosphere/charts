@@ -40,4 +40,4 @@ git commit -am "chore: copy upstream chart ${NEW_VERSION}"
 
 BASEDIR=${BASEDIR} ./patch/patch.sh
 
-echo "Done updating prometheus-operator!"
+echo "Done upgrading prometheus-operator!"

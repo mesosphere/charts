@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This patch adds alertmanager rules for certain addons
+
 source $(dirname "$0")/helpers.sh
 
 set -x

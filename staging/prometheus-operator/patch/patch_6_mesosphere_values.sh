@@ -1,5 +1,8 @@
 #/usr/bin/env bash
 
+# This patch adds mesosphere specific chart values.
+# These are the values we reference in our custom templates.
+
 source $(dirname "$0")/helpers.sh
 
 set -x

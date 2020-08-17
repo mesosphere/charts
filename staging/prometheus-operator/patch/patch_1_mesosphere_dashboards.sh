@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This patch adds all the custom dashboards that we deploy in Grafana
+
 source $(dirname "$0")/helpers.sh
 
 set -x

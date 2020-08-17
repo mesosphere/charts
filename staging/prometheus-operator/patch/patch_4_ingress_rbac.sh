@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# This patch adds all of our ingress rbac rules
+
 source $(dirname "$0")/helpers.sh
 
 set -x
