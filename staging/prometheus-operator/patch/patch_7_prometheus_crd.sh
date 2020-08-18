@@ -22,7 +22,7 @@ TMPFILE=crds/tmp-prom.yaml
 
 # let yq format the file
 docker run --rm -it \
-  -v ${BASEDIR}:/basedir \
+  -v "${BASEDIR}":/basedir \
   -w /basedir \
   -e SRCFILE=${SRCFILE} \
   -e TMPFILE=${TMPFILE} \
@@ -33,7 +33,7 @@ git_add_and_commit_with_msg ${SRCFILE} "reformat yaml with yq (no new changes)"
 
 # update volumeClaimTemplate.properties.metadata
 docker run --rm -it \
-  -v ${BASEDIR}:/basedir \
+  -v "${BASEDIR}":/basedir \
   -w /basedir \
   -e SRCFILE=${SRCFILE} \
   -e TMPFILE=${TMPFILE} \

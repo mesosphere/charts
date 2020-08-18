@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 # This patch adds mesosphere specific chart values.
 # These are the values we reference in our custom templates.
@@ -7,7 +7,7 @@ source $(dirname "$0")/helpers.sh
 
 set -x
 
-cat << EOF >> ${BASEDIR}/values.yaml
+cat << EOF >> "${BASEDIR}"/values.yaml
 
 # Create mesosphere specific resources
 mesosphereResources:
@@ -45,4 +45,4 @@ mesosphereResources:
     enabled: true
 EOF
 
-git_add_and_commit ${BASEDIR}/values.yaml
+git_add_and_commit "${BASEDIR}"/values.yaml

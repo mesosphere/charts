@@ -14,7 +14,7 @@ PROMETHEUS_PATH=stable/prometheus-operator
 BASEDIR=$(dirname $(readlink -f "$0"))
 TMPDIR=$(mktemp -d)
 
-cd ${TMPDIR}
+cd "${TMPDIR}" || exit
 
 git init
 git remote add origin -f ${UPSTREAM_REPO}
@@ -24,14 +24,14 @@ echo ${PROMETHEUS_PATH} > .git/info/sparse-checkout
 
 git pull origin master
 
-cd ${PROMETHEUS_PATH}
+cd ${PROMETHEUS_PATH} || exit
 
 for f in $(ls -A); do
-  rm -rf ${BASEDIR}/${f}
-  cp -R $f ${BASEDIR}
+  rm -rf "${BASEDIR:?}"/"${f}"
+  cp -R "$f" "${BASEDIR}"
 done
 
-cd ${BASEDIR}
+cd "${BASEDIR}" || exit
 
 NEW_VERSION=$(grep version Chart.yaml)
 

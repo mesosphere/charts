@@ -6,10 +6,10 @@ source $(dirname "$0")/helpers.sh
 
 set -x
 
-TEMPLATES_PATH=${BASEDIR}/templates/mesosphere-hooks
+TEMPLATES_PATH="${BASEDIR}"/templates/mesosphere-hooks
 
-mkdir -p ${TEMPLATES_PATH}
+mkdir -p "${TEMPLATES_PATH}"
 
-cp ${BASEDIR}/patch/mesosphere/templates/hooks/* ${TEMPLATES_PATH}
+cp "${BASEDIR}"/patch/mesosphere/templates/hooks/* "${TEMPLATES_PATH}"
 
-git_add_and_commit ${TEMPLATES_PATH}
+git_add_and_commit "${TEMPLATES_PATH}"

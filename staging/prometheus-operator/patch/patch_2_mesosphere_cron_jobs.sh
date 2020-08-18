@@ -8,8 +8,9 @@ set -x
 
 GRAFANA_PATH=${BASEDIR}/templates/grafana
 
-for c in $(ls ${BASEDIR}/patch/mesosphere/templates/grafana/cron*); do
-  cp ${c} ${GRAFANA_PATH}
+for c in "${BASEDIR}"/patch/mesosphere/templates/grafana/cron*; do
+  [[ -e ${c} ]] || break # handle case when no files exist
+  cp "${c}" "${GRAFANA_PATH}"
 done
 
-git_add_and_commit ${GRAFANA_PATH}
+git_add_and_commit "${GRAFANA_PATH}"
