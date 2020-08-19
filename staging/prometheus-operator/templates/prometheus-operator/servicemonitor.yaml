@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "prometheus-operator.fullname" . }}-operator
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: {{ template "prometheus-operator.name" . }}-operator
 {{ include "prometheus-operator.labels" . | indent 4 }}
@@ -28,5 +28,5 @@ spec:
       release: {{ $.Release.Name | quote }}
   namespaceSelector:
     matchNames:
-      - {{ printf "%s" (include "prometheus-operator.namespace" .) | quote }}
+      - {{ $.Release.Namespace | quote }}
 {{- end }}
