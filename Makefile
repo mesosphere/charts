@@ -1,3 +1,5 @@
+SHELL := /bin/bash -euo pipefail
+
 HELM_VERSION ?= v3.3.0
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
@@ -16,7 +18,6 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 CT_VERSION ?= v3.0.0
 
 TMPDIR := $(shell mktemp -d)
@@ -60,14 +61,25 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 publish: HELM_VERSION = v2.16.9
 publish: export LC_COLLATE := C
 publish:
-	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
+	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
 	rm -rf gh-pages
 	git fetch publish gh-pages
 	git worktree add gh-pages/ publish/gh-pages
 	$(MAKE) GIT_REF=$(GIT_REF) all
+# Check if any existing files other than repo index.yamls have been modified or deleted and exit if
+# there are, showing the list of changed files for easier troubleshooting.
 	cd gh-pages && \
-		git add -A . && \
-		git commit -m "$(LAST_COMMIT_MESSAGE)" && \
+		export CHANGED=$$(git ls-files -md | grep -v index.yaml) && \
+		( \
+			[[ -z "$${CHANGED}" ]] || \
+			(printf "Aborting: following changed or deleted files:\n\n$${CHANGED}" && exit 1) \
+		)
+
+# Be doubly safe by only adding new files and index.yaml files to prevent overwrites.
+	export LAST_COMMIT_MESSAGE="$$(git log -1 --pretty=format:'%B')" && \
+	cd gh-pages && \
+		git add $$(git ls-files -o --exclude-standard) staging/index.yaml stable/index.yaml && \
+		git commit -m "$${LAST_COMMIT_MESSAGE}" && \
 		git push publish HEAD:gh-pages
 	git worktree remove gh-pages/
 	rm -rf gh-pages
