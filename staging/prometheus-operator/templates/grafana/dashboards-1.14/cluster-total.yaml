@@ -8,10 +8,8 @@ https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  namespace: {{ $.Release.Namespace }}
   name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "cluster-total" | trunc 63 | trimSuffix "-" }}
-  annotations:
-{{ toYaml .Values.grafana.sidecar.dashboards.annotations | indent 4 }}
   labels:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
@@ -96,7 +94,6 @@ data:
                     "min": false,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": null,
                     "sort": "current",
                     "sortDesc": true,
                     "total": false,
@@ -198,7 +195,6 @@ data:
                     "min": false,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": null,
                     "sort": "current",
                     "sortDesc": true,
                     "total": false,
@@ -638,7 +634,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "sort": "current",
                             "sortDesc": true,
                             "total": false,
@@ -740,7 +735,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "sort": "current",
                             "sortDesc": true,
                             "total": false,
@@ -872,7 +866,6 @@ data:
                     "min": true,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": null,
                     "total": false,
                     "values": true
                 },
@@ -972,7 +965,6 @@ data:
                     "min": true,
                     "rightSide": true,
                     "show": true,
-                    "sideWidth": null,
                     "total": false,
                     "values": true
                 },
@@ -1083,7 +1075,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1183,7 +1174,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1303,7 +1293,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1403,7 +1392,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1503,7 +1491,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1607,7 +1594,6 @@ data:
                             "min": true,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -1833,7 +1819,7 @@ data:
                 "30d"
             ]
         },
-        "timezone": "UTC",
+        "timezone": "",
         "title": "Kubernetes / Networking / Cluster",
         "uid": "ff635a025bcfea7bc3dd4f508990a3e9",
         "version": 0

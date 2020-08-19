@@ -8,10 +8,8 @@ https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  namespace: {{ $.Release.Namespace }}
   name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "prometheus" | trunc 63 | trimSuffix "-" }}
-  annotations:
-{{ toYaml .Values.grafana.sidecar.dashboards.annotations | indent 4 }}
   labels:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
@@ -91,7 +89,6 @@ data:
                                 "dateFormat": "YYYY-MM-DD HH:mm:ss",
                                 "decimals": 2,
                                 "link": false,
-                                "linkTargetBlank": false,
                                 "linkTooltip": "Drill down",
                                 "linkUrl": "",
                                 "pattern": "Value #A",
@@ -110,7 +107,6 @@ data:
                                 "dateFormat": "YYYY-MM-DD HH:mm:ss",
                                 "decimals": 2,
                                 "link": false,
-                                "linkTargetBlank": false,
                                 "linkTooltip": "Drill down",
                                 "linkUrl": "",
                                 "pattern": "Value #B",
@@ -129,7 +125,6 @@ data:
                                 "dateFormat": "YYYY-MM-DD HH:mm:ss",
                                 "decimals": 2,
                                 "link": false,
-                                "linkTargetBlank": false,
                                 "linkTooltip": "Drill down",
                                 "linkUrl": "",
                                 "pattern": "instance",
@@ -148,7 +143,6 @@ data:
                                 "dateFormat": "YYYY-MM-DD HH:mm:ss",
                                 "decimals": 2,
                                 "link": false,
-                                "linkTargetBlank": false,
                                 "linkTooltip": "Drill down",
                                 "linkUrl": "",
                                 "pattern": "job",
@@ -167,7 +161,6 @@ data:
                                 "dateFormat": "YYYY-MM-DD HH:mm:ss",
                                 "decimals": 2,
                                 "link": false,
-                                "linkTargetBlank": false,
                                 "linkTooltip": "Drill down",
                                 "linkUrl": "",
                                 "pattern": "version",
@@ -1220,7 +1213,7 @@ data:
             ]
         },
         "timezone": "utc",
-        "title": "Prometheus Overview",
+        "title": "Prometheus",
         "uid": "",
         "version": 0
     }
