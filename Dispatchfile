@@ -44,7 +44,7 @@ dind_task("lint",
               "/bin/bash", "-c",
               """
               git fetch origin master --unshallow
-              make lint
+              make lint HELM_VERSION=v2.16.9 CT_VERSION=2.4.1
               """
             ]
         )

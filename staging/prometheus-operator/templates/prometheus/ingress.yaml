@@ -1,6 +1,3 @@
-{{- if .Valjues.protheus.enabled }}
-{{/*  todo */}}
-{{- end }}
 {{- if and .Values.prometheus.enabled .Values.prometheus.ingress.enabled }}
 {{- $serviceName := printf "%s-%s" (include "prometheus-operator.fullname" .) "prometheus" }}
 {{- $servicePort := .Values.prometheus.service.port -}}
