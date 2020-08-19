@@ -57,26 +57,16 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 # TODO: Publish uses helm v2 we should consider testing with helm3 soon.
 .PHONY: publish
-publish: HELM_VERSION = v2.16.10
+publish: HELM_VERSION = v2.16.9
 publish: export LC_COLLATE := C
 publish:
-	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
+	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
 	rm -rf gh-pages
 	git fetch publish gh-pages
 	git worktree add gh-pages/ publish/gh-pages
 	$(MAKE) GIT_REF=$(GIT_REF) all
-# Check if any existing files other than repo index.yamls have been modified or deleted and exit if
-# there are, showing the list of changed files for easier troubleshooting.
 	cd gh-pages && \
-		export CHANGED=$$(git ls-files -md | grep -v index.yaml) && \
-		( \
-			[[ -z "$${CHANGED}" ]] || \
-			(printf "Aborting: following changed or deleted files:\n\n$${CHANGED}" && exit 1) \
-		)
-
-# Be doubly safe by only adding new files and index.yaml files to prevent overwrites.
-	cd gh-pages && \
-		git add $$(git ls-files -o --exclude-standard) staging/index.yaml stable/index.yaml && \
+		git add -A . && \
 		git commit -m "$(LAST_COMMIT_MESSAGE)" && \
 		git push publish HEAD:gh-pages
 	git worktree remove gh-pages/
