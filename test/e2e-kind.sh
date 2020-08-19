@@ -13,6 +13,7 @@ readonly CLUSTER_NAME=chart-testing
 CT_VERSION=$1
 HELM_VERSION=$2
 GIT_REMOTE_NAME=${GIT_REMOTE_NAME:=origin}
+CURL_RETRY_OPTS="--max-time 10 --retry 10 --retry-max-time 60 --retry-connrefused"
 
 tmp=$(mktemp -d)
 
@@ -55,7 +56,7 @@ docker_exec() {
 create_kind_cluster() {
     echo 'Downloading kind...'
 
-    curl -fsSLo "${tmp}/kind" \
+    curl ${CURL_RETRY_OPTS} -fsSLo "${tmp}/kind" \
         "https://github.com/kubernetes-sigs/kind/releases/download/$KIND_VERSION/kind-$(uname)-amd64"
     chmod +x "${tmp}/kind"
     cp "$(pwd)/test/kind-entrypoint-wrapper.sh" "${tmp}/kind-entrypoint-wrapper.sh"
@@ -200,13 +201,13 @@ install_helm() {
         docker_exec kubectl create clusterrolebinding tiller-cluster-rule \
             --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
         echo 'Installing helm v2...'
-        docker_exec /bin/sh -c "curl -fsSL \
+        docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
             https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
                 | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
                 && helm init --debug --history-max 10 --service-account tiller --wait"
     else
         echo 'Installing helm v3...'
-        docker_exec /bin/sh -c "curl -fsSL \
+        docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
             https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
                 | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm"
     fi
@@ -244,7 +245,7 @@ install_dummylb() {
     echo 'Installing dummylb...'
     DUMMYLB_SHA="cb4c17d70e63393f8de7cfa97d186aa06e781b3cd25bfff1f374b9d57159e80f"
     DUMMYLB_REG="registry.gitlab.com/joejulian/dummylb"
-    curl -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
+    curl ${CURL_RETRY_OPTS} -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
       sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
       docker_exec kubectl apply -f -
       docker_exec kubectl wait --for=condition=Available --selector=app=dummylb deploy
@@ -253,8 +254,8 @@ install_dummylb() {
 
 install_reloader() {
     echo 'Installing reloader...'
-    LATEST_TAG=$(set -o pipefail; curl -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
-    curl -sL "https://raw.githubusercontent.com/stakater/Reloader/$LATEST_TAG/deployments/kubernetes/reloader.yaml" |
+    LATEST_TAG=$(set -o pipefail; curl ${CURL_RETRY_OPTS} -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
+    curl ${CURL_RETRY_OPTS} -sL "https://raw.githubusercontent.com/stakater/Reloader/$LATEST_TAG/deployments/kubernetes/reloader.yaml" |
       docker_exec kubectl apply -f -
       docker_exec kubectl wait --for=condition=Available --selector=app=reloader-reloader deploy
     echo
