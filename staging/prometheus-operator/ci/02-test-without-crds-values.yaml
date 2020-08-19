@@ -4,8 +4,3 @@ prometheusOperator:
     releaseNamespace: true
     additional:
       - kube-system
-
-prometheus-node-exporter:
-  service:
-    targetPort: 9101
-    port: 9101
