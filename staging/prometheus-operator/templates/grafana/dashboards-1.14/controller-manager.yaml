@@ -8,10 +8,8 @@ https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  namespace: {{ $.Release.Namespace }}
   name: {{ printf "%s-%s" (include "prometheus-operator.fullname" $) "controller-manager" | trunc 63 | trimSuffix "-" }}
-  annotations:
-{{ toYaml .Values.grafana.sidecar.dashboards.annotations | indent 4 }}
   labels:
     {{- if $.Values.grafana.sidecar.dashboards.label }}
     {{ $.Values.grafana.sidecar.dashboards.label }}: "1"
@@ -151,7 +149,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -256,7 +253,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -361,7 +357,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -466,7 +461,6 @@ data:
                             "min": false,
                             "rightSide": false,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": false
                         },
@@ -579,7 +573,6 @@ data:
                             "min": false,
                             "rightSide": false,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": false
                         },
@@ -603,7 +596,7 @@ data:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"POST\"}[5m])) by (verb, url, le))",
+                                "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"POST\"}[5m])) by (verb, url, le))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}verb{{`}}`}} {{`{{`}}url{{`}}`}}",
@@ -684,7 +677,6 @@ data:
                             "min": false,
                             "rightSide": true,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": true
                         },
@@ -708,7 +700,7 @@ data:
                         "steppedLine": false,
                         "targets": [
                             {
-                                "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_duration_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"GET\"}[5m])) by (verb, url, le))",
+                                "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"GET\"}[5m])) by (verb, url, le))",
                                 "format": "time_series",
                                 "intervalFactor": 2,
                                 "legendFormat": "{{`{{`}}verb{{`}}`}} {{`{{`}}url{{`}}`}}",
@@ -789,7 +781,6 @@ data:
                             "min": false,
                             "rightSide": false,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": false
                         },
@@ -881,7 +872,6 @@ data:
                             "min": false,
                             "rightSide": false,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": false
                         },
@@ -973,7 +963,6 @@ data:
                             "min": false,
                             "rightSide": false,
                             "show": true,
-                            "sideWidth": null,
                             "total": false,
                             "values": false
                         },
@@ -1134,7 +1123,7 @@ data:
                 "30d"
             ]
         },
-        "timezone": "UTC",
+        "timezone": "",
         "title": "Kubernetes / Controller Manager",
         "uid": "72e0e05bef5099e5f049b05fdc429ed4",
         "version": 0

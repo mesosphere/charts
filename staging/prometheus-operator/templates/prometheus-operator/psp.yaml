@@ -3,6 +3,7 @@ apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
   name: {{ template "prometheus-operator.fullname" . }}-operator
+  namespace: {{ $.Release.Namespace }}
   labels:
     app: {{ template "prometheus-operator.name" . }}-operator
 {{- if .Values.global.rbac.pspAnnotations }}
@@ -26,7 +27,7 @@ spec:
     - 'secret'
     - 'downwardAPI'
     - 'persistentVolumeClaim'
-  hostNetwork: {{ .Values.prometheusOperator.hostNetwork }}
+  hostNetwork: false
   hostIPC: false
   hostPID: false
   runAsUser:
