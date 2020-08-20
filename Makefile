@@ -88,7 +88,7 @@ endif
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
 $(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst gh-pages/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst gh-pages/%.tgz,%/*/*,$$@))
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yaml
+$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
@@ -102,7 +102,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
 
-%/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
+%/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml:
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
 	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
