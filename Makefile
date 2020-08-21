@@ -26,6 +26,9 @@ ifeq ($(shell uname),Darwin)
 	# mounting /var/folders/
 	TMPDIR := /private${TMPDIR}
 endif
+export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
+export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
+export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 
 HELM := $(shell bash -c "command -v helm")
 ifeq ($(HELM),)
@@ -56,9 +59,7 @@ stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
 .PHONY: stablerepo
 stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
-# TODO: Publish uses helm v2 we should consider testing with helm3 soon.
 .PHONY: publish
-publish: HELM_VERSION = v2.16.9
 publish: export LC_COLLATE := C
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
@@ -99,11 +100,11 @@ endif
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
 $(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst gh-pages/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst gh-pages/%.tgz,%/*/*,$$@))
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yaml
+$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/index.yaml
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
-	$(HELM) --home $(TMPDIR)/.helm package $(PACKAGE_SRC) -d $(shell dirname $@)
+	$(HELM) package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
 	tar -c \
 			--owner=root:0 --group=root:0 --numeric-owner \
@@ -113,13 +114,10 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(TMPDIR)/.helm/repository/local/index.yam
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
 
-%/index.yaml: $(STABLE_TARGETS) $(STAGING_TARGETS)
-%/index.yaml: $(TMPDIR)/.helm/repository/local/index.yaml
+%/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
+%/index.yaml:
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) --home $(TMPDIR)/.helm repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
-
-$(TMPDIR)/.helm/repository/local/index.yaml: $(HELM)
-	$(HELM) --home $(TMPDIR)/.helm init --client-only
+	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
 .PHONY: ct.lint
 ct.lint:
