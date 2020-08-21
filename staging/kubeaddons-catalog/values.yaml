@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: mesosphere/kubeaddons-catalog
-  tag: v0.8.6
+  tag: v0.10.0
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

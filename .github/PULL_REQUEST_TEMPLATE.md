@@ -21,6 +21,7 @@ Enter your extended release note in the block below. If the PR requires addition
 
 **Checklist**
 
+* [ ] *If a chart is changed, the chart version is correctly incremented.*
 * [ ] The commit message explains the changes and why are needed.
 * [ ] The code builds and passes lint/style checks locally.
 * [ ] The relevant subset of integration tests pass locally.
