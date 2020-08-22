@@ -1,6 +1,6 @@
 {{ $ns := .Release.Namespace }}
 {{ $labels := include "kommander.labels" . | indent 4  }}
-{{ $sa := .Values.kubecost.kommanderServiceAccount }}
+{{ $sa := include "kommander.fullname" . }}
 {{- if index .Values "kubecost" "cost-analyzer" "thanos" "query" "enabled" }}
 {{- range index .Values "kubecost" "cost-analyzer" "thanos" "query" "serviceDiscoveryFileConfigMaps" }}
 ---
