@@ -33,7 +33,15 @@ export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 HELM := $(shell command -v helm)
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
+else
+# compare short versions to see if this is the requested version
+HELM_INSTALLED=$(shell $(HELM) version --short --client | sed 's/.*\(v[0-9]\+\.[0-9]\+\).*/\1/')
+HELM_REQUESTED=$(shell echo $(HELM_VERSION) | cut -d. -f-2)
+ifneq ($(HELM_INSTALLED),$(HELM_REQUESTED))
+$(error $(HELM) is not the requested version: $(HELM_VERSION))
 endif
+endif
+
 ifeq (,$(wildcard /teamcity/system/git))
 DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
 			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
