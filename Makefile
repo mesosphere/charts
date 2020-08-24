@@ -30,7 +30,7 @@ export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
 export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 
-HELM := $(shell bash -c "command -v helm")
+HELM := $(shell command -v helm)
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
