@@ -30,7 +30,7 @@ export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
 export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 
-HELM := $(shell bash -c "command -v helm")
+HELM := $(shell command -v helm)
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
@@ -87,7 +87,7 @@ publish:
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
-	curl -Ls https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
+	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
 endif
 
 # Deterministically create helm packages by:
@@ -99,8 +99,7 @@ endif
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst gh-pages/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst gh-pages/%.tgz,%/*/*,$$@))
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/index.yaml
+$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
@@ -115,7 +114,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/i
 	rm -rf $(UNPACKED_TMP)
 
 %/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
-%/index.yaml: $$(wildcard $(patsubst %/index.yaml,%,$@)/*.tgz)
+%/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
 	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
@@ -148,4 +147,3 @@ test.helm3: ct.test
 
 .PHONY: test
 test: ct.test
-
