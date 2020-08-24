@@ -115,7 +115,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/i
 	rm -rf $(UNPACKED_TMP)
 
 %/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
-%/index.yaml:
+%/index.yaml: $$(wildcard $(patsubst %/index.yaml,%,$@)/*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
 	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
