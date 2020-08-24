@@ -87,7 +87,7 @@ publish:
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
-	curl -Ls https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
+	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
 endif
 
 # Deterministically create helm packages by:
