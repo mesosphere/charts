@@ -38,7 +38,7 @@ else
 HELM_INSTALLED=$(shell $(HELM) version --short --client | sed 's/.*\(v[0-9]\+\.[0-9]\+\).*/\1/')
 HELM_REQUESTED=$(shell echo $(HELM_VERSION) | cut -d. -f-2)
 ifneq ($(HELM_INSTALLED),$(HELM_REQUESTED))
-$(error $(HELM) is not the requested version: $(HELM_VERSION))
+	HELM := $(TMPDIR)/helm
 endif
 endif
 
