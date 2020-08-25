@@ -1,3 +1,5 @@
+SHELL := /bin/bash -euo pipefail
+
 HELM_VERSION ?= v3.3.0
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
@@ -16,7 +18,6 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-LAST_COMMIT_MESSAGE := $(shell git log -1 --pretty=format:'%B')
 CT_VERSION ?= v3.0.0
 
 TMPDIR := $(shell mktemp -d)
@@ -29,7 +30,7 @@ export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
 export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 
-HELM := $(shell bash -c "command -v helm")
+HELM := $(shell command -v helm)
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
 endif
@@ -61,21 +62,32 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 .PHONY: publish
 publish: export LC_COLLATE := C
 publish:
-	-git remote add publish $(GIT_REMOTE_URL) >/dev/null 2>&1
+	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
 	rm -rf gh-pages
 	git fetch publish gh-pages
 	git worktree add gh-pages/ publish/gh-pages
 	$(MAKE) GIT_REF=$(GIT_REF) all
+# Check if any existing files other than repo index.yamls have been modified or deleted and exit if
+# there are, showing the list of changed files for easier troubleshooting.
 	cd gh-pages && \
-		git add -A . && \
-		git commit -m "$(LAST_COMMIT_MESSAGE)" && \
+		export CHANGED=$$(git ls-files -md | grep -v index.yaml) && \
+		( \
+			[[ -z "$${CHANGED}" ]] || \
+			(printf "Aborting: following changed or deleted files:\n\n$${CHANGED}" && exit 1) \
+		)
+
+# Be doubly safe by only adding new files and index.yaml files to prevent overwrites.
+	export LAST_COMMIT_MESSAGE="$$(git log -1 --pretty=format:'%B')" && \
+	cd gh-pages && \
+		git add $$(git ls-files -o --exclude-standard) staging/index.yaml stable/index.yaml && \
+		git commit -m "$${LAST_COMMIT_MESSAGE}" && \
 		git push publish HEAD:gh-pages
 	git worktree remove gh-pages/
 	rm -rf gh-pages
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
-	curl -Ls https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
+	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
 endif
 
 # Deterministically create helm packages by:
@@ -87,8 +99,7 @@ endif
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): $$(wildcard $$(patsubst gh-pages/%.tgz,%/*,$$@)) $$(wildcard $$(patsubst gh-pages/%.tgz,%/*/*,$$@))
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/index.yaml
+$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
@@ -103,7 +114,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $(TMPDIR)/.helm/repository/local/i
 	rm -rf $(UNPACKED_TMP)
 
 %/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
-%/index.yaml:
+%/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
 	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
@@ -136,4 +147,3 @@ test.helm3: ct.test
 
 .PHONY: test
 test: ct.test
-
