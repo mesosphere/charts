@@ -13,58 +13,93 @@ gitResource(git,
     url="$(context.git.url)",
     revision="$(context.git.commit)")
 
-dind_task("publish", inputs=[git], steps=[
-  v1.Container(
-    name = "publish-charts",
-    workingDir =  "/workspace/src-git",
-    args = [
-      "/bin/bash", "-c",
-      """
-      git fetch origin master --unshallow
-      export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
-      git config --global user.name 'Dispatch CI'
-      git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-      make publish
-      """
-    ],
-    env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
-  )
-])
-
-dind_task("lint", inputs=[git], steps=[
-  v1.Container(
-    name = "lint-charts",
-    workingDir =  "/workspace/src-git",
-    args = [
-      "/bin/bash", "-c",
-      """
-      git fetch origin master --unshallow
-      make lint
-      """
+dind_task("publish",
+    inputs=[git],
+    steps=[
+        v1.Container(
+            name = "publish-charts",
+            workingDir =  "/workspace/src-git",
+            args = [
+              "/bin/bash", "-c",
+              """
+              git fetch origin master --unshallow
+              export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
+              git config --global user.name 'Dispatch CI'
+              git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
+              make publish
+              """
+            ],
+            env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
+        )
     ]
-  )
-])
+)
 
-dind_task("test", inputs=[git], deps=["lint"], steps=[
-  v1.Container(
-    name = "test-charts",
-    workingDir =  "/workspace/src-git",
-    args = [
-      "/bin/bash", "-c",
-      """
-      git fetch origin master --unshallow
-      make test
-      """
-    ],
-    resources = k8s.corev1.ResourceRequirements(
-      limits = {
-        "cpu": k8s.resource_quantity("1000m"),
-        "memory": k8s.resource_quantity("6Gi")
-      }
-    )
-  )
-])
+dind_task("lint",
+    inputs=[git],
+    steps=[
+        v1.Container(
+            name = "lint-charts",
+            workingDir =  "/workspace/src-git",
+            args = [
+              "/bin/bash", "-c",
+              """
+              git fetch origin master --unshallow
+              make lint
+              """
+            ]
+        )
+    ]
+)
 
-action(tasks=["test"], on=pullRequest())
+dind_task("test-helm2",
+    inputs=[git],
+    deps=["lint"],
+    steps=[
+      v1.Container(
+          name = "charts-helm2",
+          workingDir =  "/workspace/src-git",
+          args = [
+            "/bin/bash", "-c",
+            """
+            git fetch origin master --unshallow
+            make test.helm2
+            """
+          ],
+          resources = k8s.corev1.ResourceRequirements(
+            limits = {
+              "cpu": k8s.resource_quantity("1500m"),
+              "memory": k8s.resource_quantity("6Gi")
+            }
+          )
+      )
+  ]
+)
+
+dind_task("test-helm3",
+    inputs=[git],
+    deps=["lint"],
+    steps=[
+      v1.Container(
+          name = "charts-helm3",
+          workingDir =  "/workspace/src-git",
+          args = [
+            "/bin/bash", "-c",
+            """
+            git fetch origin master --unshallow
+            make test.helm3
+            """
+          ],
+          resources = k8s.corev1.ResourceRequirements(
+            limits = {
+              "cpu": k8s.resource_quantity("1500m"),
+              "memory": k8s.resource_quantity("6Gi")
+            }
+          )
+      )
+  ]
+)
+
+action(tasks=["test-helm2","test-helm3"], on=pullRequest())
 action(tasks=["publish"], on=push(branches=["master"]))
-action(tasks = ["test"], on = pullRequest(chatops = ["test"]))
+action(tasks = ["test-helm2"], on = pullRequest(chatops = ["test-helm2"]))
+action(tasks = ["test-helm3"], on = pullRequest(chatops = ["test-helm3"]))

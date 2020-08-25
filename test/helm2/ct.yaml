@@ -17,4 +17,4 @@ chart-repos:
   - kommander=https://mesosphere.github.io/kommander/charts
   - kubecost=https://kubecost.github.io/cost-analyzer
   - yakcl=https://mesosphere.github.io/yakcl/charts
-helm-extra-args: --timeout 600s
+helm-extra-args: --timeout 600
