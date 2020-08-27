@@ -248,7 +248,7 @@ install_dummylb() {
     curl ${CURL_RETRY_OPTS} -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
       sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
       docker_exec kubectl apply -f -
-      docker_exec kubectl wait --for=condition=Available --selector=app=dummylb deploy
+      docker_exec kubectl wait --timeout=180s --for=condition=Available --selector=app=dummylb deploy
     echo
 }
 
