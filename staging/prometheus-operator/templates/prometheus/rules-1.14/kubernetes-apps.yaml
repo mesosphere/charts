@@ -189,7 +189,7 @@ spec:
         runbook_url: {{ .Values.defaultRules.runbookUrl }}alert-name-kubehpareplicasmismatch
       expr: |-
         (kube_hpa_status_desired_replicas{job="kube-state-metrics", namespace=~"{{ $targetNamespace }}"}
-          !=
+          >
         kube_hpa_status_current_replicas{job="kube-state-metrics", namespace=~"{{ $targetNamespace }}"})
           and
         changes(kube_hpa_status_current_replicas[15m]) == 0
