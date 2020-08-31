@@ -4,6 +4,12 @@ metadata:
   name: {{ include "mtls-proxy.fullname" . }}
   labels:
 {{ include "mtls-proxy.labels" . | indent 4 }}
+  annotations:
+  {{- if .Values.service }}
+  {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
