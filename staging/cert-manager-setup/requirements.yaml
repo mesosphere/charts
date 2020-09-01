@@ -1,0 +1,5 @@
+dependencies:
+  - name: cert-manager
+    version: 0.10.2
+    repository: file://cert-manager
+    condition: installCertManager

@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "cert-manager.fullname" . }}
+  name: {{ printf "%s-%s" "controller" (include "cert-manager.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels:
     app: {{ template "cert-manager.name" . }}
@@ -16,7 +16,6 @@ spec:
       app: {{ template "cert-manager.name" . }}
       app.kubernetes.io/name: {{ template "cert-manager.name" . }}
       app.kubernetes.io/instance:  {{ .Release.Name }}
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
   {{- with .Values.strategy }}
   strategy:
     {{- . | toYaml | nindent 4 }}
