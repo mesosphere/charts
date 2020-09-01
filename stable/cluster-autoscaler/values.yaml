@@ -94,7 +94,7 @@ extraArgs:
 ## affinity: {}
 
 podDisruptionBudget: |
-  maxUnavailable: 1
+  maxUnavailable: 2
   # minAvailable: 2
 
 ## Node labels for pod assignment
