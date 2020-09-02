@@ -33,8 +33,8 @@ certificates:
       - Mesosphere, Inc.
     renewBefore: 360h
 
-clusterissuers:
-  - name: my-ca
-    spec:
-      ca:
-        secretName: my-certificate-secret
+clusterissuer:
+  name: my-ca
+  spec:
+    ca:
+      secretName: my-certificate-secret
