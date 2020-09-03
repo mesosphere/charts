@@ -31,7 +31,7 @@ spec:
       serviceAccountName: cert-manager-setup-crds
       containers:
         - name: cert-manager-setup-crds
-          image: "bitnami/kubectl:1.18.8"
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
           volumeMounts:
             - name: cert-manager-setup-crds
               mountPath: /etc/cert-manager-setup-crds
