@@ -14,5 +14,5 @@ serving:
     enabled: true
   namespaceKnativeServing:
     additionalLabels: {}
-  deployment:
+  configDeployment:
     registriesSkippingTagResolving: ""

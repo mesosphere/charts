@@ -423,8 +423,8 @@ data:
   # This is the Go import path for the binary that is containerized
   # and substituted here.
   queueSidecarImage: gcr.io/knative-releases/knative.dev/serving/cmd/queue:{{ .Chart.AppVersion }}
-  {{- if .Values.deployment.registriesSkippingTagResolving }}
-  registriesSkippingTagResolving: "{{ .Values.deployment.registriesSkippingTagResolving }}"
+  {{- if .Values.configDeployment.registriesSkippingTagResolving }}
+  registriesSkippingTagResolving: "{{ .Values.configDeployment.registriesSkippingTagResolving }}"
   {{- end }}
   _example: |
     ################################
