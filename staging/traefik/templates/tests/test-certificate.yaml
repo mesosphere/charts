@@ -82,7 +82,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-job-pod
-        image: bitnami/kubectl:latest
+        image: bitnami/kubectl:1.18.8
         command:
         - kubectl
         - apply
