@@ -7,3 +7,6 @@ customMetricsApiservice:
 
 namespaceKnativeServing:
   additionalLabels: {}
+
+configDeployment:
+  registriesSkippingTagResolving: ""
