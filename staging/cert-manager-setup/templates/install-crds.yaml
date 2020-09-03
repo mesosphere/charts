@@ -1,5 +1,6 @@
 {{- if .Values.installCertManager }}
 {{ if not (.Capabilities.APIVersions.Has "certmanager.k8s.io/v1alpha1") }}
+---
 {{.Files.Get "files/crds.yaml"}}
 {{ end }}
 ---
@@ -31,7 +32,7 @@ spec:
       serviceAccountName: cert-manager-setup-crds
       containers:
         - name: cert-manager-setup-crds
-          image: "bitnami/kubectl:1.18.8@sha256:817448e45d235d833c1cfdd3fd853668573b21d28fa6b95f1a6b24123db6eba7"
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
           volumeMounts:
             - name: cert-manager-setup-crds
               mountPath: /etc/cert-manager-setup-crds
