@@ -88,6 +88,12 @@ extraArgs:
   # scale-down-unneeded-time: 10m
   # skip-nodes-with-local-storage: false
   # skip-nodes-with-system-pods: true
+  # How long to wait before we give up provisioning a new node. We shouldn't ever give up
+  # and this is controversial as we should warn a user that we have given up, for now set it up to an hour at
+  # least and we should have metrics that alert the user when this thresh-hold of an hour is hit.
+  max-node-provision-time: 60m0s
+  # Maximum time from last recorded successful autoscaler run before automatic restart
+  # max-failing-time: 5m0s
 
 ## Affinity for pod assignment
 ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
