@@ -23,6 +23,21 @@ data:
     gpgcheck=1
     gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
     enabled=1
+
+    # C7.7.1908
+    [C7.7.1908-base]
+    name=CentOS-7.7.1908 - Base
+    baseurl=http://vault.centos.org/7.7.1908/os/$basearch/
+    gpgcheck=1
+    gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+    enabled=1
+
+    [C7.7.1908-updates]
+    name=CentOS-7.7.1908 - Updates
+    baseurl=http://vault.centos.org/7.7.1908/updates/$basearch/
+    gpgcheck=1
+    gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+    enabled=1
 {{- end }}
 ---
 kind: ConfigMap
