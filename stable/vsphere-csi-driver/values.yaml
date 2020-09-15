@@ -1,0 +1,65 @@
+replicas: 1
+
+image:
+  repository: gcr.io/cloud-provider-vsphere/csi/release/driver
+  version:
+  pullPolicy: Always
+
+syncer:
+  repository: gcr.io/cloud-provider-vsphere/csi/release/syncer
+  version:
+  pullPolicy: Always
+
+serviceAccount:
+  create: true
+
+enableTopologyZone: true
+
+tolerations:
+  - operator: "Exists"
+    effect: NoSchedule
+  - operator: "Exists"
+    effect: NoExecute
+
+liveness:
+  image:
+    repository: quay.io/k8scsi/livenessprobe
+    tag: v2.1.0
+
+registrar:
+  node:
+    image:
+      repository: quay.io/k8scsi/csi-node-driver-registrar
+      tag: v2.0.1
+  verbose: 5
+
+provisioner:
+  image:
+    repository: quay.io/k8scsi/csi-provisioner
+    tag: v2.0.1
+  timeout: 300s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 100
+  verbose: 4
+
+attacher:
+  image:
+    repository: quay.io/k8scsi/csi-attacher
+    tag: v2.2.0
+  timeout: 300s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 20
+  verbose: 4
+
+resizer:
+  image:
+    repository: quay.io/k8scsi/csi-resizer
+    tag: v1.0.0
+  verbose: 4
+
+storageclass:
+  isDefault: true
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer

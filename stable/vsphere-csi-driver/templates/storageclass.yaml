@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: vsphere-default
+  annotations:
+    kubernetes.io/description: vSphere Storage class
+{{- if .Values.storageclass.isDefault }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+provisioner: csi.vsphere.vmware.com
+allowVolumeExpansion: true
+volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
+reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
