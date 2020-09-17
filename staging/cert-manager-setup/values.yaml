@@ -82,7 +82,3 @@ clusterissuer: {}
 # This will work only in case when a cert-manager is installed in
 # `cert-manager` namespace.
 installCertManager: true
-
-cert-manager:
-  # This wrapper chart no longer installs CRDs, instead we rely on the upstream chart.
-  installCRDs: true
