@@ -1,7 +1,7 @@
 {{- if .Values.certificates }}
 {{- range .Values.certificates }}
 ---
-apiVersion: certmanager.io/v1
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ .name }}
@@ -39,9 +39,6 @@ spec:
     - {{ . | quote -}}
   {{- end }}
 {{- end }}
-  keyAlgorithm: {{ .keyAlgorithm | default "rsa" }}
-  keyEncoding: {{ .keyEncoding | default "pkcs1" }}
-  keySize: {{ .keySize | default "2048" }}
 {{- if .organization }}
   organization:
   {{- range .organization }}
