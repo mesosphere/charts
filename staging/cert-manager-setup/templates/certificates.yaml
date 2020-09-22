@@ -39,6 +39,10 @@ spec:
     - {{ . | quote -}}
   {{- end }}
 {{- end }}
+  privateKey:
+    algorithm: {{ .keyAlgorithm | default "rsa" }}
+    encoding: {{ .keyEncoding | default "pkcs1" }}
+    size: {{ .keySize | default "2048" }}
 {{- if .organization }}
   subject:
     organizations:

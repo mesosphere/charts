@@ -24,6 +24,9 @@ certificates:
       - www.example.com
     ipAddresses:
       - 127.0.0.1
+    keyAlgorithm: rsa
+    keyEncoding: pkcs8
+    keySize: 4096
     # array of strings
     organization:
       - D2iQ, Inc.
