@@ -102,14 +102,14 @@ dind_task("test-helm3",
   ]
 )
 
-def bump_addon(repo_name, task_name, addon_git_dir, chart_path):
+def bump_addon(task_name, addon_git_dir):
     """
     Automatically creates PRs on the source repo to update helm charts within addon yaml definitions.
     """
     task(task_name, inputs=[git, addon_git_dir], steps=[
         v1.Container(
             name = task_name,
-            image = "mesosphere/bump-charts:master",
+            image = "mesosphere/bump-charts:master", # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
             workingDir =  "/workspace/" + addon_git_dir,
             command = ["/bin/sh", "-c"],
             args = [
@@ -126,8 +126,12 @@ def bump_addon(repo_name, task_name, addon_git_dir, chart_path):
                 git config --local user.name 'Dispatch CI'
                 git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
                 cp /bump_charts/update_single_addon.py /bump_charts/bump_charts.py .
-                python3 update_single_addon.py --addon-name {} --chart-file-path {} --repo-name {}
-                """.format("kommander", "/workspace/{}/{}".format(git, chart_path), repo_name)
+                cd /workspace/{}
+                git fetch --depth=3
+                CHANGED_FILES=$(git diff --name-only HEAD^)
+                cd /workspace/{}
+                python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {}
+                """.format(git, addon_git_dir, addon_git_dir)
             ],
             resources = k8s.corev1.ResourceRequirements(
                 limits = {
@@ -146,17 +150,26 @@ def bump_addon(repo_name, task_name, addon_git_dir, chart_path):
     return task_name
 
 
-kommander_chart_path = "stable/kommander/Chart.yaml"
 kubeaddons_kommander_git = "kubeaddons-kommander"
 git_resource(
   kubeaddons_kommander_git,
-  url="https://github.com/mesosphere/kubeaddons-kommander",
+  url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
   revision="master")
-do_bump_kommander = bump_addon('kubeaddons-kommander', "bump-kommander", kubeaddons_kommander_git, kommander_chart_path)
+do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
 
 
+kba_git = "kubernetes-base-addons"
+git_resource(
+  kba_git,
+  url="https://github.com/mesosphere/" + kba_git,
+  revision="master")
+do_bump_addon = bump_addon("bump-addon", kba_git)
+
+
+kommander_chart_path = "stable/kommander/Chart.yaml"
 action(tasks=["test-helm2","test-helm3"], on=pull_request())
 action(tasks=["publish"], on=push(branches=["master"]))
 action(tasks = ["test-helm2"], on = pull_request(chatops = ["test-helm2"]))
 action(tasks = ["test-helm3"], on = pull_request(chatops = ["test-helm3"]))
-action(tasks = [do_bump_kommander], on = pull_request(paths = [kommander_chart_path]))
+action(tasks=[do_bump_kommander], on=push(branches = ["master"], paths = [kommander_chart_path]))
+action(tasks=[do_bump_addon], on=push(branches = ["master"], paths = ["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
