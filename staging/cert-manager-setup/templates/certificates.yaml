@@ -40,8 +40,8 @@ spec:
   {{- end }}
 {{- end }}
   privateKey:
-    algorithm: {{ .keyAlgorithm | default "rsa" }}
-    encoding: {{ .keyEncoding | default "pkcs1" }}
+    algorithm: {{ .keyAlgorithm | default "RSA" }}
+    encoding: {{ .keyEncoding | default "PKCS1" }}
     size: {{ .keySize | default "2048" }}
 {{- if .organization }}
   subject:
