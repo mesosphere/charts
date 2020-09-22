@@ -1,18 +1,4 @@
 {{- if .Values.installCertManager }}
-{{ if not (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
----
-{{.Files.Get "files/certificates.cert-manager.io-crd.yaml"}}
----
-{{.Files.Get "files/certificaterequests.cert-manager.io-crd.yaml"}}
----
-{{.Files.Get "files/challenges.acme.cert-manager.io-crd.yaml"}}
----
-{{.Files.Get "files/clusterissuers.cert-manager.io-crd.yaml"}}
----
-{{.Files.Get "files/issuers.cert-manager.io-crd.yaml"}}
----
-{{.Files.Get "files/orders.acme.cert-manager.io-crd.yaml"}}
-{{ end }}
 ---
 apiVersion: v1
 kind: ConfigMap
