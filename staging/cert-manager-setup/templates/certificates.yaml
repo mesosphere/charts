@@ -40,10 +40,11 @@ spec:
   {{- end }}
 {{- end }}
 {{- if .organization }}
-  organization:
-  {{- range .organization }}
-    - {{ . | quote -}}
-  {{- end }}
+  subject:
+    organizations:
+    {{- range .organization }}
+      - {{ . | quote -}}
+    {{- end }}
 {{- end }}
   renewBefore: {{ .renewBefore | default "null" }}
 {{- end }}
