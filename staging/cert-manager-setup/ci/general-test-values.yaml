@@ -25,7 +25,7 @@ certificates:
     ipAddresses:
       - 127.0.0.1
     keyAlgorithm: rsa
-    keyEncoding: pksc8
+    keyEncoding: pkcs8
     keySize: 4096
     # array of strings
     organization:
