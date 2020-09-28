@@ -1,4 +1,8 @@
+{{- if  (.Capabilities.APIVersions.Has "certmanager.k8s.io/v1") }}
+apiVersion: certmanager.k8s.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Certificate
 metadata:
   name: dex
