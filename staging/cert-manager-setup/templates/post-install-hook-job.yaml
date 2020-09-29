@@ -18,6 +18,6 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ .Chart.Name }}
-        image: bitnami/kubectl:latest
+        image: bitnami/kubectl:1.18.8-debian-10-r15
         imagePullPolicy: IfNotPresent
-        command: ["kubectl", "wait", "--for=condition=Available", "--timeout=360s", "apiservice", "v1beta1.webhook.certmanager.k8s.io"]
+        command: ["sleep", "30"]

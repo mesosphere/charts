@@ -1,7 +1,7 @@
 {{- if .Values.certificates }}
 {{- range .Values.certificates }}
 ---
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: {{ .name }}
@@ -39,14 +39,16 @@ spec:
     - {{ . | quote -}}
   {{- end }}
 {{- end }}
-  keyAlgorithm: {{ .keyAlgorithm | default "rsa" }}
-  keyEncoding: {{ .keyEncoding | default "pkcs1" }}
-  keySize: {{ .keySize | default "2048" }}
+  privateKey:
+    algorithm: {{ upper (.keyAlgorithm | default "RSA") }}
+    encoding: {{ upper (.keyEncoding | default "PKCS1") }}
+    size: {{ .keySize | default "2048" }}
 {{- if .organization }}
-  organization:
-  {{- range .organization }}
-    - {{ . | quote -}}
-  {{- end }}
+  subject:
+    organizations:
+    {{- range .organization }}
+      - {{ . | quote -}}
+    {{- end }}
 {{- end }}
   renewBefore: {{ .renewBefore | default "null" }}
 {{- end }}

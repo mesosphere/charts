@@ -20,8 +20,8 @@ spec:
       namespace: {{ .Values.federate.systemNamespace.name }}
       chartReference:
         chart: mtls-proxy
-        repo: https://mesosphere.github.io/charts/stable
-        version: 0.1.1
+        repo: {{ if and .Values.global.federate.airgapped .Values.global.federate.airgapped.enabled }}{{ .Values.global.federate.airgapped.chartRepo }}{{ else }}https://mesosphere.github.io/charts/stable{{ end }}
+        version: 0.1.2
         values: |
           ---
           target: {{ required "alertmanager address must be set" .Values.alertmanagerAddress }}
@@ -29,6 +29,10 @@ spec:
           ingress:
             enabled: false
           service:
+{{- if .Values.global.federate.airgapped.enabled }}
+            annotations:
+              service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+{{- end }}
             type: LoadBalancer
             port: 443
           deployment:

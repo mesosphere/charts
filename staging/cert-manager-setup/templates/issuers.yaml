@@ -1,7 +1,7 @@
 {{- if .Values.issuers }}
 {{- range .Values.issuers }}
 ---
-apiVersion: certmanager.k8s.io/v1alpha1
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .name }}

@@ -4,23 +4,23 @@ dependencies:
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-federation
-    version: "0.4.2"
+    version: "0.4.7"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-federation.enabled, global.kommander-federation.enabled
   - name: kommander-licensing
-    version: "0.4.2"
+    version: "0.4.7"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-licensing.enabled, global.kommander-licensing.enabled
   - name: auto-provisioning
-    version: "0.4.2"
+    version: "0.4.7"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: auto-provisioning.enabled, global.auto-provisioning.enabled
   - name: kommander-ui
-    version: "6.22.0"
+    version: "6.31.6"
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
   - name: kubecost
-    version: "0.1.12"
+    version: "0.1.15"
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kubecost.enabled
   - name: grafana
