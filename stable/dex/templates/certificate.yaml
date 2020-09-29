@@ -1,3 +1,4 @@
+---
 {{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
 apiVersion: cert-manager.io/v1
 {{- else }}
@@ -18,10 +19,18 @@ spec:
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
+  # The use of the common name field has been deprecated since 2000 and is
+  # discouraged from being used.
   commonName: dex
   duration: 87600h
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  subject:
+    organization:
+      - D2iQ
+{{- else }}
   organization:
     - D2iQ
+{{- end }}
   dnsNames:
     - dex-kubeaddons
     - dex-kubeaddons.kubeaddons
