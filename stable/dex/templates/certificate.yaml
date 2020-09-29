@@ -25,7 +25,7 @@ spec:
   duration: 87600h
 {{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
   subject:
-    organization:
+    organizations:
       - D2iQ
 {{- else }}
   organization:
