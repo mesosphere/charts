@@ -11,9 +11,15 @@ metadata:
   name: cert-delete-job
   namespace: {{ .Release.Namespace }}
 rules:
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+- apiGroups: ["cert-manager.io"]
+  resources: ["certificates"]
+  verbs: ["get", "list", "watch", "delete"]
+{{- else }}
 - apiGroups: ["certmanager.k8s.io"]
   resources: ["certificates"]
   verbs: ["get", "list", "watch", "delete"]
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
