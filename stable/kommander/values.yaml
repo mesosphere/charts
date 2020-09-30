@@ -266,7 +266,6 @@ kubecost:
         enabled: false
       query:
         enabled: true
-        logLevel: error
         timeout: 3m
         maxConcurrent: 10
         # Name of HTTP request header used for dynamic prefixing of UI links and redirects.
