@@ -15,7 +15,11 @@ rules:
 - apiGroups: [""]
   resources: ["configmaps"]
   verbs: ["get", "list", "watch"]
+{{- if (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+- apiGroups: ["cert-manager.io"]
+{{- else }}
 - apiGroups: ["certmanager.k8s.io"]
+{{- end }}
   resources: ["certificates"]
   verbs: ["get", "list", "watch", "create", "update"]
 ---
