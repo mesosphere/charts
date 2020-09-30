@@ -1,5 +1,9 @@
 ---
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Certificate
 metadata:
   name: istio-ca
@@ -12,9 +16,14 @@ spec:
   dnsNames:
   - ca.istio.io
   duration: 87600h
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  subject:
+    organizations:
+      - D2iQ
+{{- else }}
   organization:
-  - D2iQ
-  secretName: istio-ca
+    - D2iQ
+{{- end }}  secretName: istio-ca
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
