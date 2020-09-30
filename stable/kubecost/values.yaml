@@ -114,11 +114,6 @@ cost-analyzer:
         log.format: json
         storage.tsdb.min-block-duration: 2h
         storage.tsdb.max-block-duration: 2h
-      # extraVolumes: # TODO
-      # - name: object-store-volume
-      #   secret:
-      #     # Ensure this secret name matches thanos.storeSecretName
-      #     secretName: kubecost-thanos
       enableAdminApi: true
       service:
         gRPC:
@@ -132,7 +127,6 @@ cost-analyzer:
         - --tsdb.path=/data/
         - --prometheus.url=http://127.0.0.1:9090
         - --reloader.config-file=/etc/config/prometheus.yml
-        # - --objstore.config-file=/etc/config/object-store.yaml # TODO
         # Start of time range limit to serve. Thanos sidecar will serve only metrics, which happened
         # later than this value. Option can be a constant time in RFC3339 format or time duration
         # relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.
@@ -155,8 +149,6 @@ cost-analyzer:
         - name: storage-volume
           mountPath: /data
           subPath: ""
-        # - name: object-store-volume # TODO
-        #   mountPath: /etc/config
     alertmanager:
       enabled: true
       image:
@@ -175,20 +167,6 @@ cost-analyzer:
       persistentVolume:
         enabled: false
     serverFiles:
-      rules:
-        groups:
-          - name: CPU
-            rules:
-              - expr: sum(rate(container_cpu_usage_seconds_total{container_name!=""}[5m]))
-                record: cluster:cpu_usage:rate5m
-              - expr: rate(container_cpu_usage_seconds_total{container_name!=""}[5m])
-                record: cluster:cpu_usage_nosum:rate5m
-              - expr: avg(irate(container_cpu_usage_seconds_total{container_name!="POD", container_name!=""}[5m])) by (container_name,pod_name,namespace)
-                record: kubecost_container_cpu_usage_irate
-              - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""}) by (container_name,pod_name,namespace)
-                record: kubecost_container_memory_working_set_bytes
-              - expr: sum(container_memory_working_set_bytes{container_name!="POD",container_name!=""})
-                record: kubecost_cluster_memory_working_set_bytes
       alerts:
         groups:
           - name: Kubecost
@@ -264,6 +242,3 @@ cost-analyzer:
       enabled: false
     compact:
       enabled: false
-    # This secret name should match the sidecar configured secret name volume
-    # in the prometheus.server.extraVolumes entry
-    # storeSecretName: kubecost-thanos # TODO
