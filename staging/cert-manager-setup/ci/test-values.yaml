@@ -1,5 +1,24 @@
 # These test values are used for chart testing
 # DO NOT EDIT unless you know what you are doing
+
+issuers:
+  - name: kubernetes-root-issuer
+    secretName: kubernetes-root-ca
+
+certificates:
+  - name: kubernetes-intermediate-ca
+    # where to store this certificate
+    secretName: kubernetes-intermediate-ca
+    issuerRef:
+      name: kubernetes-root-issuer
+      kind: Issuer
+    # These are the default usages for reference
+    usages:
+      - "digital signature"
+      - "key encipherment"
+    commonName: cert-manager
+    duration: 87600h
+
 clusterissuers:
   - name: kubernetes-ca
     spec:
