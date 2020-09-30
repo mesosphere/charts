@@ -3,8 +3,11 @@ apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
   annotations:
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+    cert-manager.io/inject-ca-from: {{ .Release.Namespace }}/dstorageclass-serving-cert
+{{- else }}
     certmanager.k8s.io/inject-ca-from: {{ .Release.Namespace }}/dstorageclass-serving-cert
-  creationTimestamp: null
+{{- end }}
   name: dstorageclass-validating-webhook-configuration
 webhooks:
 - clientConfig:
