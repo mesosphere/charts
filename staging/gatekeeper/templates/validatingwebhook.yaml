@@ -12,7 +12,11 @@ metadata:
     {{- include "gatekeeper.commonLabels" . | nindent 4 }}
   annotations:
   {{- if .Values.webhook.certManager.enabled }}
+    {{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace (include "gatekeeper.rootCACertificate" .) | quote }}
+    {{- else }}
     certmanager.k8s.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace (include "gatekeeper.rootCACertificate" .) | quote }}
+    {{- end }}
   {{- end }}
 webhooks:
 - admissionReviewVersions:
@@ -54,7 +58,11 @@ webhooks:
 ---
 # Create a selfsigned Issuer, in order to create a root CA certificate for
 # signing webhook serving certificates
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Issuer
 metadata:
   name: {{ include "gatekeeper.selfSignedIssuer" . }}
@@ -64,7 +72,11 @@ spec:
   selfSigned: {}
 ---
 # Generate a CA Certificate used to sign certificates for the webhook
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Certificate
 metadata:
   name: {{ include "gatekeeper.rootCACertificate" . }}
@@ -79,7 +91,11 @@ spec:
   isCA: true
 ---
 # Create an Issuer that uses the above generated CA certificate to issue certs
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Issuer
 metadata:
   name: {{ include "gatekeeper.rootCAIssuer" . }}
@@ -90,7 +106,11 @@ spec:
     secretName: {{ include "gatekeeper.rootCACertificate" . }}
 ---
 # Finally, generate a serving certificate for the webhook to use
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Certificate
 metadata:
   name: {{ include "gatekeeper.servingCertificate" . }}
