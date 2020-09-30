@@ -23,7 +23,8 @@ spec:
 {{- else }}
   organization:
     - D2iQ
-{{- end }}  secretName: istio-ca
+{{- end }}
+  secretName: istio-ca
   issuerRef:
     name: kubernetes-ca
     kind: ClusterIssuer
