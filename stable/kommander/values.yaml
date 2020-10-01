@@ -16,9 +16,6 @@ kommander-federation:
 kommander-licensing:
   enabled: true
 
-auto-provisioning:
-  enabled: false
-
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
