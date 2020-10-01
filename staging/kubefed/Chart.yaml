@@ -1,9 +1,13 @@
-apiVersion: v1
-description: KubeFed helm chart
 name: kubefed
-version: 0.0.4
-appVersion: v0.1.0-rc6
-home: https://github.com/kubernetes-sigs/kubefed
+apiVersion: v2
+description: KubeFed helm chart (temp)
+version: 0.0.5
+home: "https://github.com/kubernetes-sigs/kubefed"
+appVersion: "0.0.4"
 maintainers:
-  - name: s12chung
-  - name: alejandroEsc
+- name: alejandroesc
+dependencies:
+- name: controllermanager
+  version: 0.0.3
+  repository: "file://./subcharts/controllermanager/"  # Required but unused.
+  condition: controllermanager.enabled
