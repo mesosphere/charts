@@ -13,6 +13,10 @@ spec:
   commonName: dstorageclass-webhook-service.{{ .Release.Namespace }}.svc
   dnsNames:
   - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}
+  - dstorageclass-webhook-service
   issuerRef:
     kind: '{{ .Values.issuer.kind }}'
     name: {{ .Values.issuer.name }}

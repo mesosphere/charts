@@ -6,19 +6,6 @@
 ##
 controllermanager:
   enabled: true
-  annotations: {}
-  replicaCount: 2
-  repository: quay.io/kubernetes-multicluster
-  image: kubefed
-  tag: canary
-  imagePullPolicy: IfNotPresent
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 100m
-      memory: 64Mi
   clusterAvailableDelay:
   clusterUnavailableDelay:
   leaderElectLeaseDuration:
@@ -34,17 +21,47 @@ controllermanager:
     adoptResources:
   ## Value of feature gates item should be either `Enabled` or `Disabled`
   featureGates:
-    featureGates:
-      CrossClusterServiceDiscovery:
-      FederatedIngress:
-      PushReconciler:
-      SchedulerPreferences:
+    PushReconciler:
+    SchedulerPreferences:
+    CrossClusterServiceDiscovery:
+    FederatedIngress:
+
+  controller:
+    annotations: {}
+    replicaCount: 2
+    repository: quay.io/kubernetes-multicluster
+    image: kubefed
+    tag: canary
+    imagePullPolicy: IfNotPresent
+    logLevel: 2
+    forceRedeployment: false
+    env: {}
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+  webhook:
+    annotations: {}
+    repository: quay.io/kubernetes-multicluster
+    image: kubefed
+    tag: canary
+    imagePullPolicy: IfNotPresent
+    logLevel: 8
+    forceRedeployment: false
+    env: {}
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
 
   certManager:
     enabled: false
-
-  webhook:
-    annotations: {}
 
 ## Configuration global values for all charts
 ##
