@@ -34,11 +34,11 @@ certificates:
 # Supported values format
 
 ```yaml
-clusterissuer:
-  name: clusterissuer-name
-  spec:
-    ca:
-      secretName: clusterissuer-secret
+clusterissuers:
+  - name: clusterissuer-name
+    spec:
+      ca:
+        secretName: clusterissuer-secret
 ```
 
 In the given example we create a `ClusterIssuer` named `clusterissuer-name` with the `ca` type. The `ca` type expects a secret that contains the Certificate Authority (CA) to be used by this `ClusterIssuer`. The spec follows the original `cert-manager` [spec](https://docs.cert-manager.io/en/latest/tasks/issuers/setup-ca.html#creating-an-issuer-referencing-the-secret).

@@ -81,13 +81,6 @@ clusterissuers: []
 #      ca:
 #        secretName: my-certificate-secret
 
-# DEPRECATED, please use the above issuers, certificates and clusterissuers
-clusterissuer: {}
-  # name: kubernetes-ca
-  # spec:
-  #   ca:
-  #     secretName: kubernetes-intermediate-ca
-
 # When installing addons on a cluster that already has cert-manager
 # installed with webhook validation enabled this value should be set to
 # false. This is necessary because CRDs and Webhook (APIService) objects

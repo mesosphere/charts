@@ -16,9 +16,6 @@ kommander-federation:
 kommander-licensing:
   enabled: true
 
-auto-provisioning:
-  enabled: false
-
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
@@ -266,7 +263,6 @@ kubecost:
         enabled: false
       query:
         enabled: true
-        logLevel: error
         timeout: 3m
         maxConcurrent: 10
         # Name of HTTP request header used for dynamic prefixing of UI links and redirects.

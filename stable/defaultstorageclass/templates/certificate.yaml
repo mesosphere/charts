@@ -1,5 +1,9 @@
 # This file is generated from `update.sh`. DO NOT EDIT.
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
 apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
 kind: Certificate
 metadata:
   creationTimestamp: null
@@ -9,6 +13,10 @@ spec:
   commonName: dstorageclass-webhook-service.{{ .Release.Namespace }}.svc
   dnsNames:
   - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc.cluster
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}.svc
+  - dstorageclass-webhook-service.{{ .Release.Namespace }}
+  - dstorageclass-webhook-service
   issuerRef:
     kind: '{{ .Values.issuer.kind }}'
     name: {{ .Values.issuer.name }}

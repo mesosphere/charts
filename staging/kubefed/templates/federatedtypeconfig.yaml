@@ -3,11 +3,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: clusterroles.rbac.authorization.k8s.io
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation"
 spec:
   federatedType:
     group: types.kubefed.io
@@ -27,11 +22,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: configmaps
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation"
 spec:
   federatedType:
     group: types.kubefed.io
@@ -50,11 +40,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: deployments.apps
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -74,11 +59,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: ingresses.extensions
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -98,11 +78,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: jobs.batch
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -122,11 +97,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: namespaces
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -145,11 +115,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: replicasets.apps
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -169,11 +134,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: secrets
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -192,11 +152,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: serviceaccounts
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
@@ -215,11 +170,6 @@ apiVersion: core.kubefed.io/v1beta1
 kind: FederatedTypeConfig
 metadata:
   name: services
-  namespace: {{ .Release.Namespace }}
-  annotations:
-    "helm.sh/hook": pre-install
-    "helm.sh/hook-weight": "-3"
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   federatedType:
     group: types.kubefed.io
