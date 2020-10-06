@@ -1,7 +1,7 @@
 dependencies:
 - name: kubeaddons-catalog
   repository: https://mesosphere.github.io/charts/staging
-  version: 0.1.12
+  version: 0.1.13
 - name: kommander-federation
   repository: https://mesosphere.github.io/yakcl/charts
   version: 0.5.0
@@ -17,5 +17,5 @@ dependencies:
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.6.3
-digest: sha256:323358f24656e432d235c1d537973d24d8152f89997475d165f4bf0291994221
-generated: "2020-10-01T11:59:16.128042372+01:00"
+digest: sha256:394847239b1f30beabda74ae0663ed1b69d0d002500218b28549e1609d2d2ae4
+generated: "2020-10-05T22:00:27.966068+02:00"
