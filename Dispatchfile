@@ -4,7 +4,7 @@
 
 
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/git@0.0.7", "git_resource")
-#TODO @faiq: once 0.0.5 of this package is released switch to that ref
+# TODO @faiq: once 0.0.5 of this package is released switch to that ref
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/k8s@0.0.7", "secret_var")
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.7", "pull_request", "push")
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
@@ -13,94 +13,95 @@ load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bum
 git = "src-git"
 
 git_resource(git,
-    url="https://github.com/mesosphere/charts",
-    revision="$(context.git.commit)")
+             url="https://github.com/mesosphere/charts",
+             revision="$(context.git.commit)")
 
 dind_task("publish",
-    inputs=[git],
-    steps=[
-        v1.Container(
-            name = "publish-charts",
-            workingDir =  "/workspace/src-git",
-            args = [
-              "/bin/bash", "-c",
-              """
+          inputs=[git],
+          steps=[
+              v1.Container(
+                  name="publish-charts",
+                  workingDir="/workspace/src-git",
+                  args=[
+                      "/bin/bash", "-c",
+                      """
               git fetch origin master --unshallow
               export GIT_REMOTE_URL=https://mesosphere:${GITHUB_USER_TOKEN}@github.com/mesosphere/charts.git
               git config --global user.name 'Dispatch CI'
               git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
               make publish
               """
-            ],
-            env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secret_var("scmtoken", "password"))]
-        )
-    ]
-)
+                  ],
+                  env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secret_var("scmtoken", "password"))]
+              )
+          ]
+          )
 
 dind_task("lint",
-    inputs=[git],
-    steps=[
-        v1.Container(
-            name = "lint-charts",
-            workingDir =  "/workspace/src-git",
-            args = [
-              "/bin/bash", "-c",
-              """
+          inputs=[git],
+          steps=[
+              v1.Container(
+                  name="lint-charts",
+                  workingDir="/workspace/src-git",
+                  args=[
+                      "/bin/bash", "-c",
+                      """
               git fetch origin master --unshallow
               make lint
               """
-            ]
-        )
-    ]
-)
+                  ]
+              )
+          ]
+          )
 
 dind_task("test-helm2",
-    inputs=[git],
-    deps=["lint"],
-    steps=[
-      v1.Container(
-          name = "charts-helm2",
-          workingDir =  "/workspace/src-git",
-          args = [
-            "/bin/bash", "-c",
-            """
+          inputs=[git],
+          deps=["lint"],
+          steps=[
+              v1.Container(
+                  name="charts-helm2",
+                  workingDir="/workspace/src-git",
+                  args=[
+                      "/bin/bash", "-c",
+                      """
             git fetch origin master --unshallow
             make test.helm2
             """
-          ],
-          resources = k8s.corev1.ResourceRequirements(
-            limits = {
-              "cpu": k8s.resource_quantity("1500m"),
-              "memory": k8s.resource_quantity("6Gi")
-            }
+                  ],
+                  resources=k8s.corev1.ResourceRequirements(
+                      limits={
+                          "cpu": k8s.resource_quantity("1500m"),
+                          "memory": k8s.resource_quantity("6Gi")
+                      }
+                  )
+              )
+          ]
           )
-      )
-  ]
-)
 
 dind_task("test-helm3",
-    inputs=[git],
-    deps=["lint"],
-    steps=[
-      v1.Container(
-          name = "charts-helm3",
-          workingDir =  "/workspace/src-git",
-          args = [
-            "/bin/bash", "-c",
-            """
+          inputs=[git],
+          deps=["lint"],
+          steps=[
+              v1.Container(
+                  name="charts-helm3",
+                  workingDir="/workspace/src-git",
+                  args=[
+                      "/bin/bash", "-c",
+                      """
             git fetch origin master --unshallow
             make test.helm3
             """
-          ],
-          resources = k8s.corev1.ResourceRequirements(
-            limits = {
-              "cpu": k8s.resource_quantity("1500m"),
-              "memory": k8s.resource_quantity("6Gi")
-            }
+                  ],
+                  resources=k8s.corev1.ResourceRequirements(
+                      limits={
+                          "cpu": k8s.resource_quantity("1500m"),
+                          "memory": k8s.resource_quantity("6Gi")
+                      }
+                  )
+              )
+          ]
           )
-      )
-  ]
-)
+
 
 def bump_addon(task_name, addon_git_dir):
     """
@@ -108,11 +109,11 @@ def bump_addon(task_name, addon_git_dir):
     """
     task(task_name, inputs=[git, addon_git_dir], steps=[
         v1.Container(
-            name = task_name,
-            image = "mesosphere/bump-charts:master", # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
-            workingDir =  "/workspace/" + addon_git_dir,
-            command = ["/bin/sh", "-c"],
-            args = [
+            name=task_name,
+            image="mesosphere/bump-charts:master",  # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
+            workingDir="/workspace/" + addon_git_dir,
+            command=["/bin/sh", "-c"],
+            args=[
                 """
                 set -e
                 echo "$GPG_PRIVATE_KEY" > gpg_private_key
@@ -133,17 +134,17 @@ def bump_addon(task_name, addon_git_dir):
                 python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {}
                 """.format(git, addon_git_dir, addon_git_dir)
             ],
-            resources = k8s.corev1.ResourceRequirements(
-                limits = {
+            resources=k8s.corev1.ResourceRequirements(
+                limits={
                     "cpu": k8s.resource_quantity("1000m"),
                     "memory": k8s.resource_quantity("4Gi")
                 }
             ),
             env=[k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
-                k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
-                k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
-                k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
-            ]
+                 k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
+                 k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
+                 k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
+                 ]
         )
     ])
 
@@ -152,24 +153,28 @@ def bump_addon(task_name, addon_git_dir):
 
 kubeaddons_kommander_git = "kubeaddons-kommander"
 git_resource(
-  kubeaddons_kommander_git,
-  url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
-  revision="master")
+    kubeaddons_kommander_git,
+    url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
+    revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
 
 
 kba_git = "kubernetes-base-addons"
 git_resource(
-  kba_git,
-  url="https://github.com/mesosphere/" + kba_git,
-  revision="master")
+    kba_git,
+    url="https://github.com/mesosphere/" + kba_git,
+    revision="master")
 do_bump_addon = bump_addon("bump-addon", kba_git)
 
-
 kommander_chart_path = "stable/kommander/Chart.yaml"
-action(tasks=["test-helm2","test-helm3"], on=pull_request())
+
+# Robot Actions
+action(tasks=["test-helm2", "test-helm3"], on=pull_request())
 action(tasks=["publish"], on=push(branches=["master"]))
-action(tasks = ["test-helm2"], on = pull_request(chatops = ["test-helm2"]))
-action(tasks = ["test-helm3"], on = pull_request(chatops = ["test-helm3"]))
-action(tasks=[do_bump_kommander], on=push(branches = ["master"], paths = [kommander_chart_path]))
-action(tasks=[do_bump_addon], on=push(branches = ["master"], paths = ["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
+action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
+action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
+
+# Chatops Actions
+action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
+action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
+action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
