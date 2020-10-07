@@ -165,11 +165,15 @@ git_resource(
   revision="master")
 do_bump_addon = bump_addon("bump-addon", kba_git)
 
-
 kommander_chart_path = "stable/kommander/Chart.yaml"
+
+# Robot Actions
 action(tasks=["test-helm2","test-helm3"], on=pull_request())
 action(tasks=["publish"], on=push(branches=["master"]))
-action(tasks = ["test-helm2"], on = pull_request(chatops = ["test-helm2"]))
-action(tasks = ["test-helm3"], on = pull_request(chatops = ["test-helm3"]))
 action(tasks=[do_bump_kommander], on=push(branches = ["master"], paths = [kommander_chart_path]))
 action(tasks=[do_bump_addon], on=push(branches = ["master"], paths = ["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
+
+# Chatops Actions
+action(tasks = ["test-helm2","test-helm3"], on = pull_request(chatops = ["test"]))
+action(tasks = ["test-helm2"], on = pull_request(chatops = ["test-helm2"]))
+action(tasks = ["test-helm3"], on = pull_request(chatops = ["test-helm3"]))
