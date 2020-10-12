@@ -537,7 +537,7 @@ tracing:
 # Docker image used to update the certificate object of traefik
 # to point to a secret name that traefik is waiting on to
 # be mounted before being able to successfully start up.
-initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.0.7
+initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.3.0
 
 dashboardRBAC:
   enabled: true
