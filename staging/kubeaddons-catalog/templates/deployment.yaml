@@ -6,7 +6,7 @@ metadata:
   labels:
 {{ include "kubeaddons-catalog.labels" . | indent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ include "kubeaddons-catalog.name" . }}
