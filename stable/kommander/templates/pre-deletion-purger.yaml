@@ -11,7 +11,7 @@ data:
   purge.sh: |
     #!/bin/bash
     for ft in $(kubectl get federatedtypeconfigs -n kommander -o jsonpath='{range .items[*]}{.spec.federatedType.kind}.{.spec.federatedType.group}{"\n"}{end}') ; do
-      k delete ${ft} --all --all-namespaces
+      kubectl delete ${ft} --all --all-namespaces
     done
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -73,10 +73,10 @@ spec:
       name: purger
     spec:
       restartPolicy: Never
-      serviceAccount: purger
+      serviceAccountName: purger
       containers:
         - name: purger
-          image: "bitnami/kubectl:latest"
+          image: "bitnami/kubectl:1.19.2"
           volumeMounts:
             - name: purger-config
               mountPath: /purge.sh
