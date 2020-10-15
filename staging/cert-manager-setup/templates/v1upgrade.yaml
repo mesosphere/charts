@@ -1,3 +1,4 @@
+{{- if .Values.installCertManager }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -7,7 +8,6 @@ metadata:
   annotations:
     "helm.sh/hook": pre-install
     "helm.sh/hook-weight": "-10"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
     spec:
@@ -17,6 +17,7 @@ spec:
           image: "jaredrodriguez/cert-manager-upgrade:v0.1.0"
           command: ["/cert-manager-upgrade", "backup"]
       restartPolicy: Never
+  ttlSecondsAfterFinished: 900
 ---
 apiVersion: batch/v1
 kind: Job
@@ -26,7 +27,6 @@ metadata:
   annotations:
     "helm.sh/hook": post-install, post-upgrade
     "helm.sh/hook-weight": "10"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
     spec:
@@ -36,6 +36,7 @@ spec:
           image: "jaredrodriguez/cert-manager-upgrade:v0.1.0"
           command: ["/cert-manager-upgrade", "restore"]
       restartPolicy: Never
+  ttlSecondsAfterFinished: 900
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -51,6 +52,9 @@ rules:
     verbs: ["get", "list", "watch", "delete"]
   - apiGroups: ["certmanager.k8s.io", "cert-manager.io"]
     resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["secrets"]
     verbs: ["*"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -111,3 +115,4 @@ metadata:
     "helm.sh/hook": pre-install, post-install, post-upgrade
     "helm.sh/hook-weight": "-11"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+{{- end }}
