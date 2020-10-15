@@ -1,6 +1,6 @@
 # These test values are used for chart testing
 # DO NOT EDIT unless you know what you are doing
-
+upgradeImage: mesosphere/kubeaddons-addon-initializer:v3.0.1
 issuers:
   - name: kubernetes-root-issuer
     secretName: kubernetes-root-ca

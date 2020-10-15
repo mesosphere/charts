@@ -15,7 +15,7 @@ spec:
       containers:
         - name: cert-manager-upgrade
           image: {{ .Values.upgradeImage }}
-          command: ["/cert-manager-upgrade", "backup"]
+          command: ["cert-manager-upgrade", "backup"]
       restartPolicy: Never
   ttlSecondsAfterFinished: 900
 ---
@@ -34,7 +34,7 @@ spec:
       containers:
         - name: cert-manager-upgrade
           image: {{ .Values.upgradeImage }}
-          command: ["/cert-manager-upgrade", "restore"]
+          command: ["cert-manager-upgrade", "restore"]
       restartPolicy: Never
   ttlSecondsAfterFinished: 900
 ---
