@@ -4,7 +4,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "metallb.fullname" . }}:controller
+  name: {{ template "metallb.fullname" . }}-controller
   labels:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
@@ -24,7 +24,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "metallb.fullname" . }}:speaker
+  name: {{ template "metallb.fullname" . }}-speaker
   labels:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
@@ -63,7 +63,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "metallb.fullname" . }}:controller
+  name: {{ template "metallb.fullname" . }}-controller
   labels:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
@@ -76,12 +76,12 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "metallb.fullname" . }}:controller
+  name: {{ template "metallb.fullname" . }}-controller
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "metallb.fullname" . }}:speaker
+  name: {{ template "metallb.fullname" . }}-speaker
   labels:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
@@ -94,7 +94,7 @@ subjects:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "metallb.fullname" . }}:speaker
+  name: {{ template "metallb.fullname" . }}-speaker
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
