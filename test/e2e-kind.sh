@@ -230,12 +230,12 @@ install_certmanager() {
 
     if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
         docker_exec helm install --debug \
-            --values staging/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager staging/cert-manager-setup
+            --values stable/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager stable/cert-manager-setup
     else
         docker_exec helm install cert-manager --debug \
-            --values staging/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager staging/cert-manager-setup
+            --values stable/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager stable/cert-manager-setup
     fi
 
     echo
