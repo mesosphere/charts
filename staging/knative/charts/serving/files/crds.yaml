@@ -32,7 +32,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: certificates.networking.internal.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -66,7 +65,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: configurations.serving.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
     duck.knative.dev/podspecable: "true"
 spec:
@@ -133,7 +131,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: ingresses.networking.internal.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -171,7 +168,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: metrics.autoscaling.internal.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: autoscaling.internal.knative.dev
@@ -203,7 +199,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: podautoscalers.autoscaling.internal.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: autoscaling.internal.knative.dev
@@ -247,7 +242,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: revisions.serving.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: serving.knative.dev
@@ -315,7 +309,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: routes.serving.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
     duck.knative.dev/addressable: "true"
 spec:
@@ -378,7 +371,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: serverlessservices.networking.internal.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -427,7 +419,6 @@ metadata:
     helm.sh/hook-delete-policy: before-hook-creation
   name: services.serving.knative.dev
   labels:
-    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     knative.dev/crd-install: "true"
     duck.knative.dev/addressable: "true"
     duck.knative.dev/podspecable: "true"
