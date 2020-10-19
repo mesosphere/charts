@@ -43,7 +43,7 @@ endif
 endif
 
 ifeq (,$(wildcard /teamcity/system/git))
-DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
+DRUN := docker run -t --rm \
 			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
 			-w /charts quay.io/helmpack/chart-testing:$(CT_VERSION)
 else
