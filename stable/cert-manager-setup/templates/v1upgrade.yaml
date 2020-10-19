@@ -1,4 +1,5 @@
 {{- if .Values.installCertManager }}
+# {{- if (.Capabilities.APIVersions.Has "certmanager.k8s.io/v1alpha1") -}}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -16,6 +17,9 @@ spec:
         - name: cert-manager-upgrade
           image: {{ .Values.upgradeImage }}
           command: ["cert-manager-upgrade", "backup"]
+          env:
+            - name: CERT_MANAGER_NAMESPACE
+              value: {{ .Release.Namespace }}
       restartPolicy: Never
   ttlSecondsAfterFinished: 900
 ---
@@ -35,6 +39,9 @@ spec:
         - name: cert-manager-upgrade
           image: {{ .Values.upgradeImage }}
           command: ["cert-manager-upgrade", "restore"]
+          env:
+            - name: CERT_MANAGER_NAMESPACE
+              value: {{ .Release.Namespace }}
       restartPolicy: Never
   ttlSecondsAfterFinished: 900
 ---
@@ -116,3 +123,4 @@ metadata:
     "helm.sh/hook-weight": "-11"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 {{- end }}
+# {{- end }}
