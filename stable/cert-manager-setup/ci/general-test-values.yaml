@@ -1,5 +1,5 @@
 # This test ensures we can create an issuer, a certificate and a clusterissuer
-upgradeImage: mesosphere/kubeaddons-addon-initializer:v3.0.1
+upgradeImage: mesosphere/kubeaddons-addon-initializer:v0.3.1
 issuers:
   - name: my-issuer
     namespace: kube-system
