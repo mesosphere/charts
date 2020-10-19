@@ -3,7 +3,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: images.caching.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -29,7 +28,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: certificates.networking.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -62,7 +60,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: configurations.serving.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -128,7 +125,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: ingresses.networking.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -165,7 +161,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: metrics.autoscaling.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -196,7 +191,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: podautoscalers.autoscaling.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -239,7 +233,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: revisions.serving.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -306,7 +299,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: routes.serving.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -368,7 +360,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: serverlessservices.networking.internal.knative.dev
   labels:
     knative.dev/crd-install: "true"
@@ -416,7 +407,6 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     helm.sh/hook: crd-install
-    helm.sh/hook-delete-policy: before-hook-creation
   name: services.serving.knative.dev
   labels:
     knative.dev/crd-install: "true"
