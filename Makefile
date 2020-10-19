@@ -1,6 +1,6 @@
 SHELL := /bin/bash -euo pipefail
 
-HELM_VERSION ?= v3.3.0
+HELM_VERSION ?= v3.3.4
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -18,7 +18,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-CT_VERSION ?= v3.0.0
+CT_VERSION ?= v3.1.1
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
@@ -33,7 +33,15 @@ export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 HELM := $(shell command -v helm)
 ifeq ($(HELM),)
 	HELM := $(TMPDIR)/helm
+else
+# compare short versions to see if this is the requested version
+HELM_INSTALLED=$(shell $(HELM) version --short --client | sed 's/.*\(v[0-9]\+\.[0-9]\+\).*/\1/')
+HELM_REQUESTED=$(shell echo $(HELM_VERSION) | cut -d. -f-2)
+ifneq ($(HELM_INSTALLED),$(HELM_REQUESTED))
+	HELM := $(TMPDIR)/helm
 endif
+endif
+
 ifeq (,$(wildcard /teamcity/system/git))
 DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
 			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
@@ -136,7 +144,7 @@ endif
 lint: ct.lint
 
 .PHONY: test.helm2
-test.helm2: HELM_VERSION = v2.16.9
+test.helm2: HELM_VERSION = v2.16.10
 test.helm2: CT_VERSION = v2.4.1
 test.helm2: ct.test
 
