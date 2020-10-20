@@ -1,6 +1,6 @@
 SHELL := /bin/bash -euo pipefail
 
-HELM_VERSION ?= v3.3.0
+HELM_VERSION ?= v3.3.4
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -18,7 +18,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-CT_VERSION ?= v3.0.0
+CT_VERSION ?= v3.1.1
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
@@ -43,7 +43,7 @@ endif
 endif
 
 ifeq (,$(wildcard /teamcity/system/git))
-DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
+DRUN := docker run -t --rm \
 			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
 			-w /charts quay.io/helmpack/chart-testing:$(CT_VERSION)
 else

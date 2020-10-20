@@ -1,14 +1,14 @@
 dependencies:
   - name: kubeaddons-catalog
-    version: "0.1.14"
+    version: "0.1.15"
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-federation
-    version: "0.5.1"
+    version: "0.6.0"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-federation.enabled, global.kommander-federation.enabled
   - name: kommander-licensing
-    version: "0.5.1"
+    version: "0.6.0"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-licensing.enabled, global.kommander-licensing.enabled
   - name: kommander-ui

@@ -5,10 +5,10 @@ set -o nounset
 set -o pipefail
 set -x
 
-readonly KIND_VERSION=v0.8.1
+readonly KIND_VERSION=v0.9.0
 KINDEST_NODE_IMAGE=kindest/node
 # full SHA256!
-KINDEST_NODE_VERSION=v1.18.8@sha256:ab79f7a98e8b4267cb0717bb1b29df05cf8e6aa0082acda837347bd81fbe10e3
+KINDEST_NODE_VERSION=v1.19.1@sha256:98cf5288864662e37115e362b23e4369c8c4a408f99cbc06e58ac30ddc721600
 readonly CLUSTER_NAME=chart-testing
 CT_VERSION=$1
 HELM_VERSION=$2
@@ -230,12 +230,12 @@ install_certmanager() {
 
     if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
         docker_exec helm install --debug \
-            --values staging/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager staging/cert-manager-setup
+            --values stable/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager stable/cert-manager-setup
     else
         docker_exec helm install cert-manager --debug \
-            --values staging/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager staging/cert-manager-setup
+            --values stable/cert-manager-setup/ci/test-values.yaml \
+            --namespace cert-manager stable/cert-manager-setup
     fi
 
     echo

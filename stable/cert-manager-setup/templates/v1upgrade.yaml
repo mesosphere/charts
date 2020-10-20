@@ -1,0 +1,126 @@
+{{- if .Values.installCertManager }}
+{{- if (.Capabilities.APIVersions.Has "certmanager.k8s.io/v1alpha1") -}}
+--
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-upgrade-backup
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-10"
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-upgrade
+      containers:
+        - name: cert-manager-upgrade
+          image: {{ .Values.upgradeImage }}
+          command: ["cert-manager-upgrade", "backup"]
+          env:
+            - name: "CERT_MANAGER_NAMESPACE"
+              value: {{ .Release.Namespace }}
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 900
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-upgrade-restore
+  annotations:
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "10"
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-upgrade
+      containers:
+        - name: cert-manager-upgrade
+          image: {{ .Values.upgradeImage }}
+          command: ["cert-manager-upgrade", "restore"]
+          env:
+            - name: "CERT_MANAGER_NAMESPACE"
+              value: {{ .Release.Namespace }}
+      restartPolicy: Never
+  ttlSecondsAfterFinished: 900
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cert-manager-upgrade
+  annotations:
+    "helm.sh/hook": pre-install, post-install, post-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["get", "list", "watch", "delete"]
+  - apiGroups: ["certmanager.k8s.io", "cert-manager.io"]
+    resources: ["*"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cert-manager-upgrade-cm
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, post-install, post-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-upgrade
+  annotations:
+    "helm.sh/hook": pre-install, post-install, post-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-upgrade
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager-upgrade
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cert-manager-upgrade-cm
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, post-install, post-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-manager-upgrade-cm
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager-upgrade
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cert-manager-upgrade
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, post-install, post-upgrade
+    "helm.sh/hook-weight": "-11"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+{{- end }}
+{{- end }}
