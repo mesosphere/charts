@@ -20,11 +20,14 @@ GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*githu
 GIT_REF ?= $(shell git rev-parse HEAD)
 CT_VERSION ?= v3.1.1
 
+PLATFORM = linux
+
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
-	# OSX requires /private prefix as symlink doesn't work when
+	# macOS requires /private prefix as symlink doesn't work when
 	# mounting /var/folders/
 	TMPDIR := /private${TMPDIR}
+	PLATFORM = darwin
 endif
 export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
@@ -70,6 +73,10 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 .PHONY: publish
 publish: export LC_COLLATE := C
 publish:
+ifeq ($(PLATFORM),darwin)
+	$(warning The publish task uses GNU executables and macOS ships with BSD ones by default.)
+endif
+
 	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
 	rm -rf gh-pages
 	git fetch publish gh-pages
@@ -95,7 +102,7 @@ publish:
 
 $(HELM):
 ifeq ($(HELM),$(TMPDIR)/helm)
-	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
+	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-$(PLATFORM)-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 '$(PLATFORM)-amd64/helm'
 endif
 
 # Deterministically create helm packages by:
