@@ -71,6 +71,7 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 .PHONY: publish
 publish: export LC_COLLATE := C
+publish: export TZ := UTC
 publish:
 ifeq ($(PLATFORM),darwin)
 	$(warning The publish task uses the GNU executables 'tar' and 'find', macOS ships with BSD ones installed by default.)
