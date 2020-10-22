@@ -69,6 +69,7 @@ stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 .PHONY: publish
 publish: export LC_COLLATE := C
+publish: export TZ := UTC
 publish:
 	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
 	rm -rf gh-pages
