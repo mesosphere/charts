@@ -23,7 +23,7 @@ CT_VERSION ?= v3.1.1
 PLATFORM = $(shell uname | tr [A-Z] [a-z])
 
 TMPDIR := $(shell mktemp -d)
-ifeq ($(shell uname),Darwin)
+ifeq ($(PLATFORM),darwin)
 	# macOS requires /private prefix as symlink doesn't work when
 	# mounting /var/folders/
 	TMPDIR := /private${TMPDIR}
