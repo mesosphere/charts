@@ -27,7 +27,6 @@ ifeq ($(PLATFORM),darwin)
 	# macOS requires /private prefix as symlink doesn't work when
 	# mounting /var/folders/
 	TMPDIR := /private${TMPDIR}
-	PLATFORM = darwin
 endif
 export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
