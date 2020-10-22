@@ -20,7 +20,7 @@ GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*githu
 GIT_REF ?= $(shell git rev-parse HEAD)
 CT_VERSION ?= v3.1.1
 
-PLATFORM = linux
+PLATFORM = $(shell uname | tr [A-Z] [a-z])
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
