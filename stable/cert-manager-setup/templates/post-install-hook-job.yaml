@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "cert-manager-setup.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "cert-manager-setup.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: "wait-for-cert-manager-webhook"
+    spec:
+      serviceAccountName: default
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: bitnami/kubectl:1.18.8-debian-10-r15
+        imagePullPolicy: IfNotPresent
+        command: ["sleep", "30"]

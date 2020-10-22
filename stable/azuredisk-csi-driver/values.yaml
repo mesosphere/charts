@@ -1,0 +1,95 @@
+image:
+  azuredisk:
+    repository: mcr.microsoft.com/k8s/csi/azuredisk-csi
+    tag: v0.7.0
+    pullPolicy: Always
+  csiProvisioner:
+    repository: quay.io/k8scsi/csi-provisioner
+    tag: v1.6.0
+    pullPolicy: Always
+  csiAttacher:
+    repository: quay.io/k8scsi/csi-attacher
+    tag: v2.2.0
+    pullPolicy: Always
+  csiSnapshotter:
+    repository: quay.io/k8scsi/csi-snapshotter
+    tag: v2.0.0
+    pullPolicy: Always
+  csiResizer:
+    repository: quay.io/k8scsi/csi-resizer
+    tag: v0.5.0
+    pullPolicy: Always
+  livenessProbe:
+    repository: quay.io/k8scsi/livenessprobe
+    tag: v2.0.0
+    pullPolicy: Always
+  nodeDriverRegistrar:
+    repository: quay.io/k8scsi/csi-node-driver-registrar
+    tag: v1.3.0
+    pullPolicy: Always
+  csiSnapshotController:
+    repository: quay.io/k8scsi/snapshot-controller
+    tag: v2.1.1
+    pullPolicy: Always
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+controller:
+  replicas: 3
+
+snapshotController:
+  replicas: 1
+
+node:
+  metricsPort: 29605
+
+# True if enable volume scheduling for dynamic volume provisioning
+enableVolumeScheduling: false
+
+cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
+snapshot:
+  enabled: false
+  cleanupVolumeSnapshotCRDV1alpha1: true
+  controller:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+
+azuredisk:
+  controller:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
+  node:
+    resources:
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists

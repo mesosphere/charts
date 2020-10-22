@@ -1,0 +1,6 @@
+storageclass:
+  isDefault: true
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+  type: gp2
+  allowVolumeExpansion: true

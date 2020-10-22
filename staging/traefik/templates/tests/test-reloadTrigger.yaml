@@ -1,0 +1,46 @@
+{{- if .Values.testFramework.enabled  }}
+apiVersion: v1
+data:
+  foo: {{ template "traefik.fullname" . }}
+kind: ConfigMap
+metadata:
+  name: test-only-reload-trigger
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "5"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: test-only-reload-trigger-sleep-job
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+spec:
+  template:
+    metadata:
+      name: test-only-reload-trigger-sleep-job
+      labels:
+        app: {{ template "traefik.fullname" . }}
+        chart: {{ template "traefik.chart" . }}
+        heritage: "{{ .Release.Service }}"
+        release: "{{ .Release.Name }}"
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: sleeper
+        image: "alpine:3.12"
+        command: ["/bin/sleep", "10"]
+{{- end }}

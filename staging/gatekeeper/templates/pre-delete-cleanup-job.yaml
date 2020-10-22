@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "gatekeeper.fullname" . }}-cleanup
+  labels:
+    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccount: {{ template "gatekeeper.serviceAccountName" . }}
+      {{- if or (.Values.securityContext.runAsUser) (.Values.securityContext.fsGroup) }}
+      securityContext:
+        {{- if .Values.securityContext.runAsUser }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        {{- end }}
+        {{- if .Values.securityContext.fsGroup }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        {{- end }}
+      {{- end }}
+      containers:
+      - name: cleanup
+        image: {{ .Values.kubectlImage }}
+        command:
+        - bash
+        args:
+        - -cxe
+        - 'kubectl delete --all constrainttemplates.templates.gatekeeper.sh && kubectl delete --all configs.config.gatekeeper.sh && kubectl delete crds configs.config.gatekeeper.sh constrainttemplates.templates.gatekeeper.sh'
+      restartPolicy: Never
+  backoffLimit: 3

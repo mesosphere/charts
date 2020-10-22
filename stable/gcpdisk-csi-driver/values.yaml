@@ -1,0 +1,72 @@
+# replicas of the CSI-Controller
+replicas: 1
+
+# replicas of the CSI-Snapshot-Controller
+replicasSnapshotController: 1
+
+image:
+  repository: gcr.io/gke-release/gcp-compute-persistent-disk-csi-driver
+  tag: v0.6.2-gke.0
+  tagK8sMinor16: v0.7.0-gke.0
+  pullPolicy: Always
+
+serviceAccount:
+  create: true
+
+rbac:
+  create: true
+
+# True if enable volume Topology Zone
+enableTopologyZone: true
+
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+
+liveness:
+  image:
+    repository: quay.io/k8scsi/livenessprobe
+    tag: v1.1.0
+
+registrar:
+  node:
+    image:
+      repository: quay.io/k8scsi/csi-node-driver-registrar
+      tag: v1.3.0
+
+provisioner:
+  image:
+    repository: quay.io/k8scsi/csi-provisioner
+    tag: v1.6.0
+  timeout: 30s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 100
+
+attacher:
+  image:
+    repository: quay.io/k8scsi/csi-attacher
+    tag: v2.2.0
+  timeout: 120s
+  retryIntervalStart: 1s
+  retryIntervalMax: 5m
+  workerThreads: 20
+
+snapshotter:
+  image:
+    repository: quay.io/k8scsi/csi-snapshotter
+    tag: v1.2.2
+
+resizer:
+  image:
+    repository: quay.io/k8scsi/csi-resizer
+    tag: v0.5.0
+
+snapshotController:
+  image:
+    repository: "quay.io/k8scsi/snapshot-controller"
+    tag: v2.1.1
+
+cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
+cleanupVolumeSnapshotCRDV1alpha1: true

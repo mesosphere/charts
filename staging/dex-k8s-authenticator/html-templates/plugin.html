@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="google" content="notranslate">
+  <meta http-equiv="Content-Language" content="en">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Kubectl Plugin Configuration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{{ .Config.Web_Path_Prefix }}static/main.css" rel="stylesheet" type="text/css">
+  <link href="{{ .Config.Web_Path_Prefix }}static/styles.css" rel="stylesheet" type="text/css">
+  <link href="{{ .Config.Web_Path_Prefix }}static/tabs.css" rel="stylesheet" type="text/css">
+  <link rel="icon" href="{{ .Config.Web_Path_Prefix }}static/favicon.png">
+</head>
+
+<body class="theme-body">
+<div class="plugin-kubeconfig-container">
+  <h1>Configure the Konvoy credentials plugin</h1>
+  <p>The Konvoy credentials plugin makes it easy to use external identity providers with <i>kubectl</i>.
+    When using the plugin, <i>kubectl</i> initiates an authentication session in your browser and stores identity tokens locally.
+    When a token expires, the plugin starts a new authentication session and refreshes the token.</p>
+
+  <div id="plugin-download-kubeconfig">
+    <h2><b>Method 1</b>: Download a kubectl configuration file</h2>
+    <p>The easiest way to get started is to download the plugin binary and a cluster generated kubectl configuration file.
+      If you are using Kommander and add a new cluster, come back to this page to download an updated kubeconfig.
+    </p>
+    <ul>
+      <li>Plugin binary (Choose the appropriate link for your platform): <a href="{{ .DarwinURL }}">Darwin</a> <a href="{{ .LinuxURL }}">Linux</a> <a href="{{ .WindowsURL }}">Windows</a></li>
+      <li>Kubectl configuration (macOS/Linux): <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig">kubeconfig</a></li>
+      <li>Kubectl configuration (Windows): <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig_windows">kubeconfig</a></li>
+    </ul>
+    <p>Download both files to your computer. The plugin is a binary and must be marked as executable on Linux and MacOS. To do so, run the following command: </p>
+    <p><code>chmod +x konvoy-async-plugin</code></p>
+    <p>Copy the binary to a location in your PATH environment variable, <i>/usr/local/bin</i> is a good candidate on most platforms.</p>
+    <h3>Running kubectl</h3>
+    <p>To configure <i>kubectl</i> to use the plugin, run <i>kubectl</i> with the <i> --kubeconfig</i> CLI option</p>
+    <p><code>kubectl --kubeconfig /path/to/downloaded/config get pods -A</code></p>
+    <p>You can also set the KUBECONFIG environment variable so you do not have to type <i> --kubeconfig</i> every time you run the command.</p>
+    <p><code>export KUBECONFIG=/path/to/downloaded/config</code></p>
+    <h3>Using Contexts</h3>
+    <p>If this cluster is managing authentication for external clusters, deployed by Kommander, you must set the correct kubectl <b>context</b>.
+    The generated kubeconfig contains contexts for each cluster managed by Kommander.
+    </p>
+
+    <p>You can list each context using the <i>config get-contexts</i> command:
+    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config get-contexts </code></p>
+    <p>To select a different context, use the <i>config use-context</i> command: 
+    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig use-context context-name</code></p>
+
+<p>For more information on using and managing kubeconfig files, refer to this documentation
+    </p>
+    <p>
+      <a href="https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/">
+        Organizing Cluster Access Using kubeconfig Files
+      </a>
+    </p><p>
+      <a href="https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/">
+        Configure Access to Multiple Clusters
+      </a>
+    </p>
+  </div>
+  <h2><b>Method 2</b>: Manual configuration</h2>
+  <p>The following commands can be pasted directly into a terminal. These instructions configure your global kubeconfig, located at <i>${HOME}/.kube/config.</i></p>
+  <!-- Only visible when multiple clusters are present -->
+  <div id="plugin-select-cluster" style="display: none">
+    <h3>Select Cluster</h3>
+    <p>This cluster handles authentication for multiple clusters using Kommander. Select the cluster you want to configure.
+      You can run these commands multiple times if you need to configure multiple clusters.
+    </p>
+    <p><label for="plugin-select-provider-id">Select Provider:</label>
+      <select id="plugin-select-provider-id" onchange="providerOnChange()"></select></p>
+
+    <p><label for="plugin-select-cluster-id">Select Cluster:</label>
+      <select id="plugin-select-cluster-id" onchange="clusterOnChange()"></select></p>
+  </div>
+  <!-- This div is populated via ajax -->
+  <div id="plugin-config-form"></div>
+  <h2>Wrapping up</h2>
+  <p>At this point you can start using kubectl. Try running a simple kubectl command: </p>
+  <div class="command">
+    <button class="btn" style="float:right" data-clipboard-snippet="">
+      <img class="clippy" width="13" src="{{ .Config.Web_Path_Prefix }}static/clippy.svg" alt=""/>
+    </button>
+    <pre><code>
+    kubectl get pods -A
+    </code></pre>
+    <p>
+    This opens a browser window and lets you authenticate. If you are using a remote terminal, a link is displayed that you can copy and paste into a local browser window.
+    </p>
+  </div>
+</div>
+
+<script src="{{ .Config.Web_Path_Prefix }}static/highlight.pack.min.js"></script>
+<script src="{{ .Config.Web_Path_Prefix }}static/clipboard.min.js"></script>
+<script src="{{ .Config.Web_Path_Prefix }}static/snippets.js"></script>
+<script src="{{ .Config.Web_Path_Prefix }}static/tooltips.js"></script>
+<script>
+    var profileName = "";
+    var clusterHostname = "";
+
+    function RenderInstructions() {
+        let R = new XMLHttpRequest();
+        let url = "/token/plugin/data";
+        let params = {};
+        if (profileName !== "") {
+            params.profileName = profileName;
+        }
+        if (clusterHostname !== "") {
+            params.cluster = clusterHostname;
+        }
+        let esc = encodeURIComponent;
+        let query = Object.keys(params)
+            .map(k => esc(k) + '=' + esc(params[k]))
+            .join('&');
+        console.log("QUERY: " + query + " " + typeof query);
+        if (query !== "") {
+            url += "?" + query
+        }
+        R.open('GET', url);
+        R.onload = function () {
+            let instructionsData = R.responseText;
+            renderInstructionsHandler(instructionsData);
+        };
+        R.send();
+    }
+
+    function renderInstructionsHandler(data) {
+        document.getElementById("plugin-config-form").innerHTML = data;
+
+        // Creates a listener so we can just hit enter when using our text box
+        document.getElementById("plugin-profile-name-input").addEventListener(
+            "keyup", function (event) {
+                event.preventDefault();
+                if (event.code === "Enter") {
+                    document.getElementById("plugin-profile-name-button").click();
+                }
+            }
+        );
+    }
+
+    function SetProfileName() {
+        let content = document.getElementById("plugin-profile-name-input").value;
+        if (content === "") {
+            console.log("content is empty");
+            return
+        }
+        profileName = content.toLowerCase().replace(/ /g, "-");
+        RenderInstructions();
+    }
+
+    var providerJSON = {};
+
+    function RenderClusterSelector() {
+        let R = new XMLHttpRequest();
+        let url = "/token/plugin/providers";
+        R.open('GET', url);
+        R.onload = function () {
+            let providerhtml = "";
+            providerJSON = JSON.parse(R.responseText);
+            if (providerJSON.length > 1 || providerJSON[0].clusters.length > 1) {
+                document.getElementById("plugin-select-cluster").style.display = "block";
+            } else {
+                console.log("Only one cluster");
+            }
+            for (let i = 0; i < providerJSON.length; i++) {
+                providerhtml += `<option value=${i}>${providerJSON[i].name}</option>`;
+            }
+            let p_elm = document.getElementById("plugin-select-provider-id");
+            p_elm.innerHTML = providerhtml;
+            setClusterList(p_elm.value)
+        };
+        R.send();
+    }
+
+    function setClusterList(idx) {
+        let clusters = providerJSON[idx].clusters;
+        let clusterhtml = "";
+        for (let i = 0; i < clusters.length; i++) {
+            clusterhtml += `<option value=${clusters[i].clusterHostname}>${clusters[i].name}</option>`;
+        }
+        document.getElementById("plugin-select-cluster-id").innerHTML = clusterhtml;
+    }
+
+    function providerOnChange() {
+        let p_elm = document.getElementById("plugin-select-provider-id");
+        setClusterList(p_elm.value)
+    }
+
+    function clusterOnChange() {
+        clusterHostname = document.getElementById("plugin-select-cluster-id").value;
+        RenderInstructions();
+    }
+
+    RenderClusterSelector();
+    RenderInstructions();
+</script>
+</body>
+</html>

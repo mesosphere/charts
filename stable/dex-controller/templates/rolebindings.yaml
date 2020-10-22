@@ -1,0 +1,51 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "dex-controller.fullname" . }}-leader-election-rolebinding
+  namespace: {{ .Release.Namespace }}
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "dex-controller.fullname" . }}-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: {{ template "dex-controller.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "dex-controller.fullname" . }}-manager-rolebinding
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "dex-controller.fullname" . }}-manager-role
+subjects:
+- kind: ServiceAccount
+  name: {{ template "dex-controller.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "dex-controller.fullname" . }}-proxy-rolebinding
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "dex-controller.fullname" . }}-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: {{ template "dex-controller.fullname" . }}-sa
+  namespace: {{ .Release.Namespace }}

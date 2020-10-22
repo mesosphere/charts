@@ -1,0 +1,23 @@
+podNvidiaGpuMetricsExporter:
+  image:
+    repository: nvidia/pod-gpu-metrics-exporter
+    tag: v1.0.0-alpha
+    pullPolicy: IfNotPresent
+  resources: {}
+
+nvidiaDcgmExporter:
+  image:
+    repository: nvidia/dcgm-exporter
+    tag: 1.4.6
+    pullPolicy: IfNotPresent
+  resources: {}
+
+nodeSelector: {}
+
+priorityClassName: ""
+
+tolerations: []
+
+affinity: {}
+
+initContainers: []

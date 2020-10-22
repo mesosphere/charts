@@ -1,0 +1,34 @@
+{{- if .Values.testFramework.enabled  }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "traefik.fullname" . }}-test
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "6"
+data:
+  run.sh: |-
+    @test "Test HTTP" {
+      curl -D - http://{{ template "traefik.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local./
+    }
+    @test "Test HTTPS" {
+      curl -k -vvv -D - https://{{ template "traefik.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local./
+    }
+    @test "Test Default Certificate" {
+      echo -n | openssl s_client -connect {{ template "traefik.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local.:443 2> /dev/null | openssl x509 -noout -subject | grep -q "traefik.localhost.localdomain"
+    }
+    @test "Test Default Certificate SNI" {
+      echo -n | openssl s_client -servername custom.whalesdolphines.tld -connect {{ template "traefik.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local.:443 2> /dev/null | openssl x509 -noout -text | grep -q "custom.whalesdolphines.tld"
+    }
+    @test "Test Custom Certificate SNI" {
+      echo -n | openssl s_client -servername konvoy.company.tld -connect {{ template "traefik.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local.:443 2> /dev/null | openssl x509 -noout -subject | grep -q "konvoy.company.tld"
+    }
+    @test "Test Prometheus Metrics scrape" {
+      curl http://{{ template "traefik.fullname" . }}-prometheus.{{ .Release.Namespace }}.svc.cluster.local.:9100/metrics | grep -q "traefik_config_reloads_total"
+    }
+{{- end }}

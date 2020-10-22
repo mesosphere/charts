@@ -1,0 +1,12 @@
+global:
+  serviceLabels: {}
+domain: example.com
+
+customMetricsApiservice:
+  enabled: true
+
+namespaceKnativeServing:
+  additionalLabels: {}
+
+configDeployment:
+  registriesSkippingTagResolving: ""

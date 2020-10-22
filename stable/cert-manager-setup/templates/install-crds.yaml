@@ -1,0 +1,204 @@
+{{- if .Values.installCertManager }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-certificates-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-certificates-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-certificates-crd
+              mountPath: /etc/cert-manager-setup-certificates-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-certificates-crd"]
+      volumes:
+        - name: cert-manager-setup-certificates-crd
+          configMap:
+            name: cert-manager-setup-certificates-crd
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-certificaterequests-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-certificaterequests-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-certificaterequests-crd
+              mountPath: /etc/cert-manager-setup-certificaterequests-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-certificaterequests-crd"]
+      volumes:
+        - name: cert-manager-setup-certificaterequests-crd
+          configMap:
+            name: cert-manager-setup-certificaterequests-crd
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-challenges-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-challenges-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-challenges-crd
+              mountPath: /etc/cert-manager-setup-challenges-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-challenges-crd"]
+      volumes:
+        - name: cert-manager-setup-challenges-crd
+          configMap:
+            name: cert-manager-setup-challenges-crd
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-clusterissuers-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-clusterissuers-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-clusterissuers-crd
+              mountPath: /etc/cert-manager-setup-clusterissuers-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-clusterissuers-crd"]
+      volumes:
+        - name: cert-manager-setup-clusterissuers-crd
+          configMap:
+            name: cert-manager-setup-clusterissuers-crd
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-issuers-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-issuers-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-issuers-crd
+              mountPath: /etc/cert-manager-setup-issuers-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-issuers-crd"]
+      volumes:
+        - name: cert-manager-setup-issuers-crd
+          configMap:
+            name: cert-manager-setup-issuers-crd
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-manager-setup-orders-crd
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: cert-manager-setup-crds
+      containers:
+        - name: cert-manager-setup-orders-crd
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          volumeMounts:
+            - name: cert-manager-setup-orders-crd
+              mountPath: /etc/cert-manager-setup-orders-crd
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/cert-manager-setup-orders-crd"]
+      volumes:
+        - name: cert-manager-setup-orders-crd
+          configMap:
+            name: cert-manager-setup-orders-crd
+      restartPolicy: OnFailure
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cert-manager-setup-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: cert-manager-setup-crds
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cert-manager-setup-crds
+subjects:
+  - kind: ServiceAccount
+    name: cert-manager-setup-crds
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cert-manager-setup-crds
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+{{- end }}

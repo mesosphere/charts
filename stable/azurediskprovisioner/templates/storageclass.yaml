@@ -1,0 +1,25 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: azurediskprovisioner
+  annotations:
+    kubernetes.io/description: Azure Disk Storage class
+{{- if .Values.storageclass.isDefault }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+provisioner: disk.csi.azure.com
+volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
+reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
+parameters:
+  {{- if .Values.storageclass.skuname }}
+  skuname: {{ .Values.storageclass.skuname | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.fsType }}
+  fsType: {{ .Values.storageclass.fsType | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.kind }}
+  kind: {{ .Values.storageclass.kind | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.cachingMode }}
+  cachingMode: {{ .Values.storageclass.cachingMode | quote }}
+  {{- end }}

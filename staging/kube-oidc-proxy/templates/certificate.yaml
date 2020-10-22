@@ -1,0 +1,29 @@
+---
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
+apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
+kind: Certificate
+metadata:
+  name: kube-oidc-proxy
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: {{ include "kube-oidc-proxy.fullname" . }}-server-tls
+  duration: 87600h
+  issuerRef:
+    name: kubernetes-ca
+    kind: ClusterIssuer
+  commonName: kube-oidc-proxy
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  subject:
+    organizations:
+      - D2iQ
+{{- else }}
+  organization:
+    - D2iQ
+{{- end }}
+  dnsNames:
+    - kube-oidc-proxy
+    - kube-oidc-proxy-kubeaddons.kubeaddons
+    - kube-oidc-proxy-kubeaddons.kubeaddons.svc.cluster.local

@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: kudobuilder/controller
+  tag: v0.9.0
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 50Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+# When installing addons on a cluster that already has kudo crds
+# installed this value should be set to false. This is necessary because
+# CRDs and Webhook (APIService) objects are cluster wide global scoped
+# without a namespace. That prevents to install 2 webhook configurations
+# for 2 instances of cert-manager.
+#
+installCRD: true

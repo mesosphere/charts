@@ -1,0 +1,115 @@
+{{ if .caPem }}
+    <h3>Copy cluster CA certificate</h3>
+    <p>This is the CA certificate needed to validate connections to your cluster. If your cluster is using a well known
+        certificate authority, such as Let's Encrypt, or you have added your CA certificate to your system certificate pool;
+        you can skip this section.</p>
+    <div class="command">
+
+        <button class="btn" style="float:right" data-clipboard-snippet="">
+            <img class="clippy" width="13" src="{{ .webPrefixPath }}static/clippy.svg" alt=""/>
+        </button>
+        <pre><code>mkdir -p ${HOME}/.kube/certs/{{ .clusterName }}/ &amp;&amp; cat &lt;&lt; EOF &gt; ${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt
+{{ .caPem }}
+EOF</code></pre>
+    </div>
+{{ end }}
+
+<h3>Download and Install Konvoy credentials plugin</h3>
+<p>Use the command appropriate for your operating system to download and install the plugin.</p>
+<p><b>OSX:</b></p>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+{{ if .caPem }}
+  <pre><code>curl --create-dirs --cacert ${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt -sL {{ .darwinURL }} \
+      -o ${HOME}/{{ .installPath }} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+{{ else }}
+    <pre><code>curl --create-dirs {{ .darwinURL }} \
+      -o ${HOME}/{{ .installPath }} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+{{ end }}
+</div>
+<p><b>LINUX:</b></p>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+    {{ if .caPem }}
+        <pre><code>curl --create-dirs --cacert ${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt -sL {{ .linuxURL }} \
+      -o ${HOME}/{{ .installPath }} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+    {{ else }}
+        <pre><code>curl --create-dirs {{ .linuxURL }} \
+      -o ${HOME}/{{ .installPath}} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+    {{ end }}
+</div>
+
+<h3>Create a cluster configuration</h3>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+  <pre><code>
+{{- if .caPem }}
+kubectl config set-cluster {{ .clusterName }} \
+    --certificate-authority=${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt \
+    --server={{ .kubeAPI }}
+{{- else }}
+kubectl config set-cluster {{ .clusterName }} \
+    --server={{ .kubeAPI }}
+{{- end }}
+  </code></pre>
+</div>
+
+<h3>Create kubeconfig user profile</h3>
+<p>The default profile name is fine for most use cases. However, if you plan to authenticate with the same cluster, using multiple user accounts, then you must create a profile for each user. 
+  Use the form below to change the profile name in the instructions.</p>
+<p><label for="plugin-profile-name-input">Set profile name (optional):</label>
+<input type="text" id="plugin-profile-name-input" value="{{ .profileName }}" onsubmit="SetProfileName()">
+<button type="button" id="plugin-profile-name-button" onclick="SetProfileName()">Ok</button></p>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+  <pre><code>
+{{- if .caPem  }}
+kubectl config set-credentials {{ .profileName }} \
+  --exec-command={{ .runPath }} \
+  --exec-api-version=client.authentication.k8s.io/v1beta1 \
+  --exec-arg="-auth-url={{ .asyncAuthURL }}" \
+  --exec-arg="-kubeconfig-user={{ .profileName }}" \
+  --exec-arg="-ca-data={{ .authCAData }}"
+{{- else }}
+kubectl config set-credentials {{ .profileName }} \
+  --exec-command={{ .runPath }} \
+  --exec-api-version=client.authentication.k8s.io/v1beta1 \
+  --exec-arg="-auth-url={{ .asyncAuthURL }}" \
+  --exec-arg="-kubeconfig-user={{ .profileName }}"
+{{- end }}
+    </code></pre>
+</div>
+<h3>Create the context</h3>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+  <pre><code>kubectl config set-context {{ .profileName }}-{{ .clusterName }} \
+      --cluster={{ .clusterName }} \
+      --user={{ .profileName }}
+  </code></pre>
+</div>
+<h3>Set the active context</h3>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+  <pre><code>kubectl config use-context {{ .profileName }}-{{ .clusterName }}
+  </code></pre>
+</div>

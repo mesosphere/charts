@@ -1,0 +1,116 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# replicas of the CSI-Controller
+replicas: 1
+
+# replicas of the CSI-Snapshot-Controller
+replicasSnapshotController: 1
+
+image:
+  repository: "amazon/aws-ebs-csi-driver"
+  tag: "v0.5.0"
+
+liveness:
+  image:
+    repository: "quay.io/k8scsi/livenessprobe"
+    tag: "v2.0.0"
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists
+
+env: {}
+
+node:
+  # annotations for the pods running on each node as started per DaemonSet
+  podAnnotations: {}
+
+statefulSetCSIController:
+  # if you want to use kube2iam or kiam roles define it here as podAnnotation for the CSI-Controller (statefulSet)
+  podAnnotations: {}
+
+statefulSetCSISnapshotController:
+  # if you want to use kube2iam or kiam roles define it here as podAnnotation for the CSI-Snapshot-Controller (statefulSet)
+  podAnnotations: {}
+
+registrar:
+  node:
+    image:
+      repository: "quay.io/k8scsi/csi-node-driver-registrar"
+      tag: "v1.3.0"
+
+provisioner:
+  # True if enable volume scheduling for dynamic volume provisioning
+  enableVolumeScheduling: false
+  image:
+    repository: "quay.io/k8scsi/csi-provisioner"
+    tag: "v1.6.0"
+
+attacher:
+  image:
+    repository: "quay.io/k8scsi/csi-attacher"
+    tag: "v2.2.0"
+
+resizer:
+  # True if enable volume resizing
+  enabled: false
+  image:
+    repository: "quay.io/k8scsi/csi-resizer"
+    tag: "v0.5.0"
+
+snapshotter:
+  # True if enable volume snapshot
+  enabled: false
+  image:
+    repository: "quay.io/k8scsi/csi-snapshotter"
+    tag: "v1.2.2"
+
+snapshotController:
+  image:
+    repository: "quay.io/k8scsi/snapshot-controller"
+    tag: "v2.1.1"
+
+# Extra volume tags to attach to each dynamically provisioned volume.
+# ---
+# extraVolumeTags:
+#   key1: value1
+#   key2: value2
+extraVolumeTags: {}
+
+serviceAccount:
+  controller:
+    annotations: {}
+  snapshot:
+    annotations: {}
+
+# AWS key id and access key
+# these are optional and can be left as is
+secrets:
+  enabled: false
+  key_id: ""
+  access_key: ""
+
+storageclass:
+  isDefault: false
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+  type: gp2
+  fstype: ext4
+  iopsPerGB: null
+  encrypted: false
+  kmsKeyId: null
+  allowedTopologies: []
+  # - matchLabelExpressions:
+  #   - key: topology.ebs.csi.aws.com/zone
+  #     values:
+  #     - us-west-2a
+  #     - us-west-2b
+  #     - us-west-2c
+  allowVolumeExpansion: true
+
+cleanupVolumeSnapshotCRDV1alpha1: true

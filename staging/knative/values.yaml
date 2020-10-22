@@ -1,0 +1,18 @@
+global:
+  serviceLabels: {}
+
+eventing:
+  enabled: true
+
+eventing-sources:
+  enabled: true
+
+serving:
+  enabled: true
+  domain: example.com
+  customMetricsApiservice:
+    enabled: true
+  namespaceKnativeServing:
+    additionalLabels: {}
+  configDeployment:
+    registriesSkippingTagResolving: ""

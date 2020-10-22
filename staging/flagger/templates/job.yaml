@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: label-ns
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  annotations:
+    helm.sh/hook: pre-install
+spec:
+  template:
+    spec:
+      containers:
+      serviceAccountName: {{ template "flagger.fullname" . }}
+      containers:
+        - name: ns-labeler
+          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args: ["kubectl label --overwrite ns {{ .Release.Namespace }} istio-injection=enabled; kubectl label --overwrite ns {{ .Release.Namespace }} ca.istio.io/override=true"]
+      restartPolicy: OnFailure

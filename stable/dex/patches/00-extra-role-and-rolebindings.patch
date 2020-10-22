@@ -1,0 +1,61 @@
+commit a5158051fc8980586639b500abd1e1bd3352686a
+Author: Jie Yu <yujie.jay@gmail.com>
+Date:   Mon Feb 3 13:25:09 2020 -0800
+
+    dex: extra role and rolebinding for init container
+    
+    This is the extra patches on top of the upstream chart. This adds the
+    extra role and rolebindings for the init containers that will be used to
+    fetch relevant Dex configurations.
+    
+    ```
+    new file:   templates/role-initcontainer.yaml
+    new file:   templates/rolebinding-initcontainer.yaml
+    ```
+
+diff --git a/stable/dex-new/templates/role-initcontainer.yaml b/stable/dex-new/templates/role-initcontainer.yaml
+new file mode 100644
+index 0000000..3c3ab3f
+--- /dev/null
++++ b/stable/dex-new/templates/role-initcontainer.yaml
+@@ -0,0 +1,17 @@
++{{- if .Values.initContainers }}
++apiVersion: rbac.authorization.k8s.io/v1
++kind: Role
++metadata:
++  name: dex-secret-management
++  namespace: {{ .Release.Namespace }}
++rules:
++- apiGroups: [""]
++  resources: ["secrets"]
++  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
++- apiGroups: [""]
++  resources: ["services"]
++  verbs: ["get", "list", "watch"]
++- apiGroups: [""]
++  resources: ["configmaps"]
++  verbs: ["get", "list", "watch"]
++{{- end -}}
+diff --git a/stable/dex-new/templates/rolebinding-initcontainer.yaml b/stable/dex-new/templates/rolebinding-initcontainer.yaml
+new file mode 100644
+index 0000000..9a218ed
+--- /dev/null
++++ b/stable/dex-new/templates/rolebinding-initcontainer.yaml
+@@ -0,0 +1,17 @@
++{{- if .Values.initContainers }}
++---
++apiVersion: rbac.authorization.k8s.io/v1
++kind: RoleBinding
++metadata:
++  name: dex-secret-management
++  namespace: {{ .Release.Namespace }}
++roleRef:
++  apiGroup: rbac.authorization.k8s.io
++  kind: Role
++  name: dex-secret-management
++subjects:
++- apiGroup: ""
++  kind: ServiceAccount
++  name: {{ template "dex.serviceAccountName" . }}
++  namespace: {{ .Release.Namespace }}
++{{- end -}}

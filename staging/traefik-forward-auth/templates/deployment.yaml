@@ -1,0 +1,156 @@
+{{- if .Values.traefikForwardAuth.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "traefik-forward-auth.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+    helm.sh/chart: {{ include "traefik-forward-auth.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  {{- if .Values.deploymentAnnotations }}
+  annotations:
+{{ toYaml .Values.deploymentAnnotations | indent 4 }}
+  {{- end }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "traefik-forward-auth.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      serviceAccountName: {{ include "traefik-forward-auth.fullname" . }}
+{{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+{{- end }}
+      volumes:
+      {{- if .Values.traefikForwardAuth.caCertificate }}
+      - name: etc-traefik-forward-auth-ca
+        secret:
+          secretName: {{ template "traefik-forward-auth.fullname" . }}-ca-certificate
+          items:
+          - key: ca.crt
+            path: ca.crt
+      {{- else if .Values.traefikForwardAuth.caSecretName }}
+      - name: etc-traefik-forward-auth-ca
+        secret:
+          secretName: {{ .Values.traefikForwardAuth.caSecretName }}
+          items:
+          - key: ca.crt
+            path: ca.crt
+      {{- end }}
+      - name: etc-traefik-forward-auth-config
+        configMap:
+          name: {{ .Release.Name }}-configmap
+          items:
+          - key: config
+            path: config.ini
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+          {{- if or .Values.traefikForwardAuth.caCertificate .Values.traefikForwardAuth.caSecretName }}
+          - name: etc-traefik-forward-auth-ca
+            mountPath: "/etc/traefik-forward-auth/ca"
+            readOnly: true
+          {{- end }}
+          - name: etc-traefik-forward-auth-config
+            mountPath: "/etc/traefik-forward-auth/config"
+            readOnly: true
+          args:
+            {{- if .Values.traefikForwardAuth.enableImpersonation }}
+            - --enable-impersonation
+            {{- end }}
+            {{- if .Values.traefikForwardAuth.enableRBAC }}
+            - --enable-rbac
+            {{- end }}
+          env:
+            {{- range $key, $value := .Values.env }}
+            - name: {{ $key | quote }}
+              value: {{ tpl $value $ | quote }}
+            {{- end }}
+            - name: CONFIG
+              value: "/etc/traefik-forward-auth/config/config.ini"
+            - name: SSL_CERT_FILE
+              {{- if or .Values.traefikForwardAuth.caCertificate .Values.traefikForwardAuth.caSecretName }}
+              value: "/etc/traefik-forward-auth/ca/ca.crt"
+              {{- else}}
+              value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
+              {{- end }}
+            - name: LOG_LEVEL
+              value: "trace"
+            - name: SERVICE_ACCOUNT_TOKEN_PATH
+              value: "/var/run/secrets/kubernetes.io/serviceaccount/token"
+            {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.name is required" .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.name }}
+                  key: {{ required "traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.key is required" .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef.key }}
+            {{- else }}
+            - name: CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}-clientsecret
+                  key: clientSecret
+            {{- end }}
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}-secret
+                  key: secret
+            - name: SESSION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "traefik-forward-auth.fullname" . }}-secret
+                  key: secret
+            {{- if gt (len .Values.traefikForwardAuth.whitelist) 0 }}
+            - name: WHITELIST
+              value: {{ join "," .Values.traefikForwardAuth.whitelist | quote }}
+            {{- end }}
+            - name: COOKIE_SECURE
+              value: {{ .Values.traefikForwardAuth.cookieSecure | quote }}
+            {{- if .Values.traefikForwardAuth.domain }}
+            - name: DOMAIN
+              value: {{ .Values.traefikForwardAuth.domain | quote }}
+            {{- end }}
+            {{- if .Values.traefikForwardAuth.authHost }}
+            - name: AUTH_HOST
+              value: {{ .Values.traefikForwardAuth.authHost | quote }}
+            {{- end }}
+            {{- if gt (len .Values.traefikForwardAuth.rbacPassThroughPaths) 0 }}
+            - name: AUTHZ_PASS_THROUGH
+              value: {{ join "," .Values.traefikForwardAuth.rbacPassThroughPaths | quote }}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 4181
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          readinessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}

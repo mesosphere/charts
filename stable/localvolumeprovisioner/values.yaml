@@ -1,0 +1,26 @@
+image:
+  repository: "quay.io/external_storage/local-volume-provisioner"
+  tag: "v2.3.2"
+  pullPolicy: "IfNotPresent"
+
+# Multiple storage classes can be defined here. This allows to, e.g.,
+# distinguish between different disk types.
+# For each entry a storage class '$name' and
+# a host folder '/mnt/$dirName' will be created. Volumes mounted to this
+# folder are made available in the storage class.
+storageclasses:
+  - name: localvolumeprovisioner
+    dirName: disks
+    isDefault: true
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+
+priorityClassName: system-node-critical
+
+tolerations:
+  - effect: NoSchedule
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - key: CriticalAddonsOnly
+    operator: Exists

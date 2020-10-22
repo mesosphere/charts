@@ -1,0 +1,14 @@
+apiVersion: v1
+name: nvidia
+description: Nvidia GPU driver and device plugin for running Nvidia GPU
+keywords:
+  - gpu
+  - nvidia
+version: 0.3.5
+appVersion: "0.2.0"
+home: http://github.com/mesosphere/charts/staging
+sources:
+  - http://github.com/mesosphere/charts/staging
+maintainers:
+  - name: gilbert88
+  - name: joejulian

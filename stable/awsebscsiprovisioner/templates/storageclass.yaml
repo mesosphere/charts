@@ -1,0 +1,35 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: awsebscsiprovisioner
+  annotations:
+    kubernetes.io/description: AWS EBS CSI provisioner StorageClass
+{{- if .Values.storageclass.isDefault }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+provisioner: ebs.csi.aws.com
+{{ if .Values.storageclass.allowVolumeExpansion }}
+allowVolumeExpansion: {{ .Values.storageclass.allowVolumeExpansion }}
+{{ end }}
+volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
+reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
+parameters:
+  type: {{ .Values.storageclass.type | quote }}
+  {{- if .Values.storageclass.fsType }}
+  fsType: {{ .Values.storageclass.fsType | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.iopsPerGB }}
+  iopsPerGB: {{ .Values.storageclass.iopsPerGB | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.encrypted }}
+  encrypted: {{ .Values.storageclass.encrypted | quote }}
+  {{- end }}
+  {{- if .Values.storageclass.kmsKeyId }}
+  kmsKeyId: {{ .Values.storageclass.kmsKeyId | quote }}
+  {{- end }}
+{{- if .Values.storageclass.allowedTopologies }}
+{{- with .Values.storageclass.allowedTopologies }}
+allowedTopologies:
+{{ toYaml . }}
+{{- end }}
+{{- end }}

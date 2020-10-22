@@ -1,0 +1,26 @@
+grafana:
+  enabled: true
+
+nvidia-dcgm-exporter:
+  enabled: true
+  podNvidiaGpuMetricsExporter:
+    resources: {}
+  nvidiaDcgmExporter:
+    resources: {}
+  nodeSelector: {}
+  tolerations: []
+  initContainers: []
+
+nvidia-device-plugin:
+  enabled: true
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  initContainers: []
+
+nvidia-driver:
+  enabled: true
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  initContainers: []

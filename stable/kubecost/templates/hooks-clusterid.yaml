@@ -1,0 +1,148 @@
+
+{{- if index .Values "cost-analyzer" "global" "prometheus" "enabled" }}
+{{- if .Values.hooks.clusterID.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "kubecost.fullname" . }}-hook
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    app: {{ template "kubecost.name" . }}-kubecost
+{{ include "kubecost.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade,post-delete
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "kubecost.fullname" . }}-hook
+  labels:
+    app: {{ template "kubecost.name" . }}
+{{ include "kubecost.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade,post-install,post-upgrade,post-delete
+    helm.sh/hook-weight: "-4"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+rules:
+# The following namespaces and configmaps permissions are needed to
+# grab the kube-system namespace uid and write it out to a configmap.
+- apiGroups: [""]
+  resources:
+  - namespaces
+  verbs: ["get"]
+- apiGroups: [""]
+  resources:
+  - configmaps
+  verbs: ["get", "create", "patch", "update", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "kubecost.fullname" . }}-hook
+  labels:
+    app: {{ template "kubecost.name" . }}
+{{ include "kubecost.labels" . | indent 4 }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade,post-install,post-upgrade,post-delete
+    helm.sh/hook-weight: "-3"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "kubecost.fullname" . }}-hook
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kubecost.fullname" . }}-hook
+    namespace: {{ $.Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-edit-prom-cluster-id
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "3"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-edit-prom-cluster-id
+    spec:
+      serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+      containers:
+        - name: kubectl
+          image: {{ .Values.hooks.clusterID.kubectlImage | quote }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - "-c"
+            - |
+              /bin/bash <<'EOF'
+              set -o nounset
+              set -o errexit
+              set -o pipefail
+              CLUSTERID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}")
+              kubectl get configmap/{{ template "kubecost.prometheus-server-cm-name" . }} -oyaml > /tmp/override.yaml
+              sed -e 's/\$CLUSTER_ID/"'$CLUSTERID'"/g' /tmp/override.yaml > /tmp/final.yaml
+              kubectl apply -f /tmp/final.yaml
+              echo "Done replacing \$CLUSTER_ID with $CLUSTERID"
+              EOF
+      restartPolicy: OnFailure
+{{- if index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-cluster-id-configmap
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-install,pre-upgrade
+    helm.sh/hook-weight: "3"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-cluster-id-configmap
+    spec:
+      serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+      containers:
+        - name: kubectl
+          image: {{ .Values.hooks.clusterID.kubectlImage | quote }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - "-c"
+            - kubectl create configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }} -oyaml --dry-run --save-config --from-literal=CLUSTER_ID=$(kubectl get namespace kube-system -o jsonpath="{.metadata.uid}") | kubectl apply -f -
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-cleanup-cluster-id-configmap
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: post-delete
+    helm.sh/hook-weight: "3"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-cleanup-cluster-id-configmap
+    spec:
+      serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+      containers:
+        - name: kubectl
+          image: {{ .Values.hooks.clusterID.kubectlImage | quote }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }}
+      restartPolicy: OnFailure
+{{- end }}
+{{- end }}
+{{- end }}

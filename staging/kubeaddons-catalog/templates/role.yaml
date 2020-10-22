@@ -1,0 +1,37 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "kubeaddons-catalog.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubeaddons-catalog.labels" . | indent 4 }}
+rules:
+  - apiGroups: ["kubeaddons.mesosphere.io"]
+    resources: ["addonrepositories"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: ["kubeaddons.mesosphere.io"]
+    resources: ["addonrepositories/status"]
+    verbs: ["update"]
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "watch", "list"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "kubeaddons-catalog.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "kubeaddons-catalog.labels" . | indent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "kubeaddons-catalog.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kubeaddons-catalog.fullname" . }}
+    namespace: {{ .Release.Namespace }}

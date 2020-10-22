@@ -1,0 +1,29 @@
+# Rules for alerting against velero
+{{- if and .Values.mesosphereResources.create .Values.mesosphereResources.rules.velero }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ printf "%s-%s" (include "prometheus-operator.fullname" .) "velero" | trunc 63 | trimSuffix "-" }}
+  labels:
+    app: {{ template "prometheus-operator.name" . }}
+{{ include "prometheus-operator.labels" . | indent 4 }}
+{{- if .Values.defaultRules.labels }}
+{{ toYaml .Values.defaultRules.labels | indent 4 }}
+{{- end }}
+{{- if .Values.defaultRules.annotations }}
+  annotations:
+{{ toYaml .Values.defaultRules.annotations | indent 4 }}
+{{- end }}
+spec:
+  groups:
+  - name: velero
+    rules:
+    # backup failed
+    - alert: veleroFailedBackup
+      annotations:
+        message: 'velero schedule "{{`{{ $labels.schedule }}`}}": backup failed.'
+      expr: rate(velero_backup_failure_total{schedule!=""}[60m]) > 0
+      for: 10m
+      labels:
+        severity: warning
+{{- end }}

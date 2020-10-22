@@ -1,0 +1,23 @@
+# Default values for generic-ingress.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+# single `ingress` definition is now deprecated and `ingresses` should be used
+# instead.
+ingress:
+  enabled: false
+
+ingresses: []
+
+# ingresses:
+#   - name: scoped-test
+#     annotations:
+#       annotation-1: test
+#     paths:
+#       - backend:
+#           serviceName: service
+#           servicePort: 8080
+#         path: /test

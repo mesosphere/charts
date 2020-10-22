@@ -1,0 +1,43 @@
+{{- if and .Values.snapshotter.enabled (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) }}
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: ebs-csi-snapshot-controller
+  namespace: {{ .Release.Namespace }}
+spec:
+  serviceName: ebs-csi-snapshot-controller
+  replicas: {{ .Values.replicasSnapshotController }}
+  selector:
+    matchLabels:
+      app: ebs-csi-snapshot-controller
+      app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+    {{- if .Values.statefulSetCSISnapshotController.podAnnotations }}
+      annotations:
+      {{- range $key, $value := .Values.statefulSetCSISnapshotController.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    {{- end }}
+      labels:
+        app: ebs-csi-snapshot-controller
+        app.kubernetes.io/name: {{ include "aws-ebs-csi-driver.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      serviceAccount: ebs-csi-snapshot-controller
+      priorityClassName: system-cluster-critical
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+      containers:
+        - name: ebs-csi-snapshot-controller
+          image: "{{ .Values.snapshotController.image.repository }}:{{ .Values.snapshotController.image.tag }}"
+          args:
+            - --v=5
+            {{- if (gt (.Values.replicasSnapshotController | int) 1) }}
+            - --leader-election=true
+            {{- end }}
+{{- end }}

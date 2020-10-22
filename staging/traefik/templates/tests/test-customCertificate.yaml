@@ -1,0 +1,102 @@
+{{- if .Values.testFramework.enabled  }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: konvoy-company-cert-setup
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: konvoy-company-cert-setup
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: konvoy-company-cert-setup
+subjects:
+  - kind: ServiceAccount
+    name: konvoy-company-cert-setup
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: konvoy-company-cert-setup
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "traefik.fullname" . }}-konvoy-company-cert-deploy-config
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  resource.yml: |
+    apiVersion: v1
+    data:
+      tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUV0akNDQXA0Q0NRQ0VCRXQ4NGV6VE9UQU5CZ2txaGtpRzl3MEJBUXNGQURBZE1Sc3dHUVlEVlFRRERCSnIKYjI1MmIza3VZMjl0Y0dGdWVTNTBiR1F3SGhjTk1qQXdOekF5TVRFMU5UQTBXaGNOTWpBd056QXpNVEUxTlRBMApXakFkTVJzd0dRWURWUVFEREJKcmIyNTJiM2t1WTI5dGNHRnVlUzUwYkdRd2dnSWlNQTBHQ1NxR1NJYjNEUUVCCkFRVUFBNElDRHdBd2dnSUtBb0lDQVFEa0tyQzROK3ZGdUN2b0hDU2ROVjYwMmRScUpIMDBSaDliaG1odGs4QjEKd0hKL1YxR3ZKRHZ6OGR5aTlWMjNoNm5sTmN6WVZRUTIxZGxCTHVzSGMzWHhOejQyek00QWRqRnVxVVRuSXlqbApmd1BJTnhjVFBSU211bGxueFRxWFpPR0Q1WU5VVzBXUklabXZlZWdaSFBRRHIyVkVVUGZ3K1dIaXVQY0pvNURoCjBzaksvbTRTWmlkM0xlaUtLZVNKMCtTdjhQaWRBYWlGRUJWQmhURzk3Zk0zUUJGdERXYnFwME9WdXR3bXdERFcKNnZvbVhBelhDLzd2cHh6SXRVeFkzRGJxVkM3blJDUFl2QWlTR2F2Y1hCVnVveEs1cXMyRkdoUElyNUdoVzBCVwpJTUxGR1ZCQWhrV05iK0FDT3RBSUhPS3RIcWRFQlJzSDRPMGVpOUtFOTh1ZnMybm8wMTdIdWwzbUpLajk1VVJxCjNVMjJBMlFGRElGamU1bllNZUF4RWpYeU1oNUtDaXhvbmhSaTRXSW9tUlZzWmtoVU9LbXlTWTc0T2tlaXZLdXYKVUlxN003d2FuRlg2TDB2VElraElvYzZXWkl3TEN3VWVudDg2U3VicVlRb1JuaHBIQWJWNzRVTXl2MCtocGhPNgpyKzVLM1BBQ0xTeDJZTlhBdTM5cC82WERONklJUUl3M3FDeHNJL3cyd2hhUHZRN2lxTkl1UURaR1lnOUg0aktRClVXWkVDRVJBMitGVWpFUzRIcXFMUmpKcDlFUG40cVNUVlNwbmNZa0IzaXVrT2pVa1RaYnROQ1kxMm9DK05EYW4KdUNOVWpyQ3JidnF4bmJydDlaZVpwdVdjUndvNmpQSW9jZlZ6OHRuQWJTYVRINDhqZHFJNjdzckZJaENaVGlCYgpDUUlEQVFBQk1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQ0FRQ1VUKzM3L1cxRWpJakdralRxSUlsWkVxSDRpNFZtCnRGb0xZb1JwcE8rd1U0Umk5WFlweE1EYkgrU3hLeDlrUjN4WXNtUFBKTmtIZFB3RmVHYnFVOWNVZEZJeDV5RjEKTUZUUU56Q2R0T1JVYnp0M21ZMHYyN2RYQ2NzZVIyczZWcG5YUmIzOFBJUnhEbkIwUTZackk3ZWJmVk5mSGwxSwpkR3FOaDVmeHRvMXF0Qk1xSGU4eWN0Yi9kOHZ6WUdnSVFYSStLVktOT3pHZUIzRHhvSmV4QzBtQ1hyVWFOeU9wCjNWdlBUbmhwdm9sMUtqaEhCbURhZ1RiOWZQV0xqWEsvY2pxeVFMVXZqT0J5QWlhZTZscU5yWDVpcmRUUUpyN0wKYkJlWnBxbUc4L2xTZy9LM2lVRitQMUw0aWlmOGJEMm0zL2Vjdi9LZWhLcGFydUpqZ3hSZlpWRmRHdEU4bHIrSQpldUU0c3JEZnBOMUo1dHBWYVpCbE9sSUV3bXVqanRCTW0zUXV1ZG1Bb1Z6ckZmTUFEUjJFbDE3NDRIRXFzVVdwClZLVjZVS2kxQmdRL1JXaHdOQ2tKazBFRjN2WUYvYVpJdWxua2VCeUVpQ1JQWUp1dVJ4OEhoQ0UzNFM1NTY4ZFUKSFNQZXpOZFhOVG9udEgzc05Pc1N6b1gxbGRBK0huVkxUSEVNYU5JUGJ4YjE5NElFNlo1MnJFeVROTGR3MDRubwpFN3EycHdNNHAxeG9WNDQ1d0lNOVd5V0Z5RUdwcmNmV1ZOOWhpZFFYdm9LTDVCTWdaSlltT1JCVm8zdzFZNkdYClU3cTZ2L2ozNndLWG1CektLSHgzaDUzV2tpajMrVVVrWVR4V0tSLzNheUpxdUxCUlNYMzNjVmtZZzk0T1IyUmgKZkVqanBabXlSUE5lSlE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlKS1FJQkFBS0NBZ0VBNUNxd3VEZnJ4YmdyNkJ3a25UVmV0Tm5VYWlSOU5FWWZXNFpvYlpQQWRjQnlmMWRSCnJ5UTc4L0hjb3ZWZHQ0ZXA1VFhNMkZVRU50WFpRUzdyQjNOMThUYytOc3pPQUhZeGJxbEU1eU1vNVg4RHlEY1gKRXowVXBycFpaOFU2bDJUaGcrV0RWRnRGa1NHWnIzbm9HUnowQTY5bFJGRDM4UGxoNHJqM0NhT1E0ZExJeXY1dQpFbVluZHkzb2lpbmtpZFBrci9ENG5RR29oUkFWUVlVeHZlM3pOMEFSYlExbTZxZERsYnJjSnNBdzF1cjZKbHdNCjF3dis3NmNjeUxWTVdOdzI2bFF1NTBRajJMd0lraG1yM0Z3VmJxTVN1YXJOaFJvVHlLK1JvVnRBVmlEQ3hSbFEKUUlaRmpXL2dBanJRQ0J6aXJSNm5SQVViQitEdEhvdlNoUGZMbjdOcDZOTmV4N3BkNWlTby9lVkVhdDFOdGdOawpCUXlCWTN1WjJESGdNUkkxOGpJZVNnb3NhSjRVWXVGaUtKa1ZiR1pJVkRpcHNrbU8rRHBIb3J5cnIxQ0t1ek84CkdweFYraTlMMHlKSVNLSE9sbVNNQ3dzRkhwN2ZPa3JtNm1FS0VaNGFSd0cxZStGRE1yOVBvYVlUdXEvdVN0encKQWkwc2RtRFZ3THQvYWYrbHd6ZWlDRUNNTjZnc2JDUDhOc0lXajcwTzRxalNMa0EyUm1JUFIrSXlrRkZtUkFoRQpRTnZoVkl4RXVCNnFpMFl5YWZSRDUrS2trMVVxWjNHSkFkNHJwRG8xSkUyVzdUUW1OZHFBdmpRMnA3Z2pWSTZ3CnEyNzZzWjI2N2ZXWG1hYmxuRWNLT296eUtISDFjL0xad0cwbWt4K1BJM2FpT3U3S3hTSVFtVTRnV3drQ0F3RUEKQVFLQ0FnQWlHZXROclRYMDJDRGYwUXo3M2hVb2pJSDkxelJMVXN1dS96aXVYKzNjNjRWeFdOaWhoNVhhVU9TOApDbFlXYnhWS1o2OFZDaWZXRmtJaFJ1VGp1VE1BZVZRNEZvWVhkWkxQeWthOUVQazB5N1lCLzVIWVUwRzU1WklsCk8wb1ZoSU5jRmpwNXFpYU1tV3dCMlFPQ2RWeFhES2ppL0FNQ3BoTW1NcVRoY092ZmhJUjBLbkRER1RkK3pZSzYKMjZZSG4zN0hlUWwvVmRjZEJCbFpNSklOby9tODRUdDVoQTVFdGZrWThOT2tpd2NCcUI3NUNycjBqUnR1TUJqUwpPcDZOaldRN3c1YzdBMmtrSkg1WGI3VEsrNHhNZTl6NW1QaWNreGd2MzJXeHF4VERpcVB4bDJYeUx0OUlVMWMwCm5odW5pc0dxUkRHVnJmbXJSTWZMei9RSDRZMHlLZnYvSm1HMXpyMUtxVUJKUHA3Zk9SUDMzb2RtZjBUd1VmazgKaXh5ZDduOCtOTktDR1k1UWNQQ0VEUTJzcDdDYmdxSXN6VmxSODlaVWN2WmJRQnA3RDgwYmhVL1o0b0FLdHBlcgp4ZXRJc09ySFpUQ1p1U1Zna1lyQ1kwOHFBWGRudmFxRGl1aW80N1Z2d2ZnT1c5V3hKdWZKZjBNblFlSS9ZRXhtCkMyUVk2emJSWk9aVUF5Z2ZmK2txRWJJRVlOYkNZWStxL1dTdklndnd4Y2ZKK1FHNWRGZGtNbkIxWWFZekdsMWMKZHN1a3ZmSC9BamRFRGhZV2VUS2ZJSzgxMFRoRVpYMDVIalI0ZDJ4TmRROGVOSmpVcERPN2h0L0RRQjBvcW9KZgpRU0dsMm5zY3hSU3gzbVoyREZjRWlqVU5TUldXalRheExCM1JhTklCUlRXMDlOZmx2UUtDQVFFQTlGVXIyaU9GCjZ6d2R6bUdnZjhpUWVwZS85b2tzY2NGSkZKUnpGaUFnaXdEeWdNeVRrazRoR2R3bU1iTFdmSmlCOHlhUVRIb0EKZlpWZ3pvb3hyRElYSGtFNmsra1R5amtZWUxCRFVBSjZtZ2FrcmxpSVljbFpVUjk1VkVpWk5GUTF5ZmEyNG9HZgpidXZiOFVSVkh3T21sVURIeU9Fb0N4cHNjbFoydW1qeTEvbUhsKzBlK3dtSUI3R1NQUE5QZmI1cEhPZU1ISStOCkZnZXFINmdjOEdIQ2NRZkkxa1YzM2UrS2ZiTkdCaHZ6SFFIdHp3bi9TdG9wbENONVorTms3YkhXMkV6K1VQbDUKRm5yTEFMSEN5cjdyeFdxcG53TjB2NEU2RFJPMThHbEJrWS9uNTRmZk9WL2dXMzJ6Q0RKSWRkRUVtTHpXN2loUwpCc29YbjRqVTI1OTR6d0tDQVFFQTd3L21TTXJlUmJVWmVYVjdSYVc2QitKSjd0NjlXbjlNRUEyQ2VkVzY0Tkp5CjBhN0l5YW1XOW04bUNhMXlVOEllUHB0eE1HeHp6SEFpeTV4ejVyRGVETTNSeW9VOXpSOXdFdDFCOG95REpXZ2YKU3hqTlNRMFpnK3VCdythTVZGK3ZBUUhsQnFmaUZSU0dHWnVJcElycXhKYU41YlBJQzlEU3ZxWURhc0JDOUNQUQplWG92dUk2Q0psUjhBQklUT3lyRi9rUndYbEowUHBEcGEyVTJ5aGpmNkkyNGZQWXc3bURtSTF3dmVNS1FmTnRjCnBYRHhoYXpDcjhaa1gxME1DQVdjMUJxZ2VWaUVGbStmTVB1Q3NzQmlxdDFEMEpGRmJlT2NOMUh4cGtqWW5hSS8KN3VEQ3NPVEgwWXZHMS9PZGk3eUtqeWNGWllHOG5aVlBRalgxUVNtMHB3S0NBUUVBeUErTlRwcFRwMStjRUVjRQpBbDJaWDZndHVKSnRYOStpRlVYUVRrZVVIZjF5azEvdlhaYTNwOU1KT3h4eVg2Y0lrSzM4N1lIZ01QUkZSaGtGCnZ6ZHNrb3RhaVk0SmRFWDMzZ08xdWlldGQ3MEV6dlVUQnU2MVFhV0IxUzkwc3RKWkVMd0ExOHJIWHkyazlCSzkKbUIySEl5TGQ4Mi9aTis0MDZoSStPVGlCejdJMEFvUllIN21ZTnFTQlY0THFqYzJCaC9kWVZISitWWkdGRFZLOApEMkFjdEN4cG1IbGRRczVIR2RIVy9sMllYU0lkTksrODUrOW1xRE83endMMHUyUW94UWVXSFh1SVdJM0c5eFNXCnFTaFhLVmpDOXI3L3MyYit2NEpxTVNZZVdDLzY5U3ZkN2I3Qm1HaCtWYkhHZnlIY242dlFXVVdPbEp5Wlp6bkYKQU9lOUpRS0NBUUVBakRnZk1vTUxiSWVVc1pFZkJQTDM4cmZmOWFQZ0hMeWR1S3l6NHhKaDBveWRuQytReGZnYQorK0NseHZkZEg1TzBlYlJpNTZ3MUg2eUdQRGRBSkFlSnRxamliSTlLZUk0QUJwQ1FwZHVVOE5QcHh2cDlMbVBvCm0xLy9kUkE5THlBUVhkN21uc2pKNnVObTVJNDl6NFZMdnBNd0Y1TWp1d3A1RWluOXh4ZU9MZlR6eXN6SVFOQVYKdHJYSEphTjBkRGZhZWhGYWQzaVZoajBwTER6cHJoQjVCTVpiZDdCUGN3S1MraHFRSFp6QmN2cVhsTkp5VjUzRgpjNlJDSzAxQVNWUkJjSWROcU44cVdwNk9HUVRzM0R2TG83eTBraGtqU0JsQS81R28wNGZXeGw3c2NRaVVLWDJIClZubE40RXljRStJNncweDM5ZG5xNytNcjRnSVVJR3g5OFFLQ0FRQk5ueGF5TVZyRktodS9FNUczalJmTXdjN1cKVXVCQkpkSVhVRWFyN09WdUs3VEFpT2QybzFhNlBIQytQM2s5UDY0YzVsN05OSFRQMDZ5aHVYOWpUZ2RwdXhobgo5ZzdOUnNhV09jQUNoYlp4NkNqclV6eUVsdExDNmt1RWptUUd2ZzRWaGhjNGwvMCs4MCtISmFkVFpETC9rYTA0CmNxWkc5KzJSVzFyYzFFSXNGQW4zSHVlbWN2WU95bUtDdWo1ZGtXMkhUQVkzc0xrcXB5VHZZU3JKWjZTZ2k0UFIKMTgrQmNZaU1tZ3pTS2JpYzV0dFNEUTNmL1Z4aTNtQlcvdncwbExDdjdEalpjMUVGMFJzTndsMkpPRFdOS0NJNQplcWFqQVQrMFZVWC9NcW9pN1BjRGZROFZYT2U2M0NLNk9EMlhBb2N4MEI5a2FHWFUvU1RZWkl3SldXQzcKLS0tLS1FTkQgUlNBIFBSSVZBVEUgS0VZLS0tLS0K
+    kind: Secret
+    metadata:
+      name: konvoy-company-cert
+    type: kubernetes.io/tls
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "traefik.fullname" . }}-konvoy-company-cert-deploy-job
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      serviceAccountName: konvoy-company-cert-setup
+      restartPolicy: Never
+      containers:
+      - name: {{ template "traefik.fullname" . }}-konvoy-company-cert-deploy-job-pod
+        image: bitnami/kubectl:1.18.8-debian-10-r15
+        command:
+        - kubectl
+        - apply
+        - -f
+        - /etc/config/resource.yml
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: config-volume
+        configMap:
+          defaultMode: 420
+          name: {{ template "traefik.fullname" . }}-konvoy-company-cert-deploy-config
+      restartPolicy: Never
+{{- end }}

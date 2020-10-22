@@ -1,0 +1,77 @@
+# Default values for cert-manager-setup.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+issuers: []
+#  - name: kubernetes-root-issuer
+#    secretName: kubernetes-root-ca
+#  - name: my-issuer
+#    namespace: kube-system
+#    secretName: my-issuer-ca
+
+certificates: []
+#  - name: kubernetes-intermediate-ca
+#    # where to store this certificate
+#    secretName: kubernetes-intermediate-ca
+#    issuerRef:
+#      name: kubernetes-root-issuer
+#      kind: Issuer
+#      # These are the default usages for reference
+#    usages:
+#      - "digital signature"
+#      - "key encipherment"
+#    commonName: cert-manager
+#    duration: 87600h
+#    dnsNames: []
+#  - name: my-certificate
+#    namespace: kube-system
+#    # where to store this certificate
+#    secretName: my-certificate-secret
+#    issuerRef:
+#      name: kubernetes-root-issuer
+#      kind: Issuer
+#      # These are the default usages for reference
+#      usages:
+#        - "digital signature"
+#        - "key encipherment"
+#    commonName: cert-manager
+#    duration: 87600h
+#    dnsNames:
+#      - example.com
+#      - www.example.com
+#    ipAddresses:
+#      - 127.0.0.1
+#    # rsa or ecdsa
+#    keyAlgorithm: ecdsa
+#    # pkcs1 or pkcs8
+#    keyEncoding: pkcs8
+#    # rsa -> 2048 ... 8192 or ecdsa -> 256, 384, 521
+#    keySize: 521
+#    # array of strings
+#    organization:
+#      - MyCompany, Inc.
+#      - MyCompanyKnowOldNaming, Inc.
+#    renewBefore: 360h
+
+clusterissuers: []
+#  - name: kubernetes-ca
+#    spec:
+#      ca:
+#        secretName: kubernetes-intermediate-ca
+#  - name: my-ca
+#    spec:
+#      ca:
+#        secretName: my-certificate-secret
+
+# When installing addons on a cluster that already has cert-manager
+# installed with webhook validation enabled this value should be set to
+# false. This is necessary because CRDs and Webhook (APIService) objects
+# are cluster wide global scoped without a namespace. That prevents to
+# install 2 webhook configurations for 2 instances of cert-manager.
+#
+# This will work only in case when a cert-manager is installed in
+# `cert-manager` namespace.
+installCertManager: true

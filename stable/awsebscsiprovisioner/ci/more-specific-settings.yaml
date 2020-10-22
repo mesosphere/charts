@@ -1,0 +1,21 @@
+# Check that statefulSet.podAnnoations is rendered
+replicas: 2
+extraVolumeTags:
+  konvoy: cluster-name-random
+  konvoy-version: 1.4.2
+storageclass:
+  isDefault: true
+  reclaimPolicy: Delete
+  volumeBindingMode: WaitForFirstConsumer
+  type: io1
+  fstype: xfs
+  iopsPerGB: 100
+  encrypted: true
+  kmsKeyId: arn:aws:kms:us-west-2:123456789011:key/d72124e7-ffff-1111-zzzz-4f820a16908e
+allowedTopologies:
+- matchLabelExpressions:
+  - key: topology.ebs.csi.aws.com/zone
+    values:
+    - us-west-2a
+    - us-west-2b
+    - us-west-2c
