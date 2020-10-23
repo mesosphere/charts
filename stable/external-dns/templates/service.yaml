@@ -30,5 +30,12 @@ spec:
     {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort)) }}
     nodePort: {{ .Values.service.nodePort  }}
     {{- end }}
+  - name: metrics
+    port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: http
+    {{- if and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort)) }}
+    nodePort: {{ .Values.service.nodePort  }}
+    {{- end }}    
   selector: {{ include "external-dns.matchLabels" . | nindent 6 }}
   type: {{ .Values.service.type }}
