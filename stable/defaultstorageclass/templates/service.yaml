@@ -5,7 +5,8 @@ metadata:
   creationTimestamp: null
   labels:
     control-plane: controller-manager
-    servicemonitor.kubeaddons.mesosphere.io/path: "metrics"
+    servicemonitor.kubeaddons.mesosphere.io/path: metrics
+    kubeaddons.mesosphere.io/name: defaultstorageclass
   name: dstorageclass-controller-manager-metrics-service
   namespace: {{ .Release.Namespace }}
 spec:
