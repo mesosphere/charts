@@ -2,13 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    prometheus.io/port: "8443"
-    prometheus.io/scheme: https
-    prometheus.io/scrape: "true"
   creationTimestamp: null
   labels:
     control-plane: controller-manager
+    servicemonitor.kubeaddons.mesosphere.io/path: metrics
+    kubeaddons.mesosphere.io/name: defaultstorageclass
   name: dstorageclass-controller-manager-metrics-service
   namespace: {{ .Release.Namespace }}
 spec:
