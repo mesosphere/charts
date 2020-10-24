@@ -38,6 +38,13 @@ prometheus:
   # can be left at false.
   scrapeAnnotations: false
 
+  ## Enable the /metrics endpoints, for now only supports prometheus
+  ## set to true to enable metric collection by prometheus
+  metrics:
+    enabled: true
+    # labels to apply to the service
+    labels: {}
+
   # Prometheus Operator service monitors
   serviceMonitor:
 
