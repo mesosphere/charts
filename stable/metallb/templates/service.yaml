@@ -1,4 +1,4 @@
-{{- if .Values.prometheus.serviceMonitor.enabled }}
+{{- if or .Values.prometheus.metrics.enabled .Values.prometheus.serviceMonitor.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,6 +9,9 @@ metadata:
     chart: {{ template "metallb.chart" . }}
     app: {{ template "metallb.name" . }}
     jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
+{{- if .Values.prometheus.metrics.labels }}
+{{ toYaml .Values.prometheus.metrics.labels | indent 4 }}
+{{- end }}
     component: controller
 spec:
   type: ClusterIP
@@ -32,6 +35,9 @@ metadata:
     chart: {{ template "metallb.chart" . }}
     app: {{ template "metallb.name" . }}
     jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel }}
+{{- if .Values.prometheus.metrics.labels }}
+{{ toYaml .Values.prometheus.metrics.labels | indent 4 }}
+{{- end }}
     component: speaker
 spec:
   type: ClusterIP
