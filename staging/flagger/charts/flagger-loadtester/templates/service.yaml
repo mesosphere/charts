@@ -7,6 +7,9 @@ metadata:
     helm.sh/chart: {{ include "loadtester.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:

@@ -56,6 +56,7 @@ Parameter | Description | Default
 `nodeSelector` | Node labels for pod assignment | `{}`
 `service.type` | Type of service | `ClusterIP`
 `service.port` | ClusterIP port | `80`
+`service.labels` | Extra service labels | `{}`
 `cmd.timeout` | Command execution timeout | `1h`
 `logLevel` | Log level can be debug, info, warning, error or panic | `info`
 `meshName` | AWS App Mesh name | `none`
