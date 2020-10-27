@@ -103,6 +103,6 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ .Values.mesosphereResources.hooks.prometheus.configmapName }} -n {{ .Release.Namespace }}
+            - kubectl delete --ignore-not-found=true configmap {{ .Values.mesosphereResources.hooks.prometheus.configmapName }} -n {{ .Release.Namespace }}
       restartPolicy: OnFailure
 {{- end }}
