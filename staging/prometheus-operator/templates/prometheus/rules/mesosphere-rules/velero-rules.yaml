@@ -1,5 +1,5 @@
-# Rules for alerting against velero
 {{- if and .Values.mesosphereResources.create .Values.mesosphereResources.rules.velero }}
+# Rules for alerting against velero
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
