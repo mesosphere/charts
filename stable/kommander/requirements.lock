@@ -4,10 +4,10 @@ dependencies:
   version: 0.1.15
 - name: kommander-federation
   repository: https://mesosphere.github.io/yakcl/charts
-  version: 0.6.2
+  version: 0.6.3
 - name: kommander-licensing
   repository: https://mesosphere.github.io/yakcl/charts
-  version: 0.6.2
+  version: 0.6.3
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander/charts
   version: 6.37.0
@@ -17,5 +17,5 @@ dependencies:
 - name: grafana
   repository: https://kubernetes-charts.storage.googleapis.com
   version: 4.6.3
-digest: sha256:bec698c08919a403654afa61c845b51a772651f2bb5275909c7e6c4ff3a14c51
-generated: "2020-10-26T21:31:13.679302-07:00"
+digest: sha256:30d06e47c4165ed8619f68e5f17e23f6bdf1583da0902d097da223afb6508438
+generated: "2020-10-27T15:36:41.016665-07:00"
