@@ -7,6 +7,13 @@ metadata:
     helm.sh/resource-policy: keep
 spec:
   group: flagger.app
+  names:
+    plural: canaries
+    singular: canary
+    kind: Canary
+    categories:
+      - all
+  scope: Namespaced
   versions:
     - name: v1alpha3
       served: true
@@ -887,11 +894,4 @@ spec:
         - name: LastTransitionTime
           type: string
           JSONPath: .status.lastTransitionTime
-  names:
-    plural: canaries
-    singular: canary
-    kind: Canary
-    categories:
-      - all
-  scope: Namespaced
 {{- end }}
