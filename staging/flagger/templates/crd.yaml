@@ -7,7 +7,6 @@ metadata:
     helm.sh/resource-policy: keep
 spec:
   group: flagger.app
-  version: v1alpha3
   versions:
     - name: v1alpha3
       served: true
