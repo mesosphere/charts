@@ -3,12 +3,7 @@ entries:
   cert-manager-setup:
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:47.216921197Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v1.0.1
+    created: "2020-11-02T21:15:48.909628481Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: cc4e729e01f8bc0249afc819d7662d47034326e4c6454b96111728ece6af31b2
     home: https://github.com/mesosphere/charts
@@ -28,12 +23,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:47.199037721Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v1.0.1
+    created: "2020-11-02T21:15:48.883594161Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a7acd5ed0746cbcfd38cb0c76277b9c57fdd66b25a91c8cf9718f6495e709144
     home: https://github.com/mesosphere/charts
@@ -53,12 +43,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:47.180051107Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v1.0.1
+    created: "2020-11-02T21:15:48.865018039Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: e346e376e36145a2feefa42f565b1c7fcbde0aac2ba6318347bc4ad343cc8482
     home: https://github.com/mesosphere/charts
@@ -78,12 +63,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:47.160197542Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: v1.0.1
+    created: "2020-11-02T21:15:48.838861866Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 7d8ff0ce2068982927c65c2a59fde8ee6c9e6d46a2fc89c3e47aff84d04c3d8a
     home: https://github.com/mesosphere/charts
@@ -103,12 +83,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.079402332Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.789170748Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a845bdca9e225763e641e754b33c369c87a549892becbbc7f0be96cc33b2a2c2
     home: https://github.com/mesosphere/charts
@@ -128,12 +103,7 @@ entries:
     version: 0.1.17
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.074088113Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: file://cert-manager
-      version: 0.10.2
+    created: "2020-11-02T21:15:48.78232479Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 4eec309c5398dc169d706a20cb759968364b276526ac3559689a217df8b7ca2f
     home: https://github.com/mesosphere/charts
@@ -153,12 +123,7 @@ entries:
     version: 0.1.16
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.068097038Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: file://cert-manager
-      version: 0.10.2
+    created: "2020-11-02T21:15:48.769894024Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: c85d198ee5cef35414740ad0d3d6288abc8cbe0a2d4fc51f404ebe34efa40acd
     home: https://github.com/mesosphere/charts
@@ -178,14 +143,10 @@ entries:
     version: 0.1.15
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.061618173Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.731738231Z"
     description: Install cert-manager and optionally add a ClusterIssuer
-    digest: 8385e3ffc9801fddedbca3e7c388c776b336d72dc6e2cb2857be1192ff755810
+    digest: 70908a1bf9858ee8a58eb7f2716640c939a2af9adb6e9f75a6772cb9db532ee3
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -203,14 +164,10 @@ entries:
     version: 0.1.14
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.058107036Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.727584502Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 0340f4c5cd3908f0ff0794df53926c10c47a5d3bcb5e1d4482130ff1a0248acd
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -228,14 +185,10 @@ entries:
     version: 0.1.13
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.054769732Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.723295858Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 074d4ae246c7e1d457cac5621d87e29110a2cc1d56ba2bdd0c911cb7fc2c5de6
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -253,14 +206,10 @@ entries:
     version: 0.1.12
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.041748917Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.717900338Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 1d723ece36bdf97f4dd19d20af51baa3a9f9d2789195b0c30fc09682b3e5e9b2
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -278,14 +227,10 @@ entries:
     version: 0.1.11
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.036905523Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.714571559Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 83a37c16670ee549d4ae2b18e35ef9518d9ac37e827e9bbb7986a25caf89c400
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -303,14 +248,10 @@ entries:
     version: 0.1.10
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.112606697Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.82216874Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: c8935b57e2cdc09a8e714c9e4fd9bf3ac09e3baf70d9a181f146d99e5ed0d5a4
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -328,14 +269,10 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.107828357Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.818240459Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: fc6b5dc4480d6b6f961c50eabba1644f0165b6e423cdf8ac3e3e674a4b268d12
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -353,14 +290,10 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.104462764Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.815323234Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 2d20035fae58536d87387198ee2f13287d257ca3d5e87725de477058f5e8ef40
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -378,14 +311,10 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.101227093Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.812570797Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: fa68bb30b5c94178f117a8804d3b259dd1e925019838ea635ff78368820e216d
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -403,14 +332,10 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.095687853Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.808959196Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 67c2c2084fbdee96862f6d1b1868186db79ff442b65884373c9848349ebe4199
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -428,14 +353,10 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.092233522Z"
-    dependencies:
-    - condition: installCertManager
-      name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.804025107Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a4121b5bc2133d9c79c159039628ab995fb39a10b02702e3304d328fc1fa91e5
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -453,13 +374,10 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.088141507Z"
-    dependencies:
-    - name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.799929609Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 9a379453aed5081687389d394d48dea7ce9e539d0721beedb9f6a59cfcd2071c
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -477,13 +395,10 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2020-10-30T20:53:47.082841002Z"
-    dependencies:
-    - name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.1
+    created: "2020-11-02T21:15:48.796011564Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: e432a362ae5afe1c73d914afed0359305e1935a2802f9ed0cfab4f7185115228
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -501,13 +416,10 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.10.0
-    created: "2020-10-30T20:53:47.033014276Z"
-    dependencies:
-    - name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.0
+    created: "2020-11-02T21:15:48.711807519Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: a5b53833dfdb6c7faf186516d83b47ae6e81f56db8e9dba1eb147c017b93692e
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -525,13 +437,10 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.10.0
-    created: "2020-10-30T20:53:47.0273899Z"
-    dependencies:
-    - name: cert-manager
-      repository: https://charts.jetstack.io
-      version: 0.10.0
+    created: "2020-11-02T21:15:48.707032363Z"
     description: Install cert-manager and optionally add a ClusterIssuer
     digest: 4d86a661d64296bc912009a61e1e6f7a5aabdeaab9bb36a4922ba28ad4641672
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - cert-manager
@@ -550,9 +459,9 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2020-10-30T20:53:47.268639164Z"
+    created: "2020-11-02T21:15:48.93879972Z"
     description: Authenticator for using Dex with Kubernetes
-    digest: 757a34c01c32376ed94ad0329e917a8e0cd7d40c9bfa41590acd0d0f2b64f232
+    digest: f9967bb619d20f5f4b035a35db700c8ffd8b6ca063a0d05ac90a439a1b286238
     home: https://github.com/mesosphere/charts
     maintainers:
     - email: mhrabovcin.c@mesosphere.com
@@ -567,7 +476,7 @@ entries:
     version: 1.2.6
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2020-10-30T20:53:47.267571564Z"
+    created: "2020-11-02T21:15:48.937640031Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 47e01f968872eeb9c0fd785b185f27b55a4c23ca5e4944b20ae60e8a5572e22e
     home: https://github.com/mesosphere/charts
@@ -584,7 +493,7 @@ entries:
     version: 1.2.5
   - apiVersion: v1
     appVersion: v1.2.1
-    created: "2020-10-30T20:53:47.266514878Z"
+    created: "2020-11-02T21:15:48.936535398Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 9ad12bb3f61e84f2fc05e1bdb9cac5eddffef8e479444449bffaee1badc819e6
     home: https://github.com/mesosphere/charts
@@ -601,7 +510,7 @@ entries:
     version: 1.2.4
   - apiVersion: v1
     appVersion: v1.2.1
-    created: "2020-10-30T20:53:47.265209385Z"
+    created: "2020-11-02T21:15:48.931347729Z"
     description: Authenticator for using Dex with Kubernetes
     digest: a765f41cedb12a36bb96053978d1918764329a7c60c129115363605f9e52158b
     home: https://github.com/mesosphere/charts
@@ -618,7 +527,7 @@ entries:
     version: 1.2.3
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2020-10-30T20:53:47.26408096Z"
+    created: "2020-11-02T21:15:48.930292935Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 528ab76398746a965e085717fe6c11c2305e7d0c5faec2556489d65c01a97659
     home: https://github.com/mesosphere/charts
@@ -635,7 +544,7 @@ entries:
     version: 1.2.2
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2020-10-30T20:53:47.262569951Z"
+    created: "2020-11-02T21:15:48.929252533Z"
     description: Authenticator for using Dex with Kubernetes
     digest: fdb8c259e3c39dbe888bf43798fd595a002d3e62869ae8d0df65c8b11c29c0bd
     home: https://github.com/mesosphere/charts
@@ -652,7 +561,7 @@ entries:
     version: 1.2.1
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2020-10-30T20:53:47.260869566Z"
+    created: "2020-11-02T21:15:48.92818348Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 3e1c039e4e7525ba098707b3b55c7081ce218c40acf895488c98f9893fb90da6
     home: https://github.com/mesosphere/charts
@@ -669,7 +578,7 @@ entries:
     version: 1.2.0
   - apiVersion: v1
     appVersion: v1.1.2
-    created: "2020-10-30T20:53:47.228495259Z"
+    created: "2020-11-02T21:15:48.920643928Z"
     description: Authenticator for using Dex with Kubernetes
     digest: d66cf937caea263e8c2913a81e3ee2e6c7600c9c7531b42e59d2ac084afbef12
     home: https://github.com/mesosphere/charts
@@ -686,7 +595,7 @@ entries:
     version: 1.1.18
   - apiVersion: v1
     appVersion: v1.1.2
-    created: "2020-10-30T20:53:47.227290992Z"
+    created: "2020-11-02T21:15:48.919547061Z"
     description: Authenticator for using Dex with Kubernetes
     digest: e768ed73121291e75c9766e9b0d9e9dfe6094e652c7613d1ac8b88e756581526
     home: https://github.com/mesosphere/charts
@@ -703,7 +612,7 @@ entries:
     version: 1.1.17
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.225960982Z"
+    created: "2020-11-02T21:15:48.918429332Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 023266c9773aa3dfef79f53f8720732fc828dd63ca0ccdcdef242efacda847cd
     home: https://github.com/mesosphere/charts
@@ -720,7 +629,7 @@ entries:
     version: 1.1.16
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.223980204Z"
+    created: "2020-11-02T21:15:48.917392225Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 16860eca12adaef6c277910f11dbb108a85aa77574555c50b515a73f64f2cb8d
     home: https://github.com/mesosphere/charts
@@ -737,7 +646,7 @@ entries:
     version: 1.1.15
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.222665869Z"
+    created: "2020-11-02T21:15:48.91652095Z"
     description: Authenticator for using Dex with Kubernetes
     digest: c54a1e936ddf33e5d804d7bd0725ea6a7ae97da858ae1337c8c3936ae8661b76
     home: https://github.com/mesosphere/charts
@@ -754,7 +663,7 @@ entries:
     version: 1.1.14
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.221774949Z"
+    created: "2020-11-02T21:15:48.913653561Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 49b8c8ffcb10849e7acdd68eb5e2f7f40347860558699deab1f1bdb80394dffd
     home: https://github.com/mesosphere/charts
@@ -771,7 +680,7 @@ entries:
     version: 1.1.13
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.220895466Z"
+    created: "2020-11-02T21:15:48.9128272Z"
     description: Authenticator for using Dex with Kubernetes
     digest: cf19cce6233681afd3750e9ee1900825345c07e2e63b84bc8a22efff47fe76eb
     home: https://github.com/mesosphere/charts
@@ -788,7 +697,7 @@ entries:
     version: 1.1.12
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.220003789Z"
+    created: "2020-11-02T21:15:48.911979291Z"
     description: Authenticator for using Dex with Kubernetes
     digest: feff041b1b88f964d0fe7d0c1c3f7ccba7399ea9140d1db8cfb4e4e74216d26e
     home: https://github.com/mesosphere/charts
@@ -805,7 +714,7 @@ entries:
     version: 1.1.11
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.219150682Z"
+    created: "2020-11-02T21:15:48.911131934Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 4d1868d10111c3aa1eb37645e28c9b26f01fbfd198321bed33ea9af55bf31a9d
     home: https://github.com/mesosphere/charts
@@ -822,7 +731,7 @@ entries:
     version: 1.1.10
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.259231045Z"
+    created: "2020-11-02T21:15:48.927121233Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 935d7009c589b049220e1fc7019da5d1325746473635fd71bc61644d3ce371a4
     home: https://github.com/mesosphere/charts
@@ -839,7 +748,7 @@ entries:
     version: 1.1.9
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2020-10-30T20:53:47.257903358Z"
+    created: "2020-11-02T21:15:48.92626638Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 879bbff14b21c67c6f1b3ea3aa80cc043796014d6998fafc2146130a9e545ed8
     home: https://github.com/mesosphere/charts
@@ -856,7 +765,7 @@ entries:
     version: 1.1.8
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.256200156Z"
+    created: "2020-11-02T21:15:48.925458142Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 722faf9590eb9d6236c36447f192d5f5d98906071120d821dc467461e5b45fce
     home: https://github.com/mesosphere/charts
@@ -871,7 +780,7 @@ entries:
     version: 1.1.7
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.254657391Z"
+    created: "2020-11-02T21:15:48.924618409Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 9d3a4378e4e7fe8b5d29c9e3540b70efd9583224846d3372e54e2626eec4b140
     home: https://github.com/mesosphere/charts
@@ -886,7 +795,7 @@ entries:
     version: 1.1.6
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.253443681Z"
+    created: "2020-11-02T21:15:48.923795781Z"
     description: Authenticator for using Dex with Kubernetes
     digest: e2aa61bd89adcb15a5c7a4e36789437147c79c27fc05f09dc4a5dab1e784bd98
     home: https://github.com/mesosphere/charts
@@ -901,7 +810,7 @@ entries:
     version: 1.1.5
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.251888056Z"
+    created: "2020-11-02T21:15:48.923001765Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 0d60186d46680159187e5458c24c6ef18cb1e322b9f28b18b95d55fb0790b444
     home: https://github.com/mesosphere/charts
@@ -916,7 +825,7 @@ entries:
     version: 1.1.4
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.230419978Z"
+    created: "2020-11-02T21:15:48.922223549Z"
     description: Authenticator for using Dex with Kubernetes
     digest: fb7db6ae0baa802c89fb7cdbdcd45eaeb601a29fc4ca39d713a6bd5517d0d02c
     maintainers:
@@ -934,7 +843,7 @@ entries:
     version: 1.1.3
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.229472447Z"
+    created: "2020-11-02T21:15:48.921426722Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 2714dd1206327a96e151357b24fe7b412e54c5507fb16990d5e199cc20dde64c
     maintainers:
@@ -952,7 +861,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2020-10-30T20:53:47.217825931Z"
+    created: "2020-11-02T21:15:48.910277396Z"
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -971,12 +880,7 @@ entries:
   dispatch:
   - apiVersion: v1
     appVersion: 0.3.0
-    created: "2020-10-30T20:53:47.277208967Z"
-    dependencies:
-    - condition: argo-cd.enabled
-      name: argo-cd
-      repository: file://charts/argo-cd
-      version: 0.4.0
+    created: "2020-11-02T21:15:48.944851821Z"
     description: Installs Dispatch into a Kubernetes cluster
     digest: 79d034e03129053ac03c182e9d0f926f910d5980dd58c14ccc888b1ede1ddd66
     name: dispatch
@@ -986,7 +890,7 @@ entries:
   flagger:
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2020-10-30T20:53:47.284275304Z"
+    created: "2020-11-02T21:15:48.951713941Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1012,7 +916,7 @@ entries:
     version: 0.20.1
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2020-10-30T20:53:47.282817735Z"
+    created: "2020-11-02T21:15:48.949980015Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1038,7 +942,7 @@ entries:
     version: 0.20.0
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2020-10-30T20:53:47.281240595Z"
+    created: "2020-11-02T21:15:48.948277049Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1064,11 +968,12 @@ entries:
     version: 0.19.1
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2020-10-30T20:53:47.279268378Z"
+    created: "2020-11-02T21:15:48.946618044Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
-    digest: 4763aa924e0105e8e822c636fc0f3ac9b7be910cc00d58781343aeeeba97483b
+    digest: 607512e958783d27205ab9b2f34205f799105470bd35e36ae640b6124ddb101f
+    engine: gotpl
     home: https://docs.flagger.app
     icon: https://raw.githubusercontent.com/weaveworks/flagger/master/docs/logo/flagger-icon.png
     keywords:
@@ -1091,7 +996,7 @@ entries:
   gatekeeper:
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.295109087Z"
+    created: "2020-11-02T21:15:48.964768561Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 23106ec5553f416f14ff9ef042eba1df22fce2dba0d75a85e439fbf1f58091cb
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1107,9 +1012,9 @@ entries:
     version: 0.4.2
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.294401596Z"
+    created: "2020-11-02T21:15:48.964006012Z"
     description: Gatekeeper - Policy Controller for Kubernetes
-    digest: fb5296aa12992c133656929426c2b4b6e413dff685cc03e681607b1048873741
+    digest: 44ac2369915d0560c5dfaa63221e7f3178cc482ec4f30d98da531396b2c24575
     home: https://github.com/open-policy-agent/gatekeeper
     icon: https://www.openpolicyagent.org/img/opa-logo.svg
     maintainers:
@@ -1118,12 +1023,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.4.1.tgz
     version: 0.4.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.293523446Z"
+    created: "2020-11-02T21:15:48.963261695Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 9d0f76b7b9f99f00a3ba380872d0a01cd3eb15b003f67f55a3bc7a312b16d436
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1134,12 +1040,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.4.0.tgz
     version: 0.4.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.292694117Z"
+    created: "2020-11-02T21:15:48.96256833Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: bca908c49462077bd89437d056b37bea3a497c163e11ab8c45c3321a3ce5e6ac
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1150,12 +1057,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.3.3.tgz
     version: 0.3.3
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.291809961Z"
+    created: "2020-11-02T21:15:48.961807701Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 11ff83c2283cd7cd9fd481232fae1ede2bbbc09549e56f097a54496c604d761e
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1166,12 +1074,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.3.2.tgz
     version: 0.3.2
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.290692921Z"
+    created: "2020-11-02T21:15:48.961101265Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 526319a1a287d599f587c28af32baa53305f566b6cdd9d1aa7631c3dabdc2d4c
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1182,12 +1091,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.3.1.tgz
     version: 0.3.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.287100989Z"
+    created: "2020-11-02T21:15:48.96041822Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: fa78f9c274eefd42fd26c9b88949fa05c3eed3314c7ab6b7def582cd9f523ca2
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1198,12 +1108,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.3.0.tgz
     version: 0.3.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.286359276Z"
+    created: "2020-11-02T21:15:48.959715644Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 013744053a3043a61c5004dac31ed8fe7559afeae8537208e97461098370f538
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1219,7 +1130,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.285608458Z"
+    created: "2020-11-02T21:15:48.953012959Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: e2d332137417d314db0401aa194c86350ac1fcc5c659b0d382b59bcc911f358a
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1230,12 +1141,13 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.2.0.tgz
     version: 0.2.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2020-10-30T20:53:47.284878533Z"
+    created: "2020-11-02T21:15:48.952300027Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 46cfcc10dd9b7f9a172237f33bd57097888e96bf90c457884234b61dba7d0c16
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1246,15 +1158,17 @@ entries:
     name: gatekeeper
     sources:
     - https://github.com/open-policy-agent/gatekeeper
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/gatekeeper-0.1.0.tgz
     version: 0.1.0
   generic-ingress:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-10-30T20:53:47.295661443Z"
+    created: "2020-11-02T21:15:48.965416196Z"
     description: Adds an traefik ingress record using the provided values
-    digest: 7a11772998c8b450c097ca24ae3facc4703df5e25bcbee416133119d3940098f
+    digest: b2e1ba39e4c891cbdaba69c1e96f95dd28668198bda9be03161b1b5f8ce37b4a
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -1268,9 +1182,10 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-10-30T20:53:47.295412611Z"
+    created: "2020-11-02T21:15:48.965087441Z"
     description: Adds an traefik ingress record using the provided values
     digest: b46c857d2c05eb49d2e1c24fa1bff19dcbf94a616f1e5ea425bb6f101813f2ee
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -1285,20 +1200,7 @@ entries:
   istio:
   - apiVersion: v1
     appVersion: 1.6.12
-    created: "2020-10-30T20:53:48.497064814Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.2
+    created: "2020-11-02T21:15:50.204979667Z"
     description: Helm chart for Istio
     digest: c64ead511eda23abc4a8e6a7e4a8bccb20d0844941ea049082e6687f49d08c06
     home: http://github.com/istio/istio
@@ -1321,20 +1223,7 @@ entries:
     version: 1.6.12
   - apiVersion: v1
     appVersion: 1.6.11
-    created: "2020-10-30T20:53:48.49502049Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.2
+    created: "2020-11-02T21:15:50.20311974Z"
     description: Helm chart for Istio
     digest: 7bc6a1b3185d1a4b71c8ad669944cd0808299188eba148d50b4e05f984d34d18
     home: http://github.com/istio/istio
@@ -1357,20 +1246,7 @@ entries:
     version: 1.6.11
   - apiVersion: v1
     appVersion: 1.6.10
-    created: "2020-10-30T20:53:47.974234999Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.2
+    created: "2020-11-02T21:15:49.653605263Z"
     description: Helm chart for Istio
     digest: 4ca87dccec874ec9807060cd1172f2a05c2f8d4a77eb6b88d4498435aaf7be81
     home: http://github.com/istio/istio
@@ -1393,20 +1269,7 @@ entries:
     version: 1.6.10
   - apiVersion: v1
     appVersion: 1.6.9
-    created: "2020-10-30T20:53:48.510017598Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.219372652Z"
     description: Helm chart for Istio
     digest: 9747ac0f8d4177b35ddef22512939bf5fbe6890d80b3859fafbad7717035051b
     home: http://github.com/istio/istio
@@ -1429,20 +1292,7 @@ entries:
     version: 1.6.9
   - apiVersion: v1
     appVersion: 1.6.8
-    created: "2020-10-30T20:53:48.508237032Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.217527766Z"
     description: Helm chart for Istio
     digest: 3bc93eeb095e5327aad314d7a13240398b9c9cbaf1f2c7f679e1fc49530242d5
     home: http://github.com/istio/istio
@@ -1465,20 +1315,7 @@ entries:
     version: 1.6.8
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2020-10-30T20:53:48.506450957Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.215179747Z"
     description: Helm chart for istio
     digest: 179f17dc7e4c94ffa61fe866fc426a07c1ced41615e4cadabb64ab68e9aeac35
     home: http://github.com/istio/istio
@@ -1500,22 +1337,10 @@ entries:
     version: 1.6.7
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2020-10-30T20:53:48.504564534Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.213054156Z"
     description: Helm chart for istio
-    digest: 7b0ed63f32ae76a2c7b1a642ce36ede03a4ddbebff35c01be7bbca7e6f5c34e8
+    digest: 0dc755d39398d3481e4f5a7f162ffe65c20c338f84899287209bb644ffbf2ef3
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1530,27 +1355,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.6.6.tgz
     version: 1.6.6
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2020-10-30T20:53:48.50262266Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.210933517Z"
     description: Helm chart for istio
     digest: 5a0ab9ace48a330606af3d8e9b7b774e6648b54b6c6889def38bb999dbf9f8e7
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1565,27 +1379,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.6.5.tgz
     version: 1.6.5
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2020-10-30T20:53:48.500748098Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.208818863Z"
     description: Helm chart for istio
     digest: 25612132374d723777eb1b52c69e0203f5658a17641a8f27f17161d37d5e8148
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1600,27 +1403,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.6.4.tgz
     version: 1.6.4
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2020-10-30T20:53:48.498886319Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 1.1.0
-    - condition: prometheus.enabled
-      name: prometheus-operator
-      repository: ""
-      version: 1.1.0
-    - condition: security.enabled
-      name: security
-      repository: ""
-      version: 0.0.1
+    created: "2020-11-02T21:15:50.206686379Z"
     description: Helm chart for istio
     digest: f7763009be40b9789180a208562b736171c8b85ad10bd815140663d278a4ad17
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1635,14 +1427,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.6.3.tgz
     version: 1.6.3
   - apiVersion: v1
     appVersion: 1.4.3
-    created: "2020-10-30T20:53:47.358438614Z"
+    created: "2020-11-02T21:15:48.999611219Z"
     description: Helm chart for all istio components
     digest: 4b70f22310577ff64f4a5cd49b4244793682dffc01283acb1ee3fc5d4a6d1cdf
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1657,14 +1451,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.4.3.tgz
     version: 1.4.3
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2020-10-30T20:53:47.325770061Z"
+    created: "2020-11-02T21:15:48.991806002Z"
     description: Helm chart for all istio components
     digest: 607a757cacc6ac79cbeda741fca7d2cda2c9caa13a2a95e32b4f365749d382cd
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1679,14 +1475,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.3.5.tgz
     version: 1.3.5
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2020-10-30T20:53:47.315655098Z"
+    created: "2020-11-02T21:15:48.984515323Z"
     description: Helm chart for all istio components
     digest: 15cb5ec63e3223d954b7c1c93b807a787fda92b327ada2a17a8f5f9067283a15
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1701,14 +1499,16 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.3.4.tgz
     version: 1.3.4
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2020-10-30T20:53:47.30689704Z"
+    created: "2020-11-02T21:15:48.97540825Z"
     description: Helm chart for all istio components
     digest: 9c14ff6a7b1568f2b5fae6871c3c9624700fdcce1eb494ad998d5885c14c93ee
+    engine: gotpl
     home: http://github.com/istio/istio
     icon: https://istio.io/favicons/android-192x192.png
     keywords:
@@ -1723,13 +1523,14 @@ entries:
     name: istio
     sources:
     - http://github.com/istio/istio
+    tillerVersion: '>=2.7.2-0'
     urls:
     - https://mesosphere.github.io/charts/staging/istio-1.3.3.tgz
     version: 1.3.3
   karma:
   - apiVersion: v1
     appVersion: v0.50
-    created: "2020-10-30T20:53:48.512011986Z"
+    created: "2020-11-02T21:15:50.220922014Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 391689d45cfc2e5a1c1f6387d5342fae2d479e5980313325c2f4097c8032a497
     home: https://github.com/prymitive/karma
@@ -1747,7 +1548,7 @@ entries:
     version: 1.3.0
   - apiVersion: v1
     appVersion: v0.50
-    created: "2020-10-30T20:53:48.511336335Z"
+    created: "2020-11-02T21:15:50.220332714Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: a723e69f518ff83d063e1966f8bb852e0207de4a0b0aea3970f3ae09eac5b774
     home: https://github.com/prymitive/karma
@@ -1765,7 +1566,7 @@ entries:
     version: 1.2.1
   - apiVersion: v1
     appVersion: v0.48
-    created: "2020-10-30T20:53:48.51073035Z"
+    created: "2020-11-02T21:15:50.21987344Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 89f5cc5f5d8616a9f3132f5d623cec98f69d266ea2e04c6d21fe5465aa38d24f
     home: https://github.com/prymitive/karma
@@ -1784,20 +1585,7 @@ entries:
   knative:
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2020-10-30T20:53:48.528491469Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.2.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.2.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.3.4
+    created: "2020-11-02T21:15:50.235362792Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: 8f5102561e9dbf810a93d844fbafb58a8f1322197caf2d260178df77e336d6c2
@@ -1812,20 +1600,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2020-10-30T20:53:48.526035121Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.2.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.2.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.3.3
+    created: "2020-11-02T21:15:50.233303525Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: 76a44c6cc0c7c841874ea9d314688c86ae0a6fdd8b2e61b761df2e8841731b08
@@ -1840,20 +1615,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2020-10-30T20:53:48.523608274Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.2.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.2.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.3.2
+    created: "2020-11-02T21:15:50.231227485Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: 5d438696ca439fec634c781385b337669c819c344b32d0f887a9ba8ec36328fb
@@ -1868,23 +1630,10 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2020-10-30T20:53:48.521120454Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.2.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.2.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.3.1
+    created: "2020-11-02T21:15:50.229183206Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
-    digest: 59a71aac2939328f5ca0064c1343add9e09463986f60ff288b9af5a87f99c1b7
+    digest: 1bd28a51af617b80822fafa817eef9b0ae36e5f2d84cd750450ce44c66dfffc7
     home: https://knative.dev/
     icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
     maintainers:
@@ -1896,20 +1645,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2020-10-30T20:53:48.518695196Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.2.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.2.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.3.0
+    created: "2020-11-02T21:15:50.227126176Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: d44fb88e2a0448bc4a2da4c0a4dda017ccbac33fdd26b66d223892539965a1c8
@@ -1924,20 +1660,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: v0.7.1
-    created: "2020-10-30T20:53:48.516350716Z"
-    dependencies:
-    - condition: eventing.enabled
-      name: eventing
-      repository: ""
-      version: 0.1.0
-    - condition: eventing-sources.enabled
-      name: eventing-sources
-      repository: ""
-      version: 0.1.0
-    - condition: serving.enabled
-      name: serving
-      repository: ""
-      version: 0.2.0
+    created: "2020-11-02T21:15:50.225075117Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: 4b54e8aa6446163d926c726c381eb26b4b20dcf7d9269f6742b7c7e9959f03c4
@@ -1951,7 +1674,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: v0.7.1
-    created: "2020-10-30T20:53:48.514188029Z"
+    created: "2020-11-02T21:15:50.223204617Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: 8b42a168932dd247574c6fb392196602dbaa655db9f0f54834a1180c78b6d4cf
@@ -1966,10 +1689,11 @@ entries:
   konvoyconfig:
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2020-10-30T20:53:48.529820515Z"
+    created: "2020-11-02T21:15:50.236507719Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
-    digest: d759a4e2ed9f2671f70d5031463dc86cbee27999e585d79777c2ff716c54f698
+    digest: 0ffadc93b42bb87b6c64b17163d3533418b33b833e05a378874b185b45d8a65f
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -1983,10 +1707,11 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2020-10-30T20:53:48.529555439Z"
+    created: "2020-11-02T21:15:50.236275168Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 3f5da96a593cbc25b185fe293cb86743737c5626299a4527bcfe620b0c6b4b26
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -2000,10 +1725,11 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2020-10-30T20:53:48.529265197Z"
+    created: "2020-11-02T21:15:50.236058667Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 3d25fd5f9152e4a3911a66ac032fefed433b1c829922e1af6b9ea8641ec8bf59
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -2017,10 +1743,11 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2020-10-30T20:53:48.528978964Z"
+    created: "2020-11-02T21:15:50.235823796Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 4c920fbaa7e0d6f0885dacc3e168bf6a08f89a56fa4848650aa106b35e36f3b8
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -2034,10 +1761,11 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2020-10-30T20:53:48.52873658Z"
+    created: "2020-11-02T21:15:50.235614505Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: d31d7c9d63f974bac3a101aa4cf1119a3b4befd075755e204ad890f24e68e06f
+    engine: gotpl
     home: https://github.com/mesosphere/charts
     keywords:
     - konvoy
@@ -2052,7 +1780,7 @@ entries:
   kube-oidc-proxy:
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2020-10-30T20:53:48.541465741Z"
+    created: "2020-11-02T21:15:50.244329099Z"
     description: A Helm chart for kube-oidc-proxy
     digest: a552dc5ceb5933f618575c98a88da7c9bb4890e1e6cfb64598b070ce1e53d203
     home: https://github.com/mesosphere/charts
@@ -2069,9 +1797,9 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2020-10-30T20:53:48.540650021Z"
+    created: "2020-11-02T21:15:50.243774859Z"
     description: A Helm chart for kube-oidc-proxy
-    digest: ed662535356604062840d0b4abd4d3ee648dd513c9040605e2bb1b6c27b1bfb8
+    digest: b09c9fc06494c931958684c8d34e0357ef2e5f3c089fc15d3e021e20180ce0c8
     home: https://github.com/mesosphere/charts
     maintainers:
     - email: mhrabovcin.c@d2iq.com
@@ -2086,7 +1814,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2020-10-30T20:53:48.539746086Z"
+    created: "2020-11-02T21:15:50.243192617Z"
     description: A Helm chart for kube-oidc-proxy
     digest: a7a6c84247a0eefd59acefc9a4e3a0f3305d9e1a91e468ee63ff4f1887711bdc
     home: https://github.com/mesosphere/charts
@@ -2103,7 +1831,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2020-10-30T20:53:48.538902004Z"
+    created: "2020-11-02T21:15:50.24262846Z"
     description: A Helm chart for kube-oidc-proxy
     digest: c47a81627f22bf3a6d072e30fc3e00db71853d1dfeaf2f91011417dec6132057
     home: https://github.com/mesosphere/charts
@@ -2120,7 +1848,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2020-10-30T20:53:48.53806269Z"
+    created: "2020-11-02T21:15:50.242054514Z"
     description: A Helm chart for kube-oidc-proxy
     digest: c913295cef84bbadbadc5c856675bf665a12a432a545f1809c177ae843115f04
     home: https://github.com/mesosphere/charts
@@ -2137,7 +1865,7 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.537280067Z"
+    created: "2020-11-02T21:15:50.241503581Z"
     description: A Helm chart for kube-oidc-proxy
     digest: e7474b460241d3c523861355b82b1ae07c21d3cff5d6dbef031db62ef2d81048
     home: https://github.com/mesosphere/charts
@@ -2154,7 +1882,7 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.536482199Z"
+    created: "2020-11-02T21:15:50.240923338Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 3d922e54157ba833b1bf16ff284cce54f7cd34a130479a555f6a7ee552b22b3c
     home: https://github.com/mesosphere/charts
@@ -2171,7 +1899,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.535682583Z"
+    created: "2020-11-02T21:15:50.240362033Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 3b3a7eb2e5fc158f4ebc7be8a1f1a7db42374e2c6e388c3f6571c2d9887a84ed
     home: https://github.com/mesosphere/charts
@@ -2188,7 +1916,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.534915586Z"
+    created: "2020-11-02T21:15:50.239825015Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 103cca053d89f445da8e1a1f5a9a6e209b9b45ff7bb3fb8e8a20a00cf4f8e71e
     home: https://github.com/mesosphere/charts
@@ -2205,7 +1933,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.534111164Z"
+    created: "2020-11-02T21:15:50.239258528Z"
     description: A Helm chart for kube-oidc-proxy
     digest: d40a6565dd85f6c7fad3eb58fa4bc126e677d991b2acd953f6fda9a0650b4f50
     home: https://github.com/mesosphere/charts
@@ -2222,7 +1950,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.533335618Z"
+    created: "2020-11-02T21:15:50.238722489Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 341397d1bc84332fbd82a16ecab4679f38954fc59af3f43e974220747ec68334
     home: https://github.com/mesosphere/charts
@@ -2239,7 +1967,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.532447006Z"
+    created: "2020-11-02T21:15:50.238153837Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 973b2417054e80962b2e8b8ad5fb3de4a8c9898419bcaabcd9578bb6051d3e17
     home: https://github.com/mesosphere/charts
@@ -2256,7 +1984,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.531526864Z"
+    created: "2020-11-02T21:15:50.237602836Z"
     description: A Helm chart for kube-oidc-proxy
     digest: d3c8e291ea01df0ac0727cfc80f407ff028627664fb8eb7cb56f189133784c5c
     home: https://github.com/mesosphere/charts
@@ -2273,7 +2001,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2020-10-30T20:53:48.530663353Z"
+    created: "2020-11-02T21:15:50.237048495Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 8e3b0437e4a921b16d6ddebbd380ea39909520371a55d6be5d23d042d3bdc9bf
     home: https://github.com/mesosphere/charts
@@ -2289,7 +2017,7 @@ entries:
   kubeaddons-catalog:
   - apiVersion: v1
     appVersion: v0.11.4
-    created: "2020-10-30T20:53:48.551776959Z"
+    created: "2020-11-02T21:15:50.249019211Z"
     description: A Catalog service for Kubeaddons
     digest: d2ad6e1478d16a35691fae0fdea94a45180ba55a06cf333caf8e1681e9e73f58
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2306,7 +2034,7 @@ entries:
     version: 0.1.15
   - apiVersion: v1
     appVersion: v0.11.3
-    created: "2020-10-30T20:53:48.548068218Z"
+    created: "2020-11-02T21:15:50.248680623Z"
     description: A Catalog service for Kubeaddons
     digest: 7c960688c345d1d1bb6aaad269aa57b561c6785707fd1477705340a2c497de94
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2323,7 +2051,7 @@ entries:
     version: 0.1.14
   - apiVersion: v1
     appVersion: v0.11.1
-    created: "2020-10-30T20:53:48.54766507Z"
+    created: "2020-11-02T21:15:50.248331992Z"
     description: A Catalog service for Kubeaddons
     digest: e638dbe5bdd9f413015eda27d63493734b388767505d0d027c106e3da6f037f5
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2340,7 +2068,7 @@ entries:
     version: 0.1.13
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.547213522Z"
+    created: "2020-11-02T21:15:50.248029788Z"
     description: A Catalog service for Kubeaddons
     digest: ea9e8ba12904d57c729cb66cc552bd9a0733c3ce3dfa8cd65dd42591a8cf5599
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2357,7 +2085,7 @@ entries:
     version: 0.1.12
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.546711261Z"
+    created: "2020-11-02T21:15:50.247738637Z"
     description: A Catalog service for Kubeaddons
     digest: d39231873b607642feabd86f3a7a51997a94e323d5f0f20b830ef10909ec8a6e
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2374,7 +2102,7 @@ entries:
     version: 0.1.11
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.546286708Z"
+    created: "2020-11-02T21:15:50.247418551Z"
     description: A Catalog service for Kubeaddons
     digest: 2a8e9ed6e54201d61dc3fffcc38f0edea36f32c9b7ec2cb4373ae37b80690bb1
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2391,7 +2119,7 @@ entries:
     version: 0.1.10
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.555295913Z"
+    created: "2020-11-02T21:15:50.251416636Z"
     description: A Catalog service for Kubeaddons
     digest: a37bed9a04e526635fddbd5a5ad89b4626f140d739a0f038c01ef41d1bd08486
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2408,7 +2136,7 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.554865282Z"
+    created: "2020-11-02T21:15:50.25110818Z"
     description: A Catalog service for Kubeaddons
     digest: 3475783bec57663ce2c919a7efcbf33ef2cffb6de78063578ed783ba2fe10b9c
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2425,7 +2153,7 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2020-10-30T20:53:48.554464811Z"
+    created: "2020-11-02T21:15:50.250813077Z"
     description: A Catalog service for Kubeaddons
     digest: bd7f51f95d535234614664ad06f81547e454092c3ae155ea39508f4e597a2f16
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2442,7 +2170,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2020-10-30T20:53:48.554021472Z"
+    created: "2020-11-02T21:15:50.25053332Z"
     description: A Catalog service for Kubeaddons
     digest: 4991348631ab7595b0f0589c90978bbe570bb547ae9b71a0e9def7c8469d9070
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -2458,7 +2186,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.553614966Z"
+    created: "2020-11-02T21:15:50.250223833Z"
     description: A Catalog service for Kubeaddons
     digest: c262c93583996accc17f4b76cb9eafb091dc9ead7e645baca955fecff07a593c
     home: https://github.com/mesosphere/kubeaddons
@@ -2475,7 +2203,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.553138341Z"
+    created: "2020-11-02T21:15:50.249941732Z"
     description: A Catalog service for Kubeaddons
     digest: 6ab3fd7ff1fb4f243da1c3bbf14c952a67de707222f8afc64902dbc591142aca
     home: https://github.com/mesosphere/kubeaddons
@@ -2492,7 +2220,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.552698285Z"
+    created: "2020-11-02T21:15:50.249655564Z"
     description: A Catalog service for Kubeaddons
     digest: 74c8ada08225a19164863988ec35612d45ae5df55257667babaaffb6a601695e
     home: https://github.com/mesosphere/kubeaddons
@@ -2509,7 +2237,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.552228302Z"
+    created: "2020-11-02T21:15:50.249334671Z"
     description: A Catalog service for Kubeaddons
     digest: 2d429aeb4998e5b2829ab4bde3303d4edd3e3c9ab2ecd1dcb8a079441c2e7a3b
     home: https://github.com/mesosphere/kubeaddons
@@ -2526,7 +2254,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.545827717Z"
+    created: "2020-11-02T21:15:50.247127129Z"
     description: A Catalog service for Kubeaddons
     digest: 2c129b1fc602bd272f1df65d97adc54cb3d0a48fd5783ee8948a49f3d16732fd
     home: https://github.com/mesosphere/kubeaddons
@@ -2543,7 +2271,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2020-10-30T20:53:48.545385919Z"
+    created: "2020-11-02T21:15:50.246860621Z"
     description: A Catalog service for Kubeaddons
     digest: 312c9b06c0c136c6ff123f004ba672b3e2af27eb838ac0f0c74dea8610c5ee07
     home: https://github.com/mesosphere/kubeaddons
@@ -2560,7 +2288,7 @@ entries:
     version: 0.1.0
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.544956857Z"
+    created: "2020-11-02T21:15:50.246584382Z"
     description: A Catalog service for Kubeaddons
     digest: a8b21207b670a093cdf96da8987f98f53388382981ac53922703c379e4dba08a
     home: https://github.com/mesosphere/kubeaddons
@@ -2577,7 +2305,7 @@ entries:
     version: 0.0.9
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.544435161Z"
+    created: "2020-11-02T21:15:50.246288661Z"
     description: A Catalog service for Kubeaddons
     digest: 9511a7408b97623700b27f2035cfd9b4ac9865cb4fdcc5dc87df7e2d9807f549
     home: https://github.com/mesosphere/kubeaddons
@@ -2594,7 +2322,7 @@ entries:
     version: 0.0.8
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.543985814Z"
+    created: "2020-11-02T21:15:50.246023137Z"
     description: A Catalog service for Kubeaddons
     digest: 5c660e69e45b5ba32619c056a7884c09655105f7498abff92ffba5e5550cf43d
     home: https://github.com/mesosphere/kubeaddons
@@ -2611,7 +2339,7 @@ entries:
     version: 0.0.7
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.543598271Z"
+    created: "2020-11-02T21:15:50.245753824Z"
     description: A Catalog service for Kubeaddons
     digest: a74980d375a10a903c0d67ca7a8b129a48c5d97f009aa7817392db18bf657a27
     home: https://github.com/mesosphere/kubeaddons
@@ -2627,7 +2355,7 @@ entries:
     version: 0.0.6
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.543231271Z"
+    created: "2020-11-02T21:15:50.245490328Z"
     description: A Catalog service for Kubeaddons
     digest: 83b5d35df68eb031f1d45aefaf6b92196543e4ab1a3592bf5108407aa959f320
     home: https://github.com/mesosphere/kubeaddons
@@ -2643,7 +2371,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.542839059Z"
+    created: "2020-11-02T21:15:50.245214278Z"
     description: A Catalog service for Kubeaddons
     digest: 64f7828e4eb713b009f82c5d319e9c529aa1cfc8325cd1cbdd0f9cc0a7cb5559
     home: https://github.com/mesosphere/kubeaddons
@@ -2659,7 +2387,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.542496317Z"
+    created: "2020-11-02T21:15:50.244973924Z"
     description: A Catalog service for Kubeaddons
     digest: fec05f09c5776775cfad6987102663708255d027f7be642304a561f200df4b22
     home: https://github.com/mesosphere/kubeaddons
@@ -2675,7 +2403,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.542127222Z"
+    created: "2020-11-02T21:15:50.244753342Z"
     description: A Catalog service for Kubeaddons
     digest: 0ecefd29fe2416d97d08441211a914913a3ee32719a4f16902ca7155ba830cc7
     home: https://github.com/mesosphere/kubeaddons
@@ -2691,7 +2419,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2020-10-30T20:53:48.541744054Z"
+    created: "2020-11-02T21:15:50.244559887Z"
     description: A Catalog service for Kubeaddons
     digest: 6c9b61341e069bc5d4b876e183bf5e3a65b18ee9ddfe32da3315439d9a11e607
     home: https://github.com/mesosphere/kubeaddons
@@ -2705,28 +2433,11 @@ entries:
     - https://mesosphere.github.io/charts/staging/kubeaddons-catalog-0.0.1.tgz
     version: 0.0.1
   kubefed:
-  - apiVersion: v2
-    appVersion: 0.0.4
-    created: "2020-10-30T20:53:48.561079832Z"
-    dependencies:
-    - condition: controllermanager.enabled
-      name: controllermanager
-      repository: file://./subcharts/controllermanager/
-      version: 0.0.3
-    description: KubeFed helm chart (temp)
-    digest: 8e6a2e2ae776afe3abf60992c8116edc3bbd79fba8efbb8a92b913e181f214dc
-    home: https://github.com/kubernetes-sigs/kubefed
-    maintainers:
-    - name: alejandroesc
-    name: kubefed
-    urls:
-    - https://mesosphere.github.io/charts/staging/kubefed-0.0.5.tgz
-    version: 0.0.5
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2020-10-30T20:53:48.559178743Z"
+    created: "2020-11-02T21:15:50.254381707Z"
     description: KubeFed helm chart
-    digest: e5f9db150bf458ddaad99bcdc04e6a41f67680bf25829afac38680e56fda2aef
+    digest: 4eae815695f50d08fde82e7cae51c2792a04a960adef0ff7e86cc9c15c15b4c5
     home: https://github.com/kubernetes-sigs/kubefed
     maintainers:
     - name: s12chung
@@ -2737,7 +2448,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2020-10-30T20:53:48.557825796Z"
+    created: "2020-11-02T21:15:50.253372925Z"
     description: KubeFed helm chart
     digest: 2126dc3cd55ceddf7556129137a4e93696ebb1e33d0a4b2e65c2d6ba3fdc40f3
     home: https://github.com/kubernetes-sigs/kubefed
@@ -2749,7 +2460,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2020-10-30T20:53:48.556538696Z"
+    created: "2020-11-02T21:15:50.252362271Z"
     description: KubeFed helm chart
     digest: 28c2bb91af11e0ca34f882cb759213d0b42c012d32ba9ba98e8ae093eff2e5cb
     home: https://github.com/kubernetes-sigs/kubefed
@@ -2762,9 +2473,9 @@ entries:
   kubernetes-dashboard:
   - apiVersion: v1
     appVersion: 2.0.0-beta6
-    created: "2020-10-30T20:53:48.562042046Z"
+    created: "2020-11-02T21:15:50.256337739Z"
     description: General-purpose web UI for Kubernetes clusters
-    digest: a00cb38a6b33b11928eb8592427b008fc367a036e83b3ddf2c9504d4beb3e244
+    digest: caf2310bb7d78cbbdd09a228305e4149bb83162413878bdd78479501a1966ed9
     home: https://github.com/kubernetes/dashboard
     icon: https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg
     keywords:
@@ -2784,9 +2495,9 @@ entries:
   kudo:
   - apiVersion: v1
     appVersion: 0.9.0
-    created: "2020-10-30T20:53:48.564189659Z"
+    created: "2020-11-02T21:15:50.258067739Z"
     description: Kubernetes Universal Declarative Operator
-    digest: 0d5b507715284ee6a819046f0ecbdf5c02d29c4b3684120e1de86bbbcf95c5e0
+    digest: 9cd5f1b5fdfb9cec326fe379bdb19a4b920456271c3471ae4962248c81ebe304
     home: https://kudo.dev
     icon: https://raw.githubusercontent.com/kudobuilder/www/master/content/.vuepress/public/favicon.ico
     maintainers:
@@ -2806,7 +2517,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 0.9.0
-    created: "2020-10-30T20:53:48.563777859Z"
+    created: "2020-11-02T21:15:50.257751673Z"
     description: Kubernetes Universal Declarative Operator
     digest: f5e19f546abc3476a7a36872417c448200cc0b3f6038202fe8435beb2d5b561e
     home: https://kudo.dev
@@ -2828,7 +2539,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 0.8.0
-    created: "2020-10-30T20:53:48.563347374Z"
+    created: "2020-11-02T21:15:50.257398398Z"
     description: Kubernetes Universal Declarative Operator
     digest: 59c27b800d7d5169a8c6b1ce17859025358d603f7641e2db5c70fb642bfe3556
     home: https://kudo.dev
@@ -2850,7 +2561,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.7.4
-    created: "2020-10-30T20:53:48.562878515Z"
+    created: "2020-11-02T21:15:50.25703772Z"
     description: Kubernetes Universal Declarative Operator
     digest: 66b804a3f6b760faa8e5e52c63b6808f3fb66373aa02406b0f331360cb416bf8
     home: https://kudo.dev
@@ -2872,7 +2583,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.7.4
-    created: "2020-10-30T20:53:48.562473227Z"
+    created: "2020-11-02T21:15:50.256700001Z"
     description: Kubernetes Universal Declarative Operator
     digest: dcb5a200294857d6cb88a73d460f43d404e8af72400d3c504cb70b34dc205530
     home: https://kudo.dev
@@ -2895,9 +2606,9 @@ entries:
   local-path-provisioner:
   - apiVersion: v1
     appVersion: 0.0.12
-    created: "2020-10-30T20:53:48.564554526Z"
+    created: "2020-11-02T21:15:50.258339087Z"
     description: Use HostPath for persistent local storage with Kubernetes
-    digest: 38dbc6992e37c884b5c3b4c910acf179af8c5322b525d2157d0b3816e758a8a8
+    digest: 8b0da1656d1d02851e549ef404c914d7238013e8e03979cf94ab858c385d1591
     home: https://github.com/rancher/local-path-provisioner
     keywords:
     - storage
@@ -2913,11 +2624,11 @@ entries:
   nfs-server-provisioner:
   - apiVersion: v1
     appVersion: 2.3.0
-    created: "2020-10-30T20:53:48.565237893Z"
+    created: "2020-11-02T21:15:50.258808831Z"
     description: nfs-server-provisioner is an out-of-tree dynamic provisioner for
       Kubernetes. You can use it to quickly & easily deploy shared storage that works
       almost anywhere.
-    digest: b0757ba5ffffaf7f9209bf608b2f5204568ca348c209a0f931bfd2b0eb072d91
+    digest: 2330a3f52de501d24d5fa71b15ba0227625d3e0003cdc837749f305142ed343e
     home: https://github.com/kubernetes/charts/tree/master/stable/nfs-server-provisioner
     keywords:
     - nfs
@@ -2940,24 +2651,7 @@ entries:
   nvidia:
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.579528384Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.6
+    created: "2020-11-02T21:15:50.268157226Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 8327c9f11cdc877c11093345c7d83bf6ddd1cf2c68ecdf70ecbe3240caf16af6
     home: http://github.com/mesosphere/charts/staging
@@ -2975,26 +2669,9 @@ entries:
     version: 0.3.5
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.577795542Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.5
+    created: "2020-11-02T21:15:50.267086185Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
-    digest: 228b355efbb7f2dc5fbe3f69e5248d5ea0248f9381de1de7e4fc31c4c70a68db
+    digest: 01531d4db30f02983104e52f8da0ead850a05f7a8bac7d087610e8cff904712c
     home: http://github.com/mesosphere/charts/staging
     keywords:
     - gpu
@@ -3010,24 +2687,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.576032231Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.4
+    created: "2020-11-02T21:15:50.265995278Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: a18991fa7abd1e228562536c2b9d9a25b27f39566424b478d210302d84c3aebe
     home: http://github.com/mesosphere/charts/staging
@@ -3045,24 +2705,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.574460941Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.3
+    created: "2020-11-02T21:15:50.264906796Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 8b4c14e31d51fd6229d7ad4a56ac8fe108e78d3e52815dd5a304b5b77180e835
     home: http://github.com/mesosphere/charts/staging
@@ -3080,24 +2723,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.572833448Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.2
+    created: "2020-11-02T21:15:50.263840479Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 8048862affcd76ab57bc55b2916ac239b5cf27c48cba1700fd93f2396a5faf91
     home: http://github.com/mesosphere/charts/staging
@@ -3114,24 +2740,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.571326737Z"
-    dependencies:
-    - condition: grafana.enabled
-      name: grafana
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-dcgm-exporter.enabled
-      name: nvidia-dcgm-exporter
-      repository: ""
-      version: 0.1.1
-    - condition: nvidia-device-plugin.enabled
-      name: nvidia-device-plugin
-      repository: ""
-      version: 0.1.2
-    - condition: nvidia-driver.enabled
-      name: nvidia-driver
-      repository: ""
-      version: 0.1.2
+    created: "2020-11-02T21:15:50.262796426Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 89b3de533593731ce400d021a459e4315d92c475147666d1655a8e455c21a2d9
     home: http://github.com/mesosphere/charts/staging
@@ -3148,7 +2757,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2020-10-30T20:53:48.569761208Z"
+    created: "2020-11-02T21:15:50.261743542Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 68fdf1a80ec72712b3adf4fb10cb82c4e964140ac7aed48866346720f5776662
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -3160,7 +2769,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 0.1.1
-    created: "2020-10-30T20:53:48.568091629Z"
+    created: "2020-11-02T21:15:50.260617125Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 48a3eca7afdd16ac9c85bd6a1eb72182fb275287b4c7a81c035a0a2d62e6961b
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -3172,7 +2781,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.1.0
-    created: "2020-10-30T20:53:48.567130427Z"
+    created: "2020-11-02T21:15:50.26000403Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 13c678990450e32fd5c2e6d369803dcff1d809c9803d54c5959cc979666344f8
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -3184,7 +2793,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.1.0
-    created: "2020-10-30T20:53:48.56618646Z"
+    created: "2020-11-02T21:15:50.259402463Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: ebd5ccf36730afda48709d070d704b66e6f1c43e4bbf313f8d19a946c0ed202f
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -3197,20 +2806,7 @@ entries:
   prometheus-operator:
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:50.054382114Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://mesosphere.github.io/charts/stable/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://mesosphere.github.io/charts/stable/
-      version: 1.10.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://mesosphere.github.io/charts/stable/
-      version: 5.3.*
+    created: "2020-11-02T21:15:51.231869498Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 6587f5cf07bb32d965f3aaf0bea7964aac703a9ebc86fa127b796e19a2d9d8bb
@@ -3234,20 +2830,7 @@ entries:
     version: 9.3.3
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:50.003027691Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.10.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.3.*
+    created: "2020-11-02T21:15:51.209233756Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 12996ce69f8217b3dda7a387044a27743c3ff47a45ff9b84f722847c750eae79
@@ -3271,20 +2854,7 @@ entries:
     version: 9.3.2
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.976035951Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.10.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.3.*
+    created: "2020-11-02T21:15:51.189203419Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 8e4051833261ffbc80eb92b9e959e4a98942ebfa21b69cce0f52e3a8429de402
@@ -3308,23 +2878,11 @@ entries:
     version: 9.3.1
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.251854239Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.687719143Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
-    digest: 6fc93f8ac8a756df418a610102ac249c3461f41efa6f503c7c7fe7e8fdfc683d
+    digest: 5688a14f99fbc148c884f8bac1da90f36ddc29f6968e1005b071439620429808
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3340,28 +2898,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.19.tgz
     version: 8.13.19
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.211194845Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.666560715Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 32400d55c7d5a7f11738b753dfc1a7cc4db9d638d57ee8b11d25b7d8493bfe79
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3377,28 +2924,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.18.tgz
     version: 8.13.18
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.17905392Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.619167606Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: afb9937cf759f12187d1ea198b5fad4f9b4b5a5c4a93459b5a9c1d8af459ca88
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3414,28 +2950,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.17.tgz
     version: 8.13.17
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.142087907Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.599794621Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 3339d42a7b97aa0e8b14cf36892bcc3764b4539c918cb5e717e8ddf222368e49
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3451,28 +2976,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.16.tgz
     version: 8.13.16
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.095784773Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.579958097Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: ce2136d3b9d4fada32ecbec5119fe87fb64c5357e7b2b41de3ed6dd92537c690
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3488,28 +3002,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.15.tgz
     version: 8.13.15
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.064562226Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.562113542Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 418b080773e0aa03f5b3469993992b6d323f42d3fcf01f5c4be3a3f0df7e0fb5
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3525,28 +3028,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.14.tgz
     version: 8.13.14
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:49.014745152Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.515892259Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 85ddc768d3ac02550d5e110200d956f3ac66225236caa3c35838533ce6c8990c
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3562,28 +3054,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.13.tgz
     version: 8.13.13
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2020-10-30T20:53:48.984865471Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.8.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.9.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 5.0.*
+    created: "2020-11-02T21:15:50.496191678Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 7beca12c121c2c3fa21d4cbbc055684fff11f9f7f85a817e9f8d67d839529756
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3599,28 +3080,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.13.12.tgz
     version: 8.13.12
   - apiVersion: v1
     appVersion: 0.35.1
-    created: "2020-10-30T20:53:49.922391126Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.16940477Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1be16914a416947d6d31c99867074201e656d58d4817a010823c7883b4c89665
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3636,28 +3106,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.5.tgz
     version: 8.8.5
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.90191893Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.132962249Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: c11dbe0ac775e9ce6a8a111648e46595d1b69d0b9e9c43c0caf37ccb6453d2cb
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3673,28 +3132,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.4.tgz
     version: 8.8.4
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.88041545Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.115038709Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 80ecf055692f4cee918723a9c8d95c9e427e03c6bf36043c346aa87986c1947e
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3710,28 +3158,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.3.tgz
     version: 8.8.3
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.855180417Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.089139388Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: d0da77114be09456ac4e25488283c391c69ce7ae6cf42b7d5defb4a50d250cc5
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3747,28 +3184,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.2.tgz
     version: 8.8.2
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.818527894Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.065133825Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: b3b7ae005e2f974be7adf5d6d1193302c9587753dd647cbe687783cf5ef0b916
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3784,28 +3210,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.1.tgz
     version: 8.8.1
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.787939185Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:51.018048528Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 23721fcde353d1d2534172d2599a328ca5750ce9197b35491cfb25c3db5d6761
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3821,28 +3236,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.8.0.tgz
     version: 8.8.0
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.756912822Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:50.99863766Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 6a3b1e92b6df3acabd700a47fff10d20cbf8dfc5e676711376e741756b588412
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3858,28 +3262,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.7.5.tgz
     version: 8.7.5
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.706544571Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:50.979533184Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 988d398ef88fe467cf1939f7697e9c4bc33331dae901a13ee711e17bb3910193
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3895,28 +3288,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.7.4.tgz
     version: 8.7.4
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.678434397Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:50.964206958Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 3a600fe42a5441e0a229dc6821a54711b01de6d845b8d09b43e3152bef14c576
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3932,28 +3314,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.7.3.tgz
     version: 8.7.3
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.655981937Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:50.924559709Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: a6d2459bf32c3b9f8b147cefc3a2fce2d5da925c202afd1cd848f9db0c575268
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -3969,28 +3340,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.7.2.tgz
     version: 8.7.2
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2020-10-30T20:53:49.613680766Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.8.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.3.*
+    created: "2020-11-02T21:15:50.907982672Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1e89a9369a9e7dd9e1a6107eb452ccdc57ac19caee4116a6c405f1e64611c259
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4006,28 +3366,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.7.1.tgz
     version: 8.7.1
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.303981962Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.719586729Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 38c1f4d2a4efb0b48e1a357a7f7431f4c4439b8ff55fed9bed87928aba69708c
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4043,28 +3392,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.11.tgz
     version: 8.3.11
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.281850166Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.705257358Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: b2e92ccd279b10743a1faaa2c8df489153cd739d059e615f584042be17026470
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4080,28 +3418,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.10.tgz
     version: 8.3.10
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.587309501Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.889669083Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 6119c6a515598bd7ff6482e31772a1a42eb0195b5c52037f8f5e16fc4be05cc6
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4117,28 +3444,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.9.tgz
     version: 8.3.9
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.554717303Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.874058718Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: cb6c4159991dff489c8cb5c0a23dfd2004c1c1c917cbf11526fe43e4763c7452
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4154,28 +3470,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.8.tgz
     version: 8.3.8
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.535912911Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.825885388Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1452a5df6e2897a5a1a2dae3e3371666b04ec0d6a166d900a7b59c5887d3e483
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4191,28 +3496,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.7.tgz
     version: 8.3.7
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.503268533Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.81003066Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: df4039f6bc9d327bac6b77d9cd26bb45c39279de11637b2cb6633df5ba61bb65
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4228,28 +3522,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.6.tgz
     version: 8.3.6
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.423374601Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.793829457Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: c5b19592b869039a37595df28c118747a2a5da9e4b62d7d906b3a66975eff558
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4265,28 +3548,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.5.tgz
     version: 8.3.5
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.393319469Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.7770372Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: feec94ca9895169878579a3dd20c02051be4001f1fcc853967f6106fd40109b7
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4302,28 +3574,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.4.tgz
     version: 8.3.4
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2020-10-30T20:53:49.364864665Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 2.4.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.7.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 4.0.*
+    created: "2020-11-02T21:15:50.758906815Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 471016586932b0123d36920c20e835ab4535e13c5b0d6b56e1446d4a96ed4df6
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4339,28 +3600,17 @@ entries:
     - https://github.com/coreos/kube-prometheus
     - https://github.com/coreos/prometheus-operator
     - https://coreos.com/operators/prometheus
+    tillerVersion: '>=2.12.0'
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-8.3.3.tgz
     version: 8.3.3
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.956800398Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: file://dependent-charts/kube-state-metrics
-      version: 2.4.1
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: file://dependent-charts/prometheus-node-exporter
-      version: 1.5.1
-    - condition: grafana.enabled
-      name: grafana
-      repository: file://dependent-charts/grafana
-      version: 3.5.10
+    created: "2020-11-02T21:15:50.477233496Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: d61689d7e429209500706e68c8d68207f2ce01b83cb961e8baba91e9bf8beb87
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4380,23 +3630,11 @@ entries:
     version: 5.19.7
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.918729091Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: file://dependent-charts/kube-state-metrics
-      version: 1.6.5
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: file://dependent-charts/prometheus-node-exporter
-      version: 1.5.1
-    - condition: grafana.enabled
-      name: grafana
-      repository: file://dependent-charts/grafana
-      version: 3.5.10
+    created: "2020-11-02T21:15:50.46336364Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1e751d9968deff5f3fcac461eac7a6ff8283ed52865dc1b9369f610cc33cc60a
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4416,23 +3654,11 @@ entries:
     version: 5.19.6
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.89888533Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.424335102Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: cf4c3ca8588b4f94e38b4c2178b15daa7d761f2d4119d33c044b04bd6119c34a
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4452,23 +3678,11 @@ entries:
     version: 5.19.5
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.878522458Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.412055615Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 2aeb8698c2c58f69b0e9ef46759fbdebb7cb0538b20ef45ac3181b5af40d40d9
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4488,23 +3702,11 @@ entries:
     version: 5.19.4
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.85883853Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.399578179Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 97cdc51c1d359b5ac5a3a2e7aca658c07bba7d6baa9a9aef8c5e8478220e1c8a
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4524,23 +3726,11 @@ entries:
     version: 5.19.3
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.815576874Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.3858445Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: f860fc969f6a9b5fe7d6f7bcdfea214edeb76254d4c90961e63aa0b670ed895d
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4560,23 +3750,11 @@ entries:
     version: 5.19.2
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.800049391Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.374719775Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: a5cc60cc6b93002a1dc77e1c090e7fe93acef1e347feb737ff01f35a00389315
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4596,20 +3774,7 @@ entries:
     version: 5.19.1
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2020-10-30T20:53:48.779381206Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.6.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.5.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.5.*
+    created: "2020-11-02T21:15:50.362276056Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 059c366bfa990b6ca68fb5a901ec3956ba9c28300350af1e582d9bd8f0613be8
@@ -4632,23 +3797,11 @@ entries:
     version: 5.19.0
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.758877869Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.35333063Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 055fc59a8950888594b2492b6c41abbecbb8f61eb8d9328008f50f677f5b7ba2
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4666,23 +3819,11 @@ entries:
     version: 5.10.9
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.726612869Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.344460771Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 0bedf6edc04136d93331fb1843f47817f8ca4b17b85460a9d0bc5627907abe3f
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4700,23 +3841,11 @@ entries:
     version: 5.10.8
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.707832073Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.335688374Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: ad37143ebb687bb1ac9529da72c97f423820a0d755778f74c71c35e6db16d0ce
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4734,23 +3863,11 @@ entries:
     version: 5.10.7
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.689395091Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.327018969Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 88c4250a6a28dfc9a249b8b17bbb3c6209de270ad6721c9e79aa63361b7b5ecc
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4768,23 +3885,11 @@ entries:
     version: 5.10.6
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.67103361Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.318710829Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 9bdd15570e4c9bb6d9fe6fb58f9f51948ff1ad3c650b84b8e3837e8a898b1cd2
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4802,23 +3907,11 @@ entries:
     version: 5.10.5
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.652645937Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.310285567Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 07d9a370120ebf873e0e4f02ae7588a874bb13aa133dd4dbb2c761e7356e0d1e
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4836,23 +3929,11 @@ entries:
     version: 5.10.4
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.633745824Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.301504412Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: adb71ee73a50c2ab5f0e229fe93267f1f2af6480d00f8bae43fa4e50a5ec61fc
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4870,23 +3951,11 @@ entries:
     version: 5.10.3
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.616226188Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.292960401Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 03a9f9b0f3f314c36ade5d4c0753907f270e4e5ca8093381aa013c26f34a7d1a
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4904,23 +3973,11 @@ entries:
     version: 5.10.2
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.604430524Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.284646399Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: 1263d0f1261bfc84c34504c3f44bcb2e1d936551a733aa8fe31effd3f9035266
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4938,23 +3995,11 @@ entries:
     version: 5.10.1
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2020-10-30T20:53:48.592588785Z"
-    dependencies:
-    - condition: kubeStateMetrics.enabled
-      name: kube-state-metrics
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.1.*
-    - condition: nodeExporter.enabled
-      name: prometheus-node-exporter
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 1.4.*
-    - condition: grafana.enabled
-      name: grafana
-      repository: https://kubernetes-charts.storage.googleapis.com/
-      version: 3.3.*
+    created: "2020-11-02T21:15:50.276420196Z"
     description: Provides easy monitoring definitions for Kubernetes services, and
       deployment and management of Prometheus instances.
     digest: c34186f40539eace19bd69793140e4bd79572362b68881f22eb99466079485e2
+    engine: gotpl
     home: https://github.com/coreos/prometheus-operator
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -4973,7 +4018,7 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2020-10-30T20:53:50.054845287Z"
+    created: "2020-11-02T21:15:51.23214534Z"
     description: A Helm chart for Kubernetes
     digest: d07d36886354e77838f74ca60211e8246dd4575267e59527ede41513b5cc1ae6
     name: test
@@ -4983,7 +4028,7 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.174463529Z"
+    created: "2020-11-02T21:15:51.305643008Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5404bd66b2a5afe9b6989731c2846afbf8f2de99688333e0713c3a7db5025cf6
@@ -5012,7 +4057,7 @@ entries:
     version: 1.88.0
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.170049502Z"
+    created: "2020-11-02T21:15:51.303988491Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: bb85425e7709c0e905400bc75a40fa7d7863ec747556c8406730eb523c3d883e
@@ -5041,10 +4086,11 @@ entries:
     version: 1.87.5
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.165552741Z"
+    created: "2020-11-02T21:15:51.302368447Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
-    digest: 4c35ed4ce97c2ad112e685c31419a31d6e0e53661016b73468f4cafe9f0c2a96
+    digest: 2ae4d82eb7c05cb4ed2ec0ae8f977a908718614fdf1a5ea4596de5a71715b8af
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/assets/img/traefik.logo.png
     keywords:
@@ -5070,10 +4116,11 @@ entries:
     version: 1.87.4
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.160397144Z"
+    created: "2020-11-02T21:15:51.300714122Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5d1985b3471fd22072d05c9fe9fbc53e620867196b512b0f0058155dae512f68
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/assets/img/traefik.logo.png
     keywords:
@@ -5099,10 +4146,11 @@ entries:
     version: 1.87.3
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.15595703Z"
+    created: "2020-11-02T21:15:51.298769829Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 29c6ecb791f4d1f7cb375c3fef9abe7a4103dc13b8c5583a73d12f3aa8257a43
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/assets/img/traefik.logo.png
     keywords:
@@ -5128,10 +4176,11 @@ entries:
     version: 1.87.2
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.111223432Z"
+    created: "2020-11-02T21:15:51.286380957Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: d2bd9c5ec466ce02dcf78146ca8c8f7bf9a96b34a23671c7826a1edc9c643a10
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5157,10 +4206,11 @@ entries:
     version: 1.72.24
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.10819016Z"
+    created: "2020-11-02T21:15:51.282051212Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: fbcd4007025bb33a9cf2c6e3abf5c3053479f946fc75a279d6ab46d56b804324
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5186,10 +4236,11 @@ entries:
     version: 1.72.23
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.105325733Z"
+    created: "2020-11-02T21:15:51.280675493Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 003a900e88832a61351b846a332511350598463d7eee55a84ff18ac0fdceee3d
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5215,10 +4266,11 @@ entries:
     version: 1.72.22
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2020-10-30T20:53:50.101947879Z"
+    created: "2020-11-02T21:15:51.27929797Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5156470ebdda731d493061cb25f41bec6a00cf46bec31e746e43874dc28fcb87
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5244,10 +4296,11 @@ entries:
     version: 1.72.21
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2020-10-30T20:53:50.097247939Z"
+    created: "2020-11-02T21:15:51.277897317Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 45aeeac6a8e9b5c3816229fa584729117dd4e1fefef434fdf3610ed73d46bc53
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5273,10 +4326,11 @@ entries:
     version: 1.72.20
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2020-10-30T20:53:50.089691375Z"
+    created: "2020-11-02T21:15:51.275011495Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 4350dfeca2ef97ac22f077f01217ea9c8821385264f0da5a5f0a668b8c1dd036
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5302,10 +4356,11 @@ entries:
     version: 1.72.19
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2020-10-30T20:53:50.087330842Z"
+    created: "2020-11-02T21:15:51.273694839Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 1813993fd7d425f54d159b5df1d8b43525d3498f7af8ea13120ca06c2ac4ba2a
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5331,10 +4386,11 @@ entries:
     version: 1.72.18
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2020-10-30T20:53:50.085059693Z"
+    created: "2020-11-02T21:15:51.272305337Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: aec29ee2d2be47413ab7a38ecf4baf4e60cca882a82396affdcc7cc109ab894f
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5360,10 +4416,11 @@ entries:
     version: 1.72.17
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.08277055Z"
+    created: "2020-11-02T21:15:51.270886235Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: cd3767564af475fab562c56752c2f98e3298292cc838bfe672a64d755c19d63f
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5389,10 +4446,11 @@ entries:
     version: 1.72.16
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.079556338Z"
+    created: "2020-11-02T21:15:51.269208027Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 53fb6394a62d8fe4c6a4c739b8a60136ad8021cc5e985f7bd0f45b1b59091efa
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5418,10 +4476,11 @@ entries:
     version: 1.72.15
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.076544296Z"
+    created: "2020-11-02T21:15:51.267624753Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 60f6821019972b38d82227049b9b277e1817479302e478f5ba2223e76e0fa97c
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5447,10 +4506,11 @@ entries:
     version: 1.72.14
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.071756136Z"
+    created: "2020-11-02T21:15:51.266146227Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: d83731e5d344521fe36ce01b8cce6bb263bc8cf9248c6e1f5baa8d1535c2e948
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5476,10 +4536,11 @@ entries:
     version: 1.72.13
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.069235264Z"
+    created: "2020-11-02T21:15:51.26454829Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: edef5ff485722b464bd70d6c6d49ed83bafc36e6ec34ee7ebaa7d00a304f5001
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5505,10 +4566,11 @@ entries:
     version: 1.72.12
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.066978724Z"
+    created: "2020-11-02T21:15:51.261204474Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: ab2704ec2be7921a1fdcacc09b4837340ff1aff819d65a5c95650a45adb0a10d
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5534,10 +4596,11 @@ entries:
     version: 1.72.11
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.06453879Z"
+    created: "2020-11-02T21:15:51.259709465Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: c47776151be774296923978ab9b14e9fbff5d0cf16982fd356ce9cec8502542a
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5563,10 +4626,11 @@ entries:
     version: 1.72.10
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.152584269Z"
+    created: "2020-11-02T21:15:51.297008637Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 21fbc53064b2a0db764ded916681dfbb91ee31abba483094f7e7d6b27b9dfde2
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5592,10 +4656,11 @@ entries:
     version: 1.72.9
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.129700695Z"
+    created: "2020-11-02T21:15:51.295014095Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 6f3d6fcbe8a87abe7d303fd719af932b37cf3ad4fa857d5875d3db1bf1b859ef
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5621,10 +4686,11 @@ entries:
     version: 1.72.8
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.126197336Z"
+    created: "2020-11-02T21:15:51.29283235Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: e8d3a17a4f20aa1ea198d9cde5d94fc72637565c3f31b26131b0b037197c45c8
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5650,10 +4716,11 @@ entries:
     version: 1.72.7
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.12346955Z"
+    created: "2020-11-02T21:15:51.291368579Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 13bf931e58c5aa940a609d4f27b1a1160ce0a9071aef9deb3a2cb9225390f0eb
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5679,10 +4746,11 @@ entries:
     version: 1.72.6
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.120245729Z"
+    created: "2020-11-02T21:15:51.290135939Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: efde17f47542af4f16d0a38ecc458b06a7bff1fa2e48c119fa719bda5533364b
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5708,10 +4776,11 @@ entries:
     version: 1.72.5
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.115937955Z"
+    created: "2020-11-02T21:15:51.288913359Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 01a94519c3d28def7052ec283501b622d11078f11fe7ad9737b472a2f5f3cbe6
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5737,10 +4806,11 @@ entries:
     version: 1.72.4
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.113656737Z"
+    created: "2020-11-02T21:15:51.287672623Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 6b729f5ae8792ea6077a3c6e6709bfa7d6e594cec41fbbf4c8a3fd1fddc125b8
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5766,10 +4836,11 @@ entries:
     version: 1.72.3
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.093274832Z"
+    created: "2020-11-02T21:15:51.276331629Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2452a70ae7bff1ffbdb74a97303f1b25cbd34e59d27140a602af02881626b9bd
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5795,10 +4866,11 @@ entries:
     version: 1.72.2
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.062031671Z"
+    created: "2020-11-02T21:15:51.235815799Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: b920941d7e7e9c435d367616a81eb71a9ea619a158f2baee07e44952b16a92e5
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5824,10 +4896,11 @@ entries:
     version: 1.72.1
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.059540547Z"
+    created: "2020-11-02T21:15:51.234559676Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: c8a356700064625fb7d39d57907254a49f95a12b640facce5cafbb6aa795643e
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5853,10 +4926,11 @@ entries:
     version: 1.72.0
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2020-10-30T20:53:50.057250795Z"
+    created: "2020-11-02T21:15:51.233321272Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2ad3ff530f0d01fb81d8c75a2fb6fff82eb4994a6a34994c0cbe76349c56dc18
+    engine: gotpl
     home: https://traefik.io/
     icon: https://docs.traefik.io/img/traefik.logo.png
     keywords:
@@ -5883,10 +4957,10 @@ entries:
   traefik-forward-auth:
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.188209649Z"
+    created: "2020-11-02T21:15:51.312168861Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
-    digest: 39909f7b9bee23b694fb802c0236d9255b75b2eaeb61405cd12adf335b7dfeea
+    digest: b35c2e5a15a772bc5851e078f4f7fc5fe6a8bda0aa31fab8a3ab86e0a806777b
     home: https://github.com/mesosphere/traefik-forward-auth
     keywords:
     - traefik-forward-auth
@@ -5903,7 +4977,7 @@ entries:
     version: 0.2.14
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.187554647Z"
+    created: "2020-11-02T21:15:51.311315039Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 5ac32d0d03dbe017ca4b1680a71695ea450cefb436e6166c1ba141b125390b9f
@@ -5923,7 +4997,7 @@ entries:
     version: 0.2.13
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.186904471Z"
+    created: "2020-11-02T21:15:51.310502974Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 4a61c3245a55c051e389b19b1811a263e1f10eb0a752608f213c3eb78283477e
@@ -5943,7 +5017,7 @@ entries:
     version: 0.2.12
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.18604045Z"
+    created: "2020-11-02T21:15:51.309672574Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 9121bdf91b1e0cb3f1914ae285e25cea8dd1b8c047dd8eb4596de54934e559af
@@ -5963,7 +5037,7 @@ entries:
     version: 0.2.11
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.18496473Z"
+    created: "2020-11-02T21:15:51.309231993Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: f080c9e6c89d94474f856edaadec32e145f973f2629c04934caed85141366fa3
@@ -5983,7 +5057,7 @@ entries:
     version: 0.2.10
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.194456786Z"
+    created: "2020-11-02T21:15:51.317347259Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 019b13fbe2b65c16c7a8b43c42073c64925b2a22619632e2655c65991001d01a
@@ -6003,7 +5077,7 @@ entries:
     version: 0.2.9
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.193401693Z"
+    created: "2020-11-02T21:15:51.316906393Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 8ed471e88df5b6a4afd26748f0803673ebb9270ba7c76a75fc67bd331b9f0e1e
@@ -6021,7 +5095,7 @@ entries:
     version: 0.2.8
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.19236475Z"
+    created: "2020-11-02T21:15:51.316260105Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: a05adfd3d961534df0ce78d4428b67ff6573f1d4e071c97df33e57dcd6ce390d
@@ -6039,7 +5113,7 @@ entries:
     version: 0.2.7
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.191330338Z"
+    created: "2020-11-02T21:15:51.315818453Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: fba05f0133974fa1bc870db3069c113308c6a6bdb82fb6563f36958be2039ffc
@@ -6057,7 +5131,7 @@ entries:
     version: 0.2.6
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.190659695Z"
+    created: "2020-11-02T21:15:51.315372422Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 0a93e9b541782f02dd3a54eba204afd61292209d60b875b254379d2a7d5527e8
@@ -6075,7 +5149,7 @@ entries:
     version: 0.2.5
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.190026457Z"
+    created: "2020-11-02T21:15:51.314600651Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: aee2ed78945566fc4636d09bac6926b15bd67f9e028c30bb13ec4bd88be96a4d
@@ -6093,7 +5167,7 @@ entries:
     version: 0.2.4
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.189434071Z"
+    created: "2020-11-02T21:15:51.313774534Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 4837e0d7e4193902c0633acee9dc878c215bc2ae6b1fcac8ca10682487513226
@@ -6111,7 +5185,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.188817917Z"
+    created: "2020-11-02T21:15:51.312925447Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 271c3f61e53a2c46437f0c169e6ac844f8e4fcc607e9cf1567424988b2d8e3cd
@@ -6129,7 +5203,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.183763748Z"
+    created: "2020-11-02T21:15:51.308782589Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 7290faed495ea9dcef68546bbe36a24fc5496005a9c78095cc6683e0aad604ec
@@ -6147,7 +5221,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.182327796Z"
+    created: "2020-11-02T21:15:51.308366643Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 0268d932f2e9158e0eddd75c92437b40fcf756a417f3988bb108ca06f3074ce8
@@ -6165,7 +5239,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.180946208Z"
+    created: "2020-11-02T21:15:51.307992701Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 1f414c4ed835a24b2dffa9c0aea556c570c7b27b5fb01f3d1a180a52714fa427
@@ -6183,7 +5257,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.179514768Z"
+    created: "2020-11-02T21:15:51.307574425Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 00fcc7e35fc3ca79c8dbfa6da2f4e8fecac63b33cb8c20674e649a38bdd61d73
@@ -6201,7 +5275,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.178473418Z"
+    created: "2020-11-02T21:15:51.307175226Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 319e36602dec4508c19a3b106703730a3cc4042905cc60acb59339bb1d2c0c1a
@@ -6219,7 +5293,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.177487064Z"
+    created: "2020-11-02T21:15:51.306807074Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c58c8f7bdd0ee2d267809e9089d32cdcef7e81f614d3f4bbc730b884bc2620df
@@ -6237,7 +5311,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.176465094Z"
+    created: "2020-11-02T21:15:51.306385176Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c88663f8cfca74df65d9a298fe59a649aa01f096edf85bbfa3cd4295b3d169e1
@@ -6255,7 +5329,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: latest
-    created: "2020-10-30T20:53:50.175447727Z"
+    created: "2020-11-02T21:15:51.306017918Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: f825b48d33eb5ebf688b510b547ea2f72d04b513f2aae03d4aa4edfc83328991
@@ -6274,9 +5348,10 @@ entries:
   traefik2:
   - apiVersion: v1
     appVersion: 2.1.1
-    created: "2020-10-30T20:53:50.196006209Z"
+    created: "2020-11-02T21:15:51.317960389Z"
     description: A Traefik based Kubernetes ingress controller
-    digest: daa5eec6d5dc40a640df935be0492c424c1d077a87c85093e79b6d5bedd629a6
+    digest: 3ed7a9f394f6579a4041f1bbb23e5fbf14d3f421df5c128a68ad7fcd658e7901
+    engine: gotpl
     home: https://traefik.io/
     icon: http://traefik.io/traefik.logo.png
     keywords:
@@ -6299,14 +5374,9 @@ entries:
   velero:
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.264132472Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.16
+    created: "2020-11-02T21:15:51.369547763Z"
     description: A Helm chart for velero
-    digest: 20537deea3642004bbdfdaeca07b740fbf374bf086ce42d2a4e09648a6e5dd71
+    digest: 598f1423021258aeaa31245ed591279120ea29a094643ca0f46aba8609c18624
     home: https://github.com/heptio/velero
     icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
     maintainers:
@@ -6325,17 +5395,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.6.tgz
     version: 3.0.6
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.261491334Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.16
+    created: "2020-11-02T21:15:51.367930853Z"
     description: A Helm chart for velero
     digest: 5120603db38a275a510fb77ca653274f53366124bd921526de4f666df2999f00
     home: https://github.com/heptio/velero
@@ -6356,17 +5422,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.5.tgz
     version: 3.0.5
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.258860723Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.16
+    created: "2020-11-02T21:15:51.36630662Z"
     description: A Helm chart for velero
     digest: cac6f4fcf3682944f16117eb14158fc5b5dce641b19bb9dbd0175775de5cebb2
     home: https://github.com/heptio/velero
@@ -6383,17 +5445,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.4.tgz
     version: 3.0.4
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.254864397Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.15
+    created: "2020-11-02T21:15:51.36473996Z"
     description: A Helm chart for velero
     digest: be9642e9579a9351b4de78bd80f295de3baa6a6b7d28c6a09887432f3c350f35
     home: https://github.com/heptio/velero
@@ -6410,17 +5468,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.3.tgz
     version: 3.0.3
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.229154483Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.14
+    created: "2020-11-02T21:15:51.361871033Z"
     description: A Helm chart for velero
     digest: 541ca3e3880614f9b0a60c1177dee6d6bdd39dc4df8b037bd6532163b5eb6baa
     home: https://github.com/heptio/velero
@@ -6437,17 +5491,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.2.tgz
     version: 3.0.2
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.225754254Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.14
+    created: "2020-11-02T21:15:51.360068358Z"
     description: A Helm chart for velero
     digest: 17dc4daecc1fc21559133cf04a6ebb4a41d505c8b0fa287aa21c8528b83a23fc
     home: https://github.com/heptio/velero
@@ -6464,17 +5514,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.1.tgz
     version: 3.0.1
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.221729959Z"
-    dependencies:
-    - condition: minioBackend
-      name: minio
-      repository: ""
-      version: 5.0.12
+    created: "2020-11-02T21:15:51.332091061Z"
     description: A Helm chart for velero
     digest: 1824829e8685786df4b061932d6e63a8fbeeb80bf3d9ab2eb9d868a327f59921
     home: https://github.com/heptio/velero
@@ -6491,12 +5537,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-3.0.0.tgz
     version: 3.0.0
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.207012663Z"
+    created: "2020-11-02T21:15:51.322960835Z"
     description: A Helm chart for velero
     digest: dc3e5ddb3a447a95c27598b6c959f86322b50a04d83e412ce14fff6eb9ae5355
     home: https://github.com/heptio/velero
@@ -6513,12 +5560,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.11.tgz
     version: 2.2.11
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.20596662Z"
+    created: "2020-11-02T21:15:51.322267085Z"
     description: A Helm chart for velero
     digest: 523ddb0daada17a44ac198356c94e32a1f32328e46512e87915a8e0d812508ae
     home: https://github.com/heptio/velero
@@ -6535,12 +5583,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.10.tgz
     version: 2.2.10
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.218222643Z"
+    created: "2020-11-02T21:15:51.330499582Z"
     description: A Helm chart for velero
     digest: 340e343fdc922a57756943322782d7db90b4031a5e2f120073396fb949770076
     home: https://github.com/heptio/velero
@@ -6557,12 +5606,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.9.tgz
     version: 2.2.9
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.217222354Z"
+    created: "2020-11-02T21:15:51.329757204Z"
     description: A Helm chart for velero
     digest: 24b65e520c94696010f5887a9c5c8501d25bc291ab7acd3641307f0cca44b972
     home: https://github.com/heptio/velero
@@ -6579,12 +5629,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.8.tgz
     version: 2.2.8
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.21556192Z"
+    created: "2020-11-02T21:15:51.329016134Z"
     description: A Helm chart for velero
     digest: e514308f2b319071fd335f7e98fcb8e8ceff01c115960027c43a2efe1c205226
     home: https://github.com/heptio/velero
@@ -6601,12 +5652,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.7.tgz
     version: 2.2.7
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.212420272Z"
+    created: "2020-11-02T21:15:51.32826835Z"
     description: A Helm chart for velero
     digest: 22d9ed7600d9d9046d881b2359c64248b93ccccda2bc3ba7727491390ace2c37
     home: https://github.com/heptio/velero
@@ -6623,12 +5675,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.6.tgz
     version: 2.2.6
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.211230443Z"
+    created: "2020-11-02T21:15:51.327587549Z"
     description: A Helm chart for velero
     digest: f7f9ac7c42dc4aad5434b56fc2bf293abd53e319f73f126be965b8627ed6ace7
     home: https://github.com/heptio/velero
@@ -6645,12 +5698,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.5.tgz
     version: 2.2.5
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.210122629Z"
+    created: "2020-11-02T21:15:51.326771542Z"
     description: A Helm chart for velero
     digest: 1373abbd685dfa45d60b8bd579e24e94221f4cca18d8e5a59688bff0d076bf36
     home: https://github.com/heptio/velero
@@ -6667,12 +5721,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.4.tgz
     version: 2.2.4
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2020-10-30T20:53:50.209044078Z"
+    created: "2020-11-02T21:15:51.325387503Z"
     description: A Helm chart for velero
     digest: 5664b64db004d6da7e7904453ae0fbe806232fa9208eb30742f88b7ac26bdd25
     home: https://github.com/heptio/velero
@@ -6689,12 +5744,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.3.tgz
     version: 2.2.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.208050486Z"
+    created: "2020-11-02T21:15:51.323724756Z"
     description: A Helm chart for velero
     digest: 6535cdc66856ed7eb74b30fdcecba995f9701b89a04a9da28fd4830d9171c5f9
     home: https://github.com/heptio/velero
@@ -6711,12 +5767,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.2.tgz
     version: 2.2.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.204920959Z"
+    created: "2020-11-02T21:15:51.321569562Z"
     description: A Helm chart for velero
     digest: 064ba88232436c98bf435ac9202792907149e0226532c86f97c29f953e2a1136
     home: https://github.com/heptio/velero
@@ -6733,12 +5790,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.1.tgz
     version: 2.2.1
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.20384463Z"
+    created: "2020-11-02T21:15:51.320830782Z"
     description: A Helm chart for velero
     digest: c7222c0d16638eca14deed9c38c877931a9857e12c817d3db9feafff2f90a7bb
     home: https://github.com/heptio/velero
@@ -6755,12 +5813,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.2.0.tgz
     version: 2.2.0
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.20222356Z"
+    created: "2020-11-02T21:15:51.32011485Z"
     description: A Helm chart for velero
     digest: 94f0397a43ecac7e621c242e6fb8c61f5c322d6bbd9fd1413e17fe24956f33e1
     home: https://github.com/heptio/velero
@@ -6777,12 +5836,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.3.tgz
     version: 2.1.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.199481815Z"
+    created: "2020-11-02T21:15:51.319340523Z"
     description: A Helm chart for velero
     digest: fab1defd2987463b4be58a2d90e8f7dabbcc444e9d9fe393b7aa1b232c1b426c
     home: https://github.com/heptio/velero
@@ -6799,12 +5859,13 @@ entries:
     name: velero
     sources:
     - https://github.com/heptio/velero
+    tillerVersion: '>=2.10.0'
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.2.tgz
     version: 2.1.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2020-10-30T20:53:50.197953985Z"
+    created: "2020-11-02T21:15:51.318622762Z"
     description: A Helm chart for velero
     digest: 1cbd8904e0c31e0266b8d41b4fc3abaa22c0d9d7c0a038bde2362dba1da6b108
     home: https://github.com/heptio/velero
@@ -6824,4 +5885,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2020-10-30T20:53:47.022173686Z"
+generated: "2020-11-02T21:15:48.701774784Z"
