@@ -11,6 +11,8 @@ spec:
   commonName: {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc
   dnsNames:
   - {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc.cluster.local
+  - {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc.cluster
+  - {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc
   issuerRef:
     kind: Issuer
     name: {{ template "dex-controller.fullname" . }}-selfsigned-issuer
