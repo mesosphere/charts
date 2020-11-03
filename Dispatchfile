@@ -100,6 +100,6 @@ dind_task("test-helm3",
 )
 
 action(tasks=["test-helm2","test-helm3"], on=pullRequest())
-action(tasks=["publish"], on=push(branches=["master"]))
+action(tasks=["publish"], on=push(branches=["release/kommander-0.8.x"]))
 action(tasks = ["test-helm2"], on = pullRequest(chatops = ["test-helm2"]))
 action(tasks = ["test-helm3"], on = pullRequest(chatops = ["test-helm3"]))
