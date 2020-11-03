@@ -128,10 +128,8 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | 
 
 .PHONY: ct.lint
 ct.lint:
-ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
-endif
-	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME} --debug
+	$(DRUN) git fetch ${GIT_REMOTE_NAME} release/kommander-0.8.x
+	$(DRUN) ct lint --target-branch release/kommander-0.8.x --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
 ct.test:
