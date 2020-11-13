@@ -142,7 +142,7 @@ spec:
     metadata:
       name: "wait-for-cert-manager-webhook"
     spec:
-      serviceAccountName: default
+      serviceAccountName: cert-manager-upgrade
       restartPolicy: Never
       containers:
       - name: {{ .Chart.Name }}-patch-apiservice
