@@ -135,7 +135,7 @@ metadata:
 {{ include "cert-manager-setup.labels" . | indent 4 }}
   annotations:
     "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-weight": "10"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
@@ -145,7 +145,7 @@ spec:
       serviceAccountName: default
       restartPolicy: Never
       containers:
-      - name: {{ .Chart.Name }}
+      - name: {{ .Chart.Name }}-patch-apiservice
         image: bitnami/kubectl:1.18.8-debian-10-r15
         imagePullPolicy: IfNotPresent
         command: 
