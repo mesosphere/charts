@@ -57,6 +57,9 @@ rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list", "watch", "delete"]
+  - apiGroups: ["apiregistration.k8s.io/v1"]
+    resources: ["apiservices"]
+    verbs: ["*"]
   - apiGroups: ["certmanager.k8s.io", "cert-manager.io"]
     resources: ["*"]
     verbs: ["*"]
@@ -122,5 +125,35 @@ metadata:
     "helm.sh/hook": pre-install, post-install, post-upgrade
     "helm.sh/hook-weight": "-11"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "cert-manager-setup.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+{{ include "cert-manager-setup.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-6"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: "wait-for-cert-manager-webhook"
+    spec:
+      serviceAccountName: default
+      restartPolicy: Never
+      containers:
+      - name: {{ .Chart.Name }}
+        image: bitnami/kubectl:1.18.8-debian-10-r15
+        imagePullPolicy: IfNotPresent
+        command: 
+          - "kubectl"
+          - "patch"
+          - "apiservice"
+          - "v1alpha1.authorizedlister.workspaces.kommander.mesosphere.io"
+          - "--patch" 
+          - "{\"metadata\":{\"annotations\":{\"cert-manager.io/inject-ca-from\":\"kommander/kommander-federation-authorizedlister-tls\",\"certmanager.k8s.io/inject-ca-from\":null}}}"
 {{- end }}
 {{- end }}
