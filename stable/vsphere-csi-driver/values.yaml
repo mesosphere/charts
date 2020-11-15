@@ -63,3 +63,8 @@ storageclass:
   isDefault: true
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
+  # parameters to set for storageclass
+  # e.g.
+  # parameters:
+  #   storagepolicyname: Bronze NFS
+  parameters: {}
