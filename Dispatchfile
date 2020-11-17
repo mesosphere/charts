@@ -157,8 +157,8 @@ git_resource(
     url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
-do_bump_catalog="bump_kommander_catalog_api"
-do_bump_kommander_catalog_api = bump_requirements(do_bump_catalog, git, "stable/kommander", args=["--name=mesosphere", "--project=chart",  "--bump-option=sliced", "--dependencies=kommander-ui" ], env=[k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password"))])
+do_bump_catalog="bump-kommander-catalog-api"
+do_bump_kommander_catalog_api = bump_requirements(do_bump_catalog, git, "stable/kommander", command=["bump_requirements"], args=["--user=mesosphere", "--project=chart",  "--bump-option=sliced", "--dependencies=kommander-ui" ], env=[k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password"))])
 
 kba_git = "kubernetes-base-addons"
 git_resource(
