@@ -8,7 +8,7 @@ load("github.com/mesosphere/dispatch-catalog/starlark/stable/git@0.0.7", "git_re
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/k8s@0.0.7", "secret_var")
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.7", "pull_request", "push")
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
-load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts")
+load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts", "bump_requirements")
 
 git = "src-git"
 
@@ -157,7 +157,8 @@ git_resource(
     url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
-
+do_bump_catalog="bump_kommander_catalog_api"
+do_bump_kommander_catalog_api = bump_requirements(do_bump_catalog, git, "stable/kommander", args=["--name=mesosphere", "--project=chart",  "--bump-option=sliced", "--dependencies=kommander-ui" ], env=[k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password"))])
 
 kba_git = "kubernetes-base-addons"
 git_resource(
@@ -176,5 +177,6 @@ action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommande
 
 # Chatops Actions
 action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
+action(tasks=[do_bump_catalog], on=pull_request(chatops=["bump-catalog"]))
 action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
 action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
