@@ -8,7 +8,7 @@ Represents an umbrella chart for deploying multiple charts:
 - Kubeaddons-Catalog
 
 ## Pre-Reqs for Installation
-You must have installed in your cluster `Cert-Manager`.
+You must have `Cert-Manager` installed in your cluster.
 
 ```bash
 CERT_MANAGER_VERSION=0.10.1
