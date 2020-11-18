@@ -10,25 +10,60 @@ global:
       enabled: false
       chartRepo: http://konvoy-addons-chart-repo.kubeaddons.svc:8879
 
+ingress:
+  extraAnnotations:
+    traefik.ingress.kubernetes.io/priority: "2"
+
 kommander-federation:
   enabled: true
+  utilityApiserver:
+    minimumKubernetesVersion: 1.16.0
+  certificates:
+    issuer:
+      name: kubernetes-ca
+      kind: ClusterIssuer
+  konvoy:
+    allowUnofficialReleases: false
+  kubefed:
+    controllermanager:
+      annotations:
+        secret.reloader.stakater.com/reload: "kubefed-admission-webhook-serving-cert"
+      webhook:
+        annotations:
+          secret.reloader.stakater.com/reload: "kubefed-admission-webhook-serving-cert"
 
 kommander-licensing:
   enabled: true
+  certificates:
+    issuer:
+      name: kubernetes-ca
+      kind: ClusterIssuer
 
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
   kommanderServiceAccount: kommander-kubeaddons
+  thanos:
+    query:
+      deploymentAnnotations:
+        secret.reloader.stakater.com/reload: kommander-thanos-client-tls
 
 kommander-karma:
   enabled: true
   alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
   kommanderServiceAccount: kommander-kubeaddons
   kommanderKarmaConfigMap: kommander-kubeaddons-config
+  karma:
+    deployment:
+      annotations:
+        configmap.reloader.stakater.com/reload: kommander-kubeaddons-config
 
 kubeaddons-catalog:
   enabled: true
+  ingress:
+    enable: false
+    hostName: catalog.kubeaddons.localhost
+    annotations: {}
 
 grafana:
   enabled: true
@@ -179,6 +214,8 @@ kommander-ui:
       traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Impersonate-User,Impersonate-Group
     path: /ops/portal/kommander/ui
     graphqlPath: /ops/portal/kommander/ui/graphql
+  podAnnotations: {}
+  #  iam.amazonaws.com/role: xyz
 
 portalRBAC:
   grafana:
@@ -197,6 +234,7 @@ kubecost:
 
   cost-analyzer:
     enabled: true
+
     fullnameOverride: "kommander-kubecost-cost-analyzer"
     global:
       prometheus:
@@ -208,6 +246,9 @@ kubecost:
         queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
         # The wait time before Kommander begins querying cost data for all attached clusters
         queryOffset: 5m
+        query:
+          deploymentAnnotations:
+            secret.reloader.stakater.com/reload: kommander-kubecost-thanos-client-tls
 
       grafana:
         # If false, Grafana will not be installed
@@ -287,7 +328,7 @@ kubecost:
         sidecarDNSDiscovery: false
         # Names of configmaps that contain addresses of store API servers, used for file service discovery.
         serviceDiscoveryFileConfigMaps:
-        - kubecost-thanos-query-stores
+          - kubecost-thanos-query-stores
         # Refresh interval to re-read file SD files. It is used as a resync fallback.
         serviceDiscoveryInterval: 5m
         extraArgs:
