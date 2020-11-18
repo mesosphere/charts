@@ -10,6 +10,15 @@ load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.7", "p
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
 load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts", "bump_requirements")
 
+resource("artifacts", type="storage", params={
+    "type": "gcs",
+    "location": "s3://artifacts",
+    "dir": "yes"
+}, secrets={
+    "BOTO_CONFIG": k8s.corev1.SecretKeySelector(key="boto", localObjectReference=k8s.corev1.LocalObjectReference(name="s3-config"))
+})
+
+
 git = "src-git"
 dispatch_common_go_environment = [
     k8s.corev1.EnvVar(name="GOARCH", value="amd64"),
@@ -160,6 +169,42 @@ def bump_addon(task_name, addon_git_dir):
 
     return task_name
 
+git_resource("ui-git", url="git@github.com:mesosphere/kommander-ui.git", revision="v6.59.0")
+dind_task("kommander-e2e",
+         inputs=[git, "ui-git"],
+         outputs=["artifacts"],
+         steps=[
+             v1.Container(
+                 name="fetch-master",
+                 image="mesosphere/dispatch-dind:v0.5.2",
+                 workingDir="/workspace/" + git,
+                 args=["git", "fetch", "origin", "master", "--unshallow"]),
+
+             v1.Container(
+                 name="run-kommander-e2e-tests",
+                 image="mesosphere/kommander-ci:1-3066ab8",
+                 workingDir="/workspace/" + git,
+                 resources=k8s.corev1.ResourceRequirements(
+                     limits={
+                         "cpu": k8s.resource_quantity("8000m"),
+                         "memory": k8s.resource_quantity("6Gi")
+                     }
+                 ),
+                 env=[
+                     k8s.corev1.EnvVar(name="DISPATCH_CI", value="true"),
+                     k8s.corev1.EnvVar(name="OUTPUT_PATH", value="$(resources.outputs.artifacts.path)"),
+                     k8s.corev1.EnvVar(name="AWS_REGION", value="us-west-2"),
+                     k8s.corev1.EnvVar(name="AWS_ACCESS_KEY", valueFrom=secret_var("rotator-ksphere-kommander", "AWS_ACCESS_KEY_ID")),
+                     k8s.corev1.EnvVar(name="AWS_SECRET_KEY", valueFrom=secret_var("rotator-ksphere-kommander", "AWS_SECRET_ACCESS_KEY")),
+                     k8s.corev1.EnvVar(name="AWS_ACCESS_KEY_ID", valueFrom=secret_var("rotator-ksphere-kommander", "AWS_ACCESS_KEY_ID")),
+                     k8s.corev1.EnvVar(name="AWS_SECRET_ACCESS_KEY", valueFrom=secret_var("rotator-ksphere-kommander", "AWS_SECRET_ACCESS_KEY")),
+                     k8s.corev1.EnvVar(name="LICENSE", valueFrom=secret_var("kommander-license", "LICENSE")),
+                     k8s.corev1.EnvVar(name="COMMIT", value="$(context.git.commit)"),
+                     k8s.corev1.EnvVar(name="COMMIT_INFO_BRANCH", value="charts/$(context.git.branch)"),
+                     k8s.corev1.EnvVar(name="COMMIT_INFO_SHA", value="$(context.git.commit)")
+                 ],
+                 command=["/entrypoint.sh", "./test/e2e-kommander/run.sh"]),
+         ])
 
 kubeaddons_kommander_git = "kubeaddons-kommander"
 git_resource(
@@ -198,10 +243,12 @@ git_resource(
     revision="master")
 do_bump_addon = bump_addon("bump-addon", kba_git)
 
+kommander_path = "stable/kommander/**"
 kommander_chart_path = "stable/kommander/Chart.yaml"
 
 # Robot Actions
 action(tasks=["test-helm2", "test-helm3"], on=pull_request())
+action(tasks=["kommander-e2e"], on=pull_request(paths=[kommander_path]))
 action(tasks=["publish"], on=push(branches=["master"]))
 action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
 action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
@@ -211,6 +258,8 @@ action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
 action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
 action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
 action(tasks=[do_bump_kommander_catalog_api], on=pull_request(chatops=["bump-catalog-api"]))
+action(tasks=["kommander-e2e"], on=pull_request(chatops=["test-kommander-e2e"]))
+action(tasks=["kommander-e2e"], on=pull_request(chatops=["test"], paths=[kommander_path]))
 
 # Cron Actions
 action(name="bump-catalog-api", tasks=[do_bump_kommander_catalog_api], on=cron(schedule="0 8 * * 5"))

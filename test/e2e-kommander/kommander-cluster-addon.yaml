@@ -1,0 +1,47 @@
+# This addon installs nothing, it's just here for opsportal to know where to find kommander
+apiVersion: kubeaddons.mesosphere.io/v1beta2
+kind: ClusterAddon
+metadata:
+  annotations:
+    appversion.kubeaddons.mesosphere.io/karma: 1.4.1
+    appversion.kubeaddons.mesosphere.io/kommander: 1.3.0-beta.0
+    appversion.kubeaddons.mesosphere.io/kommander-grafana: 6.6.0
+    appversion.kubeaddons.mesosphere.io/thanos: 0.3.21
+    catalog.kubeaddons.mesosphere.io/addon-revision: 1.3.0-1
+    docs.kubeaddons.mesosphere.io/karma: https://github.com/prymitive/karma
+    docs.kubeaddons.mesosphere.io/kommander-grafana: https://grafana.com/docs/
+    docs.kubeaddons.mesosphere.io/thanos: https://thanos.io/getting-started.md/
+    endpoint.kubeaddons.mesosphere.io/karma: /ops/portal/kommander/monitoring/karma
+    endpoint.kubeaddons.mesosphere.io/kommander: /ops/portal/kommander/ui
+    endpoint.kubeaddons.mesosphere.io/kommander-grafana: /ops/portal/kommander/monitoring/grafana
+    endpoint.kubeaddons.mesosphere.io/thanos: /ops/portal/kommander/monitoring/query
+    values.chart.helm.kubeaddons.mesosphere.io/kommander: https://raw.githubusercontent.com/mesosphere/charts/a0d4f6e/stable/kommander/values.yaml
+  labels:
+    kubeaddons.mesosphere.io/hack-requires-defaultstorageclass: "true"
+    kubeaddons.mesosphere.io/name: kommander
+  name: kommander
+spec:
+  chartReference:
+    chart: nginx-ingress
+    repo: https://helm.nginx.com/stable
+    version: 3.12.0
+  cloudProvider:
+  - enabled: true
+    name: aws
+  - enabled: true
+    name: azure
+  - enabled: true
+    name: gcp
+  - enabled: true
+    name: vsphere
+  - enabled: true
+    name: docker
+  - enabled: true
+    name: none
+  kubernetes:
+    minSupportedVersion: v1.16.0
+  namespace: kommander
+  requires:
+  - matchLabels:
+      kubeaddons.mesosphere.io/cert-manager: v1
+      kubeaddons.mesosphere.io/name: cert-manager
