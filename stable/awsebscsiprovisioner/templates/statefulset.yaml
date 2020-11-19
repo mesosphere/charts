@@ -74,17 +74,20 @@ spec:
             periodSeconds: 10
             failureThreshold: 5
         - name: csi-provisioner
-          image: "{{ .Values.provisioner.image.repository }}:{{ .Values.provisioner.image.tag }}"
+          image: "{{ .Values.provisioner.image.repository }}:{{ include "aws-ebs-csi-driver.csi-provisioner.tag" . }}"
           args:
-            - --provisioner=ebs.csi.aws.com
             - --csi-address=$(ADDRESS)
             - --v=5
             {{- if .Values.provisioner.enableVolumeScheduling }}
             - --feature-gates=Topology=true
             {{- end}}
             {{- if (gt (.Values.replicas | int) 1) }}
+            {{- if semverCompare ">=2.0.0" (trimPrefix "v" (include "aws-ebs-csi-driver.csi-provisioner.tag" .)) }}
+            - --leader-election=true
+            {{- else }}
             - --enable-leader-election
             - --leader-election-type=leases
+            {{- end }}
             {{- end }}
           env:
             - name: ADDRESS
@@ -93,7 +96,7 @@ spec:
             - name: socket-dir
               mountPath: /var/lib/csi/sockets/pluginproxy/
         - name: csi-attacher
-          image: "{{ .Values.attacher.image.repository }}:{{ .Values.attacher.image.tag }}"
+          image: "{{ .Values.attacher.image.repository }}:{{ include "aws-ebs-csi-driver.csi-attacher.tag" . }}"
           args:
             - --csi-address=$(ADDRESS)
             - --v=5
