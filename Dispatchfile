@@ -6,9 +6,9 @@
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/git@0.0.7", "git_resource")
 # TODO @faiq: once 0.0.5 of this package is released switch to that ref
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/k8s@0.0.7", "secret_var")
-load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.7", "pull_request", "push")
+load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.7", "pull_request", "push", "cron")
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
-load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts")
+load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts", "bump_requirements")
 
 git = "src-git"
 
@@ -157,7 +157,30 @@ git_resource(
     url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
+do_bump_catalog="bump-kommander-catalog-api"
+do_bump_kommander_catalog_api = bump_requirements(do_bump_catalog, git, "stable/kommander",
+  command=["/bin/sh", "-c"], args=[
+    """
+  echo "$GPG_PRIVATE_KEY" > gpg_private_key
+  echo "$GPG_PUBLIC_KEY" > gpg_public_key
+  gpg --import gpg_private_key
+  gpg --import gpg_public_key
+  git config --local commit.gpgsign true
+  git config --local user.signingkey $GPG_KEY_ID
 
+  git config --local user.name 'Dispatch CI'
+  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
+
+  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubeaddons-catalog
+    """
+  ],
+  env=[
+    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
+    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
+    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
+    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
+  ]
+)
 
 kba_git = "kubernetes-base-addons"
 git_resource(
@@ -178,3 +201,6 @@ action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommande
 action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
 action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
 action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
+
+# Cron Actions
+action(name="bump-kommander-catalog-api", tasks=[do_bump_catalog], on=cron(schedule="0 3 * * 5"))
