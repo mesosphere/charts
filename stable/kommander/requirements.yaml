@@ -13,7 +13,7 @@ dependencies:
     condition: kommander-licensing.enabled, global.kommander-licensing.enabled
   - name: kommander-ui
     version: 6.55.0
-    repository: "https://mesosphere.github.io/kommander/charts"
+    repository: "https://mesosphere.github.io/kommander-ui/charts"
     condition: kommander-ui.enabled
   - name: kubecost
     version: "0.1.15"
