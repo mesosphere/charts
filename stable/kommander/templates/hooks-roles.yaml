@@ -10,5 +10,5 @@ metadata:
     release: "{{ .Release.name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-delete
     helm.sh/hook-delete-policy: "before-hook-creation"
