@@ -131,7 +131,7 @@ def bump_addon(task_name, addon_git_dir):
                 git fetch --depth=3
                 CHANGED_FILES=$(git diff --name-only HEAD^)
                 cd /workspace/{}
-                python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {}
+                python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {} --commit-sha $(context.git.commit)
                 """.format(git, addon_git_dir, addon_git_dir)
             ],
             resources=k8s.corev1.ResourceRequirements(
