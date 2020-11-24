@@ -39,6 +39,13 @@ Create a truncated name suitable for resources that need shorter names, such as 
 {{- end -}}
 
 {{/*
+Create a service account name for hooks running in the chart.
+*/}}
+{{- define "kommander.sa-name" -}}
+{{- include "kommander.fullname" . -}}-hook
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "kommander.labels" -}}
