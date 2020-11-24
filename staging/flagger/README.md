@@ -66,6 +66,7 @@ Parameter | Description | Default
 `image.repository` | image repository | `weaveworks/flagger`
 `image.tag` | image tag | `<VERSION>`
 `image.pullPolicy` | image pull policy | `IfNotPresent`
+`podLabels` | additional labels for Flagger pods | `{}`
 `prometheus.install` | if `true`, installs Prometheus configured to scrape all pods in the custer including the App Mesh sidecar | `false`
 `metricsServer` | Prometheus URL, used when `prometheus.install` is `false` | `http://prometheus.istio-system:9090`
 `slack.url` | Slack incoming webhook | None
