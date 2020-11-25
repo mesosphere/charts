@@ -42,6 +42,7 @@ kommander-licensing:
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
+  # Do not use, this will be deprecated
   kommanderServiceAccount: kommander-kubeaddons
   thanos:
     query:
@@ -51,7 +52,9 @@ kommander-thanos:
 kommander-karma:
   enabled: true
   alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
+  # Do not use, this will be deprecated
   kommanderServiceAccount: kommander-kubeaddons
+  # Do not use, this will be deprecated
   kommanderKarmaConfigMap: kommander-kubeaddons-config
   karma:
     deployment:

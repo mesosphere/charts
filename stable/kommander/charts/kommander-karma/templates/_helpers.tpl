@@ -46,6 +46,13 @@ Create a service account name for hooks running in the chart.
 {{- end -}}
 
 {{/*
+Generate the karma configmap name.
+*/}}
+{{- define "kommander-karma.configmap-name" -}}
+{{ .Release.Name }}-config
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "kommander-karma.labels" -}}

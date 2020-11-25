@@ -11,12 +11,13 @@ metadata:
     heritage: "{{ .Release.Service }}"
   annotations:
     helm.sh/hook: pre-install,pre-upgrade,pre-delete
+    helm.sh/hook-weight: "0"
     helm.sh/hook-delete-policy: "before-hook-creation"
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{.Release.Name}}-hooks
+  name: {{ template "kommander-thanos.fullname" . }}-hooks
   namespace: {{ .Release.Namespace }}
   labels:
 {{ include "kommander-thanos.labels" . | indent 4 }}
@@ -32,7 +33,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{.Release.Name}}-hooks
+  name: {{ template "kommander-thanos.fullname" . }}-hooks
   labels:
 {{ include "kommander-thanos.labels" . | indent 4 }}
   annotations:
@@ -42,7 +43,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{.Release.Name}}-hooks
+  name: {{ template "kommander-thanos.fullname" . }}-hooks
 subjects:
 - kind: ServiceAccount
   name: {{ template "kommander-thanos.sa-name" . }}

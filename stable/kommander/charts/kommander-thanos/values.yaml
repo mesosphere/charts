@@ -6,6 +6,7 @@
 # thanosAddress: "HOST:PORT"
 thanosAddress: ""
 # Kommander service account used to delete Thanos store configmaps
+# Do not use, this will be deprecated
 kommanderServiceAccount: kommander-kubeaddons
 
 federate:
