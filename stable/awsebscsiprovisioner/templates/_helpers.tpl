@@ -68,3 +68,25 @@ They are released in combination and depend on each other on newer kubernetes ve
 {{- .Values.snapshotter.image.tag -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+To keep compability we need to set csi-attacher matching on kubernetes versions >= Minor 17
+*/}}
+{{- define "aws-ebs-csi-driver.csi-attacher.tag" -}}
+{{- if (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) -}}
+{{- .Values.attacher.image.tagK8sUpMinor17 -}}
+{{- else -}}
+{{- .Values.attacher.image.tag -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+To keep compability we need to set csi-provisioner matching on kubernetes versions >= Minor 17
+*/}}
+{{- define "aws-ebs-csi-driver.csi-provisioner.tag" -}}
+{{- if (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) -}}
+{{- .Values.provisioner.image.tagK8sUpMinor17 -}}
+{{- else -}}
+{{- .Values.provisioner.image.tag -}}
+{{- end -}}
+{{- end -}}
