@@ -48,7 +48,7 @@ spec:
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
-        {{- if semverCompare ">2.0.0"  (default .Chart.AppVersion .Values.image.version) }}
+        {{- if and (semverCompare ">2.0.0" (default .Chart.AppVersion .Values.image.version)) .Values.storageclass.allowVolumeExpansion }}
         - name: csi-resizer
           image: {{ .Values.resizer.image.repository }}:{{ .Values.resizer.image.tag }}
           args:
@@ -163,7 +163,8 @@ spec:
 ---
 apiVersion: v1
 data:
-  "volume-extend": "true"
+  "volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
+  "online-volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
   "volume-health": "true"
 kind: ConfigMap
 metadata:

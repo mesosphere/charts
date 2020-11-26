@@ -8,7 +8,7 @@ metadata:
     storageclass.kubernetes.io/is-default-class: "true"
 {{- end }}
 provisioner: csi.vsphere.vmware.com
-allowVolumeExpansion: true
+allowVolumeExpansion: {{ .Values.storageclass.allowVolumeExpansion }}
 volumeBindingMode: {{ .Values.storageclass.volumeBindingMode | quote }}
 reclaimPolicy: {{ .Values.storageclass.reclaimPolicy | quote }}
 {{- if .Values.storageclass.parameters }}
