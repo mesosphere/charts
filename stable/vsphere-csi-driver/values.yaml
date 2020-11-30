@@ -16,27 +16,29 @@ serviceAccount:
 enableTopologyZone: true
 
 tolerations:
-  - operator: "Exists"
+  - operator: Exists
     effect: NoSchedule
-  - operator: "Exists"
+  - operator: Exists
     effect: NoExecute
+  - key: CriticalAddonsOnly
+    operator: Exists
 
 liveness:
   image:
-    repository: quay.io/k8scsi/livenessprobe
+    repository: k8s.gcr.io/sig-storage/livenessprobe
     tag: v2.1.0
 
 registrar:
   node:
     image:
-      repository: quay.io/k8scsi/csi-node-driver-registrar
+      repository: k8s.gcr.io/sig-storage/csi-node-driver-registrar
       tag: v2.0.1
   verbose: 5
 
 provisioner:
   image:
-    repository: quay.io/k8scsi/csi-provisioner
-    tag: v2.0.1
+    repository: k8s.gcr.io/sig-storage/csi-provisioner
+    tag: v2.0.4
   timeout: 300s
   retryIntervalStart: 1s
   retryIntervalMax: 5m
@@ -45,7 +47,7 @@ provisioner:
 
 attacher:
   image:
-    repository: quay.io/k8scsi/csi-attacher
+    repository: k8s.gcr.io/sig-storage/csi-attacher
     tag: v2.2.0
   timeout: 300s
   retryIntervalStart: 1s
@@ -55,14 +57,17 @@ attacher:
 
 resizer:
   image:
-    repository: quay.io/k8scsi/csi-resizer
-    tag: v1.0.0
+    repository: k8s.gcr.io/sig-storage/csi-resizer
+    tag: v1.0.1
   verbose: 4
 
 storageclass:
   isDefault: true
   reclaimPolicy: Delete
   volumeBindingMode: WaitForFirstConsumer
+  # Volume Expansion is available with vSphere >= 7, so we set the default to false
+  # https://github.com/kubernetes-sigs/vsphere-csi-driver/blob/release-2.0/pkg/csi/service/vanilla/controller.go#L65-L80
+  allowVolumeExpansion: false
   # parameters to set for storageclass
   # e.g.
   # parameters:
