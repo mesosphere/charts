@@ -1,6 +1,6 @@
 {{ $ns := .Release.Namespace }}
 {{ $labels := include "kommander.labels" . | indent 4  }}
-{{ $sa := include "kommander.fullname" . }}
+{{ $sa := include "kommander.sa-name" . }}
 {{- if index .Values "kubecost" "cost-analyzer" "thanos" "query" "enabled" }}
 {{- range index .Values "kubecost" "cost-analyzer" "thanos" "query" "serviceDiscoveryFileConfigMaps" }}
 ---
@@ -71,7 +71,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ . }} --ignore-not-found
+            - kubectl delete configmap --ignore-not-found {{ . }}
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}

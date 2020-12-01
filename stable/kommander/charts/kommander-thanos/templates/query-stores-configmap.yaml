@@ -1,6 +1,6 @@
 {{ $ns := .Release.Namespace }}
 {{ $labels := include "kommander-thanos.labels" . | indent 4  }}
-{{ $sa := .Values.kommanderServiceAccount }}
+{{ $sa := include "kommander-thanos.sa-name" . }}
 {{- if .Values.thanos.query.enabled }}
 {{- range .Values.thanos.query.serviceDiscoveryFileConfigMaps }}
 ---
@@ -71,7 +71,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ . }}
+            - kubectl delete configmap --ignore-not-found {{ . }}
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}

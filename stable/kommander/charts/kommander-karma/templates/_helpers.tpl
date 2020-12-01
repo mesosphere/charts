@@ -39,6 +39,20 @@ Create a truncated name suitable for resources that need shorter names, such as 
 {{- end -}}
 
 {{/*
+Create a service account name for hooks running in the chart.
+*/}}
+{{- define "kommander-karma.sa-name" -}}
+{{- include "kommander-karma.fullname" . -}}-hook
+{{- end -}}
+
+{{/*
+Generate the karma configmap name.
+*/}}
+{{- define "kommander-karma.configmap-name" -}}
+{{ .Release.Name }}-config
+{{- end -}}
+
+{{/*
 Common labels
 */}}
 {{- define "kommander-karma.labels" -}}

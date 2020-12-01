@@ -1,47 +1,4 @@
 ---
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: {{.Release.Name}}-kubeaddons-ns
-  namespace: {{ .Release.Namespace }}
-  labels:
-{{ include "kommander.labels" . | indent 4 }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade,pre-delete
-    "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
-rules:
-- apiGroups: [""]
-  resources: ["namespaces"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-{{- if .Values.grafana.enabled }}
-- apiGroups: [""]
-  resources: ["secrets", "configmaps"]
-  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
-{{- end }}
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: {{.Release.Name}}-kubeaddons-ns
-  labels:
-{{ include "kommander.labels" . | indent 4 }}
-  annotations:
-    "helm.sh/hook": pre-install,pre-upgrade,pre-delete
-    "helm.sh/hook-weight": "2"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: {{.Release.Name}}-kubeaddons-ns
-subjects:
-- kind: ServiceAccount
-  name: default
-  namespace: {{ .Release.Namespace }}
-- kind: ServiceAccount
-  name: {{ template "kommander.fullname" . }}
-  namespace: {{ .Release.Namespace }}
----
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -59,9 +16,10 @@ spec:
       name: {{.Release.Name}}-kubeaddons-ns
       labels:
         app.kubernetes.io/managed-by: {{.Release.Service | quote }}
-        app.kubernetes.io/instance: {{.Release.Name | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
     spec:
       restartPolicy: Never
+      serviceAccountName: {{ template "kommander.sa-name" . }}
       containers:
         - name: {{.Release.Name}}-kubeaddons-ns
           image: "{{.Values.federate.kubeaddonsInitializer.repository}}:{{.Values.federate.kubeaddonsInitializer.tag}}"
