@@ -5,12 +5,6 @@
 # Internal address for the cluster's alertmanager.
 # alertmanagerAddress: "HOST:PORT"
 alertmanagerAddress: ""
-# Kommander service account used to delete the karma configmap
-# Do not use, this will be deprecated
-kommanderServiceAccount: kommander-kubeaddons
-# Name of the karma configmap
-# Do not use, this will be deprecated
-kommanderKarmaConfigMap: kommander-kubeaddons-config
 
 federate:
   addons: true

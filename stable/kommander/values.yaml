@@ -42,8 +42,6 @@ kommander-licensing:
 kommander-thanos:
   enabled: true
   thanosAddress: "prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:10901"
-  # Do not use, this will be deprecated
-  kommanderServiceAccount: kommander-kubeaddons
   thanos:
     query:
       deploymentAnnotations:
@@ -52,10 +50,6 @@ kommander-thanos:
 kommander-karma:
   enabled: true
   alertmanagerAddress: "prometheus-kubeaddons-prom-alertmanager.kubeaddons.svc.cluster.local:9093"
-  # Do not use, this will be deprecated
-  kommanderServiceAccount: kommander-kubeaddons
-  # Do not use, this will be deprecated
-  kommanderKarmaConfigMap: kommander-kubeaddons-config
   karma:
     deployment:
       annotations:
@@ -84,10 +78,6 @@ grafana:
   hooks:
     image: dwdraju/alpine-curl-jq
     secretKeyRef: ops-portal-username
-    # Do not use, this will be deprecated
-    serviceURL: http://kommander-kubeaddons-grafana.kommander
-    # Do not use, this will be deprecated
-    kommanderServiceAccount: kommander-kubeaddons
 
   ## Do not deploy default dashboards.
   ##
@@ -228,8 +218,6 @@ portalRBAC:
 
 kubecost:
   thanosAddress: "kubecost-kubeaddons-prometheus-server.kubecost.svc.cluster.local:10901"
-  # Do not use, this will be deprecated
-  kommanderServiceAccount: kommander-kubeaddons
   federate:
     addons: true
     systemNamespace:
