@@ -23,3 +23,9 @@ dependencies:
     version: 4.6.3
     repository: https://mesosphere.github.io/charts/stable
     condition: grafana.enabled
+  - name: kommander-karma
+    version: 0.3.12
+    condition: kommander-karma.enabled
+  - name: kommander-thanos
+    version: 0.1.16
+    condition: kommander-thanos.enabled
