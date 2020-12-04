@@ -1,6 +1,6 @@
 SHELL := /bin/bash -euo pipefail
 
-HELM_VERSION ?= v3.3.4
+HELM_VERSION ?= v3.4.1
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -18,7 +18,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-CT_VERSION ?= v3.1.1
+CT_VERSION ?= v3.3.1
 
 PLATFORM = $(shell uname | tr [A-Z] [a-z])
 
