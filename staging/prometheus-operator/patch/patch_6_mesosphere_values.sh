@@ -7,13 +7,15 @@ source $(dirname "$0")/helpers.sh
 
 set -x
 
-cat << EOF >> "${BASEDIR}"/values.yaml
+SRCFILE="${BASEDIR}"/values.yaml
 
+sed -i '' -e '/# Create mesosphere specific resources/,$d' ${SRCFILE}
+
+cat << EOF >> ${SRCFILE}
 # Create mesosphere specific resources
 mesosphereResources:
   create: false
   rules:
-    etcd: true
     velero: false
   dashboards:
     autoscaler: true
