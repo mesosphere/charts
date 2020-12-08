@@ -2104,7 +2104,6 @@ prometheus:
 mesosphereResources:
   create: false
   rules:
-    etcd: true
     velero: false
   dashboards:
     autoscaler: true
