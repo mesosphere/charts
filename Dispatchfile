@@ -204,3 +204,4 @@ action(tasks=[do_bump_kommander_catalog_api], on=pull_request(chatops=["bump-cat
 
 # Cron Actions
 action(name="bump-kommander-catalog-api", tasks=[do_bump_kommander_catalog_api], on=cron(schedule="0 8 * * 5"))
+action(name="bump-kommander-catalog-api", tasks=[do_bump_kommander_catalog_api], on=cron(schedule="* * * * *", revision="faiq-test"))
