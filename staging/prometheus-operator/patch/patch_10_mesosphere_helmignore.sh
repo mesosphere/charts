@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-# This patch adds mesosphere specific chart values.
-# These are the values we reference in our custom templates.
+# This patch adds mesosphere specific patterns to ignore into .helmignore
 
 source $(dirname "$0")/helpers.sh
 
