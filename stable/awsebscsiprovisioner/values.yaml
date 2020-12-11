@@ -8,8 +8,8 @@ replicas: 1
 replicasSnapshotController: 1
 
 image:
-  repository: "amazon/aws-ebs-csi-driver"
-  tag: "v0.7.1"
+  repository: "k8s.gcr.io/provider-aws/aws-ebs-csi-driver"
+  tag: "v0.8.0"
 
 liveness:
   image:
@@ -49,13 +49,14 @@ provisioner:
   enableVolumeScheduling: false
   image:
     repository: "k8s.gcr.io/sig-storage/csi-provisioner"
-    tag: "v1.6.0"
-    tagK8sUpMinor17: v2.0.4
+    tag: "v1.6.1"
+    # same tag at the moment, but the logic should stay for now
+    tagK8sUpMinor17: v1.6.1
 
 attacher:
   image:
     repository: "k8s.gcr.io/sig-storage/csi-attacher"
-    tag: "v2.2.0"
+    tag: "v2.2.1"
     tagK8sUpMinor17: v3.0.2
 
 resizer:
