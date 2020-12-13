@@ -30,12 +30,6 @@ rules:
   verbs:
   - '*'
 - apiGroups:
-  - rbac.istio.io
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- apiGroups:
   - security.istio.io
   resources:
   - '*'
@@ -81,6 +75,7 @@ rules:
   verbs:
   - get
   - create
+  - update
 - apiGroups:
   - policy
   resources:
@@ -104,6 +99,7 @@ rules:
   - events
   - namespaces
   - pods
+  - pods/proxy
   - persistentvolumeclaims
   - secrets
   - services

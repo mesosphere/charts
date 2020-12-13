@@ -22,7 +22,7 @@ spec:
     - sourceLabels: [__meta_kubernetes_pod_container_port_name]
       action: keep
       regex: '.*-envoy-prom'
-    - action: labeldrop
+    - action: labelmap
       regex: "__meta_kubernetes_pod_label_(.+)"
     - sourceLabels: [__meta_kubernetes_namespace]
       action: replace
@@ -34,44 +34,19 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: kubernetes-pods-monitor
-  namespace: {{ .Release.Namespace }}
+  name: istio-component
   labels:
-    monitoring: kube-pods
+    monitoring: istio-components
     release: prometheus-kubeaddons
 spec:
+  jobLabel: istio
   selector:
     matchExpressions:
-      - {key: istio-prometheus-ignore, operator: DoesNotExist}
+      - {key: istio, operator: In, values: [pilot, sidecar-injector]}
   namespaceSelector:
     any: true
-  jobLabel: kubernetes-pods
   endpoints:
-  - interval: {{ .Values.scrapeInterval }}
-    relabelings:
-    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-      action: keep
-      regex: 'true'
-    - sourceLabels: [__meta_kubernetes_pod_annotation_sidecar_istio_io_status, __meta_kubernetes_pod_annotation_prometheus_io_scheme]
-      action: keep
-      regex: '((;.*)|(.*;http)|(.??))'
-    - sourceLabels: [__meta_kubernetes_pod_annotation_istio_mtls]
-      action: drop
-      regex: 'true'
-    - sourceLabels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-      action: replace
-      targetLabel: __metrics_path__
-      regex: '(.+)'
-    - sourceLabels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
-      action: replace
-      regex: '([^:]+)(?::\d+)?;(\d+)'
-      replacement: $1:$2
-      targetLabel: __address__
-    - action: labelmap
-      regex: '__meta_kubernetes_pod_label_(.+)'
-    - sourceLabels: [__meta_kubernetes_namespace]
-      action: replace
-      targetLabel: namespace
-    - sourceLabels: [__meta_kubernetes_pod_name]
-      action: replace
-      targetLabel: pod_name
+  - port: http-monitoring
+    interval: {{ .Values.scrapeInterval }}
+  - port: http-policy-monitoring
+    interval: {{ .Values.scrapeInterval }}
