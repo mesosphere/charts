@@ -85,7 +85,7 @@ publish:
 		)
 
 # Be doubly safe by only adding new files and index.yaml files to prevent overwrites.
-	export LAST_COMMIT_MESSAGE="$$(git log -1 --pretty=format:'%B')" && \
+	export LAST_COMMIT_MESSAGE="$$(git log -1 --no-show-signature --pretty=format:'%B')" && \
 	cd gh-pages && \
 		git add $$(git ls-files -o --exclude-standard) staging/index.yaml stable/index.yaml && \
 		git commit -m "$${LAST_COMMIT_MESSAGE}" && \
@@ -116,7 +116,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | 
 	tar -c \
 			--owner=root:0 --group=root:0 --numeric-owner \
 			--no-recursion \
-			--mtime="@$(shell git log -1 --format="%at" $(GIT_REF) -- $(PACKAGE_SRC))" \
+			--mtime="@$(shell git log -1 --no-show-signature --format="%at" $(GIT_REF) -- $(PACKAGE_SRC))" \
 			-C $(UNPACKED_TMP) \
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
