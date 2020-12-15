@@ -21,9 +21,9 @@ commonLabels: {}
 
 image:
   # image.name is the name of the Gatekeeper container image.
-  name: quay.io/open-policy-agent/gatekeeper
+  name: openpolicyagent/gatekeeper
   # image.tag is the tag name of the Gatekeeper container image.
-  tag:
+  tag: v3.3.1
   # image.pullPolicy specifies when to pull the image.
   pullPolicy: IfNotPresent
 
@@ -105,4 +105,4 @@ webhook:
   # Webhook side effects
   sideEffects: None
 
-kubectlImage: bitnami/kubectl:1.15
+kubectlImage: bitnami/kubectl:1.19

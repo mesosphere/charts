@@ -30,10 +30,12 @@ spec:
       containers:
       - args:
         - --auditInterval=30
+        - --logtostderr
         - --port={{ .Values.port }}
+        - --exempt-namespace=kubeaddons
         - --enable-manual-deploy
         command:
-        - /root/manager
+        - /manager
         env:
         - name: POD_NAMESPACE
           valueFrom:
