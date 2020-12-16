@@ -1,5 +1,5 @@
 image:
-  repository: "docker.elastic.co/elasticsearch/elasticsearch"
+  repository: "docker.elastic.co/kibana/kibana"
   tag: "7.10.1"
   pullPolicy: "IfNotPresent"
 
