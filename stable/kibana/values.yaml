@@ -1,6 +1,6 @@
 image:
   repository: "docker.elastic.co/elasticsearch/elasticsearch"
-  tag: "7.10.2-SNAPSHOT"
+  tag: "7.10.1"
   pullPolicy: "IfNotPresent"
 
 testFramework:
