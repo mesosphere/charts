@@ -25,7 +25,7 @@ data:
 
     # This could change in the future so we should monitor this on each release
     for i in {1..{{ .Values.dashboardImport.timeout }}}; do
-      curl -s localhost:5601{{ .Values.dashboardImport.basePath }}/api/status | grep "Looking good" 2> /dev/null | grep green > /dev/null && break || sleep 1
+      curl -s -m1 localhost:5601{{ .Values.dashboardImport.basePath }}/api/status | grep -e '"Looking good".*green\|green.*"Looking good"' > /dev/null && break || sleep 1
     done
 
     for DASHBOARD_FILE in *; do
