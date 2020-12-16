@@ -30,7 +30,7 @@ spec:
       dnsPolicy: "Default"
       containers:
         - name: csi-attacher
-          image: {{ .Values.attacher.image.repository }}:{{ .Values.attacher.image.tag }}
+          image: {{ .Values.attacher.image.repository }}:{{ include "vsphere-csi-driver.csi-attacher.tag" . }}
           args:
             - "--v={{ .Values.attacher.verbose }}"
             - "--csi-address=$(ADDRESS)"
