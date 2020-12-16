@@ -38,7 +38,7 @@ registrar:
 provisioner:
   image:
     repository: k8s.gcr.io/sig-storage/csi-provisioner
-    tag: v2.0.4
+    tag: v1.6.1
   timeout: 300s
   retryIntervalStart: 1s
   retryIntervalMax: 5m
@@ -48,7 +48,8 @@ provisioner:
 attacher:
   image:
     repository: k8s.gcr.io/sig-storage/csi-attacher
-    tag: v2.2.0
+    tag: v2.2.1
+    tagK8sUpMinor17: v3.0.2
   timeout: 300s
   retryIntervalStart: 1s
   retryIntervalMax: 5m
