@@ -15,7 +15,7 @@ spec:
       component: "{{ .Values.master.name }}"
       release: {{ .Release.Name }}
       role: master
-  serviceName: {{ template "elasticsearch.master.fullname" . }}
+  serviceName: {{ template "elasticsearch.masteruname" . }}-discovery
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
@@ -132,18 +132,43 @@ spec:
       containers:
       - name: elasticsearch
         env:
+        {{- if lt (int (include "elasticsearch.esMajorVersion" .)) 7 }}
         - name: NODE_DATA
           value: "false"
-{{- if hasPrefix "5." .Values.appVersion }}
-        - name: NODE_INGEST
-          value: "false"
-{{- end }}
         - name: DISCOVERY_SERVICE
           value: {{ template "elasticsearch.fullname" . }}-discovery
+        - name: NODE_MASTER
+          value: "true"
         - name: PROCESSORS
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
+        - name: discovery.zen.ping.unicast.hosts
+          value: {{ template "elasticsearch.fullname" . }}-discovery
+        {{- else }}
+        - name: discovery.zen.minimum_master_nodes
+          value: "{{ .Values.minimumMasterNodes }}"
+        - name: cluster.initial_master_nodes
+          value: {{ template "elasticsearch.masterEndpoints" . }}
+        - name: discovery.seed_hosts
+          value: {{ template "elasticsearch.fullname" . }}-discovery
+        - name: node.name
+          value: {{ template "elasticsearch.master.fullname" . }}
+        - name: cluster.name
+          value: "{{ .Values.cluster.name }}"
+        - name: network.host
+          value: "{{ .Values.networkHost }}"
+        - name: node.master
+          value: "true"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "false"
+        - name: node.ml
+          value: "false"
+        - name: node.remote_cluster_client
+          value: "false"
+        {{- end }}
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.master.heapSize }} -Xmx{{ .Values.master.heapSize }} {{ .Values.cluster.additionalJavaOpts }} {{ .Values.master.additionalJavaOpts }}"
         {{- range $key, $value :=  .Values.cluster.env }}

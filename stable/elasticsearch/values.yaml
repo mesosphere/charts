@@ -1,7 +1,14 @@
-# Default values for elasticsearch.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-appVersion: "6.8.6"
+nameOverride: ""
+fullnameOverride: ""
+
+appVersion: "7.10.1"
+esMajorVersion: "7"
+minimumMasterNodes: 2
+networkHost: "0.0.0.0"
+
+# The service that non master groups will try to connect to when joining the cluster
+# This should be set to clusterName + "-" + nodeGroup for your master group
+masterService: ""
 
 ## Define serviceAccount names for components. Defaults to component's fully qualified name.
 ##
@@ -41,8 +48,8 @@ securityContext:
 # schedulerName: "default-scheduler"
 
 image:
-  repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-  tag: "6.8.6"
+  repository: "docker.elastic.co/elasticsearch/elasticsearch"
+  tag: "7.10.1"
   pullPolicy: "IfNotPresent"
   # If specified, use these secrets to access the image
   # pullSecrets:
@@ -115,9 +122,8 @@ client:
   # httpNodePort: 30920
   loadBalancerIP: {}
   loadBalancerSourceRanges: {}
-## (dict) If specified, apply these annotations to the client service
-#  serviceAnnotations:
-#    example: client-svc-foo
+  serviceAnnotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
   heapSize: "512m"
   # additionalJavaOpts: "-XX:MaxRAM=512m"
   antiAffinity: "soft"

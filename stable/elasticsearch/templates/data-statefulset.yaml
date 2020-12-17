@@ -129,6 +129,7 @@ spec:
       containers:
       - name: elasticsearch
         env:
+        {{- if lt (int (include "elasticsearch.esMajorVersion" .)) 7 }}
         - name: DISCOVERY_SERVICE
           value: {{ template "elasticsearch.fullname" . }}-discovery
         - name: NODE_MASTER
@@ -137,6 +138,28 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
+        - name: discovery.zen.ping.unicast.hosts
+          value: "{{ template "elasticsearch.fullname" . }}-discovery"
+        {{- else }}
+        - name: discovery.seed_hosts
+          value: "{{ template "elasticsearch.fullname" . }}-discovery"
+        - name: node.name
+          value: {{ template "elasticsearch.data.fullname" . }}
+        - name: cluster.name
+          value: "{{ .Values.cluster.name }}"
+        - name: network.host
+          value: "{{ .Values.networkHost }}"
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "true"
+        - name: node.ml
+          value: "false"
+        - name: node.remote_cluster_client
+          value: "false"
+        {{- end }}
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }} {{ .Values.cluster.additionalJavaOpts }} {{ .Values.data.additionalJavaOpts }}"
         {{- range $key, $value :=  .Values.cluster.env }}

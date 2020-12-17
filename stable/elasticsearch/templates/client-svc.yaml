@@ -12,7 +12,6 @@ metadata:
   annotations:
 {{ toYaml .Values.client.serviceAnnotations | indent 4 }}
 {{- end }}
-
 spec:
   ports:
     - name: http
