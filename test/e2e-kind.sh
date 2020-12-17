@@ -261,6 +261,15 @@ install_reloader() {
     echo
 }
 
+install_elasticsearch() {
+    echo 'Installing elasticsearch...'
+    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
+        docker_exec helm install --debug stable/elasticsearch --name elasticsearch
+    else
+        docker_exec helm install elasticsearch --debug stable/elasticsearch
+    fi
+}
+
 replace_priority_class_name_system_x_critical() {
     # only change if needed
     set +o pipefail
@@ -283,6 +292,7 @@ main() {
     install_dummylb
     install_certmanager
     install_reloader
+    install_elasticsearch
 
     replace_priority_class_name_system_x_critical
 
