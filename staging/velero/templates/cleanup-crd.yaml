@@ -1,6 +1,6 @@
+{{- if and .Values.installCRDs .Values.cleanUpCRDs  }}
 # This job is meant primarily for cleaning up on CI systems.
 # Using this on production systems, especially those that have multiple releases of Velero, will be destructive.
-{{- if .Values.cleanUpCRDs }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -9,7 +9,7 @@ metadata:
   annotations:
     "helm.sh/hook": pre-delete
     "helm.sh/hook-weight": "3"
-    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+    "helm.sh/hook-delete-policy": hook-succeeded
   labels:
     app.kubernetes.io/name: {{ include "velero.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ include "velero.serverServiceAccount" . }}
       containers:
         - name: kubectl
-          image: docker.io/bitnami/kubectl:1.16.2
+          image: docker.io/bitnami/kubectl:1.14.1
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
@@ -33,6 +33,7 @@ spec:
               kubectl delete backup --all;
               kubectl delete backupstoragelocation --all;
               kubectl delete volumesnapshotlocation --all;
-              kubectl delete crd -l helm.sh/chart={{ include "velero.chart" . }}
+              kubectl delete podvolumerestore --all;
+              kubectl delete crd -l app.kubernetes.io/name=velero;
       restartPolicy: OnFailure
 {{- end }}
