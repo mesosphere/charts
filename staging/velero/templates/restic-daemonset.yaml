@@ -124,6 +124,7 @@ spec:
               value: /credentials/cloud
             {{- else if eq $provider "minio" }}
             - name: AWS_SHARED_CREDENTIALS_FILE
+              value: /credentials/cloud
             {{- end }}
           {{- end }}
           {{- with .Values.configuration.extraEnvVars }}
