@@ -151,7 +151,7 @@ endif
 lint: ct.lint
 
 .PHONY: test.helm2
-test.helm2: HELM_VERSION = v2.16.10
+test.helm2: HELM_VERSION = v2.17.0
 test.helm2: CT_VERSION = v2.4.1
 test.helm2: ct.test
 
