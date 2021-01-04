@@ -21,6 +21,16 @@ spec:
           command:
           - operator
           - server
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1337
+            runAsUser: 1337
+            runAsNonRoot: true
           imagePullPolicy: IfNotPresent
           resources:
             limits:
@@ -31,14 +41,14 @@ spec:
               memory: 128Mi
           env:
             - name: WATCH_NAMESPACE
-              value: "istio-system"
+              value: {{.Release.Namespace | quote}}
             - name: LEADER_ELECTION_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+              value: {{.Release.Namespace | quote}}
             - name: POD_NAME
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
-              value: "istio-system"
+              value: {{.Release.Namespace | quote}}
+            - name: WAIT_FOR_RESOURCES_TIMEOUT
+              value: {{.Values.global.waitForResourcesTimeout | quote}}

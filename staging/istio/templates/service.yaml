@@ -10,5 +10,6 @@ spec:
   - name: http-metrics
     port: 8383
     targetPort: 8383
+    protocol: TCP
   selector:
     name: istio-operator

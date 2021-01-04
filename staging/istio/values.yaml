@@ -2,6 +2,8 @@ global:
   image: docker.io/bitnami/kubectl
   tag: 1.19.2
 
+  waitForResourcesTimeout: 300s
+
 grafana:
   enabled: true
 security:
@@ -13,17 +15,9 @@ istioOperator:
   profile: default
 
   hub: docker.io/istio
-  tag: 1.6.12
+  tag: 1.8.1
 
   components:
     cni:
       enabled: true
       namespace: kube-system
-
-  addonComponents:
-    prometheus:
-      enabled: false
-    kiali:
-      enabled: true
-    tracing:
-      enabled: true
