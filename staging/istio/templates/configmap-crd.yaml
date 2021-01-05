@@ -5,4 +5,4 @@ metadata:
   name: istio-crd
 data:
   crd.yaml: |-
-{{.Files.Get "files/crd.yaml" | printf "%s" | indent 4}}
+{{.Files.Get "crds/crd.yaml" | printf "%s" | indent 4}}

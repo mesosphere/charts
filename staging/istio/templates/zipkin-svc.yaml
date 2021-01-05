@@ -1,0 +1,29 @@
+# This service is used by istio to talk to Jaeger
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: jaeger
+  name: zipkin
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: http-zipkin
+    port: 9411
+    protocol: TCP
+    targetPort: 9411
+  - name: http-grpc
+    port: 14250
+    protocol: TCP
+    targetPort: 14250
+  - name: c-tchan-trft
+    port: 14267
+    protocol: TCP
+    targetPort: 14267
+  - name: http-c-binary-trft
+    port: 14268
+    protocol: TCP
+    targetPort: 14268
+  selector:
+    app: jaeger
+  type: ClusterIP
