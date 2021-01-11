@@ -8,11 +8,11 @@ https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
-  name: {{ printf "%s-%s" (include "prometheus-operator.fullname" .) "kubernetes-system-apiserver" | trunc 63 | trimSuffix "-" }}
-  namespace: {{ template "prometheus-operator.namespace" . }}
+  name: {{ printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "kubernetes-system-apiserver" | trunc 63 | trimSuffix "-" }}
+  namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
-    app: {{ template "prometheus-operator.name" . }}
-{{ include "prometheus-operator.labels" . | indent 4 }}
+    app: {{ template "kube-prometheus-stack.name" . }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
 {{- if .Values.defaultRules.labels }}
 {{ toYaml .Values.defaultRules.labels | indent 4 }}
 {{- end }}

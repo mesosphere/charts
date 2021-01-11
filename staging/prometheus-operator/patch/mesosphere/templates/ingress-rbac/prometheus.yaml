@@ -5,11 +5,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-prometheus-admin
   labels:
-    app: {{ template "prometheus-operator.name" . }}-prom
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
   {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
   {{- end }}
-  {{ include "prometheus-operator.labels" . | indent 4 }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     {{- range .Values.prometheus.ingress.paths }}
@@ -29,11 +29,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-prometheus-view
   labels:
-    app: {{ template "prometheus-operator.name" . }}-prom
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
   {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
   {{- end }}
-  {{ include "prometheus-operator.labels" . | indent 4 }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     {{- range .Values.prometheus.ingress.paths }}
@@ -50,11 +50,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-prometheus-edit
   labels:
-    app: {{ template "prometheus-operator.name" . }}-prom
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
   {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
   {{- end }}
-  {{ include "prometheus-operator.labels" . | indent 4 }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     {{- range .Values.prometheus.ingress.paths }}
