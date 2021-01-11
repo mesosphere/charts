@@ -48,6 +48,7 @@ fi
 
 function teardown() {
   export KUBECONFIG=$PROJECT_ROOT/admin.conf
+  kubeclt get pods -n kommander
   mv "$KOMMANDER_REPO_PATH/system-tests/cypress/videos" "$OUTPUT_PATH/cypress-videos" || echo "No videos"
   mv "$KOMMANDER_REPO_PATH/system-tests/cypress/screenshots" "$OUTPUT_PATH/cypress-screenshots" || echo "No screenshots"
 
