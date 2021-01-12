@@ -6,7 +6,7 @@ metadata:
   name: v9-to-v10-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-21"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 data:
   crd-probes.yaml: |-
@@ -19,7 +19,7 @@ metadata:
   name: v9-to-v10-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
-    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-weight": "-20"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   template:
@@ -45,7 +45,7 @@ metadata:
   name: v9-to-v10-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-21"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 rules:
   - apiGroups: ["apiextensions.k8s.io"]
@@ -58,7 +58,7 @@ metadata:
   name: v9-to-v10-crds
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-21"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -76,5 +76,5 @@ metadata:
   namespace: {{ $.Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "-21"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
