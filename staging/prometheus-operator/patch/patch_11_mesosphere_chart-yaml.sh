@@ -6,13 +6,9 @@ source $(dirname "$0")/helpers.sh
 
 set -x
 
-SRCFILE="${BASEDIR}"/.helmignore
+SRCFILE="${BASEDIR}"/Chart.yaml
 
-sed -i '' -e '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
+sed -i 's/kube-prometheus-stack/prometheus-operator/g' ${SRCFILE}
 
-cat << EOF >> ${SRCFILE}
-# Mesosphere-specific files to ignore
-patch/
-EOF
 
-git_add_and_commit "${BASEDIR}"/.helmignore
+git_add_and_commit "${BASEDIR}"/Chart.yaml
