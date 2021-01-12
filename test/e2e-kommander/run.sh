@@ -275,8 +275,8 @@ cd "$KOMMANDER_REPO_PATH/system-tests"
 wait $INSTALL_PID
 wait $KOMMANDER_INSTALL_PID
 
-kubectl -n kommander set env deploy/kommander-kubeaddons-kommander-ui LOG_LEVEL=debug
-kubectl -n kommander wait deploy kommander-kubeaddons-kommander-ui --for condition=available --timeout=300s
-kubectl logs -n kommander deploy/kommander-kubeaddons-kommander-ui --ignore-errors -f > "$OUTPUT_PATH/kommander-deploy.log" &
+kubectl -n kommander set env deploy/kubeaddons-kommander-kommander-ui LOG_LEVEL=debug
+kubectl -n kommander wait deploy kubeaddons-kommander-kommander-ui --for condition=available --timeout=300s
+kubectl logs -n kommander deploy/kubeaddons-kommander-kommander-ui --ignore-errors -f > "$OUTPUT_PATH/kommander-deploy.log" &
 
 NEW_UUID=$NEW_UUID CLUSTER_URL=$CLUSTER_URL OPS_PORTAL_USER=$OPS_PORTAL_USER OPS_PORTAL_PASSWORD=$OPS_PORTAL_PASSWORD AWS_ACCESS_KEY=$AWS_ACCESS_KEY AWS_SECRET_KEY=$AWS_SECRET_KEY LICENSE=$LICENSE ADDONS="cassandra,jenkins,kafka,spark,zookeeper" npm test
