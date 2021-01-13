@@ -48,7 +48,6 @@ fi
 
 function teardown() {
   export KUBECONFIG=$PROJECT_ROOT/admin.conf
-  kubeclt get pods -n kommander
   mv "$KOMMANDER_REPO_PATH/system-tests/cypress/videos" "$OUTPUT_PATH/cypress-videos" || echo "No videos"
   mv "$KOMMANDER_REPO_PATH/system-tests/cypress/screenshots" "$OUTPUT_PATH/cypress-screenshots" || echo "No screenshots"
 
@@ -278,5 +277,8 @@ wait $KOMMANDER_INSTALL_PID
 kubectl -n kommander set env deploy/kubeaddons-kommander-kommander-ui LOG_LEVEL=debug
 kubectl -n kommander wait deploy kubeaddons-kommander-kommander-ui --for condition=available --timeout=300s
 kubectl logs -n kommander deploy/kubeaddons-kommander-kommander-ui --ignore-errors -f > "$OUTPUT_PATH/kommander-deploy.log" &
+
+# The UI takes a moment to be responsive
+sleep 30 
 
 NEW_UUID=$NEW_UUID CLUSTER_URL=$CLUSTER_URL OPS_PORTAL_USER=$OPS_PORTAL_USER OPS_PORTAL_PASSWORD=$OPS_PORTAL_PASSWORD AWS_ACCESS_KEY=$AWS_ACCESS_KEY AWS_SECRET_KEY=$AWS_SECRET_KEY LICENSE=$LICENSE ADDONS="cassandra,jenkins,kafka,spark,zookeeper" npm test
