@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
 
-# This patch adds mesosphere specific patterns to ignore into .helmignore
+# This patch adds mesosphere files to the files directory
 
 source $(dirname "$0")/helpers.sh
 
 set -x
 
-SRCFILE="${BASEDIR}"/Chart.yaml
+FILES_PATH="${BASEDIR}"/files
 
-sed -i 's/kube-prometheus-stack/prometheus-operator/g' ${SRCFILE}
+mkdir -p "${FILES_PATH}"
 
+cp "${BASEDIR}"/patch/mesosphere/files* "${FILES_PATH}"
 
-git_add_and_commit "${BASEDIR}"/Chart.yaml
+git_add_and_commit "${FILES_PATH}"
