@@ -4412,20 +4412,6 @@ spec:
       served: true
       storage: true
       subresources: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          properties:
-            storage:
-              properties:
-                volumeClaimTemplate:
-                  properties:
-                    metadata:
-                      properties:
-                        name:
-                          description: Name is the name used in the PVC claim
-                          type: string
 status:
   acceptedNames:
     kind: ""

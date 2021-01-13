@@ -9,8 +9,14 @@ metadata:
     helm.sh/hook-weight: "-21"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 data:
-  v9-to-v11-crds-part2.yaml: |-
-{{ .Files.Get "files/v9-to-v11-crds-part2.yaml" | printf "%s" | indent 4 }}
+  crd-prometheuses.yaml: |-
+{{ .Files.Get "crds/crd-prometheuses.yaml" | printf "%s" | indent 4 }}
+  crd-prometheusrules.yaml: |-
+{{ .Files.Get "crds/crd-prometheusrules.yaml" | printf "%s" | indent 4 }}
+  crd-servicemonitors.yaml: |-
+{{ .Files.Get "crds/crd-servicemonitors.yaml" | printf "%s" | indent 4 }}
+  crd-thanoserulers.yaml: |-
+{{ .Files.Get "crds/crd-thanoserulers.yaml" | printf "%s" | indent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job

@@ -31,6 +31,7 @@ docker run --rm -it \
 
 git_add_and_commit_with_msg ${SRCFILE} "reformat yaml with yq (no new changes)"
 
+# TODO this may not be necessary any longer
 # update volumeClaimTemplate.properties.metadata
 docker run --rm -it \
   -v "${BASEDIR}":/basedir \
@@ -38,7 +39,7 @@ docker run --rm -it \
   -e SRCFILE=${SRCFILE} \
   -e TMPFILE=${TMPFILE} \
   mikefarah/yq:3.3.2 \
-  yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.description "Name is the name used in the PVC claim" && \
-  yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.type "string"
+  echo yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.description "Name is the name used in the PVC claim" && \
+  echo yq write -i "${SRCFILE}" spec.validation.openAPIV3Schema.properties.spec.properties.storage.properties.volumeClaimTemplate.properties.metadata.properties.name.type "string"
 
 git_add_and_commit_with_msg ${SRCFILE} "update volumeClaimTemplate"
