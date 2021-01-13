@@ -10,6 +10,6 @@ FILES_PATH="${BASEDIR}"/files
 
 mkdir -p "${FILES_PATH}"
 
-cp "${BASEDIR}"/patch/mesosphere/files* "${FILES_PATH}"
+cp "${BASEDIR}"/patch/mesosphere/files/* "${FILES_PATH}"
 
 git_add_and_commit "${FILES_PATH}"
