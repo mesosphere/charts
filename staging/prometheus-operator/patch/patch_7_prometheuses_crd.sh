@@ -17,7 +17,7 @@ source $(dirname "$0")/helpers.sh
 
 set -x
 
-SRCFILE=crds/crd-prometheus.yaml
+SRCFILE=crds/crd-prometheuses.yaml
 TMPFILE=crds/tmp-prom.yaml
 
 # let yq format the file
