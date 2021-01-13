@@ -141,14 +141,10 @@ spec:
   probeSelector:
     matchLabels:
       release: {{ $.Release.Name | quote }}
-{{ else }}
-  probeSelector: {}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.probeNamespaceSelector }}
   probeNamespaceSelector:
 {{ toYaml .Values.prometheus.prometheusSpec.probeNamespaceSelector | indent 4 }}
-{{ else }}
-  probeNamespaceSelector: {}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.remoteRead }}
   remoteRead:
