@@ -3,20 +3,20 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 data:
-  v9-to-v11-crds.yaml: |-
-{{ .Files.Get "files/v9-to-v11-crds.yaml" | printf "%s" | indent 4 }}
+  v9-to-v11-crds-part1.yaml: |-
+{{ .Files.Get "files/v9-to-v11-crds-part1.yaml" | printf "%s" | indent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-20"
@@ -24,9 +24,9 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: v9-to-v11-crds
+      serviceAccountName: v9-to-v11-crds-part1
       containers:
-        - name: v9-to-v11-crds
+        - name: v9-to-v11-crds-part1
           image: "bitnami/kubectl:1.16.2"
           volumeMounts:
             - name: crds
@@ -36,13 +36,13 @@ spec:
       volumes:
         - name: crds
           configMap:
-            name: v9-to-v11-crds
+            name: v9-to-v11-crds-part1
       restartPolicy: OnFailure
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
@@ -55,7 +55,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
@@ -63,16 +63,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
 subjects:
   - kind: ServiceAccount
-    name: v9-to-v11-crds
+    name: v9-to-v11-crds-part1
     namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: v9-to-v11-crds
+  name: v9-to-v11-crds-part1
   namespace: {{ $.Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
