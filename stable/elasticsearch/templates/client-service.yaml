@@ -1,0 +1,67 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "elasticsearch.clientuname" . }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.clientuname" . }}"
+  {{- if .Values.client.service.labels }}
+  {{ toYaml .Values.client.service.labels | indent 4}}
+  {{- end }}
+  annotations:
+  {{ toYaml .Values.client.service.annotations | indent 4 }}
+spec:
+  type: {{ .Values.client.service.type }}
+  selector:
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.clientuname" . }}"
+  ports:
+    - name: {{ .Values.client.service.httpPortName | default "http" }}
+      protocol: TCP
+      port: {{ .Values.client.httpPort }}
+      {{- if .Values.client.service.nodePort }}
+      nodePort: {{ .Values.client.service.nodePort }}
+    {{- end }}
+    - name: {{ .Values.client.service.transportPortName | default "transport" }}
+      protocol: TCP
+      port: {{ .Values.client.transportPort }}
+  {{- if .Values.client.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.client.service.loadBalancerIP }}
+  {{- end }}
+  {{- with .Values.client.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+  {{ toYaml . | indent 4 }}
+  {{- end }}
+  {{- if .Values.client.service.externalTrafficPolicy }}
+  externalTrafficPolicy: {{ .Values.client.service.externalTrafficPolicy }}
+  {{- end }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "elasticsearch.clientuname" . }}-headless
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.clientuname" . }}"
+  {{- if .Values.client.service.labelsHeadless }}
+  {{ toYaml .Values.client.service.labelsHeadless | indent 4 }}
+  {{- end }}
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  clusterIP: None # This is needed for statefulset hostnames like elasticsearch-0 to resolve
+  # Create endpoints also if the related pod isn't ready
+  publishNotReadyAddresses: true
+  selector:
+    app: "{{ template "elasticsearch.clientuname" . }}"
+  ports:
+    - name: {{ .Values.client.service.httpPortName | default "http" }}
+      port: {{ .Values.client.httpPort }}
+    - name: {{ .Values.client.service.transportPortName | default "transport" }}
+      port: {{ .Values.client.transportPort }}

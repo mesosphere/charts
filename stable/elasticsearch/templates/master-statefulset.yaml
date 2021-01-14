@@ -1,26 +1,25 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: {{ template "elasticsearch.masteruname" . }}
   labels:
-    app: {{ template "elasticsearch.name" . }}
+    app: "{{ template "elasticsearch.masteruname" . }}"
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: "{{ .Values.master.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "elasticsearch.master.fullname" . }}
+  annotations:
+    esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
 spec:
+  serviceName: {{ template "elasticsearch.masteruname" . }}-headless
   selector:
     matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      component: "{{ .Values.master.name }}"
-      release: {{ .Release.Name }}
-      role: master
-  serviceName: {{ template "elasticsearch.masteruname" . }}-discovery
+      app: "{{ template "elasticsearch.masteruname" . }}"
   replicas: {{ .Values.master.replicas }}
   template:
     metadata:
       labels:
-        app: {{ template "elasticsearch.name" . }}
+        app: {{ template "elasticsearch.masteruname" . }}
         component: "{{ .Values.master.name }}"
         release: {{ .Release.Name }}
         role: master
@@ -132,28 +131,16 @@ spec:
       containers:
       - name: elasticsearch
         env:
-        {{- if lt (int (include "elasticsearch.esMajorVersion" .)) 7 }}
-        - name: NODE_DATA
-          value: "false"
-        - name: DISCOVERY_SERVICE
-          value: {{ template "elasticsearch.fullname" . }}-discovery
-        - name: NODE_MASTER
-          value: "true"
-        - name: PROCESSORS
-          valueFrom:
-            resourceFieldRef:
-              resource: limits.cpu
-        - name: discovery.zen.ping.unicast.hosts
-          value: {{ template "elasticsearch.fullname" . }}-discovery
-        {{- else }}
         - name: discovery.zen.minimum_master_nodes
           value: "{{ .Values.minimumMasterNodes }}"
         - name: cluster.initial_master_nodes
           value: {{ template "elasticsearch.masterEndpoints" . }}
         - name: discovery.seed_hosts
-          value: {{ template "elasticsearch.fullname" . }}-discovery
+          value: {{ template "elasticsearch.masterService" . }}-headless
         - name: node.name
-          value: {{ template "elasticsearch.master.fullname" . }}
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: cluster.name
           value: "{{ .Values.cluster.name }}"
         - name: network.host
@@ -165,8 +152,7 @@ spec:
         - name: node.data
           value: "false"
         - name: node.remote_cluster_client
-          value: "false"
-        {{- end }}
+          value: "true"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.master.heapSize }} -Xmx{{ .Values.master.heapSize }} {{ .Values.cluster.additionalJavaOpts }} {{ .Values.master.additionalJavaOpts }}"
         {{- range $key, $value :=  .Values.cluster.env }}
@@ -193,22 +179,14 @@ spec:
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
           name: data
-        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-          name: config
-          subPath: elasticsearch.yml
+        {{- range $path, $config := .Values.master.esConfig }}
+        - name: config
+          mountPath: /usr/share/elasticsearch/config/{{ $path }}
+          subPath: {{ $path }}
+        {{- end -}}
 {{- if .Values.cluster.plugins }}
         - mountPath: /usr/share/elasticsearch/plugins/
           name: plugindir
-{{- end }}
-{{- if hasPrefix "2." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/logging.yml
-          name: config
-          subPath: logging.yml
-{{- end }}
-{{- if hasPrefix "5." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/log4j2.properties
-          name: config
-          subPath: log4j2.properties
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
         - name: keystore
@@ -226,19 +204,6 @@ spec:
           mountPath: /master-post-start-hook.sh
           subPath: master-post-start-hook.sh
 {{- end }}
-{{- if or .Values.master.hooks.preStop .Values.master.hooks.postStart }}
-        lifecycle:
-  {{- if .Values.master.hooks.preStop }}
-          preStop:
-            exec:
-              command: ["/bin/bash","/master-pre-stop-hook.sh"]
-  {{- end }}
-  {{- if .Values.master.hooks.postStart }}
-          postStart:
-            exec:
-              command: ["/bin/bash","/master-post-start-hook.sh"]
-  {{- end }}
-{{- end }}
 {{- if .Values.image.pullSecrets }}
       imagePullSecrets:
       {{- range $pullSecret := .Values.image.pullSecrets }}
@@ -246,9 +211,11 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-      - name: config
-        configMap:
-          name: {{ template "elasticsearch.fullname" . }}
+{{- if .Values.master.esConfig }}
+        - name: config
+          configMap:
+            name: {{ template "elasticsearch.masteruname" . }}-config
+{{- end }}
 {{- if .Values.cluster.plugins }}
       - name: plugindir
         emptyDir: {}
