@@ -4,7 +4,7 @@ metadata:
   name: {{ template "elasticsearch.masteruname" . }}
   labels:
     app: "{{ template "elasticsearch.masteruname" . }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: {{ .Chart.Name }}
     component: "{{ .Values.master.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         app: {{ template "elasticsearch.masteruname" . }}
+        chart: "{{ .Chart.Name }}"
         component: "{{ .Values.master.name }}"
         release: {{ .Release.Name }}
         role: master

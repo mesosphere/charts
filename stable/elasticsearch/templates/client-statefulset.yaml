@@ -4,7 +4,7 @@ metadata:
   name: "{{ template "elasticsearch.clientuname" . }}"
   labels:
     app: "{{ template "elasticsearch.clientuname" . }}"
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    chart: {{ .Chart.Name }}
     component: "{{ .Values.client.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
