@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         app: {{ template "elasticsearch.clientuname" . }}
+        chart: {{ .Chart.Name }}
         component: "{{ .Values.client.name }}"
         release: {{ .Release.Name }}
       annotations:
