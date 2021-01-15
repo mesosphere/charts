@@ -11,6 +11,11 @@ load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62
 load("github.com/mesosphere/dispatch-tasks/bump_charts/bump_charts@master", "bump_charts", "bump_requirements")
 
 git = "src-git"
+dispatch_common_go_environment = [
+    k8s.corev1.EnvVar(name="GOARCH", value="amd64"),
+    k8s.corev1.EnvVar(name="GOOS", value="linux"),
+    k8s.corev1.EnvVar(name="GOPATH", value="/")
+]
 
 git_resource(git,
              url="https://github.com/mesosphere/charts",
@@ -32,7 +37,9 @@ dind_task("publish",
               make publish
               """
                   ],
-                  env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secret_var("scmtoken", "password"))]
+                  env=dispatch_common_go_environment + [
+                      k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secret_var("scmtoken", "password"))
+                      ]
               )
           ]
           )
@@ -49,7 +56,8 @@ dind_task("lint",
               git fetch origin master --unshallow
               make lint
               """
-                  ]
+                  ],
+                  env=dispatch_common_go_environment
               )
           ]
           )
@@ -68,6 +76,7 @@ dind_task("test-helm2",
             make test.helm2
             """
                   ],
+                  env=dispatch_common_go_environment,
                   resources=k8s.corev1.ResourceRequirements(
                       limits={
                           "cpu": k8s.resource_quantity("1500m"),
@@ -92,6 +101,7 @@ dind_task("test-helm3",
             make test.helm3
             """
                   ],
+                  env=dispatch_common_go_environment,
                   resources=k8s.corev1.ResourceRequirements(
                       limits={
                           "cpu": k8s.resource_quantity("1500m"),
@@ -140,7 +150,7 @@ def bump_addon(task_name, addon_git_dir):
                     "memory": k8s.resource_quantity("4Gi")
                 }
             ),
-            env=[k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
+            env=dispatch_common_go_environment + [k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
                  k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
                  k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
                  k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
@@ -173,7 +183,7 @@ do_bump_kommander_catalog_api = bump_requirements("bump-catalog-api", git, "stab
   bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubeaddons-catalog
     """
   ],
-  env=[
+  env=dispatch_common_go_environment + [
     k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
     k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
     k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
