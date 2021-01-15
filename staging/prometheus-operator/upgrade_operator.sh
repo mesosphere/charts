@@ -11,7 +11,7 @@ set -x
 
 UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
 PROMETHEUS_PATH=charts/kube-prometheus-stack
-PROMETHEUS_TAG=prometheus-13.1.0
+PROMETHEUS_TAG=kube-prometheus-stack-12.11.3
 # if using osx download coreutils via brew and use greadlink instead
 BASEDIR=$(dirname $(readlink -f "$0"))
 TMPDIR=$(mktemp -d)

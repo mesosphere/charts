@@ -20,7 +20,6 @@ docker run --rm -it \
 
 git_add_and_commit_with_msg ${SRCFILE} "reformat yaml with yq (no new changes)"
 
-# update volumeClaimTemplate.properties.metadata
 # 1. For this version we set probeSelectorNilUsesHelmValues value to false to allow updates of crds from version 9 to 11
 # we should probably set to true for the next version bump
 

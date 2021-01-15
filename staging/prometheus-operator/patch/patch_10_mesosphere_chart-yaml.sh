@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This patch adds mesosphere specific patterns to ignore into .helmignore
+# This patch replaces the kube-prometheus-stack name in favor of prometheus-operator
 
 source $(dirname "$0")/helpers.sh
 
