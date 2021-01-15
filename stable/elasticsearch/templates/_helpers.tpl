@@ -132,7 +132,7 @@ plugin installer template
 {{- define "elasticsearch.clientuname" -}}
 {{- if empty .Values.fullnameOverride -}}
 {{- if empty .Values.nameOverride -}}
-{{ .Values.cluster.name }}-client
+{{ template "elasticsearch.fullname" . }}-client
 {{- else -}}
 {{ .Values.nameOverride }}-client
 {{- end -}}
@@ -144,7 +144,7 @@ plugin installer template
 {{- define "elasticsearch.datauname" -}}
 {{- if empty .Values.fullnameOverride -}}
 {{- if empty .Values.nameOverride -}}
-{{ .Values.cluster.name }}-data
+{{ template "elasticsearch.fullname" . }}-data
 {{- else -}}
 {{ .Values.nameOverride }}-data
 {{- end -}}
@@ -156,7 +156,7 @@ plugin installer template
 {{- define "elasticsearch.masteruname" -}}
 {{- if empty .Values.fullnameOverride -}}
 {{- if empty .Values.nameOverride -}}
-{{ .Values.cluster.name }}-master
+{{ template "elasticsearch.fullname" . }}-master
 {{- else -}}
 {{ .Values.nameOverride }}-master
 {{- end -}}
