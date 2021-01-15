@@ -29,8 +29,8 @@ spec:
       {{- if .Values.data.podAnnotations }}
 {{ toYaml .Values.data.podAnnotations | indent 8 }}
       {{- end }}
-      {{- if eq .Values.data.updateStrategy.type "RollingUpdate" }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- if .Values.data.esConfig }}
+        configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
       {{- end }}
 {{- end }}
     spec:

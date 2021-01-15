@@ -28,8 +28,8 @@ spec:
       {{- if .Values.master.podAnnotations }}
 {{ toYaml .Values.master.podAnnotations | indent 8 }}
       {{- end }}
-      {{- if eq .Values.master.updateStrategy.type "RollingUpdate" }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+      {{- if .Values.master.esConfig }}
+        configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
       {{- end }}
 {{- end }}
     spec:
