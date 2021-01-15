@@ -20,9 +20,10 @@ spec:
     metadata:
       labels:
         app: {{ template "elasticsearch.clientuname" . }}
-        chart: {{ .Chart.Name }}
+        chart: "{{ .Chart.Name }}"
         component: "{{ .Values.client.name }}"
         release: {{ .Release.Name }}
+        role: client
       annotations:
         {{- if .Values.client.podAnnotations }}
 {{ toYaml .Values.client.podAnnotations | indent 8 }}
