@@ -15,8 +15,8 @@ data:
 {{ .Files.Get "crds/crd-prometheusrules.yaml" | printf "%s" | indent 4 }}
   crd-servicemonitors.yaml: |-
 {{ .Files.Get "crds/crd-servicemonitors.yaml" | printf "%s" | indent 4 }}
-  crd-thanoserulers.yaml: |-
-{{ .Files.Get "crds/crd-thanoserulers.yaml" | printf "%s" | indent 4 }}
+  crd-thanosrulers.yaml: |-
+{{ .Files.Get "crds/crd-thanosrulers.yaml" | printf "%s" | indent 4 }}
 ---
 apiVersion: batch/v1
 kind: Job
