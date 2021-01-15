@@ -1,6 +1,18 @@
 SHELL := /bin/bash -euo pipefail
 
-HELM_VERSION ?= v3.3.4
+GOARCH ?= $(shell go env GOARCH)
+GOOS ?= $(shell go env GOOS)
+GOPATH ?= $(shell go env GOPATH)
+ifndef GOBIN
+ifeq (,$(shell go env GOBIN))
+GOBIN=$(shell go env GOPATH)/bin
+else
+GOBIN=$(shell go env GOBIN)
+endif
+endif
+
+HELM_VERSION ?= v3.5.0
+HELM_BIN ?= bin/$(GOOS)/$(GOARCH)/helm-$(HELM_VERSION)
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
 STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
@@ -18,7 +30,7 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
 GIT_REF ?= $(shell git rev-parse HEAD)
-CT_VERSION ?= v3.1.1
+CT_VERSION ?= v3.3.1
 
 TMPDIR := $(shell mktemp -d)
 ifeq ($(shell uname),Darwin)
@@ -30,25 +42,21 @@ export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
 export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
 export HELM_DATA_HOME=$(TMPDIR)/.helm/data
 
-HELM := $(shell command -v helm)
-ifeq ($(HELM),)
-	HELM := $(TMPDIR)/helm
-else
-# compare short versions to see if this is the requested version
-HELM_INSTALLED=$(shell $(HELM) version --short --client | sed 's/.*\(v[0-9]\+\.[0-9]\+\).*/\1/')
-HELM_REQUESTED=$(shell echo $(HELM_VERSION) | cut -d. -f-2)
-ifneq ($(HELM_INSTALLED),$(HELM_REQUESTED))
-	HELM := $(TMPDIR)/helm
-endif
-endif
-
 ifeq (,$(wildcard /teamcity/system/git))
 DRUN := docker run -t --rm -u $(shell id -u):$(shell id -g) \
-			-v ${PWD}:/charts -v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -v $(TMPDIR):/.helm \
-			-w /charts quay.io/helmpack/chart-testing:$(CT_VERSION)
+			-v $(TMPDIR):/.helm \
+			-v ${PWD}:/charts \
+			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml \
+			-v ${PWD}/$(HELM_BIN):/usr/local/bin/helm \
+			-w /charts \
+			quay.io/helmpack/chart-testing:$(CT_VERSION)
 else
-DRUN := docker run -t --rm -v /teamcity/system/git:/teamcity/system/git -v ${PWD}:/charts \
-			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml -w /charts \
+DRUN := docker run -t --rm \
+            -v /teamcity/system/git:/teamcity/system/git \
+			-v ${PWD}:/charts \
+			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml \
+			-v ${PWD}/$(HELM_BIN):/usr/local/bin/helm \
+			-w /charts \
 			quay.io/helmpack/chart-testing:$(CT_VERSION)
 endif
 
@@ -59,7 +67,7 @@ all: stagingrepo stablerepo
 
 .PHONY: clean
 clean:
-	rm -rf gh-pages
+	rm -rf gh-pages bin
 
 .PHONY: stagingrepo
 stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
@@ -93,11 +101,6 @@ publish:
 	git worktree remove gh-pages/
 	rm -rf gh-pages
 
-$(HELM):
-ifeq ($(HELM),$(TMPDIR)/helm)
-	curl -fsSL https://get.helm.sh/helm-$(HELM_VERSION)-linux-amd64.tar.gz | tar xz -C $(TMPDIR) --strip-components=1 'linux-amd64/helm'
-endif
-
 # Deterministically create helm packages by:
 #
 # - Using `helm package` to create the initial package (useful for including chart dependencies
@@ -107,11 +110,11 @@ endif
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
+$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
-	$(HELM) package $(PACKAGE_SRC) -d $(shell dirname $@)
+	$(HELM_BIN) package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
 	tar -c \
 			--owner=root:0 --group=root:0 --numeric-owner \
@@ -121,18 +124,18 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM) $$(shell find $$(shell echo $$@ | 
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
 
-%/index.yaml: $(HELM) $(STABLE_TARGETS) $(STAGING_TARGETS)
+%/index.yaml: $(HELM_BIN) $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
+	$(HELM_BIN) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
 
 .PHONY: ct.lint
-ct.lint:
+ct.lint: $(HELM_BIN)
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} release/kommander-0.8.x
 	$(DRUN) ct lint --target-branch release/kommander-0.8.x --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
-ct.test:
+ct.test: $(HELM_BIN)
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
@@ -147,9 +150,24 @@ test.helm2: CT_VERSION = v2.4.1
 test.helm2: ct.test
 
 .PHONY: test.helm3
-test.helm3: HELM_VERSION = v3.3.0
-test.helm3: CT_VERSION = v3.0.0
 test.helm3: ct.test
 
 .PHONY: test
 test: ct.test
+
+# ------------------------------------------------------------------------------
+# Download Tools
+# ------------------------------------------------------------------------------
+
+ifneq (,$(filter tar (GNU tar)%, $(shell tar --version)))
+WILDCARDS := --wildcards
+endif
+
+.PHONY: helm
+helm: $(HELM_BIN)
+
+# download helm
+$(HELM_BIN):
+	mkdir -p $(dir $@) _build
+	curl -Ls https://get.helm.sh/helm-$(subst helm-,,$(notdir $@))-$(GOOS)-$(GOARCH).tar.gz | tar xz -C _build $(WILDCARDS) --strip=1 '*/helm'
+	mv _build/helm $@

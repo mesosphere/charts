@@ -8,6 +8,11 @@ load("github.com/mesosphere/dispatch-catalog/starlark/stable/pipeline@0.0.4", "g
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/docker@dc4612e95b62ff8b744bda2e4d3c75cf2edeb694", "dind_task")
 
 git = "src-git"
+dispatch_common_go_environment = [
+    k8s.corev1.EnvVar(name="GOARCH", value="amd64"),
+    k8s.corev1.EnvVar(name="GOOS", value="linux"),
+    k8s.corev1.EnvVar(name="GOPATH", value="/")
+]
 
 gitResource(git,
     url="$(context.git.url)",
@@ -28,11 +33,13 @@ dind_task("publish",
               git config --global user.email '56653984+d2iq-dispatch@users.noreply.github.com'
               make publish
               """
-            ],
-            env=[k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secretVar("scmtoken", "password"))]
-        )
-    ]
-)
+                  ],
+                  env=dispatch_common_go_environment + [
+                      k8s.corev1.EnvVar(name="GITHUB_USER_TOKEN", valueFrom=secret_var("scmtoken", "password"))
+                      ]
+              )
+          ]
+          )
 
 dind_task("lint",
     inputs=[git],
@@ -46,10 +53,11 @@ dind_task("lint",
               git fetch origin master --unshallow
               make lint
               """
-            ]
-        )
-    ]
-)
+                  ],
+                  env=dispatch_common_go_environment
+              )
+          ]
+          )
 
 dind_task("test-helm2",
     inputs=[git],
@@ -64,12 +72,16 @@ dind_task("test-helm2",
             git fetch origin master --unshallow
             make test.helm2
             """
-          ],
-          resources = k8s.corev1.ResourceRequirements(
-            limits = {
-              "cpu": k8s.resource_quantity("1500m"),
-              "memory": k8s.resource_quantity("6Gi")
-            }
+                  ],
+                  env=dispatch_common_go_environment,
+                  resources=k8s.corev1.ResourceRequirements(
+                      limits={
+                          "cpu": k8s.resource_quantity("1500m"),
+                          "memory": k8s.resource_quantity("6Gi")
+                      }
+                  )
+              )
+          ]
           )
       )
   ]
@@ -88,18 +100,104 @@ dind_task("test-helm3",
             git fetch origin master --unshallow
             make test.helm3
             """
-          ],
-          resources = k8s.corev1.ResourceRequirements(
-            limits = {
-              "cpu": k8s.resource_quantity("1500m"),
-              "memory": k8s.resource_quantity("6Gi")
-            }
+                  ],
+                  env=dispatch_common_go_environment,
+                  resources=k8s.corev1.ResourceRequirements(
+                      limits={
+                          "cpu": k8s.resource_quantity("1500m"),
+                          "memory": k8s.resource_quantity("6Gi")
+                      }
+                  )
+              )
+          ]
           )
       )
   ]
 )
 
-action(tasks=["test-helm2","test-helm3"], on=pullRequest())
-action(tasks=["publish"], on=push(branches=["release/kommander-0.8.x"]))
-action(tasks = ["test-helm2"], on = pullRequest(chatops = ["test-helm2"]))
-action(tasks = ["test-helm3"], on = pullRequest(chatops = ["test-helm3"]))
+
+def bump_addon(task_name, addon_git_dir):
+    """
+    Automatically creates PRs on the source repo to update helm charts within addon yaml definitions.
+    """
+    task(task_name, inputs=[git, addon_git_dir], steps=[
+        v1.Container(
+            name=task_name,
+            image="mesosphere/bump-charts:master",  # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
+            workingDir="/workspace/" + addon_git_dir,
+            command=["/bin/sh", "-c"],
+            args=[
+                """
+                set -e
+                echo "$GPG_PRIVATE_KEY" > gpg_private_key
+                echo "$GPG_PUBLIC_KEY" > gpg_public_key
+                set -x
+                git fetch origin
+                gpg --import gpg_private_key
+                gpg --import gpg_public_key
+                git config --local commit.gpgsign true
+                git config --local user.signingkey $GPG_KEY_ID
+                git config --local user.name 'Dispatch CI'
+                git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
+                cp /bump_charts/update_single_addon.py /bump_charts/bump_charts.py .
+                cd /workspace/{}
+                git fetch --depth=3
+                CHANGED_FILES=$(git diff --name-only HEAD^)
+                cd /workspace/{}
+                python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {}
+                """.format(git, addon_git_dir, addon_git_dir)
+            ],
+            resources=k8s.corev1.ResourceRequirements(
+                limits={
+                    "cpu": k8s.resource_quantity("1000m"),
+                    "memory": k8s.resource_quantity("4Gi")
+                }
+            ),
+            env=dispatch_common_go_environment + [k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
+                 k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
+                 k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
+                 k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
+                 ]
+        )
+    ])
+
+    return task_name
+
+
+kubeaddons_kommander_git = "kubeaddons-kommander"
+git_resource(
+    kubeaddons_kommander_git,
+    url="https://github.com/mesosphere/" + kubeaddons_kommander_git,
+    revision="master")
+do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
+
+  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubeaddons-catalog
+    """
+  ],
+  env=dispatch_common_go_environment + [
+    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
+    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
+    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
+    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
+  ]
+)
+
+kba_git = "kubernetes-base-addons"
+git_resource(
+    kba_git,
+    url="https://github.com/mesosphere/" + kba_git,
+    revision="master")
+do_bump_addon = bump_addon("bump-addon", kba_git)
+
+kommander_chart_path = "stable/kommander/Chart.yaml"
+
+# Robot Actions
+action(tasks=["test-helm2", "test-helm3"], on=pull_request())
+action(tasks=["publish"], on=push(branches=["master"]))
+action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
+action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
+
+# Chatops Actions
+action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
+action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
+action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
