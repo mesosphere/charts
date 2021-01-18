@@ -74,7 +74,7 @@ INSTALL_PID=$!
 cd "$PROJECT_ROOT"
 
 echo "Install Konvoy"
-source ${PROJECT_ROOT}/test/e2e-kommander/install-konvoy.sh v1.6.0
+source ${PROJECT_ROOT}/test/e2e-kommander/install-konvoy.sh v1.7.0-beta.0
 
 # Generate SSH Keys
 echo "Generate SSH Keys"
