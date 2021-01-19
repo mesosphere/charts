@@ -200,15 +200,16 @@ spec:
 {{- end }}
 {{- if or .Values.data.hooks.preStop .Values.data.hooks.postStart .Values.data.hooks.drain.enabled }}
         lifecycle:
-          {{- if or .Values.data.hooks.preStop .Values.data.hooks.drain.enabled }}
+  {{- if or .Values.data.hooks.preStop .Values.data.hooks.drain.enabled }}
           preStop:
             exec:
               command: ["/bin/bash","/data-pre-stop-hook.sh"]
-{{- end }}
-{{- if or .Values.data.hooks.postStart .Values.data.hooks.drain.enabled }}
+  {{- end }}
+  {{- if or .Values.data.hooks.postStart .Values.data.hooks.drain.enabled }}
           postStart:
             exec:
               command: ["/bin/bash","/data-post-start-hook.sh"]
+  {{- end }}
 {{- end }}
       terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
 {{- if .Values.image.pullSecrets }}
