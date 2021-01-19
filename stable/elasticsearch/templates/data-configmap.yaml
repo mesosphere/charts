@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "elasticsearch.datauname" . }}
+  name: {{ template "elasticsearch.datauname" . }}-config
   labels:
     app: {{ template "elasticsearch.fullname" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"

@@ -29,7 +29,7 @@ spec:
       {{- if .Values.data.podAnnotations }}
 {{ toYaml .Values.data.podAnnotations | indent 8 }}
       {{- end }}
-        configchecksum: {{ template "elasticsearch.clientuname" . }}-config . | sha256sum | trunc 63 }}
+        configchecksum: {{ template "elasticsearch.datauname" . }}-config . | sha256sum | trunc 63 }}
 {{- end }}
     spec:
       {{- if .Values.schedulerName }}
