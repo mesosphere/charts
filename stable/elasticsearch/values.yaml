@@ -327,7 +327,7 @@ data:
     ## Drain the node before stopping it and re-integrate it into the cluster after start.
     ## When enabled, it supersedes `data.hooks.preStop` and `data.hooks.postStart` defined below.
     drain:
-      enabled: true
+      enabled: false
 
     ## (string) Script to execute prior the data pod stops. Ignored if `data.hooks.drain.enabled` is true (default)
     # preStop: |-
