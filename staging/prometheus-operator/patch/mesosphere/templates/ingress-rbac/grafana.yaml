@@ -5,11 +5,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-grafana-admin
   labels:
-    app: {{ template "prometheus-operator.name" . }}-grafana
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
 {{ toYaml .Values.grafana.ingress.labels | indent 4 }}
 {{- end }}
-{{ include "prometheus-operator.labels" . | indent 4 }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     - {{ .Values.grafana.ingress.path | trimSuffix "/" }}
@@ -27,11 +27,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-grafana-view
   labels:
-    app: {{ template "prometheus-operator.name" . }}-grafana
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
 {{ toYaml .Values.grafana.ingress.labels | indent 4 }}
 {{- end }}
-{{ include "prometheus-operator.labels" . | indent 4 }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     - {{ .Values.grafana.ingress.path | trimSuffix "/" }}
@@ -46,11 +46,11 @@ kind: ClusterRole
 metadata:
   name: opsportal-grafana-edit
   labels:
-    app: {{ template "prometheus-operator.name" . }}-grafana
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
 {{ toYaml .Values.grafana.ingress.labels | indent 4 }}
 {{- end }}
-{{ include "prometheus-operator.labels" . | indent 4 }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
 rules:
   - nonResourceURLs:
     - {{ .Values.grafana.ingress.path | trimSuffix "/" }}

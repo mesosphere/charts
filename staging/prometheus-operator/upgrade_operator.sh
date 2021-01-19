@@ -9,8 +9,10 @@
 
 set -x
 
-UPSTREAM_REPO=git@github.com:helm/charts.git
-PROMETHEUS_PATH=stable/prometheus-operator
+UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
+PROMETHEUS_PATH=charts/kube-prometheus-stack
+PROMETHEUS_TAG=kube-prometheus-stack-12.11.3
+# if using osx download coreutils via brew and use greadlink instead
 BASEDIR=$(dirname $(readlink -f "$0"))
 TMPDIR=$(mktemp -d)
 
@@ -23,6 +25,7 @@ git config core.sparsecheckout true
 echo ${PROMETHEUS_PATH} > .git/info/sparse-checkout
 
 git pull origin master
+git checkout ${PROMETHEUS_TAG}
 
 cd ${PROMETHEUS_PATH} || exit
 
