@@ -225,11 +225,9 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-{{- if .Values.master.esConfig }}
         - name: config
           configMap:
             name: {{ template "elasticsearch.masteruname" . }}-config
-{{- end }}
 {{- if .Values.cluster.plugins }}
       - name: plugindir
         emptyDir: {}

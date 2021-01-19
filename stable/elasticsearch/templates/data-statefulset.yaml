@@ -29,9 +29,7 @@ spec:
       {{- if .Values.data.podAnnotations }}
 {{ toYaml .Values.data.podAnnotations | indent 8 }}
       {{- end }}
-      {{- if .Values.data.esConfig }}
         configchecksum: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum | trunc 63 }}
-      {{- end }}
 {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -219,11 +217,9 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-{{- if .Values.data.esConfig }}
         - name: config
           configMap:
             name: {{ template "elasticsearch.datauname" . }}-config
-{{- end }}
 {{- if .Values.cluster.plugins }}
       - name: plugindir
         emptyDir: {}

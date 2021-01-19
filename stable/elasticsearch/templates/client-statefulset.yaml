@@ -191,11 +191,9 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-{{- if .Values.client.esConfig }}
         - name: config
           configMap:
             name: {{ template "elasticsearch.clientuname" . }}-config
-{{- end }}
 {{- if .Values.cluster.plugins }}
       - name: plugindir
         emptyDir: {}
