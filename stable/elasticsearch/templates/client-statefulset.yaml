@@ -24,10 +24,10 @@ spec:
         component: "{{ .Values.client.name }}"
         release: {{ .Release.Name }}
         role: client
+{{- if .Values.client.podAnnotations }}
       annotations:
-        {{- if .Values.client.podAnnotations }}
 {{ toYaml .Values.client.podAnnotations | indent 8 }}
-        {{- end }}
+{{- end }}
     spec:
       serviceAccountName: {{ template "elasticsearch.serviceAccountName.client" . }}
 {{- if .Values.client.priorityClassName }}
@@ -195,11 +195,11 @@ spec:
           configMap:
             name: {{ template "elasticsearch.clientuname" . }}-config
 {{- if .Values.cluster.plugins }}
-      - name: plugindir
-        emptyDir: {}
+        - name: plugindir
+          emptyDir: {}
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
-      - name: keystore
-        secret:
-          secretName: {{ .Values.cluster.keystoreSecret }}
+        - name: keystore
+          secret:
+            secretName: {{ .Values.cluster.keystoreSecret }}
 {{- end }}
