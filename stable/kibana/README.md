@@ -2,9 +2,6 @@
 
 [kibana](https://github.com/elastic/kibana) is your window into the Elastic Stack. Specifically, it's an open source (Apache Licensed), browser-based analytics and search dashboard for Elasticsearch.
 
-## Pre-deprecation notice
-As mentioned in #14935 we are planning on deprecating this chart in favour of the official Elastic Helm Chart. The Elastic Helm Chart supports version 7 of Kibana. 
-
 ## TL;DR;
 
 ```console

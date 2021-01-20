@@ -35,7 +35,9 @@ envFromSecrets: {}
 files:
   kibana.yml:
     ## Default Kibana configuration from kibana-docker.
-    elasticsearch.hosts: ["http://elasticsearch-client:9200"]
+    elasticsearch.hosts: ["http://elasticsearch:9200"]
+    server.port: 5601
+    server.host: "0.0.0.0"
 
     ## Custom config properties below
     ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
