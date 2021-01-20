@@ -5,3 +5,12 @@ cluster:
   plugins:
     - ingest-attachment
     - mapper-size
+
+client:
+  replicas: 1
+
+master:
+  replicas: 2
+
+data:
+  replicas: 1
