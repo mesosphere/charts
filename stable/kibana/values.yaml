@@ -1,6 +1,6 @@
 image:
   repository: "docker.elastic.co/kibana/kibana-oss"
-  tag: "6.7.0"
+  tag: "7.9.3"
   pullPolicy: "IfNotPresent"
 
 testFramework:
@@ -35,10 +35,9 @@ envFromSecrets: {}
 files:
   kibana.yml:
     ## Default Kibana configuration from kibana-docker.
-    server.name: kibana
-    server.host: "0"
-    ## For kibana < 6.6, use elasticsearch.url instead
-    elasticsearch.hosts: http://elasticsearch:9200
+    elasticsearch.hosts: ["http://elasticsearch:9200"]
+    server.port: 5601
+    server.host: "0.0.0.0"
 
     ## Custom config properties below
     ## Ref: https://www.elastic.co/guide/en/kibana/current/settings.html
@@ -172,8 +171,11 @@ dashboardImport:
     enabled: false
     username: myuser
     password: mypass
+  # An entry with that is a url must contain "URL" in its name otherwise assumed to be valid json
   dashboards: {}
-    # k8s: https://raw.githubusercontent.com/monotek/kibana-dashboards/master/k8s-fluentd-elasticsearch.json
+    # k8sURL: https://raw.githubusercontent.com/monotek/kibana-dashboards/master/k8s-fluentd-elasticsearch.json
+    # or
+    # k8s: `some valid json string`
 
 # List of plugins to install using initContainer
 # NOTE : We notice that lower resource constraints given to the chart + plugins are likely not going to work well.
