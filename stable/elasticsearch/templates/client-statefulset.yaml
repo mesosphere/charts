@@ -131,11 +131,6 @@ spec:
             path: /_cluster/health
             port: 9200
           initialDelaySeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /_cluster/health?local=true
-            port: 9200
-          initialDelaySeconds: 90
         {{- if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.securityContext.runAsUser }}
