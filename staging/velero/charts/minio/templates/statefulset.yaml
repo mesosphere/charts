@@ -36,7 +36,7 @@ spec:
 apiVersion: {{ template "minio.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "minio.fullname" . }}
+  name: minio # CUSTOM CHANGE: due to this setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/b43aae5100c10d4f1e58b3710895fd194b23d339/addons/velero/velero.yaml#L112
   labels:
     app: {{ template "minio.name" . }}
     chart: {{ template "minio.chart" . }}
@@ -82,10 +82,10 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-
+          # CUSTOM CHANGE: due to this setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/b43aae5100c10d4f1e58b3710895fd194b23d339/addons/velero/velero.yaml#L112
           command: [ "/bin/sh",
             "-ce",
-            "/usr/bin/docker-entrypoint.sh minio -S {{ .Values.certsPath }} server {{- range $i := until $zoneCount }}{{ $factor := mul $i $nodeCount }}{{ $endIndex := add $factor $nodeCount }}{{ $beginIndex := mul $i $nodeCount }}  {{ $scheme }}://{{ template `minio.fullname` $ }}-{{ `{` }}{{ $beginIndex }}...{{ sub $endIndex 1 }}{{ `}`}}.{{ template `minio.fullname` $ }}-svc.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}{{if (gt $drivesPerNode 1)}}{{ $bucketRoot }}-{{ `{` }}0...{{ sub $drivesPerNode 1 }}{{ `}` }}{{else}}{{ $bucketRoot }}{{end}}{{- end}}{{- template `minio.extraArgs` . }}" ]
+            "/usr/bin/docker-entrypoint.sh minio -S {{ .Values.certsPath }} server {{- range $i := until $zoneCount }}{{ $factor := mul $i $nodeCount }}{{ $endIndex := add $factor $nodeCount }}{{ $beginIndex := mul $i $nodeCount }}  {{ $scheme }}://minio-{{ `{` }}{{ $beginIndex }}...{{ sub $endIndex 1 }}{{ `}`}}.{{ template `minio.fullname` $ }}-svc.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}{{if (gt $drivesPerNode 1)}}{{ $bucketRoot }}-{{ `{` }}0...{{ sub $drivesPerNode 1 }}{{ `}` }}{{else}}{{ $bucketRoot }}{{end}}{{- end}}{{- template `minio.extraArgs` . }}" ]
           volumeMounts:
             {{- if $penabled }}
             {{- if (gt $drivesPerNode 1) }}
@@ -97,7 +97,7 @@ spec:
               {{- end }}
             {{- end }}
             {{- else }}
-            - name: export
+            - name: data # CUSTOM CHANGE: due to setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/master/addons/velero/velero.yaml#L111
               mountPath: {{ $mountPath }}
               {{- if and $penabled $subPath }}
               subPath: {{ $subPath }}
@@ -160,7 +160,7 @@ spec:
     {{- end }}
   {{- else }}
     - metadata:
-        name: export
+        name: data # CUSTOM CHANGE: due to setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/master/addons/velero/velero.yaml#L111
       spec:
         accessModes: [ {{ $accessMode | quote }} ]
         {{- if $storageClass }}

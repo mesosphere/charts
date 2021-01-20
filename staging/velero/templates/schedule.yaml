@@ -4,10 +4,9 @@ kind: Schedule
 metadata:
   name: {{ include "velero.fullname" $ }}-{{ $scheduleName }}
   annotations:
-  {{- if $.Values.enableHelmHooks }}
+    # CUSTOM CHANGE: forced hooks due to error for first backup
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-delete-policy": "before-hook-creation"
-  {{- end }}
   labels:
     app.kubernetes.io/name: {{ include "velero.name" $ }}
     app.kubernetes.io/instance: {{ $.Release.Name }}

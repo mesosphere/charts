@@ -40,7 +40,7 @@ initContainers: []
   #   imagePullPolicy: IfNotPresent
   #   volumeMounts:
   #     - mountPath: /target
-#       name: plugins
+  #       name: plugins
 
 # SecurityContext to use for the Velero deployment. Optional.
 # Set fsGroup for `AWS IAM Roles for Service Accounts`
