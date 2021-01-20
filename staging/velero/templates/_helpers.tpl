@@ -49,6 +49,72 @@ Create the name for the credentials secret.
 {{- if .Values.credentials.existingSecret -}}
   {{- .Values.credentials.existingSecret -}}
 {{- else -}}
+  {{ default (include "velero.fullname" .) .Values.credentials.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the Velero priority class name.
+*/}}
+{{- define "velero.priorityClassName" -}}
+{{- if .Values.priorityClassName -}}
+  {{- .Values.priorityClassName -}}
+{{- else -}}
   {{- include "velero.fullname" . -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Create the Restic priority class name.
+*/}}
+{{- define "velero.restic.priorityClassName" -}}
+{{- if .Values.restic.priorityClassName -}}
+  {{- .Values.restic.priorityClassName -}}
+{{- else -}}
+  {{- include "velero.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the backup storage location name
+*/}}
+{{- define "velero.backupStorageLocation.name" -}}
+{{- with .Values.configuration.backupStorageLocation -}}
+{{ default "default" .name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the backup storage location provider
+*/}}
+{{- define "velero.backupStorageLocation.provider" -}}
+{{- with .Values.configuration -}}
+{{ default .provider .backupStorageLocation.provider }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the volume snapshot location name
+*/}}
+{{- define "velero.volumeSnapshotLocation.name" -}}
+{{- with .Values.configuration.volumeSnapshotLocation -}}
+{{ default "default" .name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the volume snapshot location provider
+*/}}
+{{- define "velero.volumeSnapshotLocation.provider" -}}
+{{- with .Values.configuration -}}
+{{ default .provider .volumeSnapshotLocation.provider }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Helm hooks for Helm v2 CRDs 
+*/}}
+{{- define "velero.helmhooks.crds" -}}
+{{ print "\"helm.sh/hook\": pre-install,pre-upgrade" | indent 4 }}
+{{ print "\"helm.sh/hook-delete-policy\": \"before-hook-creation\"" | indent 4 }}
 {{- end -}}

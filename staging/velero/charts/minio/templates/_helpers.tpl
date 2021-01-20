@@ -35,10 +35,10 @@ Create chart name and version as used by the chart label.
 Return the appropriate apiVersion for networkpolicy.
 */}}
 {{- define "minio.networkPolicy.apiVersion" -}}
-{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare ">=1.4-0, <1.7-0" .Capabilities.KubeVersion.Version -}}
 {{- print "extensions/v1beta1" -}}
-{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.GitVersion -}}
-{{- print "networking.k8s.io/v1" -}}
+{{- else if semverCompare "^1.7-0" .Capabilities.KubeVersion.Version -}}
+{{- print "networking.k8s.io/v1beta1" -}}
 {{- end -}}
 {{- end -}}
 
@@ -46,7 +46,7 @@ Return the appropriate apiVersion for networkpolicy.
 Return the appropriate apiVersion for deployment.
 */}}
 {{- define "minio.deployment.apiVersion" -}}
-{{- if semverCompare "<1.9-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare "<1.9-0" .Capabilities.KubeVersion.Version -}}
 {{- print "apps/v1beta2" -}}
 {{- else -}}
 {{- print "apps/v1" -}}
@@ -57,21 +57,10 @@ Return the appropriate apiVersion for deployment.
 Return the appropriate apiVersion for statefulset.
 */}}
 {{- define "minio.statefulset.apiVersion" -}}
-{{- if .Capabilities.APIVersions.Has "apps/v1beta2" -}}
+{{- if semverCompare "<1.16-0" .Capabilities.KubeVersion.Version -}}
 {{- print "apps/v1beta2" -}}
 {{- else -}}
 {{- print "apps/v1" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return the appropriate name for statefulset.
-*/}}
-{{- define "minio.statefulset.name" -}}
-{{- if .Values.statefulSetNameOverride -}}
-{{- printf "%s" .Values.statefulSetNameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{ template "minio.fullname" . }}
 {{- end -}}
 {{- end -}}
 
@@ -87,6 +76,17 @@ Return the appropriate apiVersion for ingress.
 {{- end -}}
 
 {{/*
+Determine secret name.
+*/}}
+{{- define "minio.secretName" -}}
+{{- if .Values.existingSecret -}}
+{{- .Values.existingSecret }}
+{{- else -}}
+{{- include "minio.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Determine service account name for deployment or statefulset.
 */}}
 {{- define "minio.serviceAccountName" -}}
@@ -98,10 +98,85 @@ Determine service account name for deployment or statefulset.
 {{- end -}}
 
 {{/*
+Determine name for scc role and rolebinding
+*/}}
+{{- define "minio.sccRoleName" -}}
+{{- printf "%s-%s" "scc" (include "minio.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Properly format optional additional arguments to Minio binary
 */}}
 {{- define "minio.extraArgs" -}}
 {{- range .Values.extraArgs -}}
-{{ " " }}{{ .  }}
+{{ " " }}{{ . }}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "minio.imagePullSecrets" -}}
+{{/*
+Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
+but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
+Also, we can not use a single if because lazy evaluation is not an option
+*/}}
+{{- if .Values.global }}
+{{- if .Values.global.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.global.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- else if .Values.imagePullSecrets }}
+imagePullSecrets:
+    {{ toYaml .Values.imagePullSecrets }}
+{{- end -}}
+{{- else if .Values.imagePullSecrets }}
+imagePullSecrets:
+    {{ toYaml .Values.imagePullSecrets }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Formats volumeMount for Minio tls keys and trusted certs
+*/}}
+{{- define "minio.tlsKeysVolumeMount" -}}
+{{- if .Values.tls.enabled }}
+- name: cert-secret-volume
+  mountPath: {{ .Values.certsPath }}
+{{- end }}
+{{- if or .Values.tls.enabled (ne .Values.trustedCertsSecret "") }}
+{{- $casPath := printf "%s/CAs" .Values.certsPath | clean }}
+- name: trusted-cert-secret-volume
+  mountPath: {{ $casPath }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Formats volume for Minio tls keys and trusted certs
+*/}}
+{{- define "minio.tlsKeysVolume" -}}
+{{- if .Values.tls.enabled }}
+- name: cert-secret-volume
+  secret:
+    secretName: {{ .Values.tls.certSecret }}
+    items:
+    - key: {{ .Values.tls.publicCrt }}
+      path: public.crt
+    - key: {{ .Values.tls.privateKey }}
+      path: private.key
+{{- end }}
+{{- if or .Values.tls.enabled (ne .Values.trustedCertsSecret "") }}
+{{- $certSecret := eq .Values.trustedCertsSecret "" | ternary .Values.tls.certSecret .Values.trustedCertsSecret }}
+{{- $publicCrt := eq .Values.trustedCertsSecret "" | ternary .Values.tls.publicCrt "" }}
+- name: trusted-cert-secret-volume
+  secret:
+    secretName: {{ $certSecret }}
+    {{- if ne $publicCrt "" }}
+    items:
+    - key: {{ $publicCrt }}
+      path: public.crt
+    {{- end }}
+{{- end }}
 {{- end -}}

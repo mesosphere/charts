@@ -4,7 +4,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "velero.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: {{ include "velero.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
@@ -19,10 +18,14 @@ spec:
   template:
     metadata:
       labels:
+        name: velero
         app.kubernetes.io/name: {{ include "velero.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
         app.kubernetes.io/managed-by: {{ .Release.Service }}
         helm.sh/chart: {{ include "velero.chart" . }}
+        {{- if .Values.podLabels }}
+          {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
     {{- if or .Values.podAnnotations .Values.metrics.enabled }}
       annotations:
       {{- with .Values.podAnnotations }}
@@ -33,11 +36,24 @@ spec:
       {{- end }}
     {{- end }}
     spec:
+    {{- if .Values.image.imagePullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.imagePullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+    {{- end }}
       restartPolicy: Always
       serviceAccountName: {{ include "velero.serverServiceAccount" . }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ include "velero.priorityClassName" . }}
+      {{- end }}
       containers:
         - name: velero
+        {{- if .Values.image.digest }}
+          image: "{{ .Values.image.repository }}@{{ .Values.image.digest }}"
+        {{- else }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.metrics.enabled }}
           ports:
@@ -61,11 +77,18 @@ spec:
             {{- with .restoreResourcePriorities }}
             - --restore-resource-priorities={{ . }}
             {{- end }}
-          {{- end }}
-          {{- if eq $provider "azure" }}
-          envFrom:
-            - secretRef:
-                name: {{ include "velero.secretName" . }}
+            {{- with .features }}
+            - --features={{ . }}
+            {{- end }}
+            {{- with .logLevel }}
+            - --log-level={{ . }}
+            {{- end }}
+            {{- with .logFormat }}
+            - --log-format={{ . }}
+            {{- end }}
+            {{- if .defaultVolumesToRestic }}
+            - --default-volumes-to-restic
+            {{- end }}
           {{- end }}
           {{- with .Values.resources }}
           resources:
@@ -74,24 +97,44 @@ spec:
           volumeMounts:
             - name: plugins
               mountPath: /plugins
-        {{- if and .Values.credentials.useSecret (or (eq $provider "aws") (eq $provider "gcp")) }}
+        {{- if and .Values.credentials.useSecret }}
             - name: cloud-credentials
               mountPath: /credentials
             - name: scratch
               mountPath: /scratch
         {{- end }}
-          {{- if (or (and .Values.credentials.useSecret (or (eq $provider "aws") (eq $provider "gcp"))) .Values.configuration.extraEnvVars) }}
-          env:
-          {{- end }}
-          {{- if and .Values.credentials.useSecret (or (eq $provider "aws") (eq $provider "gcp")) }}
-            {{- if eq $provider "aws" }}
-            - name: AWS_SHARED_CREDENTIALS_FILE
-            {{- else }}
-            - name: GOOGLE_APPLICATION_CREDENTIALS
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
-              value: /credentials/cloud
+        {{- if .Values.credentials.extraSecretRef }}
+          envFrom:
+          - secretRef:
+              name: {{ .Values.credentials.extraSecretRef }}
+        {{- end }}
+          env:
             - name: VELERO_SCRATCH_DIR
               value: /scratch
+            - name: VELERO_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: LD_LIBRARY_PATH
+              value: /plugins
+          {{- if .Values.credentials.useSecret }}
+            {{- if eq $provider "aws" }}
+            - name: AWS_SHARED_CREDENTIALS_FILE
+              value: /credentials/cloud
+            {{- else if eq $provider "gcp"}}
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /credentials/cloud
+            {{- else if eq $provider "azure" }}
+            - name: AZURE_CREDENTIALS_FILE
+              value: /credentials/cloud
+            {{- else if eq $provider "alibabacloud" }}
+            - name: ALIBABA_CLOUD_CREDENTIALS_FILE
+              value: /credentials/cloud
+            {{- end }}
           {{- end }}
           {{- with .Values.configuration.extraEnvVars }}
           {{- range $key, $value := . }}
@@ -99,8 +142,22 @@ spec:
               value: {{ default "none" $value }}
           {{- end }}
           {{- end }}
+          {{- with .Values.credentials.extraEnvVars }}
+          {{- range $key, $value := . }}
+            - name: {{ default "none" $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "velero.fullname" $ }}
+                  key: {{ default "none" $key }}
+          {{- end }}
+          {{- end }}
+      dnsPolicy: {{ .Values.dnsPolicy }}
+{{- if .Values.initContainers }}
+      initContainers:
+        {{- toYaml .Values.initContainers | nindent 8 }}
+{{- end }}
       volumes:
-        {{- if and .Values.credentials.useSecret (or (eq $provider "aws") (eq $provider "gcp")) }}
+        {{- if and .Values.credentials.useSecret }}
         - name: cloud-credentials
           secret:
             secretName: {{ include "velero.secretName" . }}
@@ -109,6 +166,13 @@ spec:
           emptyDir: {}
         - name: scratch
           emptyDir: {}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+    {{- with .Values.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -117,8 +181,8 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-{{- if .Values.initContainers }}
-      initContainers:
-        {{- toYaml .Values.initContainers | nindent 8 }}
-{{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
 {{- end -}}

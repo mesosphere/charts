@@ -4,7 +4,7 @@
 {{ $drivesPerNode := .Values.drivesPerNode | int }}
 {{ $scheme := "http" }}
 {{- if .Values.tls.enabled }}
-{{ $scheme := "https" }}
+{{ $scheme = "https" }}
 {{ end }}
 {{ $mountPath := .Values.mountPath }}
 {{ $bucketRoot := or ($.Values.bucketRoot) ($.Values.mountPath) }}
@@ -26,11 +26,7 @@ spec:
   publishNotReadyAddresses: true
   clusterIP: None
   ports:
-    {{- if .Values.tls.enabled }}
-    - name: https
-    {{ else }}
-    - name: http
-    {{- end }}
+    - name: {{ $scheme }}
       port: {{ .Values.service.port }}
       protocol: TCP
   selector:
@@ -40,7 +36,7 @@ spec:
 apiVersion: {{ template "minio.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
-  name: {{ template "minio.statefulset.name" . }}
+  name: minio # CUSTOM CHANGE: due to this setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/b43aae5100c10d4f1e58b3710895fd194b23d339/addons/velero/velero.yaml#L112
   labels:
     app: {{ template "minio.name" . }}
     chart: {{ template "minio.chart" . }}
@@ -66,7 +62,6 @@ spec:
 {{ toYaml .Values.podLabels | indent 8 }}
 {{- end }}
       annotations:
-        rollme: {{ randAlphaNum 5 | quote }}
         checksum/secrets: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{- if .Values.podAnnotations }}
@@ -87,96 +82,54 @@ spec:
         - name: {{ .Chart.Name }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-
+          # CUSTOM CHANGE: due to this setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/b43aae5100c10d4f1e58b3710895fd194b23d339/addons/velero/velero.yaml#L112
           command: [ "/bin/sh",
             "-ce",
-            "/usr/bin/docker-entrypoint.sh minio -S {{ .Values.certsPath }} server {{- range $i := until $zoneCount }}{{ $factor := mul $i $nodeCount }}{{ $endIndex := add $factor $nodeCount }}{{ $beginIndex := mul $i $nodeCount }}  {{ $scheme }}://{{ template `minio.statefulset.name` $ }}-{{ `{` }}{{ $beginIndex }}...{{ sub $endIndex 1 }}{{ `}`}}.{{ template `minio.fullname` $ }}-svc.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}{{if (gt $drivesPerNode 1)}}{{ $bucketRoot }}-{{ `{` }}0...{{ sub $drivesPerNode 1 }}{{ `}` }}{{else}}{{ $bucketRoot }}{{end}}{{- end}}{{- template `minio.extraArgs` . }}" ]
+            "/usr/bin/docker-entrypoint.sh minio -S {{ .Values.certsPath }} server {{- range $i := until $zoneCount }}{{ $factor := mul $i $nodeCount }}{{ $endIndex := add $factor $nodeCount }}{{ $beginIndex := mul $i $nodeCount }}  {{ $scheme }}://minio-{{ `{` }}{{ $beginIndex }}...{{ sub $endIndex 1 }}{{ `}`}}.{{ template `minio.fullname` $ }}-svc.{{ $.Release.Namespace }}.svc.{{ $.Values.clusterDomain }}{{if (gt $drivesPerNode 1)}}{{ $bucketRoot }}-{{ `{` }}0...{{ sub $drivesPerNode 1 }}{{ `}` }}{{else}}{{ $bucketRoot }}{{end}}{{- end}}{{- template `minio.extraArgs` . }}" ]
           volumeMounts:
             {{- if $penabled }}
             {{- if (gt $drivesPerNode 1) }}
             {{- range $i := until $drivesPerNode }}
-            - name: {{ .Values.persistence.volumeTemplatePrefix }}-{{ $i }}
+            - name: export-{{ $i }}
               mountPath: {{ $mountPath }}-{{ $i }}
               {{- if and $penabled $subPath }}
               subPath: {{ $subPath }}
               {{- end }}
             {{- end }}
             {{- else }}
-            - name: {{ .Values.persistence.volumeTemplatePrefix }}
+            - name: data # CUSTOM CHANGE: due to setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/master/addons/velero/velero.yaml#L111
               mountPath: {{ $mountPath }}
               {{- if and $penabled $subPath }}
               subPath: {{ $subPath }}
               {{- end }}
             {{- end }}
             {{- end }}
-            {{- if .Values.tls.enabled }}
-            - name: cert-secret-volume
-              mountPath: {{ .Values.certsPath }}
-            {{ end }}
+            {{- include "minio.tlsKeysVolumeMount" . | indent 12 }}
           ports:
-            {{- if .Values.tls.enabled }}
-            - name: https
-            {{ else }}
-            - name: http
-            {{- end }}
+            - name: {{ $scheme }}
               containerPort: 9000
           env:
             - name: MINIO_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "minio.fullname" . }}{{ end }}
+                  name: {{ template "minio.secretName" . }}
                   key: accesskey
             - name: MINIO_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "minio.fullname" . }}{{ end }}
+                  name: {{ template "minio.secretName" . }}
                   key: secretkey
             {{- range $key, $val := .Values.environment }}
             - name: {{ $key }}
               value: {{ $val | quote }}
             {{- end}}
-          livenessProbe:
-            httpGet:
-              path: /minio/health/live
-              {{- if .Values.tls.enabled }}
-              port: https
-              {{ else }}
-              port: http
-              {{- end }}
-              {{- if .Values.tls.enabled }}
-              scheme: HTTPS
-              {{ else }}
-              scheme: HTTP
-              {{- end }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-          readinessProbe:
-            httpGet:
-              path: /minio/health/ready
-              {{- if .Values.tls.enabled }}
-              port: https
-              {{ else }}
-              port: http
-              {{- end }}
-              {{- if .Values.tls.enabled }}
-              scheme: HTTPS
-              {{ else }}
-              scheme: HTTP
-              {{- end }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
     {{- end }}
+{{- include "minio.imagePullSecrets" . | indent 6 }}
     {{- with .Values.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
@@ -188,25 +141,14 @@ spec:
       volumes:
         - name: minio-user
           secret:
-            secretName: {{ if .Values.existingSecret }}{{ .Values.existingSecret }}{{ else }}{{ template "minio.fullname" . }}{{ end }}
-        {{- if .Values.tls.enabled }}
-        - name: cert-secret-volume
-          secret:
-            secretName: {{ .Values.tls.certSecret }}
-            items:
-            - key: {{ .Values.tls.publicCrt }}
-              path: public.crt
-            - key: {{ .Values.tls.privateKey }}
-              path: private.key
-            - key: {{ .Values.tls.publicCrt }}
-              path: CAs/public.crt
-        {{ end }}
+            secretName: {{ template "minio.secretName" . }}
+        {{- include "minio.tlsKeysVolume" . | indent 8 }}
 {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
   {{- if gt $drivesPerNode 1 }}
     {{- range $diskId := until $drivesPerNode}}
     - metadata:
-        name: {{ .Values.persistence.volumeTemplatePrefix }}-{{ $diskId }}
+        name: export-{{ $diskId }}
       spec:
         accessModes: [ {{ $accessMode | quote }} ]
         {{- if $storageClass }}
@@ -218,7 +160,7 @@ spec:
     {{- end }}
   {{- else }}
     - metadata:
-        name: {{ .Values.persistence.volumeTemplatePrefix }}
+        name: data # CUSTOM CHANGE: due to setting this value in the old chart to make PVCs match: https://github.com/mesosphere/kubernetes-base-addons/blob/master/addons/velero/velero.yaml#L111
       spec:
         accessModes: [ {{ $accessMode | quote }} ]
         {{- if $storageClass }}
