@@ -108,9 +108,6 @@ plugin installer template
   volumeMounts:
   - mountPath: /usr/share/elasticsearch/plugins/
     name: plugindir
-  - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-    name: config
-    subPath: elasticsearch.yml
 {{- end -}}
 
 {{- define "elasticsearch.masterService" -}}
