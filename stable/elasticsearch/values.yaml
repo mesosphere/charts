@@ -311,7 +311,7 @@ data:
       # memory: "2048Mi"
     requests:
       cpu: "25m"
-      memory: "1536Mi"
+      memory: "2048Mi"
   priorityClassName: ""
   ## (dict) If specified, apply these annotations to each data Pod
   # podAnnotations:
