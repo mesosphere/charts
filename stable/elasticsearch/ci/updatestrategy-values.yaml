@@ -1,7 +1,13 @@
+---
+client:
+  replicas: 1
+
 data:
+  replicas: 1
   updateStrategy:
     type: RollingUpdate
 
 master:
+  replicas: 2
   updateStrategy:
     type: RollingUpdate

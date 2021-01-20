@@ -1,6 +1,15 @@
 ---
 # Deploy Chart as non-root and unprivileged
 
+client:
+  replicas: 1
+
+master:
+  replicas: 2
+
+data:
+  replicas: 1
+
 chownInitContainer:
   enabled: false
 

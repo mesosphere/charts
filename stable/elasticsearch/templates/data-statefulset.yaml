@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
+  name: "{{ template "elasticsearch.datauname" . }}"
   labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: "{{ template "elasticsearch.datauname" . }}"
+    chart: {{ .Chart.Name }}
     component: "{{ .Values.data.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "elasticsearch.data.fullname" . }}
+  annotations:
+    esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
 spec:
+  serviceName: {{ template "elasticsearch.datauname" . }}-headless
   selector:
     matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      component: "{{ .Values.data.name }}"
-      release: {{ .Release.Name }}
-      role: data
-  serviceName: {{ template "elasticsearch.data.fullname" . }}
+      app: "{{ template "elasticsearch.datauname" . }}"
   replicas: {{ .Values.data.replicas }}
   template:
     metadata:
       labels:
-        app: {{ template "elasticsearch.name" . }}
+        app: {{ template "elasticsearch.datauname" . }}
+        chart: "{{ .Chart.Name }}"
         component: "{{ .Values.data.name }}"
         release: {{ .Release.Name }}
         role: data
@@ -29,9 +29,7 @@ spec:
       {{- if .Values.data.podAnnotations }}
 {{ toYaml .Values.data.podAnnotations | indent 8 }}
       {{- end }}
-      {{- if eq .Values.data.updateStrategy.type "RollingUpdate" }}
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-      {{- end }}
+        configchecksum: {{ template "elasticsearch.datauname" . }}-config . | sha256sum | trunc 63 }}
 {{- end }}
     spec:
       {{- if .Values.schedulerName }}
@@ -129,14 +127,24 @@ spec:
       containers:
       - name: elasticsearch
         env:
-        - name: DISCOVERY_SERVICE
-          value: {{ template "elasticsearch.fullname" . }}-discovery
-        - name: NODE_MASTER
-          value: "false"
-        - name: PROCESSORS
+        - name: discovery.seed_hosts
+          value: {{ template "elasticsearch.masterService" . }}-headless
+        - name: node.name
           valueFrom:
-            resourceFieldRef:
-              resource: limits.cpu
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.name
+          value: "{{ .Values.cluster.name }}"
+        - name: network.host
+          value: "{{ .Values.networkHost }}"
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "true"
+        - name: node.remote_cluster_client
+          value: "true"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.data.heapSize }} -Xmx{{ .Values.data.heapSize }} {{ .Values.cluster.additionalJavaOpts }} {{ .Values.data.additionalJavaOpts }}"
         {{- range $key, $value :=  .Values.cluster.env }}
@@ -163,22 +171,14 @@ spec:
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
           name: data
-        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-          name: config
-          subPath: elasticsearch.yml
+        {{- range $path, $config := .Values.data.esConfig }}
+        - name: config
+          mountPath: /usr/share/elasticsearch/config/{{ $path }}
+          subPath: {{ $path }}
+        {{- end -}}
 {{- if .Values.cluster.plugins }}
         - mountPath: /usr/share/elasticsearch/plugins/
           name: plugindir
-{{- end }}
-{{- if hasPrefix "2." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/logging.yml
-          name: config
-          subPath: logging.yml
-{{- end }}
-{{- if hasPrefix "5." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/log4j2.properties
-          name: config
-          subPath: log4j2.properties
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
         - name: keystore
@@ -217,21 +217,21 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-      - name: config
-        configMap:
-          name: {{ template "elasticsearch.fullname" . }}
+        - name: config
+          configMap:
+            name: {{ template "elasticsearch.datauname" . }}-config
 {{- if .Values.cluster.plugins }}
-      - name: plugindir
-        emptyDir: {}
+        - name: plugindir
+          emptyDir: {}
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
-      - name: keystore
-        secret:
-          secretName: {{ .Values.cluster.keystoreSecret }}
+        - name: keystore
+          secret:
+            secretName: {{ .Values.cluster.keystoreSecret }}
 {{- end }}
   {{- if not .Values.data.persistence.enabled }}
-      - name: data
-        emptyDir: {}
+        - name: data
+          emptyDir: {}
   {{- end }}
   podManagementPolicy: {{ .Values.data.podManagementPolicy }}
   updateStrategy:

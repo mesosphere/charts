@@ -1,31 +1,33 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
+  name: "{{ template "elasticsearch.clientuname" . }}"
   labels:
-    app: {{ template "elasticsearch.name" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: "{{ template "elasticsearch.clientuname" . }}"
+    chart: {{ .Chart.Name }}
     component: "{{ .Values.client.name }}"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  name: {{ template "elasticsearch.client.fullname" . }}
+  annotations:
+    esMajorVersion: "{{ include "elasticsearch.esMajorVersion" . }}"
 spec:
+  serviceName: {{ template "elasticsearch.clientuname" . }}-headless
   selector:
     matchLabels:
-      app: {{ template "elasticsearch.name" . }}
-      component: "{{ .Values.client.name }}"
-      release: {{ .Release.Name }}
+      app: "{{ template "elasticsearch.clientuname" . }}"
   replicas: {{ .Values.client.replicas }}
   template:
     metadata:
       labels:
-        app: {{ template "elasticsearch.name" . }}
+        app: {{ template "elasticsearch.clientuname" . }}
+        chart: "{{ .Chart.Name }}"
         component: "{{ .Values.client.name }}"
         release: {{ .Release.Name }}
+        role: client
+{{- if .Values.client.podAnnotations }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        {{- if .Values.client.podAnnotations }}
 {{ toYaml .Values.client.podAnnotations | indent 8 }}
-        {{- end }}
+{{- end }}
     spec:
       serviceAccountName: {{ template "elasticsearch.serviceAccountName.client" . }}
 {{- if .Values.client.priorityClassName }}
@@ -94,22 +96,28 @@ spec:
 {{- end }}
 {{- end }}
       containers:
-      - name: elasticsearch
+      - name: "{{ template "elasticsearch.name" . }}"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         env:
-        - name: NODE_DATA
-          value: "false"
-{{- if hasPrefix "5." .Values.appVersion }}
-        - name: NODE_INGEST
-          value: "false"
-{{- end }}
-        - name: NODE_MASTER
-          value: "false"
-        - name: DISCOVERY_SERVICE
-          value: {{ template "elasticsearch.fullname" . }}-discovery
-        - name: PROCESSORS
+        - name: discovery.seed_hosts
+          value: {{ template "elasticsearch.masterService" . }}-headless
+        - name: node.name
           valueFrom:
-            resourceFieldRef:
-              resource: limits.cpu
+            fieldRef:
+              fieldPath: metadata.name
+        - name: cluster.name
+          value: "{{ .Values.cluster.name }}"
+        - name: network.host
+          value: "{{ .Values.networkHost }}"
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "false"
+        - name: node.remote_cluster_client
+          value: "true"
         - name: ES_JAVA_OPTS
           value: "-Djava.net.preferIPv4Stack=true -Xms{{ .Values.client.heapSize }} -Xmx{{ .Values.client.heapSize }} {{ .Values.cluster.additionalJavaOpts }} {{ .Values.client.additionalJavaOpts }}"
         {{- range $key, $value :=  .Values.cluster.env }}
@@ -123,13 +131,6 @@ spec:
             path: /_cluster/health
             port: 9200
           initialDelaySeconds: 5
-        livenessProbe:
-          httpGet:
-            path: /_cluster/health?local=true
-            port: 9200
-          initialDelaySeconds: 90
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.securityContext.enabled }}
         securityContext:
           runAsUser: {{ .Values.securityContext.runAsUser }}
@@ -140,22 +141,14 @@ spec:
         - containerPort: 9300
           name: transport
         volumeMounts:
-        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-          name: config
-          subPath: elasticsearch.yml
+        {{- range $path, $config := .Values.client.esConfig }}
+          - name: config
+            mountPath: /usr/share/elasticsearch/config/{{ $path }}
+            subPath: {{ $path }}
+        {{- end -}}
 {{- if .Values.cluster.plugins }}
         - mountPath: /usr/share/elasticsearch/plugins/
           name: plugindir
-{{- end }}
-{{- if hasPrefix "2." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/logging.yml
-          name: config
-          subPath: logging.yml
-{{- end }}
-{{- if hasPrefix "5." .Values.appVersion }}
-        - mountPath: /usr/share/elasticsearch/config/log4j2.properties
-          name: config
-          subPath: log4j2.properties
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
         - name: keystore
@@ -193,15 +186,15 @@ spec:
       {{- end }}
 {{- end }}
       volumes:
-      - name: config
-        configMap:
-          name: {{ template "elasticsearch.fullname" . }}
+        - name: config
+          configMap:
+            name: {{ template "elasticsearch.clientuname" . }}-config
 {{- if .Values.cluster.plugins }}
-      - name: plugindir
-        emptyDir: {}
+        - name: plugindir
+          emptyDir: {}
 {{- end }}
 {{- if .Values.cluster.keystoreSecret }}
-      - name: keystore
-        secret:
-          secretName: {{ .Values.cluster.keystoreSecret }}
+        - name: keystore
+          secret:
+            secretName: {{ .Values.cluster.keystoreSecret }}
 {{- end }}

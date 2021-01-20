@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "elasticsearch.datauname" . }}-config
+  labels:
+    app: {{ template "elasticsearch.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+{{- range $path, $config := .Values.data.esConfig }}
+  {{ $path }}: |
+{{ $config | indent 4 -}}
+{{- end -}}
+
+{{- if .Values.data.hooks.drain.enabled }}
+  data-pre-stop-hook.sh: |-
+    #!/bin/bash
+    exec &> >(tee -a "/var/log/elasticsearch-hooks.log")
+    NODE_NAME=${HOSTNAME}
+    echo "Prepare to migrate data of the node ${NODE_NAME}"
+    echo "Move all data from node ${NODE_NAME}"
+    curl -s -XPUT -H 'Content-Type: application/json' '{{ template "elasticsearch.clientuname" . }}:9200/_cluster/settings' -d "{
+      \"transient\" :{
+          \"cluster.routing.allocation.exclude._name\" : \"${NODE_NAME}\"
+      }
+    }"
+    echo ""
+    while true ; do
+      echo -e "Wait for node ${NODE_NAME} to become empty"
+      SHARDS_ALLOCATION=$(curl -s -XGET 'http://{{ template "elasticsearch.clientuname" . }}:9200/_cat/shards')
+      if ! echo "${SHARDS_ALLOCATION}" | grep -E "${NODE_NAME}"; then
+        break
+      fi
+      sleep 1
+    done
+    echo "Node ${NODE_NAME} is ready to shutdown"
+  data-post-start-hook.sh: |-
+    #!/bin/bash
+    exec &> >(tee -a "/var/log/elasticsearch-hooks.log")
+    NODE_NAME=${HOSTNAME}
+    CLUSTER_SETTINGS=$(curl -s -XGET "http://{{ template "elasticsearch.clientuname" . }}:9200/_cluster/settings")
+    if echo "${CLUSTER_SETTINGS}" | grep -E "${NODE_NAME}"; then
+      echo "Activate node ${NODE_NAME}"
+      curl -s -XPUT -H 'Content-Type: application/json' "http://{{ template "elasticsearch.clientuname" . }}:9200/_cluster/settings" -d "{
+        \"transient\" :{
+            \"cluster.routing.allocation.exclude._name\" : null
+        }
+      }"
+    fi
+    echo "Node ${NODE_NAME} is ready to be used"
+{{- else }}
+  {{- if .Values.data.hooks.preStop }}
+  data-pre-stop-hook.sh: |-
+{{ tpl .Values.data.hooks.preStop . | indent 4 }}
+  {{- end }}
+  {{- if .Values.data.hooks.postStart }}
+  data-post-start-hook.sh: |-
+{{ tpl .Values.data.hooks.postStart . | indent 4 }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "elasticsearch.masteruname" . }}-config
+  labels:
+    app: {{ template "elasticsearch.fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+{{- range $path, $config := .Values.master.esConfig }}
+  {{ $path }}: |
+{{ $config | indent 4 -}}
+{{- end -}}
+
+{{- if .Values.master.hooks.preStop }}
+  master-pre-stop-hook.sh: |-
+{{ tpl .Values.master.hooks.preStop . | indent 4 }}
+{{- end }}
+{{- if .Values.master.hooks.postStart }}
+  master-post-start-hook.sh: |-
+{{ tpl .Values.master.hooks.postStart . | indent 4 }}
+{{- end }}

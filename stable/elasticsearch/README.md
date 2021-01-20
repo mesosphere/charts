@@ -3,14 +3,6 @@
 This chart uses a standard Docker image of Elasticsearch (docker.elastic.co/elasticsearch/elasticsearch-oss) and uses a service pointing to the master's transport port for service discovery.
 Elasticsearch does not communicate with the Kubernetes API, hence no need for RBAC permissions.
 
-## This Helm chart is deprecated
-As mentioned in #10543 this chart has been deprecated in favour of the official [Elastic Helm Chart](https://github.com/elastic/helm-charts/tree/master/elasticsearch).
-We have made steps towards that goal by producing a [migration guide](https://github.com/elastic/helm-charts/blob/master/elasticsearch/examples/migration/README.md) to help people switch the management of their clusters over to the new Charts.
-The Elastic Helm Chart supports version 6 and 7 of Elasticsearch and it was decided it would be easier for people to upgrade after migrating to the Elastic Helm Chart because it's upgrade process works better.
-During deprecation process we want to make sure that Chart will do what people are using this chart to do.
-Please look at the Elastic Helm Charts and if you see anything missing from please [open an issue](https://github.com/elastic/helm-charts/issues/new/choose) to let us know what you need.
-The Elastic Chart repo is also in [Helm Hub](https://hub.helm.sh).
-
 ## Warning for previous users
 If you are currently using an earlier version of this Chart you will need to redeploy your Elasticsearch clusters. The discovery method used here is incompatible with using RBAC.
 If you are upgrading to Elasticsearch 6 from the 5.5 version used in this chart before, please note that your cluster needs to do a full cluster restart.
@@ -114,7 +106,6 @@ The following table lists the configurable parameters of the elasticsearch chart
 | `client.ingress.annotations`         | Client Ingress annotations                                          | `{}`                                                |
 | `client.ingress.hosts`               | Client Ingress Hostnames                                            | `[]`                                                |
 | `client.ingress.tls`                 | Client Ingress TLS configuration                                    | `[]`                                                |
-| `client.exposeTransportPort`         | Expose transport port 9300 on client service (ClusterIP)            | `false`                                             |
 | `master.initResources`               | Master initContainer resources requests & limits                    | `{}`                                                |
 | `master.additionalJavaOpts`          | Parameters to be added to `ES_JAVA_OPTS` environment variable for master | `""`                                           |
 | `master.exposeHttp`                  | Expose http port 9200 on master Pods for monitoring, etc            | `false`                                             |

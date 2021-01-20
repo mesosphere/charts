@@ -108,7 +108,94 @@ plugin installer template
   volumeMounts:
   - mountPath: /usr/share/elasticsearch/plugins/
     name: plugindir
-  - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
-    name: config
-    subPath: elasticsearch.yml
+{{- end -}}
+
+{{- define "elasticsearch.masterService" -}}
+{{- if empty .Values.masterService -}}
+{{- if empty .Values.fullnameOverride -}}
+{{- if empty .Values.nameOverride -}}
+{{ .Values.cluster.name }}-master
+{{- else -}}
+{{ .Values.nameOverride }}-master
+{{- end -}}
+{{- else -}}
+{{ .Values.fullnameOverride }}
+{{- end -}}
+{{- else -}}
+{{ .Values.masterService }}
+{{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.clientuname" -}}
+{{- if empty .Values.fullnameOverride -}}
+{{- if empty .Values.nameOverride -}}
+{{ template "elasticsearch.fullname" . }}-client
+{{- else -}}
+{{ .Values.nameOverride }}-client
+{{- end -}}
+{{- else -}}
+{{ .Values.fullnameOverride }}
+{{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.datauname" -}}
+{{- if empty .Values.fullnameOverride -}}
+{{- if empty .Values.nameOverride -}}
+{{ template "elasticsearch.fullname" . }}-data
+{{- else -}}
+{{ .Values.nameOverride }}-data
+{{- end -}}
+{{- else -}}
+{{ .Values.fullnameOverride }}
+{{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.masteruname" -}}
+{{- if empty .Values.fullnameOverride -}}
+{{- if empty .Values.nameOverride -}}
+{{ template "elasticsearch.fullname" . }}-master
+{{- else -}}
+{{ .Values.nameOverride }}-master
+{{- end -}}
+{{- else -}}
+{{ .Values.fullnameOverride }}
+{{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.masterEndpoints" -}}
+{{- $replicas := int (.Values.master.replicas) }}
+{{- $uname := ( include "elasticsearch.masteruname" .) }}
+  {{- range $i, $e := untilStep 0 $replicas 1 -}}
+{{ $uname }}-{{ $i }},
+  {{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.clientEndpoints" -}}
+{{- $replicas := int (.Values.client.replicas) }}
+{{- $uname := ( include "elasticsearch.clientuname" .) }}
+  {{- range $i, $e := untilStep 0 $replicas 1 -}}
+{{ $uname }}-{{ $i }},
+  {{- end -}}
+{{- end -}}
+
+{{- define "elasticsearch.dataEndpoints" -}}
+{{- $replicas := int (.Values.data.replicas) }}
+{{- $uname := ( include "elasticsearch.datauname" .) }}
+  {{- range $i, $e := untilStep 0 $replicas 1 -}}
+{{ $uname }}-{{ $i }},
+  {{- end -}}
+{{- end -}}
+
+
+{{- define "elasticsearch.esMajorVersion" -}}
+{{- if .Values.esMajorVersion -}}
+{{ .Values.esMajorVersion }}
+{{- else -}}
+{{- $version := int (index (.Values.image.tag | splitList ".") 0) -}}
+  {{- if and (contains "docker.elastic.co/elasticsearch/elasticsearch" .Values.image) (not (eq $version 0)) -}}
+{{ $version }}
+  {{- else -}}
+8
+  {{- end -}}
+{{- end -}}
 {{- end -}}
