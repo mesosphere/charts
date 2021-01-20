@@ -33,12 +33,7 @@ spec:
             runAsNonRoot: true
           imagePullPolicy: IfNotPresent
           resources:
-            limits:
-              cpu: 200m
-              memory: 256Mi
-            requests:
-              cpu: 50m
-              memory: 128Mi
+{{ toYaml .Values.operator.resources | trim | indent 12 }}
           env:
             - name: WATCH_NAMESPACE
               value: {{.Release.Namespace | quote}}
@@ -51,4 +46,4 @@ spec:
             - name: OPERATOR_NAME
               value: {{.Release.Namespace | quote}}
             - name: WAIT_FOR_RESOURCES_TIMEOUT
-              value: {{.Values.global.waitForResourcesTimeout | quote}}
+              value: {{.Values.waitForResourcesTimeout | quote}}
