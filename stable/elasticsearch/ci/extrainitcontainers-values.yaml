@@ -1,6 +1,7 @@
 ---
 
 # TODO testing seems to fail with downloading these plugins
+
 #extraInitContainers: |
 #  - name: "plugin-install-ingest-attachment"
 #    image: "docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.1"
