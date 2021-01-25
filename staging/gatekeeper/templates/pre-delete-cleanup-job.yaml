@@ -3,23 +3,26 @@ kind: Job
 metadata:
   name: {{ include "gatekeeper.fullname" . }}-cleanup
   labels:
-    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
   annotations:
     helm.sh/hook: pre-delete
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 spec:
   template:
     spec:
-      serviceAccount: {{ template "gatekeeper.serviceAccountName" . }}
-      {{- if or (.Values.securityContext.runAsUser) (.Values.securityContext.fsGroup) }}
+      serviceAccount: gatekeeper-admin 
       securityContext:
-        {{- if .Values.securityContext.runAsUser }}
-        runAsUser: {{ .Values.securityContext.runAsUser }}
-        {{- end }}
-        {{- if .Values.securityContext.fsGroup }}
-        fsGroup: {{ .Values.securityContext.fsGroup }}
-        {{- end }}
-      {{- end }}
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - all
+        runAsGroup: 999
+        runAsNonRoot: true
+        runAsUser: 1000
       containers:
       - name: cleanup
         image: {{ .Values.kubectlImage }}
@@ -27,6 +30,6 @@ spec:
         - bash
         args:
         - -cxe
-        - 'kubectl delete --all constrainttemplates.templates.gatekeeper.sh && kubectl delete --all configs.config.gatekeeper.sh && kubectl delete crds configs.config.gatekeeper.sh constrainttemplates.templates.gatekeeper.sh'
+        - 'kubectl delete --all configs.config.gatekeeper.sh && kubectl delete --all constrainttemplates.templates.gatekeeper.sh && kubectl delete --all constraintpodstatuses.status.gatekeeper.sh && kubectl delete --all constrainttemplatepodstatuses.status.gatekeeper.sh && kubectl delete crds configs.config.gatekeeper.sh constrainttemplates.templates.gatekeeper.sh constraintpodstatuses.status.gatekeeper.sh constrainttemplatepodstatuses.status.gatekeeper.sh'
       restartPolicy: Never
   backoffLimit: 3

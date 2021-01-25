@@ -3,7 +3,11 @@ kind: Pod
 metadata:
   name: {{ include "gatekeeper.fullname" . }}-test-connection
   labels:
-    {{- include "gatekeeper.commonLabels" . | nindent 4 }}
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
   annotations:
     helm.sh/hook: test-success
 spec:
@@ -11,5 +15,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args:  ['{{ include "gatekeeper.fullname" . }}:{{ .Values.service.port }}']
+      args:  ['gatekeeper-kubeaddons:{{ .Values.service.port }}']
   restartPolicy: Never

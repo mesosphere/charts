@@ -32,46 +32,18 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{/*
-Add Helm metadata to selector labels specifically for deployments/daemonsets/statefulsets/\s.
-*/}}
-{{- define "gatekeeper.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "gatekeeper.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
-{{/*
 Common labels
 */}}
-{{- define "gatekeeper.commonLabels" -}}
-{{- include "gatekeeper.selectorLabels" . }}
+{{- define "gatekeeper.labels" -}}
+app.kubernetes.io/name: {{ include "gatekeeper.name" . }}
 helm.sh/chart: {{ include "gatekeeper.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "gatekeeper.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-{{ default (include "gatekeeper.fullname" .) .Values.serviceAccount.name }}
-{{- else -}}
-{{ default "default" .Values.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the image tag to use
-*/}}
-{{- define "gatekeeper.imageTag" -}}
-{{- if .Values.image.tag -}}
-{{ .Values.image.tag }}
-{{- else -}}
-v{{ .Chart.AppVersion }}
-{{- end -}}
-{{- end -}}
 
 {{- define "gatekeeper.selfSignedIssuer" -}}
 {{ printf "%s-selfsign" (include "gatekeeper.fullname" .) }}
