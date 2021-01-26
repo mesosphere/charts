@@ -1,5 +1,8 @@
 {{if not (.Capabilities.APIVersions.Has "config.gatekeeper.sh/v1alpha1") }}
-{{.Files.Get "crds/crds.yaml"}}
+{{- range $path, $bytes := .Files.Glob "crds/*.yaml" }}
+{{ $.Files.Get $path }}
+---
+{{- end }}
 {{ end }}
 ---
 apiVersion: v1
@@ -12,8 +15,9 @@ metadata:
     "helm.sh/hook-weight": "-5"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 data:
-  crds.yaml: |-
-{{.Files.Get "crds/crds.yaml" | printf "%s" | indent 4}}
+{{- range $path, $bytes := .Files.Glob "crds/*.yaml" }}
+  {{ $path | trimPrefix "crds/" }}: {{ $.Files.Get $path  | quote }}
+{{- end }}
 ---
 apiVersion: batch/v1
 kind: Job
