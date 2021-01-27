@@ -197,6 +197,7 @@ grafana:
 kommander-ui:
   showCost: true
   impersonateUser: true
+  showCD: true
   ingress:
     enabled: true
     traefikFrontendRuleType: PathPrefixStrip
