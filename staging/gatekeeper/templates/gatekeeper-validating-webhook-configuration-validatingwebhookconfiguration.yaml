@@ -148,7 +148,7 @@ metadata:
     heritage: '{{ .Release.Service }}'
     release: '{{ .Release.Name }}'
 spec:
-  secretName: {{ template "gatekeeper.fullname" . }}-cert
+  secretName: gatekeeper-webhook-server-cert
   duration: 8760h # 1y
   issuerRef:
     name: {{ include "gatekeeper.rootCAIssuer" . }}
@@ -167,7 +167,7 @@ metadata:
     gatekeeper.sh/system: "yes"
     heritage: '{{ .Release.Service }}'
     release: '{{ .Release.Name }}'
-  name: {{ template "gatekeeper.fullname" . }}-cert
+  name: gatekeeper-webhook-server-cert
 type: kubernetes.io/tls
 data:
   tls.crt: {{ b64enc $cert.Cert }}
