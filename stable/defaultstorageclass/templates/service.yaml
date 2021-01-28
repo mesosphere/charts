@@ -15,7 +15,7 @@ spec:
     port: 8443
     targetPort: https
   selector:
-    app: dstorageclass-controller-manager
+    app: defaultstorageclass
     control-plane: controller-manager
 status:
   loadBalancer: {}
@@ -32,7 +32,7 @@ spec:
   - port: 443
     targetPort: 443
   selector:
-    app: dstorageclass-controller-manager  
+    app: defaultstorageclass  
     control-plane: controller-manager
 status:
   loadBalancer: {}
