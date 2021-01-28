@@ -34,7 +34,7 @@ spec:
       serviceAccountName: gatekeeper-crds
       containers:
         - name: gatekeeper-crds
-          image: "bitnami/kubectl:1.16.2"
+          image: "bitnami/kubectl:1.19.7"
           volumeMounts:
             - name: gatekeeper-crds
               mountPath: /etc/gatekeeper-crds
