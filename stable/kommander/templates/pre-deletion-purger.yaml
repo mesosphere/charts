@@ -76,7 +76,7 @@ spec:
       serviceAccountName: purger
       containers:
         - name: purger
-          image: "bitnami/kubectl:1.19.2"
+          image: "bitnami/kubectl:1.19.7"
           volumeMounts:
             - name: purger-config
               mountPath: /purge.sh
