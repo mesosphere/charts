@@ -33,7 +33,7 @@ spec:
       serviceAccountName: v9-to-v11-crds-part2
       containers:
         - name: v9-to-v11-crds-part2
-          image: "bitnami/kubectl:1.16.2"
+          image: "bitnami/kubectl:1.19.7"
           volumeMounts:
             - name: crds
               mountPath: /etc/crds
