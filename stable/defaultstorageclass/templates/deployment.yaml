@@ -4,6 +4,7 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
+    app: defaultstorageclass  
     control-plane: controller-manager
   name: dstorageclass-controller-manager
   namespace: {{ .Release.Namespace }}
@@ -11,12 +12,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
+      app: defaultstorageclass    
       control-plane: controller-manager
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
+        app: defaultstorageclass      
         control-plane: controller-manager
     spec:
       containers:
