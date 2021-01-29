@@ -42,7 +42,7 @@ metadata:
   name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
 data:
   run.sh: |-
-    #!/bin/bash
+    #!/bin/sh
     set -o nounset
     set -o errexit
     set -o pipefail
