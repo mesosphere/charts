@@ -32,10 +32,10 @@ mesosphereResources:
     name: "Kubernetes / Compute Resources / Cluster"
     cronJob:
       name: set-grafana-home-dashboard
-      image: dwdraju/alpine-curl-jq
+      image: apteno/alpine-jq:2021-01-19
   hooks:
     grafana:
-      image: dwdraju/alpine-curl-jq
+      image: apteno/alpine-jq:2021-01-19
       secretKeyRef: ops-portal-credentials
       # serviceURL is deprecated, do not use
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
