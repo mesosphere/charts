@@ -12,7 +12,7 @@ For issues and support for Helm and Charts see [Support Channels](CONTRIBUTING.m
 ## How do I install these charts
 
 To add these charts for your local client, run `helm repo add`:
-
+sdafadsfasdfsd
 ```bash
 $ helm repo add mesosphere-staging https://mesosphere.github.io/charts/staging
 "mesosphere-staging" has been added to your repositories
