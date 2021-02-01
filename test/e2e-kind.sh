@@ -204,7 +204,7 @@ install_helm() {
         docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
             https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
                 | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
-                && helm init --debug --history-max 10 --service-account tiller --wait"
+                && helm init --debug --history-max 10 --service-account tiller --stable-repo-url https://mesosphere.github.io/charts/stable --wait"
     else
         echo 'Installing helm v3...'
         docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
