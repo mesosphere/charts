@@ -4,7 +4,7 @@ dependencies:
   - name: kommander-thanos
     version: "0.1.16"
   - name: kubeaddons-catalog
-    version: "0.1.15"
+    version: "0.1.16"
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-federation
