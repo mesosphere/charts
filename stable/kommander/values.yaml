@@ -73,10 +73,10 @@ grafana:
     name: "Kubernetes / Compute Resources / Cluster [Global]"
     cronJob:
       name: set-grafana-home-dashboard
-      image: dwdraju/alpine-curl-jq
+      image: apteno/alpine-jq:2021-01-19
 
   hooks:
-    image: dwdraju/alpine-curl-jq
+    image: apteno/alpine-jq:2021-01-19
     secretKeyRef: ops-portal-username
 
   ## Do not deploy default dashboards.
