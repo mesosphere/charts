@@ -48,8 +48,10 @@ cost-analyzer:
   #     - ""
   #   tls: []
 
-  # Define persistence volume for cost-analyzer
+  # Define persistence volume for cost-analyzer, more information at https://github.com/kubecost/docs/blob/master/storage.md
   persistentVolume:
+    # default size is increased to 32Gi in 1.72.0, but breaks upgrades if automatic disk resize not supported
+    # https://github.com/kubecost/cost-analyzer-helm-chart/issues/507
     size: 0.2Gi
     # Note that setting this to false means configurations will be wiped out on pod restart.
     enabled: true
