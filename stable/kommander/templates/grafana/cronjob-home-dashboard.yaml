@@ -32,7 +32,7 @@ spec:
               - sh
               - "-c"
               - |
-                /bin/bash <<'EOF' 
+                /bin/sh <<'EOF' 
                 set -o nounset
                 set -o errexit
                 set -o pipefail
