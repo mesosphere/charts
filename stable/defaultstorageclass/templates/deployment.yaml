@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   creationTimestamp: null
   labels:
-    app: defaultstorageclass  
+    app: defaultstorageclass
     control-plane: controller-manager
   name: dstorageclass-controller-manager
   namespace: {{ .Release.Namespace }}
@@ -12,14 +12,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: defaultstorageclass    
+      app: defaultstorageclass
       control-plane: controller-manager
   strategy: {}
   template:
     metadata:
       creationTimestamp: null
       labels:
-        app: defaultstorageclass      
+        app: defaultstorageclass
         control-plane: controller-manager
     spec:
       containers:
@@ -27,8 +27,9 @@ spec:
         - --secure-listen-address=0.0.0.0:8443
         - --upstream=http://127.0.0.1:8080/
         - --logtostderr=true
+        - --ignore-paths=/metrics
         - --v=10
-        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.4.0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.8.0
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443
