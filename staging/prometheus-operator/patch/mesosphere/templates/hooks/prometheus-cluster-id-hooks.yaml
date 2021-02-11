@@ -9,7 +9,7 @@ metadata:
     app: {{ template "kube-prometheus-stack.name" . }}-prometheus
 {{ include "kube-prometheus-stack.labels" . | indent 4 }}
   annotations:
-    helm.sh/hook: pre-install
+    helm.sh/hook: pre-install,pre-delete
     helm.sh/hook-weight: "-5"
     helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
 ---
