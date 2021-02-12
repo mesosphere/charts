@@ -40,4 +40,4 @@ Push this release branch to the m/charts repo. Then, branch off the release bran
 
 **Note**: If you have forked m/charts, it may be helpful to run through these steps on your fork first to double check that the process works as expected, for peace of mind and to lower the risk of something going wrong in our charts repo.
 
-Once the patched chart version is published, you can open up a PR in `kubeaddons-kommander` to bump the addon revision and pull in the patch. There are docs on how to patch the addon in the `kubeaddons-kommander` repo's `README`.
+Once the patched chart version is published, you can open up a PR in `kubeaddons-kommander` to bump the addon revision and pull in the patch. There are docs on how to patch the addon in the `kubeaddons-kommander` repo's [`README`](https://github.com/mesosphere/kubeaddons-kommander#dealing-with-previously-released-stable-versions).
