@@ -38,6 +38,12 @@ This allows us to backport and create patch releases. When backporting, you shou
 
 Push this release branch to the m/charts repo. Then, branch off the release branch to backport your changes. Open up a PR against the release branch. When the PR is merged, you are ready to publish the new patch chart version. There is a `make publish` target that runs the necessary `helm` commands to package and index the new chart. Making sure you are on the release branch, run `make publish`. This will push a commit to the `gh-pages` branch with the new chart tar file and the updated index.yaml. Double check this has been done properly by checking out the `gh-pages` branch, and that no other charts have been modified or deleted. It is expected to see timestamp changes across the yaml file as it is re-indexed.
 
+If for any reason the publish results in a bad commit, you can revert the commit by getting the SHA of the previous commit on `gh-pages` prior to the latest push and running:
+```bash
+git reset --hard <SHA>
+git push --force origin/gh-pages
+```
+
 **Note**: If you have forked m/charts, it may be helpful to run through these steps on your fork first to double check that the process works as expected, for peace of mind and to lower the risk of something going wrong in our charts repo.
 
 Once the patched chart version is published, you can open up a PR in `kubeaddons-kommander` to bump the addon revision and pull in the patch. There are docs on how to patch the addon in the `kubeaddons-kommander` repo's [`README`](https://github.com/mesosphere/kubeaddons-kommander#dealing-with-previously-released-stable-versions).
