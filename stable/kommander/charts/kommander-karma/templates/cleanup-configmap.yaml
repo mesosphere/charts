@@ -22,6 +22,6 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ .Values.kommanderKarmaConfigMap }}
+            - kubectl delete configmap --ignore-not-found {{ .Values.kommanderKarmaConfigMap }}
       restartPolicy: OnFailure
 {{- end }}
