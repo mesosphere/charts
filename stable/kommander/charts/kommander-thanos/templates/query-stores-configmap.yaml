@@ -71,7 +71,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ . }}
+            - kubectl delete configmap --ignore-not-found {{ . }}
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}
