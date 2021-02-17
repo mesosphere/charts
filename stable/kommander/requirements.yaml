@@ -20,7 +20,7 @@ dependencies:
     repository: "https://mesosphere.github.io/kommander/charts"
     condition: kommander-ui.enabled
   - name: kubecost
-    version: "0.1.12"
+    version: "0.1.16"
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kubecost.enabled
   - name: grafana
