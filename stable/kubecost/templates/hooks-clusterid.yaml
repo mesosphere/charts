@@ -141,7 +141,7 @@ spec:
           command:
             - /bin/sh
             - -c
-            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }}
+            - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }} --ignore-not-found
       restartPolicy: OnFailure
 {{- end }}
 {{- end }}
