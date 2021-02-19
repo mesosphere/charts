@@ -29,7 +29,7 @@ The changes include:
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install stable/kibana --name my-release
+$ helm install my-release stable/kibana
 ```
 
 The command deploys kibana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -41,14 +41,14 @@ NOTE : We notice that lower resource constraints given to the chart + plugins ar
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+$ helm remove my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-The following table lists the configurable parameters of the kibana chart and their default values.
+We keep the following table for historical reasons, since we realize this table may not be up-to-date with the latest configurations.
 
 | Parameter                                  | Description                                                            | Default                               |
 | ------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------- |
