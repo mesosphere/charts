@@ -57,6 +57,9 @@ cost-analyzer:
     enabled: true
     # storageClass: "-"
 
+  podSecurityPolicy:
+    enabled: false
+
   prometheus:
     nodeExporter:
       enabled: false
