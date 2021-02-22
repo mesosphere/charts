@@ -1,4 +1,4 @@
-# kibana
+# kibana - D2IQ
 
 [kibana](https://github.com/elastic/kibana) is your window into the Elastic Stack. Specifically, it's an open source (Apache Licensed), browser-based analytics and search dashboard for Elasticsearch.
 
@@ -11,13 +11,25 @@ $ helm install stable/kibana
 ## Introduction
 
 This chart bootstraps a kibana deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+ 
+This chart is a combination of the upstream chart found at [here](https://github.com/elastic/helm-charts/tree/master/kibana) and the previous official [community chart](https://github.com/helm/charts/tree/master/stable/kibana).
+The community chart has since been deprecated. 
+At D2IQ, we have found certain important tooling and ease of use has since been removed or refactored from the community version.
+To allow an easy transition from the community chart, while taking advantage of new changes from the now official chart, we have created our own new chart here.
+
+The changes include:
+- Refactored how dashboards are defined, but preserved the option of enabling dashboard imports easily.
+- Changed the default kibana config file values. 
+- Changed assuming major version of '7', previous versions are not likely to be supported on this chart.
+- Removed tests that expect elastic-search.
+
 
 ## Installing the Chart
 
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install stable/kibana --name my-release
+$ helm install my-release stable/kibana
 ```
 
 The command deploys kibana on the Kubernetes cluster in the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -29,14 +41,14 @@ NOTE : We notice that lower resource constraints given to the chart + plugins ar
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+$ helm remove my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
 
 ## Configuration
 
-The following table lists the configurable parameters of the kibana chart and their default values.
+We keep the following table for historical reasons, since we realize this table may not be up-to-date with the latest configurations.
 
 | Parameter                                  | Description                                                            | Default                               |
 | ------------------------------------------ | ---------------------------------------------------------------------- | ------------------------------------- |
@@ -143,9 +155,3 @@ $ helm install stable/kibana --name my-release -f values.yaml
 ## Dasboard import
 
 -   A dashboard for dashboardImport.dashboards can be a JSON or a download url to a JSON file.
-
-## Upgrading
-
-### To 2.3.0
-
-The default value of `elasticsearch.url` (for kibana < 6.6) has been removed in favor of `elasticsearch.hosts` (for kibana >= 6.6).
