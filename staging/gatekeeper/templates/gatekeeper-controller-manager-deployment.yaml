@@ -47,13 +47,15 @@ spec:
               topologyKey: kubernetes.io/hostname
             weight: 100
       containers:
-      - args:
+      - name: manager
+        args:
         - --port={{ .Values.port }}
         - --logtostderr
         - --emit-admission-events={{ .Values.emitAdmissionEvents }}
         - --log-level={{ .Values.logLevel }}
         - --exempt-namespace={{ .Release.Namespace }}
         - --operation=webhook
+        - --enable-mutation={{ .Values.mutations.enable }}
         {{- if .Values.webhook.certManager.enabled }}
         - --disable-cert-rotation
         {{- end }} 
@@ -69,13 +71,24 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        {{- if .Values.proxySettings.noProxy }}
+        - name: NO_PROXY
+          value: {{ .Values.proxySettings.noProxy }}
+        {{- end }}
+        {{- if .Values.proxySettings.httpProxy }}
+        - name: HTTP_PROXY
+          value: {{ .Values.proxySettings.httpProxy }}
+        {{- end }}
+        {{- if .Values.proxySettings.httpsProxy }}
+        - name: HTTPS_PROXY
+          value: {{ .Values.proxySettings.httpsProxy }}
+        {{- end }}
         image: '{{ .Values.image.repository }}:{{ .Values.image.release }}'
         imagePullPolicy: '{{ .Values.image.pullPolicy }}'
         livenessProbe:
           httpGet:
             path: /healthz
             port: 9090
-        name: manager
         ports:
         - containerPort: {{ .Values.port }}
           name: webhook-server

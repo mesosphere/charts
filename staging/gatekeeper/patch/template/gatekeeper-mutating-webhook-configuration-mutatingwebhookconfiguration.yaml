@@ -1,0 +1,177 @@
+{{- if not .Values.disableValidatingWebhook }}
+{{- $serviceName := "gatekeeper-webhook-service" }}
+{{- $ca := genCA ( printf "%s-ca" $serviceName ) 3650 }}
+{{- $altName1 := printf "%s.%s" $serviceName .Release.Namespace }}
+{{- $altName2 := printf "%s.%s.svc" $serviceName .Release.Namespace }}
+{{- $cert := genSignedCert $serviceName nil (list $altName1 $altName2) 3650 $ca }}
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+  annotations:
+  {{- if .Values.webhook.certManager.enabled }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace (include "gatekeeper.rootCACertificate" .) | quote }}
+  {{- end }}  
+  name: gatekeeper-validating-webhook-configuration
+webhooks:
+- clientConfig:
+    {{ if not .Values.webhook.certManager.enabled }}
+    caBundle: {{ b64enc $ca.Cert }}
+    {{ end }}
+    service:
+      name: gatekeeper-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /v1/admit
+  failurePolicy: {{ .Values.admissionControllerFailurePolicy }}
+  name: validation.gatekeeper.sh
+  namespaceSelector:
+    matchExpressions:
+    - key: admission.gatekeeper.sh/ignore
+      operator: DoesNotExist
+    {{- with .Values.admissionControllerNamespaceSelector.matchExpressions }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
+ {{- if semverCompare ">=1.15.0-0" .Capabilities.KubeVersion.GitVersion }}
+  objectSelector:
+    matchExpressions:
+    - {key: app.kubernetes.io/name, operator: NotIn, values: [ {{ include "gatekeeper.name" . | quote }} ]}
+    - {key: app.kubernetes.io/instance, operator: NotIn, values: [ {{ .Release.Name | quote }}]}
+    {{- with .Values.admissionControllerObjectSelector.matchExpressions }}
+    {{ toYaml . | nindent 4 }}
+    {{ end }}
+    {{- with .Values.admissionControllerObjectSelector.matchLabels }}
+    matchLabels:
+    {{ toYaml . | nindent 4 }}
+  {{ end }}
+ {{- end }} 
+  rules:
+  - apiGroups:
+    - '*'
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - '*'
+  sideEffects: None
+  timeoutSeconds: 3
+- clientConfig:
+    {{ if not .Values.webhook.certManager.enabled }}
+    caBundle: {{ b64enc $ca.Cert }}
+    {{ end }}
+    service:
+      name: gatekeeper-webhook-service
+      namespace: {{ .Release.Namespace }}
+      path: /v1/admitlabel
+  failurePolicy: Fail
+  name: check-ignore-label.gatekeeper.sh
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - '*'
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - namespaces
+  sideEffects: None
+  timeoutSeconds: 3
+---
+{{ if .Values.webhook.certManager.enabled }}
+---
+# Create a selfsigned Issuer, in order to create a root CA certificate for
+# signing webhook serving certificates
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "gatekeeper.selfSignedIssuer" . }}
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+spec:
+  selfSigned: {}
+---
+# Generate a CA Certificate used to sign certificates for the webhook
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "gatekeeper.rootCACertificate" . }}
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+spec:
+  secretName: {{ include "gatekeeper.rootCACertificate" . }}
+  duration: 43800h # 5y
+  issuerRef:
+    name: {{ include "gatekeeper.selfSignedIssuer" . }}
+  commonName: "ca.webhook.gatekeeper"
+  isCA: true
+---
+# Create an Issuer that uses the above generated CA certificate to issue certs
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "gatekeeper.rootCAIssuer" . }}
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+spec:
+  ca:
+    secretName: {{ include "gatekeeper.rootCACertificate" . }}
+---
+# Finally, generate a serving certificate for the webhook to use
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "gatekeeper.servingCertificate" . }}
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+spec:
+  secretName: gatekeeper-webhook-server-cert
+  duration: 8760h # 1y
+  issuerRef:
+    name: {{ include "gatekeeper.rootCAIssuer" . }}
+  dnsNames:
+  - gatekeeper-webhook-service
+  - gatekeeper-webhook-service.{{ .Release.Namespace }}
+  - gatekeeper-webhook-service.{{ .Release.Namespace }}.svc
+  - gatekeeper-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+{{ else }}
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+  name: gatekeeper-webhook-server-cert
+type: kubernetes.io/tls
+data:
+  tls.crt: {{ b64enc $cert.Cert }}
+  tls.key: {{ b64enc $cert.Key }}
+  ca.crt: {{ b64enc $ca.Cert }}
+{{- end }}
+{{- end }}

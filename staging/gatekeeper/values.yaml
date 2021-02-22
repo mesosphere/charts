@@ -93,3 +93,16 @@ webhook:
     enabled: false
 
 kubectlImage: bitnami/kubectl:1.15
+
+# ProxySettings
+proxySettings:
+  noProxy:
+  httpsProxy:
+  httpProxy:
+
+# enable mutations
+mutations:
+  enable: false
+
+  # proxy settings
+  enablePodProxy: false

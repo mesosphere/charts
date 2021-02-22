@@ -1,0 +1,60 @@
+{{- if .Values.proxySettings.noProxy }}
+---
+apiVersion: mutations.gatekeeper.sh/v1alpha1
+kind: Assign
+metadata:
+  name: "pod-mutation-no-proxy"
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: ["Pod"]
+      versions: ["*"]
+
+  location: "spec.containers[name:*].env[name:NO_PROXY]"
+
+  parameters:
+    assign:
+      value:
+        name: NO_PROXY
+        value: {{ .Values.proxySettings.noProxy }}
+{{- end }}
+{{- if .Values.proxySettings.httpProxy }}
+---
+apiVersion: mutations.gatekeeper.sh/v1alpha1
+kind: Assign
+metadata:
+  name: "pod-mutation-http-proxy"
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: ["Pod"]
+      versions: ["*"]
+
+  location: "spec.containers[name:*].env[name:HTTP_PROXY]"
+
+  parameters:
+    assign:
+      value:
+        name: HTTP_PROXY
+        value: {{ .Values.proxySettings.httpProxy }}
+{{- end }}
+{{- if .Values.proxySettings.httpsProxy }}
+---
+apiVersion: mutations.gatekeeper.sh/v1alpha1
+kind: Assign
+metadata:
+  name: "pod-mutation-https-proxy"
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: ["Pod"]
+      versions: ["*"]
+
+  location: "spec.containers[name:*].env[name:HTTPS_PROXY]"
+
+  parameters:
+    assign:
+      value:
+        name: HTTPS_PROXY
+        value: {{ .Values.proxySettings.httpsProxy }}
+{{- end }}
