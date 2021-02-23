@@ -29,3 +29,17 @@ rules:
   - patch
   - update
   - watch
+{{- if .Values.mutations.enable }}
+- apiGroups:
+    - admissionregistration.k8s.io
+  resources:
+    - mutatingwebhookconfigurations
+  verbs:
+    - create
+    - delete
+    - get
+    - list
+    - patch
+    - update
+    - watch
+{{- end }}

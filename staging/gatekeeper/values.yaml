@@ -31,7 +31,7 @@ port: 8443
 
 image:
   repository: openpolicyagent/gatekeeper
-  release: v3.2.2
+  release: v3.3.0
   pullPolicy: IfNotPresent
 
 service:
@@ -93,3 +93,16 @@ webhook:
     enabled: false
 
 kubectlImage: bitnami/kubectl:1.15
+
+# ProxySettings
+proxySettings:
+  noProxy:
+  httpProxy:
+  httpsProxy:
+
+# enable mutations
+mutations:
+  enable: false
+
+  # proxy settings
+  enablePodProxy: false
