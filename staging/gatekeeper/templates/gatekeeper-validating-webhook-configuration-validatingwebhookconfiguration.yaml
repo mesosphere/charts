@@ -4,6 +4,7 @@
 {{- $altName1 := printf "%s.%s" $serviceName .Release.Namespace }}
 {{- $altName2 := printf "%s.%s.svc" $serviceName .Release.Namespace }}
 {{- $cert := genSignedCert $serviceName nil (list $altName1 $altName2) 3650 $ca }}
+---
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: ValidatingWebhookConfiguration
 metadata:
@@ -84,7 +85,6 @@ webhooks:
     - namespaces
   sideEffects: None
   timeoutSeconds: 3
----
 {{- if .Values.mutations.enable }}
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
@@ -196,6 +196,7 @@ spec:
   - gatekeeper-webhook-service.{{ .Release.Namespace }}.svc
   - gatekeeper-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
 {{ else }}
+---
 apiVersion: v1
 kind: Secret
 metadata:
