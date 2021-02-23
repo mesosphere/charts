@@ -85,6 +85,44 @@ webhooks:
   sideEffects: None
   timeoutSeconds: 3
 ---
+{{- if .Values.mutations.enable }}
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: gatekeeper-mutating-webhook-configuration
+  labels:
+    app: '{{ template "gatekeeper.name" . }}'
+    chart: '{{ template "gatekeeper.name" . }}'
+    gatekeeper.sh/system: "yes"
+    heritage: '{{ .Release.Service }}'
+    release: '{{ .Release.Name }}'
+  annotations:
+    {{- if .Values.webhook.certManager.enabled }}
+    cert-manager.io/inject-ca-from: {{ printf "%s/%s" .Release.Namespace (include "gatekeeper.rootCACertificate" .) | quote }}
+  {{- end }}
+webhooks:
+  - clientConfig:
+      {{ if not .Values.webhook.certManager.enabled }}
+      caBundle: {{ b64enc $ca.Cert }}
+      {{ end }}
+      service:
+        name: gatekeeper-webhook-service
+        namespace: {{ .Release.Namespace }}
+        path: /v1/mutate
+    failurePolicy: {{ .Values.admissionControllerFailurePolicy }}
+    name: mutation.gatekeeper.sh
+    rules:
+      - apiGroups:
+          - '*'
+        apiVersions:
+          - '*'
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - '*'
+{{- end }}
 {{ if .Values.webhook.certManager.enabled }}
 ---
 # Create a selfsigned Issuer, in order to create a root CA certificate for

@@ -31,7 +31,7 @@ port: 8443
 
 image:
   repository: openpolicyagent/gatekeeper
-  release: v3.2.2
+  release: v3.3.0
   pullPolicy: IfNotPresent
 
 service:
@@ -97,8 +97,8 @@ kubectlImage: bitnami/kubectl:1.15
 # ProxySettings
 proxySettings:
   noProxy:
-  httpsProxy:
   httpProxy:
+  httpsProxy:
 
 # enable mutations
 mutations:

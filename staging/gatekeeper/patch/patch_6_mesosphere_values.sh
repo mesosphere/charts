@@ -15,8 +15,8 @@ cat << EOF >> ${SRCFILE}
 # ProxySettings
 proxySettings:
   noProxy:
-  httpsProxy:
   httpProxy:
+  httpsProxy:
 
 # enable mutations
 mutations:

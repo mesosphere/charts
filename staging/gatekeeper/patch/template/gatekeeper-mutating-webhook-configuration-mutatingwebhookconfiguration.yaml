@@ -1,4 +1,4 @@
-{{- if not .Values.disableValidatingWebhook }}
+{{- if .Values.mu }}
 {{- $serviceName := "gatekeeper-webhook-service" }}
 {{- $ca := genCA ( printf "%s-ca" $serviceName ) 3650 }}
 {{- $altName1 := printf "%s.%s" $serviceName .Release.Namespace }}
