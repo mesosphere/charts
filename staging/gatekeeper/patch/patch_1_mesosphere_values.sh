@@ -24,6 +24,9 @@ mutations:
 
   # proxy settings
   enablePodProxy: false
+
+  # disable the following namespaces
+  excludeNamespacesFromProxy: []
 EOF
 
 git_add_and_commit "${BASEDIR}"/values.yaml
