@@ -1,7 +1,7 @@
 # Helm Charts
 
 Use this repository to submit Mesosphere-owned Charts for Helm. Charts are curated application definitions for Helm. For more information about installing and using Helm, see its
-[README.md](https://github.com/helm/helm/tree/master/README.md). To get a quick introduction to Charts see this [chart document](https://github.com/helm/helm/blob/master/docs/charts.md).
+[README.md](https://github.com/helm/helm/tree/master/README.md). To get a quick introduction to Charts see this [chart document](https://helm.sh/docs/topics/charts/).
 
 ## Where to find us
 
@@ -41,7 +41,7 @@ The Charts in this repository are organized into two folders:
 
 Stable Charts meet the criteria in the [technical requirements](CONTRIBUTING.md#technical-requirements).
 
-Staging Charts are those that have pending contributions [upstream](https://github.com/helm/charts) that are not yet merged. Having the staging folder allows charts to be hosted and used until a PR is accepted upstream. A chart PR into the `staging` repository will not be accepted without an accompanying upstream pull request.
+Staging Charts are those that have pending contributions [upstream](https://artifacthub.io/) that are not yet merged. Having the staging folder allows charts to be hosted and used until a PR is accepted upstream. A chart PR into the `staging` repository will not be accepted without an accompanying upstream pull request.
 
 ## Contributing a Chart
 
