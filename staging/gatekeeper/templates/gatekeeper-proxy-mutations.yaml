@@ -10,6 +10,12 @@ spec:
       kinds: ["Pod"]
       versions: ["*"]
 
+  match:
+    scope: "*"
+    {{- if .Values.mutations.excludeNamespacesFromProxy }}
+    excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
+    {{- end }}
+
   location: "spec.containers[name:*].env[name:NO_PROXY]"
 
   parameters:
@@ -30,6 +36,12 @@ spec:
       kinds: ["Pod"]
       versions: ["*"]
 
+  match:
+    scope: "*"
+    {{- if .Values.mutations.excludeNamespacesFromProxy }}
+    excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
+    {{- end }}
+
   location: "spec.containers[name:*].env[name:HTTP_PROXY]"
 
   parameters:
@@ -49,6 +61,12 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["*"]
+
+  match:
+    scope: "*"
+    {{- if .Values.mutations.excludeNamespacesFromProxy }}
+    excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
+    {{- end }}
 
   location: "spec.containers[name:*].env[name:HTTPS_PROXY]"
 
