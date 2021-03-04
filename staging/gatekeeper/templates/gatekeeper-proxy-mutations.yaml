@@ -11,7 +11,7 @@ spec:
       versions: ["*"]
 
   match:
-    scope: "*"
+    scope: '*'
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
@@ -37,7 +37,7 @@ spec:
       versions: ["*"]
 
   match:
-    scope: "*"
+    scope: '*'
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
@@ -63,7 +63,7 @@ spec:
       versions: ["*"]
 
   match:
-    scope: "*"
+    scope: '*'
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
