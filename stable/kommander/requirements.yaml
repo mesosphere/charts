@@ -24,6 +24,6 @@ dependencies:
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kubecost.enabled
   - name: grafana
-    version: 4.6.3
+    version: 5.0.0
     repository: https://mesosphere.github.io/charts/stable
     condition: grafana.enabled
