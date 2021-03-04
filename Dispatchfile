@@ -191,7 +191,7 @@ do_bump_kommander_catalog_api = bump_requirements("bump-catalog-api", git, "stab
   ]
 )
 
-do_bump_grafana = bump_requirements("bump-grafana", git, "stable/grafana",
+do_bump_grafana = bump_requirements("bump-grafana", git, "stable/kommander",
   command=["/bin/sh", "-c"], args=[
     """
   echo "$GPG_PRIVATE_KEY" > gpg_private_key
@@ -204,7 +204,7 @@ do_bump_grafana = bump_requirements("bump-grafana", git, "stable/grafana",
   git config --local user.name 'Dispatch CI'
   git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
 
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced
+  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=grafana
     """
   ],
   env=dispatch_common_go_environment + [
