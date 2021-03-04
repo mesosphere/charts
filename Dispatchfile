@@ -2,7 +2,6 @@
 # vi:syntax=python
 #
 
-
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/git@0.0.7", "git_resource")
 # TODO @faiq: once 0.0.5 of this package is released switch to that ref
 load("github.com/mesosphere/dispatch-catalog/starlark/stable/k8s@0.0.7", "secret_var")
@@ -168,30 +167,6 @@ git_resource(
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
 
-do_bump_kommander_catalog_api = bump_requirements("bump-catalog-api", git, "stable/kommander",
-  command=["/bin/sh", "-c"], args=[
-    """
-  echo "$GPG_PRIVATE_KEY" > gpg_private_key
-  echo "$GPG_PUBLIC_KEY" > gpg_public_key
-  gpg --import gpg_private_key
-  gpg --import gpg_public_key
-  git config --local commit.gpgsign true
-  git config --local user.signingkey $GPG_KEY_ID
-
-  git config --local user.name 'Dispatch CI'
-  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubeaddons-catalog
-    """
-  ],
-  env=dispatch_common_go_environment + [
-    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
-    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
-    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
-    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
-  ]
-)
-
 do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kommander",
   command=["/bin/sh", "-c"], args=[
     """
@@ -206,6 +181,30 @@ do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kommander",
   git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
 
   bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubecost
+    """
+  ],
+  env=dispatch_common_go_environment + [
+    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
+    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
+    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
+    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
+  ]
+)
+
+do_bump_grafana = bump_requirements("bump-grafana", git, "stable/kommander",
+  command=["/bin/sh", "-c"], args=[
+    """
+  echo "$GPG_PRIVATE_KEY" > gpg_private_key
+  echo "$GPG_PUBLIC_KEY" > gpg_public_key
+  gpg --import gpg_private_key
+  gpg --import gpg_public_key
+  git config --local commit.gpgsign true
+  git config --local user.signingkey $GPG_KEY_ID
+
+  git config --local user.name 'Dispatch CI'
+  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
+
+  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=grafana
     """
   ],
   env=dispatch_common_go_environment + [
@@ -235,9 +234,9 @@ action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommande
 action(tasks=["test-helm2", "test-helm3"], on=pull_request(chatops=["test"]))
 action(tasks=["test-helm2"], on=pull_request(chatops=["test-helm2"]))
 action(tasks=["test-helm3"], on=pull_request(chatops=["test-helm3"]))
-action(tasks=[do_bump_kommander_catalog_api], on=pull_request(chatops=["bump-catalog-api"]))
 action(tasks=[do_bump_kubecost], on=pull_request(chatops=["bump-kubecost"]))
+action(tasks=[do_bump_grafana], on=pull_request(chatops=["bump-grafana"]))
 
 # Cron Actions
-action(name="bump-catalog-api", tasks=[do_bump_kommander_catalog_api], on=cron(schedule="0 8 * * 5"))
 action(name="bump-kubecost", tasks=[do_bump_kubecost], on=cron(schedule="0 8 * * 5"))
+action(name="bump-grafana", tasks=[do_bump_grafana], on=cron(schedule="0 8 * * 5"))
