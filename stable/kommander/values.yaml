@@ -4,6 +4,9 @@ federate:
     tag: "v0.2.8"
     pullPolicy: IfNotPresent
 
+# labels to append to the namespace where kommander is deployed
+namespaceLabels:  []
+
 global:
   federate:
     airgapped:
