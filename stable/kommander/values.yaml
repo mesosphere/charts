@@ -5,7 +5,7 @@ federate:
     pullPolicy: IfNotPresent
 
 # labels to append to the namespace where kommander is deployed
-namespaceLabels:  []
+namespaceLabels: []
 
 global:
   federate:
