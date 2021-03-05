@@ -108,7 +108,7 @@ mutations:
   enablePodProxy: false
 
   # apply mutations on objects whose labels match namespace labels
-  namespaceSelector: {}
+  namespaceSelectorForProxy: {}
 
   # disable the following namespaces
   excludeNamespacesFromProxy: []

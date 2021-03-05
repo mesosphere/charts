@@ -11,10 +11,10 @@ spec:
       versions: ["*"]
   match:
     scope: "Namespaced"
-    {{- if .Values.mutations.namespaceSelector }}
+    {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
-    {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+    {{- toYaml .Values.mutations.namespaceSelectorForProxy | nindent 8 }}
     {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
@@ -39,10 +39,10 @@ spec:
       versions: ["*"]
   match:
     scope: "Namespaced"
-    {{- if .Values.mutations.namespaceSelector }}
+    {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
-    {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+    {{- toYaml .Values.mutations.namespaceSelectorForProxy | nindent 8 }}
     {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
@@ -67,10 +67,10 @@ spec:
       versions: ["*"]
   match:
     scope: "Namespaced"
-    {{- if .Values.mutations.namespaceSelector }}
+    {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
-      {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+      {{- toYaml .Values.mutations.namespaceSelectorForProxy | nindent 8 }}
     {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
