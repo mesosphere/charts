@@ -14,7 +14,7 @@ spec:
     {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
-    {{- toYaml .Values.mutations.namespaceSelectorForProxy | nindent 8 }}
+      {{- toYaml .Values.mutations.namespaceSelectorForProxy | nindent 8 }}
     {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
