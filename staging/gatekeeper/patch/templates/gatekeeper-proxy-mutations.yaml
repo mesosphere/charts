@@ -9,15 +9,17 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["*"]
-
   match:
     scope: "Namespaced"
+    {{- if .Values.mutations.namespaceSelector }}
+    namespaceSelector:
+      matchLabels:
+      {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+    {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
-
   location: "spec.containers[name:*].env[name:NO_PROXY]"
-
   parameters:
     assign:
       value:
@@ -35,15 +37,17 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["*"]
-
   match:
     scope: "Namespaced"
+    {{- if .Values.mutations.namespaceSelector }}
+    namespaceSelector:
+      matchLabels:
+      {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+    {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
-
   location: "spec.containers[name:*].env[name:HTTP_PROXY]"
-
   parameters:
     assign:
       value:
@@ -61,15 +65,17 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["*"]
-
   match:
     scope: "Namespaced"
+    {{- if .Values.mutations.namespaceSelector }}
+    namespaceSelector:
+      matchLabels:
+      {{- toYaml .Values.mutations.namespaceSelector | nindent 8 }}
+    {{- end }}
     {{- if .Values.mutations.excludeNamespacesFromProxy }}
     excludedNamespaces: {{ .Values.mutations.excludeNamespacesFromProxy }}
     {{- end }}
-
   location: "spec.containers[name:*].env[name:HTTPS_PROXY]"
-
   parameters:
     assign:
       value:
