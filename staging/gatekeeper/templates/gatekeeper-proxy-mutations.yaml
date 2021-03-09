@@ -1,4 +1,4 @@
-{{- if and (and .Values.proxySettings.noProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
+{{- if and (and .Values.mutations.podProxySettings.noProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
 ---
 apiVersion: mutations.gatekeeper.sh/v1alpha1
 kind: Assign
@@ -24,9 +24,9 @@ spec:
     assign:
       value:
         name: NO_PROXY
-        value: {{ .Values.proxySettings.noProxy }}
+        value: {{ .Values.mutations.podProxySettings.noProxy }}
 {{- end }}
-{{- if and (and .Values.proxySettings.httpProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
+{{- if and (and .Values.mutations.podProxySettings.httpProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
 ---
 apiVersion: mutations.gatekeeper.sh/v1alpha1
 kind: Assign
@@ -52,9 +52,9 @@ spec:
     assign:
       value:
         name: HTTP_PROXY
-        value: {{ .Values.proxySettings.httpProxy }}
+        value: {{ .Values.mutations.podProxySettings.httpProxy }}
 {{- end }}
-{{- if and (and .Values.proxySettings.httpsProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
+{{- if and (and .Values.mutations.podProxySettings.httpsProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
 ---
 apiVersion: mutations.gatekeeper.sh/v1alpha1
 kind: Assign
@@ -80,5 +80,5 @@ spec:
     assign:
       value:
         name: HTTPS_PROXY
-        value: {{ .Values.proxySettings.httpsProxy }}
+        value: {{ .Values.mutations.podProxySettings.httpsProxy }}
 {{- end }}

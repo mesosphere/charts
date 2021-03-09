@@ -94,18 +94,17 @@ webhook:
 
 kubectlImage: bitnami/kubectl:1.15
 
-# ProxySettings
-proxySettings:
-  noProxy:
-  httpProxy:
-  httpsProxy:
-
 # enable mutations
 mutations:
   enable: false
 
   # proxy settings
   enablePodProxy: false
+
+  podProxySettings:
+    noProxy:
+    httpProxy:
+    httpsProxy:
 
   # apply mutations on objects whose labels match namespace labels
   namespaceSelectorForProxy: {}
