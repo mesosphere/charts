@@ -57,18 +57,6 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        {{- if .Values.proxySettings.noProxy }}
-        - name: NO_PROXY
-          value: {{ .Values.proxySettings.noProxy }}
-        {{- end }}
-        {{- if .Values.proxySettings.httpProxy }}
-        - name: HTTP_PROXY
-          value: {{ .Values.proxySettings.httpProxy }}
-        {{- end }}
-        {{- if .Values.proxySettings.httpsProxy }}
-        - name: HTTPS_PROXY
-          value: {{ .Values.proxySettings.httpsProxy }}
-        {{- end }}
         image: '{{ .Values.image.repository }}:{{ .Values.image.release }}'
         imagePullPolicy: '{{ .Values.image.pullPolicy }}'
         livenessProbe:
