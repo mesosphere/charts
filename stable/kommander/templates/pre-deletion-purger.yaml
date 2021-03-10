@@ -10,7 +10,7 @@ metadata:
 data:
   purge.sh: |
     #!/bin/bash
-    for ft in $(kubectl get federatedtypeconfigs -n kommander -o jsonpath='{range .items[*]}{.spec.federatedType.kind}.{.spec.federatedType.group}{"\n"}{end}') ; do
+    for ft in $(kubectl get federatedtypeconfigs -n kommander -o jsonpath='{range .items[*]}{.spec.federatedType.kind}.{.spec.federatedType.version}.{.spec.federatedType.group}{"\n"}{end}') ; do
       kubectl delete ${ft} --all --all-namespaces
     done
 ---
