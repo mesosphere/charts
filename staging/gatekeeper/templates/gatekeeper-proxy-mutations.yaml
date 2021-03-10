@@ -10,7 +10,7 @@ spec:
       kinds: ["Pod"]
       versions: ["*"]
   match:
-    scope: "Namespaced"
+    scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
@@ -38,7 +38,7 @@ spec:
       kinds: ["Pod"]
       versions: ["*"]
   match:
-    scope: "Namespaced"
+    scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
@@ -66,7 +66,7 @@ spec:
       kinds: ["Pod"]
       versions: ["*"]
   match:
-    scope: "Namespaced"
+    scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
     namespaceSelector:
       matchLabels:
