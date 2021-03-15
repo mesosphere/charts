@@ -29,8 +29,10 @@ spec:
                     values:
                       - virtual-kubelet
       priorityClassName: system-node-critical
+{{- if .Values.node.tolerations }}
       tolerations:
-        - operator: "Exists"
+{{ toYaml .Values.node.tolerations | indent 8 }}
+{{- end }}
       {{- include "azuredisk.pullSecrets" . | indent 6 }}
       containers:
         - name: liveness-probe
@@ -42,20 +44,17 @@ spec:
             - --csi-address=/csi/csi.sock
             - --probe-timeout=3s
             - --health-port=29603
-            - --v=2
+            - --v={{ .Values.node.logLevel }}
           resources:
-            limits:
-              cpu: 100m
-              memory: 100Mi
-            requests:
-              cpu: 10m
-              memory: 20Mi
+{{- if .Values.node.resources }}
+{{ toYaml .Values.node.resources | indent 12 }}
+{{- end }}
         - name: node-driver-registrar
           image: "{{ .Values.image.nodeDriverRegistrar.repository }}:{{ .Values.image.nodeDriverRegistrar.tag }}"
           args:
             - --csi-address=$(ADDRESS)
             - --kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)
-            - --v=2
+            - --v={{ .Values.node.logLevel }}
           lifecycle:
             preStop:
               exec:
@@ -71,12 +70,9 @@ spec:
             - name: registration-dir
               mountPath: /registration
           resources:
-            limits:
-              cpu: 100m
-              memory: 100Mi
-            requests:
-              cpu: 10m
-              memory: 20Mi
+{{- if .Values.node.resources }}
+{{ toYaml .Values.node.resources | indent 12 }}
+{{- end }}
         - name: azuredisk
           image: "{{ .Values.image.azuredisk.repository }}:{{ .Values.image.azuredisk.tag }}"
           args:
@@ -101,11 +97,7 @@ spec:
             periodSeconds: 30
           env:
             - name: AZURE_CREDENTIAL_FILE
-              valueFrom:
-                configMapKeyRef:
-                  name: azure-cred-file
-                  key: path
-                  optional: true
+              value: {{ .Values.cloudConfig }}
             - name: CSI_ENDPOINT
               value: unix:///csi/csi.sock
             - name: KUBE_NODE_NAME
@@ -143,12 +135,9 @@ spec:
               readOnly: true
             {{- end }}
           resources:
-            limits:
-              cpu: 200m
-              memory: 200Mi
-            requests:
-              cpu: 10m
-              memory: 20Mi
+{{- if .Values.node.resources }}
+{{ toYaml .Values.node.resources | indent 12 }}
+{{- end }}
       volumes:
         - hostPath:
             path: {{ .Values.kubelet.linuxPath }}/plugins/disk.csi.azure.com

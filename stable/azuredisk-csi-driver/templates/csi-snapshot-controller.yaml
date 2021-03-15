@@ -19,24 +19,22 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
+{{- if .Values.snapshot.snapshotController.tolerations }}
       tolerations:
-        - key: "node-role.kubernetes.io/master"
-          operator: "Equal"
-          value: "true"
-          effect: "NoSchedule"
+{{ toYaml .Values.snapshot.snapshotController.tolerations | indent 8 }}
+{{- end }}
       {{- include "azuredisk.pullSecrets" . | indent 6 }}
       containers:
         - name: csi-snapshot-controller
           image: "{{ .Values.snapshot.image.csiSnapshotController.repository }}:{{ .Values.snapshot.image.csiSnapshotController.tag }}"
           args:
-            - "--v=2"
-            - "--leader-election=false"
+            - "--v={{ .Values.snapshot.snapshotController.logLevel }}"
+            {{- if (gt (.Values.snapshot.snapshotController.replicas | int) 1) }}
+            - "-leader-election"
+            {{- end }}
           resources:
-            limits:
-              cpu: 100m
-              memory: 100Mi
-            requests:
-              cpu: 10m
-              memory: 20Mi
+{{- if .Values.snapshot.snapshotController.resources }}
+{{ toYaml .Values.snapshot.snapshotController.resources | indent 12 }}
+{{- end }}
           imagePullPolicy: {{ .Values.snapshot.image.csiSnapshotController.pullPolicy }}
 {{- end -}}

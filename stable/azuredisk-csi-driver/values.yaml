@@ -24,6 +24,8 @@ image:
     tag: v2.0.1
     pullPolicy: IfNotPresent
 
+cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+
 serviceAccount:
   create: true
 
@@ -35,10 +37,32 @@ controller:
   metricsPort: 29604
   runOnMaster: false
   logLevel: 5
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+  tolerations:
+    - effect: NoSchedule
+      operator: Exists
+    - effect: NoExecute
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
 
 node:
   metricsPort: 29605
   logLevel: 5
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+  tolerations:
+    - effect: NoSchedule
+      operator: Exists
+    - effect: NoExecute
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
 
 snapshot:
   enabled: false
@@ -53,8 +77,20 @@ snapshot:
       pullPolicy: IfNotPresent
   snapshotController:
     replicas: 1
+    logLevel: 5
     serviceAccount: true
     rbac: true
+    resources:
+      requests:
+        cpu: 10m
+        memory: 20Mi
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+      - key: CriticalAddonsOnly
+        operator: Exists
 
 linux:
   enabled: true
