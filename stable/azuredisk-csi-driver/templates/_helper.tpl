@@ -21,3 +21,13 @@ They are released in combination and depend on each other on newer kubernetes ve
 {{- .Values.image.csiSnapshotter.tag -}}
 {{- end -}}
 {{- end -}}
+
+{{/* pull secrets for containers */}}
+{{- define "azuredisk.pullSecrets" -}}
+{{- if .Values.imagePullSecrets }}
+imagePullSecrets:
+{{- range .Values.imagePullSecrets }}
+  - name: {{ . }}
+{{- end }}
+{{- end }}
+{{- end -}}

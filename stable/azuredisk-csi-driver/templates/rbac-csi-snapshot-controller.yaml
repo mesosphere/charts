@@ -1,5 +1,4 @@
-{{- if and .Values.snapshot.enabled (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) }}
-{{- if .Values.rbac.create -}}
+{{- if and .Values.snapshot.enabled .Values.snapshot.snapshotController.rbac -}}
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
@@ -70,4 +69,3 @@ roleRef:
   name: csi-snapshot-controller-leaderelection-role
   apiGroup: rbac.authorization.k8s.io
 {{ end }}
-{{- end -}}
