@@ -29,6 +29,7 @@ excluded-charts:
   - local-path-provisioner
   - vsphere-csi-driver
   - cert-manager          # cert-manager is no longer compatible with helmv2
+  - kubefed
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
