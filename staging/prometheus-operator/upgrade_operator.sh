@@ -55,4 +55,8 @@ git commit -am "chore: copy upstream chart ${NEW_VERSION}"
 
 BASEDIR=${BASEDIR} ./patch/patch.sh
 
+helm dependency upgrade
+git add .
+git commit -m 'helm dependency upgrade'
+
 echo "Done upgrading prometheus-operator!"
