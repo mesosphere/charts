@@ -616,8 +616,6 @@ grafana:
     #   - grafana.example.com
 
   sidecar:
-    image:
-      tag: 1.3.0
     dashboards:
       enabled: true
       label: grafana_dashboard
@@ -1441,7 +1439,7 @@ prometheusOperator:
   ##
   configmapReloadImage:
     repository: docker.io/jimmidyson/configmap-reload
-    tag: v0.5.0
+    tag: v0.4.0
     sha: ""
 
   ## Prometheus-config-reloader image to use for config and rule reloading
@@ -1876,7 +1874,7 @@ prometheus:
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the probes created
     ##
-    probeSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: true
 
     ## Probes to be selected for target discovery.
     ## If {}, select all Probes
@@ -2294,36 +2292,3 @@ prometheus:
     ## https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#podmetricsendpoint
     ##
     # podMetricsEndpoints: []
-# Create mesosphere specific resources
-mesosphereResources:
-  create: false
-  rules:
-    velero: false
-  dashboards:
-    autoscaler: true
-    calico: true
-    elasticsearch: true
-    fluentbit: true
-    grafana: true
-    opsportal: true
-    kibana: true
-    localvolumeprovisioner: true
-    traefik: true
-    velero: true
-  homeDashboard:
-    name: "Kubernetes / Compute Resources / Cluster"
-    cronJob:
-      name: set-grafana-home-dashboard
-      image: apteno/alpine-jq:2021-01-19
-  hooks:
-    grafana:
-      image: apteno/alpine-jq:2021-01-19
-      secretKeyRef: ops-portal-credentials
-      # serviceURL is deprecated, do not use
-      serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
-    prometheus:
-      jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.19.7
-      configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
