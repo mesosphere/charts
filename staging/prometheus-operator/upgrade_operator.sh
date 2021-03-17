@@ -21,11 +21,12 @@ export STARTING_REV
 trap 'rollback' ERR
 
 rollback() {
+    set +x
+    echo "ERROR running upgrades. Rolling back."
     cd "${BASEDIR}"
     git reset --hard "${STARTING_REV}"
+    exit 1
 }
-
-
 
 cd "${TMPDIR}" || exit
 
