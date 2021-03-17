@@ -1,0 +1,64 @@
+{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled }}
+# This cronjob periodically sets the Grafana home dashboard to the dashboard identified by
+# `.Values.grafana.homeDashboard.name`. A post-install hook job that runs once may end up in a race with the Grafana
+# sidecar that loads dashboards from configmaps. This should be replaced with setting the home dashboard in
+# `grafana.ini` once the feature is available. See https://github.com/grafana/grafana/pull/25595.
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: {{ .Values.mesosphereResources.homeDashboard.cronJob.name | quote }}
+              image: {{ .Values.mesosphereResources.homeDashboard.cronJob.image | quote }}
+              command: ["/bin/sh", "-c", "/job/run.sh"]
+              env:
+                - name: X_FORWARDED_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.mesosphereResources.hooks.grafana.secretKeyRef }}
+                      key: username
+              volumeMounts:
+                - mountPath: /job
+                  name: job
+          volumes:
+            - name: job
+              configMap:
+                name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
+                defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
+data:
+  run.sh: |-
+    #!/bin/sh
+    set -o nounset
+    set -o errexit
+    set -o pipefail
+    GRAFANA_API_URL="http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}:{{ .Values.grafana.service.port }}"
+    CURL="curl --verbose --max-time 60 --retry 10 --retry-connrefused --fail"
+    DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" $GRAFANA_API_URL/api/search/?query={{ .Values.mesosphereResources.homeDashboard.name | urlquery }} | jq '.[0].id' || true )
+    if [ "$DASHBOARD_ID" == "" ]; then
+      echo "error: Could not retrieve dashboard id"
+      exit 1
+    fi
+    # we want to fail silently as this assumes a user exists or that grafana is set up to create a user if it doesnt
+    # not all installations of prometheus should be expected to, so we should not hold up a prometheus install because of this
+    echo "setting home dashboard to ID" $DASHBOARD_ID
+    SET_DEFAULT=$($CURL -X PUT -H "Content-Type: application/json" -H "X-Forwarded-User: $X_FORWARDED_USER" -d '{"theme":"","homeDashboardId":'"$DASHBOARD_ID"',"timezone":""}' $GRAFANA_API_URL/api/org/preferences || true )
+    if [ "$SET_DEFAULT" == "" ]; then
+      echo "error: Could not set default dashboard for user $X_FORWARDED_USER"
+      exit 1
+    fi
+{{- end }}
