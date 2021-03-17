@@ -2,7 +2,8 @@
 
 set -euo pipefail
 
-patches=($(ls patch/patch_*.sh | sort -V))
+# shellcheck disable=2012
+mapfile -t patches < <(ls patch/patch_*.sh | sort -V)
 
 for p in ${patches[*]}; do
     echo "Executing $p"
