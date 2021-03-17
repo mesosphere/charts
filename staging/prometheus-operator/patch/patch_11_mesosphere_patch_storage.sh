@@ -2,7 +2,7 @@
 
 source $(dirname "$0")/helpers.sh
 
-set -x
+set -xeuo pipefail
 
 patch -d "${BASEDIR}" -p3 < patch/mesosphere/patch/11_use_existing_storage_definitions.patch
 

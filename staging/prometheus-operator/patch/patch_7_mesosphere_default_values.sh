@@ -4,7 +4,7 @@
 
 source $(dirname "$0")/helpers.sh
 
-set -x
+set -xeuo pipefail
 
 SRCFILE=values.yaml
 TMPFILE=crds/values.yaml

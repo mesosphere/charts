@@ -4,7 +4,7 @@
 
 source $(dirname "$0")/helpers.sh
 
-set -x
+set -xeuo pipefail
 
 GRAFANA_PATH=${BASEDIR}/templates/grafana
 
