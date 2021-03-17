@@ -30,6 +30,6 @@ docker run --rm -it \
   -e SRCFILE=${SRCFILE} \
   -e TMPFILE=${TMPFILE} \
   mikefarah/yq:3.3.2 \
-  echo yq write -i "${SRCFILE}"  prometheus.prometheusSpec.probeSelectorNilUsesHelmValues false && \
+  yq write -i "${SRCFILE}"  "prometheus.prometheusSpec.probeSelectorNilUsesHelmValues false"
 
 git_add_and_commit_with_msg ${SRCFILE} "update values files"
