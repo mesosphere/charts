@@ -11,8 +11,6 @@ spec:
   placement:
     clusterSelector:
       matchLabels: {}
-      matchExpressions:
-        - {key: kommander.mesosphere.io/connection-type, operator: NotIn, values: [unidirectional]}
   template:
     metadata:
       namespace: kubeaddons
