@@ -23,7 +23,7 @@ ingress:
   hosts: []
 
 # Environment variables to be passed to ghostunnel deployment container.
-env: {}
+env: []
 #  - name: SOME_VAR
 #    value: some-var-value
 #  - name: SOME_OTHER_VAR
