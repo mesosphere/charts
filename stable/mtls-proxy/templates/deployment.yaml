@@ -43,9 +43,9 @@ spec:
             - name: tls
               containerPort: 443
               protocol: TCP
-          {{- with .Values.env }}
+          {{- if .Values.env }}
           env:
-            {{- toYaml . | indent 12 }}
+{{ toYaml .Values.env | indent 10 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
