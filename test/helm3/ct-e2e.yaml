@@ -28,6 +28,7 @@ excluded-charts:
   - traefik-forward-auth  # DCOS-62819
   - local-path-provisioner
   - vsphere-csi-driver
+  - kubefed
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable

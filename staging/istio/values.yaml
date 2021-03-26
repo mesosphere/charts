@@ -29,7 +29,7 @@ istioOperator:
   profile: default
 
   hub: docker.io/istio
-  tag: 1.8.2
+  tag: 1.9.1
 
   components:
     cni:
