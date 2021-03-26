@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: squareup/ghostunnel
-  tag: v1.5.1
+  tag: v1.5.3
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -21,6 +21,13 @@ ingress:
   enabled: false
   annotations: {}
   hosts: []
+
+# Environment variables to be passed to ghostunnel deployment container.
+env: []
+#  - name: SOME_VAR
+#    value: some-var-value
+#  - name: SOME_OTHER_VAR
+#    value: some-other-var-value
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
