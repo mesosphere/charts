@@ -538,6 +538,14 @@ tracing:
 # to point to a secret name that traefik is waiting on to
 # be mounted before being able to successfully start up.
 initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.3.0
+# initCert:
+#   ingressNamespace: "kubeaddons"
+#   ingressServiceName: "traefik-kubeaddons"
+#   ingressCertificateName: "traefik-kubeaddons"
+#   ingressCertificateIssuer: "kubernetes-ca"
+#   ingressCertificateSecretName: "traefik-kubeaddons-certificate"
+#   konvoyAddonsConfigMap: "konvoyconfig-kubeaddons"
+#   clusterHostnameKey: "clusterHostname"
 
 dashboardRBAC:
   enabled: true
