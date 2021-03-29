@@ -1,10 +1,8 @@
-{{- if and .Values.deployment.enabled (eq .Values.deployment.kind "Deployment") -}}
-  {{- if gt (int .Values.deployment.replicas) 1 -}}
-    {{- with .Values.additionalArguments -}}
-      {{- range . -}}
-        {{- if contains ".acme." . -}}
-          {{- fail (printf "You can not enable acme if you set more than one traefik replica") -}}
-        {{- end -}}
+{{- if and .Values.deployment.enabled (eq .Values.deployment.kind "DaemonSet") -}}
+  {{- with .Values.additionalArguments -}}
+    {{- range . -}}
+      {{- if contains ".acme." . -}}
+        {{- fail (printf "ACME functionality is not supported when running Traefik as a DaemonSet") -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
@@ -14,7 +12,7 @@
 
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: {{ template "traefik.fullname" . }}
   labels:
@@ -30,18 +28,13 @@ metadata:
   {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ default 1 .Values.deployment.replicas }}
-  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "traefik.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-  strategy:
+  updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      {{- with .Values.rollingUpdate }}
-        {{- toYaml . | nindent 6 }}
-      {{- end }}
+      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
   template: {{ template "traefik.podTemplate" . }}
 {{- end -}}
