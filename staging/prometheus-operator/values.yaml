@@ -1,7 +1,3 @@
-## Provide a name in place of kube-prometheus-stack for `app:` labels
-
-##
-
 nameOverride: ""
 ## Override the deployment namespace
 
@@ -444,11 +440,11 @@ alertmanager:
 
   ##
   alertmanagerSpec:
-    ## Metadata Labels and Annotations gets propagated to the Alertmanager pods.
-
     ##
     podMetadata: {}
     ## Image of Alertmanager
+
+    ## Metadata Labels and Annotations gets propagated to the Alertmanager pods.
 
     ## Standard object’s metadata. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#metadata
 
@@ -772,7 +768,6 @@ grafana:
   #   hosts:
 
   #   - grafana.example.com
-
   sidecar:
     dashboards:
       enabled: true
@@ -1086,7 +1081,7 @@ kubelet:
       - sourceLabels:
           - __metrics_path__
         targetLabel: metrics_path
-    # - sourceLabels: [__meta_kubernetes_pod_node_name]
+        # - sourceLabels: [__meta_kubernetes_pod_node_name]
 #   separator: ;
 
 #   regex: ^(.*)$
@@ -1733,7 +1728,6 @@ prometheusOperator:
     ## Scrape timeout. If not set, the Prometheus default scrape timeout is used.
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
-
     scrapeTimeout: ""
     selfMonitor: true
     ## 	metric relabel configs to apply to samples before ingestion.
@@ -1992,7 +1986,6 @@ prometheus:
   #   hosts:
 
   #   - thanos-gateway.domain.com
-
   ingress:
     enabled: false
     # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
@@ -2782,7 +2775,6 @@ prometheus:
 
     ## in Prometheus so it may change in any upcoming release.
     allowOverlappingBlocks: false
-
   additionalRulesForClusterRole: []
   #  - apiGroups: [ "" ]
 
@@ -3004,7 +2996,7 @@ mesosphereResources:
     traefik: true
     velero: true
   homeDashboard:
-    name: "Kubernetes / Compute Resources / Cluster"
+    name: Kubernetes / Compute Resources / Cluster
     cronJob:
       name: set-grafana-home-dashboard
       image: apteno/alpine-jq:2021-01-19
@@ -3020,7 +3012,6 @@ mesosphereResources:
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true
-
 # Upgrades from <=9.3.x will fail unless this is set to false.
 # Affected fields that will be ignored when includeNewCRDFields is false:
 # - prometheus.prometheusSpec.shards
