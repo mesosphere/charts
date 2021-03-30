@@ -44,17 +44,21 @@ spec:
   configMaps:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.configMaps | indent 4 }}
 {{- end }}
+{{- if .Values.includeNewCRDFields }}
 {{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector }}
   alertmanagerConfigSelector:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector | indent 4}}
 {{ else }}
   alertmanagerConfigSelector: {}
 {{- end }}
+{{- end }}
+{{- if .Values.includeNewCRDFields }}
 {{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector }}
   alertmanagerConfigNamespaceSelector:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector | indent 4}}
 {{ else }}
   alertmanagerConfigNamespaceSelector: {}
+{{- end }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.resources }}
   resources:
