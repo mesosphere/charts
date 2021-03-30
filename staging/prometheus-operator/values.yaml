@@ -132,9 +132,10 @@ global:
 
 ##
 alertmanager:
-  ##
   enabled: true
   ## Api that prometheus will use to communicate with alertmanager. Possible values are v1, v2
+
+  ##
 
   ## Deploy alertmanager
 
@@ -396,9 +397,10 @@ alertmanager:
 
   ##
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+
+    ##
 
     selfMonitor: true
     ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
@@ -440,9 +442,10 @@ alertmanager:
 
   ##
   alertmanagerSpec:
-    ##
     podMetadata: {}
     ## Image of Alertmanager
+
+    ##
 
     ## Metadata Labels and Annotations gets propagated to the Alertmanager pods.
 
@@ -729,9 +732,10 @@ grafana:
   defaultDashboardsEnabled: true
   adminPassword: prom-operator
   ingress:
-    ##
     enabled: false
     ## Annotations for Grafana Ingress
+
+    ##
 
     ## If true, Grafana Ingress will be created
 
@@ -839,9 +843,10 @@ grafana:
 
   ##
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+
+    ##
 
     selfMonitor: true
     # Path to use for scraping metrics. Might be different if server.root_url is set
@@ -901,9 +906,10 @@ kubeApiServer:
 
   #   replacement: kubernetes.default.svc:443
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+
+    ##
 
     jobLabel: component
     selector:
@@ -926,9 +932,10 @@ kubelet:
   enabled: true
   namespace: kube-system
   serviceMonitor:
-    ##
     interval: ""
     ## Enable scraping the kubelet over https. For requirements to enable this see
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1115,11 +1122,11 @@ kubeControllerManager:
     targetPort: 10252
     # selector:
   #   component: kube-controller-manager
-
   serviceMonitor:
-    ##
     interval: ""
     ## Enable scraping kube-controller-manager over https.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1168,11 +1175,11 @@ coreDns:
     targetPort: 9153
     # selector:
   #   k8s-app: kube-dns
-
   serviceMonitor:
-    ##
     interval: ""
     ## 	metric relabel configs to apply to samples before ingestion.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1213,11 +1220,11 @@ kubeDns:
       targetPort: 10055
       # selector:
   #   k8s-app: kube-dns
-
   serviceMonitor:
-    ##
     interval: ""
     ## 	metric relabel configs to apply to samples before ingestion.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1312,9 +1319,10 @@ kubeEtcd:
 
   ##
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+
+    ##
 
     scheme: http
     insecureSkipVerify: false
@@ -1370,11 +1378,11 @@ kubeScheduler:
     targetPort: 10251
     # selector:
   #   component: kube-scheduler
-
   serviceMonitor:
-    ##
     interval: ""
     ## Enable scraping kube-scheduler over https.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1432,11 +1440,11 @@ kubeProxy:
     targetPort: 10249
     # selector:
   #   k8s-app: kube-proxy
-
   serviceMonitor:
-    ##
     interval: ""
     ## Enable scraping kube-proxy over https.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1469,9 +1477,10 @@ kubeProxy:
 kubeStateMetrics:
   enabled: true
   serviceMonitor:
-    ##
     interval: ""
     ## 	metric relabel configs to apply to samples before ingestion.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1517,9 +1526,10 @@ nodeExporter:
   ##
   jobLabel: jobLabel
   serviceMonitor:
-    ##
     interval: ""
     ## How long until a scrape request times out. If not set, the Prometheus default scape timeout is used.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
 
@@ -1560,9 +1570,10 @@ nodeExporter:
 prometheus-node-exporter:
   namespaceOverride: ""
   podLabels:
-    ##
     jobLabel: node-exporter
     ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+
+    ##
   extraArgs:
     - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
     - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
@@ -1723,9 +1734,10 @@ prometheusOperator:
 
   ##
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape timeout. If not set, the Prometheus default scrape timeout is used.
+
+    ##
 
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
     scrapeTimeout: ""
@@ -2076,9 +2088,10 @@ prometheus:
   podSecurityPolicy:
     allowedCapabilities: []
   serviceMonitor:
-    ##
     interval: ""
     ## Scrape interval. If not set, the Prometheus default scrape interval is used.
+
+    ##
 
     selfMonitor: true
     ## scheme: HTTP scheme to use for scraping. Can be used with `tlsConfig` for example if using istio mTLS.
@@ -2120,9 +2133,10 @@ prometheus:
 
   ##
   prometheusSpec:
-    ##
     disableCompaction: false
     ## APIServerConfig
+
+    ##
 
     ## If true, pass --storage.tsdb.max-block-duration=2h to prometheus. This is already done if using Thanos
 
@@ -2376,7 +2390,7 @@ prometheus:
     ## which will also match the probes created
 
     ##
-    probeSelectorNilUsesHelmValues: true
+    probeSelectorNilUsesHelmValues: false
     ## Probes to be selected for target discovery.
 
     ## If {}, select all Probes
@@ -3005,6 +3019,7 @@ mesosphereResources:
       image: apteno/alpine-jq:2021-01-19
       secretKeyRef: ops-portal-credentials
       # serviceURL is deprecated, do not use
+
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
     prometheus:
       jobName: prom-get-cluster-id
@@ -3013,13 +3028,22 @@ mesosphereResources:
   ingressRBAC:
     enabled: true
 # Upgrades from <=9.3.x will fail unless this is set to false.
+
 # Affected fields that will be ignored when includeNewCRDFields is false:
+
 # - prometheus.prometheusSpec.shards
+
 # - prometheus.prometheusSpec.probeSelector
+
 # - prometheus.prometheusSpec.probeNamespaceSelector
+
 # - alertmanager.alertmanagerSpec.alertmanagerConfigSelector
+
 # - alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector
+
 # Users should be advised to override/set this to true after upgrading
+
 # if they wish to use the affected fields.
+
 # The field should be removed from the chart in the next major release.
 includeNewCRDFields: false
