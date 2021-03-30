@@ -2782,7 +2782,7 @@ prometheus:
 
     ## in Prometheus so it may change in any upcoming release.
     allowOverlappingBlocks: false
-    probeSelectorNilUsesHelmValues false:
+
   additionalRulesForClusterRole: []
   #  - apiGroups: [ "" ]
 
