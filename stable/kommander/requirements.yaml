@@ -1,18 +1,18 @@
 dependencies:
   - name: kommander-karma
-    version: "0.3.15"
+    version: "0.3.16"
   - name: kommander-thanos
-    version: "0.1.18"
+    version: "0.1.19"
   - name: kubeaddons-catalog
     version: "0.1.16"
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-federation
-    version: "0.11.0"
+    version: "0.12.0"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-federation.enabled, global.kommander-federation.enabled
   - name: kommander-licensing
-    version: "0.11.0"
+    version: "0.12.0"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-licensing.enabled, global.kommander-licensing.enabled
   - name: kommander-ui
