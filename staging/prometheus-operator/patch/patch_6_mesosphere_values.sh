@@ -45,6 +45,18 @@ mesosphereResources:
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true
+
+# Upgrades from <=9.3.x will fail unless this is set to false.
+# Affected fields that will be ignored when includeNewCRDFields is false:
+# - prometheus.prometheusSpec.shards
+# - prometheus.prometheusSpec.probeSelector
+# - prometheus.prometheusSpec.probeNamespaceSelector
+# - alertmanager.alertmanagerSpec.alertmanagerConfigSelector
+# - alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector
+# Users should be advised to override/set this to true after upgrading
+# if they wish to use the affected fields.
+# The field should be removed from the chart in the next major release.
+includeNewCRDFields: false
 EOF
 
 git_add_and_commit "${BASEDIR}"/values.yaml

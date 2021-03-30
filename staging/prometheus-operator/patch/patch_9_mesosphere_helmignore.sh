@@ -12,6 +12,8 @@ sed -i '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Mesosphere-specific files to ignore
+upgrade_operator.sh
+prometheus-operator-*.tgz
 patch/
 EOF
 
