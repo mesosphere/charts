@@ -27,7 +27,11 @@ spec:
   secretName: {{ template "traefik.fullname" . }}-certificate
   {{- end }}
   issuerRef:
+  {{- if .Values.initCert }}
+    name: {{ .Values.initCert.ingressCertificateIssuer | default "kubernetes-ca" | quote }}
+  {{- else }}
     name: kubernetes-ca
+  {{- end }}
     kind: ClusterIssuer
   # DCOS-60297 Update certificate to comply with Apple security requirements
   # https://support.apple.com/en-us/HT210176

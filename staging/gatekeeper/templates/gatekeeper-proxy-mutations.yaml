@@ -1,4 +1,7 @@
 {{- if and (and .Values.mutations.podProxySettings.noProxy .Values.mutations.enablePodProxy) .Values.mutations.enable }}
+# versions: ["*"] doesn't work and is not expected to work, as stated in the docs, "Globs are not allowed."
+# https://github.com/open-policy-agent/gatekeeper/blob/001f4c3f3155e19e26955356e7be24207c5d5ac4/apis/mutations/v1alpha1/assign_types.go#L40
+# also see usage of this []string here: https://github.com/open-policy-agent/gatekeeper/blob/6ceb3f486a0a4b4887526e982762e6857829843a/pkg/mutation/schema/schema.go#L39-L48
 ---
 apiVersion: mutations.gatekeeper.sh/v1alpha1
 kind: Assign
@@ -8,7 +11,7 @@ spec:
   applyTo:
     - groups: [""]
       kinds: ["Pod"]
-      versions: ["*"]
+      versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
@@ -36,7 +39,7 @@ spec:
   applyTo:
     - groups: [""]
       kinds: ["Pod"]
-      versions: ["*"]
+      versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
@@ -64,7 +67,7 @@ spec:
   applyTo:
     - groups: [""]
       kinds: ["Pod"]
-      versions: ["*"]
+      versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
