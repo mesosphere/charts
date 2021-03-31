@@ -28,8 +28,7 @@ spec:
   {{- end }}
   issuerRef:
   {{- if .Values.certIssuerRef }}
-    name: {{ .Values.certIssuerRef.name }}
-    kind: {{ .Values.certIssuerRef.kind }}
+    {{- toYaml .Values.certIssuerRef | nindent 4 }}
   {{- else }}
     name: kubernetes-ca
     kind: ClusterIssuer
