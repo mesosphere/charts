@@ -32,7 +32,11 @@ spec:
         - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
           value: {{.Values.initCert.ingressCertificateName | default "traefik-kubeaddons" | quote }}
         - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
-          value: {{ .Values.initCert.ingressCertificateIssuer | default "kubernetes-ca" | quote }}
+        {{- if .Values.certIssuerRef }}
+          value: {{ .Values.certIssuerRef.name }}
+        {{- else }}
+          value: "kubernetes-ca"
+        {{- end }}
         - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
           value: {{ .Values.initCert.ingressCertificateSecretName | default "traefik-kubeaddons-certificate" | quote }}
         - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
@@ -47,7 +51,11 @@ spec:
         - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
           value: "traefik-kubeaddons"
         - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
+        {{- if .Values.certIssuerRef }}
+          value: {{ .Values.certIssuerRef.name }}
+        {{- else }}
           value: "kubernetes-ca"
+        {{- end }}
         - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
           value: "traefik-kubeaddons-certificate"
         - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
