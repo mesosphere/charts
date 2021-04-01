@@ -12,8 +12,12 @@ spec:
   secretName: {{ include "kube-oidc-proxy.fullname" . }}-server-tls
   duration: 87600h
   issuerRef:
+  {{- if .Values.certIssuerRef }}
+    {{- toYaml .Values.certIssuerRef | nindent 4 }}
+  {{- else }}
     name: kubernetes-ca
     kind: ClusterIssuer
+  {{- end }}
   commonName: kube-oidc-proxy
 {{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
   subject:
