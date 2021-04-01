@@ -110,3 +110,7 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# certIssuerRef:
+#   kind: ClusterIssuer
+#   name: kubernetes-ca
