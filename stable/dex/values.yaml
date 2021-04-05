@@ -95,6 +95,10 @@ ingress:
 extraVolumes: []
 extraVolumeMounts: []
 
+# certIssuerRef:
+#   kind: ClusterIssuer
+#   name: kubernetes-ca
+
 certs:
   securityContext:
     enabled: true

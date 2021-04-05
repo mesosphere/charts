@@ -24,6 +24,26 @@ spec:
         imagePullPolicy: IfNotPresent
         args: ["traefik"]
         env:
+        {{- if .Values.initCert }}
+        - name: "TRAEFIK_INGRESS_NAMESPACE"
+          value: {{ .Values.initCert.ingressNamespace | default "kubeaddons" | quote }} 
+        - name: "TRAEFIK_INGRESS_SERVICE_NAME"
+          value: {{ .Values.initCert.ingressServiceName | default "traefik-kubeaddons" | quote }} 
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
+          value: {{.Values.initCert.ingressCertificateName | default "traefik-kubeaddons" | quote }}
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
+        {{- if .Values.certIssuerRef }}
+          value: {{ .Values.certIssuerRef.name }}
+        {{- else }}
+          value: "kubernetes-ca"
+        {{- end }}
+        - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
+          value: {{ .Values.initCert.ingressCertificateSecretName | default "traefik-kubeaddons-certificate" | quote }}
+        - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
+          value: {{ .Values.initCert.konvoyAddonsConfigMap | default "konvoyconfig-kubeaddons" | quote }}
+        - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
+          value: {{ .Values.initCert.clusterHostnameKey | default "clusterHostname" | quote }}
+        {{- else }}
         - name: "TRAEFIK_INGRESS_NAMESPACE"
           value: "kubeaddons"
         - name: "TRAEFIK_INGRESS_SERVICE_NAME"
@@ -31,11 +51,16 @@ spec:
         - name: "TRAEFIK_INGRESS_CERTIFICATE_NAME"
           value: "traefik-kubeaddons"
         - name: "TRAEFIK_INGRESS_CERTIFICATE_ISSUER"
+        {{- if .Values.certIssuerRef }}
+          value: {{ .Values.certIssuerRef.name }}
+        {{- else }}
           value: "kubernetes-ca"
+        {{- end }}
         - name: "TRAEFIK_INGRESS_CERTIFICATE_SECRET_NAME"
           value: "traefik-kubeaddons-certificate"
         - name: "TRAEFIK_KONVOY_ADDONS_CONFIG_MAP"
           value: "konvoyconfig-kubeaddons"
         - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
           value: "clusterHostname"
+        {{- end }}
 {{- end }}
