@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: squareup/ghostunnel
+  repository: ghostunnel/ghostunnel
   tag: v1.5.3
   pullPolicy: IfNotPresent
 

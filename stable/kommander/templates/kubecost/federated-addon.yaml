@@ -23,7 +23,7 @@ spec:
       chartReference:
         chart: mtls-proxy
         repo: {{ if and .Values.global.federate.airgapped .Values.global.federate.airgapped.enabled }}{{ .Values.global.federate.airgapped.chartRepo }}{{ else }}https://mesosphere.github.io/charts/stable{{ end }}
-        version: 0.1.2
+        version: 0.1.5
         values: |
           ---
           target: {{ required "thanos address must be set" .Values.kubecost.thanosAddress }}

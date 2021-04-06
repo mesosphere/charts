@@ -542,10 +542,13 @@ initCertJobImage: mesosphere/kubeaddons-addon-initializer:v0.3.0
 #   ingressNamespace: "kubeaddons"
 #   ingressServiceName: "traefik-kubeaddons"
 #   ingressCertificateName: "traefik-kubeaddons"
-#   ingressCertificateIssuer: "kubernetes-ca"
 #   ingressCertificateSecretName: "traefik-kubeaddons-certificate"
 #   konvoyAddonsConfigMap: "konvoyconfig-kubeaddons"
 #   clusterHostnameKey: "clusterHostname"
+
+# certIssuerRef:
+#   kind: ClusterIssuer
+#   name: kubernetes-ca
 
 dashboardRBAC:
   enabled: true
