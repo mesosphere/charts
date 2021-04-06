@@ -1,0 +1,94 @@
+commit 7c01b4a4e11cd75a4bb2f8c7d655ff3b789d0dfb
+Author: Joe Julian <me@joejulian.name>
+Date:   Mon Mar 15 17:44:27 2021 -0700
+
+    use exiting storage config if it already exists
+
+    If either prometheus or alertmanager resources exist and have a storage
+    attribute defined in their spec, reuse that instead of what's defined
+    in the values.
+
+    This prevents the accidental redefinition of the volumeClaimTemplate and
+    the abaondomnet of old data.
+
+diff --git a/staging/prometheus-operator/templates/NOTES.txt b/staging/prometheus-operator/templates/NOTES.txt
+index 4ef1bc3c8..f08a8afaa 100644
+--- a/staging/prometheus-operator/templates/NOTES.txt
++++ b/staging/prometheus-operator/templates/NOTES.txt
+@@ -1,5 +1,23 @@
++{{- $namespace := include "prometheus-operator.namespace" . }}
++{{- $name := print (include "prometheus-operator.fullname" .) "-prometheus" }}
++{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
++{{- $spec := ($prometheus).spec }}
++{{- $storage := ($spec).storage }}
++{{- if $storage }}
++NOTICE: A Prometheus resource was already defined. Retaining the existing storage definition.
++If this is not the desired behavior, delete the {{ $name }} prometheus resource from the {{ $namespace }} namespace and upgrade this helm release.
++{{- end }}
++{{- $name = print (include "prometheus-operator.fullname" .) "-alertmanager" }}
++{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Alertmanager" $namespace $name) }}
++{{- $spec = ($alertmanager).spec }}
++{{- $storage = ($spec).storage }}
++{{- if $storage }}
++NOTICE: An Alertmanager resource was already defined. Retaining the existing storage definition.
++If this is not the desired behavior, delete the {{ $name }} alertmanager resource from the {{ $namespace }} namespace and upgrade this helm release.
++{{- end }}
++
+ The Prometheus Operator has been installed. Check its status by running:
+   kubectl --namespace {{ template "prometheus-operator.namespace" . }} get pods -l "release={{ $.Release.Name }}"
+
+ Visit https://github.com/coreos/prometheus-operator for instructions on how
+-to create & configure Alertmanager and Prometheus instances using the Operator.
+\ No newline at end of file
++to create & configure Alertmanager and Prometheus instances using the Operator.
+
+diff --git a/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml b/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
+index 7bc2465ce..2b3f1e8de 100644
+--- a/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
++++ b/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
+@@ -56,8 +56,18 @@ spec:
+ {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
+ {{- end }}
+ {{- if .Values.alertmanager.alertmanagerSpec.storage }}
+-  storage:
+-{{ toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4 }}
++{{- $namespace := include "prometheus-operator.namespace" . }}
++{{- $name := print (include "prometheus-operator.fullname" .) "-alertmanager" }}
++{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
++{{- $spec := ($alertmanager).spec }}
++{{- $storage := ($spec).storage }}
++{{- if $storage }}
++  # This Alertmanager resource was already defined. Keeping the existing storage definition.
++  # If this is not the desired behavior, delete this resource before upgrading the helm release.
++  storage: {{ toYaml $storage | nindent 4 }}
++{{- else }}
++  storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
++{{- end }}
+ {{- end }}
+ {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
+   podMetadata:
+diff --git a/staging/prometheus-operator/templates/prometheus/prometheus.yaml b/staging/prometheus-operator/templates/prometheus/prometheus.yaml
+index 210fd50fe..ab4025daa 100644
+--- a/staging/prometheus-operator/templates/prometheus/prometheus.yaml
++++ b/staging/prometheus-operator/templates/prometheus/prometheus.yaml
+@@ -159,9 +159,17 @@ spec:
+ {{ else }}
+   ruleSelector: {}
+ {{- end }}
+-{{- if .Values.prometheus.prometheusSpec.storageSpec }}
+-  storage:
+-{{ toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4 }}
++{{- $namespace := include "prometheus-operator.namespace" . }}
++{{- $name := print (include "prometheus-operator.fullname" .) "-prometheus" }}
++{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
++{{- $spec := ($prometheus).spec }}
++{{- $storage := ($spec).storage }}
++{{- if $storage }}
++  # This Prometheus resource was already defined. Keeping the existing storage definition.
++  # If this is not the desired behavior, delete this resource before upgrading the helm release.
++  storage: {{ toYaml $storage | nindent 4 }}
++{{- else }}
++  storage: {{ toYaml .Values.prometheus.prometheusSpec.storageSpec | nindent 4 }}
+ {{- end }}
+ {{- if .Values.prometheus.prometheusSpec.podMetadata }}
+   podMetadata:
