@@ -35,7 +35,4 @@ spec:
   organization:
     - D2iQ
 {{- end }}
-  dnsNames:
-    - dex-kubeaddons
-    - dex-kubeaddons.kubeaddons
-    - dex-kubeaddons.kubeaddons.svc.cluster.local
+  dnsNames: {{ toYaml .Values.dnsNames | nindent 4 }}
