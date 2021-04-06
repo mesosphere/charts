@@ -65,7 +65,7 @@ spec:
 {{- end }}
   paused: {{ .Values.prometheus.prometheusSpec.paused }}
   replicas: {{ .Values.prometheus.prometheusSpec.replicas }}
-{{- if .Values.includeNewCRDFields }}
+{{- if gt (int (.Values.prometheus.prometheusSpec.shards)) 1}}
   shards: {{ .Values.prometheus.prometheusSpec.shards }}
 {{- end }}
   logLevel:  {{ .Values.prometheus.prometheusSpec.logLevel }}
@@ -136,7 +136,6 @@ spec:
 {{ else }}
   podMonitorNamespaceSelector: {}
 {{- end }}
-{{- if .Values.includeNewCRDFields }}
 {{- if .Values.prometheus.prometheusSpec.probeSelector }}
   probeSelector:
 {{ toYaml .Values.prometheus.prometheusSpec.probeSelector | indent 4 }}
@@ -144,17 +143,10 @@ spec:
   probeSelector:
     matchLabels:
       release: {{ $.Release.Name | quote }}
-{{ else }}
-  probeSelector: {}
 {{- end }}
-{{- end }}
-{{- if .Values.includeNewCRDFields }}
 {{- if .Values.prometheus.prometheusSpec.probeNamespaceSelector }}
   probeNamespaceSelector:
 {{ toYaml .Values.prometheus.prometheusSpec.probeNamespaceSelector | indent 4 }}
-{{ else }}
-  probeNamespaceSelector: {}
-{{- end }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.remoteRead }}
   remoteRead:
