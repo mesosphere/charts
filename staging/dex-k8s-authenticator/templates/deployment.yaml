@@ -50,6 +50,9 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
+{{- if .Values.rbac.create }}
+      serviceAccountName: {{ template "dex-k8s-authenticator.fullname" . }}
+{{- end }}
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

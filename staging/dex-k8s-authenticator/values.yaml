@@ -121,3 +121,6 @@ initContainers: []
 #   volumeMounts:
 #     - name: plugins
 #       mountPath: /target
+
+rbac:
+  create: false

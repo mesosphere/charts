@@ -95,6 +95,10 @@ ingress:
 extraVolumes: []
 extraVolumeMounts: []
 
+# certIssuerRef:
+#   kind: ClusterIssuer
+#   name: kubernetes-ca
+
 certs:
   securityContext:
     enabled: true
@@ -220,3 +224,8 @@ config:
 
 dex-controller:
   enabled: true
+
+dnsNames: []
+    # - dex-kubeaddons
+    # - dex-kubeaddons.kubeaddons
+    # - dex-kubeaddons.kubeaddons.svc.cluster.local

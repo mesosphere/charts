@@ -4,14 +4,16 @@
 
 source $(dirname "$0")/helpers.sh
 
-set -x
+set -xeuo pipefail
 
 SRCFILE="${BASEDIR}"/.helmignore
 
-sed -i '' -e '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
+sed -i '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Mesosphere-specific files to ignore
+upgrade_operator.sh
+prometheus-operator-*.tgz
 patch/
 EOF
 
