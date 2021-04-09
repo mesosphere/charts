@@ -27,8 +27,12 @@ spec:
   secretName: {{ template "traefik.fullname" . }}-certificate
   {{- end }}
   issuerRef:
+  {{- if .Values.certIssuerRef }}
+    {{- toYaml .Values.certIssuerRef | nindent 4 }}
+  {{- else }}
     name: kubernetes-ca
     kind: ClusterIssuer
+  {{- end }}
   # DCOS-60297 Update certificate to comply with Apple security requirements
   # https://support.apple.com/en-us/HT210176
   duration: 19200h   # 800 days

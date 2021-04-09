@@ -243,9 +243,9 @@ install_certmanager() {
 
 install_dummylb() {
     echo 'Installing dummylb...'
-    DUMMYLB_SHA="cb4c17d70e63393f8de7cfa97d186aa06e781b3cd25bfff1f374b9d57159e80f"
+    DUMMYLB_SHA="25a41c158e51193d692a541cc79277dea34be901a3c35b2b7e209148efe56af9"
     DUMMYLB_REG="registry.gitlab.com/joejulian/dummylb"
-    curl ${CURL_RETRY_OPTS} -sL https://gitlab.com/joejulian/dummylb/-/raw/f5c51f24e706cd4c5ebe7e5d36e688d167473f8b/dummylb.yaml |
+    curl ${CURL_RETRY_OPTS} -sL https://gitlab.com/joejulian/dummylb/-/raw/2b2f05497fd49569ad6c21d281066a23185cecae/dummylb.yaml |
       sed "s%image: $DUMMYLB_REG:latest%image: $DUMMYLB_REG@sha256:$DUMMYLB_SHA%" |
       docker_exec kubectl apply -f -
       docker_exec kubectl wait --timeout=180s --for=condition=Available --selector=app=dummylb deploy

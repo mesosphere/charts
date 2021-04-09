@@ -25,4 +25,6 @@ hack/
 ci/
 kube-prometheus-*.tgz
 # Mesosphere-specific files to ignore
+upgrade_operator.sh
+prometheus-operator-*.tgz
 patch/

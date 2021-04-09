@@ -17,8 +17,12 @@ metadata:
 spec:
   secretName: dex
   issuerRef:
+  {{- if .Values.certIssuerRef }}
+    {{- toYaml .Values.certIssuerRef | nindent 4 }}
+  {{- else }}
     name: kubernetes-ca
     kind: ClusterIssuer
+  {{- end }}
   # The use of the common name field has been deprecated since 2000 and is
   # discouraged from being used.
   commonName: dex
@@ -31,7 +35,4 @@ spec:
   organization:
     - D2iQ
 {{- end }}
-  dnsNames:
-    - dex-kubeaddons
-    - dex-kubeaddons.kubeaddons
-    - dex-kubeaddons.kubeaddons.svc.cluster.local
+  dnsNames: {{ toYaml .Values.dnsNames | nindent 4 }}

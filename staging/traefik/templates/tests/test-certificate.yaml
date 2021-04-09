@@ -136,4 +136,77 @@ spec:
           value: "konvoyconfig-kubeaddons"
         - name: "TRAEFIK_CLUSTER_HOSTNAME_KEY"
           value: "clusterHostname"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "traefik.fullname" . }}-reload
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "traefik.fullname" . }}-reload
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+    resourceNames: ["{{ template "traefik.fullname" . }}"]
+    verbs: ["get", "patch", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ template "traefik.fullname" . }}-reload
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "4"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ template "traefik.fullname" . }}-reload
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "traefik.fullname" . }}-reload
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "traefik.fullname" . }}-reload-pod
+  labels:
+    app: {{ template "traefik.fullname" . }}
+    chart: {{ template "traefik.chart" . }}
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-weight": "5"
+spec:
+  backoffLimit: 5
+  template:
+    spec:
+      serviceAccountName: {{ template "traefik.fullname" . }}-reload
+      restartPolicy: Never
+      containers:
+      - name: {{ template "traefik.fullname" . }}-konvoyconfig-kubeaddons-deploy-job-pod
+        image: bitnami/kubectl:1.18.8-debian-10-r15
+        command:
+        - kubectl
+        - -n
+        - {{ template "traefik.fullname" . }}
+        - rollout
+        - restart
+        - deployment
+        - {{ template "traefik.fullname" . }}
+      restartPolicy: Never
+---
 {{- end }}

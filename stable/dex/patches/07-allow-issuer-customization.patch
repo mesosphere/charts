@@ -1,0 +1,38 @@
+commit b63dffe0419a05aab931df2e7149ea109254f93c
+Author: Joe Julian <me@joejulian.name>
+Date:   Thu Apr 1 12:58:34 2021 -0700
+
+    allow dex certificate issuer customization
+
+diff --git a/stable/dex/templates/certificate.yaml b/stable/dex/templates/certificate.yaml
+index a1fdd2535..a0ce6b0fb 100644
+--- a/stable/dex/templates/certificate.yaml
++++ b/stable/dex/templates/certificate.yaml
+@@ -17,8 +17,12 @@ metadata:
+ spec:
+   secretName: dex
+   issuerRef:
++  {{- if .Values.certIssuerRef }}
++    {{- toYaml .Values.certIssuerRef | nindent 4 }}
++  {{- else }}
+     name: kubernetes-ca
+     kind: ClusterIssuer
++  {{- end }}
+   # The use of the common name field has been deprecated since 2000 and is
+   # discouraged from being used.
+   commonName: dex
+diff --git a/stable/dex/values.yaml b/stable/dex/values.yaml
+index 2f36f3901..f1d5e95e6 100644
+--- a/stable/dex/values.yaml
++++ b/stable/dex/values.yaml
+@@ -95,6 +95,10 @@ ingress:
+ extraVolumes: []
+ extraVolumeMounts: []
+ 
++# certIssuerRef:
++#   kind: ClusterIssuer
++#   name: kubernetes-ca
++
+ certs:
+   securityContext:
+     enabled: true
