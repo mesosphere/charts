@@ -27,4 +27,10 @@ spec:
   organization:
     - D2iQ
 {{- end }}
-  dnsNames: {{ toYaml .Values.dnsNames | nindent 4 }}
+  dnsNames:
+    # names are the <name of the service>.<namespace>.srv.<domain> and
+    # shortened variations. However, there is no way to determine the domain,
+    # so we only include the up to svc.
+    {{ template "kube-oidc-proxy.fullname" . }}
+    {{ template "kube-oidc-proxy.fullname" . }}.{{ .Release.Namespace }}
+    {{ template "kube-oidc-proxy.fullname" . }}.{{ .Release.Namespace }}.svc

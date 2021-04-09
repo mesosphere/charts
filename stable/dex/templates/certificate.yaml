@@ -35,4 +35,10 @@ spec:
   organization:
     - D2iQ
 {{- end }}
-  dnsNames: {{ toYaml .Values.dnsNames | nindent 4 }}
+  dnsNames:
+    # names are the <name of the service>.<namespace>.srv.<domain> and
+    # shortened variations. However, there is no way to determine the domain,
+    # so we only include the up to svc.
+    {{ template "dex.fullname" . }}
+    {{ template "dex.fullname" . }}.{{ .Release.Namespace }}
+    {{ template "dex.fullname" . }}.{{ .Release.Namespace }}.svc
