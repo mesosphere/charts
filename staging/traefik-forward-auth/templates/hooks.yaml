@@ -67,7 +67,7 @@ spec:
       serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-pre-install"
-        image: "mesosphere/kubeaddons-addon-initializer:v0.0.2"
+        image: "{{ .Values.addonsInitializer }}"
         args:
         - password-secret
         - create
@@ -100,7 +100,7 @@ spec:
       serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-pre-install"
-        image: "mesosphere/kubeaddons-addon-initializer:v0.5.1"
+        image: "{{ .Values.addonsInitializer }}"
         args:
         - password-secret
         - create
@@ -135,7 +135,7 @@ spec:
       serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-post-delete"
-        image: "mesosphere/kubeaddons-addon-initializer:v0.5.1"
+        image: "{{ .Values.addonsInitializer }}"
         args:
         - password-secret
         - delete
@@ -168,7 +168,7 @@ spec:
       serviceAccountName: "{{.Release.Name}}-secret-sa"
       containers:
       - name: "{{.Release.Name}}-post-delete"
-        image: "mesosphere/kubeaddons-addon-initializer:v0.5.1"
+        image: "{{ .Values.addonsInitializer }}"
         args:
         - password-secret
         - delete

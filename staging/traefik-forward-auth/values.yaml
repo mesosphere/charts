@@ -90,3 +90,5 @@ affinity: {}
 initContainers: []
 
 deploymentAnnotations: {}
+
+addonsInitializer: "mesosphere/kubeaddons-addon-initializer:v0.5.1"
