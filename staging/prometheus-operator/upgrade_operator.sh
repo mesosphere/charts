@@ -7,14 +7,26 @@
 # To upgrade, simply run: 
 #   ./upgrade_operator.sh
 
-set -x
+set -xeuo pipefail
+shopt -s dotglob
 
+BASEDIR=$(dirname "$(readlink -f "$0")")
 UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
 PROMETHEUS_PATH=charts/kube-prometheus-stack
 PROMETHEUS_TAG=kube-prometheus-stack-12.11.3
 # if using osx download coreutils via brew and use greadlink instead
-BASEDIR=$(dirname $(readlink -f "$0"))
 TMPDIR=$(mktemp -d)
+STARTING_REV=$(git rev-parse HEAD)
+export STARTING_REV
+trap 'rollback' ERR
+
+rollback() {
+    set +x
+    echo "ERROR running upgrades. Rolling back."
+    cd "${BASEDIR}"
+    git reset --hard "${STARTING_REV}"
+    exit 1
+}
 
 cd "${TMPDIR}" || exit
 
@@ -24,12 +36,12 @@ git config core.sparsecheckout true
 
 echo ${PROMETHEUS_PATH} > .git/info/sparse-checkout
 
-git pull origin master
+git fetch origin ${PROMETHEUS_TAG}
 git checkout ${PROMETHEUS_TAG}
 
 cd ${PROMETHEUS_PATH} || exit
 
-for f in $(ls -A); do
+for f in *; do
   rm -rf "${BASEDIR:?}"/"${f}"
   cp -R "$f" "${BASEDIR}"
 done
@@ -42,5 +54,9 @@ git add .
 git commit -am "chore: copy upstream chart ${NEW_VERSION}"
 
 BASEDIR=${BASEDIR} ./patch/patch.sh
+
+helm dependency upgrade
+git add .
+git commit -m 'helm dependency upgrade'
 
 echo "Done upgrading prometheus-operator!"

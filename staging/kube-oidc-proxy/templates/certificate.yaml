@@ -27,7 +27,4 @@ spec:
   organization:
     - D2iQ
 {{- end }}
-  dnsNames:
-    - kube-oidc-proxy
-    - kube-oidc-proxy-kubeaddons.kubeaddons
-    - kube-oidc-proxy-kubeaddons.kubeaddons.svc.cluster.local
+  dnsNames: {{ toYaml .Values.dnsNames | nindent 4 }}

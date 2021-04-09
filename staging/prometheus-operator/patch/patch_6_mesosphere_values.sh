@@ -5,11 +5,11 @@
 
 source $(dirname "$0")/helpers.sh
 
-set -x
+set -xeuo pipefail
 
 SRCFILE="${BASEDIR}"/values.yaml
 
-sed -i '' -e '/# Create mesosphere specific resources/,$d' ${SRCFILE}
+sed -i '/# Create mesosphere specific resources/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Create mesosphere specific resources
