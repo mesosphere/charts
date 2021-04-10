@@ -109,7 +109,7 @@ spec:
             - name: SESSION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "traefik-forward-auth.fullname" . }}-secret
+                  name: {{ template "traefik-forward-auth.fullname" . }}-session-key
                   key: secret
             {{- if gt (len .Values.traefikForwardAuth.whitelist) 0 }}
             - name: WHITELIST
@@ -128,6 +128,14 @@ spec:
             {{- if gt (len .Values.traefikForwardAuth.rbacPassThroughPaths) 0 }}
             - name: AUTHZ_PASS_THROUGH
               value: {{ join "," .Values.traefikForwardAuth.rbacPassThroughPaths | quote }}
+            {{- end }}
+            {{- if .Values.clusterStorage.enabled }}
+            - name: ENABLE_IN_CLUSTER_STORAGE
+              value: "true"
+            - name: CLUSTER_STORE_CACHE_TTL
+              value: {{ .Values.clusterStorage.cacheTTL | quote }}
+            - name: CLUSTER_STORE_NAMESPACE
+              value: {{ .Values.clusterStorage.namespace | quote}}
             {{- end }}
           ports:
             - name: http
