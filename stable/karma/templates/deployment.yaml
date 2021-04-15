@@ -48,12 +48,14 @@ spec:
           {{- with .Values.env }}
 {{ toYaml . | indent 10 }}
           {{- end }}
+          {{- if .Values.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}
               port: http
             initialDelaySeconds: {{ .Values.livenessProbe.delay }}
             periodSeconds: {{ .Values.livenessProbe.period }}
+          {{- end }}
           readinessProbe:
             httpGet:
               path: {{ .Values.livenessProbe.path }}

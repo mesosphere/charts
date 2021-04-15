@@ -68,6 +68,7 @@ securityContext: {}
 
 # configuration for liveness probe
 livenessProbe:
+  enabled: true
   delay: 5
   period: 5
   path: /health
