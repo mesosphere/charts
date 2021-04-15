@@ -68,6 +68,10 @@ securityContext: {}
 
 # configuration for liveness probe
 livenessProbe:
+  # Disabled by default. karma doesn't start its API, including /health, until it finishes its first pull from its
+  # backing alertmanagers. If a single alertmanager pull takes too long, this can delay the availability of /health
+  # until karma fails its liveness checks and is restarted. This will repeat until all alertmanager pulls quickly
+  # succeed or fail.
   enabled: false
   delay: 5
   period: 5
