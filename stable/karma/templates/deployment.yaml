@@ -56,12 +56,14 @@ spec:
             initialDelaySeconds: {{ .Values.livenessProbe.delay }}
             periodSeconds: {{ .Values.livenessProbe.period }}
           {{- end }}
+          {{- if .Values.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.livenessProbe.path }}
+              path: {{ .Values.readinessProbe.path }}
               port: http
-            initialDelaySeconds: {{ .Values.livenessProbe.delay }}
-            periodSeconds: {{ .Values.livenessProbe.period }}
+            initialDelaySeconds: {{ .Values.readinessProbe.delay }}
+            periodSeconds: {{ .Values.readinessProbe.period }}
+          {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
