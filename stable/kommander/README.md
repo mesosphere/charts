@@ -31,7 +31,7 @@ helm install --namespace "kommander" --name "kommander-kubeaddons" --set kommand
 ## Backporting / Patch Releases
 The minor version should be bumped following every Kommander release.
 
-- Kommander v1.4.x -> chart version v0.28.x
+- Kommander v1.4.x -> chart version v0.29.x
 - Kommander v1.3.x patches should go into chart version v0.15.x
 
 This allows us to backport and create patch releases. When backporting, you should work off of the appropriate release branch for the chart. The release branch follows a `release/kommander-v0.15.x` convention for v0.15.x chart versions. If the release branch does not exist, you must create it. Browse the chart's git history until you find the commit before the chart was bumped to the next minor version. Branch off that commit to create the release branch, which will sit at the latest patch version of the chart before it was bumped to the next minor version (and release of Kommander).
