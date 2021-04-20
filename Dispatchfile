@@ -167,7 +167,7 @@ git_resource(
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
 
-do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kommander",
+do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kubecost",
   command=["/bin/sh", "-c"], args=[
     """
   echo "$GPG_PRIVATE_KEY" > gpg_private_key
