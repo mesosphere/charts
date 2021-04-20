@@ -36,7 +36,7 @@ karma:
     hosts:
       - ""
 
-  livenessProbe:
+  readinessProbe:
     delay: 5
     period: 5
     path: /ops/portal/kommander/monitoring/karma/

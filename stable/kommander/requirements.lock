@@ -1,7 +1,7 @@
 dependencies:
 - name: kommander-karma
   repository: ""
-  version: 0.3.18
+  version: 0.3.19
 - name: kommander-thanos
   repository: ""
   version: 0.1.22
@@ -16,12 +16,12 @@ dependencies:
   version: v0.15.0
 - name: kommander-ui
   repository: https://mesosphere.github.io/kommander-ui/charts
-  version: 6.97.0
+  version: 6.97.1
 - name: kubecost
   repository: https://mesosphere.github.io/charts/stable
-  version: 0.9.0
+  version: 0.9.1
 - name: grafana
   repository: https://mesosphere.github.io/charts/stable
   version: 4.6.3
-digest: sha256:ac3d70fe4c97e7dc89a4b40c9bba0caa3b1fc44550004f755c5857f9c240e69e
-generated: "2021-04-14T09:27:33.058596-05:00"
+digest: sha256:8518aa4f9f464c896220b9429d7cfbbd452e237bca3ef223711103e99df7c5a9
+generated: "2021-04-16T17:05:56.68311-05:00"
