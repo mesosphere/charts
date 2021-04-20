@@ -36,7 +36,7 @@ spec:
     - D2iQ
 {{- end }}
   dnsNames:
-    # names are the <name of the service>.<namespace>.srv.<domain> and
+    # names are the <name of the service>.<namespace>.svc.<domain> and
     # shortened variations. However, there is no way to determine the domain,
     # so we only include the up to svc.
     {{ template "dex.fullname" . }}
