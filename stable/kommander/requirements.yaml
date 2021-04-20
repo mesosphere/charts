@@ -1,6 +1,6 @@
 dependencies:
   - name: kommander-karma
-    version: "0.3.18"
+    version: "0.3.19"
   - name: kommander-thanos
     version: "0.1.22"
   - name: kubeaddons-catalog
@@ -16,11 +16,11 @@ dependencies:
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-licensing.enabled, global.kommander-licensing.enabled
   - name: kommander-ui
-    version: "6.95.1"
+    version: "6.97.1"
     repository: "https://mesosphere.github.io/kommander-ui/charts"
     condition: kommander-ui.enabled
   - name: kubecost
-    version: "0.9.0"
+    version: "0.9.1"
     repository: "https://mesosphere.github.io/charts/stable"
     condition: kubecost.enabled
   - name: grafana
