@@ -17,22 +17,24 @@ spec:
       hostNetwork: true
       serviceAccountName: csi-azuredisk-controller-sa
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux
+        {{- if .Values.controller.runOnMaster}}
+        kubernetes.io/role: master
+        {{- end}}
       priorityClassName: system-cluster-critical
-{{- if .Values.azuredisk.controller.tolerations }}
+{{- if .Values.controller.tolerations }}
       tolerations:
-{{ toYaml .Values.azuredisk.controller.tolerations | indent 8 }}
+{{ toYaml .Values.controller.tolerations | indent 8 }}
 {{- end }}
+      {{- include "azuredisk.pullSecrets" . | indent 6 }}
       containers:
         - name: csi-provisioner
           image: "{{ .Values.image.csiProvisioner.repository }}:{{ .Values.image.csiProvisioner.tag }}"
           args:
+            - "--feature-gates=Topology=true"
             - "--csi-address=$(ADDRESS)"
-            - "--v=5"
-            - "--timeout=120s"
-            {{- if .Values.enableVolumeScheduling }}
-            - --feature-gates=Topology=true
-            {{- end}}
+            - "--v={{ .Values.controller.logLevel }}"
+            - "--timeout=15s"
             {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "--enable-leader-election"
             - "--leader-election-type=leases"
@@ -40,18 +42,17 @@ spec:
           env:
             - name: ADDRESS
               value: /csi/csi.sock
-          imagePullPolicy: Always
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
         - name: csi-attacher
           image: "{{ .Values.image.csiAttacher.repository }}:{{ .Values.image.csiAttacher.tag }}"
           args:
-            - "-v=5"
+            - "-v={{ .Values.controller.logLevel }}"
             - "-csi-address=$(ADDRESS)"
             - "-timeout=120s"
             {{- if (gt (.Values.controller.replicas | int) 1) }}
@@ -60,22 +61,22 @@ spec:
           env:
             - name: ADDRESS
               value: /csi/csi.sock
-          imagePullPolicy: Always
           volumeMounts:
           - mountPath: /csi
             name: socket-dir
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
+        {{- if .Values.snapshot.enabled}}
         - name: csi-snapshotter
-          image: "{{ .Values.image.csiSnapshotter.repository }}:{{ include "azuredisk.csiSnapshotter.tag" . }}"
+          image: "{{ .Values.snapshot.image.csiSnapshotter.repository }}:{{ .Values.snapshot.image.csiSnapshotter.tag }}"
           args:
             - "-csi-address=$(ADDRESS)"
             {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "-leader-election"
             {{- end }}
-            - "-v=5"
+            - "-v={{ .Values.controller.logLevel }}"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -83,17 +84,19 @@ spec:
             - name: socket-dir
               mountPath: /csi
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
+        {{- end}}
         - name: csi-resizer
           image: "{{ .Values.image.csiResizer.repository }}:{{ .Values.image.csiResizer.tag }}"
           args:
             - "-csi-address=$(ADDRESS)"
-            - "-v=5"
+            - "-v={{ .Values.controller.logLevel }}"
             {{- if (gt (.Values.controller.replicas | int) 1) }}
             - "-leader-election"
             {{- end }}
+            - '-handle-volume-inuse-error=true'
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -101,33 +104,34 @@ spec:
             - name: socket-dir
               mountPath: /csi
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
         - name: liveness-probe
           image: "{{ .Values.image.livenessProbe.repository }}:{{ .Values.image.livenessProbe.tag }}"
           args:
             - --csi-address=/csi/csi.sock
+            - --probe-timeout=3s
             - --health-port=29602
-            - --v=5
+            - --v={{ .Values.controller.logLevel }}
           volumeMounts:
             - name: socket-dir
               mountPath: /csi
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
         - name: azuredisk
           image: "{{ .Values.image.azuredisk.repository }}:{{ .Values.image.azuredisk.tag }}"
           args:
-            - "--v=5"
+            - "--v={{ .Values.controller.logLevel }}"
             - "--endpoint=$(CSI_ENDPOINT)"
-            - "--nodeid=$(KUBE_NODE_NAME)"
+            - "--metrics-address=0.0.0.0:{{ .Values.controller.metricsPort }}"
           ports:
             - containerPort: 29602
               name: healthz
               protocol: TCP
-            - containerPort: 29604
+            - containerPort: {{ .Values.controller.metricsPort }}
               name: metrics
               protocol: TCP
           livenessProbe:
@@ -143,6 +147,10 @@ spec:
               value: {{ .Values.cloudConfig }}
             - name: CSI_ENDPOINT
               value: unix:///csi/csi.sock
+            {{- if eq .Values.cloud "AzureStackCloud" }}
+            - name: AZURE_ENVIRONMENT_FILEPATH
+              value: /etc/kubernetes/azurestackcloud.json
+            {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           volumeMounts:
             - mountPath: /csi
@@ -152,9 +160,14 @@ spec:
             - mountPath: /var/lib/waagent/ManagedIdentity-Settings
               readOnly: true
               name: msi
+            {{- if eq .Values.cloud "AzureStackCloud" }}
+            - name: ssl
+              mountPath: /etc/ssl/certs
+              readOnly: true
+            {{- end }}
           resources:
-{{- if .Values.azuredisk.controller.resources }}
-{{ toYaml .Values.azuredisk.controller.resources | indent 12 }}
+{{- if .Values.controller.resources }}
+{{ toYaml .Values.controller.resources | indent 12 }}
 {{- end }}
       volumes:
         - name: socket-dir
@@ -166,3 +179,8 @@ spec:
         - name: msi
           hostPath:
             path: /var/lib/waagent/ManagedIdentity-Settings
+        {{- if eq .Values.cloud "AzureStackCloud" }}
+        - name: ssl
+          hostPath:
+            path: /etc/ssl/certs
+        {{- end }}

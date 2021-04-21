@@ -1,39 +1,40 @@
-{{- if and .Values.snapshot.enabled (or (gt (.Capabilities.KubeVersion.Minor | int) 17) (eq (.Capabilities.KubeVersion.Minor | int) 17)) }}
----
+{{- if .Values.snapshot.enabled -}}
 kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: csi-snapshot-controller
   namespace: {{ .Release.Namespace }}
+{{ include "azuredisk.labels" . | indent 2 }}
 spec:
-  replicas: {{ .Values.snapshotController.replicas }}
+  replicas: {{ .Values.snapshot.snapshotController.replicas }}
   selector:
     matchLabels:
       app: csi-snapshot-controller
   template:
     metadata:
-      labels:
+{{ include "azuredisk.labels" . | indent 6 }}
         app: csi-snapshot-controller
     spec:
       serviceAccountName: csi-snapshot-controller-sa
       nodeSelector:
-          beta.kubernetes.io/os: linux
-{{- if .Values.snapshot.controller.tolerations }}
-      tolerations:
-{{ toYaml .Values.snapshot.controller.tolerations | indent 8 }}
-{{- end }}
+        kubernetes.io/os: linux
       priorityClassName: system-cluster-critical
+{{- if .Values.snapshot.snapshotController.tolerations }}
+      tolerations:
+{{ toYaml .Values.snapshot.snapshotController.tolerations | indent 8 }}
+{{- end }}
+      {{- include "azuredisk.pullSecrets" . | indent 6 }}
       containers:
         - name: csi-snapshot-controller
-          image: "{{ .Values.image.csiSnapshotController.repository }}:{{ .Values.image.csiSnapshotController.tag }}"
+          image: "{{ .Values.snapshot.image.csiSnapshotController.repository }}:{{ .Values.snapshot.image.csiSnapshotController.tag }}"
           args:
-            - "--v=5"
-            {{- if (gt (.Values.snapshotController.replicas | int) 1) }}
+            - "--v={{ .Values.snapshot.snapshotController.logLevel }}"
+            {{- if (gt (.Values.snapshot.snapshotController.replicas | int) 1) }}
             - "-leader-election"
             {{- end }}
           resources:
-{{- if .Values.snapshot.controller.resources }}
-{{ toYaml .Values.snapshot.controller.resources | indent 12 }}
+{{- if .Values.snapshot.snapshotController.resources }}
+{{ toYaml .Values.snapshot.snapshotController.resources | indent 12 }}
 {{- end }}
-          imagePullPolicy: {{ .Values.image.csiSnapshotController.pullPolicy }}
+          imagePullPolicy: {{ .Values.snapshot.image.csiSnapshotController.pullPolicy }}
 {{- end -}}

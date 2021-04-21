@@ -1,36 +1,30 @@
 image:
   azuredisk:
     repository: mcr.microsoft.com/k8s/csi/azuredisk-csi
-    tag: v0.7.0
-    pullPolicy: Always
+    tag: v1.1.1
+    pullPolicy: IfNotPresent
   csiProvisioner:
-    repository: quay.io/k8scsi/csi-provisioner
-    tag: v1.6.0
-    pullPolicy: Always
+    repository: mcr.microsoft.com/oss/kubernetes-csi/csi-provisioner
+    tag: v1.6.1
+    pullPolicy: IfNotPresent
   csiAttacher:
-    repository: quay.io/k8scsi/csi-attacher
+    repository: mcr.microsoft.com/oss/kubernetes-csi/csi-attacher
     tag: v2.2.0
-    pullPolicy: Always
-  csiSnapshotter:
-    repository: quay.io/k8scsi/csi-snapshotter
-    tag: v2.0.0
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   csiResizer:
-    repository: quay.io/k8scsi/csi-resizer
-    tag: v0.5.0
-    pullPolicy: Always
+    repository: mcr.microsoft.com/oss/kubernetes-csi/csi-resizer
+    tag: v1.1.0
+    pullPolicy: IfNotPresent
   livenessProbe:
-    repository: quay.io/k8scsi/livenessprobe
-    tag: v2.0.0
-    pullPolicy: Always
+    repository: mcr.microsoft.com/oss/kubernetes-csi/livenessprobe
+    tag: v2.2.0
+    pullPolicy: IfNotPresent
   nodeDriverRegistrar:
-    repository: quay.io/k8scsi/csi-node-driver-registrar
-    tag: v1.3.0
-    pullPolicy: Always
-  csiSnapshotController:
-    repository: quay.io/k8scsi/snapshot-controller
-    tag: v2.1.1
-    pullPolicy: Always
+    repository: mcr.microsoft.com/oss/kubernetes-csi/csi-node-driver-registrar
+    tag: v2.0.1
+    pullPolicy: IfNotPresent
+
+cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
 
 serviceAccount:
   create: true
@@ -39,23 +33,53 @@ rbac:
   create: true
 
 controller:
-  replicas: 3
-
-snapshotController:
-  replicas: 1
+  replicas: 2
+  metricsPort: 29604
+  runOnMaster: false
+  logLevel: 5
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+  tolerations:
+    - effect: NoSchedule
+      operator: Exists
+    - effect: NoExecute
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
 
 node:
   metricsPort: 29605
-
-# True if enable volume scheduling for dynamic volume provisioning
-enableVolumeScheduling: false
-
-cloudConfig: /etc/kubernetes/cloud-config/cloud.conf
+  logLevel: 5
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+  tolerations:
+    - effect: NoSchedule
+      operator: Exists
+    - effect: NoExecute
+      operator: Exists
+    - key: CriticalAddonsOnly
+      operator: Exists
 
 snapshot:
   enabled: false
-  cleanupVolumeSnapshotCRDV1alpha1: true
-  controller:
+  image:
+    csiSnapshotter:
+      repository: mcr.microsoft.com/oss/kubernetes-csi/csi-snapshotter
+      tag: v3.0.3
+      pullPolicy: IfNotPresent
+    csiSnapshotController:
+      repository: mcr.microsoft.com/oss/kubernetes-csi/snapshot-controller
+      tag: v3.0.3
+      pullPolicy: IfNotPresent
+  snapshotController:
+    replicas: 1
+    logLevel: 5
+    serviceAccount: true
+    rbac: true
     resources:
       requests:
         cpu: 10m
@@ -68,28 +92,23 @@ snapshot:
       - key: CriticalAddonsOnly
         operator: Exists
 
-azuredisk:
-  controller:
-    resources:
-      requests:
-        cpu: 10m
-        memory: 20Mi
-    tolerations:
-      - effect: NoSchedule
-        operator: Exists
-      - effect: NoExecute
-        operator: Exists
-      - key: CriticalAddonsOnly
-        operator: Exists
-  node:
-    resources:
-      requests:
-        cpu: 10m
-        memory: 20Mi
-    tolerations:
-      - effect: NoSchedule
-        operator: Exists
-      - effect: NoExecute
-        operator: Exists
-      - key: CriticalAddonsOnly
-        operator: Exists
+linux:
+  enabled: true
+
+windows:
+  enabled: true
+  image:
+    livenessProbe:
+      repository: mcr.microsoft.com/oss/kubernetes-csi/livenessprobe
+      tag: v2.2.0
+      pullPolicy: IfNotPresent
+    nodeDriverRegistrar:
+      repository: mcr.microsoft.com/oss/kubernetes-csi/csi-node-driver-registrar
+      tag: v2.0.1
+      pullPolicy: IfNotPresent
+
+kubelet:
+  windowsPath: 'C:\var\lib\kubelet'
+  linuxPath: /var/lib/kubelet
+
+cloud: AzurePublicCloud
