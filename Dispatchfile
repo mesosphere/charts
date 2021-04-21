@@ -167,7 +167,7 @@ git_resource(
     revision="master")
 do_bump_kommander = bump_addon("bump-kommander", kubeaddons_kommander_git)
 
-do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kommander",
+do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kubecost",
   command=["/bin/sh", "-c"], args=[
     """
   echo "$GPG_PRIVATE_KEY" > gpg_private_key
@@ -274,7 +274,7 @@ kommander_chart_path = "stable/kommander/Chart.yaml"
 
 # Robot Actions
 action(tasks=["test-helm2", "test-helm3"], on=pull_request())
-action(tasks=["publish"], on=push(branches=["master"]))
+action(tasks=["publish"], on=push(branches=["master", "release/*"]))
 action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
 action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
 
