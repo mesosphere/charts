@@ -2,94 +2,103 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: vsphere-csi-controller
-  namespace: {{ .Release.Namespace }}
-{{ include "vsphere.labels" . | indent 2 }}
+  namespace: kube-system
 spec:
-  replicas: {{ .Values.replicas }}
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 0
+  replicas: 1
   selector:
     matchLabels:
       app: vsphere-csi-controller
   template:
     metadata:
-{{ include "vsphere.labels" . | indent 6 }}
+      labels:
         app: vsphere-csi-controller
         role: vsphere-csi
     spec:
       serviceAccountName: vsphere-csi-controller
       nodeSelector:
         node-role.kubernetes.io/master: ""
-{{- if .Values.tolerations }}
       tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
-{{- end }}
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        # uncomment below toleration if you need an aggressive pod eviction in case when
+        # node becomes not-ready or unreachable. Default is 300 seconds if not specified.
+        #- key: node.kubernetes.io/not-ready
+        #  operator: Exists
+        #  effect: NoExecute
+        #  tolerationSeconds: 30
+        #- key: node.kubernetes.io/unreachable
+        #  operator: Exists
+        #  effect: NoExecute
+        #  tolerationSeconds: 30
       dnsPolicy: "Default"
       containers:
         - name: csi-attacher
-          image: {{ .Values.attacher.image.repository }}:{{ include "vsphere-csi-driver.csi-attacher.tag" . }}
+          image: quay.io/k8scsi/csi-attacher:v3.1.0
           args:
-            - "--v={{ .Values.attacher.verbose }}"
+            - "--v=4"
+            - "--timeout=300s"
             - "--csi-address=$(ADDRESS)"
-            - "--metrics-address=:22012"
-            - "--timeout={{ .Values.attacher.timeout }}"
-            - "--retry-interval-start={{ .Values.attacher.retryIntervalStart }}"
-            - "--retry-interval-max={{ .Values.attacher.retryIntervalMax }}"
-            - "--worker-threads={{ .Values.attacher.workerThreads }}"
-            {{- if (gt (.Values.replicas | int) 1) }}
-            - "--leader-election=true"
-            {{- end }}
+            - "--leader-election"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
-        {{- if and (semverCompare ">2.0.0" (default .Chart.AppVersion .Values.image.version)) .Values.storageclass.allowVolumeExpansion }}
         - name: csi-resizer
-          image: {{ .Values.resizer.image.repository }}:{{ .Values.resizer.image.tag }}
+          image: quay.io/k8scsi/csi-resizer:v1.1.0
           args:
-            - "--v={{ .Values.resizer.verbose }}"
+            - "--v=4"
+            - "--timeout=300s"
+            - "--handle-volume-inuse-error=false"
             - "--csi-address=$(ADDRESS)"
-            - "--metrics-address=:22013"
-            {{- if (gt (.Values.replicas | int) 1) }}
-            - "--leader-election=true"
-            {{- end }}
+            - "--kube-api-qps=100"
+            - "--kube-api-burst=100"
+            - "--leader-election"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
           volumeMounts:
             - mountPath: /csi
               name: socket-dir
-        {{- end }}
         - name: vsphere-csi-controller
-          image: {{ .Values.image.repository }}:v{{ default .Chart.AppVersion .Values.image.version }}
-          lifecycle:
-            preStop:
-              exec:
-                command: ["/bin/sh", "-c", "rm -rf /var/lib/csi/sockets/pluginproxy/csi.vsphere.vmware.com"]
+          image: gcr.io/cloud-provider-vsphere/csi/release/driver:v2.2.0
+          args:
+            - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
+            - "--fss-namespace=$(CSI_NAMESPACE)"
           imagePullPolicy: "Always"
           env:
             - name: CSI_ENDPOINT
-              value: unix:///var/lib/csi/sockets/pluginproxy/csi.sock
+              value: unix:///csi/csi.sock
             - name: X_CSI_MODE
               value: "controller"
             - name: VSPHERE_CSI_CONFIG
-              value: "/etc/cloud/csi.conf"
+              value: "/etc/cloud/csi-vsphere.conf"
             - name: LOGGER_LEVEL
-              value: "PRODUCTION"
+              value: "PRODUCTION" # Options: DEVELOPMENT, PRODUCTION
+            - name: INCLUSTER_CLIENT_QPS
+              value: "100"
+            - name: INCLUSTER_CLIENT_BURST
+              value: "100"
+            - name: CSI_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: X_CSI_SERIAL_VOL_ACCESS_TIMEOUT
+              value: 3m
           volumeMounts:
             - mountPath: /etc/cloud
               name: vsphere-config-volume
               readOnly: true
-            - mountPath: /var/lib/csi/sockets/pluginproxy/
+            - mountPath: /csi
               name: socket-dir
           ports:
             - name: healthz
               containerPort: 9808
+              protocol: TCP
+            - name: prometheus
+              containerPort: 2112
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -100,51 +109,56 @@ spec:
             periodSeconds: 5
             failureThreshold: 3
         - name: liveness-probe
-          image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
+          image: quay.io/k8scsi/livenessprobe:v2.2.0
           args:
-            - "--csi-address=$(ADDRESS)"
-          env:
-            - name: ADDRESS
-              value: /var/lib/csi/sockets/pluginproxy/csi.sock
+            - "--v=4"
+            - "--csi-address=/csi/csi.sock"
           volumeMounts:
-            - mountPath: /var/lib/csi/sockets/pluginproxy/
-              name: socket-dir
+            - name: socket-dir
+              mountPath: /csi
         - name: vsphere-syncer
-          image: {{ .Values.syncer.repository }}:v{{ default .Chart.AppVersion .Values.syncer.version }}
-          {{- if (gt (.Values.replicas | int) 1) }}
+          image: gcr.io/cloud-provider-vsphere/csi/release/syncer:v2.2.0
           args:
             - "--leader-election"
-          {{- end }}
+            - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
+            - "--fss-namespace=$(CSI_NAMESPACE)"
           imagePullPolicy: "Always"
+          ports:
+            - containerPort: 2113
+              name: prometheus
+              protocol: TCP
           env:
             - name: FULL_SYNC_INTERVAL_MINUTES
               value: "30"
             - name: VSPHERE_CSI_CONFIG
-              value: "/etc/cloud/csi.conf"
+              value: "/etc/cloud/csi-vsphere.conf"
             - name: LOGGER_LEVEL
-              value: "PRODUCTION"
+              value: "PRODUCTION" # Options: DEVELOPMENT, PRODUCTION
+            - name: INCLUSTER_CLIENT_QPS
+              value: "100"
+            - name: INCLUSTER_CLIENT_BURST
+              value: "100"
+            - name: CSI_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           volumeMounts:
             - mountPath: /etc/cloud
               name: vsphere-config-volume
               readOnly: true
         - name: csi-provisioner
-          image: {{ .Values.provisioner.image.repository }}:{{ .Values.provisioner.image.tag }}
+          image: quay.io/k8scsi/csi-provisioner:v2.1.0
           args:
-            - "--v={{ .Values.provisioner.verbose }}"
+            - "--v=4"
+            - "--timeout=300s"
             - "--csi-address=$(ADDRESS)"
-            - "--metrics-address=:22011"
-            - "--timeout={{ .Values.provisioner.timeout }}"
-            - "--retry-interval-start={{ .Values.provisioner.retryIntervalStart }}"
-            - "--retry-interval-max={{ .Values.provisioner.retryIntervalMax }}"
-            - "--worker-threads={{ .Values.provisioner.workerThreads }}"
-            {{- if .Values.enableTopologyZone }}
-            - "--feature-gates=Topology=true"
-            - "--strict-topology"
-            {{- end}}
-            {{- if (gt (.Values.replicas | int) 1) }}
-            - "--enable-leader-election"
-            - "--leader-election-type=leases"
-            {{- end }}
+            - "--kube-api-qps=100"
+            - "--kube-api-burst=100"
+            - "--leader-election"
+            - "--default-fstype=ext4"
+            # needed only for topology aware setup
+            #- "--feature-gates=Topology=true"
+            #- "--strict-topology"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -154,28 +168,44 @@ spec:
       volumes:
       - name: vsphere-config-volume
         secret:
-          secretName: csi-config-secret
+          secretName: vsphere-config-secret
       - name: socket-dir
-        hostPath:
-          path: /var/lib/csi/sockets/pluginproxy/csi.vsphere.vmware.com
-          type: DirectoryOrCreate
-{{- if semverCompare ">2.0.0"  (default .Chart.AppVersion .Values.image.version) }}
+        emptyDir: {}
 ---
 apiVersion: v1
 data:
-  "volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
-  "online-volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
-  "volume-health": "true"
+  "csi-migration": "false"
+  "csi-auth-check": "true"
+  "online-volume-extend": "true"
 kind: ConfigMap
 metadata:
-  name: csi-feature-states
-  namespace: {{ .Release.Namespace }}
-{{- end }}
+  name: internal-feature-states.csi.vsphere.vmware.com
+  namespace: kube-system
 ---
-apiVersion: storage.k8s.io/v1beta1
+apiVersion: storage.k8s.io/v1 # For k8s 1.17 use storage.k8s.io/v1beta1
 kind: CSIDriver
 metadata:
   name: csi.vsphere.vmware.com
 spec:
   attachRequired: true
   podInfoOnMount: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vsphere-csi-controller
+  namespace: kube-system
+  labels:
+    app: vsphere-csi-controller
+spec:
+  ports:
+    - name: ctlr
+      port: 2112
+      targetPort: 2112
+      protocol: TCP
+    - name: syncer
+      port: 2113
+      targetPort: 2113
+      protocol: TCP
+  selector:
+    app: vsphere-csi-controller
