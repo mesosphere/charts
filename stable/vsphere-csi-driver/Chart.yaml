@@ -1,10 +1,10 @@
 apiVersion: v1
-appVersion: 2.0.1
+appVersion: 2.2.0
 description: vSphere Container Storage Interface (CSI) driver
 name: vsphere-csi-driver
 maintainers:
   - name: sebbrandt87
-version: 1.2.1
+version: 1.3.0
 kubeVersion: ">=1.16.0"
 home: https://vsphere-csi-driver.sigs.k8s.io
 sources:

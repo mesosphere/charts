@@ -2,7 +2,8 @@ kind: DaemonSet
 apiVersion: apps/v1
 metadata:
   name: vsphere-csi-node
-  namespace: kube-system
+  namespace: {{ .Release.Namespace }}
+{{ include "vsphere.labels" . | indent 2 }}
 spec:
   selector:
     matchLabels:
@@ -13,7 +14,7 @@ spec:
       maxUnavailable: 1
   template:
     metadata:
-      labels:
+{{ include "vsphere.labels" . | indent 6 }}
         app: vsphere-csi-node
         role: vsphere-csi
     spec:
@@ -21,9 +22,9 @@ spec:
       dnsPolicy: "Default"
       containers:
       - name: node-driver-registrar
-        image: quay.io/k8scsi/csi-node-driver-registrar:v2.1.0
+        image: {{ .Values.registrar.node.image.repository }}:{{ .Values.registrar.node.image.tag }}        
         args:
-        - "--v=5"
+        - "--v={{ .Values.registrar.verbose }}"
         - "--csi-address=$(ADDRESS)"
         - "--kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)"
         - "--health-port=9809"
@@ -47,7 +48,7 @@ spec:
           initialDelaySeconds: 5
           timeoutSeconds: 5
       - name: vsphere-csi-node
-        image: gcr.io/cloud-provider-vsphere/csi/release/driver:v2.2.0
+        image: {{ .Values.image.repository }}:v{{ default .Chart.AppVersion .Values.image.version }}
         args:
           - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
           - "--fss-namespace=$(CSI_NAMESPACE)"
@@ -64,8 +65,8 @@ spec:
         - name: X_CSI_SPEC_REQ_VALIDATION
           value: "false"
         # needed only for topology aware setups
-        #- name: VSPHERE_CSI_CONFIG
-        #  value: "/etc/cloud/csi-vsphere.conf" # here csi-vsphere.conf is the name of the file used for creating secret using "--from-file" flag
+        - name: VSPHERE_CSI_CONFIG
+          value: "/etc/cloud/csi-vsphere.conf" # here csi-vsphere.conf is the name of the file used for creating secret using "--from-file" flag
         - name: X_CSI_DEBUG
           value: "true"
         - name: LOGGER_LEVEL
@@ -81,9 +82,9 @@ spec:
           allowPrivilegeEscalation: true
         volumeMounts:
         # needed only for topology aware setups
-        #- name: vsphere-config-volume
-        #  mountPath: /etc/cloud
-        #  readOnly: true
+        - name: vsphere-config-volume
+          mountPath: /etc/cloud
+          readOnly: true
         - name: plugin-dir
           mountPath: /csi
         - name: pods-mount-dir
@@ -109,7 +110,7 @@ spec:
           periodSeconds: 5
           failureThreshold: 3
       - name: liveness-probe
-        image: quay.io/k8scsi/livenessprobe:v2.2.0
+        image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
         args:
           - "--v=4"
           - "--csi-address=/csi/csi.sock"
@@ -118,9 +119,9 @@ spec:
           mountPath: /csi
       volumes:
       # needed only for topology aware setups
-      #- name: vsphere-config-volume
-      #  secret:
-      #    secretName: vsphere-config-secret
+      - name: vsphere-config-volume
+        secret:
+          secretName: vsphere-config-secret
       - name: registration-dir
         hostPath:
           path: /var/lib/kubelet/plugins_registry
