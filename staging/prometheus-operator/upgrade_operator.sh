@@ -47,7 +47,7 @@ done
 
 cd "${BASEDIR}" || exit
 
-NEW_VERSION=$(grep version Chart.yaml)
+NEW_VERSION=$(grep -E '^version:' Chart.yaml)
 
 git add .
 git commit -am "chore: copy upstream chart ${NEW_VERSION}"
