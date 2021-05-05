@@ -2,8 +2,10 @@
 
 set -euo pipefail
 
-# shellcheck disable=2012
-mapfile -t patches < <(ls patch/patch_*.sh | sort -V)
+declare -a patches
+while IFS= read -r line; do
+  patches+=("$line")
+done < <(find patch/patch_*.sh | sort -V)
 
 for p in ${patches[*]}; do
     echo "Executing $p"
