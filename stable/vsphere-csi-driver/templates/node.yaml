@@ -22,7 +22,12 @@ spec:
       dnsPolicy: "Default"
       containers:
       - name: node-driver-registrar
-        image: {{ .Values.registrar.node.image.repository }}:{{ .Values.registrar.node.image.tag }}        
+        image: {{ .Values.registrar.node.image.repository }}:{{ .Values.registrar.node.image.tag }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "rm -rf /registration/csi.vsphere.vmware.com /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com-reg.sock"]
+        image: {{ .Values.registrar.node.image.repository }}:{{ .Values.registrar.node.image.tag }}      
         args:
         - "--v={{ .Values.registrar.verbose }}"
         - "--csi-address=$(ADDRESS)"
@@ -32,7 +37,7 @@ spec:
         - name: ADDRESS
           value: /csi/csi.sock
         - name: DRIVER_REG_SOCK_PATH
-          value: /var/lib/kubelet/plugins/csi.vsphere.vmware.com/csi.sock
+          value: /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com/csi.sock
         volumeMounts:
         - name: plugin-dir
           mountPath: /csi
@@ -113,7 +118,10 @@ spec:
         image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
         args:
           - "--v=4"
-          - "--csi-address=/csi/csi.sock"
+          - "--csi-address=$(ADDRESS)"
+        env:
+        - name: ADDRESS
+          value: /csi/csi.sock        
         volumeMounts:
         - name: plugin-dir
           mountPath: /csi
@@ -128,7 +136,7 @@ spec:
           type: Directory
       - name: plugin-dir
         hostPath:
-          path: /var/lib/kubelet/plugins/csi.vsphere.vmware.com
+          path: /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com
           type: DirectoryOrCreate
       - name: pods-mount-dir
         hostPath:
