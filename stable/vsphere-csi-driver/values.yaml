@@ -31,7 +31,7 @@ tolerations:
   # - key: node.kubernetes.io/unreachable
   #   operator: Exists
   #   effect: NoExecute
-  #   tolerationSeconds: 30    
+  #   tolerationSeconds: 30
 
 liveness:
   image:
