@@ -121,7 +121,7 @@ spec:
       # needed only for topology aware setups
       - name: vsphere-config-volume
         secret:
-          secretName: vsphere-config-secret
+          secretName: csi-config-secret
       - name: registration-dir
         hostPath:
           path: /var/lib/kubelet/plugins_registry
