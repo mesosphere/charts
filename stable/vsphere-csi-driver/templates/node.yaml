@@ -27,7 +27,6 @@ spec:
           preStop:
             exec:
               command: ["/bin/sh", "-c", "rm -rf /registration/csi.vsphere.vmware.com /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com-reg.sock"]
-        image: {{ .Values.registrar.node.image.repository }}:{{ .Values.registrar.node.image.tag }}      
         args:
         - "--v={{ .Values.registrar.verbose }}"
         - "--csi-address=$(ADDRESS)"
@@ -71,7 +70,7 @@ spec:
           value: "false"
         # needed only for topology aware setups
         - name: VSPHERE_CSI_CONFIG
-          value: "/etc/cloud/csi-vsphere.conf" # here csi-vsphere.conf is the name of the file used for creating secret using "--from-file" flag
+          value: "/etc/cloud/csi.conf"
         - name: X_CSI_DEBUG
           value: "true"
         - name: LOGGER_LEVEL
@@ -117,11 +116,11 @@ spec:
       - name: liveness-probe
         image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
         args:
-          - "--v=4"
-          - "--csi-address=$(ADDRESS)"
+        - "--v=4"
+        - "--csi-address=$(ADDRESS)"
         env:
         - name: ADDRESS
-          value: /csi/csi.sock        
+          value: /csi/csi.sock
         volumeMounts:
         - name: plugin-dir
           mountPath: /csi
