@@ -1,0 +1,86 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: v9-to-v11-crds-part1
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-21"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+data:
+  crd-alertmanagerconfigs.yaml: |-
+{{ .Files.Get "crds/crd-alertmanagerconfigs.yaml" | printf "%s" | indent 4 }}
+  crd-alertmanager.yaml: |-
+{{ .Files.Get "crds/crd-alertmanager.yaml" | printf "%s" | indent 4 }}
+  crd-podmonitors.yaml: |-
+{{ .Files.Get "crds/crd-podmonitors.yaml" | printf "%s" | indent 4 }}
+  crd-probes.yaml: |-
+{{ .Files.Get "crds/crd-probes.yaml" | printf "%s" | indent 4 }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ $.Release.Namespace }}
+  name: v9-to-v11-crds-part1
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-20"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      serviceAccountName: v9-to-v11-crds-part1
+      containers:
+        - name: v9-to-v11-crds-part1
+          image: "bitnami/kubectl:1.19.7"
+          volumeMounts:
+            - name: crds
+              mountPath: /etc/crds
+              readOnly: true
+          command: ["kubectl", "apply", "-f", "/etc/crds"]
+      volumes:
+        - name: crds
+          configMap:
+            name: v9-to-v11-crds-part1
+      restartPolicy: OnFailure
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: v9-to-v11-crds-part1
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-21"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: v9-to-v11-crds-part1
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-21"
+    helm.sh/hook-delete-policy: hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: v9-to-v11-crds-part1
+subjects:
+  - kind: ServiceAccount
+    name: v9-to-v11-crds-part1
+    namespace: {{ $.Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: v9-to-v11-crds-part1
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install, pre-upgrade
+    "helm.sh/hook-weight": "-21"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation

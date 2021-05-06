@@ -1,0 +1,63 @@
+{{- if and .Values.mesosphereResources.ingressRBAC.enabled .Values.grafana.ingress.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-grafana-admin
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
+{{- if .Values.grafana.ingress.labels }}
+{{ toYaml .Values.grafana.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}/*
+    verbs:
+      - get
+      - head
+      - post
+      - put
+      - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-grafana-view
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
+{{- if .Values.grafana.ingress.labels }}
+{{ toYaml .Values.grafana.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}/*
+    verbs:
+      - get
+      - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-grafana-edit
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-grafana
+{{- if .Values.grafana.ingress.labels }}
+{{ toYaml .Values.grafana.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}
+    - {{ .Values.grafana.ingress.path | trimSuffix "/" }}/*
+    verbs:
+      - get
+      - head
+      - post
+      - put
+{{- end }}
