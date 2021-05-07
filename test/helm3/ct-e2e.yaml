@@ -25,6 +25,7 @@ excluded-charts:
   - kudo                  # DCOS-62815
   - nvidia                # DCOS-62816
   - prometheus-operator   # DCOS-62817
+  - kube-prometheus-stack # DCOS-62817
   - traefik-forward-auth  # DCOS-62819
   - local-path-provisioner
   - vsphere-csi-driver
