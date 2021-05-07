@@ -1,0 +1,69 @@
+{{- if and .Values.mesosphereResources.ingressRBAC.enabled .Values.prometheus.ingress.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-prometheus-admin
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
+  {{- if .Values.prometheus.ingress.labels }}
+  {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
+  {{- end }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    {{- range .Values.prometheus.ingress.paths }}
+    - {{ . | trimSuffix "/" }}
+    - {{ . | trimSuffix "/" }}/*
+    {{- end }}
+    verbs:
+      - get
+      - head
+      - post
+      - put
+      - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-prometheus-view
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
+  {{- if .Values.prometheus.ingress.labels }}
+  {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
+  {{- end }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    {{- range .Values.prometheus.ingress.paths }}
+    - {{ . | trimSuffix "/" }}
+    - {{ . | trimSuffix "/" }}/*
+    {{- end }}
+    verbs:
+      - get
+      - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-prometheus-edit
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-prom
+  {{- if .Values.prometheus.ingress.labels }}
+  {{ toYaml .Values.prometheus.ingress.labels | indent 4 }}
+  {{- end }}
+  {{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+  - nonResourceURLs:
+    {{- range .Values.prometheus.ingress.paths }}
+    - {{ . | trimSuffix "/" }}
+    - {{ . | trimSuffix "/" }}/*
+    {{- end }}
+    verbs:
+      - get
+      - head
+      - post
+      - put
+  {{- end }}
