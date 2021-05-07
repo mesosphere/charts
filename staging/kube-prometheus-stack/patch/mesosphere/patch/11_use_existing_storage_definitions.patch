@@ -11,10 +11,10 @@ Date:   Mon Mar 15 17:44:27 2021 -0700
     This prevents the accidental redefinition of the volumeClaimTemplate and
     the abaondomnet of old data.
 
-diff --git a/staging/prometheus-operator/templates/NOTES.txt b/staging/prometheus-operator/templates/NOTES.txt
+diff --git a/staging/kube-prometheus-stack/templates/NOTES.txt b/staging/kube-prometheus-stack/templates/NOTES.txt
 index 371f3ae39..826ec6eb9 100644
---- a/staging/prometheus-operator/templates/NOTES.txt
-+++ b/staging/prometheus-operator/templates/NOTES.txt
+--- a/staging/kube-prometheus-stack/templates/NOTES.txt
++++ b/staging/kube-prometheus-stack/templates/NOTES.txt
 @@ -1,3 +1,21 @@
 +{{- $namespace := include "kube-prometheus-stack.namespace" . }}
 +{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
@@ -37,10 +37,10 @@ index 371f3ae39..826ec6eb9 100644
  {{ $.Chart.Name }} has been installed. Check its status by running:
    kubectl --namespace {{ template "kube-prometheus-stack.namespace" . }} get pods -l "release={{ $.Release.Name }}"
  
-diff --git a/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml b/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
+diff --git a/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml b/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml
 index 78d0f7c5b..9f0602e8d 100644
---- a/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
-+++ b/staging/prometheus-operator/templates/alertmanager/alertmanager.yaml
+--- a/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml
++++ b/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml
 @@ -64,8 +64,18 @@ spec:
  {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
  {{- end }}
@@ -62,10 +62,10 @@ index 78d0f7c5b..9f0602e8d 100644
  {{- end }}
  {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
    podMetadata:
-diff --git a/staging/prometheus-operator/templates/prometheus/prometheus.yaml b/staging/prometheus-operator/templates/prometheus/prometheus.yaml
+diff --git a/staging/kube-prometheus-stack/templates/prometheus/prometheus.yaml b/staging/kube-prometheus-stack/templates/prometheus/prometheus.yaml
 index eb316d64d..ddd7a8d06 100644
---- a/staging/prometheus-operator/templates/prometheus/prometheus.yaml
-+++ b/staging/prometheus-operator/templates/prometheus/prometheus.yaml
+--- a/staging/kube-prometheus-stack/templates/prometheus/prometheus.yaml
++++ b/staging/kube-prometheus-stack/templates/prometheus/prometheus.yaml
 @@ -178,8 +178,18 @@ spec:
    ruleSelector: {}
  {{- end }}

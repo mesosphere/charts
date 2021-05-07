@@ -58,4 +58,4 @@ helm dependency update
 git add .
 git commit -m 'helm dependency update'
 
-echo "Done upgrading prometheus-operator!"
+echo "Done upgrading kube-prometheus-stack!"
