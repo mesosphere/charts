@@ -1,0 +1,22 @@
+{{- $namespace := include "kube-prometheus-stack.namespace" . }}
+{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
+{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
+{{- $spec := ($prometheus).spec }}
+{{- $storage := ($spec).storage }}
+{{- if $storage }}
+NOTICE: A Prometheus resource was already defined. Retaining the existing storage definition.
+If this is not the desired behavior, delete the {{ $name }} prometheus resource from the {{ $namespace }} namespace and upgrade this helm release.
+{{- end }}
+{{- $name = print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
+{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Alertmanager" $namespace $name) }}
+{{- $spec = ($alertmanager).spec }}
+{{- $storage = ($spec).storage }}
+{{- if $storage }}
+NOTICE: An Alertmanager resource was already defined. Retaining the existing storage definition.
+If this is not the desired behavior, delete the {{ $name }} alertmanager resource from the {{ $namespace }} namespace and upgrade this helm release.
+{{- end }}
+
+{{ $.Chart.Name }} has been installed. Check its status by running:
+  kubectl --namespace {{ template "kube-prometheus-stack.namespace" . }} get pods -l "release={{ $.Release.Name }}"
+
+Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.

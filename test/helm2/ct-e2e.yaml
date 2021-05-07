@@ -6,26 +6,27 @@ chart-dirs:
 excluded-charts:
   - common
   - dex-controller # Moved to a different helm repo
-  - azuredisk-csi-driver  # DCOS-62804
-  - defaultstorageclass   # DCOS-62803
-  - dispatch              # DCOS-62802
+  - azuredisk-csi-driver  # D2IQ-62804
+  - defaultstorageclass   # D2IQ-62803
+  - dispatch              # D2IQ-62802
   - gcpdisk-csi-driver    # D2IQ-65765
-  - gcpdiskprovisioner    # DCOS-62801
-  - kommander             # DCOS-62800
-  - kommander-karma       # DCOS-62799
-  - kommander-thanos      # DCOS-62798
-  - mtls-proxy            # DCOS-62805
-  - dex-k8s-authenticator # DCOS-62806
-  - flagger               # DCOS-62809
-  - gatekeeper            # DCOS-62810
-  - generic-ingress       # DCOS-62811
-  - istio                 # DCOS-62812
-  - knative               # DCOS-62813
-  - kube-oidc-proxy       # DCOS-62814
-  - kudo                  # DCOS-62815
-  - nvidia                # DCOS-62816
-  - prometheus-operator   # DCOS-62817
-  - traefik-forward-auth  # DCOS-62819
+  - gcpdiskprovisioner    # D2IQ-62801
+  - kommander             # D2IQ-62800
+  - kommander-karma       # D2IQ-62799
+  - kommander-thanos      # D2IQ-62798
+  - mtls-proxy            # D2IQ-62805
+  - dex-k8s-authenticator # D2IQ-62806
+  - flagger               # D2IQ-62809
+  - gatekeeper            # D2IQ-62810
+  - generic-ingress       # D2IQ-62811
+  - istio                 # D2IQ-62812
+  - knative               # D2IQ-62813
+  - kube-oidc-proxy       # D2IQ-62814
+  - kudo                  # D2IQ-62815
+  - nvidia                # D2IQ-62816
+  - prometheus-operator   # D2IQ-62817
+  - kube-prometheus-stack # D2IQ-62817
+  - traefik-forward-auth  # D2IQ-62819
   - local-path-provisioner
   - vsphere-csi-driver
   - cert-manager          # cert-manager is no longer compatible with helmv2
