@@ -10,11 +10,10 @@
 set -xeuo pipefail
 shopt -s dotglob
 
-BASEDIR=$(dirname "$(readlink -f "$0")")
+BASEDIR=$(dirname "$(realpath "$0")")
 UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
 PROMETHEUS_PATH=charts/kube-prometheus-stack
 PROMETHEUS_TAG=kube-prometheus-stack-12.11.3
-# if using osx download coreutils via brew and use greadlink instead
 TMPDIR=$(mktemp -d)
 STARTING_REV=$(git rev-parse HEAD)
 export STARTING_REV
@@ -48,15 +47,15 @@ done
 
 cd "${BASEDIR}" || exit
 
-NEW_VERSION=$(grep version Chart.yaml)
+NEW_VERSION=$(grep -E '^version:' Chart.yaml)
 
 git add .
 git commit -am "chore: copy upstream chart ${NEW_VERSION}"
 
 BASEDIR=${BASEDIR} ./patch/patch.sh
 
-helm dependency upgrade
+helm dependency update
 git add .
-git commit -m 'helm dependency upgrade'
+git commit -m 'helm dependency update'
 
 echo "Done upgrading prometheus-operator!"
