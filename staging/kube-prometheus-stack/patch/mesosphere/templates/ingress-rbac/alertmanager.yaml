@@ -1,0 +1,69 @@
+{{- if and .Values.mesosphereResources.ingressRBAC.enabled .Values.alertmanager.ingress.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-alertmanager-admin
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
+{{- if .Values.alertmanager.ingress.labels }}
+{{ toYaml .Values.alertmanager.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+- nonResourceURLs:
+  {{- range .Values.alertmanager.ingress.paths }}
+  - {{ . | trimSuffix "/" }}
+  - {{ . | trimSuffix "/" }}/*
+  {{- end }}
+  verbs:
+  - get
+  - head
+  - post
+  - put
+  - delete
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-alertmanager-view
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
+{{- if .Values.alertmanager.ingress.labels }}
+{{ toYaml .Values.alertmanager.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+- nonResourceURLs:
+  {{- range .Values.alertmanager.ingress.paths }}
+  - {{ . | trimSuffix "/" }}
+  - {{ . | trimSuffix "/" }}/*
+  {{- end }}
+  verbs:
+  - get
+  - head
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: opsportal-alertmanager-edit
+  labels:
+    app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
+{{- if .Values.alertmanager.ingress.labels }}
+{{ toYaml .Values.alertmanager.ingress.labels | indent 4 }}
+{{- end }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+rules:
+- nonResourceURLs:
+  {{- range .Values.alertmanager.ingress.paths }}
+  - {{ . | trimSuffix "/" }}
+  - {{ . | trimSuffix "/" }}/*
+  {{- end }}
+  verbs:
+  - get
+  - head
+  - post
+  - put
+{{- end }}

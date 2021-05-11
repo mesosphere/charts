@@ -180,7 +180,7 @@ do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kubecost",
   git config --local user.name 'Dispatch CI'
   git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
 
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=kubecost
+  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=cost-analyzer
     """
   ],
   env=dispatch_common_go_environment + [

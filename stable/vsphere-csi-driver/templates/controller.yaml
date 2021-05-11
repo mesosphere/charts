@@ -53,8 +53,11 @@ spec:
           image: {{ .Values.resizer.image.repository }}:{{ .Values.resizer.image.tag }}
           args:
             - "--v={{ .Values.resizer.verbose }}"
+            - "--timeout={{ .Values.resizer.timeout }}"
             - "--csi-address=$(ADDRESS)"
             - "--metrics-address=:22013"
+            - "--kube-api-qps=100"
+            - "--kube-api-burst=100"
             {{- if (gt (.Values.replicas | int) 1) }}
             - "--leader-election=true"
             {{- end }}
@@ -71,6 +74,9 @@ spec:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "rm -rf /var/lib/csi/sockets/pluginproxy/csi.vsphere.vmware.com"]
+          args:
+            - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
+            - "--fss-namespace=$(CSI_NAMESPACE)"
           imagePullPolicy: "Always"
           env:
             - name: CSI_ENDPOINT
@@ -80,7 +86,17 @@ spec:
             - name: VSPHERE_CSI_CONFIG
               value: "/etc/cloud/csi.conf"
             - name: LOGGER_LEVEL
-              value: "PRODUCTION"
+              value: "PRODUCTION" # Options: DEVELOPMENT, PRODUCTION
+            - name: INCLUSTER_CLIENT_QPS
+              value: "100"
+            - name: INCLUSTER_CLIENT_BURST
+              value: "100"
+            - name: CSI_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: X_CSI_SERIAL_VOL_ACCESS_TIMEOUT
+              value: 3m
           volumeMounts:
             - mountPath: /etc/cloud
               name: vsphere-config-volume
@@ -90,6 +106,9 @@ spec:
           ports:
             - name: healthz
               containerPort: 9808
+              protocol: TCP
+            - name: prometheus
+              containerPort: 2112
               protocol: TCP
           livenessProbe:
             httpGet:
@@ -102,6 +121,7 @@ spec:
         - name: liveness-probe
           image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
           args:
+            - "--v={{ .Values.liveness.verbose }}"
             - "--csi-address=$(ADDRESS)"
           env:
             - name: ADDRESS
@@ -111,18 +131,32 @@ spec:
               name: socket-dir
         - name: vsphere-syncer
           image: {{ .Values.syncer.repository }}:v{{ default .Chart.AppVersion .Values.syncer.version }}
-          {{- if (gt (.Values.replicas | int) 1) }}
           args:
+          {{- if (gt (.Values.replicas | int) 1) }}
             - "--leader-election"
           {{- end }}
+            - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
+            - "--fss-namespace=$(CSI_NAMESPACE)"
           imagePullPolicy: "Always"
+          ports:
+            - containerPort: 2113
+              name: prometheus
+              protocol: TCP
           env:
             - name: FULL_SYNC_INTERVAL_MINUTES
               value: "30"
             - name: VSPHERE_CSI_CONFIG
               value: "/etc/cloud/csi.conf"
             - name: LOGGER_LEVEL
-              value: "PRODUCTION"
+              value: "PRODUCTION" # Options: DEVELOPMENT, PRODUCTION
+            - name: INCLUSTER_CLIENT_QPS
+              value: "100"
+            - name: INCLUSTER_CLIENT_BURST
+              value: "100"
+            - name: CSI_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           volumeMounts:
             - mountPath: /etc/cloud
               name: vsphere-config-volume
@@ -137,14 +171,18 @@ spec:
             - "--retry-interval-start={{ .Values.provisioner.retryIntervalStart }}"
             - "--retry-interval-max={{ .Values.provisioner.retryIntervalMax }}"
             - "--worker-threads={{ .Values.provisioner.workerThreads }}"
+            # needed only for topology aware setup
             {{- if .Values.enableTopologyZone }}
             - "--feature-gates=Topology=true"
             - "--strict-topology"
             {{- end}}
+            - "--kube-api-qps=100"
+            - "--kube-api-burst=100"
             {{- if (gt (.Values.replicas | int) 1) }}
             - "--enable-leader-election"
             - "--leader-election-type=leases"
             {{- end }}
+            - "--default-fstype=ext4"
           env:
             - name: ADDRESS
               value: /csi/csi.sock
@@ -159,23 +197,44 @@ spec:
         hostPath:
           path: /var/lib/csi/sockets/pluginproxy/csi.vsphere.vmware.com
           type: DirectoryOrCreate
-{{- if semverCompare ">2.0.0"  (default .Chart.AppVersion .Values.image.version) }}
 ---
 apiVersion: v1
 data:
   "volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
   "online-volume-extend": "{{ .Values.storageclass.allowVolumeExpansion }}"
   "volume-health": "true"
+  "csi-migration": "false"
+  "csi-auth-check": "true"
+  "online-volume-extend": "true"
 kind: ConfigMap
 metadata:
-  name: csi-feature-states
+  name: internal-feature-states.csi.vsphere.vmware.com
   namespace: {{ .Release.Namespace }}
-{{- end }}
 ---
-apiVersion: storage.k8s.io/v1beta1
+apiVersion: storage.k8s.io/v1
 kind: CSIDriver
 metadata:
   name: csi.vsphere.vmware.com
 spec:
   attachRequired: true
   podInfoOnMount: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vsphere-csi-controller
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: vsphere-csi-controller
+spec:
+  ports:
+    - name: ctlr
+      port: 2112
+      targetPort: 2112
+      protocol: TCP
+    - name: syncer
+      port: 2113
+      targetPort: 2113
+      protocol: TCP
+  selector:
+    app: vsphere-csi-controller
