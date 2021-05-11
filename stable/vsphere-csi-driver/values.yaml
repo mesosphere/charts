@@ -22,23 +22,34 @@ tolerations:
     effect: NoExecute
   - key: CriticalAddonsOnly
     operator: Exists
+  # uncomment below toleration if you need an aggressive pod eviction in case when
+  # node becomes not-ready or unreachable. Default is 300 seconds if not specified.
+  # - key: node.kubernetes.io/not-ready
+  #   operator: Exists
+  #   effect: NoExecute
+  #   tolerationSeconds: 30
+  # - key: node.kubernetes.io/unreachable
+  #   operator: Exists
+  #   effect: NoExecute
+  #   tolerationSeconds: 30
 
 liveness:
   image:
     repository: k8s.gcr.io/sig-storage/livenessprobe
-    tag: v2.1.0
+    tag: v2.2.0
+  verbose: 4
 
 registrar:
   node:
     image:
       repository: k8s.gcr.io/sig-storage/csi-node-driver-registrar
-      tag: v2.0.1
+      tag: v2.1.0
   verbose: 5
 
 provisioner:
   image:
     repository: k8s.gcr.io/sig-storage/csi-provisioner
-    tag: v1.6.1
+    tag: v2.1.0
   timeout: 300s
   retryIntervalStart: 1s
   retryIntervalMax: 5m
@@ -48,7 +59,7 @@ provisioner:
 attacher:
   image:
     repository: k8s.gcr.io/sig-storage/csi-attacher
-    tag: v2.2.1
+    tag: v3.1.0
     tagK8sUpMinor17: v3.0.2
   timeout: 300s
   retryIntervalStart: 1s
@@ -59,7 +70,8 @@ attacher:
 resizer:
   image:
     repository: k8s.gcr.io/sig-storage/csi-resizer
-    tag: v1.0.1
+    tag: v1.1.0
+  timeout: 300s
   verbose: 4
 
 storageclass:

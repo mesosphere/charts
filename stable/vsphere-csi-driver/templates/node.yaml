@@ -10,12 +10,15 @@ spec:
       app: vsphere-csi-node
   updateStrategy:
     type: "RollingUpdate"
+    rollingUpdate:
+      maxUnavailable: 1
   template:
     metadata:
 {{ include "vsphere.labels" . | indent 6 }}
         app: vsphere-csi-node
         role: vsphere-csi
     spec:
+      serviceAccountName: vsphere-csi-node
       dnsPolicy: "Default"
       containers:
       - name: node-driver-registrar
@@ -28,20 +31,31 @@ spec:
         - "--v={{ .Values.registrar.verbose }}"
         - "--csi-address=$(ADDRESS)"
         - "--kubelet-registration-path=$(DRIVER_REG_SOCK_PATH)"
+        - "--health-port=9809"
         env:
         - name: ADDRESS
           value: /csi/csi.sock
         - name: DRIVER_REG_SOCK_PATH
           value: /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com/csi.sock
-        securityContext:
-          privileged: true
         volumeMounts:
         - name: plugin-dir
           mountPath: /csi
         - name: registration-dir
           mountPath: /registration
+        ports:
+        - containerPort: 9809
+          name: healthz
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: healthz
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
       - name: vsphere-csi-node
         image: {{ .Values.image.repository }}:v{{ default .Chart.AppVersion .Values.image.version }}
+        args:
+          - "--fss-name=internal-feature-states.csi.vsphere.vmware.com"
+          - "--fss-namespace=$(CSI_NAMESPACE)"
         imagePullPolicy: "Always"
         env:
         - name: NODE_NAME
@@ -54,18 +68,24 @@ spec:
           value: "node"
         - name: X_CSI_SPEC_REQ_VALIDATION
           value: "false"
+        # needed only for topology aware setups
         - name: VSPHERE_CSI_CONFIG
           value: "/etc/cloud/csi.conf"
         - name: X_CSI_DEBUG
           value: "true"
         - name: LOGGER_LEVEL
-          value: "PRODUCTION"
+          value: "PRODUCTION" # Options: DEVELOPMENT, PRODUCTION
+        - name: CSI_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         securityContext:
           privileged: true
           capabilities:
             add: ["SYS_ADMIN"]
           allowPrivilegeEscalation: true
         volumeMounts:
+        # needed only for topology aware setups
         - name: vsphere-config-volume
           mountPath: /etc/cloud
           readOnly: true
@@ -78,21 +98,25 @@ spec:
           mountPropagation: "Bidirectional"
         - name: device-dir
           mountPath: /dev
+        - name: blocks-dir
+          mountPath: /sys/block
+        - name: sys-devices-dir
+          mountPath: /sys/devices
         ports:
-          - name: healthz
-            containerPort: 9808
-            protocol: TCP
+          - containerPort: 9808
+            name: healthz
         livenessProbe:
           httpGet:
             path: /healthz
             port: healthz
           initialDelaySeconds: 10
-          timeoutSeconds: 3
+          timeoutSeconds: 5
           periodSeconds: 5
           failureThreshold: 3
       - name: liveness-probe
         image: {{ .Values.liveness.image.repository }}:{{ .Values.liveness.image.tag }}
         args:
+        - "--v=4"
         - "--csi-address=$(ADDRESS)"
         env:
         - name: ADDRESS
@@ -101,13 +125,14 @@ spec:
         - name: plugin-dir
           mountPath: /csi
       volumes:
+      # needed only for topology aware setups
       - name: vsphere-config-volume
         secret:
           secretName: csi-config-secret
       - name: registration-dir
         hostPath:
           path: /var/lib/kubelet/plugins_registry
-          type: DirectoryOrCreate
+          type: Directory
       - name: plugin-dir
         hostPath:
           path: /var/lib/kubelet/plugins_registry/csi.vsphere.vmware.com
@@ -119,6 +144,14 @@ spec:
       - name: device-dir
         hostPath:
           path: /dev
+      - name: blocks-dir
+        hostPath:
+          path: /sys/block
+          type: Directory
+      - name: sys-devices-dir
+        hostPath:
+          path: /sys/devices
+          type: Directory
       tolerations:
         - effect: NoExecute
           operator: Exists
