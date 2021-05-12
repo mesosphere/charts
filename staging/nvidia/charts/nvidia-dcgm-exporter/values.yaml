@@ -1,16 +1,12 @@
-podNvidiaGpuMetricsExporter:
-  image:
-    repository: nvidia/pod-gpu-metrics-exporter
-    tag: v1.0.0-alpha
-    pullPolicy: IfNotPresent
-  resources: {}
-
 nvidiaDcgmExporter:
   image:
     repository: nvidia/dcgm-exporter
-    tag: 1.4.6
+    tag: 2.1.8-2.4.0-rc.2-ubuntu18.04
     pullPolicy: IfNotPresent
   resources: {}
+
+service:
+  port: 9400
 
 nodeSelector: {}
 

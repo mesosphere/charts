@@ -28,30 +28,12 @@ spec:
       priorityClassName: {{ .Values.priorityClassName }}
 {{- end }}
       containers:
-      - name: pod-nvidia-gpu-metrics-exporter
-        image: "{{ .Values.podNvidiaGpuMetricsExporter.image.repository }}:{{ .Values.podNvidiaGpuMetricsExporter.image.tag }}"
-        imagePullPolicy: {{ .Values.podNvidiaGpuMetricsExporter.image.pullPolicy }}
-{{- if .Values.podNvidiaGpuMetricsExporter.resources }}
-        resources:
-{{- toYaml .Values.podNvidiaGpuMetricsExporter.resources | nindent 12 }}
-{{- end }}
-        ports:
-        - name: gpu-metrics
-          containerPort: 9400
-          hostPort: 9400
-        securityContext:
-          runAsNonRoot: false
-          runAsUser: 0
-        volumeMounts:
-        - name: pod-gpu-resources
-          readOnly: true
-          mountPath: /var/lib/kubelet/pod-resources
-        - name: device-metrics
-          readOnly: true
-          mountPath: /run/prometheus
       - name: nvidia-dcgm-exporter
         image: "{{ .Values.nvidiaDcgmExporter.image.repository }}:{{ .Values.nvidiaDcgmExporter.image.tag }}"
         imagePullPolicy: {{ .Values.nvidiaDcgmExporter.image.pullPolicy }}
+        env:
+        - name: "DCGM_EXPORTER_KUBERNETES"
+          value: "true"
 {{- if .Values.nvidiaDcgmExporter.resources }}
         resources:
 {{- toYaml .Values.nvidiaDcgmExporter.resources | nindent 12 }}
@@ -59,9 +41,30 @@ spec:
         securityContext:
           runAsNonRoot: false
           runAsUser: 0
+        ports:
+        - name: gpu-metrics
+          containerPort: {{ .Values.service.port }}
+          hostPort: {{ .Values.service.port }}
         volumeMounts:
-        - name: device-metrics
-          mountPath: /run/prometheus
+        - name: pod-gpu-resources
+          readOnly: true
+          mountPath: /var/lib/kubelet/pod-resources
+        startupProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.service.port }}
+          failureThreshold: 30
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.service.port }}
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.service.port }}
+          initialDelaySeconds: 5
       volumes:
       - name: pod-gpu-resources
         hostPath:
