@@ -119,7 +119,7 @@ def bump_addon(task_name, addon_git_dir):
     task(task_name, inputs=[git, addon_git_dir], steps=[
         v1.Container(
             name=task_name,
-            image="mesosphere/bump-charts:master",  # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
+            image="mesosphere/bump-charts:75790bugfix",  # This docker image is built in this repo: https://github.com/mesosphere/dispatch-tasks
             workingDir="/workspace/" + addon_git_dir,
             command=["/bin/sh", "-c"],
             args=[
@@ -138,7 +138,7 @@ def bump_addon(task_name, addon_git_dir):
                 cp /bump_charts/update_single_addon.py /bump_charts/bump_charts.py .
                 cd /workspace/{}
                 git fetch --depth=3
-                CHANGED_FILES=$(git diff --name-only HEAD^)
+                CHANGED_FILES=stable/kommander/Chart.yaml
                 cd /workspace/{}
                 python3 update_single_addon.py --changed-files "$CHANGED_FILES" --repo-name {} --commit-sha $(context.git.commit)
                 """.format(git, addon_git_dir, addon_git_dir)
@@ -286,6 +286,7 @@ action(tasks=[do_bump_kubecost], on=pull_request(chatops=["bump-kubecost"]))
 action(tasks=[do_bump_grafana], on=pull_request(chatops=["bump-grafana"]))
 action(tasks=[do_bump_karma], on=pull_request(chatops=["bump-karma"]))
 action(tasks=[do_bump_thanos], on=pull_request(chatops=["bump-thanos"]))
+action(tasks=[do_bump_kommander], on=pull_request(chatops=["bump-kommander"]))
 
 # Cron Actions
 action(name="bump-kubecost", tasks=[do_bump_kubecost], on=cron(schedule="0 8 * * 5"))
