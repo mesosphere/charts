@@ -286,7 +286,7 @@ action(tasks=[do_bump_kubecost], on=pull_request(chatops=["bump-kubecost"]))
 action(tasks=[do_bump_grafana], on=pull_request(chatops=["bump-grafana"]))
 action(tasks=[do_bump_karma], on=pull_request(chatops=["bump-karma"]))
 action(tasks=[do_bump_thanos], on=pull_request(chatops=["bump-thanos"]))
-action(tasks=[do_bump_kommander], on=pull_request(chatops=["bump-kommander"]))
+action(tasks=[do_bump_addon], on=pull_request(chatops=["bump-kommander"]))
 
 # Cron Actions
 action(name="bump-kubecost", tasks=[do_bump_kubecost], on=cron(schedule="0 8 * * 5"))
