@@ -123,6 +123,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "7b6520ae"
 data:
   _example: |
     ################################
@@ -209,8 +211,9 @@ data:
     # enters panic mode. When operating in panic mode, the autoscaler
     # scales on the average concurrency over the panic window which is
     # panic-window-percentage of the stable-window.
+    # Must be in the [1, 100] range.
     # When computing the panic window it will be rounded to the closest
-    # whole second.
+    # whole second, at least 1s.
     panic-window-percentage: "10.0"
 
     # The percentage of the container concurrency target at which to
@@ -222,7 +225,7 @@ data:
     # observed pods.
     # Cannot be less or equal to 1.
     # I.e with value of 2.0 the number of pods can at most go N to 2N
-    # over single Autoscaler period (see tick-interval), but at least N to
+    # over single Autoscaler period (2s), but at least N to
     # N+1, if Autoscaler needs to scale up.
     max-scale-up-rate: "1000.0"
 
@@ -231,24 +234,35 @@ data:
     # desired pods.
     # Cannot be less or equal to 1.
     # I.e. with value of 2.0 the number of pods can at most go N to N/2
-    # over single Autoscaler evaluation period (see tick-interval), but at
+    # over single Autoscaler evaluation period (2s), but at
     # least N to N-1, if Autoscaler needs to scale down.
     max-scale-down-rate: "2.0"
 
-    # Scale to zero feature flag
+    # Scale to zero feature flag.
     enable-scale-to-zero: "true"
-
-    # Tick interval is the time between autoscaling calculations.
-    tick-interval: "2s"
 
     # Scale to zero grace period is the time an inactive revision is left
     # running before it is scaled to zero (min: 6s).
+    # This is the upper limit and is provided not to enforce timeout after
+    # the revision stopped receiving requests for stable window, but to
+    # ensure network reprogramming to put activator in the path has completed.
+    # If the system determines that a shorter period is satisfactory,
+    # then the system will only wait that amount of time before scaling to 0.
+    # NOTE: this period might actually be 0, if activator has been
+    # in the request path sufficiently long.
+    # If there is necessity for the last pod to linger longer use
+    # scale-to-zero-pod-retention-period flag.
     scale-to-zero-grace-period: "30s"
 
-    # Enable graceful scaledown feature flag.
-    # Once enabled, it allows the autoscaler to prioritize pods processing
-    # fewer (or zero) requests for removal when scaling down.
-    enable-graceful-scaledown: "false"
+    # Scale to zero pod retention period defines the minimum amount
+    # of time the last pod will remain after Autoscaler has decided to
+    # scale to zero.
+    # This flag is for the situations where the pod starup is very expensive
+    # and the traffic is bursty (requiring smaller windows for fast action),
+    # but patchy.
+    # The larger of this flag and `scale-to-zero-grace-period` will effectively
+    # detemine how the last pod will hang around.
+    scale-to-zero-pod-retention-period: "0s"
 
     # pod-autoscaler-class specifies the default pod autoscaler class
     # that should be used if none is specified. If omitted, the Knative
@@ -262,6 +276,21 @@ data:
     # See the algorithm here: http://bit.ly/38XiCZ3.
     # TODO(vagababov): tune after actual benchmarking.
     activator-capacity: "100.0"
+
+    # initial-scale is the cluster-wide default value for the initial target
+    # scale of a revision after creation, unless overridden by the
+    # "autoscaling.knative.dev/initialScale" annotation.
+    # This value must be greater than 0 unless allow-zero-initial-scale is true.
+    initial-scale: "1"
+
+    # allow-zero-initial-scale controls whether either the cluster-wide initial-scale flag,
+    # or the "autoscaling.knative.dev/initialScale" annotation, can be set to 0.
+    allow-zero-initial-scale: "false"
+
+    # max-scale is the cluster-wide default value for the max scale of a revision,
+    # unless overridden by the "autoscaling.knative.dev/maxScale" annotation.
+    # If set to 0, the revision has no maximum scale.
+    max-scale: "0"
 
 ---
 # Copyright 2019 The Knative Authors
@@ -285,6 +314,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "d19e4f27"
 data:
   _example: |
     ################################
@@ -311,33 +342,54 @@ data:
     # seconds that can be used for revision-timeout-seconds.
     # This value must be greater than or equal to revision-timeout-seconds.
     # If omitted, the system default is used (600 seconds).
+    #
+    # If this value is increased, the activator's terminationGraceTimeSeconds
+    # should also be increased to prevent in-flight requests being disrupted.
     max-revision-timeout-seconds: "600"  # 10 minutes
 
     # revision-cpu-request contains the cpu allocation to assign
     # to revisions by default.  If omitted, no value is specified
     # and the system default is used.
+    # Below is an example of setting revision-cpu-request.
+    # By default, it is not set by Knative.
     revision-cpu-request: "400m"  # 0.4 of a CPU (aka 400 milli-CPU)
 
     # revision-memory-request contains the memory allocation to assign
     # to revisions by default.  If omitted, no value is specified
     # and the system default is used.
+    # Below is an example of setting revision-memory-request.
+    # By default, it is not set by Knative.
     revision-memory-request: "100M"  # 100 megabytes of memory
+
+    # revision-ephemeral-storage-request contains the ephemeral storage
+    # allocation to assign to revisions by default.  If omitted, no value is
+    # specified and the system default is used.
+    revision-ephemeral-storage-request: "500M"  # 500 megabytes of storage
 
     # revision-cpu-limit contains the cpu allocation to limit
     # revisions to by default.  If omitted, no value is specified
     # and the system default is used.
+    # Below is an example of setting revision-cpu-limit.
+    # By default, it is not set by Knative.
     revision-cpu-limit: "1000m"  # 1 CPU (aka 1000 milli-CPU)
 
     # revision-memory-limit contains the memory allocation to limit
     # revisions to by default.  If omitted, no value is specified
     # and the system default is used.
+    # Below is an example of setting revision-memory-limit.
+    # By default, it is not set by Knative.
     revision-memory-limit: "200M"  # 200 megabytes of memory
+
+    # revision-ephemeral-storage-limit contains the ephemeral storage
+    # allocation to limit revisions to by default.  If omitted, no value is
+    # specified and the system default is used.
+    revision-ephemeral-storage-limit: "750M"  # 750 megabytes of storage
 
     # container-name-template contains a template for the default
     # container name, if none is specified.  This field supports
     # Go templating and is supplied with the ObjectMeta of the
     # enclosing Service or Configuration, so values such as
-    # {{.Name}} are also valid.
+    # {{ `{{.Name}}` }} are also valid.
     container-name-template: "user-container"
 
     # container-concurrency specifies the maximum number
@@ -351,11 +403,26 @@ data:
     # the individual revisions cannot have arbitrary large concurrency
     # values, or autoscaling targets. `container-concurrency` default setting
     # must be at or below this value.
+    #
     # Must be greater than 1.
+    #
+    # Note: even with this set, a user can choose a containerConcurrency
+    # of 0 (i.e. unbounded) unless allow-container-concurrency-zero is
+    # set to "false".
     container-concurrency-max-limit: "1000"
 
-    # feature flag indicates whether to enable multi container support or not
-    enable-multi-container: "false"
+    # allow-container-concurrency-zero controls whether users can
+    # specify 0 (i.e. unbounded) for containerConcurrency.
+    allow-container-concurrency-zero: "true"
+
+    # enable-service-links specifies the default value used for the
+    # enableServiceLinks field of the PodSpec, when it is omitted by the user.
+    # See: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service
+    #
+    # In environments with large number of services it is suggested
+    # to set this value to `false`.
+    # See https://github.com/knative/serving/issues/8498.
+    enable-service-links: "default"
 
 ---
 # Copyright 2019 The Knative Authors
@@ -379,6 +446,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "52900e59"
 data:
   # This is the Go import path for the binary that is containerized
   # and substituted here.
@@ -403,7 +472,41 @@ data:
     # to actually change the configuration.
 
     # List of repositories for which tag to digest resolving should be skipped
-    registriesSkippingTagResolving: "ko.local,dev.local"
+    registriesSkippingTagResolving: "kind.local,ko.local,dev.local"
+
+    # digestResolutionTimeout is the maximum time allowed for an image's
+    # digests to be resolved.
+    digestResolutionTimeout: "10s"
+
+    # ProgressDeadline is the duration we wait for the deployment to
+    # be ready before considering it failed.
+    progressDeadline: "120s"
+
+    # queueSidecarCPURequest is the requests.cpu to set for the queue proxy sidecar container.
+    # If omitted, a default value (currently "25m"), is used.
+    queueSidecarCPURequest: "25m"
+
+    # queueSidecarCPULimit is the limits.cpu to set for the queue proxy sidecar container.
+    # If omitted, no value is specified and the system default is used.
+    queueSidecarCPULimit: "1000m"
+
+    # queueSidecarMemoryRequest is the requests.memory to set for the queue proxy container.
+    # If omitted, no value is specified and the system default is used.
+    queueSidecarMemoryRequest: "400Mi"
+
+    # queueSidecarMemoryLimit is the limits.memory to set for the queue proxy container.
+    # If omitted, no value is specified and the system default is used.
+    queueSidecarMemoryLimit: "800Mi"
+
+    # queueSidecarEphemeralStorageRequest is the requests.ephemeral-storage to
+    # set for the queue proxy sidecar container.
+    # If omitted, no value is specified and the system default is used.
+    queueSidecarEphemeralStorageRequest: "512Mi"
+
+    # queueSidecarEphemeralStorageLimit is the limits.ephemeral-storage to set
+    # for the queue proxy sidecar container.
+    # If omitted, no value is specified and the system default is used.
+    queueSidecarEphemeralStorageLimit: "1024Mi"
 
 ---
 # Copyright 2018 The Knative Authors
@@ -427,6 +530,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "f8e5beb4"
 data:
   _example: |
     ################################
@@ -467,6 +572,121 @@ data:
   {{ .Values.domain }}: ""
 
 ---
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-features
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "6a69cdef"
+data:
+  _example: |
+    ################################
+    #                              #
+    #    EXAMPLE CONFIGURATION     #
+    #                              #
+    ################################
+
+    # This block is not actually functional configuration,
+    # but serves to illustrate the available configuration
+    # options and document them in a way that is accessible
+    # to users that `kubectl edit` this config map.
+    #
+    # These sample configuration options may be copied out of
+    # this example block and unindented to be in the data block
+    # to actually change the configuration.
+
+    # Indicates whether multi container support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    multi-container: "enabled"
+
+    # Indicates whether Kubernetes affinity support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    kubernetes.podspec-affinity: "disabled"
+
+    # Indicates whether Kubernetes nodeSelector support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    kubernetes.podspec-nodeselector: "disabled"
+
+    # Indicates whether Kubernetes tolerations support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled
+    kubernetes.podspec-tolerations: "disabled"
+
+    # Indicates whether Kubernetes FieldRef support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    kubernetes.podspec-fieldref: "disabled"
+
+    # Indicates whether Kubernetes RuntimeClassName support is enabled
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    kubernetes.podspec-runtimeclassname: "disabled"
+
+    # This feature allows end-users to set a subset of fields on the Pod's SecurityContext
+    # in addition to expanding the allowable fields within a Container's SecurityContext.
+    #
+    # When set to "enabled" or "allowed" it allows the following
+    # PodSecurityContext properties:
+    # - FSGroup
+    # - RunAsGroup
+    # - RunAsNonRoot
+    # - SupplementalGroups
+    # - RunAsUser
+    #
+    # When set to "enabled" or "allowed" it allows the following
+    # Container SecurityContext properties:
+    # - RunAsNonRoot
+    # - RunAsGroup
+    # - RunAsUser (already allowed without this flag)
+    #
+    # This feature flag should be used with caution as the PodSecurityContext
+    # properties may have a side-effect on non-user sidecar containers that come
+    # from Knative or your service mesh
+    #
+    # WARNING: Cannot safely be disabled once enabled.
+    kubernetes.podspec-securitycontext: "disabled"
+
+    # This feature validates PodSpecs from the validating webhook
+    # against the K8s API Server.
+    #
+    # When "enabled", the server will always run the extra validation.
+    # When "allowed", the server will not run the dry-run validation by default.
+    #   However, clients may enable the behavior on an individual Service by
+    #   attaching the following metadata annotation: "features.knative.dev/podspec-dryrun":"enabled".
+    kubernetes.podspec-dryrun: "allowed"
+
+    # Indicates whether new responsive garbage collection is enabled. This
+    # feature labels revisions in real-time as they become referenced and
+    # dereferenced by Routes. This allows us to reap revisions shortly after
+    # they are no longer active.
+    responsive-revision-gc: "allowed"
+
+    # Controls whether tag header based routing feature are enabled or not.
+    # 1. Enabled: enabling tag header based routing
+    # 2. Disabled: disabling tag header based routing
+    tag-header-based-routing: "disabled"
+
+---
 # Copyright 2018 The Knative Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -488,6 +708,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "4b89cfa0"
 data:
   _example: |
     ################################
@@ -514,13 +736,73 @@ data:
     # resync period (10 hours).
     stale-revision-timeout: "15h"
 
-    # Minimum number of generations of revisions to keep before considering
-    # them for GC
+    # Minimum number of generations of non-active revisions to keep before
+    # considering them for GC.
     stale-revision-minimum-generations: "20"
 
     # To avoid constant updates, we allow an existing annotation to be stale by this
     # amount before we update the timestamp.
     stale-revision-lastpinned-debounce: "5h"
+
+
+    # ---------------------------------------
+    # V2 Garbage Collector Settings
+    # ---------------------------------------
+    #
+    # These settings are enabled via the "responsive-revision-gc" feature flag.
+    # ALPHA NOTE: This feature is still experimental and under active development.
+    #
+    # Active
+    #   * Revisions which are referenced by a Route are considered active.
+    #   * Individual revisions may be marked with the annotation
+    #      "knative.dev/no-gc":"true" to be permanently considered active.
+    #   * Active revisions are not considered for GC.
+    # Retention
+    #   * Revisions are retained if they are any of the following:
+    #       1. Active
+    #       2. Were created within "retain-since-create-time"
+    #       3. Were last referenced by a route within
+    #           "retain-since-last-active-time"
+    #       4. There are fewer than "min-non-active-revisions"
+    #     If none of these conditions are met, or if the count of revisions exceed
+    #      "max-non-active-revisions", they will be deleted by GC.
+    #     The special value "disabled" may be used to turn off these limits.
+    #
+    # Example config to immediately collect any inactive revision:
+    #    min-non-active-revisions: "0"
+    #    retain-since-create-time: "disabled"
+    #    retain-since-last-active-time: "disabled"
+    #
+    # Example config to always keep around the last ten non-active revisions:
+    #     retain-since-create-time: "disabled"
+    #     retain-since-last-active-time: "disabled"
+    #     max-non-active-revisions: "10"
+    #
+    # Example config to disable all GC:
+    #     retain-since-create-time: "disabled"
+    #     retain-since-last-active-time: "disabled"
+    #     max-non-active-revisions: "disabled"
+    #
+    # Example config to keep recently deployed or active revisions,
+    # always maintain the last two in case of rollback, and prevent
+    # burst activity from exploding the count of old revisions:
+    #      retain-since-create-time: "48h"
+    #      retain-since-last-active-time: "15h"
+    #      min-non-active-revisions: "2"
+    #      max-non-active-revisions: "1000"
+
+    # Duration since creation before considering a revision for GC or "disabled".
+    retain-since-create-time: "48h"
+
+    # Duration since active before considering a revision for GC or "disabled".
+    retain-since-last-active-time: "15h"
+
+    # Minimum number of non-active revisions to retain.
+    min-non-active-revisions: "20"
+
+    # Maximum number of non-active revisions to retain
+    # or "disabled" to disable any maximum limit.
+    max-non-active-revisions: "1000"
 
 ---
 # Copyright 2020 The Knative Authors
@@ -545,11 +827,11 @@ metadata:
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 data:
-  # An inactive but valid configuration follows; see example.
   resourceLock: "leases"
   leaseDuration: "15s"
   renewDeadline: "10s"
   retryPeriod: "2s"
+  # An inactive but valid configuration follows; see example.
   _example: |
     ################################
     #                              #
@@ -566,32 +848,17 @@ data:
     # this example block and unindented to be in the data block
     # to actually change the configuration.
 
-    # resourceLock controls which API resource is used as the basis for the
-    # leader election lock. Valid values are:
-    #
-    # - leases -> use the coordination API
-    # - configmaps -> use configmaps
-    # - endpoints -> use endpoints
-    resourceLock: "leases"
-
     # leaseDuration is how long non-leaders will wait to try to acquire the
     # lock; 15 seconds is the value used by core kubernetes controllers.
     leaseDuration: "15s"
+
     # renewDeadline is how long a leader will try to renew the lease before
     # giving up; 10 seconds is the value used by core kubernetes controllers.
     renewDeadline: "10s"
+
     # retryPeriod is how long the leader election client waits between tries of
     # actions; 2 seconds is the value used by core kubernetes controllers.
     retryPeriod: "2s"
-    # enabledComponents is a comma-delimited list of component names for which
-    # leader election is enabled. Valid values are:
-    #
-    # - controller
-    # - hpaautoscaler
-    # - certcontroller
-    # - istiocontroller
-    # - nscontroller
-    enabledComponents: "controller,hpaautoscaler,certcontroller,istiocontroller,nscontroller"
 
 ---
 # Copyright 2018 The Knative Authors
@@ -615,6 +882,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "23eed3d8"
 data:
   _example: |
     ################################
@@ -691,6 +960,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "5e3df87d"
 data:
   _example: |
     ################################
@@ -707,13 +978,6 @@ data:
     # These sample configuration options may be copied out of
     # this example block and unindented to be in the data block
     # to actually change the configuration.
-
-    # DEPRECATED:
-    # istio.sidecar.includeOutboundIPRanges is obsolete.
-    # The current versions have outbound network access enabled by default.
-    # If you need this option for some reason, please use global.proxy.includeIPRanges in Istio.
-    #
-    # istio.sidecar.includeOutboundIPRanges: "*"
 
     # ingress.class specifies the default ingress class
     # to use when not dictated by Route annotation.
@@ -739,28 +1003,34 @@ data:
 
     # domainTemplate specifies the golang text template string to use
     # when constructing the Knative service's DNS name. The default
-    # value is "{{.Name}}.{{.Namespace}}.{{.Domain}}". And those three
-    # values (Name, Namespace, Domain) are the only variables defined.
+    # value is {{ `"{{.Name}}.{{.Namespace}}.{{.Domain}}"` }}.
+    #
+    # Valid variables defined in the template include Name, Namespace, Domain,
+    # Labels, and Annotations. Name will be the result of the tagTemplate
+    # below, if a tag is specified for the route.
     #
     # Changing this value might be necessary when the extra levels in
     # the domain name generated is problematic for wildcard certificates
     # that only support a single level of domain name added to the
     # certificate's domain. In those cases you might consider using a value
-    # of "{{.Name}}-{{.Namespace}}.{{.Domain}}", or removing the Namespace
+    # of {{ `"{{.Name}}-{{.Namespace}}.{{.Domain}}"` }}, or removing the Namespace
     # entirely from the template. When choosing a new value be thoughtful
     # of the potential for conflicts - for example, when users choose to use
     # characters such as `-` in their service, or namespace, names.
-    # {{.Annotations}} can be used for any customization in the go template if needed.
-    # We strongly recommend keeping namespace part of the template to avoid domain name clashes
-    # Example {{`'{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}'`}}
-    # and you have an annotation {"sub":"foo"}, then the generated template would be {Name}-{Namespace}.foo.{Domain}
-    domainTemplate: {{`"{{.Name}}.{{.Namespace}}.{{.Domain}}"`}}
+    # {{ `{{.Annotations}}` }} or {{ `{{.Labels}}` }} can be used for any customization in the
+    # go template if needed.
+    # We strongly recommend keeping namespace part of the template to avoid
+    # domain name clashes:
+    # eg. {{ `'{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}'` }}
+    # and you have an annotation {"sub":"foo"}, then the generated template
+    # would be {Name}-{Namespace}.foo.{Domain}
+    domainTemplate: {{ `"{{.Name}}.{{.Namespace}}.{{.Domain}}"` }}
 
     # tagTemplate specifies the golang text template string to use
     # when constructing the DNS name for "tags" within the traffic blocks
     # of Routes and Configuration.  This is used in conjunction with the
     # domainTemplate above to determine the full URL for the tag.
-    tagTemplate: {{`"{{.Tag}}-{{.Name}}"`}}
+    tagTemplate: {{ `"{{.Tag}}-{{.Name}}"` }}
 
     # Controls whether TLS certificates are automatically provisioned and
     # installed in the Knative ingress to terminate external TLS connection.
@@ -773,7 +1043,7 @@ data:
     # 1. Enabled: The Knative ingress will be able to serve HTTP connection.
     # 2. Disabled: The Knative ingress will reject HTTP traffic.
     # 3. Redirected: The Knative ingress will send a 302 redirect for all
-    # http connections, asking the clients to use HTTPS
+    # http connections, asking the clients to use HTTPS.
     httpProtocol: "Enabled"
 
 ---
@@ -798,6 +1068,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "11674c15"
 data:
   _example: |
     ################################
@@ -824,11 +1096,13 @@ data:
     # logging URL that is injected into the status of each Revision.
     # This value is what you might use the the Knative monitoring bundle, and provides
     # access to Kibana after setting up kubectl proxy.
-    logging.revision-url-template: |
-      http://localhost:8001/api/v1/namespaces/knative-monitoring/services/kibana-logging/proxy/app/kibana#/discover?_a=(query:(match:(kubernetes.labels.serving-knative-dev%2FrevisionUID:(query:'${REVISION_UID}',type:phrase))))
+    logging.revision-url-template: "http://localhost:8001/api/v1/namespaces/knative-monitoring/services/kibana-logging/proxy/app/kibana#/discover?_a=(query:(match:(kubernetes.labels.knative-dev%2FrevisionUID:(query:'${REVISION_UID}',type:phrase))))"
 
     # If non-empty, this enables queue proxy writing user request logs to stdout, excluding probe
     # requests.
+    # NB: after 0.18 release logging.enable-request-log must be explicitly set to true
+    # in order for request logging to be enabled.
+    #
     # The value determines the shape of the request logs and it must be a valid go text/template.
     # It is important to keep this as a single line. Multiple lines are parsed as separate entities
     # by most collection agents and will split the request logs into multiple records.
@@ -854,8 +1128,12 @@ data:
     #   PodName       string  // Name of the pod hosting the revision
     #   PodIP         string  // IP of the pod hosting the revision
     # }
-    #
-    logging.request-log-template: {{`'{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}"}'`}}
+    logging.request-log-template: {{ `'{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}"}' `}}
+
+    # If true, the request logging will be enabled.
+    # NB: up to and including Knative version 0.18 if logging.requst-log-template is non-empty, this value
+    # will be ignored.
+    logging.enable-request-log: "false"
 
     # If true, this enables queue proxy writing request logs for probe requests to stdout.
     # It uses the same template for user requests, i.e. logging.request-log-template.
@@ -911,6 +1189,8 @@ metadata:
   namespace: knative-serving
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+  annotations:
+    knative.dev/example-checksum: "4002b4c2"
 data:
   _example: |
     ################################
@@ -984,6 +1264,23 @@ spec:
       targetAverageUtilization: 100
 
 ---
+# Activator PDB. Currently we permit unavailability of 20% of tasks at the same time.
+# Given the subsetting and that the activators are partially stateful systems, we want
+# a slow rollout of the new versions and slow migration during node upgrades.
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: activator-pdb
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
+spec:
+  minAvailable: 80%
+  selector:
+    matchLabels:
+      app: activator
+
+---
 # Copyright 2018 The Knative Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -1035,8 +1332,8 @@ spec:
             cpu: 1000m
             memory: 600Mi
         env:
-        - # Run Activator with GC collection when newly generated memory is 500%.
-          name: GOGC
+        # Run Activator with GC collection when newly generated memory is 500%.
+        - name: GOGC
           value: "500"
         - name: POD_NAME
           valueFrom:
@@ -1054,8 +1351,8 @@ spec:
           value: config-logging
         - name: CONFIG_OBSERVABILITY_NAME
           value: config-observability
-        - # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
-          name: METRICS_DOMAIN
+        # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
+        - name: METRICS_DOMAIN
           value: knative.dev/internal/serving
         securityContext:
           allowPrivilegeEscalation: false
@@ -1068,13 +1365,21 @@ spec:
           containerPort: 8012
         - name: h2c
           containerPort: 8013
-        readinessProbe: &probe
+        readinessProbe:
           httpGet:
             port: 8012
             httpHeaders:
             - name: k-kubelet-probe
               value: "activator"
-        livenessProbe: *probe
+          failureThreshold: 12
+        livenessProbe:
+          httpGet:
+            port: 8012
+            httpHeaders:
+              - name: k-kubelet-probe
+                value: "activator"
+          failureThreshold: 12
+          initialDelaySeconds: 15
       # The activator (often) sits on the dataplane, and may proxy long (e.g.
       # streaming, websockets) requests.  We give a long grace period for the
       # activator to "lame duck" and drain outstanding requests before we
@@ -1082,7 +1387,8 @@ spec:
       # should be at least as large as the upper bound on the Revision's
       # timeoutSeconds property to avoid servicing events disrupting
       # connections.
-      terminationGracePeriodSeconds: 300
+      terminationGracePeriodSeconds: 600
+
 ---
 apiVersion: v1
 kind: Service
@@ -1099,8 +1405,8 @@ spec:
   selector:
     app: activator
   ports:
-  - # Define metrics and profiling for them to be accessible within service meshes.
-    name: http-metrics
+  # Define metrics and profiling for them to be accessible within service meshes.
+  - name: http-metrics
     port: 9090
     targetPort: 9090
   - name: http-profiling
@@ -1149,6 +1455,16 @@ spec:
         app: autoscaler
         serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     spec:
+      # To avoid node becoming SPOF, spread our replicas to different nodes.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: autoscaler
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       serviceAccountName: controller
       containers:
       - name: autoscaler
@@ -1163,6 +1479,10 @@ spec:
             cpu: 300m
             memory: 400Mi
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: SYSTEM_NAMESPACE
           valueFrom:
             fieldRef:
@@ -1171,8 +1491,8 @@ spec:
           value: config-logging
         - name: CONFIG_OBSERVABILITY_NAME
           value: config-observability
-        - # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
-          name: METRICS_DOMAIN
+        # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
+        - name: METRICS_DOMAIN
           value: knative.dev/serving
         securityContext:
           allowPrivilegeEscalation: false
@@ -1183,18 +1503,20 @@ spec:
           containerPort: 8008
         - name: websocket
           containerPort: 8080
-        - name: custom-metrics
-          containerPort: 8443
-        readinessProbe: &probe
+        readinessProbe:
           httpGet:
             port: 8080
             httpHeaders:
             - name: k-kubelet-probe
               value: "autoscaler"
-        livenessProbe: *probe
-        args:
-        - "--secure-port=8443"
-        - "--cert-dir=/tmp"
+        livenessProbe:
+          httpGet:
+            port: 8080
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: "autoscaler"
+          failureThreshold: 6
+
 ---
 apiVersion: v1
 kind: Service
@@ -1209,8 +1531,8 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-  - # Define metrics and profiling for them to be accessible within service meshes.
-    name: http-metrics
+  # Define metrics and profiling for them to be accessible within service meshes.
+  - name: http-metrics
     port: 9090
     targetPort: 9090
   - name: http-profiling
@@ -1219,9 +1541,6 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
-  - name: https-custom-metrics
-    port: 443
-    targetPort: 8443
   selector:
     app: autoscaler
 
@@ -1259,6 +1578,16 @@ spec:
         app: controller
         serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     spec:
+      # To avoid node becoming SPOF, spread our replicas to different nodes.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: controller
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       serviceAccountName: controller
       containers:
       - name: controller
@@ -1273,6 +1602,10 @@ spec:
             cpu: 1000m
             memory: 1000Mi
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: SYSTEM_NAMESPACE
           valueFrom:
             fieldRef:
@@ -1281,8 +1614,8 @@ spec:
           value: config-logging
         - name: CONFIG_OBSERVABILITY_NAME
           value: config-observability
-        - # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
-          name: METRICS_DOMAIN
+        # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
+        - name: METRICS_DOMAIN
           value: knative.dev/internal/serving
         securityContext:
           allowPrivilegeEscalation: false
@@ -1291,6 +1624,7 @@ spec:
           containerPort: 9090
         - name: profiling
           containerPort: 8008
+
 ---
 apiVersion: v1
 kind: Service
@@ -1305,8 +1639,8 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-  - # Define metrics and profiling for them to be accessible within service meshes.
-    name: http-metrics
+  # Define metrics and profiling for them to be accessible within service meshes.
+  - name: http-metrics
     port: 9090
     targetPort: 9090
   - name: http-profiling
@@ -1351,6 +1685,16 @@ spec:
         role: webhook
         serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
     spec:
+      # To avoid node becoming SPOF, spread our replicas to different nodes.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: webhook
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       serviceAccountName: controller
       containers:
       - name: webhook
@@ -1359,12 +1703,16 @@ spec:
         image: gcr.io/knative-releases/knative.dev/serving/cmd/webhook:{{ .Chart.AppVersion }}
         resources:
           requests:
-            cpu: 20m
-            memory: 20Mi
+            cpu: 100m
+            memory: 100Mi
           limits:
-            cpu: 200m
-            memory: 200Mi
+            cpu: 500m
+            memory: 500Mi
         env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
         - name: SYSTEM_NAMESPACE
           valueFrom:
             fieldRef:
@@ -1373,8 +1721,10 @@ spec:
           value: config-logging
         - name: CONFIG_OBSERVABILITY_NAME
           value: config-observability
-        - # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
-          name: METRICS_DOMAIN
+        - name: WEBHOOK_PORT
+          value: "8443"
+        # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
+        - name: METRICS_DOMAIN
           value: knative.dev/serving
         securityContext:
           allowPrivilegeEscalation: false
@@ -1385,6 +1735,22 @@ spec:
           containerPort: 8008
         - name: https-webhook
           containerPort: 8443
+        readinessProbe: &probe
+          periodSeconds: 1
+          httpGet:
+            scheme: HTTPS
+            port: 8443
+            httpHeaders:
+              - name: k-kubelet-probe
+                value: "webhook"
+        livenessProbe:
+          !!merge <<: *probe
+          failureThreshold: 6
+          initialDelaySeconds: 20
+      # Our webhook should gracefully terminate by lame ducking first, set this to a sufficiently
+      # high value that we respect whatever value it has configured for the lame duck grace period.
+      terminationGracePeriodSeconds: 300
+
 ---
 apiVersion: v1
 kind: Service
@@ -1399,8 +1765,8 @@ metadata:
   namespace: knative-serving
 spec:
   ports:
-  - # Define metrics and profiling for them to be accessible within service meshes.
-    name: http-metrics
+  # Define metrics and profiling for them to be accessible within service meshes.
+  - name: http-metrics
     port: 9090
     targetPort: 9090
   - name: http-profiling
@@ -1472,10 +1838,13 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 rules:
-- apiGroups: ["serving.knative.dev", "networking.internal.knative.dev", "autoscaling.internal.knative.dev",
-    "caching.internal.knative.dev"]
+- apiGroups: ["serving.knative.dev"]
   resources: ["*"]
   verbs: ["*"]
+- apiGroups: ["networking.internal.knative.dev", "autoscaling.internal.knative.dev", "caching.internal.knative.dev"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
+
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1485,10 +1854,12 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 rules:
-- apiGroups: ["serving.knative.dev", "networking.internal.knative.dev", "autoscaling.internal.knative.dev",
-    "caching.internal.knative.dev"]
+- apiGroups: ["serving.knative.dev"]
   resources: ["*"]
   verbs: ["create", "update", "patch", "delete"]
+- apiGroups: ["networking.internal.knative.dev", "autoscaling.internal.knative.dev", "caching.internal.knative.dev"]
+  resources: ["*"]
+  verbs: ["get", "list", "watch"]
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1498,8 +1869,7 @@ metadata:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 rules:
-- apiGroups: ["serving.knative.dev", "networking.internal.knative.dev", "autoscaling.internal.knative.dev",
-    "caching.internal.knative.dev"]
+- apiGroups: ["serving.knative.dev", "networking.internal.knative.dev", "autoscaling.internal.knative.dev", "caching.internal.knative.dev"]
   resources: ["*"]
   verbs: ["get", "list", "watch"]
 
@@ -1606,15 +1976,14 @@ rules:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: config.webhook.serving.knative.dev
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 webhooks:
-- admissionReviewVersions:
-  - v1beta1
+- admissionReviewVersions: ["v1", "v1beta1"]
   clientConfig:
     service:
       name: webhook
@@ -1626,6 +1995,7 @@ webhooks:
     matchExpressions:
     - key: serving.knative.dev/release
       operator: Exists
+  timeoutSeconds: 10
 
 ---
 # Copyright 2020 The Knative Authors
@@ -1642,15 +2012,14 @@ webhooks:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: webhook.serving.knative.dev
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 webhooks:
-- admissionReviewVersions:
-  - v1beta1
+- admissionReviewVersions: ["v1", "v1beta1"]
   clientConfig:
     service:
       name: webhook
@@ -1658,6 +2027,7 @@ webhooks:
   failurePolicy: Fail
   sideEffects: None
   name: webhook.serving.knative.dev
+  timeoutSeconds: 10
 
 ---
 # Copyright 2020 The Knative Authors
@@ -1674,15 +2044,14 @@ webhooks:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: validation.webhook.serving.knative.dev
   labels:
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
 webhooks:
-- admissionReviewVersions:
-  - v1beta1
+- admissionReviewVersions: ["v1", "v1beta1"]
   clientConfig:
     service:
       name: webhook
@@ -1690,6 +2059,7 @@ webhooks:
   failurePolicy: Fail
   sideEffects: None
   name: validation.webhook.serving.knative.dev
+  timeoutSeconds: 10
 
 ---
 # Copyright 2020 The Knative Authors
@@ -1983,7 +2353,7 @@ metadata:
   # These are the permissions needed by the Istio Ingress implementation.
   name: knative-serving-istio
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
     serving.knative.dev/controller: "true"
     networking.knative.dev/ingress-provider: istio
 rules:
@@ -2013,7 +2383,7 @@ metadata:
   name: knative-ingress-gateway
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
     networking.knative.dev/ingress-provider: istio
 spec:
   selector:
@@ -2025,6 +2395,72 @@ spec:
       protocol: HTTP
     hosts:
     - "*"
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: knative-local-gateway
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 8081
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knative-local-gateway
+  namespace: knative-serving
+  labels:
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
+spec:
+  type: ClusterIP
+  selector:
+    istio: ingressgateway
+  ports:
+  - name: http2
+    port: 80
+    targetPort: 8081
+
+---
+# Allows the Webhooks to be reached by kube-api with or without
+# sidecar injection and with mTLS PERMISSIVE and STRICT.
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: "webhook"
+  namespace: "knative-serving"
+spec:
+  selector:
+    matchLabels:
+      app: webhook
+  mtls:
+    mode: PERMISSIVE
+
+---
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: "istio-webhook"
+  namespace: "knative-serving"
+spec:
+  selector:
+    matchLabels:
+      app: istio-webhook
+  mtls:
+    mode: PERMISSIVE
 
 ---
 # Copyright 2019 The Knative Authors
@@ -2050,7 +2486,7 @@ metadata:
   name: cluster-local-gateway
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
     networking.knative.dev/ingress-provider: istio
 spec:
   selector:
@@ -2078,12 +2514,13 @@ spec:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: webhook.istio.networking.internal.knative.dev
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
 webhooks:
 - admissionReviewVersions:
   - v1beta1
@@ -2113,12 +2550,13 @@ webhooks:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: config.webhook.istio.networking.internal.knative.dev
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
 webhooks:
 - admissionReviewVersions:
   - v1beta1
@@ -2155,7 +2593,8 @@ metadata:
   name: istio-webhook-certs
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
 
 ---
 # Copyright 2018 The Knative Authors
@@ -2178,7 +2617,7 @@ metadata:
   name: config-istio
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
     networking.knative.dev/ingress-provider: istio
 data:
   _example: |
@@ -2187,7 +2626,6 @@ data:
     #    EXAMPLE CONFIGURATION     #
     #                              #
     ################################
-
     # This block is not actually functional configuration,
     # but serves to illustrate the available configuration
     # options and document them in a way that is accessible
@@ -2196,16 +2634,14 @@ data:
     # These sample configuration options may be copied out of
     # this example block and unindented to be in the data block
     # to actually change the configuration.
-
     # Default Knative Gateway after v0.3. It points to the Istio
     # standard istio-ingressgateway, instead of a custom one that we
     # used pre-0.3. The configuration format should be `gateway.
-    # {{`{{gateway_namespace}}.{{gateway_name}}`}}: {{`"{{ingress_name}}.`}}
-    # {{`{{ingress_namespace}}.svc.cluster.local"`}}`. The {{`{{gateway_namespace}}`}}
+    # {{ `{{gateway_namespace}}.{{gateway_name}}: "{{ingress_name}}.`}}
+    # {{ `{{ingress_namespace}}.svc.cluster.local"` }}. The {{ `{{gateway_namespace}}` }}
     # is optional; when it is omitted, the system will search for
     # the gateway in the serving system namespace `knative-serving`
     gateway.knative-serving.knative-ingress-gateway: "istio-ingressgateway.istio-system.svc.cluster.local"
-
     # A cluster local gateway to allow pods outside of the mesh to access
     # Services and Routes not exposing through an ingress.  If the users
     # do have a service mesh setup, this isn't required and can be removed.
@@ -2214,14 +2650,13 @@ data:
     # sidecar injection (like Knative's istio-ci-no-mesh.yaml).  Since every pod
     # is outside of the service mesh in that case, a cluster-local  service
     # will need to be exposed to a cluster-local gateway to be accessible.
-    # The configuration format should be `local-gateway.{{`{{local_gateway_namespace}}`}}.
-    # {{`{{local_gateway_name}}: "{{cluster_local_gateway_name}}.`}}
-    # {{`{{cluster_local_gateway_namespace}}.svc.cluster.local"`}}`. The
-    # {{`{{local_gateway_namespace}}`}} is optional; when it is omitted, the system
+    # The configuration format should be {{ `local-gateway.{{local_gateway_namespace}}.` }}
+    # {{ `{{local_gateway_name}}: "{{cluster_local_gateway_name}}.` }}
+    # {{ `{{cluster_local_gateway_namespace}}.svc.cluster.local"` }}. The
+    # {{ `{{local_gateway_namespace}}` }} is optional; when it is omitted, the system
     # will search for the local gateway in the serving system namespace
     # `knative-serving`
     local-gateway.knative-serving.cluster-local-gateway: "cluster-local-gateway.istio-system.svc.cluster.local"
-
     # To use only Istio service mesh and no cluster-local-gateway, replace
     # all local-gateway.* entries by the following entry.
     local-gateway.mesh: "mesh"
@@ -2248,7 +2683,7 @@ metadata:
   name: networking-istio
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
     networking.knative.dev/ingress-provider: istio
 spec:
   selector:
@@ -2264,14 +2699,14 @@ spec:
         sidecar.istio.io/inject: "false"
       labels:
         app: networking-istio
-        serving.knative.dev/release: "v20200411-5be0174"
+        serving.knative.dev/release: "v20200928-4a59aa96"
     spec:
       serviceAccountName: controller
       containers:
       - name: networking-istio
         # This is the Go import path for the binary that is containerized
         # and substituted here.
-        image: gcr.io/knative-nightly/knative.dev/net-istio/cmd/controller:v20200410-5be0174
+        image: gcr.io/knative-nightly/knative.dev/net-istio/cmd/controller:v20200928-4a59aa96
         resources:
           requests:
             cpu: 30m
@@ -2323,7 +2758,8 @@ metadata:
   name: istio-webhook
   namespace: knative-serving
   labels:
-    serving.knative.dev/release: "v20200411-5be0174"
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
 spec:
   selector:
     matchLabels:
@@ -2336,14 +2772,14 @@ spec:
       labels:
         app: istio-webhook
         role: istio-webhook
-        serving.knative.dev/release: "v20200411-5be0174"
+        serving.knative.dev/release: "v20200928-4a59aa96"
     spec:
       serviceAccountName: controller
       containers:
       - name: webhook
         # This is the Go import path for the binary that is containerized
         # and substituted here.
-        image: gcr.io/knative-nightly/knative.dev/net-istio/cmd/webhook:v20200410-5be0174
+        image: gcr.io/knative-nightly/knative.dev/net-istio/cmd/webhook:v20200928-4a59aa96
         resources:
           requests:
             cpu: 20m
@@ -2397,10 +2833,8 @@ metadata:
   namespace: knative-serving
   labels:
     role: istio-webhook
-    serving.knative.dev/release: "v20200411-5be0174"
-    {{- with .Values.global.serviceLabels }}
-    {{ toYaml . | indent 4 | trim }}
-    {{- end }}
+    serving.knative.dev/release: "v20200928-4a59aa96"
+    networking.knative.dev/ingress-provider: istio
 spec:
   ports:
   - # Define metrics and profiling for them to be accessible within service meshes.

@@ -1,5 +1,19 @@
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2018 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: images.caching.internal.knative.dev
@@ -7,7 +21,6 @@ metadata:
     knative.dev/crd-install: "true"
 spec:
   group: caching.internal.knative.dev
-  version: v1alpha1
   names:
     kind: Image
     plural: images
@@ -18,11 +31,37 @@ spec:
     shortNames:
       - img
   scope: Namespaced
-  subresources:
-    status: {}
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: certificates.networking.internal.knative.dev
@@ -30,7 +69,27 @@ metadata:
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
-  version: v1alpha1
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Ready\")].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type==\"Ready\")].reason"
   names:
     kind: Certificate
     plural: certificates
@@ -41,18 +100,23 @@ spec:
     shortNames:
       - kcert
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type==\"Ready\")].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type==\"Ready\")].reason"
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: configurations.serving.knative.dev
@@ -61,25 +125,85 @@ metadata:
     duck.knative.dev/podspecable: "true"
 spec:
   group: serving.knative.dev
-  preserveUnknownFields: false
-  validation:
-    openAPIV3Schema:
-      type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
-      x-kubernetes-preserve-unknown-fields: true
   versions:
     - name: v1alpha1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1beta1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Configuration
     plural: configurations
@@ -92,30 +216,31 @@ spec:
       - config
       - cfg
   scope: Namespaced
-  subresources:
-    status: {}
   conversion:
     strategy: Webhook
-    webhookClientConfig:
-      service:
-        name: webhook
-        namespace: knative-serving
-  additionalPrinterColumns:
-    - name: LatestCreated
-      type: string
-      JSONPath: .status.latestCreatedRevisionName
-    - name: LatestReady
-      type: string
-      JSONPath: .status.latestReadyRevisionName
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
+    webhook:
+      conversionReviewVersions: ["v1", "v1beta1"]
+      clientConfig:
+        service:
+          name: webhook
+          namespace: knative-serving
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: ingresses.networking.internal.knative.dev
@@ -127,6 +252,23 @@ spec:
     - name: v1alpha1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Ingress
     plural: ingresses
@@ -138,18 +280,23 @@ spec:
       - kingress
       - king
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: metrics.autoscaling.internal.knative.dev
@@ -157,7 +304,27 @@ metadata:
     knative.dev/crd-install: "true"
 spec:
   group: autoscaling.internal.knative.dev
-  version: v1alpha1
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Metric
     plural: metrics
@@ -166,18 +333,23 @@ spec:
       - knative-internal
       - autoscaling
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2018 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: podautoscalers.autoscaling.internal.knative.dev
@@ -189,6 +361,29 @@ spec:
     - name: v1alpha1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: DesiredScale
+          type: integer
+          jsonPath: ".status.desiredScale"
+        - name: ActualScale
+          type: integer
+          jsonPath: ".status.actualScale"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: PodAutoscaler
     plural: podautoscalers
@@ -200,24 +395,23 @@ spec:
       - kpa
       - pa
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-    - name: DesiredScale
-      type: integer
-      JSONPath: ".status.desiredScale"
-    - name: ActualScale
-      type: integer
-      JSONPath: ".status.actualScale"
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: revisions.serving.knative.dev
@@ -225,25 +419,94 @@ metadata:
     knative.dev/crd-install: "true"
 spec:
   group: serving.knative.dev
-  preserveUnknownFields: false
-  validation:
-    openAPIV3Schema:
-      type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
-      x-kubernetes-preserve-unknown-fields: true
   versions:
     - name: v1alpha1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Config Name
+          type: string
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configuration']"
+        - name: K8s Service Name
+          type: string
+          jsonPath: ".status.serviceName"
+        - name: Generation
+          type: string # int in string form :(
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configurationGeneration']"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1beta1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Config Name
+          type: string
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configuration']"
+        - name: K8s Service Name
+          type: string
+          jsonPath: ".status.serviceName"
+        - name: Generation
+          type: string # int in string form :(
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configurationGeneration']"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Config Name
+          type: string
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configuration']"
+        - name: K8s Service Name
+          type: string
+          jsonPath: ".status.serviceName"
+        - name: Generation
+          type: string # int in string form :(
+          jsonPath: ".metadata.labels['serving\\.knative\\.dev/configurationGeneration']"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Revision
     plural: revisions
@@ -255,33 +518,31 @@ spec:
     shortNames:
       - rev
   scope: Namespaced
-  subresources:
-    status: {}
   conversion:
     strategy: Webhook
-    webhookClientConfig:
-      service:
-        name: webhook
-        namespace: knative-serving
-  additionalPrinterColumns:
-    - name: Config Name
-      type: string
-      JSONPath: ".metadata.labels['serving\\.knative\\.dev/configuration']"
-    - name: K8s Service Name
-      type: string
-      JSONPath: ".status.serviceName"
-    - name: Generation
-      type: string # int in string form :(
-      JSONPath: ".metadata.labels['serving\\.knative\\.dev/configurationGeneration']"
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
+    webhook:
+      conversionReviewVersions: ["v1", "v1beta1"]
+      clientConfig:
+        service:
+          name: webhook
+          namespace: knative-serving
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: routes.serving.knative.dev
@@ -290,25 +551,76 @@ metadata:
     duck.knative.dev/addressable: "true"
 spec:
   group: serving.knative.dev
-  preserveUnknownFields: false
-  validation:
-    openAPIV3Schema:
-      type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
-      x-kubernetes-preserve-unknown-fields: true
   versions:
     - name: v1alpha1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1beta1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Route
     plural: routes
@@ -320,27 +632,31 @@ spec:
     shortNames:
       - rt
   scope: Namespaced
-  subresources:
-    status: {}
   conversion:
     strategy: Webhook
-    webhookClientConfig:
-      service:
-        name: webhook
-        namespace: knative-serving
-  additionalPrinterColumns:
-    - name: URL
-      type: string
-      JSONPath: .status.url
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
+    webhook:
+      conversionReviewVersions: ["v1", "v1beta1"]
+      clientConfig:
+        service:
+          name: webhook
+          namespace: knative-serving
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: serverlessservices.networking.internal.knative.dev
@@ -352,6 +668,35 @@ spec:
     - name: v1alpha1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: Mode
+          type: string
+          jsonPath: ".spec.mode"
+        - name: Activators
+          type: integer
+          jsonPath: ".spec.numActivators"
+        - name: ServiceName
+          type: string
+          jsonPath: ".status.serviceName"
+        - name: PrivateServiceName
+          type: string
+          jsonPath: ".status.privateServiceName"
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: ServerlessService
     plural: serverlessservices
@@ -362,30 +707,23 @@ spec:
     shortNames:
       - sks
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-    - name: Mode
-      type: string
-      JSONPath: ".spec.mode"
-    - name: Activators
-      type: integer
-      JSONPath: ".spec.numActivators"
-    - name: ServiceName
-      type: string
-      JSONPath: ".status.serviceName"
-    - name: PrivateServiceName
-      type: string
-      JSONPath: ".status.privateServiceName"
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: services.serving.knative.dev
@@ -395,25 +733,94 @@ metadata:
     duck.knative.dev/podspecable: "true"
 spec:
   group: serving.knative.dev
-  preserveUnknownFields: false
-  validation:
-    openAPIV3Schema:
-      type: object
-      # this is a work around so we don't need to flush out the
-      # schema for each version at this time
-      #
-      # see issue: https://github.com/knative/serving/issues/912
-      x-kubernetes-preserve-unknown-fields: true
   versions:
     - name: v1alpha1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1beta1
       served: true
       storage: false
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - name: v1
       served: true
       storage: true
+      subresources:
+        status: {}
+      schema:
+        openAPIV3Schema:
+          type: object
+          # this is a work around so we don't need to flush out the
+          # schema for each version at this time
+          #
+          # see issue: https://github.com/knative/serving/issues/912
+          x-kubernetes-preserve-unknown-fields: true
+      additionalPrinterColumns:
+        - name: URL
+          type: string
+          jsonPath: .status.url
+        - name: LatestCreated
+          type: string
+          jsonPath: .status.latestCreatedRevisionName
+        - name: LatestReady
+          type: string
+          jsonPath: .status.latestReadyRevisionName
+        - name: Ready
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+        - name: Reason
+          type: string
+          jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
   names:
     kind: Service
     plural: services
@@ -426,27 +833,12 @@ spec:
       - kservice
       - ksvc
   scope: Namespaced
-  subresources:
-    status: {}
   conversion:
     strategy: Webhook
-    webhookClientConfig:
-      service:
-        name: webhook
-        namespace: knative-serving
-  additionalPrinterColumns:
-    - name: URL
-      type: string
-      JSONPath: .status.url
-    - name: LatestCreated
-      type: string
-      JSONPath: .status.latestCreatedRevisionName
-    - name: LatestReady
-      type: string
-      JSONPath: .status.latestReadyRevisionName
-    - name: Ready
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-    - name: Reason
-      type: string
-      JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
+    webhook:
+      conversionReviewVersions: ["v1", "v1beta1"]
+      clientConfig:
+        service:
+          name: webhook
+          namespace: knative-serving
+---
