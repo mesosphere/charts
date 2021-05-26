@@ -5,4 +5,4 @@ metadata:
   name: knative-crd
 data:
   crd.yaml: |-
-{{.Files.Get "crds/crds.yaml" | printf "%s" | indent 4}}
+{{.Files.Get "crds/crds.yaml" | indent 4}}
