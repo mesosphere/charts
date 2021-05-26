@@ -36,7 +36,7 @@ spec:
   template:
     metadata:
       annotations:
-        sidecar.knative.io/inject: "false"
+        sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: knative-crd-job
       containers:
