@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: knative-crd-job
+  namespace: knative-serving
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: knative-crd-job
+rules:
+- apiGroups: ["apiextensions.k8s.io"]
+  resources: ["customresourcedefinitions"]
+  verbs: ["create", "get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: knative-crd-job
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: knative-crd-job
+subjects:
+  - kind: ServiceAccount
+    name: knative-crd-job
+    namespace: knative-serving
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: knative-serving
+  name: knative-crd-{{ randAlphaNum 5 | lower }}
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.knative.io/inject: "false"
+    spec:
+      serviceAccountName: knative-crd-job
+      containers:
+      - name: knative-crd
+        image: {{.Values.global.image}}:{{.Values.global.tag}}
+        volumeMounts:
+        - name: crd
+          mountPath: /etc/knative/crd
+          readOnly: true
+        command: ["kubectl",  "apply", "-f", "/etc/knative/crd/crd.yaml"]
+      volumes:
+      - name: crd
+        configMap:
+          name: knative-crd
+      restartPolicy: OnFailure
