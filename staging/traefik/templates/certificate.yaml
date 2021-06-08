@@ -33,22 +33,24 @@ spec:
     name: kubernetes-ca
     kind: ClusterIssuer
   {{- end }}
-  # DCOS-60297 Update certificate to comply with Apple security requirements
-  # https://support.apple.com/en-us/HT210176
-  duration: 19200h   # 800 days
+  dnsNames:
+    - {{ .Values.ssl.defaultCN }}
+    {{- range .Values.ssl.defaultSANList }}
+    - {{ . }}
+    {{- end }}
+  duration: {{ .Values.ssl.defaultDuration }}
+  {{- if .Values.ssl.defaultUsages }}
   usages:
-  - digital signature
-  - key encipherment
-  - server auth
+    {{- toYaml .Values.ssl.defaultUsages | nindent 2 }}
+  {{- end }}
 {{- if (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
   subject:
-    organizations:
-    - D2iQ
+  {{- toYaml .Values.ssl.defaultSubject | nindent 2 }}
 {{- else }}
   organization:
-  - D2iQ
+  {{- toYaml .Values.ssl.defaultSubject.organizations | nindent 2 }}
 {{- end }}
   # The commonName will get replaced by kubeaddons-config
   # init-container for traefik
-  commonName: traefik.localhost.localdomain
+  commonName: {{ .Values.ssl.defaultCN }}
 {{- end }}
