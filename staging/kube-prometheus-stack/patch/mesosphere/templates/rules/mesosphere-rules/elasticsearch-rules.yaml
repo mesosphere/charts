@@ -54,4 +54,4 @@ spec:
       annotations:
         summary: Elasticsearch Cluster Yellow (instance {{ $labels.instance }})
         description: "Elastic Cluster Yellow status\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-  {{- end }}
+{{- end }}
