@@ -3250,6 +3250,7 @@ prometheus:
 mesosphereResources:
   create: false
   rules:
+    elasticsearch: false
     velero: false
   dashboards:
     autoscaler: true

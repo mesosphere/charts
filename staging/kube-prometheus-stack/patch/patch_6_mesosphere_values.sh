@@ -16,6 +16,7 @@ cat << EOF >> ${SRCFILE}
 mesosphereResources:
   create: false
   rules:
+    elasticsearch: false
     velero: false
   dashboards:
     autoscaler: true
