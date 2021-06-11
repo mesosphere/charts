@@ -11,7 +11,7 @@ This chart bootstraps the Nvidia Device Plugin on Nvidia GPU enabled nodes.
 
 ### Nvidia Device Plugin
 
-1. NVIDIA drivers ~= 361.93
+1. NVIDIA drivers ~= 384.81
 2. nvidia-docker version > 2.0 (see how to [install](https://github.com/NVIDIA/nvidia-docker) and it's [prerequisites](https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0)#prerequisites))
 3. docker configured with nvidia as the [default runtime](https://github.com/NVIDIA/nvidia-docker/wiki/Advanced-topics#default-runtime).
 4. Kubernetes version >= 1.10
