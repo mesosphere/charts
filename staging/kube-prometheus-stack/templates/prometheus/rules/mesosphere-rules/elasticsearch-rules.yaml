@@ -25,8 +25,7 @@ spec:
       labels:
         severity: critical
       annotations:
-        summary: Elasticsearch disk out of space (instance {{ $labels.instance }})
-        description: "The disk usage is over 90%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        message: The disk usage is over 90%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS =  {{`{{`}} $labels {{`}}`}}
     # The disk usage is over 80%
     - alert: ElasticsearchDiskSpaceLow
       expr: elasticsearch_filesystem_data_available_bytes / elasticsearch_filesystem_data_size_bytes * 100 < 20
@@ -34,8 +33,7 @@ spec:
       labels:
         severity: warning
       annotations:
-        summary: Elasticsearch disk space low (instance {{ $labels.instance }})
-        description: "The disk usage is over 80%\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        message: The disk usage is over 80%\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}
     # Elastic Cluster Red status
     - alert: ElasticsearchClusterRed
       expr: elasticsearch_cluster_health_status{color="red"} == 1
@@ -43,8 +41,7 @@ spec:
       labels:
         severity: critical
       annotations:
-        summary: Elasticsearch Cluster Red (instance {{ $labels.instance }})
-        description: "Elastic Cluster Red status\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        message: Elastic Cluster Red status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}
     # Elastic Cluster Yellow status
     - alert: ElasticsearchClusterYellow
       expr: elasticsearch_cluster_health_status{color="yellow"} == 1
@@ -52,6 +49,5 @@ spec:
       labels:
         severity: warning
       annotations:
-        summary: Elasticsearch Cluster Yellow (instance {{ $labels.instance }})
-        description: "Elastic Cluster Yellow status\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+        message: Elastic Cluster Yellow status\n  VALUE = {{`{{`}} $value {{`}}`}}\n  LABELS = {{`{{`}} $labels {{`}}`}}
 {{- end }}
