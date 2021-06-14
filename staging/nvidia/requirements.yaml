@@ -6,8 +6,5 @@ dependencies:
     version: 0.1.2
     condition: nvidia-dcgm-exporter.enabled
   - name: nvidia-device-plugin
-    version: 0.1.2
+    version: 0.1.3
     condition: nvidia-device-plugin.enabled
-  - name: nvidia-driver
-    version: 0.1.6
-    condition: nvidia-driver.enabled
