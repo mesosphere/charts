@@ -23,7 +23,7 @@ spec:
       release: '{{ .Release.Name }}'
   template:
     metadata:
-      annotations: 
+      annotations:
 {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       labels:
         app: '{{ template "gatekeeper.name" . }}'
@@ -34,18 +34,6 @@ spec:
         heritage: '{{ .Release.Service }}'
         release: '{{ .Release.Name }}'
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: gatekeeper.sh/operation
-                  operator: In
-                  values:
-                  - webhook
-              topologyKey: kubernetes.io/hostname
-            weight: 100
       containers:
       - name: manager
         args:
@@ -58,7 +46,7 @@ spec:
         - --enable-mutation={{ .Values.mutations.enable }}
         {{- if .Values.webhook.certManager.enabled }}
         - --disable-cert-rotation
-        {{- end }} 
+        {{- end }}
         command:
         - /manager
         env:
@@ -91,7 +79,7 @@ spec:
           httpGet:
             path: /readyz
             port: 9090
-        resources: 
+        resources:
 {{ toYaml .Values.controllerManager.resources | indent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
@@ -105,10 +93,10 @@ spec:
         - mountPath: /certs
           name: cert
           readOnly: true
-      nodeSelector: 
+      nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
       affinity:
-{{ toYaml .Values.affinity | indent 8 }}
+{{ toYaml .Values.controllerManager.affinity | indent 8 }}
       tolerations:
 {{ toYaml .Values.tolerations | indent 8 }}
       serviceAccountName: gatekeeper-admin
