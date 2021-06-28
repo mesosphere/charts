@@ -33,7 +33,7 @@ In Github, you can host charts from your own repository.
     `stable` chart:
 
       ```sh
-      helm repo index --url "https://<your_github_org>.github.io/charts/stable ."
+      helm repo index --url "https://<your_github_org>.github.io/charts/stable" .
       ```
 
   1. Copy the new chart details under the `entries:` section.

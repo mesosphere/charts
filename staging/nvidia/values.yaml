@@ -17,10 +17,3 @@ nvidia-device-plugin:
   nodeSelector: {}
   tolerations: []
   initContainers: []
-
-nvidia-driver:
-  enabled: true
-  resources: {}
-  nodeSelector: {}
-  tolerations: []
-  initContainers: []
