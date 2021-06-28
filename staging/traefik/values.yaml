@@ -129,13 +129,23 @@ ssl:
   insecureSkipVerify: false
   generateTLS: false
   useCertManager: false
-  # defaultCN: "example.com"
+  defaultCN: "traefik.localhost.localdomain"
     # or *.example.com
   defaultSANList: []
     # - example.com
     # - test1.example.com
   defaultIPList: []
     # - 1.2.3.4
+  defaultUsages:
+    - digital signature
+    - key encipherment
+    - server auth
+  defaultSubject:
+    organizations:
+      - D2iQ
+  # DCOS-60297 Update certificate to comply with Apple security requirements
+  # https://support.apple.com/en-us/HT210176
+  defaultDuration: 19200h  # 800 days
   # cipherSuites: []
   # https://docs.traefik.io/configuration/entrypoints/#specify-minimum-tls-version
   # tlsMinVersion: VersionTLS12
