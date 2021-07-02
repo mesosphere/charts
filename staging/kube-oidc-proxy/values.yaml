@@ -16,6 +16,7 @@ fullnameOverride: ""
 service:
   type: ClusterIP
   port: 443
+  annotations: {}
 
 # These values needs to be set in overrides in order to get kube-oidc-proxy
 # working.
