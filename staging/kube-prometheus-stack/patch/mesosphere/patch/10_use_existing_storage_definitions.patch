@@ -2,12 +2,12 @@ commit 7c01b4a4e11cd75a4bb2f8c7d655ff3b789d0dfb
 Author: Joe Julian <me@joejulian.name>
 Date:   Mon Mar 15 17:44:27 2021 -0700
 
-    use exiting storage config if it already exists
-    
+    use existing storage config if it already exists
+
     If either prometheus or alertmanager resources exist and have a storage
     attribute defined in their spec, reuse that instead of what's defined
     in the values.
-    
+
     This prevents the accidental redefinition of the volumeClaimTemplate and
     the abaondomnet of old data.
 
@@ -36,7 +36,7 @@ index 371f3ae39..826ec6eb9 100644
 +
  {{ $.Chart.Name }} has been installed. Check its status by running:
    kubectl --namespace {{ template "kube-prometheus-stack.namespace" . }} get pods -l "release={{ $.Release.Name }}"
- 
+
 diff --git a/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml b/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml
 index 78d0f7c5b..9f0602e8d 100644
 --- a/staging/kube-prometheus-stack/templates/alertmanager/alertmanager.yaml

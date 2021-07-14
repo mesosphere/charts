@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # This script upgrades the prometheus operator by copying all the latest upstream helm files.
-# 
+#
 # It then applies all the needed mesosphere changes from the /patch folder.
 #
-# To upgrade, simply run: 
+# To upgrade, simply run:
 #   ./upgrade_operator.sh
 
 set -xeuo pipefail
@@ -13,7 +13,7 @@ shopt -s dotglob
 BASEDIR=$(dirname "$(realpath "$0")")
 UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
 PROMETHEUS_PATH=charts/kube-prometheus-stack
-PROMETHEUS_TAG=kube-prometheus-stack-15.4.4
+PROMETHEUS_TAG=kube-prometheus-stack-16.13.0
 TMPDIR=$(mktemp -d)
 STARTING_REV=$(git rev-parse HEAD)
 export STARTING_REV
@@ -56,6 +56,6 @@ BASEDIR=${BASEDIR} ./patch/patch.sh
 
 helm dependency update
 git add .
-git commit -m 'helm dependency update'
+git commit -m 'chore: helm dependency update'
 
 echo "Done upgrading kube-prometheus-stack!"
