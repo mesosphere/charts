@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # This script upgrades the prometheus operator by copying all the latest upstream helm files.
-# 
+#
 # It then applies all the needed mesosphere changes from the /patch folder.
 #
-# To upgrade, simply run: 
+# To upgrade, simply run:
 #   ./upgrade_operator.sh
 
 set -xeuo pipefail
@@ -56,6 +56,6 @@ BASEDIR=${BASEDIR} ./patch/patch.sh
 
 helm dependency update
 git add .
-git commit -m 'helm dependency update'
+git commit -m 'chore: helm dependency update'
 
 echo "Done upgrading kube-prometheus-stack!"
