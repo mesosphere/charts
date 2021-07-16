@@ -18,17 +18,6 @@ mesosphereResources:
   rules:
     elasticsearch: false
     velero: false
-  dashboards:
-    autoscaler: true
-    calico: true
-    elasticsearch: true
-    fluentbit: true
-    grafana: true
-    opsportal: true
-    kibana: true
-    localvolumeprovisioner: true
-    traefik: true
-    velero: true
   homeDashboard:
     name: "Kubernetes / Compute Resources / Cluster"
     cronJob:
