@@ -2659,7 +2659,7 @@ prometheus:
     ## which will also match the probes created
 
     ##
-    probeSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: true
     ## Probes to be selected for target discovery.
 
     ## If {}, select all Probes
