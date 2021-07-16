@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-prometheus-admin
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-prometheus-admin
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
@@ -27,7 +27,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-prometheus-view
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-prometheus-view
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
@@ -48,7 +48,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-prometheus-edit
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-prometheus-edit
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-prom
   {{- if .Values.prometheus.ingress.labels }}
