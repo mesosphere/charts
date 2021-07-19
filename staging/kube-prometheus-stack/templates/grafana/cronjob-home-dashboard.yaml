@@ -1,4 +1,4 @@
-{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled }}
+{{- if and .Values.grafana.enabled .Values.grafana.defaultDashboardsEnabled .Values.mesosphereResources.homeDashboard.cronJob.enabled }}
 # This cronjob periodically sets the Grafana home dashboard to the dashboard identified by
 # `.Values.grafana.homeDashboard.name`. A post-install hook job that runs once may end up in a race with the Grafana
 # sidecar that loads dashboards from configmaps. This should be replaced with setting the home dashboard in

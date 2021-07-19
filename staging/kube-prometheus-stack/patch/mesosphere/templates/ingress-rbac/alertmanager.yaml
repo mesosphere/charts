@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-alertmanager-admin
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-alertmanager-admin
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
 {{- if .Values.alertmanager.ingress.labels }}
@@ -27,7 +27,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-alertmanager-view
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-alertmanager-view
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
 {{- if .Values.alertmanager.ingress.labels }}
@@ -48,7 +48,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: opsportal-alertmanager-edit
+  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-alertmanager-edit
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
 {{- if .Values.alertmanager.ingress.labels }}
