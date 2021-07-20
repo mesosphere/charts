@@ -11,7 +11,7 @@ GOBIN=$(shell go env GOBIN)
 endif
 endif
 
-HELM_VERSION ?= v3.5.0
+HELM_VERSION ?= v3.6.3
 HELM_BIN ?= bin/$(GOOS)/$(GOARCH)/helm-$(HELM_VERSION)
 
 STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
@@ -153,13 +153,8 @@ endif
 .PHONY: lint
 lint: ct.lint
 
-.PHONY: test.helm2
-test.helm2: HELM_VERSION = v2.17.0
-test.helm2: CT_VERSION = v2.4.1
-test.helm2: ct.test
-
-.PHONY: test.helm3
-test.helm3: ct.test
+.PHONY: test.helm
+test.helm: ct.test
 
 .PHONY: test
 test: ct.test

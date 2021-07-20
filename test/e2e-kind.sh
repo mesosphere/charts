@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 set -x
 
-readonly KIND_VERSION=v0.9.0
+readonly KIND_VERSION=v0.11.1
 KINDEST_NODE_IMAGE=kindest/node
 # full SHA256!
 KINDEST_NODE_VERSION=v1.19.1@sha256:98cf5288864662e37115e362b23e4369c8c4a408f99cbc06e58ac30ddc721600
@@ -30,13 +30,9 @@ run_ct_container() {
         cat
     echo
 
-    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
-        docker cp "$(pwd)/test/helm2/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
-        docker cp "$(pwd)/." "ct:/charts"
-    else
-        docker cp "$(pwd)/test/helm3/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
-        docker cp "$(pwd)/." "ct:/charts"
-    fi
+    docker cp "$(pwd)/test/helm3/ct-e2e.yaml" "ct:/etc/ct/ct.yaml"
+    docker cp "$(pwd)/." "ct:/charts"
+
     docker_exec chown -R root:root /charts
 }
 
@@ -195,22 +191,9 @@ EOF
 install_helm() {
     echo 'Installing helm...'
 
-    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
-        echo 'Installing tiller...'
-        docker_exec kubectl --namespace kube-system create serviceaccount tiller
-        docker_exec kubectl create clusterrolebinding tiller-cluster-rule \
-            --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-        echo 'Installing helm v2...'
-        docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
-            https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
-                | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm \
-                && helm init --debug --history-max 10 --service-account tiller --stable-repo-url https://mesosphere.github.io/charts/stable --wait"
-    else
-        echo 'Installing helm v3...'
-        docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
-            https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
-                | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm"
-    fi
+    docker_exec /bin/sh -c "curl ${CURL_RETRY_OPTS} -fsSL \
+        https://get.helm.sh/helm-${HELM_VERSION}-linux-amd64.tar.gz \
+            | tar xz --strip-components=1 -C /usr/local/bin linux-amd64/helm"
 
     echo
 }
@@ -228,15 +211,9 @@ install_certmanager() {
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
 
-    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
-        docker_exec helm install --debug \
-            --values stable/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager stable/cert-manager-setup
-    else
-        docker_exec helm install cert-manager --debug \
-            --values stable/cert-manager-setup/ci/test-values.yaml \
-            --namespace cert-manager stable/cert-manager-setup
-    fi
+    docker_exec helm install cert-manager --debug \
+        --values stable/cert-manager-setup/ci/test-values.yaml \
+        --namespace cert-manager stable/cert-manager-setup
 
     echo
 }
@@ -263,11 +240,7 @@ install_reloader() {
 
 install_elasticsearch() {
     echo 'Installing elasticsearch...'
-    if [[ "${HELM_VERSION}" =~ ^v2.* ]]; then
-        docker_exec helm install --debug stable/elasticsearch --name elasticsearch
-    else
-        docker_exec helm install elasticsearch --debug stable/elasticsearch
-    fi
+    docker_exec helm install elasticsearch --debug stable/elasticsearch
 }
 
 replace_priority_class_name_system_x_critical() {
