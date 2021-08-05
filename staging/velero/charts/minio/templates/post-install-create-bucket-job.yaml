@@ -72,7 +72,7 @@ spec:
         command: ["/bin/sh", "/config/initialize"]
         env:
           - name: MINIO_ENDPOINT
-            value: {{ template "minio.fullname" . }}
+            value: {{ template "minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local
           - name: MINIO_PORT
             value: {{ .Values.service.port | quote }}
         volumeMounts:
