@@ -1,4 +1,3 @@
-
 {{- if index .Values "cost-analyzer" "global" "prometheus" "enabled" }}
 {{- if .Values.hooks.clusterID.enabled }}
 ---
