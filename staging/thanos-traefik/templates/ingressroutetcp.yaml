@@ -8,13 +8,13 @@ metadata:
 {{ include "thanos-traefik.labels" . | indent 4 }}
 spec:
   entryPoints:
-    {{ toYaml .Values.route.endpoints | nindent 4}}
+    {{- toYaml .Values.route.endpoints | nindent 4}}
   routes:
     - match: HostSNI(`{{ .Values.route.sni }}`)
       services:
-      {{ toYaml .Values.route.services | nindent 6 }}
+      {{- toYaml .Values.route.services | nindent 6 }}
   tls:
-    secretName: {{ .Values.route.tls.secretName }}
+    secretName: {{ .Values.route.tls.secretName | required "A valid route.tls.secretName is required" }}
     options:
       name: {{ include "thanos-traefik.fullname" . }}-tls-options
       namespace: {{ .Release.Namespace }}
@@ -33,6 +33,6 @@ spec:
     # the CA certificate is extracted from secret data key `tls.ca` of the given
     # secrets.
     secretNames:
-      - {{ .Values.tlsoptions.secretName }}
+      - {{ .Values.tlsoptions.secretName | required "A valid tlsoptions.secretName is required" }}
     clientAuthType: RequireAndVerifyClientCert
 {{ end }}
