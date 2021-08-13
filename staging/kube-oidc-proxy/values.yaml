@@ -115,8 +115,3 @@ affinity: {}
 # certIssuerRef:
 #   kind: ClusterIssuer
 #   name: kubernetes-ca
-
-dnsNames: []
-    # - kube-oidc-proxy-kubeaddons
-    # - kube-oidc-proxy-kubeaddons.kubeaddons
-    # - kube-oidc-proxy-kubeaddons.kubeaddons.svc.cluster.local
