@@ -106,7 +106,12 @@ spec:
                 secretKeyRef:
                   name: {{ template "traefik-forward-auth.fullname" . }}-secret
                   key: secret
+            {{- if lt (.Values.image.tag | semver | (semver "3.0.0").Compare) 0 }}
+            - name: ENCRYPTION_KEY
+            {{- else }}
+            # Before v3 use SESSION_KEY
             - name: SESSION_KEY
+            {{- end }}
               valueFrom:
                 secretKeyRef:
                   name: {{ template "traefik-forward-auth.fullname" . }}-session-key
