@@ -28,7 +28,7 @@ excluded-charts:
   - kube-prometheus-stack # D2IQ-62817
   - traefik-forward-auth  # D2IQ-62819
   - local-path-provisioner
-  - thanos-traefik
+  - thanos-traefik        # This requires installing dependencies like traefik2
   - vsphere-csi-driver
   - kubefed
 chart-repos:

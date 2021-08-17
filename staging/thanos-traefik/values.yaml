@@ -7,7 +7,7 @@ fullnameOverride: ""
 
 # Setting this option to true will allow installing this chart and not creating
 # any configuration objects.
-disable: false
+enabled: true
 
 # Configuration options for the ingress route tcp. The route will be configured
 # to do the TLS termination and verification of client cert (mtls).
