@@ -29,11 +29,11 @@ route:
   tls:
     # Define the secret name that contains the server certificate that should
     # be used for TLS termination by traefik
-    secretName: kommander-prometheus-thanos-certificates
+    secretName: kommander-thanos-server-tls
 
 # Configuration for TLS Options that will instruct traefik to perform the
 # TLS termination and client cert verification.
 tlsoptions:
   # The secret must have `tls.ca` key with a root CA certificate that will
   # be used for TLS verification.
-  secretName: kommander-prometheus-thanos-certificates
+  secretName: kommander-thanos-server-tls
