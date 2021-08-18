@@ -8,7 +8,7 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
-  commonName: {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc
+  commonName: dex-controller-webhook-service
   dnsNames:
   - {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc.cluster.local
   - {{ template "dex-controller.fullname" . }}-webhook-service.kubeaddons.svc.cluster
