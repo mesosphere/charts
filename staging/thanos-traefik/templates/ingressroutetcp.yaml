@@ -1,0 +1,38 @@
+{{ if .Values.enabled }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ include "thanos-traefik.fullname" . }}-ingress
+  labels:
+{{ include "thanos-traefik.labels" . | indent 4 }}
+spec:
+  entryPoints:
+    {{- toYaml .Values.route.endpoints | nindent 4}}
+  routes:
+    - match: HostSNI(`{{ .Values.route.sni }}`)
+      services:
+      {{- toYaml .Values.route.services | nindent 6 }}
+  tls:
+    secretName: {{ .Values.route.tls.secretName | required "A valid route.tls.secretName is required" }}
+    options:
+      name: {{ include "thanos-traefik.fullname" . }}-tls-options
+      namespace: {{ .Release.Namespace }}
+    passthrough: false
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSOption
+metadata:
+  name: {{ include "thanos-traefik.fullname" . }}-tls-options
+  labels:
+{{ include "thanos-traefik.labels" . | indent 4 }}
+spec:
+  sniStrict: true
+  clientAuth:
+    # the CA certificate is extracted from secret data key `tls.ca` of the given
+    # secrets.
+    secretNames:
+      - {{ .Values.tlsoptions.secretName | required "A valid tlsoptions.secretName is required" }}
+    clientAuthType: RequireAndVerifyClientCert
+{{ end }}

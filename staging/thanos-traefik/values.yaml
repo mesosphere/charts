@@ -1,0 +1,39 @@
+# Default values for traefik-thanos.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Setting this option to true will allow installing this chart and not creating
+# any configuration objects.
+enabled: true
+
+# Configuration options for the ingress route tcp. The route will be configured
+# to do the TLS termination and verification of client cert (mtls).
+route:
+  # These are the traefik endpoints for which the TCP route will get created
+  endpoints:
+    - web
+    - websecure
+
+  # Hostname that will be used to match the route. GRPC client must send this
+  # in TCP request when providing a client certificate.
+  sni: server.thanos.localhost.localdomain
+
+  # List of the thanos sidecar grpc service that will get the the connections.
+  services:
+    - name: kube-prometheus-stack-prometheus
+      port: 10901
+
+  tls:
+    # Define the secret name that contains the server certificate that should
+    # be used for TLS termination by traefik
+    secretName: kommander-thanos-server-tls
+
+# Configuration for TLS Options that will instruct traefik to perform the
+# TLS termination and client cert verification.
+tlsoptions:
+  # The secret must have `tls.ca` key with a root CA certificate that will
+  # be used for TLS verification.
+  secretName: kommander-thanos-server-tls
