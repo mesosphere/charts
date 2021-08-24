@@ -13,3 +13,9 @@ namespaceKnativeServing:
 
 configDeployment:
   registriesSkippingTagResolving: ""
+
+gc:
+  staleRevisionCreateDelay: "48h"
+  staleRevisionTimeout: "15h"
+  staleRevisionMinimumGenerations: "20"
+  staleRevisionLastpinnedDebounce: "5h"
