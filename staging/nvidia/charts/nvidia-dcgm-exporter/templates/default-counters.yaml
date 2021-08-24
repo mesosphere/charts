@@ -5,6 +5,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   default-counters.csv: |
+    # These settings are taken from the dcgm-exporter repository:
+    # https://github.com/NVIDIA/gpu-monitoring-tools/blob/master/etc/dcgm-exporter/default-counters.csv
+    #
     # Format,,
     # If line starts with a '#' it is considered a comment,,
     # DCGM FIELD, Prometheus metric type, help message
