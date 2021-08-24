@@ -49,6 +49,8 @@ spec:
         - name: pod-gpu-resources
           readOnly: true
           mountPath: /var/lib/kubelet/pod-resources
+        - name: default-counters
+          mountPath: /etc/dcgm-exporter
         startupProbe:
           httpGet:
             path: /health
@@ -69,3 +71,6 @@ spec:
       - name: pod-gpu-resources
         hostPath:
           path: /var/lib/kubelet/pod-resources
+      - name: default-counters
+        configMap:
+          name: nvidia-dcgm-exporter-counters
