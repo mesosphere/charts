@@ -711,6 +711,10 @@ metadata:
   annotations:
     knative.dev/example-checksum: "4b89cfa0"
 data:
+  stale-revision-create-delay: "{{ .Values.gc.staleRevisionCreateDelay }}"
+  stale-revision-timeout: "{{ .Values.gc.staleRevisionTimeout }}"
+  stale-revision-minimum-generations: "{{ .Values.gc.staleRevisionMinimumGenerations }}"
+  stale-revision-lastpinned-debounce: "{{ .Values.gc.staleRevisionLastpinnedDebounce }}"
   _example: |
     ################################
     #                              #
