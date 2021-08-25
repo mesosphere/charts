@@ -1,4 +1,3 @@
-{{- if index .Values "cost-analyzer" "global" "prometheus" "enabled" }}
 {{- if .Values.hooks.clusterID.enabled }}
 ---
 apiVersion: v1
@@ -56,6 +55,7 @@ subjects:
   - kind: ServiceAccount
     name: {{ template "kubecost.fullname" . }}-hook
     namespace: {{ $.Release.Namespace }}
+{{- if index .Values "cost-analyzer" "global" "prometheus" "enabled" }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -91,6 +91,7 @@ spec:
               echo "Done replacing \$CLUSTER_ID with $CLUSTERID"
               EOF
       restartPolicy: OnFailure
+{{- end }}
 {{- if index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }}
 ---
 apiVersion: batch/v1
@@ -142,6 +143,5 @@ spec:
             - -c
             - kubectl delete configmap {{ index .Values "cost-analyzer" "prometheus" "server" "clusterIDConfigmap" }} -n {{ .Release.Namespace }} --ignore-not-found
       restartPolicy: OnFailure
-{{- end }}
 {{- end }}
 {{- end }}
