@@ -19,3 +19,14 @@ gc:
   staleRevisionTimeout: "15h"
   staleRevisionMinimumGenerations: "20"
   staleRevisionLastpinnedDebounce: "5h"
+  # V2 GC settings
+  # To enable V2 GC set responsiveRevisioGC to "allowed"
+  responsiveRevisionGC: ""
+  # Duration since creation before considering a revision for GC or "disabled".
+  retainSinceCreateTime: "48h"
+  # Duration since active before considering a revision for GC or "disabled".
+  retainSinceLastActiveTime: "15h"
+  # Minimum number of non-active revisions to retain.
+  minNonActiveRevisions: "20"
+  # Maximum number of non-active revisions to retain or "disabled" to disable any maximum limit.
+  maxNonActiveRevisions: "1000"

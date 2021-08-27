@@ -596,6 +596,9 @@ metadata:
   annotations:
     knative.dev/example-checksum: "6a69cdef"
 data:
+  {{- if .Values.gc.responsiveRevisionGC }}
+  responsive-revision-gc: "{{ .Values.gc.responsiveRevisionGC }}"
+  {{- end }}
   _example: |
     ################################
     #                              #
@@ -711,10 +714,17 @@ metadata:
   annotations:
     knative.dev/example-checksum: "4b89cfa0"
 data:
+  {{- if .Values.gc.responsiveRevisionGC }}
+  retain-since-create-time: "{{ .Values.gc.retainSinceCreateTime }}"
+  retain-since-last-active-time: "{{ .Values.gc.retainSinceLastActiveTime }}"
+  min-non-active-revisions: "{{ .Values.gc.minNonActiveRevisions }}"
+  max-non-active-revisions: "{{ .Values.gc.maxNonActiveRevisions }}"
+  {{- else }}
   stale-revision-create-delay: "{{ .Values.gc.staleRevisionCreateDelay }}"
   stale-revision-timeout: "{{ .Values.gc.staleRevisionTimeout }}"
   stale-revision-minimum-generations: "{{ .Values.gc.staleRevisionMinimumGenerations }}"
   stale-revision-lastpinned-debounce: "{{ .Values.gc.staleRevisionLastpinnedDebounce }}"
+  {{- end }}
   _example: |
     ################################
     #                              #
