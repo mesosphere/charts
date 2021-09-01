@@ -19,11 +19,11 @@
 /stable/dispatch @mesosphere/devx
 /stable/gcpdisk-csi-driver @mesosphere/sig-ksphere-cluster
 /stable/gcpdiskprovisioner @mesosphere/sig-ksphere-cluster
-/stable/kommander @mesosphere/sig-ksphere-ui @mesosphere/sig-ksphere-multi-cluster @mesosphere/sig-ksphere-observability
+/stable/kommander @mesosphere/d2iq-ui @mesosphere/sig-ksphere-multi-cluster @mesosphere/sig-ksphere-observability
 /stable/kubecost @mesosphere/sig-ksphere-observability
 /stable/localvolumeprovisioner @mesosphere/sig-ksphere-cluster
 /stable/mtls-proxy @mesosphere/sig-ksphere-observability
-/stable/opsportal @mesosphere/sig-ksphere-ui @mesosphere/sig-ksphere-security
+/stable/opsportal @mesosphere/d2iq-ui @mesosphere/sig-ksphere-security
 /stable/tekton @mesosphere/devx
 
 /staging/prometheus-operator @mesosphere/sig-ksphere-observability
