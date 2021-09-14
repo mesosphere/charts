@@ -77,7 +77,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{.Release.Name}}-session-key-pre-install"
+  name: "{{.Release.Name}}-sesh-key-pre-install"
   labels:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
@@ -145,7 +145,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: "{{.Release.Name}}-session-key-post-delete"
+  name: "{{.Release.Name}}-sesh-key-post-delete"
   labels:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
