@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
@@ -22,7 +22,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   namespace: {{ $.Release.Namespace }}
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-20"
@@ -30,9 +30,9 @@ metadata:
 spec:
   template:
     spec:
-      serviceAccountName: v9-to-v11-crds-part2
+      serviceAccountName: crd-upgrades-part2
       containers:
-        - name: v9-to-v11-crds-part2
+        - name: crd-upgrades-part2
           image: "bitnami/kubectl:1.19.7"
           volumeMounts:
             - name: crds
@@ -42,13 +42,13 @@ spec:
       volumes:
         - name: crds
           configMap:
-            name: v9-to-v11-crds-part2
+            name: crd-upgrades-part2
       restartPolicy: OnFailure
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
@@ -61,7 +61,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
   annotations:
     helm.sh/hook: pre-install, pre-upgrade
     helm.sh/hook-weight: "-21"
@@ -69,16 +69,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
 subjects:
   - kind: ServiceAccount
-    name: v9-to-v11-crds-part2
+    name: crd-upgrades-part2
     namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: v9-to-v11-crds-part2
+  name: crd-upgrades-part2
   namespace: {{ $.Release.Namespace }}
   annotations:
     "helm.sh/hook": pre-install, pre-upgrade
