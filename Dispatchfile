@@ -166,78 +166,6 @@ do_bump_kubecost = bump_requirements("bump-kubecost", git, "stable/kubecost",
   ]
 )
 
-do_bump_grafana = bump_requirements("bump-grafana", git, "stable/kommander",
-  command=["/bin/sh", "-c"], args=[
-    """
-  echo "$GPG_PRIVATE_KEY" > gpg_private_key
-  echo "$GPG_PUBLIC_KEY" > gpg_public_key
-  gpg --import gpg_private_key
-  gpg --import gpg_public_key
-  git config --local commit.gpgsign true
-  git config --local user.signingkey $GPG_KEY_ID
-
-  git config --local user.name 'Dispatch CI'
-  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=grafana
-    """
-  ],
-  env=dispatch_common_go_environment + [
-    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
-    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
-    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
-    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
-  ]
-)
-
-do_bump_karma = bump_requirements("bump-karma", git, "stable/kommander/charts/kommander-karma",
-  command=["/bin/sh", "-c"], args=[
-    """
-  echo "$GPG_PRIVATE_KEY" > gpg_private_key
-  echo "$GPG_PUBLIC_KEY" > gpg_public_key
-  gpg --import gpg_private_key
-  gpg --import gpg_public_key
-  git config --local commit.gpgsign true
-  git config --local user.signingkey $GPG_KEY_ID
-
-  git config --local user.name 'Dispatch CI'
-  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=karma
-    """
-  ],
-  env=dispatch_common_go_environment + [
-    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
-    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
-    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
-    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
-  ]
-)
-
-do_bump_thanos = bump_requirements("bump-thanos", git, "stable/kommander/charts/kommander-thanos",
-  command=["/bin/sh", "-c"], args=[
-    """
-  echo "$GPG_PRIVATE_KEY" > gpg_private_key
-  echo "$GPG_PUBLIC_KEY" > gpg_public_key
-  gpg --import gpg_private_key
-  gpg --import gpg_public_key
-  git config --local commit.gpgsign true
-  git config --local user.signingkey $GPG_KEY_ID
-
-  git config --local user.name 'Dispatch CI'
-  git config --local user.email '56653984+d2iq-dispatch@users.noreply.github.com'
-
-  bump_requirements --user=mesosphere --project=charts --bump-option=sliced --dependencies=thanos
-    """
-  ],
-  env=dispatch_common_go_environment + [
-    k8s.corev1.EnvVar(name="GITHUB_TOKEN", valueFrom=secret_var("d2iq-dispatch-basic-auth", "password")),
-    k8s.corev1.EnvVar(name="GPG_PRIVATE_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "private_key")),
-    k8s.corev1.EnvVar(name="GPG_PUBLIC_KEY", valueFrom=secret_var("d2iq-dispatch-gpg", "public_key")),
-    k8s.corev1.EnvVar(name="GPG_KEY_ID", valueFrom=secret_var("d2iq-dispatch-gpg", "key_id"))
-  ]
-)
-
 kba_git = "kubernetes-base-addons"
 git_resource(
     kba_git,
@@ -257,12 +185,6 @@ action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommande
 action(tasks=["test-helm"], on=pull_request(chatops=["test"]))
 action(tasks=["test-helm"], on=pull_request(chatops=["test-helm"]))
 action(tasks=[do_bump_kubecost], on=pull_request(chatops=["bump-kubecost"]))
-action(tasks=[do_bump_grafana], on=pull_request(chatops=["bump-grafana"]))
-action(tasks=[do_bump_karma], on=pull_request(chatops=["bump-karma"]))
-action(tasks=[do_bump_thanos], on=pull_request(chatops=["bump-thanos"]))
 
 # Cron Actions
 action(name="bump-kubecost", tasks=[do_bump_kubecost], on=cron(schedule="0 8 * * 5"))
-action(name="bump-grafana", tasks=[do_bump_grafana], on=cron(schedule="0 8 * * 5"))
-action(name="bump-thanos", tasks=[do_bump_thanos], on=cron(schedule="0 8 * * 5"))
-action(name="bump-karma", tasks=[do_bump_karma], on=cron(schedule="0 8 * * 5"))
