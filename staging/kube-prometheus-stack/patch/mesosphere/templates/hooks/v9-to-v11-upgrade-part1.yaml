@@ -11,8 +11,8 @@ metadata:
 data:
   crd-alertmanagerconfigs.yaml: |-
 {{ .Files.Get "crds/crd-alertmanagerconfigs.yaml" | printf "%s" | indent 4 }}
-  crd-alertmanager.yaml: |-
-{{ .Files.Get "crds/crd-alertmanager.yaml" | printf "%s" | indent 4 }}
+  crd-alertmanagers.yaml: |-
+{{ .Files.Get "crds/crd-alertmanagers.yaml" | printf "%s" | indent 4 }}
   crd-podmonitors.yaml: |-
 {{ .Files.Get "crds/crd-podmonitors.yaml" | printf "%s" | indent 4 }}
   crd-probes.yaml: |-
