@@ -8,7 +8,7 @@ dependencies:
     repository: "https://mesosphere.github.io/charts/staging"
     condition: kubeaddons-catalog.enabled
   - name: kommander-federation
-    version: "0.20.0"
+    version: "0.20.1"
     repository: "https://mesosphere.github.io/yakcl/charts"
     condition: kommander-federation.enabled, global.kommander-federation.enabled
   - name: kommander-licensing
