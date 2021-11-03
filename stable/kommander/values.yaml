@@ -151,12 +151,12 @@ grafana:
       datasources:
         - name: ThanosQuery
           type: prometheus
-          url: http://kommander-kubeaddons-thanos-query-http.kommander.svc.cluster.local:10902/
+          url: http://kommander-kubeaddons-thanos-query-http.kommander.svc:10902/
           access: proxy
           isDefault: true
         - name: KommanderPrometheus
           type: prometheus
-          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons.svc.cluster.local:9090/
+          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons.svc:9090/
           access: proxy
           isDefault: false
 
@@ -242,7 +242,7 @@ kubecost:
 
       thanos:
         enabled: true
-        queryService: http://kommander-kubecost-thanos-query-http.kommander.svc.cluster.local:10902
+        queryService: http://kommander-kubecost-thanos-query-http.kommander.svc:10902
         # The wait time before Kommander begins querying cost data for all attached clusters
         queryOffset: 5m
         query:
