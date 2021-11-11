@@ -39,3 +39,19 @@ Adds additional pod labels to the common ones
 {{- toYaml .Values.podLabels | nindent 8 }}
 {{- end }}
 {{- end -}}
+
+{{- define "gatekeeper.selfSignedIssuer" -}}
+{{ printf "%s-selfsign" (include "gatekeeper.fullname" .) }}
+{{- end -}}
+
+{{- define "gatekeeper.rootCAIssuer" -}}
+{{ printf "%s-ca" (include "gatekeeper.fullname" .) }}
+{{- end -}}
+
+{{- define "gatekeeper.rootCACertificate" -}}
+{{ printf "%s-ca" (include "gatekeeper.fullname" .) }}
+{{- end -}}
+
+{{- define "gatekeeper.servingCertificate" -}}
+{{ printf "%s-webhook-tls" (include "gatekeeper.fullname" .) }}
+{{- end -}}
