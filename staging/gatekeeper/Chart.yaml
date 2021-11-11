@@ -1,10 +1,16 @@
 apiVersion: v2
+appVersion: v3.6.0
 description: A Helm chart for Gatekeeper
 name: gatekeeper
 keywords:
   - open policy agent
-version: 3.6.0
+version: 0.6.9
 home: https://github.com/open-policy-agent/gatekeeper
+icon: https://www.openpolicyagent.org/img/opa-logo.svg
+maintainers:
+- email: jimmidyson@gmail.com
+  name: jimmidyson
+- email: dgoel@d2iq.com
+  name: deepakgoel
 sources:
   - https://github.com/open-policy-agent/gatekeeper.git
-appVersion: v3.6.0
