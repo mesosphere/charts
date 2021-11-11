@@ -11,9 +11,9 @@ set -x
 
 UPSTREAM_REPO=git@github.com:open-policy-agent/gatekeeper.git
 GATEKEEPER_PATH=charts/gatekeeper
-GATEKEEPER_TAG=v3.3.0
+GATEKEEPER_TAG=v3.6.0
 # if using osx download coreutils via brew and use greadlink instead
-BASEDIR=$(dirname $(greadlink -f "$0"))
+BASEDIR=$(dirname $(readlink -f "$0"))
 TMPDIR=$(mktemp -d)
 
 cd "${TMPDIR}" || exit

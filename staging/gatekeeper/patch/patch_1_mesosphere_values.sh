@@ -25,8 +25,37 @@ mutations:
   # proxy settings
   enablePodProxy: false
 
+  podProxySettings:
+    noProxy:
+    httpProxy:
+    httpsProxy:
+
+  # apply mutations on objects whose labels match namespace labels
+  namespaceSelectorForProxy: {}
+
   # disable the following namespaces
   excludeNamespacesFromProxy: []
+
+# Adds a namespace selector to the validation controller webhook
+admissionControllerNamespaceSelector:
+  matchExpressions: []
+
+# Adds an object selector to the validation controller webhook
+admissionControllerObjectSelector:
+  matchExpressions: []
+  # - {key: foo, operator: NotIn, values: ["bar"]}
+  matchLabels: []
+  # - foo: bar
+
+# Webhook configuration
+webhook:
+  # Setup the webhook using cert-manager
+  certManager:
+    enabled: false
 EOF
+
+# install yq and format the file or else ct.lint target will fail with follwing error:
+#   <too many spaces inside braces  (braces)>
+yq e -i ${SRCFILE}
 
 git_add_and_commit "${BASEDIR}"/values.yaml

@@ -29,7 +29,7 @@ webhooks:
       name: gatekeeper-webhook-service
       namespace: {{ .Release.Namespace }}
       path: /v1/admit
-  failurePolicy: {{ .Values.admissionControllerFailurePolicy }}
+  failurePolicy: {{ .Values.validatingWebhookFailurePolicy }}
   name: validation.gatekeeper.sh
   namespaceSelector:
     matchExpressions:
@@ -110,7 +110,7 @@ webhooks:
         name: gatekeeper-webhook-service
         namespace: {{ .Release.Namespace }}
         path: /v1/mutate
-    failurePolicy: {{ .Values.admissionControllerFailurePolicy }}
+    failurePolicy: {{ .Values.validatingWebhookFailurePolicy }}
     name: mutation.gatekeeper.sh
     rules:
       - apiGroups:

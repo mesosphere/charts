@@ -9,6 +9,7 @@ set -x
 TEMPLATES_PATH=${BASEDIR}/templates/
 
 # remove validation webhook to replace
+rm "${TEMPLATES_PATH}/gatekeeper-mutating-webhook-configuration-mutatingwebhookconfiguration.yaml"
 rm "${TEMPLATES_PATH}/gatekeeper-validating-webhook-configuration-validatingwebhookconfiguration.yaml"
 
 cp "${BASEDIR}"/patch/templates/* "${TEMPLATES_PATH}"
