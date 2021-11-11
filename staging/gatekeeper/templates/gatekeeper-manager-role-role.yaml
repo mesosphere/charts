@@ -9,6 +9,7 @@ metadata:
     heritage: '{{ .Release.Service }}'
     release: '{{ .Release.Name }}'
   name: gatekeeper-manager-role
+  namespace: '{{ .Release.Namespace }}'
 rules:
 - apiGroups:
   - ""
@@ -29,17 +30,3 @@ rules:
   - patch
   - update
   - watch
-{{- if .Values.mutations.enable }}
-- apiGroups:
-    - admissionregistration.k8s.io
-  resources:
-    - mutatingwebhookconfigurations
-  verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
-{{- end }}

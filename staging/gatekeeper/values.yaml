@@ -1,70 +1,60 @@
-# Default values for gatekeeper.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-## Provide a name in place of prometheus-operator for `app:` labels
-##
-nameOverride: ""
-
-## Provide a name to substitute for the full names of resources
-##
-fullnameOverride: ""
-
-## Labels to apply to all resources
-##
-commonLabels: {}
-# scmhash: abc123
-# myLabel: aakkmd
-
-## Number of replicas by default
-replicas: 2
-
+replicas: 3
 auditInterval: 60
+auditMatchKindOnly: false
 constraintViolationsLimit: 20
 auditFromCache: false
 disableValidatingWebhook: false
+validatingWebhookTimeoutSeconds: 3
+validatingWebhookFailurePolicy: Ignore
+validatingWebhookCheckIgnoreFailurePolicy: Fail
+enableDeleteOperations: false
+experimentalEnableMutation: false
 auditChunkSize: 0
 logLevel: INFO
+logDenies: false
 emitAdmissionEvents: false
 emitAuditEvents: false
-port: 8443
-
+resourceQuota: true
+postInstall:
+  labelNamespace:
+    enabled: true
+    image:
+      repository: line/kubectl-kustomize
+      tag: 1.20.4-4.0.5
+      pullPolicy: IfNotPresent
+      pullSecrets: []
 image:
   repository: openpolicyagent/gatekeeper
-  release: v3.4.0-rc.1
+  crdRepository: openpolicyagent/gatekeeper-crds
+  release: v3.6.0
   pullPolicy: IfNotPresent
-
-service:
-  annotations: {}
-  type: ClusterIP
-  port: 443
-
-  # For nodeport, specify the following:
-  #   type: NodePort
-  #   nodePort: <port-number>
-
-nodeSelector:
-  kubernetes.io/os: linux
-
-tolerations: []
-
-
+  pullSecrets: []
 podAnnotations:
-  container.seccomp.security.alpha.kubernetes.io/manager: runtime/default
-
+  { container.seccomp.security.alpha.kubernetes.io/manager: runtime/default }
+podLabels: {}
+podCountLimit: 100
+secretAnnotations: {}
 controllerManager:
+  exemptNamespaces: []
+  hostNetwork: false
+  port: 8443
+  metricsPort: 8888
+  healthPort: 9090
+  priorityClassName: system-cluster-critical
   affinity:
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
-      - podAffinityTerm:
-          labelSelector:
-            matchExpressions:
-            - key: gatekeeper.sh/operation
-              operator: In
-              values:
-              - webhook
-          topologyKey: kubernetes.io/hostname
-        weight: 100
+        - podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: gatekeeper.sh/operation
+                  operator: In
+                  values:
+                    - webhook
+            topologyKey: kubernetes.io/hostname
+          weight: 100
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
   resources:
     limits:
       cpu: 1000m
@@ -72,9 +62,14 @@ controllerManager:
     requests:
       cpu: 100m
       memory: 256Mi
-
 audit:
+  hostNetwork: false
+  metricsPort: 8888
+  healthPort: 9090
+  priorityClassName: system-cluster-critical
   affinity: {}
+  tolerations: []
+  nodeSelector: { kubernetes.io/os: linux }
   resources:
     limits:
       cpu: 1000m
@@ -82,44 +77,8 @@ audit:
     requests:
       cpu: 100m
       memory: 256Mi
-
-# To _fail closed_ on failures, change to Fail. During initial testing, we
-# recommend leaving the failure policy as Ignore.
-admissionControllerFailurePolicy: Ignore
-
-# Adds a namespace selector to the admission controller webhook
-admissionControllerNamespaceSelector:
-  matchExpressions: []
-
-# Adds an object selector to the admission controller webhook
-admissionControllerObjectSelector:
-  matchExpressions: []
-  # - {key: foo, operator: NotIn, values: ["bar"]}
-  matchLabels: []
-  # - foo: bar
-
-# Webhook configuration
-webhook:
-  # Setup the webhook using cert-manager
-  certManager:
-    enabled: false
-
-kubectlImage: bitnami/kubectl:1.15
-
-# enable mutations
-mutations:
-  enable: false
-
-  # proxy settings
-  enablePodProxy: false
-
-  podProxySettings:
-    noProxy:
-    httpProxy:
-    httpsProxy:
-
-  # apply mutations on objects whose labels match namespace labels
-  namespaceSelectorForProxy: {}
-
-  # disable the following namespaces
-  excludeNamespacesFromProxy: []
+pdb:
+  controllerManager:
+    minAvailable: 1
+service: {}
+disabledBuiltins:

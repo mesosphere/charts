@@ -8,18 +8,17 @@ metadata:
     heritage: '{{ .Release.Service }}'
     release: '{{ .Release.Name }}'
   name: gatekeeper-webhook-service
-{{- if .Values.service.annotations }}
-  annotations:
-    {{ toYaml .Values.service.annotations | nindent 4 }}
-{{- end }}
+  namespace: '{{ .Release.Namespace }}'
 spec:
-  type: {{ .Values.service.type }}
+  {{- if .Values.service }}
+  type: {{  .Values.service.type | default "ClusterIP" }}
+    {{- if .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+    {{- end }}
+  {{- end }}
   ports:
-  - port: {{ .Values.service.port }}
-    targetPort: {{ .Values.port }}
-{{- if and  .Values.service.nodePort (eq "NodePort" .Values.service.type) }}
-    nodePort: {{ .Values.service.nodePort }}
-{{- end }}
+  - port: 443
+    targetPort: webhook-server
   selector:
     app: '{{ template "gatekeeper.name" . }}'
     chart: '{{ template "gatekeeper.name" . }}'

@@ -10,6 +10,7 @@ metadata:
     heritage: '{{ .Release.Service }}'
     release: '{{ .Release.Name }}'
   name: gatekeeper-controller-manager
+  namespace: '{{ .Release.Namespace }}'
 spec:
   replicas: {{ .Values.replicas }}
   selector:
@@ -24,8 +25,9 @@ spec:
   template:
     metadata:
       annotations:
-{{- toYaml .Values.podAnnotations | trim | nindent 8 }}
+        {{- toYaml .Values.podAnnotations | trim | nindent 8 }}
       labels:
+{{- include "gatekeeper.podLabels" . }}
         app: '{{ template "gatekeeper.name" . }}'
         chart: '{{ template "gatekeeper.name" . }}'
         control-plane: controller-manager
@@ -34,18 +36,28 @@ spec:
         heritage: '{{ .Release.Service }}'
         release: '{{ .Release.Name }}'
     spec:
+      affinity:
+        {{- toYaml .Values.controllerManager.affinity | nindent 8 }}
+      automountServiceAccountToken: true
       containers:
-      - name: manager
-        args:
-        - --port={{ .Values.port }}
+      - args:
+        - --port={{ .Values.controllerManager.port }}
+        - --health-addr=:{{ .Values.controllerManager.healthPort }}
+        - --prometheus-port={{ .Values.controllerManager.metricsPort }}
         - --logtostderr
+        - --log-denies={{ .Values.logDenies }}
         - --emit-admission-events={{ .Values.emitAdmissionEvents }}
         - --log-level={{ .Values.logLevel }}
         - --exempt-namespace={{ .Release.Namespace }}
         - --operation=webhook
-        - --enable-mutation={{ .Values.mutations.enable }}
-        {{- if .Values.webhook.certManager.enabled }}
-        - --disable-cert-rotation
+        - --enable-mutation={{ .Values.experimentalEnableMutation}}
+        
+        {{- range .Values.disabledBuiltins}}
+        - --disable-opa-builtin={{ . }}
+        {{- end }}
+        
+        {{- range .Values.controllerManager.exemptNamespaces}}
+        - --exempt-namespace={{ . }}
         {{- end }}
         command:
         - /manager
@@ -64,28 +76,30 @@ spec:
         livenessProbe:
           httpGet:
             path: /healthz
-            port: 9090
+            port: {{ .Values.controllerManager.healthPort }}
+        name: manager
         ports:
-        - containerPort: {{ .Values.port }}
+        - containerPort: {{ .Values.controllerManager.port }}
           name: webhook-server
           protocol: TCP
-        - containerPort: 8888
+        - containerPort: {{ .Values.controllerManager.metricsPort }}
           name: metrics
           protocol: TCP
-        - containerPort: 9090
+        - containerPort: {{ .Values.controllerManager.healthPort }}
           name: healthz
           protocol: TCP
         readinessProbe:
           httpGet:
             path: /readyz
-            port: 9090
+            port: {{ .Values.controllerManager.healthPort }}
         resources:
-{{ toYaml .Values.controllerManager.resources | indent 10 }}
+          {{- toYaml .Values.controllerManager.resources | nindent 10 }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:
             drop:
             - all
+          readOnlyRootFilesystem: true
           runAsGroup: 999
           runAsNonRoot: true
           runAsUser: 1000
@@ -93,14 +107,18 @@ spec:
         - mountPath: /certs
           name: cert
           readOnly: true
+      hostNetwork: {{ .Values.controllerManager.hostNetwork }}
+      imagePullSecrets:
+        {{- toYaml .Values.image.pullSecrets | nindent 8 }}
       nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-      affinity:
-{{ toYaml .Values.controllerManager.affinity | indent 8 }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
+        {{- toYaml .Values.controllerManager.nodeSelector | nindent 8 }}
+      {{- if .Values.controllerManager.priorityClassName }} 
+      priorityClassName:  {{ .Values.controllerManager.priorityClassName }}
+      {{- end }}
       serviceAccountName: gatekeeper-admin
       terminationGracePeriodSeconds: 60
+      tolerations:
+        {{- toYaml .Values.controllerManager.tolerations | nindent 8 }}
       volumes:
       - name: cert
         secret:
