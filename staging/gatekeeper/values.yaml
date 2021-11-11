@@ -29,8 +29,7 @@ image:
   release: v3.6.0
   pullPolicy: IfNotPresent
   pullSecrets: []
-podAnnotations:
-  { container.seccomp.security.alpha.kubernetes.io/manager: runtime/default }
+podAnnotations: {container.seccomp.security.alpha.kubernetes.io/manager: runtime/default}
 podLabels: {}
 podCountLimit: 100
 secretAnnotations: {}
@@ -54,7 +53,7 @@ controllerManager:
             topologyKey: kubernetes.io/hostname
           weight: 100
   tolerations: []
-  nodeSelector: { kubernetes.io/os: linux }
+  nodeSelector: {kubernetes.io/os: linux}
   resources:
     limits:
       cpu: 1000m
@@ -69,7 +68,7 @@ audit:
   priorityClassName: system-cluster-critical
   affinity: {}
   tolerations: []
-  nodeSelector: { kubernetes.io/os: linux }
+  nodeSelector: {kubernetes.io/os: linux}
   resources:
     limits:
       cpu: 1000m
@@ -82,3 +81,35 @@ pdb:
     minAvailable: 1
 service: {}
 disabledBuiltins:
+# ProxySettings
+proxySettings:
+  noProxy:
+  httpProxy:
+  httpsProxy:
+# enable mutations
+mutations:
+  enable: false
+  # proxy settings
+  enablePodProxy: false
+  podProxySettings:
+    noProxy:
+    httpProxy:
+    httpsProxy:
+  # apply mutations on objects whose labels match namespace labels
+  namespaceSelectorForProxy: {}
+  # disable the following namespaces
+  excludeNamespacesFromProxy: []
+# Adds a namespace selector to the validation controller webhook
+admissionControllerNamespaceSelector:
+  matchExpressions: []
+# Adds an object selector to the validation controller webhook
+admissionControllerObjectSelector:
+  matchExpressions: []
+  # - {key: foo, operator: NotIn, values: ["bar"]}
+  matchLabels: []
+  # - foo: bar
+# Webhook configuration
+webhook:
+  # Setup the webhook using cert-manager
+  certManager:
+    enabled: false
