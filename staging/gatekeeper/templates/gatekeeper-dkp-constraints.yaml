@@ -1,3 +1,4 @@
+{{- if not .Values.disableDkpConstraints }}
 ---
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
@@ -48,3 +49,4 @@ spec:
     namespaceSelector:
       matchLabels:
         kommander.d2iq.io/managed-by-kind: "Project"
+{{- end }}
