@@ -23,7 +23,7 @@ auditInterval: 60
 constraintViolationsLimit: 20
 auditFromCache: false
 disableValidatingWebhook: false
-disableDkpConstraints: false
+enableFluxConstraints: true
 auditChunkSize: 0
 logLevel: INFO
 emitAdmissionEvents: false

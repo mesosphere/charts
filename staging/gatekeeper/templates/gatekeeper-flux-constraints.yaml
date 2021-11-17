@@ -1,10 +1,11 @@
-{{- if not .Values.disableDkpConstraints }}
+{{- if .Values.enableFluxConstraints }}
 ---
 apiVersion: templates.gatekeeper.sh/v1beta1
 kind: ConstraintTemplate
 metadata:
   name: requiredserviceaccountname
   annotations:
+    "helm.sh/hook-weight": "10"
     description: >-
       Requires the given resource to have the
       .spec.serviceAccountName field set.
@@ -28,6 +29,8 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: RequiredServiceAccountName
 metadata:
   name: helmrelease-must-have-sa
+  annotations:
+    "helm.sh/hook-weight": "20"
 spec:
   match:
     kinds:
@@ -41,6 +44,8 @@ apiVersion: constraints.gatekeeper.sh/v1beta1
 kind: RequiredServiceAccountName
 metadata:
   name: kustomization-must-have-sa
+  annotations:
+    "helm.sh/hook-weight": "20"
 spec:
   match:
     kinds:
