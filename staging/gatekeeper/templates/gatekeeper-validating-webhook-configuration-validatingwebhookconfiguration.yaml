@@ -112,6 +112,7 @@ webhooks:
         path: /v1/mutate
     failurePolicy: {{ .Values.admissionControllerFailurePolicy }}
     name: mutation.gatekeeper.sh
+    sideEffects: None
     rules:
       - apiGroups:
           - '*'
