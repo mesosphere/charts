@@ -28,9 +28,6 @@ spec:
         prometheus.io/port: "7472"
 {{- end }}
     spec:
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
       serviceAccountName: {{ template "metallb.speakerServiceAccountName" . }}
       terminationGracePeriodSeconds: 0
       hostNetwork: true
@@ -74,10 +71,12 @@ spec:
         {{- with .Values.speaker.nodeSelector }}
 {{ toYaml . | indent 8 }}
     {{- end }}
-    {{- with .Values.speaker.tolerations }}
       tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      {{- with .Values.speaker.tolerations }}
 {{ toYaml . | indent 8 }}
-    {{- end }}
+      {{- end }}
     {{- with .Values.speaker.affinity }}
       affinity:
 {{ toYaml . | indent 8 }}
