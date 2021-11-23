@@ -1033,7 +1033,7 @@ data:
                     "options": [
 
                     ],
-                    "query": "label_values(kube_pod_info, cluster)",
+                    "query": "label_values(up{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\"}, cluster)",
                     "refresh": 2,
                     "regex": "",
                     "sort": 0,
@@ -1220,7 +1220,7 @@ data:
                 "30d"
             ]
         },
-        "timezone": "UTC",
+        "timezone": "{{ .Values.grafana.defaultDashboardsTimezone }}",
         "title": "Kubernetes / Networking / Pod",
         "uid": "7a18067ce943a40ae25454675c19ff5c",
         "version": 0

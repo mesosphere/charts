@@ -208,18 +208,8 @@ spec:
   ruleSelector: {}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.storageSpec }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
-{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($prometheus).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Prometheus resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.prometheus.prometheusSpec.storageSpec | nindent 4 }}
-{{- end }}
+  storage:
+{{ toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4 }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.podMetadata }}
   podMetadata:
@@ -350,6 +340,18 @@ spec:
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.enforcedSampleLimit }}
   enforcedSampleLimit: {{ .Values.prometheus.prometheusSpec.enforcedSampleLimit }}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.enforcedTargetLimit }}
+  enforcedTargetLimit: {{ .Values.prometheus.prometheusSpec.enforcedTargetLimit }}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.enforcedLabelLimit	}}
+  enforcedLabelLimit: {{ .Values.prometheus.prometheusSpec.enforcedLabelLimit	}}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.enforcedLabelNameLengthLimit	}}
+  enforcedLabelNameLengthLimit: {{ .Values.prometheus.prometheusSpec.enforcedLabelNameLengthLimit	}}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.enforcedLabelValueLengthLimit}}
+  enforcedLabelValueLengthLimit: {{ .Values.prometheus.prometheusSpec.enforcedLabelValueLengthLimit	}}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.allowOverlappingBlocks }}
   allowOverlappingBlocks: {{ .Values.prometheus.prometheusSpec.allowOverlappingBlocks }}
