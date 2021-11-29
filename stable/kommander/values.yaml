@@ -151,12 +151,12 @@ grafana:
       datasources:
         - name: ThanosQuery
           type: prometheus
-          url: http://kommander-kubeaddons-thanos-query-http.kommander:10902/
+          url: http://kommander-kubeaddons-thanos-query-http.kommander.svc:10902/
           access: proxy
           isDefault: true
         - name: KommanderPrometheus
           type: prometheus
-          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons:9090/
+          url: http://prometheus-kubeaddons-prom-prometheus.kubeaddons.svc:9090/
           access: proxy
           isDefault: false
 
@@ -233,13 +233,16 @@ kubecost:
 
     fullnameOverride: "kommander-kubecost-cost-analyzer"
     global:
+      # We need to specify full domain name explicity in order to make
+      # http_proxy work.  Otherwise requests go through proxy instead directly
+      zone: cluster.local
       prometheus:
         # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
         enabled: true
 
       thanos:
         enabled: true
-        queryService: http://kommander-kubecost-thanos-query-http.kommander:10902
+        queryService: http://kommander-kubecost-thanos-query-http.kommander.svc:10902
         # The wait time before Kommander begins querying cost data for all attached clusters
         queryOffset: 5m
         query:
