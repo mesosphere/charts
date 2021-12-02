@@ -199,7 +199,7 @@ cost-analyzer:
 
   grafana:
     sidecar:
-      image: kiwigrid/k8s-sidecar:1.3.0
+      image: kiwigrid/k8s-sidecar:1.12.3
       dashboards:
         enabled: true
         label: kubecost_grafana_dashboard
