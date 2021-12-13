@@ -15,6 +15,7 @@ cat << EOF >> ${SRCFILE}
 upgrade_operator.sh
 kube-prometheus-stack-*.tgz
 patch/
+UPGRADING.md
 EOF
 
 git_add_and_commit "${BASEDIR}"/.helmignore
