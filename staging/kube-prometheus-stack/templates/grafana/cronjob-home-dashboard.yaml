@@ -10,6 +10,12 @@ metadata:
   name: {{ .Release.Name }}-{{ .Values.mesosphereResources.homeDashboard.cronJob.name }}
 spec:
   schedule: "*/5 * * * *"
+  # Set this value to replace as the actual job run is not expected to be
+  # running more than a few seconds in the normal conditions. If there is an
+  # error in the pod then there is no need to keep the old pod running. With
+  # this value missing the cronjob could potentially schedule failing pods
+  # wihtout any limit.
+  concurrencyPolicy: Replace
   jobTemplate:
     spec:
       template:
