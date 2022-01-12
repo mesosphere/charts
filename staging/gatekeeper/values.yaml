@@ -123,3 +123,6 @@ mutations:
 
   # disable the following namespaces
   excludeNamespacesFromProxy: []
+
+  # configure mutatingwebhookconfiguration sideEffects if necessary
+   sideEffects: ""

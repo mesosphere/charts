@@ -122,7 +122,9 @@ webhooks:
           - UPDATE
         resources:
           - '*'
-    sideEffects: None
+    {{ if .Values.mutations.sideEffects }}
+    sideEffects: {{ .Values.mutations.sideEffects }}
+    {{ end }}
 {{- end }}
 {{ if .Values.webhook.certManager.enabled }}
 ---
