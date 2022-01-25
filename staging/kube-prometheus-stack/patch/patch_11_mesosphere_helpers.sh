@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This patch adds mesosphere specific patterns to ignore into .helmignore
+# This patch adds mesosphere specific templates into _helpers.tpl
 
 source $(dirname "$0")/helpers.sh
 
@@ -8,7 +8,7 @@ set -xeuo pipefail
 
 SRCFILE="${BASEDIR}"/templates/_helpers.tpl
 
-sed -i '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
+sed -i '/# Mesosphere-specific templates/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Mesosphere-specific templates
