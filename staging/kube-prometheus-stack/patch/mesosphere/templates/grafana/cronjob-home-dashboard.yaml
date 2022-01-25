@@ -52,7 +52,7 @@ data:
     set -o nounset
     set -o errexit
     set -o pipefail
-    GRAFANA_API_URL="http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}:{{ .Values.grafana.service.port }}"
+    GRAFANA_API_URL="http://{{ template "kube-prometheus-stack.homeDashboard.grafanaServiceName" . }}.{{ .Release.Namespace }}:{{ .Values.grafana.service.port }}"
     CURL="curl --verbose --max-time 60 --retry 10 --retry-connrefused --fail"
     DASHBOARD_ID=$($CURL -H "X-Forwarded-User: $X_FORWARDED_USER" $GRAFANA_API_URL/api/search/?query={{ .Values.mesosphereResources.homeDashboard.name | urlquery }} | jq '.[0].id' || true )
     if [ "$DASHBOARD_ID" == "" ]; then
