@@ -592,7 +592,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "DCGM_FI_DEV_GPU_UTIL{instance=~\"${instance}\", gpu=~\"${gpu}\"}",
+          "expr": "DCGM_FI_DEV_DEC_UTIL{instance=~\"${instance}\", gpu=~\"${gpu}\"}",
           "interval": "",
           "legendFormat": "GPU {{gpu}}",
           "refId": "A"
