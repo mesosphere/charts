@@ -20,6 +20,7 @@ mesosphereResources:
     velero: false
   homeDashboard:
     name: "Kubernetes / Compute Resources / Cluster"
+    serviceNameOverride: ""
     cronJob:
       enabled: true
       name: set-grafana-home-dashboard
