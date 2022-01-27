@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: quay.io/jetstack/kube-oidc-proxy
-  tag: v0.2.0
+  tag: v0.3.0
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -66,13 +66,33 @@ oidc:
   signingAlgs:
     - RS256
   requiredClaims: {}
-  apiAudiences: []
 
 # To enable token passthrough feature
 # https://github.com/jetstack/kube-oidc-proxy/blob/master/docs/tasks/token-passthrough.md
 tokenPassthrough:
   enabled: false
   audiences: []
+
+# To add extra impersonation headers
+# https://github.com/jetstack/kube-oidc-proxy/blob/master/docs/tasks/extra-impersonation-headers.md
+extraImpersonationHeaders:
+  clientIP: false
+  # headers: key1=foo,key2=bar,key1=bar
+
+extraArgs: {}
+  # audit-log-path: /audit-log
+  # audit-policy-file: /audit/audit.yaml
+
+extraVolumeMounts: {}
+  # - name: audit
+  #   mountPath: /audit
+  #   readOnly: true
+
+extraVolumes: {}
+  # - configMap:
+  #    defaultMode: 420
+  #    name: kube-oidc-proxy-policy
+  #   name: audit
 
 ingress:
   enabled: false
@@ -87,6 +107,18 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+# Allows setting the Deployment update strategy
+# rollingUpdateStrategy:
+#   type: RollingUpdate
+#   rollingUpdate:
+#     maxSurge: 34%
+#     maxUnavailable: 33%
+
+# Enable Pod Disruption Budget
+podDisruptionBudget:
+  enabled: false
+  minAvailable: 1
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
