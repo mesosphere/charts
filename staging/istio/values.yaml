@@ -1,6 +1,6 @@
 global:
   image: docker.io/bitnami/kubectl
-  tag: 1.19.2
+  tag: 1.22.6
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.
@@ -22,6 +22,7 @@ grafana:
   enabled: true
 security:
   enabled: true
+  issuerName: kommander-ca
 prometheus:
   enabled: true
 
@@ -29,7 +30,7 @@ istioOperator:
   profile: default
 
   hub: docker.io/istio
-  tag: 1.9.1
+  tag: 1.11.5
 
   components:
     cni:

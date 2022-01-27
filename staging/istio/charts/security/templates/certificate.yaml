@@ -26,5 +26,5 @@ spec:
 {{- end }}
   secretName: istio-ca
   issuerRef:
-    name: kubernetes-ca
+    name: {{ .Values.issuerName }}
     kind: ClusterIssuer
