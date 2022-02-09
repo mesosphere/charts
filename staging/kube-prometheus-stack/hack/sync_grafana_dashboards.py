@@ -34,7 +34,7 @@ charts = [
         'multicluster_key': '.Values.grafana.sidecar.dashboards.multicluster.global.enabled',
     },
     {
-        'source': 'https://raw.githubusercontent.com/etcd-io/website/master/content/en/docs/v3.4/op-guide/grafana.json',
+        'source': 'https://raw.githubusercontent.com/etcd-io/website/master/content/en/docs/v3.5/op-guide/grafana.json',
         'destination': '../templates/grafana/dashboards-1.14',
         'type': 'json',
         'min_kubernetes': '1.14.0-0',
@@ -67,7 +67,7 @@ https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-promet
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: {{ template "kube-prometheus-stack.namespace" . }}
+  namespace: {{ template "kube-prometheus-stack-grafana.namespace" . }}
   name: {{ printf "%%s-%%s" (include "kube-prometheus-stack.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
   annotations:
 {{ toYaml .Values.grafana.sidecar.dashboards.annotations | indent 4 }}
