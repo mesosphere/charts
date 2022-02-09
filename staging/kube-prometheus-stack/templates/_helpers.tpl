@@ -96,6 +96,39 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
   {{- end -}}
 {{- end -}}
 
+{{/*
+Use the grafana namespace override for multi-namespace deployments in combined charts
+*/}}
+{{- define "kube-prometheus-stack-grafana.namespace" -}}
+  {{- if .Values.grafana.namespaceOverride -}}
+    {{- .Values.grafana.namespaceOverride -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Use the kube-state-metrics namespace override for multi-namespace deployments in combined charts
+*/}}
+{{- define "kube-prometheus-stack-kube-state-metrics.namespace" -}}
+  {{- if index .Values "kube-state-metrics" "namespaceOverride" -}}
+    {{- index .Values "kube-state-metrics" "namespaceOverride" -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
+{{- end -}}
+
+{{/*
+Use the prometheus-node-exporter namespace override for multi-namespace deployments in combined charts
+*/}}
+{{- define "kube-prometheus-stack-prometheus-node-exporter.namespace" -}}
+  {{- if index .Values "prometheus-node-exporter" "namespaceOverride" -}}
+    {{- index .Values "prometheus-node-exporter" "namespaceOverride" -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
+{{- end -}}
+
 {{/* Allow KubeVersion to be overridden. */}}
 {{- define "kube-prometheus-stack.kubeVersion" -}}
   {{- default .Capabilities.KubeVersion.Version .Values.kubeVersionOverride -}}
@@ -130,10 +163,40 @@ Allow the release namespace to be overridden for multi-namespace deployments in 
   {{- else -}}
     {{- print "policy/v1beta1" -}}
   {{- end -}}
-{{- end -}}
-# Mesosphere-specific templates
+  {{- end -}}
 
-{{/* Override grafana service name if applicable, only in cronjob */}}
-{{- define "kube-prometheus-stack.homeDashboard.grafanaServiceName" -}}
-   {{- default (printf "%s-grafana" .Release.Name ) .Values.mesosphereResources.homeDashboard.serviceNameOverride -}}
+{{/* Get value based on current Kubernetes version */}}
+{{- define "kube-prometheus-stack.kubeVersionDefaultValue" -}}
+  {{- $values := index . 0 -}}
+  {{- $kubeVersion := index . 1 -}}
+  {{- $old := index . 2 -}}
+  {{- $new := index . 3 -}}
+  {{- $default := index . 4 -}}
+  {{- if kindIs "invalid" $default -}}
+    {{- if semverCompare $kubeVersion (include "kube-prometheus-stack.kubeVersion" $values) -}}
+      {{- print $new -}}
+    {{- else -}}
+      {{- print $old -}}
+    {{- end -}}
+  {{- else -}}
+    {{- print $default }}
+  {{- end -}}
+{{- end -}}
+
+{{/* Get value for kube-controller-manager depending on insecure scraping availability */}}
+{{- define "kube-prometheus-stack.kubeControllerManager.insecureScrape" -}}
+  {{- $values := index . 0 -}}
+  {{- $insecure := index . 1 -}}
+  {{- $secure := index . 2 -}}
+  {{- $userValue := index . 3 -}}
+  {{- include "kube-prometheus-stack.kubeVersionDefaultValue" (list $values ">= 1.22-0" $insecure $secure $userValue) -}}
+{{- end -}}
+
+{{/* Get value for kube-scheduler depending on insecure scraping availability */}}
+{{- define "kube-prometheus-stack.kubeScheduler.insecureScrape" -}}
+  {{- $values := index . 0 -}}
+  {{- $insecure := index . 1 -}}
+  {{- $secure := index . 2 -}}
+  {{- $userValue := index . 3 -}}
+  {{- include "kube-prometheus-stack.kubeVersionDefaultValue" (list $values ">= 1.23-0" $insecure $secure $userValue) -}}
 {{- end -}}
