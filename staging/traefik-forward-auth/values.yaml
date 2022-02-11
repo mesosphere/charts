@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: mesosphere/traefik-forward-auth
-  tag: 3.0.3
+  tag: 3.1.0
   pullPolicy: IfNotPresent
 
 nameOverride: ""
