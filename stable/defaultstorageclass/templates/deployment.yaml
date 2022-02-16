@@ -43,7 +43,7 @@ spec:
         - --enable-leader-election
         command:
         - /manager
-        image: mesosphere/default-storage-class:latest
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag}}
         name: manager
         ports:
         - containerPort: 443
