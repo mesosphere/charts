@@ -15,6 +15,9 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "kube-oidc-proxy.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+  {{- if .Values.rollingUpdateStrategy }}
+  strategy: {{ .Values.rollingUpdateStrategy | nindent 4 }}
+  {{ end }}
   template:
     metadata:
       labels:
@@ -69,15 +72,21 @@ spec:
           {{- if .Values.oidc.requiredClaims }}
           - "--oidc-signing-algs=$(OIDC_REQUIRED_CLAIMS)"
           {{ end }}
-          {{- if .Values.oidc.apiAudiences }}
-          - "--api-audiences=$(API_AUDIENCES)"
-          {{ end }}
           {{- if .Values.tokenPassthrough.enabled }}
           - "--token-passthrough"
           {{- if .Values.tokenPassthrough.audiences }}
           - "--token-passthrough-audiences={{ join "," .Values.tokenPassthrough.audiences }}"
           {{ end }}
           {{ end }}
+          {{- if .Values.extraImpersonationHeaders.clientIP }}
+          - "--extra-user-header-client-ip"
+          {{ end  }}
+          {{- if .Values.extraImpersonationHeaders.headers }}
+          - "--extra-user-headers={{ .Values.extraImpersonationHeaders.headers  }}"
+          {{ end  }}
+          {{- range $key, $value := .Values.extraArgs -}}
+          - "--{{ $key }}={{ $value -}}"
+          {{ end  }}
         resources:
           {{- toYaml .Values.resources | nindent 12 }}
         env:
@@ -135,13 +144,6 @@ spec:
               name: {{ include "kube-oidc-proxy.fullname" . }}-config
               key: oidc.required-claims
         {{ end }}
-        {{- if .Values.oidc.apiAudiences }}
-        - name: API_AUDIENCES
-          valueFrom:
-            secretKeyRef:
-              name: {{ include "kube-oidc-proxy.fullname" . }}-config
-              key: api-audiences
-        {{ end }}
         volumeMounts:
           {{- if .Values.oidc.caSystemDefault }}
           # No need to mount volumes. Use the CA bundle in the image.
@@ -157,6 +159,7 @@ spec:
           - name: kube-oidc-proxy-tls
             mountPath: /etc/oidc/tls
             readOnly: true
+          {{- if .Values.extraVolumeMounts }}{{ toYaml .Values.extraVolumeMounts | trim | nindent 10 }}{{ end }}
       volumes:
         {{- if .Values.oidc.caSystemDefault }}
         # No need to mount volumes. Use the CA bundle in the image.
@@ -180,6 +183,7 @@ spec:
             path: {{ .Values.oidc.caCertPemHostPath }}
             type: File
         {{ end }}
+        {{- if .Values.extraVolumes }}{{ toYaml .Values.extraVolumes | trim | nindent 8 }}{{ end }}
         - name: kube-oidc-proxy-tls
           secret:
             secretName: {{ include "kube-oidc-proxy.fullname" . }}-server-tls

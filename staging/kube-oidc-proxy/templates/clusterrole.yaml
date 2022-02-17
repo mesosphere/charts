@@ -27,6 +27,7 @@ rules:
   - "authentication.k8s.io"
   resources:
   - "userextras/scopes"
+  - "userextras/remote-client-ip"
   verbs:
   - "impersonate"
 - apiGroups:
