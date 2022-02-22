@@ -8,4 +8,4 @@ This chart is meant to be used along upstream `cert-manager` chart. The reason t
 
 ## Upgrading the chart
 
-There is a makefile target `update-crds`. It pulls CRDs from the `cert-manager` github repository. Once executed, the changes can be added and commited to `mesosphere/charts` repository.
+There is a makefile target `update`. It pulls CRDs from the `cert-manager` github repository and updates `appVersion` attribute in `Charts.yaml`. Once executed, the changes can be added and commited to `mesosphere/charts` repository.
