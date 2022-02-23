@@ -26,9 +26,9 @@ traefikForwardAuth:
   clientSecret:
     value: "do-not-use"
     valueFrom:
-      secretKeyRef:
-        name: secretName
-        key: secretKey
+ #     secretKeyRef:
+ #       name: secretName
+ #       key: secretKey
   # https only?
   cookieSecure: false
   domain:
@@ -49,6 +49,7 @@ traefikForwardAuth:
 
 ingress:
   enabled: false
+  # ingressClassName: traefik
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
