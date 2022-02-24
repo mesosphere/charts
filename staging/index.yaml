@@ -3,7 +3,7 @@ entries:
   cert-manager-setup:
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:54.782868308Z"
+    created: "2022-02-24T02:18:33.700975906Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -28,7 +28,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:54.766821083Z"
+    created: "2022-02-24T02:18:33.686378647Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -53,7 +53,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:54.716001871Z"
+    created: "2022-02-24T02:18:33.670602265Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -78,7 +78,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:54.700241805Z"
+    created: "2022-02-24T02:18:33.627212915Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -103,7 +103,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.623373996Z"
+    created: "2022-02-24T02:18:33.582278652Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -128,7 +128,7 @@ entries:
     version: 0.1.17
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.619950608Z"
+    created: "2022-02-24T02:18:33.579145391Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -153,7 +153,7 @@ entries:
     version: 0.1.16
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.616090377Z"
+    created: "2022-02-24T02:18:33.574238083Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -178,7 +178,7 @@ entries:
     version: 0.1.15
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.611173514Z"
+    created: "2022-02-24T02:18:33.570213097Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -203,7 +203,7 @@ entries:
     version: 0.1.14
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.608105671Z"
+    created: "2022-02-24T02:18:33.565967263Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -228,7 +228,7 @@ entries:
     version: 0.1.13
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.60370447Z"
+    created: "2022-02-24T02:18:33.562664696Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -253,7 +253,7 @@ entries:
     version: 0.1.12
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.600632599Z"
+    created: "2022-02-24T02:18:33.559127139Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -278,7 +278,7 @@ entries:
     version: 0.1.11
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.597505239Z"
+    created: "2022-02-24T02:18:33.530383409Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -303,7 +303,7 @@ entries:
     version: 0.1.10
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.683341942Z"
+    created: "2022-02-24T02:18:33.609420922Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -328,7 +328,7 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.680184731Z"
+    created: "2022-02-24T02:18:33.60623001Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -353,7 +353,7 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.675560174Z"
+    created: "2022-02-24T02:18:33.603037347Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -378,7 +378,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.672400819Z"
+    created: "2022-02-24T02:18:33.598747163Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -403,7 +403,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.66928537Z"
+    created: "2022-02-24T02:18:33.595689512Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -428,7 +428,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.66528528Z"
+    created: "2022-02-24T02:18:33.59238695Z"
     dependencies:
     - condition: installCertManager
       name: cert-manager
@@ -453,7 +453,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.662119404Z"
+    created: "2022-02-24T02:18:33.588405608Z"
     dependencies:
     - name: cert-manager
       repository: https://charts.jetstack.io
@@ -477,7 +477,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 0.10.1
-    created: "2022-02-23T09:13:54.659029839Z"
+    created: "2022-02-24T02:18:33.58528819Z"
     dependencies:
     - name: cert-manager
       repository: https://charts.jetstack.io
@@ -501,7 +501,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.10.0
-    created: "2022-02-23T09:13:54.592975223Z"
+    created: "2022-02-24T02:18:33.526731305Z"
     dependencies:
     - name: cert-manager
       repository: https://charts.jetstack.io
@@ -525,7 +525,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.10.0
-    created: "2022-02-23T09:13:54.589586714Z"
+    created: "2022-02-24T02:18:33.523111426Z"
     dependencies:
     - name: cert-manager
       repository: https://charts.jetstack.io
@@ -550,7 +550,22 @@ entries:
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2022-02-23T09:13:54.80757295Z"
+    created: "2022-02-24T02:18:33.757536357Z"
+    description: Authenticator for using Dex with Kubernetes
+    digest: c7a936d990c92e3a98f071c02d65df47bc6d31ec8750553e659250ce88ed5082
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@mesosphere.com
+      name: mhrabovcin
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mintel/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.2.9.tgz
+    version: 1.2.9
+  - apiVersion: v1
+    appVersion: v1.2.2
+    created: "2022-02-24T02:18:33.726388195Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 374f2dd2a59d862328f9e84818464dc2e5b7162cb57bc6278a4335021b1dd920
     home: https://github.com/mesosphere/charts
@@ -567,7 +582,7 @@ entries:
     version: 1.2.8
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2022-02-23T09:13:54.806555636Z"
+    created: "2022-02-24T02:18:33.725299835Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 262a422b5289712ac14cd365ac133541ad7543a49525f12aa89e7e2250cf319d
     home: https://github.com/mesosphere/charts
@@ -584,7 +599,7 @@ entries:
     version: 1.2.7
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2022-02-23T09:13:54.805503213Z"
+    created: "2022-02-24T02:18:33.724290662Z"
     description: Authenticator for using Dex with Kubernetes
     digest: f9967bb619d20f5f4b035a35db700c8ffd8b6ca063a0d05ac90a439a1b286238
     home: https://github.com/mesosphere/charts
@@ -601,7 +616,7 @@ entries:
     version: 1.2.6
   - apiVersion: v1
     appVersion: v1.2.2
-    created: "2022-02-23T09:13:54.804508756Z"
+    created: "2022-02-24T02:18:33.723260993Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 47e01f968872eeb9c0fd785b185f27b55a4c23ca5e4944b20ae60e8a5572e22e
     home: https://github.com/mesosphere/charts
@@ -618,7 +633,7 @@ entries:
     version: 1.2.5
   - apiVersion: v1
     appVersion: v1.2.1
-    created: "2022-02-23T09:13:54.803462995Z"
+    created: "2022-02-24T02:18:33.722296347Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 9ad12bb3f61e84f2fc05e1bdb9cac5eddffef8e479444449bffaee1badc819e6
     home: https://github.com/mesosphere/charts
@@ -635,7 +650,7 @@ entries:
     version: 1.2.4
   - apiVersion: v1
     appVersion: v1.2.1
-    created: "2022-02-23T09:13:54.802481687Z"
+    created: "2022-02-24T02:18:33.721287794Z"
     description: Authenticator for using Dex with Kubernetes
     digest: a765f41cedb12a36bb96053978d1918764329a7c60c129115363605f9e52158b
     home: https://github.com/mesosphere/charts
@@ -652,7 +667,7 @@ entries:
     version: 1.2.3
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2022-02-23T09:13:54.801043351Z"
+    created: "2022-02-24T02:18:33.720315982Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 528ab76398746a965e085717fe6c11c2305e7d0c5faec2556489d65c01a97659
     home: https://github.com/mesosphere/charts
@@ -669,7 +684,7 @@ entries:
     version: 1.2.2
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2022-02-23T09:13:54.799381079Z"
+    created: "2022-02-24T02:18:33.719299741Z"
     description: Authenticator for using Dex with Kubernetes
     digest: fdb8c259e3c39dbe888bf43798fd595a002d3e62869ae8d0df65c8b11c29c0bd
     home: https://github.com/mesosphere/charts
@@ -686,7 +701,7 @@ entries:
     version: 1.2.1
   - apiVersion: v1
     appVersion: v1.2.0
-    created: "2022-02-23T09:13:54.798412435Z"
+    created: "2022-02-24T02:18:33.718320364Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 3e1c039e4e7525ba098707b3b55c7081ce218c40acf895488c98f9893fb90da6
     home: https://github.com/mesosphere/charts
@@ -703,7 +718,7 @@ entries:
     version: 1.2.0
   - apiVersion: v1
     appVersion: v1.1.2
-    created: "2022-02-23T09:13:54.791368014Z"
+    created: "2022-02-24T02:18:33.710461712Z"
     description: Authenticator for using Dex with Kubernetes
     digest: d66cf937caea263e8c2913a81e3ee2e6c7600c9c7531b42e59d2ac084afbef12
     home: https://github.com/mesosphere/charts
@@ -720,7 +735,7 @@ entries:
     version: 1.1.18
   - apiVersion: v1
     appVersion: v1.1.2
-    created: "2022-02-23T09:13:54.790376402Z"
+    created: "2022-02-24T02:18:33.709485475Z"
     description: Authenticator for using Dex with Kubernetes
     digest: e768ed73121291e75c9766e9b0d9e9dfe6094e652c7613d1ac8b88e756581526
     home: https://github.com/mesosphere/charts
@@ -737,7 +752,7 @@ entries:
     version: 1.1.17
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.789397449Z"
+    created: "2022-02-24T02:18:33.708553071Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 023266c9773aa3dfef79f53f8720732fc828dd63ca0ccdcdef242efacda847cd
     home: https://github.com/mesosphere/charts
@@ -754,7 +769,7 @@ entries:
     version: 1.1.16
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.788450763Z"
+    created: "2022-02-24T02:18:33.707630222Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 16860eca12adaef6c277910f11dbb108a85aa77574555c50b515a73f64f2cb8d
     home: https://github.com/mesosphere/charts
@@ -771,7 +786,7 @@ entries:
     version: 1.1.15
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.787610248Z"
+    created: "2022-02-24T02:18:33.706841283Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 71626793f6b1a6d0e1ef6a041c6da16bededde551baf40fd4209a7f13b25b29f
     home: https://github.com/mesosphere/charts
@@ -788,7 +803,7 @@ entries:
     version: 1.1.14
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.786730825Z"
+    created: "2022-02-24T02:18:33.706003779Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 49b8c8ffcb10849e7acdd68eb5e2f7f40347860558699deab1f1bdb80394dffd
     home: https://github.com/mesosphere/charts
@@ -805,7 +820,7 @@ entries:
     version: 1.1.13
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.785953892Z"
+    created: "2022-02-24T02:18:33.704703377Z"
     description: Authenticator for using Dex with Kubernetes
     digest: cf19cce6233681afd3750e9ee1900825345c07e2e63b84bc8a22efff47fe76eb
     home: https://github.com/mesosphere/charts
@@ -822,7 +837,7 @@ entries:
     version: 1.1.12
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.785112304Z"
+    created: "2022-02-24T02:18:33.703245026Z"
     description: Authenticator for using Dex with Kubernetes
     digest: feff041b1b88f964d0fe7d0c1c3f7ccba7399ea9140d1db8cfb4e4e74216d26e
     home: https://github.com/mesosphere/charts
@@ -839,7 +854,7 @@ entries:
     version: 1.1.11
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.784352407Z"
+    created: "2022-02-24T02:18:33.702426627Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 4d1868d10111c3aa1eb37645e28c9b26f01fbfd198321bed33ea9af55bf31a9d
     home: https://github.com/mesosphere/charts
@@ -856,7 +871,7 @@ entries:
     version: 1.1.10
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.797423292Z"
+    created: "2022-02-24T02:18:33.716852509Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 935d7009c589b049220e1fc7019da5d1325746473635fd71bc61644d3ce371a4
     home: https://github.com/mesosphere/charts
@@ -873,7 +888,7 @@ entries:
     version: 1.1.9
   - apiVersion: v1
     appVersion: v1.1.1
-    created: "2022-02-23T09:13:54.79662152Z"
+    created: "2022-02-24T02:18:33.715682238Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 879bbff14b21c67c6f1b3ea3aa80cc043796014d6998fafc2146130a9e545ed8
     home: https://github.com/mesosphere/charts
@@ -890,7 +905,7 @@ entries:
     version: 1.1.8
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.795875352Z"
+    created: "2022-02-24T02:18:33.714945144Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 722faf9590eb9d6236c36447f192d5f5d98906071120d821dc467461e5b45fce
     home: https://github.com/mesosphere/charts
@@ -905,7 +920,7 @@ entries:
     version: 1.1.7
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.795097213Z"
+    created: "2022-02-24T02:18:33.7142024Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 9d3a4378e4e7fe8b5d29c9e3540b70efd9583224846d3372e54e2626eec4b140
     home: https://github.com/mesosphere/charts
@@ -920,7 +935,7 @@ entries:
     version: 1.1.6
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.794343789Z"
+    created: "2022-02-24T02:18:33.713432435Z"
     description: Authenticator for using Dex with Kubernetes
     digest: e2aa61bd89adcb15a5c7a4e36789437147c79c27fc05f09dc4a5dab1e784bd98
     home: https://github.com/mesosphere/charts
@@ -935,7 +950,7 @@ entries:
     version: 1.1.5
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.79361817Z"
+    created: "2022-02-24T02:18:33.712714517Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 0d60186d46680159187e5458c24c6ef18cb1e322b9f28b18b95d55fb0790b444
     home: https://github.com/mesosphere/charts
@@ -950,7 +965,7 @@ entries:
     version: 1.1.4
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.792881303Z"
+    created: "2022-02-24T02:18:33.711986967Z"
     description: Authenticator for using Dex with Kubernetes
     digest: fb7db6ae0baa802c89fb7cdbdcd45eaeb601a29fc4ca39d713a6bd5517d0d02c
     maintainers:
@@ -968,7 +983,7 @@ entries:
     version: 1.1.3
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.792099791Z"
+    created: "2022-02-24T02:18:33.711206693Z"
     description: Authenticator for using Dex with Kubernetes
     digest: 2714dd1206327a96e151357b24fe7b412e54c5507fb16990d5e199cc20dde64c
     maintainers:
@@ -986,7 +1001,7 @@ entries:
     version: 1.1.2
   - apiVersion: v1
     appVersion: v1.1.0
-    created: "2022-02-23T09:13:54.783505886Z"
+    created: "2022-02-24T02:18:33.70163176Z"
     description: Authenticator for using Dex with Kubernetes
     digest: ef65818aaedebe5053fef11f1184f8255edc5e850859642fe5ce48d764b77b35
     maintainers:
@@ -1005,7 +1020,7 @@ entries:
   dispatch:
   - apiVersion: v1
     appVersion: 0.3.0
-    created: "2022-02-23T09:13:54.813924609Z"
+    created: "2022-02-24T02:18:33.764396793Z"
     dependencies:
     - condition: argo-cd.enabled
       name: argo-cd
@@ -1020,7 +1035,7 @@ entries:
   flagger:
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2022-02-23T09:13:54.820193421Z"
+    created: "2022-02-24T02:18:33.7708491Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1046,7 +1061,7 @@ entries:
     version: 0.21.0
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2022-02-23T09:13:54.818934768Z"
+    created: "2022-02-24T02:18:33.76953605Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1072,7 +1087,7 @@ entries:
     version: 0.20.1
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2022-02-23T09:13:54.817682282Z"
+    created: "2022-02-24T02:18:33.768251354Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1098,7 +1113,7 @@ entries:
     version: 0.20.0
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2022-02-23T09:13:54.816445158Z"
+    created: "2022-02-24T02:18:33.766949532Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1124,7 +1139,7 @@ entries:
     version: 0.19.1
   - apiVersion: v1
     appVersion: 0.19.0
-    created: "2022-02-23T09:13:54.815214309Z"
+    created: "2022-02-24T02:18:33.765675802Z"
     description: Flagger is a Kubernetes operator that automates the promotion of
       canary deployments using Istio, Linkerd, App Mesh, Gloo or NGINX routing for
       traffic shifting and Prometheus metrics for canary analysis.
@@ -1151,7 +1166,7 @@ entries:
   gatekeeper:
   - apiVersion: v1
     appVersion: 3.4.0-rc.1
-    created: "2022-02-23T09:13:54.870924982Z"
+    created: "2022-02-24T02:18:33.795523125Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 23dacfcf2431c27f7fcfa013d8a93b5e48f96f9b59c92babf8fa34e814cd0c92
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1169,7 +1184,7 @@ entries:
     version: 0.6.9
   - apiVersion: v1
     appVersion: 3.4.0-rc.1
-    created: "2022-02-23T09:13:54.868595336Z"
+    created: "2022-02-24T02:18:33.794293982Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 1747e0b165817eaf29f8c5721525685105d815232dcaa2fd9b9d8bf249cbed74
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1187,7 +1202,7 @@ entries:
     version: 0.6.8
   - apiVersion: v1
     appVersion: 3.4.0-rc.1
-    created: "2022-02-23T09:13:54.867313419Z"
+    created: "2022-02-24T02:18:33.793075709Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 9abdc85b6ac65e86fbda58da8d6bc6f321922d36ef30bed0cab01a2dba5fe999
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1205,7 +1220,7 @@ entries:
     version: 0.6.7
   - apiVersion: v1
     appVersion: v3.4.0-rc.1
-    created: "2022-02-23T09:13:54.866103163Z"
+    created: "2022-02-24T02:18:33.791861444Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 80a8816f9f6e78be9050305480bcbdc01680cf035b3e2a064220a0c803bf5bef
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1223,7 +1238,7 @@ entries:
     version: 0.6.6
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.864912579Z"
+    created: "2022-02-24T02:18:33.790643287Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 7043e4bd68d3598276611f669909403c874e9d13cfaa9b332b88adcd60b649ac
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1241,7 +1256,7 @@ entries:
     version: 0.6.5
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.8637078Z"
+    created: "2022-02-24T02:18:33.789405487Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 1acc79594bdc57052e5ff6d3a0e569a271a2f35147230335d9db07ce31b50dba
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1259,7 +1274,7 @@ entries:
     version: 0.6.4
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.862501311Z"
+    created: "2022-02-24T02:18:33.787820671Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: b8eb5bc030f1aaed7b02b8b085c3900e7830d3eaa8aa4e140931443d9a2182af
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1277,7 +1292,7 @@ entries:
     version: 0.6.3
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.861296783Z"
+    created: "2022-02-24T02:18:33.785925077Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 2d559eec089d2bd71041fbe1270631bbfd5e0f0ba9443566bada7328ccdb4295
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1295,7 +1310,7 @@ entries:
     version: 0.6.2
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.860106369Z"
+    created: "2022-02-24T02:18:33.784716943Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: ba442dde297b83f5670339eeaa1fe83be4e08d710cf1ed1fa201ac46225380e5
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1313,7 +1328,7 @@ entries:
     version: 0.6.1
   - apiVersion: v1
     appVersion: 3.3.0
-    created: "2022-02-23T09:13:54.858899301Z"
+    created: "2022-02-24T02:18:33.783529826Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 1cc0e7354b7ee9270172cbad30542989b0d3174953b3b9be8ac4982d5909ca73
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1331,7 +1346,7 @@ entries:
     version: 0.6.0
   - apiVersion: v1
     appVersion: 3.2.2
-    created: "2022-02-23T09:13:54.857594474Z"
+    created: "2022-02-24T02:18:33.782376975Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: c38b4bd511e010b168fa270a5ca3ce5258750982fc16e96d29f87027e2391e8a
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1349,7 +1364,7 @@ entries:
     version: 0.5.2
   - apiVersion: v1
     appVersion: 3.2.2
-    created: "2022-02-23T09:13:54.830163921Z"
+    created: "2022-02-24T02:18:33.781524327Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 080438ffba2cb2dc07dd13a4dcc52744447ee11a749324543fbcbc01043b20dc
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1367,7 +1382,7 @@ entries:
     version: 0.5.1
   - apiVersion: v1
     appVersion: 3.2.2
-    created: "2022-02-23T09:13:54.82910988Z"
+    created: "2022-02-24T02:18:33.780642972Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 6b7fa2ef93aca1a202f948425ceeb02ba28b4259bfae1c6fc76ee10a26e71bcb
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1383,7 +1398,7 @@ entries:
     version: 0.5.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.828064244Z"
+    created: "2022-02-24T02:18:33.779753776Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 23106ec5553f416f14ff9ef042eba1df22fce2dba0d75a85e439fbf1f58091cb
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1399,7 +1414,7 @@ entries:
     version: 0.4.2
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.827150819Z"
+    created: "2022-02-24T02:18:33.779032381Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 44ac2369915d0560c5dfaa63221e7f3178cc482ec4f30d98da531396b2c24575
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1415,7 +1430,7 @@ entries:
     version: 0.4.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.826239766Z"
+    created: "2022-02-24T02:18:33.778297538Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 9d0f76b7b9f99f00a3ba380872d0a01cd3eb15b003f67f55a3bc7a312b16d436
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1431,7 +1446,7 @@ entries:
     version: 0.4.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.824851366Z"
+    created: "2022-02-24T02:18:33.777489078Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: bca908c49462077bd89437d056b37bea3a497c163e11ab8c45c3321a3ce5e6ac
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1447,7 +1462,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.824152454Z"
+    created: "2022-02-24T02:18:33.776452023Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 11ff83c2283cd7cd9fd481232fae1ede2bbbc09549e56f097a54496c604d761e
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1463,7 +1478,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.823418297Z"
+    created: "2022-02-24T02:18:33.7749936Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 526319a1a287d599f587c28af32baa53305f566b6cdd9d1aa7631c3dabdc2d4c
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1479,7 +1494,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.822739515Z"
+    created: "2022-02-24T02:18:33.773386094Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: fa78f9c274eefd42fd26c9b88949fa05c3eed3314c7ab6b7def582cd9f523ca2
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1495,7 +1510,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.822074387Z"
+    created: "2022-02-24T02:18:33.772691924Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 013744053a3043a61c5004dac31ed8fe7559afeae8537208e97461098370f538
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1511,7 +1526,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.821419768Z"
+    created: "2022-02-24T02:18:33.772046902Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: e2d332137417d314db0401aa194c86350ac1fcc5c659b0d382b59bcc911f358a
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1527,7 +1542,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 3.0.4-beta.1
-    created: "2022-02-23T09:13:54.820801102Z"
+    created: "2022-02-24T02:18:33.771395511Z"
     description: Gatekeeper - Policy Controller for Kubernetes
     digest: 46cfcc10dd9b7f9a172237f33bd57097888e96bf90c457884234b61dba7d0c16
     home: https://github.com/open-policy-agent/gatekeeper
@@ -1544,7 +1559,7 @@ entries:
   generic-ingress:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2022-02-23T09:13:54.871429814Z"
+    created: "2022-02-24T02:18:33.796051705Z"
     description: Adds an traefik ingress record using the provided values
     digest: b2e1ba39e4c891cbdaba69c1e96f95dd28668198bda9be03161b1b5f8ce37b4a
     home: https://github.com/mesosphere/charts
@@ -1560,7 +1575,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2022-02-23T09:13:54.871175708Z"
+    created: "2022-02-24T02:18:33.795780959Z"
     description: Adds an traefik ingress record using the provided values
     digest: b46c857d2c05eb49d2e1c24fa1bff19dcbf94a616f1e5ea425bb6f101813f2ee
     home: https://github.com/mesosphere/charts
@@ -1577,7 +1592,7 @@ entries:
   istio:
   - apiVersion: v1
     appVersion: 1.11.5
-    created: "2022-02-23T09:13:54.873231102Z"
+    created: "2022-02-24T02:18:33.798823073Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1610,7 +1625,7 @@ entries:
     version: 1.11.5
   - apiVersion: v1
     appVersion: 1.9.1
-    created: "2022-02-23T09:13:56.013400287Z"
+    created: "2022-02-24T02:18:35.135941887Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1643,7 +1658,7 @@ entries:
     version: 1.9.1
   - apiVersion: v1
     appVersion: 1.8.2
-    created: "2022-02-23T09:13:56.011594148Z"
+    created: "2022-02-24T02:18:35.134154465Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1676,7 +1691,7 @@ entries:
     version: 1.8.4
   - apiVersion: v1
     appVersion: 1.8.1
-    created: "2022-02-23T09:13:56.009842541Z"
+    created: "2022-02-24T02:18:35.132373077Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1710,7 +1725,7 @@ entries:
     version: 1.8.3
   - apiVersion: v1
     appVersion: 1.8.1
-    created: "2022-02-23T09:13:56.008107189Z"
+    created: "2022-02-24T02:18:35.130609736Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1744,7 +1759,7 @@ entries:
     version: 1.8.2
   - apiVersion: v1
     appVersion: 1.8.1
-    created: "2022-02-23T09:13:56.006343352Z"
+    created: "2022-02-24T02:18:35.128899975Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1778,7 +1793,7 @@ entries:
     version: 1.8.1
   - apiVersion: v1
     appVersion: 1.6.12
-    created: "2022-02-23T09:13:55.992214981Z"
+    created: "2022-02-24T02:18:35.114956538Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1814,7 +1829,7 @@ entries:
     version: 1.6.12
   - apiVersion: v1
     appVersion: 1.6.11
-    created: "2022-02-23T09:13:55.990267084Z"
+    created: "2022-02-24T02:18:35.113083319Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1850,7 +1865,7 @@ entries:
     version: 1.6.11
   - apiVersion: v1
     appVersion: 1.6.10
-    created: "2022-02-23T09:13:55.496689666Z"
+    created: "2022-02-24T02:18:34.531926651Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1886,7 +1901,7 @@ entries:
     version: 1.6.10
   - apiVersion: v1
     appVersion: 1.6.9
-    created: "2022-02-23T09:13:56.004561869Z"
+    created: "2022-02-24T02:18:35.127138913Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1922,7 +1937,7 @@ entries:
     version: 1.6.9
   - apiVersion: v1
     appVersion: 1.6.8
-    created: "2022-02-23T09:13:56.00285679Z"
+    created: "2022-02-24T02:18:35.125419388Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1958,7 +1973,7 @@ entries:
     version: 1.6.8
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2022-02-23T09:13:56.00110163Z"
+    created: "2022-02-24T02:18:35.123692556Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -1993,7 +2008,7 @@ entries:
     version: 1.6.7
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2022-02-23T09:13:55.999306401Z"
+    created: "2022-02-24T02:18:35.12195673Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -2028,7 +2043,7 @@ entries:
     version: 1.6.6
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2022-02-23T09:13:55.997535798Z"
+    created: "2022-02-24T02:18:35.120216133Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -2063,7 +2078,7 @@ entries:
     version: 1.6.5
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2022-02-23T09:13:55.995761315Z"
+    created: "2022-02-24T02:18:35.118471191Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -2098,7 +2113,7 @@ entries:
     version: 1.6.4
   - apiVersion: v1
     appVersion: 1.6.3
-    created: "2022-02-23T09:13:55.994019135Z"
+    created: "2022-02-24T02:18:35.11673667Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -2133,7 +2148,7 @@ entries:
     version: 1.6.3
   - apiVersion: v1
     appVersion: 1.4.3
-    created: "2022-02-23T09:13:54.905776227Z"
+    created: "2022-02-24T02:18:33.866364785Z"
     description: Helm chart for all istio components
     digest: 4b70f22310577ff64f4a5cd49b4244793682dffc01283acb1ee3fc5d4a6d1cdf
     home: http://github.com/istio/istio
@@ -2155,7 +2170,7 @@ entries:
     version: 1.4.3
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2022-02-23T09:13:54.896386128Z"
+    created: "2022-02-24T02:18:33.821173159Z"
     description: Helm chart for all istio components
     digest: 607a757cacc6ac79cbeda741fca7d2cda2c9caa13a2a95e32b4f365749d382cd
     home: http://github.com/istio/istio
@@ -2177,7 +2192,7 @@ entries:
     version: 1.3.5
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2022-02-23T09:13:54.888579211Z"
+    created: "2022-02-24T02:18:33.814126872Z"
     description: Helm chart for all istio components
     digest: 15cb5ec63e3223d954b7c1c93b807a787fda92b327ada2a17a8f5f9067283a15
     home: http://github.com/istio/istio
@@ -2199,7 +2214,7 @@ entries:
     version: 1.3.4
   - apiVersion: v1
     appVersion: 1.3.3
-    created: "2022-02-23T09:13:54.881695031Z"
+    created: "2022-02-24T02:18:33.806053331Z"
     description: Helm chart for all istio components
     digest: 9c14ff6a7b1568f2b5fae6871c3c9624700fdcce1eb494ad998d5885c14c93ee
     home: http://github.com/istio/istio
@@ -2222,7 +2237,7 @@ entries:
   karma:
   - apiVersion: v1
     appVersion: v0.50
-    created: "2022-02-23T09:13:56.015141776Z"
+    created: "2022-02-24T02:18:35.137631845Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 391689d45cfc2e5a1c1f6387d5342fae2d479e5980313325c2f4097c8032a497
     home: https://github.com/prymitive/karma
@@ -2240,7 +2255,7 @@ entries:
     version: 1.3.0
   - apiVersion: v1
     appVersion: v0.50
-    created: "2022-02-23T09:13:56.014564543Z"
+    created: "2022-02-24T02:18:35.137049945Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: a723e69f518ff83d063e1966f8bb852e0207de4a0b0aea3970f3ae09eac5b774
     home: https://github.com/prymitive/karma
@@ -2258,7 +2273,7 @@ entries:
     version: 1.2.1
   - apiVersion: v1
     appVersion: v0.48
-    created: "2022-02-23T09:13:56.013983263Z"
+    created: "2022-02-24T02:18:35.136494284Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: 89f5cc5f5d8616a9f3132f5d623cec98f69d266ea2e04c6d21fe5465aa38d24f
     home: https://github.com/prymitive/karma
@@ -2277,7 +2292,7 @@ entries:
   knative:
   - apiVersion: v1
     appVersion: v0.18.3
-    created: "2022-02-23T09:13:56.040220378Z"
+    created: "2022-02-24T02:18:35.165656092Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2304,7 +2319,7 @@ entries:
     version: 0.3.8
   - apiVersion: v1
     appVersion: v0.18.3
-    created: "2022-02-23T09:13:56.0377254Z"
+    created: "2022-02-24T02:18:35.163160565Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2331,7 +2346,7 @@ entries:
     version: 0.3.7
   - apiVersion: v1
     appVersion: v0.18.3
-    created: "2022-02-23T09:13:56.035207773Z"
+    created: "2022-02-24T02:18:35.160620533Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2358,7 +2373,7 @@ entries:
     version: 0.3.6
   - apiVersion: v1
     appVersion: v0.18.3
-    created: "2022-02-23T09:13:56.032725502Z"
+    created: "2022-02-24T02:18:35.158133261Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2385,7 +2400,7 @@ entries:
     version: 0.3.5
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2022-02-23T09:13:56.030316474Z"
+    created: "2022-02-24T02:18:35.152669703Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2413,7 +2428,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2022-02-23T09:13:56.028029777Z"
+    created: "2022-02-24T02:18:35.150452903Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2441,7 +2456,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2022-02-23T09:13:56.025733316Z"
+    created: "2022-02-24T02:18:35.148229081Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2469,7 +2484,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2022-02-23T09:13:56.023495298Z"
+    created: "2022-02-24T02:18:35.145956774Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2497,7 +2512,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: v0.14.0
-    created: "2022-02-23T09:13:56.021309099Z"
+    created: "2022-02-24T02:18:35.143748134Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2525,7 +2540,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: v0.7.1
-    created: "2022-02-23T09:13:56.019086465Z"
+    created: "2022-02-24T02:18:35.14150506Z"
     dependencies:
     - condition: eventing.enabled
       name: eventing
@@ -2552,7 +2567,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: v0.7.1
-    created: "2022-02-23T09:13:56.017056607Z"
+    created: "2022-02-24T02:18:35.139513493Z"
     description: Kubernetes-based platform to build, deploy, and manage modern serverless
       workloads
     digest: a7aae3b9d505645543f8ad43d7d170ba075f7d7b66b13388ddb7e3a6f01feb1c
@@ -2567,7 +2582,7 @@ entries:
   konvoyconfig:
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:56.04152156Z"
+    created: "2022-02-24T02:18:35.167011118Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 0ffadc93b42bb87b6c64b17163d3533418b33b833e05a378874b185b45d8a65f
@@ -2584,7 +2599,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:56.041236601Z"
+    created: "2022-02-24T02:18:35.166732579Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 3f5da96a593cbc25b185fe293cb86743737c5626299a4527bcfe620b0c6b4b26
@@ -2601,7 +2616,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:56.040984619Z"
+    created: "2022-02-24T02:18:35.166439122Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 3d25fd5f9152e4a3911a66ac032fefed433b1c829922e1af6b9ea8641ec8bf59
@@ -2618,7 +2633,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:56.040715378Z"
+    created: "2022-02-24T02:18:35.166156302Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: 4c920fbaa7e0d6f0885dacc3e168bf6a08f89a56fa4848650aa106b35e36f3b8
@@ -2635,7 +2650,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:56.040467834Z"
+    created: "2022-02-24T02:18:35.165914417Z"
     description: Adds a ConfigMap to the kubeaddons namespace containing the values
       provided to this chart
     digest: d31d7c9d63f974bac3a101aa4cf1119a3b4befd075755e204ad890f24e68e06f
@@ -2653,7 +2668,22 @@ entries:
   kube-oidc-proxy:
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.06114002Z"
+    created: "2022-02-24T02:18:35.182257517Z"
+    description: A Helm chart for kube-oidc-proxy
+    digest: 239693856a23148e5a1ebddef05ea21b8afa7bf6c6f289289ed3fbb7d262e19c
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.3.1.tgz
+    version: 0.3.1
+  - apiVersion: v1
+    appVersion: v0.3.0
+    created: "2022-02-24T02:18:35.181429595Z"
     description: A Helm chart for kube-oidc-proxy
     digest: d4c8d22f3517b5936e1bc270f1e2cd5e7b880f0eb7b83c9b2496843f4f99b46f
     home: https://github.com/mesosphere/charts
@@ -2668,7 +2698,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.060326276Z"
+    created: "2022-02-24T02:18:35.180604793Z"
     description: A Helm chart for kube-oidc-proxy
     digest: b63199046191934b2f538ef24d8224edcc91a465bec977a972590e6df2bc527d
     home: https://github.com/mesosphere/charts
@@ -2685,7 +2715,7 @@ entries:
     version: 0.2.7
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.059533864Z"
+    created: "2022-02-24T02:18:35.179858665Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 6427ac502b31eeeda2846aa15beb2217d724de2f59cf7a7d415cd07b48d7af72
     home: https://github.com/mesosphere/charts
@@ -2702,7 +2732,7 @@ entries:
     version: 0.2.6
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.058740145Z"
+    created: "2022-02-24T02:18:35.179080263Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 6c65af6957c6affb52242803b5efdd7c0a58882a3f7c2a95b7d8b51bc274eba6
     home: https://github.com/mesosphere/charts
@@ -2719,7 +2749,7 @@ entries:
     version: 0.2.5
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.057986945Z"
+    created: "2022-02-24T02:18:35.178309648Z"
     description: A Helm chart for kube-oidc-proxy
     digest: dda84cb8aaaa44b42e1c49b898f1f6a3922d74a1c907e89715da63359680b512
     home: https://github.com/mesosphere/charts
@@ -2736,7 +2766,7 @@ entries:
     version: 0.2.4
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.057181046Z"
+    created: "2022-02-24T02:18:35.177550733Z"
     description: A Helm chart for kube-oidc-proxy
     digest: a552dc5ceb5933f618575c98a88da7c9bb4890e1e6cfb64598b070ce1e53d203
     home: https://github.com/mesosphere/charts
@@ -2753,7 +2783,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.051300017Z"
+    created: "2022-02-24T02:18:35.176804293Z"
     description: A Helm chart for kube-oidc-proxy
     digest: b09c9fc06494c931958684c8d34e0357ef2e5f3c089fc15d3e021e20180ce0c8
     home: https://github.com/mesosphere/charts
@@ -2770,7 +2800,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.050504576Z"
+    created: "2022-02-24T02:18:35.176036271Z"
     description: A Helm chart for kube-oidc-proxy
     digest: a7a6c84247a0eefd59acefc9a4e3a0f3305d9e1a91e468ee63ff4f1887711bdc
     home: https://github.com/mesosphere/charts
@@ -2787,7 +2817,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.049717195Z"
+    created: "2022-02-24T02:18:35.175264119Z"
     description: A Helm chart for kube-oidc-proxy
     digest: c47a81627f22bf3a6d072e30fc3e00db71853d1dfeaf2f91011417dec6132057
     home: https://github.com/mesosphere/charts
@@ -2804,7 +2834,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: v0.2.0
-    created: "2022-02-23T09:13:56.048983325Z"
+    created: "2022-02-24T02:18:35.174519523Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 62a56c50db31251a6cac3412cb6ea82554c9039cd5c57f1542051af78b54a61a
     home: https://github.com/mesosphere/charts
@@ -2821,7 +2851,7 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.048247891Z"
+    created: "2022-02-24T02:18:35.173747922Z"
     description: A Helm chart for kube-oidc-proxy
     digest: e7474b460241d3c523861355b82b1ae07c21d3cff5d6dbef031db62ef2d81048
     home: https://github.com/mesosphere/charts
@@ -2838,7 +2868,7 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.047479967Z"
+    created: "2022-02-24T02:18:35.173002061Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 3d922e54157ba833b1bf16ff284cce54f7cd34a130479a555f6a7ee552b22b3c
     home: https://github.com/mesosphere/charts
@@ -2855,7 +2885,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.046692922Z"
+    created: "2022-02-24T02:18:35.172180177Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 3b3a7eb2e5fc158f4ebc7be8a1f1a7db42374e2c6e388c3f6571c2d9887a84ed
     home: https://github.com/mesosphere/charts
@@ -2872,7 +2902,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.045958741Z"
+    created: "2022-02-24T02:18:35.171443956Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 103cca053d89f445da8e1a1f5a9a6e209b9b45ff7bb3fb8e8a20a00cf4f8e71e
     home: https://github.com/mesosphere/charts
@@ -2889,7 +2919,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.045228666Z"
+    created: "2022-02-24T02:18:35.170712994Z"
     description: A Helm chart for kube-oidc-proxy
     digest: d40a6565dd85f6c7fad3eb58fa4bc126e677d991b2acd953f6fda9a0650b4f50
     home: https://github.com/mesosphere/charts
@@ -2906,7 +2936,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.044478692Z"
+    created: "2022-02-24T02:18:35.169983085Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 341397d1bc84332fbd82a16ecab4679f38954fc59af3f43e974220747ec68334
     home: https://github.com/mesosphere/charts
@@ -2923,7 +2953,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.043732444Z"
+    created: "2022-02-24T02:18:35.169231364Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 973b2417054e80962b2e8b8ad5fb3de4a8c9898419bcaabcd9578bb6051d3e17
     home: https://github.com/mesosphere/charts
@@ -2940,7 +2970,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.04301825Z"
+    created: "2022-02-24T02:18:35.168484031Z"
     description: A Helm chart for kube-oidc-proxy
     digest: d3c8e291ea01df0ac0727cfc80f407ff028627664fb8eb7cb56f189133784c5c
     home: https://github.com/mesosphere/charts
@@ -2957,7 +2987,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: v0.1.1
-    created: "2022-02-23T09:13:56.042280884Z"
+    created: "2022-02-24T02:18:35.167757498Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 8e3b0437e4a921b16d6ddebbd380ea39909520371a55d6be5d23d042d3bdc9bf
     home: https://github.com/mesosphere/charts
@@ -2980,7 +3010,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.54.0
-    created: "2022-02-23T09:13:56.515387854Z"
+    created: "2022-02-24T02:18:35.665095848Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3039,7 +3069,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.50.0
-    created: "2022-02-23T09:13:56.493103515Z"
+    created: "2022-02-24T02:18:35.607422801Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3093,7 +3123,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.50.0
-    created: "2022-02-23T09:13:56.472996064Z"
+    created: "2022-02-24T02:18:35.587026966Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3147,7 +3177,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.50.0
-    created: "2022-02-23T09:13:56.422740682Z"
+    created: "2022-02-24T02:18:35.567499229Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3201,7 +3231,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.50.0
-    created: "2022-02-23T09:13:56.402999387Z"
+    created: "2022-02-24T02:18:35.522124725Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3255,7 +3285,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.50.0
-    created: "2022-02-23T09:13:56.383185096Z"
+    created: "2022-02-24T02:18:35.502416427Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3309,7 +3339,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.49.0
-    created: "2022-02-23T09:13:56.362167606Z"
+    created: "2022-02-24T02:18:35.477777355Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3363,7 +3393,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.48.1
-    created: "2022-02-23T09:13:56.312576898Z"
+    created: "2022-02-24T02:18:35.427537019Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3417,7 +3447,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.48.1
-    created: "2022-02-23T09:13:56.293347841Z"
+    created: "2022-02-24T02:18:35.408533203Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3471,7 +3501,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.099906257Z"
+    created: "2022-02-24T02:18:35.220956013Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3525,7 +3555,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.080561676Z"
+    created: "2022-02-24T02:18:35.201515191Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3579,7 +3609,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.273937016Z"
+    created: "2022-02-24T02:18:35.384415048Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3633,7 +3663,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.218200416Z"
+    created: "2022-02-24T02:18:35.35946527Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3687,7 +3717,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.19182787Z"
+    created: "2022-02-24T02:18:35.311220612Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3741,7 +3771,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.165707601Z"
+    created: "2022-02-24T02:18:35.285037673Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3795,7 +3825,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.138854866Z"
+    created: "2022-02-24T02:18:35.262832229Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3849,7 +3879,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.47.0
-    created: "2022-02-23T09:13:56.119418552Z"
+    created: "2022-02-24T02:18:35.240384537Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3897,7 +3927,7 @@ entries:
   kubeaddons-catalog:
   - apiVersion: v1
     appVersion: v0.11.4
-    created: "2022-02-23T09:13:56.522629698Z"
+    created: "2022-02-24T02:18:35.672133834Z"
     description: A Catalog service for Kubeaddons
     digest: b6aaee202036529e0223d1be109b0a14233c89dca4416f0cf947de86eb5e740c
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3914,7 +3944,7 @@ entries:
     version: 0.1.16
   - apiVersion: v1
     appVersion: v0.11.4
-    created: "2022-02-23T09:13:56.522202926Z"
+    created: "2022-02-24T02:18:35.671692088Z"
     description: A Catalog service for Kubeaddons
     digest: d2ad6e1478d16a35691fae0fdea94a45180ba55a06cf333caf8e1681e9e73f58
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3931,7 +3961,7 @@ entries:
     version: 0.1.15
   - apiVersion: v1
     appVersion: v0.11.3
-    created: "2022-02-23T09:13:56.52177232Z"
+    created: "2022-02-24T02:18:35.671292727Z"
     description: A Catalog service for Kubeaddons
     digest: 7c960688c345d1d1bb6aaad269aa57b561c6785707fd1477705340a2c497de94
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3948,7 +3978,7 @@ entries:
     version: 0.1.14
   - apiVersion: v1
     appVersion: v0.11.1
-    created: "2022-02-23T09:13:56.521352389Z"
+    created: "2022-02-24T02:18:35.670879973Z"
     description: A Catalog service for Kubeaddons
     digest: e638dbe5bdd9f413015eda27d63493734b388767505d0d027c106e3da6f037f5
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3965,7 +3995,7 @@ entries:
     version: 0.1.13
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.520892717Z"
+    created: "2022-02-24T02:18:35.670439518Z"
     description: A Catalog service for Kubeaddons
     digest: ea9e8ba12904d57c729cb66cc552bd9a0733c3ce3dfa8cd65dd42591a8cf5599
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3982,7 +4012,7 @@ entries:
     version: 0.1.12
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.520407549Z"
+    created: "2022-02-24T02:18:35.66999514Z"
     description: A Catalog service for Kubeaddons
     digest: d39231873b607642feabd86f3a7a51997a94e323d5f0f20b830ef10909ec8a6e
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -3999,7 +4029,7 @@ entries:
     version: 0.1.11
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.519926014Z"
+    created: "2022-02-24T02:18:35.669558463Z"
     description: A Catalog service for Kubeaddons
     digest: 2a8e9ed6e54201d61dc3fffcc38f0edea36f32c9b7ec2cb4373ae37b80690bb1
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -4016,7 +4046,7 @@ entries:
     version: 0.1.10
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.52601137Z"
+    created: "2022-02-24T02:18:35.675437581Z"
     description: A Catalog service for Kubeaddons
     digest: a37bed9a04e526635fddbd5a5ad89b4626f140d739a0f038c01ef41d1bd08486
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -4033,7 +4063,7 @@ entries:
     version: 0.1.9
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.525573941Z"
+    created: "2022-02-24T02:18:35.675038417Z"
     description: A Catalog service for Kubeaddons
     digest: 3475783bec57663ce2c919a7efcbf33ef2cffb6de78063578ed783ba2fe10b9c
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -4050,7 +4080,7 @@ entries:
     version: 0.1.8
   - apiVersion: v1
     appVersion: v0.8.3
-    created: "2022-02-23T09:13:56.525175083Z"
+    created: "2022-02-24T02:18:35.674618424Z"
     description: A Catalog service for Kubeaddons
     digest: b706603aa1edb4726cc78cbda7b30ba4af907038969f55df30e617cf6d43b1b3
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -4067,7 +4097,7 @@ entries:
     version: 0.1.7
   - apiVersion: v1
     appVersion: v0.8.2
-    created: "2022-02-23T09:13:56.524747541Z"
+    created: "2022-02-24T02:18:35.674218503Z"
     description: A Catalog service for Kubeaddons
     digest: 4991348631ab7595b0f0589c90978bbe570bb547ae9b71a0e9def7c8469d9070
     home: https://github.com/mesosphere/kommander-catalog-api
@@ -4083,7 +4113,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.524335251Z"
+    created: "2022-02-24T02:18:35.673811427Z"
     description: A Catalog service for Kubeaddons
     digest: c262c93583996accc17f4b76cb9eafb091dc9ead7e645baca955fecff07a593c
     home: https://github.com/mesosphere/kubeaddons
@@ -4100,7 +4130,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.52391315Z"
+    created: "2022-02-24T02:18:35.673368552Z"
     description: A Catalog service for Kubeaddons
     digest: 6ab3fd7ff1fb4f243da1c3bbf14c952a67de707222f8afc64902dbc591142aca
     home: https://github.com/mesosphere/kubeaddons
@@ -4117,7 +4147,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.523467839Z"
+    created: "2022-02-24T02:18:35.672963811Z"
     description: A Catalog service for Kubeaddons
     digest: 74c8ada08225a19164863988ec35612d45ae5df55257667babaaffb6a601695e
     home: https://github.com/mesosphere/kubeaddons
@@ -4134,7 +4164,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.523052694Z"
+    created: "2022-02-24T02:18:35.672529878Z"
     description: A Catalog service for Kubeaddons
     digest: 2d429aeb4998e5b2829ab4bde3303d4edd3e3c9ab2ecd1dcb8a079441c2e7a3b
     home: https://github.com/mesosphere/kubeaddons
@@ -4151,7 +4181,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.519496731Z"
+    created: "2022-02-24T02:18:35.669146479Z"
     description: A Catalog service for Kubeaddons
     digest: 2c129b1fc602bd272f1df65d97adc54cb3d0a48fd5783ee8948a49f3d16732fd
     home: https://github.com/mesosphere/kubeaddons
@@ -4168,7 +4198,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: v0.3.0
-    created: "2022-02-23T09:13:56.519072545Z"
+    created: "2022-02-24T02:18:35.668732552Z"
     description: A Catalog service for Kubeaddons
     digest: 312c9b06c0c136c6ff123f004ba672b3e2af27eb838ac0f0c74dea8610c5ee07
     home: https://github.com/mesosphere/kubeaddons
@@ -4185,7 +4215,7 @@ entries:
     version: 0.1.0
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.518652835Z"
+    created: "2022-02-24T02:18:35.668342472Z"
     description: A Catalog service for Kubeaddons
     digest: a8b21207b670a093cdf96da8987f98f53388382981ac53922703c379e4dba08a
     home: https://github.com/mesosphere/kubeaddons
@@ -4202,7 +4232,7 @@ entries:
     version: 0.0.9
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.518226493Z"
+    created: "2022-02-24T02:18:35.667951466Z"
     description: A Catalog service for Kubeaddons
     digest: 9511a7408b97623700b27f2035cfd9b4ac9865cb4fdcc5dc87df7e2d9807f549
     home: https://github.com/mesosphere/kubeaddons
@@ -4219,7 +4249,7 @@ entries:
     version: 0.0.8
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.517777313Z"
+    created: "2022-02-24T02:18:35.667547061Z"
     description: A Catalog service for Kubeaddons
     digest: 5c660e69e45b5ba32619c056a7884c09655105f7498abff92ffba5e5550cf43d
     home: https://github.com/mesosphere/kubeaddons
@@ -4236,7 +4266,7 @@ entries:
     version: 0.0.7
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.517368567Z"
+    created: "2022-02-24T02:18:35.66715518Z"
     description: A Catalog service for Kubeaddons
     digest: a74980d375a10a903c0d67ca7a8b129a48c5d97f009aa7817392db18bf657a27
     home: https://github.com/mesosphere/kubeaddons
@@ -4252,7 +4282,7 @@ entries:
     version: 0.0.6
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.517001658Z"
+    created: "2022-02-24T02:18:35.666663378Z"
     description: A Catalog service for Kubeaddons
     digest: 83b5d35df68eb031f1d45aefaf6b92196543e4ab1a3592bf5108407aa959f320
     home: https://github.com/mesosphere/kubeaddons
@@ -4268,7 +4298,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.516643057Z"
+    created: "2022-02-24T02:18:35.666313379Z"
     description: A Catalog service for Kubeaddons
     digest: 64f7828e4eb713b009f82c5d319e9c529aa1cfc8325cd1cbdd0f9cc0a7cb5559
     home: https://github.com/mesosphere/kubeaddons
@@ -4284,7 +4314,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.51630487Z"
+    created: "2022-02-24T02:18:35.665986179Z"
     description: A Catalog service for Kubeaddons
     digest: fec05f09c5776775cfad6987102663708255d027f7be642304a561f200df4b22
     home: https://github.com/mesosphere/kubeaddons
@@ -4300,7 +4330,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.515998961Z"
+    created: "2022-02-24T02:18:35.665670516Z"
     description: A Catalog service for Kubeaddons
     digest: 0ecefd29fe2416d97d08441211a914913a3ee32719a4f16902ca7155ba830cc7
     home: https://github.com/mesosphere/kubeaddons
@@ -4316,7 +4346,7 @@ entries:
     version: 0.0.2
   - apiVersion: v1
     appVersion: v0.0.1-alpha1
-    created: "2022-02-23T09:13:56.515696349Z"
+    created: "2022-02-24T02:18:35.665389075Z"
     description: A Catalog service for Kubeaddons
     digest: 6c9b61341e069bc5d4b876e183bf5e3a65b18ee9ddfe32da3315439d9a11e607
     home: https://github.com/mesosphere/kubeaddons
@@ -4331,7 +4361,7 @@ entries:
     version: 0.0.1
   kubefed:
   - apiVersion: v2
-    created: "2022-02-23T09:13:56.561688909Z"
+    created: "2022-02-24T02:18:35.683154254Z"
     dependencies:
     - condition: controllermanager.enabled
       name: controllermanager
@@ -4345,7 +4375,7 @@ entries:
     version: 0.5.2
   - apiVersion: v2
     appVersion: 0.0.4
-    created: "2022-02-23T09:13:56.559551721Z"
+    created: "2022-02-24T02:18:35.681998065Z"
     dependencies:
     - condition: controllermanager.enabled
       name: controllermanager
@@ -4362,7 +4392,7 @@ entries:
     version: 0.0.5
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2022-02-23T09:13:56.557713286Z"
+    created: "2022-02-24T02:18:35.680013026Z"
     description: KubeFed helm chart
     digest: 4eae815695f50d08fde82e7cae51c2792a04a960adef0ff7e86cc9c15c15b4c5
     home: https://github.com/kubernetes-sigs/kubefed
@@ -4375,7 +4405,7 @@ entries:
     version: 0.0.4
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2022-02-23T09:13:56.528367679Z"
+    created: "2022-02-24T02:18:35.677751163Z"
     description: KubeFed helm chart
     digest: 2126dc3cd55ceddf7556129137a4e93696ebb1e33d0a4b2e65c2d6ba3fdc40f3
     home: https://github.com/kubernetes-sigs/kubefed
@@ -4387,7 +4417,7 @@ entries:
     version: 0.0.3
   - apiVersion: v1
     appVersion: v0.1.0-rc6
-    created: "2022-02-23T09:13:56.527099298Z"
+    created: "2022-02-24T02:18:35.676516958Z"
     description: KubeFed helm chart
     digest: 28c2bb91af11e0ca34f882cb759213d0b42c012d32ba9ba98e8ae093eff2e5cb
     home: https://github.com/kubernetes-sigs/kubefed
@@ -4400,7 +4430,7 @@ entries:
   kubernetes-dashboard:
   - apiVersion: v1
     appVersion: 2.0.0-beta6
-    created: "2022-02-23T09:13:56.562861358Z"
+    created: "2022-02-24T02:18:35.683956085Z"
     description: General-purpose web UI for Kubernetes clusters
     digest: caf2310bb7d78cbbdd09a228305e4149bb83162413878bdd78479501a1966ed9
     home: https://github.com/kubernetes/dashboard
@@ -4422,7 +4452,7 @@ entries:
   kudo:
   - apiVersion: v1
     appVersion: 0.9.0
-    created: "2022-02-23T09:13:56.564919093Z"
+    created: "2022-02-24T02:18:35.685985623Z"
     description: Kubernetes Universal Declarative Operator
     digest: 9cd5f1b5fdfb9cec326fe379bdb19a4b920456271c3471ae4962248c81ebe304
     home: https://kudo.dev
@@ -4444,7 +4474,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: 0.9.0
-    created: "2022-02-23T09:13:56.564517747Z"
+    created: "2022-02-24T02:18:35.68557757Z"
     description: Kubernetes Universal Declarative Operator
     digest: f5e19f546abc3476a7a36872417c448200cc0b3f6038202fe8435beb2d5b561e
     home: https://kudo.dev
@@ -4466,7 +4496,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: 0.8.0
-    created: "2022-02-23T09:13:56.564121072Z"
+    created: "2022-02-24T02:18:35.685183104Z"
     description: Kubernetes Universal Declarative Operator
     digest: 59c27b800d7d5169a8c6b1ce17859025358d603f7641e2db5c70fb642bfe3556
     home: https://kudo.dev
@@ -4488,7 +4518,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.7.4
-    created: "2022-02-23T09:13:56.563697734Z"
+    created: "2022-02-24T02:18:35.684769407Z"
     description: Kubernetes Universal Declarative Operator
     digest: 66b804a3f6b760faa8e5e52c63b6808f3fb66373aa02406b0f331360cb416bf8
     home: https://kudo.dev
@@ -4510,7 +4540,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.7.4
-    created: "2022-02-23T09:13:56.563294517Z"
+    created: "2022-02-24T02:18:35.684371716Z"
     description: Kubernetes Universal Declarative Operator
     digest: dcb5a200294857d6cb88a73d460f43d404e8af72400d3c504cb70b34dc205530
     home: https://kudo.dev
@@ -4533,7 +4563,7 @@ entries:
   local-path-provisioner:
   - apiVersion: v1
     appVersion: 0.0.12
-    created: "2022-02-23T09:13:56.565652211Z"
+    created: "2022-02-24T02:18:35.686702964Z"
     description: Use HostPath for persistent local storage with Kubernetes
     digest: eecf81ebff4e39175226c4d57b7e14cfc6906e51a28f2e3892f43adacbbc6f07
     home: https://github.com/rancher/local-path-provisioner
@@ -4550,7 +4580,7 @@ entries:
     version: 0.0.13
   - apiVersion: v1
     appVersion: 0.0.12
-    created: "2022-02-23T09:13:56.565280748Z"
+    created: "2022-02-24T02:18:35.686344819Z"
     description: Use HostPath for persistent local storage with Kubernetes
     digest: 8b0da1656d1d02851e549ef404c914d7238013e8e03979cf94ab858c385d1591
     home: https://github.com/rancher/local-path-provisioner
@@ -4568,7 +4598,7 @@ entries:
   nfs-server-provisioner:
   - apiVersion: v1
     appVersion: 2.3.0
-    created: "2022-02-23T09:13:56.566274925Z"
+    created: "2022-02-24T02:18:35.68731752Z"
     description: nfs-server-provisioner is an out-of-tree dynamic provisioner for
       Kubernetes. You can use it to quickly & easily deploy shared storage that works
       almost anywhere.
@@ -4595,7 +4625,7 @@ entries:
   nvidia:
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.589482731Z"
+    created: "2022-02-24T02:18:35.709833528Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4627,7 +4657,7 @@ entries:
     version: 0.4.4
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.588200503Z"
+    created: "2022-02-24T02:18:35.708625153Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4659,7 +4689,7 @@ entries:
     version: 0.4.3
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.586962883Z"
+    created: "2022-02-24T02:18:35.707410879Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4691,7 +4721,7 @@ entries:
     version: 0.4.2
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.585116208Z"
+    created: "2022-02-24T02:18:35.70618094Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4723,7 +4753,7 @@ entries:
     version: 0.4.1
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.583349447Z"
+    created: "2022-02-24T02:18:35.704944438Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4755,7 +4785,7 @@ entries:
     version: 0.4.0
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.582161645Z"
+    created: "2022-02-24T02:18:35.70373576Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4791,7 +4821,7 @@ entries:
     version: 0.3.6
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.580711195Z"
+    created: "2022-02-24T02:18:35.701094134Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4826,7 +4856,7 @@ entries:
     version: 0.3.5
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.579241189Z"
+    created: "2022-02-24T02:18:35.69965098Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4861,7 +4891,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.577780398Z"
+    created: "2022-02-24T02:18:35.698221831Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4896,7 +4926,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.576313899Z"
+    created: "2022-02-24T02:18:35.696759087Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4931,7 +4961,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.5748305Z"
+    created: "2022-02-24T02:18:35.695323348Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4965,7 +4995,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.571975761Z"
+    created: "2022-02-24T02:18:35.693936722Z"
     dependencies:
     - condition: grafana.enabled
       name: grafana
@@ -4999,7 +5029,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: 0.2.0
-    created: "2022-02-23T09:13:56.570531708Z"
+    created: "2022-02-24T02:18:35.692457105Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 68fdf1a80ec72712b3adf4fb10cb82c4e964140ac7aed48866346720f5776662
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -5011,7 +5041,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: 0.1.1
-    created: "2022-02-23T09:13:56.569028082Z"
+    created: "2022-02-24T02:18:35.689981382Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 48a3eca7afdd16ac9c85bd6a1eb72182fb275287b4c7a81c035a0a2d62e6961b
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -5023,7 +5053,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: 0.1.0
-    created: "2022-02-23T09:13:56.568089877Z"
+    created: "2022-02-24T02:18:35.689098706Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: 13c678990450e32fd5c2e6d369803dcff1d809c9803d54c5959cc979666344f8
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -5035,7 +5065,7 @@ entries:
     version: 0.1.1
   - apiVersion: v1
     appVersion: 0.1.0
-    created: "2022-02-23T09:13:56.567172062Z"
+    created: "2022-02-24T02:18:35.688211783Z"
     description: Nvidia GPU driver and device plugin for running Nvidia GPU
     digest: ebd5ccf36730afda48709d070d704b66e6f1c43e4bbf313f8d19a946c0ed202f
     home: https://docs.nvidia.com/datacenter/kubernetes/kubernetes-upstream/
@@ -5055,7 +5085,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.706471809Z"
+    created: "2022-02-24T02:18:35.824323612Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5109,7 +5139,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.68585772Z"
+    created: "2022-02-24T02:18:35.802271342Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5163,7 +5193,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.666030392Z"
+    created: "2022-02-24T02:18:35.782425441Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5217,7 +5247,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.610876243Z"
+    created: "2022-02-24T02:18:35.758535758Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5271,7 +5301,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.909904164Z"
+    created: "2022-02-24T02:18:36.064870718Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5325,7 +5355,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.88931012Z"
+    created: "2022-02-24T02:18:36.012054151Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5379,7 +5409,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.869480214Z"
+    created: "2022-02-24T02:18:35.990716695Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5433,7 +5463,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.81768625Z"
+    created: "2022-02-24T02:18:35.97056257Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5487,7 +5517,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.794001531Z"
+    created: "2022-02-24T02:18:35.916061038Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5541,7 +5571,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.773723612Z"
+    created: "2022-02-24T02:18:35.895951152Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5595,7 +5625,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: 0.44.0
-    created: "2022-02-23T09:13:56.726365999Z"
+    created: "2022-02-24T02:18:35.875658356Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5642,7 +5672,7 @@ entries:
     version: 12.11.3
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.388757676Z"
+    created: "2022-02-24T02:18:37.574272768Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5679,7 +5709,7 @@ entries:
     version: 9.3.9
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.368312708Z"
+    created: "2022-02-24T02:18:37.528189491Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5716,7 +5746,7 @@ entries:
     version: 9.3.8
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.324312048Z"
+    created: "2022-02-24T02:18:37.507155754Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5753,7 +5783,7 @@ entries:
     version: 9.3.7
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.304453143Z"
+    created: "2022-02-24T02:18:37.483452503Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5790,7 +5820,7 @@ entries:
     version: 9.3.6
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.283878611Z"
+    created: "2022-02-24T02:18:37.459870933Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5827,7 +5857,7 @@ entries:
     version: 9.3.5
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.263923751Z"
+    created: "2022-02-24T02:18:37.40685034Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5864,7 +5894,7 @@ entries:
     version: 9.3.4
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.207182979Z"
+    created: "2022-02-24T02:18:37.385299835Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5901,7 +5931,7 @@ entries:
     version: 9.3.3
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.181279795Z"
+    created: "2022-02-24T02:18:37.359074648Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5938,7 +5968,7 @@ entries:
     version: 9.3.2
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:58.124722884Z"
+    created: "2022-02-24T02:18:37.304627284Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -5975,7 +6005,7 @@ entries:
     version: 9.3.1
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.564068855Z"
+    created: "2022-02-24T02:18:36.69511907Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6012,7 +6042,7 @@ entries:
     version: 8.13.20
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.514188599Z"
+    created: "2022-02-24T02:18:36.676018609Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6049,7 +6079,7 @@ entries:
     version: 8.13.19
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.492776096Z"
+    created: "2022-02-24T02:18:36.625494573Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6086,7 +6116,7 @@ entries:
     version: 8.13.18
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.473430267Z"
+    created: "2022-02-24T02:18:36.606513507Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6123,7 +6153,7 @@ entries:
     version: 8.13.17
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.416498172Z"
+    created: "2022-02-24T02:18:36.586828599Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6160,7 +6190,7 @@ entries:
     version: 8.13.16
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.395593479Z"
+    created: "2022-02-24T02:18:36.566121557Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6197,7 +6227,7 @@ entries:
     version: 8.13.15
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.375354371Z"
+    created: "2022-02-24T02:18:36.514850491Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6234,7 +6264,7 @@ entries:
     version: 8.13.14
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.319962396Z"
+    created: "2022-02-24T02:18:36.491923101Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6271,7 +6301,7 @@ entries:
     version: 8.13.13
   - apiVersion: v1
     appVersion: 0.38.1
-    created: "2022-02-23T09:13:57.299464852Z"
+    created: "2022-02-24T02:18:36.466190107Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6308,7 +6338,7 @@ entries:
     version: 8.13.12
   - apiVersion: v1
     appVersion: 0.35.1
-    created: "2022-02-23T09:13:58.103308181Z"
+    created: "2022-02-24T02:18:37.277641866Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6345,7 +6375,7 @@ entries:
     version: 8.8.6
   - apiVersion: v1
     appVersion: 0.35.1
-    created: "2022-02-23T09:13:58.085747811Z"
+    created: "2022-02-24T02:18:37.232137683Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6382,7 +6412,7 @@ entries:
     version: 8.8.5
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:58.066456427Z"
+    created: "2022-02-24T02:18:37.209684436Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6419,7 +6449,7 @@ entries:
     version: 8.8.4
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:58.018951179Z"
+    created: "2022-02-24T02:18:37.187767514Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6456,7 +6486,7 @@ entries:
     version: 8.8.3
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:58.000243293Z"
+    created: "2022-02-24T02:18:37.165094003Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6493,7 +6523,7 @@ entries:
     version: 8.8.2
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.982410384Z"
+    created: "2022-02-24T02:18:37.108079455Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6530,7 +6560,7 @@ entries:
     version: 8.8.1
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.964410169Z"
+    created: "2022-02-24T02:18:37.089883156Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6567,7 +6597,7 @@ entries:
     version: 8.8.0
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.90608414Z"
+    created: "2022-02-24T02:18:37.072470011Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6604,7 +6634,7 @@ entries:
     version: 8.7.5
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.88861281Z"
+    created: "2022-02-24T02:18:37.022521412Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6641,7 +6671,7 @@ entries:
     version: 8.7.4
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.870411083Z"
+    created: "2022-02-24T02:18:37.004183818Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6678,7 +6708,7 @@ entries:
     version: 8.7.3
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.819471439Z"
+    created: "2022-02-24T02:18:36.986961866Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6715,7 +6745,7 @@ entries:
     version: 8.7.2
   - apiVersion: v1
     appVersion: 0.35.0
-    created: "2022-02-23T09:13:57.802364732Z"
+    created: "2022-02-24T02:18:36.969069371Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6752,7 +6782,7 @@ entries:
     version: 8.7.1
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.59749629Z"
+    created: "2022-02-24T02:18:36.764380883Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6789,7 +6819,7 @@ entries:
     version: 8.3.11
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.581157161Z"
+    created: "2022-02-24T02:18:36.714870328Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6826,7 +6856,7 @@ entries:
     version: 8.3.10
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.783834554Z"
+    created: "2022-02-24T02:18:36.91597061Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6863,7 +6893,7 @@ entries:
     version: 8.3.9
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.766366607Z"
+    created: "2022-02-24T02:18:36.900236743Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6900,7 +6930,7 @@ entries:
     version: 8.3.8
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.717149271Z"
+    created: "2022-02-24T02:18:36.883957432Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6937,7 +6967,7 @@ entries:
     version: 8.3.7
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.70028736Z"
+    created: "2022-02-24T02:18:36.866205329Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -6974,7 +7004,7 @@ entries:
     version: 8.3.6
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.682653461Z"
+    created: "2022-02-24T02:18:36.817053165Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7011,7 +7041,7 @@ entries:
     version: 8.3.5
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.665427928Z"
+    created: "2022-02-24T02:18:36.800406694Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7048,7 +7078,7 @@ entries:
     version: 8.3.4
   - apiVersion: v1
     appVersion: 0.34.0
-    created: "2022-02-23T09:13:57.615729931Z"
+    created: "2022-02-24T02:18:36.781151896Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7085,7 +7115,7 @@ entries:
     version: 8.3.3
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.279926532Z"
+    created: "2022-02-24T02:18:36.413615306Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7121,7 +7151,7 @@ entries:
     version: 5.19.7
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.264669276Z"
+    created: "2022-02-24T02:18:36.394714345Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7157,7 +7187,7 @@ entries:
     version: 5.19.6
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.224581882Z"
+    created: "2022-02-24T02:18:36.380030155Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7193,7 +7223,7 @@ entries:
     version: 5.19.5
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.202946399Z"
+    created: "2022-02-24T02:18:36.362744218Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7229,7 +7259,7 @@ entries:
     version: 5.19.4
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.186444315Z"
+    created: "2022-02-24T02:18:36.311142912Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7265,7 +7295,7 @@ entries:
     version: 5.19.3
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.166401865Z"
+    created: "2022-02-24T02:18:36.294453905Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7301,7 +7331,7 @@ entries:
     version: 5.19.2
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.117917444Z"
+    created: "2022-02-24T02:18:36.277329931Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7337,7 +7367,7 @@ entries:
     version: 5.19.1
   - apiVersion: v1
     appVersion: 0.31.1
-    created: "2022-02-23T09:13:57.105306739Z"
+    created: "2022-02-24T02:18:36.264313697Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7373,7 +7403,7 @@ entries:
     version: 5.19.0
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:57.092010843Z"
+    created: "2022-02-24T02:18:36.223961667Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7407,7 +7437,7 @@ entries:
     version: 5.10.9
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:57.079946407Z"
+    created: "2022-02-24T02:18:36.207952737Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7441,7 +7471,7 @@ entries:
     version: 5.10.8
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:57.06740716Z"
+    created: "2022-02-24T02:18:36.195253164Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7475,7 +7505,7 @@ entries:
     version: 5.10.7
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:57.0259284Z"
+    created: "2022-02-24T02:18:36.181329808Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7509,7 +7539,7 @@ entries:
     version: 5.10.6
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:57.011865501Z"
+    created: "2022-02-24T02:18:36.165082105Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7543,7 +7573,7 @@ entries:
     version: 5.10.5
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:56.997440842Z"
+    created: "2022-02-24T02:18:36.122259045Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7577,7 +7607,7 @@ entries:
     version: 5.10.4
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:56.986422655Z"
+    created: "2022-02-24T02:18:36.110737147Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7611,7 +7641,7 @@ entries:
     version: 5.10.3
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:56.974251513Z"
+    created: "2022-02-24T02:18:36.099110403Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7645,7 +7675,7 @@ entries:
     version: 5.10.2
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:56.960760448Z"
+    created: "2022-02-24T02:18:36.087248432Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7679,7 +7709,7 @@ entries:
     version: 5.10.1
   - apiVersion: v1
     appVersion: 0.29.0
-    created: "2022-02-23T09:13:56.920843194Z"
+    created: "2022-02-24T02:18:36.075582223Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -7714,7 +7744,7 @@ entries:
   test:
   - apiVersion: v1
     appVersion: "1.0"
-    created: "2022-02-23T09:13:58.389136679Z"
+    created: "2022-02-24T02:18:37.575121143Z"
     description: A Helm chart for Kubernetes
     digest: d07d36886354e77838f74ca60211e8246dd4575267e59527ede41513b5cc1ae6
     name: test
@@ -7724,7 +7754,7 @@ entries:
   thanos-traefik:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2022-02-23T09:13:58.389468881Z"
+    created: "2022-02-24T02:18:37.575732774Z"
     description: A Helm chart for Kubernetes that exposes thanos GRPC service over
       traefik with mTLS termination
     digest: fb4f7a9b0b3ea1bc359670cf334f07dc0ebf363c8a788a49b158eaff0f1cce0e
@@ -7739,7 +7769,7 @@ entries:
   traefik:
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.522216504Z"
+    created: "2022-02-24T02:18:37.693990402Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: a292154f31647e776b763def0957b6d90f72e78710821c502178872ddfdcaac6
@@ -7768,7 +7798,7 @@ entries:
     version: 1.90.0
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.517525571Z"
+    created: "2022-02-24T02:18:37.691491738Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 81abbbf4148de6c27fc3f2d46106c9ddc364f5ba9c768cb7fa2327877a8b97d1
@@ -7797,7 +7827,7 @@ entries:
     version: 1.89.2
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.51477746Z"
+    created: "2022-02-24T02:18:37.688348743Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 49b7583faa5935c3203809502abe83c4e3238fa5aaf629af57da312e21cb3f15
@@ -7826,7 +7856,7 @@ entries:
     version: 1.89.1
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.512221732Z"
+    created: "2022-02-24T02:18:37.685481358Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: eba2a73af9d2a4713ab955c3bfaa90531adaeb120c59921e3748d3e0e883ba73
@@ -7855,7 +7885,7 @@ entries:
     version: 1.89.0
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.509636097Z"
+    created: "2022-02-24T02:18:37.683036758Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5404bd66b2a5afe9b6989731c2846afbf8f2de99688333e0713c3a7db5025cf6
@@ -7884,7 +7914,7 @@ entries:
     version: 1.88.0
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.507035413Z"
+    created: "2022-02-24T02:18:37.680596979Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: bb85425e7709c0e905400bc75a40fa7d7863ec747556c8406730eb523c3d883e
@@ -7913,7 +7943,7 @@ entries:
     version: 1.87.5
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.504002697Z"
+    created: "2022-02-24T02:18:37.678092371Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2ae4d82eb7c05cb4ed2ec0ae8f977a908718614fdf1a5ea4596de5a71715b8af
@@ -7942,7 +7972,7 @@ entries:
     version: 1.87.4
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.500437119Z"
+    created: "2022-02-24T02:18:37.675432802Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5d1985b3471fd22072d05c9fe9fbc53e620867196b512b0f0058155dae512f68
@@ -7971,7 +8001,7 @@ entries:
     version: 1.87.3
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.49680124Z"
+    created: "2022-02-24T02:18:37.671391178Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 29c6ecb791f4d1f7cb375c3fef9abe7a4103dc13b8c5583a73d12f3aa8257a43
@@ -8000,7 +8030,7 @@ entries:
     version: 1.87.2
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.472701187Z"
+    created: "2022-02-24T02:18:37.620395339Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: d2bd9c5ec466ce02dcf78146ca8c8f7bf9a96b34a23671c7826a1edc9c643a10
@@ -8029,7 +8059,7 @@ entries:
     version: 1.72.24
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.469543936Z"
+    created: "2022-02-24T02:18:37.616525086Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: fbcd4007025bb33a9cf2c6e3abf5c3053479f946fc75a279d6ab46d56b804324
@@ -8058,7 +8088,7 @@ entries:
     version: 1.72.23
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.466736981Z"
+    created: "2022-02-24T02:18:37.614325093Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 003a900e88832a61351b846a332511350598463d7eee55a84ff18ac0fdceee3d
@@ -8087,7 +8117,7 @@ entries:
     version: 1.72.22
   - apiVersion: v1
     appVersion: 1.7.24
-    created: "2022-02-23T09:13:58.463395842Z"
+    created: "2022-02-24T02:18:37.612145947Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 5156470ebdda731d493061cb25f41bec6a00cf46bec31e746e43874dc28fcb87
@@ -8116,7 +8146,7 @@ entries:
     version: 1.72.21
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2022-02-23T09:13:58.458679304Z"
+    created: "2022-02-24T02:18:37.609920832Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 45aeeac6a8e9b5c3816229fa584729117dd4e1fefef434fdf3610ed73d46bc53
@@ -8145,7 +8175,7 @@ entries:
     version: 1.72.20
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2022-02-23T09:13:58.418969232Z"
+    created: "2022-02-24T02:18:37.605749974Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 4350dfeca2ef97ac22f077f01217ea9c8821385264f0da5a5f0a668b8c1dd036
@@ -8174,7 +8204,7 @@ entries:
     version: 1.72.19
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2022-02-23T09:13:58.416839076Z"
+    created: "2022-02-24T02:18:37.602281027Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 1813993fd7d425f54d159b5df1d8b43525d3498f7af8ea13120ca06c2ac4ba2a
@@ -8203,7 +8233,7 @@ entries:
     version: 1.72.18
   - apiVersion: v1
     appVersion: 1.7.23
-    created: "2022-02-23T09:13:58.414688929Z"
+    created: "2022-02-24T02:18:37.600063294Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: aec29ee2d2be47413ab7a38ecf4baf4e60cca882a82396affdcc7cc109ab894f
@@ -8232,7 +8262,7 @@ entries:
     version: 1.72.17
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.412549941Z"
+    created: "2022-02-24T02:18:37.597964721Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: cd3767564af475fab562c56752c2f98e3298292cc838bfe672a64d755c19d63f
@@ -8261,7 +8291,7 @@ entries:
     version: 1.72.16
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.410476545Z"
+    created: "2022-02-24T02:18:37.595877651Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: f4caf2e65510db88666d95ecdd46d6f3d4a81a04e488c52a527d6ac712b338a6
@@ -8290,7 +8320,7 @@ entries:
     version: 1.72.15
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.407122989Z"
+    created: "2022-02-24T02:18:37.593774694Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 60f6821019972b38d82227049b9b277e1817479302e478f5ba2223e76e0fa97c
@@ -8319,7 +8349,7 @@ entries:
     version: 1.72.14
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.405041639Z"
+    created: "2022-02-24T02:18:37.591687831Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: d83731e5d344521fe36ce01b8cce6bb263bc8cf9248c6e1f5baa8d1535c2e948
@@ -8348,7 +8378,7 @@ entries:
     version: 1.72.13
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.402976052Z"
+    created: "2022-02-24T02:18:37.58838841Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: edef5ff485722b464bd70d6c6d49ed83bafc36e6ec34ee7ebaa7d00a304f5001
@@ -8377,7 +8407,7 @@ entries:
     version: 1.72.12
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.40079651Z"
+    created: "2022-02-24T02:18:37.586320365Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: ab2704ec2be7921a1fdcacc09b4837340ff1aff819d65a5c95650a45adb0a10d
@@ -8406,7 +8436,7 @@ entries:
     version: 1.72.11
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.398711204Z"
+    created: "2022-02-24T02:18:37.584262173Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: c47776151be774296923978ab9b14e9fbff5d0cf16982fd356ce9cec8502542a
@@ -8435,7 +8465,7 @@ entries:
     version: 1.72.10
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.494262969Z"
+    created: "2022-02-24T02:18:37.668898429Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 21fbc53064b2a0db764ded916681dfbb91ee31abba483094f7e7d6b27b9dfde2
@@ -8464,7 +8494,7 @@ entries:
     version: 1.72.9
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.492126547Z"
+    created: "2022-02-24T02:18:37.666831746Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 6f3d6fcbe8a87abe7d303fd719af932b37cf3ad4fa857d5875d3db1bf1b859ef
@@ -8493,7 +8523,7 @@ entries:
     version: 1.72.8
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.489119345Z"
+    created: "2022-02-24T02:18:37.664765573Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: e8d3a17a4f20aa1ea198d9cde5d94fc72637565c3f31b26131b0b037197c45c8
@@ -8522,7 +8552,7 @@ entries:
     version: 1.72.7
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.48576187Z"
+    created: "2022-02-24T02:18:37.66273887Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 13bf931e58c5aa940a609d4f27b1a1160ce0a9071aef9deb3a2cb9225390f0eb
@@ -8551,7 +8581,7 @@ entries:
     version: 1.72.6
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.483267605Z"
+    created: "2022-02-24T02:18:37.660674544Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: efde17f47542af4f16d0a38ecc458b06a7bff1fa2e48c119fa719bda5533364b
@@ -8580,7 +8610,7 @@ entries:
     version: 1.72.5
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.478821986Z"
+    created: "2022-02-24T02:18:37.658568833Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 01a94519c3d28def7052ec283501b622d11078f11fe7ad9737b472a2f5f3cbe6
@@ -8609,7 +8639,7 @@ entries:
     version: 1.72.4
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.475639511Z"
+    created: "2022-02-24T02:18:37.623031752Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 6b729f5ae8792ea6077a3c6e6709bfa7d6e594cec41fbbf4c8a3fd1fddc125b8
@@ -8638,7 +8668,7 @@ entries:
     version: 1.72.3
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.421040611Z"
+    created: "2022-02-24T02:18:37.607779698Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2452a70ae7bff1ffbdb74a97303f1b25cbd34e59d27140a602af02881626b9bd
@@ -8667,7 +8697,7 @@ entries:
     version: 1.72.2
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.396617604Z"
+    created: "2022-02-24T02:18:37.582214793Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: b920941d7e7e9c435d367616a81eb71a9ea619a158f2baee07e44952b16a92e5
@@ -8696,7 +8726,7 @@ entries:
     version: 1.72.1
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.394318431Z"
+    created: "2022-02-24T02:18:37.580214738Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: c8a356700064625fb7d39d57907254a49f95a12b640facce5cafbb6aa795643e
@@ -8725,7 +8755,7 @@ entries:
     version: 1.72.0
   - apiVersion: v1
     appVersion: 1.7.12
-    created: "2022-02-23T09:13:58.391474857Z"
+    created: "2022-02-24T02:18:37.578163314Z"
     description: A Traefik based Kubernetes ingress controller with Let's Encrypt
       support
     digest: 2ad3ff530f0d01fb81d8c75a2fb6fff82eb4994a6a34994c0cbe76349c56dc18
@@ -8755,7 +8785,25 @@ entries:
   traefik-forward-auth:
   - apiVersion: v1
     appVersion: 3.1.0
-    created: "2022-02-23T09:13:58.570396489Z"
+    created: "2022-02-24T02:18:37.712597694Z"
+    description: Minimal forward authentication service that provides OIDC based login
+      and authentication for the traefik reverse proxy
+    digest: ae323a741b24f9b4d62f4ac0cc2cb424c4952ab7c861f1bf31400beea680570d
+    home: https://github.com/mesosphere/traefik-forward-auth
+    keywords:
+    - traefik-forward-auth
+    - traefik
+    - oauth
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    name: traefik-forward-auth
+    urls:
+    - https://mesosphere.github.io/charts/staging/traefik-forward-auth-0.3.6.tgz
+    version: 0.3.6
+  - apiVersion: v1
+    appVersion: 3.1.0
+    created: "2022-02-24T02:18:37.711955978Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 7a6f0451a461e516ab68928636b0c560113ac2ef1f2285889fe0a4fcfd2c45d1
@@ -8775,7 +8823,7 @@ entries:
     version: 0.3.5
   - apiVersion: v1
     appVersion: 3.0.3
-    created: "2022-02-23T09:13:58.569664898Z"
+    created: "2022-02-24T02:18:37.711268394Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 5f9b097da9acf265cc88e2e3cca5b6fcf99f1f7f7789af090e9b71c404e10686
@@ -8795,7 +8843,7 @@ entries:
     version: 0.3.4
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2022-02-23T09:13:58.568959963Z"
+    created: "2022-02-24T02:18:37.710578067Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 62e438d5c5edd3b9c3c8d4630da4dcef13c3418b35229b40d2a8f19aa0ea3c68
@@ -8815,7 +8863,7 @@ entries:
     version: 0.3.3
   - apiVersion: v1
     appVersion: 3.0.2
-    created: "2022-02-23T09:13:58.568263371Z"
+    created: "2022-02-24T02:18:37.709864776Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 25a8d03e9f32fd15f2424afeff36a309eeb37697fda325becf3661e08ea44033
@@ -8835,7 +8883,7 @@ entries:
     version: 0.3.2
   - apiVersion: v1
     appVersion: 3.0.1
-    created: "2022-02-23T09:13:58.567565155Z"
+    created: "2022-02-24T02:18:37.709146038Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 3a727ddc6ec8095178e023d399a4e314dc505bfe043cbc885a4f121156386278
@@ -8855,7 +8903,7 @@ entries:
     version: 0.3.1
   - apiVersion: v1
     appVersion: 3.0.0
-    created: "2022-02-23T09:13:58.566462865Z"
+    created: "2022-02-24T02:18:37.708477257Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c00526c8a752017297e0794dbeb12ef6317def598ad15f07f09c6228f429161d
@@ -8875,7 +8923,7 @@ entries:
     version: 0.3.0
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.557754306Z"
+    created: "2022-02-24T02:18:37.701778458Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: b35c2e5a15a772bc5851e078f4f7fc5fe6a8bda0aa31fab8a3ab86e0a806777b
@@ -8895,7 +8943,7 @@ entries:
     version: 0.2.14
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.557031678Z"
+    created: "2022-02-24T02:18:37.701122123Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 5ac32d0d03dbe017ca4b1680a71695ea450cefb436e6166c1ba141b125390b9f
@@ -8915,7 +8963,7 @@ entries:
     version: 0.2.13
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.530105274Z"
+    created: "2022-02-24T02:18:37.700506227Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 4a61c3245a55c051e389b19b1811a263e1f10eb0a752608f213c3eb78283477e
@@ -8935,7 +8983,7 @@ entries:
     version: 0.2.12
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.529417499Z"
+    created: "2022-02-24T02:18:37.699896432Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 9121bdf91b1e0cb3f1914ae285e25cea8dd1b8c047dd8eb4596de54934e559af
@@ -8955,7 +9003,7 @@ entries:
     version: 0.2.11
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.5287593Z"
+    created: "2022-02-24T02:18:37.699251542Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: f080c9e6c89d94474f856edaadec32e145f973f2629c04934caed85141366fa3
@@ -8975,7 +9023,7 @@ entries:
     version: 0.2.10
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.564569234Z"
+    created: "2022-02-24T02:18:37.707839586Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 019b13fbe2b65c16c7a8b43c42073c64925b2a22619632e2655c65991001d01a
@@ -8995,7 +9043,7 @@ entries:
     version: 0.2.9
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.563948679Z"
+    created: "2022-02-24T02:18:37.707202615Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 8ed471e88df5b6a4afd26748f0803673ebb9270ba7c76a75fc67bd331b9f0e1e
@@ -9013,7 +9061,7 @@ entries:
     version: 0.2.8
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.563277256Z"
+    created: "2022-02-24T02:18:37.706584211Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: a05adfd3d961534df0ce78d4428b67ff6573f1d4e071c97df33e57dcd6ce390d
@@ -9031,7 +9079,7 @@ entries:
     version: 0.2.7
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.562416047Z"
+    created: "2022-02-24T02:18:37.706001311Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: fba05f0133974fa1bc870db3069c113308c6a6bdb82fb6563f36958be2039ffc
@@ -9049,7 +9097,7 @@ entries:
     version: 0.2.6
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.561467288Z"
+    created: "2022-02-24T02:18:37.705423884Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 0a93e9b541782f02dd3a54eba204afd61292209d60b875b254379d2a7d5527e8
@@ -9067,7 +9115,7 @@ entries:
     version: 0.2.5
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.560543687Z"
+    created: "2022-02-24T02:18:37.704814475Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: aee2ed78945566fc4636d09bac6926b15bd67f9e028c30bb13ec4bd88be96a4d
@@ -9085,7 +9133,7 @@ entries:
     version: 0.2.4
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.559591174Z"
+    created: "2022-02-24T02:18:37.70380732Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 4837e0d7e4193902c0633acee9dc878c215bc2ae6b1fcac8ca10682487513226
@@ -9103,7 +9151,7 @@ entries:
     version: 0.2.3
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.558679733Z"
+    created: "2022-02-24T02:18:37.702373371Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 271c3f61e53a2c46437f0c169e6ac844f8e4fcc607e9cf1567424988b2d8e3cd
@@ -9121,7 +9169,7 @@ entries:
     version: 0.2.2
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.52811207Z"
+    created: "2022-02-24T02:18:37.698623733Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 7290faed495ea9dcef68546bbe36a24fc5496005a9c78095cc6683e0aad604ec
@@ -9139,7 +9187,7 @@ entries:
     version: 0.2.1
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.527510018Z"
+    created: "2022-02-24T02:18:37.698077029Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 0268d932f2e9158e0eddd75c92437b40fcf756a417f3988bb108ca06f3074ce8
@@ -9157,7 +9205,7 @@ entries:
     version: 0.2.0
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.526917352Z"
+    created: "2022-02-24T02:18:37.697496093Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 1f414c4ed835a24b2dffa9c0aea556c570c7b27b5fb01f3d1a180a52714fa427
@@ -9175,7 +9223,7 @@ entries:
     version: 0.1.6
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.52630745Z"
+    created: "2022-02-24T02:18:37.696919662Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 00fcc7e35fc3ca79c8dbfa6da2f4e8fecac63b33cb8c20674e649a38bdd61d73
@@ -9193,7 +9241,7 @@ entries:
     version: 0.1.5
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.525679234Z"
+    created: "2022-02-24T02:18:37.696329418Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: 319e36602dec4508c19a3b106703730a3cc4042905cc60acb59339bb1d2c0c1a
@@ -9211,7 +9259,7 @@ entries:
     version: 0.1.4
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.52485132Z"
+    created: "2022-02-24T02:18:37.695733404Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c58c8f7bdd0ee2d267809e9089d32cdcef7e81f614d3f4bbc730b884bc2620df
@@ -9229,7 +9277,7 @@ entries:
     version: 0.1.3
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.524237194Z"
+    created: "2022-02-24T02:18:37.695171539Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: c88663f8cfca74df65d9a298fe59a649aa01f096edf85bbfa3cd4295b3d169e1
@@ -9247,7 +9295,7 @@ entries:
     version: 0.1.2
   - apiVersion: v1
     appVersion: latest
-    created: "2022-02-23T09:13:58.523572295Z"
+    created: "2022-02-24T02:18:37.694578041Z"
     description: Minimal forward authentication service that provides OIDC based login
       and authentication for the traefik reverse proxy
     digest: f825b48d33eb5ebf688b510b547ea2f72d04b513f2aae03d4aa4edfc83328991
@@ -9266,7 +9314,7 @@ entries:
   traefik2:
   - apiVersion: v2
     appVersion: 2.4.8
-    created: "2022-02-23T09:13:58.572706385Z"
+    created: "2022-02-24T02:18:37.714827367Z"
     description: A Traefik based Kubernetes ingress controller
     digest: d29531b1326d2fbe3c76af8e98575eb88ce44e08b5830c00337f393499b2080d
     home: https://traefik.io/
@@ -9291,7 +9339,7 @@ entries:
     version: 9.18.0
   - apiVersion: v1
     appVersion: 2.1.1
-    created: "2022-02-23T09:13:58.571179694Z"
+    created: "2022-02-24T02:18:37.713348533Z"
     description: A Traefik based Kubernetes ingress controller
     digest: 3ed7a9f394f6579a4041f1bbb23e5fbf14d3f421df5c128a68ad7fcd658e7901
     home: https://traefik.io/
@@ -9316,7 +9364,7 @@ entries:
   velero:
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.663741308Z"
+    created: "2022-02-24T02:18:37.803095131Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9347,7 +9395,7 @@ entries:
     version: 3.1.5
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.65963582Z"
+    created: "2022-02-24T02:18:37.798089964Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9378,7 +9426,7 @@ entries:
     version: 3.1.4
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.625147567Z"
+    created: "2022-02-24T02:18:37.79392671Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9409,7 +9457,7 @@ entries:
     version: 3.1.3
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.619297443Z"
+    created: "2022-02-24T02:18:37.78928406Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9440,7 +9488,7 @@ entries:
     version: 3.1.2
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.615215572Z"
+    created: "2022-02-24T02:18:37.783861411Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9471,7 +9519,7 @@ entries:
     version: 3.1.1
   - apiVersion: v1
     appVersion: 1.5.2
-    created: "2022-02-23T09:13:58.611191417Z"
+    created: "2022-02-24T02:18:37.77975875Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9502,7 +9550,7 @@ entries:
     version: 3.1.0
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.605883503Z"
+    created: "2022-02-24T02:18:37.775687825Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9533,7 +9581,7 @@ entries:
     version: 3.0.6
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.603594191Z"
+    created: "2022-02-24T02:18:37.772010671Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9564,7 +9612,7 @@ entries:
     version: 3.0.5
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.60132365Z"
+    created: "2022-02-24T02:18:37.769716536Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9591,7 +9639,7 @@ entries:
     version: 3.0.4
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.598999858Z"
+    created: "2022-02-24T02:18:37.767283769Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9618,7 +9666,7 @@ entries:
     version: 3.0.3
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.596592026Z"
+    created: "2022-02-24T02:18:37.764961765Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9645,7 +9693,7 @@ entries:
     version: 3.0.2
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.592743972Z"
+    created: "2022-02-24T02:18:37.762578983Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9672,7 +9720,7 @@ entries:
     version: 3.0.1
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.590488623Z"
+    created: "2022-02-24T02:18:37.760236593Z"
     dependencies:
     - condition: minioBackend
       name: minio
@@ -9699,7 +9747,7 @@ entries:
     version: 3.0.0
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.579853404Z"
+    created: "2022-02-24T02:18:37.722696346Z"
     description: A Helm chart for velero
     digest: f408a2051f0be5da8c6544d94e80f5619e12d42f481b038d7a8cc1f305ef3289
     home: https://github.com/heptio/velero
@@ -9721,7 +9769,7 @@ entries:
     version: 2.2.11
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.57843649Z"
+    created: "2022-02-24T02:18:37.721797438Z"
     description: A Helm chart for velero
     digest: 523ddb0daada17a44ac198356c94e32a1f32328e46512e87915a8e0d812508ae
     home: https://github.com/heptio/velero
@@ -9743,7 +9791,7 @@ entries:
     version: 2.2.10
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.588153176Z"
+    created: "2022-02-24T02:18:37.730198057Z"
     description: A Helm chart for velero
     digest: 340e343fdc922a57756943322782d7db90b4031a5e2f120073396fb949770076
     home: https://github.com/heptio/velero
@@ -9765,7 +9813,7 @@ entries:
     version: 2.2.9
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.587160745Z"
+    created: "2022-02-24T02:18:37.72925281Z"
     description: A Helm chart for velero
     digest: 24b65e520c94696010f5887a9c5c8501d25bc291ab7acd3641307f0cca44b972
     home: https://github.com/heptio/velero
@@ -9787,7 +9835,7 @@ entries:
     version: 2.2.8
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.58623661Z"
+    created: "2022-02-24T02:18:37.728281621Z"
     description: A Helm chart for velero
     digest: e514308f2b319071fd335f7e98fcb8e8ceff01c115960027c43a2efe1c205226
     home: https://github.com/heptio/velero
@@ -9809,7 +9857,7 @@ entries:
     version: 2.2.7
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.585305292Z"
+    created: "2022-02-24T02:18:37.7273438Z"
     description: A Helm chart for velero
     digest: 22d9ed7600d9d9046d881b2359c64248b93ccccda2bc3ba7727491390ace2c37
     home: https://github.com/heptio/velero
@@ -9831,7 +9879,7 @@ entries:
     version: 2.2.6
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.58437114Z"
+    created: "2022-02-24T02:18:37.726415832Z"
     description: A Helm chart for velero
     digest: f7f9ac7c42dc4aad5434b56fc2bf293abd53e319f73f126be965b8627ed6ace7
     home: https://github.com/heptio/velero
@@ -9853,7 +9901,7 @@ entries:
     version: 2.2.5
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.583428123Z"
+    created: "2022-02-24T02:18:37.725471902Z"
     description: A Helm chart for velero
     digest: 1373abbd685dfa45d60b8bd579e24e94221f4cca18d8e5a59688bff0d076bf36
     home: https://github.com/heptio/velero
@@ -9875,7 +9923,7 @@ entries:
     version: 2.2.4
   - apiVersion: v1
     appVersion: 1.0.1
-    created: "2022-02-23T09:13:58.582480591Z"
+    created: "2022-02-24T02:18:37.724539973Z"
     description: A Helm chart for velero
     digest: 5664b64db004d6da7e7904453ae0fbe806232fa9208eb30742f88b7ac26bdd25
     home: https://github.com/heptio/velero
@@ -9897,7 +9945,7 @@ entries:
     version: 2.2.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.581533191Z"
+    created: "2022-02-24T02:18:37.723626918Z"
     description: A Helm chart for velero
     digest: 6535cdc66856ed7eb74b30fdcecba995f9701b89a04a9da28fd4830d9171c5f9
     home: https://github.com/heptio/velero
@@ -9919,7 +9967,7 @@ entries:
     version: 2.2.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.577493274Z"
+    created: "2022-02-24T02:18:37.720864764Z"
     description: A Helm chart for velero
     digest: 064ba88232436c98bf435ac9202792907149e0226532c86f97c29f953e2a1136
     home: https://github.com/heptio/velero
@@ -9941,7 +9989,7 @@ entries:
     version: 2.2.1
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.576520375Z"
+    created: "2022-02-24T02:18:37.719878964Z"
     description: A Helm chart for velero
     digest: c7222c0d16638eca14deed9c38c877931a9857e12c817d3db9feafff2f90a7bb
     home: https://github.com/heptio/velero
@@ -9963,7 +10011,7 @@ entries:
     version: 2.2.0
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.57556372Z"
+    created: "2022-02-24T02:18:37.718760977Z"
     description: A Helm chart for velero
     digest: 94f0397a43ecac7e621c242e6fb8c61f5c322d6bbd9fd1413e17fe24956f33e1
     home: https://github.com/heptio/velero
@@ -9985,7 +10033,7 @@ entries:
     version: 2.1.3
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.574605679Z"
+    created: "2022-02-24T02:18:37.716863906Z"
     description: A Helm chart for velero
     digest: fab1defd2987463b4be58a2d90e8f7dabbcc444e9d9fe393b7aa1b232c1b426c
     home: https://github.com/heptio/velero
@@ -10007,7 +10055,7 @@ entries:
     version: 2.1.2
   - apiVersion: v1
     appVersion: 1.0.0
-    created: "2022-02-23T09:13:58.573618408Z"
+    created: "2022-02-24T02:18:37.715714934Z"
     description: A Helm chart for velero
     digest: 1cbd8904e0c31e0266b8d41b4fc3abaa22c0d9d7c0a038bde2362dba1da6b108
     home: https://github.com/heptio/velero
@@ -10027,4 +10075,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2022-02-23T09:13:54.584748461Z"
+generated: "2022-02-24T02:18:33.516473532Z"
