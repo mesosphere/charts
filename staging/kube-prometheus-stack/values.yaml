@@ -322,6 +322,11 @@ alertmanager:
     externalIPs: []
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: ClusterIP
@@ -347,6 +352,11 @@ alertmanager:
     ## Loadbalancer source IP ranges
     ## Only used if servicePerReplica.type is "LoadBalancer"
     loadBalancerSourceRanges: []
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: ClusterIP
@@ -692,6 +702,7 @@ grafana:
     dashboards:
       enabled: true
       label: grafana_dashboard
+      labelValue: "1"
 
       ## Annotations for Grafana dashboard configmaps
       ##
@@ -724,6 +735,7 @@ grafana:
       ## ref: https://git.io/fjaBS
       createPrometheusReplicasDatasources: false
       label: grafana_datasource
+      labelValue: "1"
 
   extraConfigmapMounts: []
   # - name: certs-configmap
@@ -1543,6 +1555,10 @@ prometheusOperator:
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
   ## Service type
   ## NodePort, ClusterIP, LoadBalancer
   ##
@@ -1738,6 +1754,10 @@ prometheus:
     annotations: {}
     labels: {}
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: ClusterIP
@@ -1801,6 +1821,10 @@ prometheus:
     httpPort: 10902
     targetHttpPort: "http"
 
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: LoadBalancer
@@ -1838,6 +1862,11 @@ prometheus:
     ## Only use if service.type is "LoadBalancer"
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: ClusterIP
@@ -1872,6 +1901,11 @@ prometheus:
     ## Loadbalancer source IP ranges
     ## Only used if servicePerReplica.type is "LoadBalancer"
     loadBalancerSourceRanges: []
+
+    ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
+    ##
+    externalTrafficPolicy: Cluster
+
     ## Service type
     ##
     type: ClusterIP
@@ -2733,26 +2767,3 @@ prometheus:
     ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#podmetricsendpoint
     ##
     # podMetricsEndpoints: []
-# Create mesosphere specific resources
-mesosphereResources:
-  create: false
-  rules:
-    elasticsearch: false
-    velero: false
-  homeDashboard:
-    name: "Kubernetes / Compute Resources / Cluster"
-    serviceNameOverride: ""
-    cronJob:
-      enabled: true
-      name: set-grafana-home-dashboard
-      image: apteno/alpine-jq:2021-01-19
-  hooks:
-    grafana:
-      image: apteno/alpine-jq:2021-01-19
-      secretKeyRef: dkp-credentials
-    prometheus:
-      jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.19.7
-      configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
