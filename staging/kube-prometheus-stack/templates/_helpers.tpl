@@ -200,9 +200,3 @@ Use the prometheus-node-exporter namespace override for multi-namespace deployme
   {{- $userValue := index . 3 -}}
   {{- include "kube-prometheus-stack.kubeVersionDefaultValue" (list $values ">= 1.23-0" $insecure $secure $userValue) -}}
 {{- end -}}
-# Mesosphere-specific templates
-
-{{/* Override grafana service name if applicable, only in cronjob */}}
-{{- define "kube-prometheus-stack.homeDashboard.grafanaServiceName" -}}
-   {{- default (printf "%s-grafana" .Release.Name ) .Values.mesosphereResources.homeDashboard.serviceNameOverride -}}
-{{- end -}}
