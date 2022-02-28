@@ -19,16 +19,9 @@ mesosphereResources:
     elasticsearch: false
     velero: false
   homeDashboard:
-    name: "Kubernetes / Compute Resources / Cluster"
-    serviceNameOverride: ""
     cronJob:
-      enabled: true
-      name: set-grafana-home-dashboard
-      image: apteno/alpine-jq:2021-01-19
+      enabled: false
   hooks:
-    grafana:
-      image: apteno/alpine-jq:2021-01-19
-      secretKeyRef: dkp-credentials
     prometheus:
       jobName: prom-get-cluster-id
       kubectlImage: bitnami/kubectl:1.19.7
