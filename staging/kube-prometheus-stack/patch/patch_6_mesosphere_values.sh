@@ -24,7 +24,7 @@ mesosphereResources:
   hooks:
     prometheus:
       jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.19.7
+      kubectlImage: bitnami/kubectl:1.21.3
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true
