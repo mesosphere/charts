@@ -1,0 +1,68 @@
+# For upgrades from <22.x
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ template "kube-prometheus-stack.fullname" . }}-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-weight: "0"
+    helm.sh/hook-delete-policy: before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "kube-prometheus-stack.fullname" . }}-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: ["apps"]
+    resources: ["deployment"]
+    verbs: ["get", "watch", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "kube-prometheus-stack.fullname" . }}-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "kube-prometheus-stack.fullname" . }}-hook
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "kube-prometheus-stack.fullname" . }}-hook
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: delete-ksm-deployment
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      name: delete-ksm-deployment
+    spec:
+      serviceAccountName: {{ template "kube-prometheus-stack.fullname" . }}-hook
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              kubectl delete deployments.apps -l app.kubernetes.io/instance=kube-prometheus-stack,app.kubernetes.io/name=kube-state-metrics --cascade=orphan -n {{ .Release.Namespace }} --ignore-not-found
