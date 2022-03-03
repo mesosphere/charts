@@ -1681,6 +1681,13 @@ prometheusOperator:
     runAsNonRoot: true
     runAsUser: 65534
 
+  ## Container-specific security context configuration
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+  ##
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+
   ## Prometheus-operator image
   ##
   image:
@@ -2767,26 +2774,3 @@ prometheus:
     ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#podmetricsendpoint
     ##
     # podMetricsEndpoints: []
-# Create mesosphere specific resources
-mesosphereResources:
-  create: false
-  rules:
-    elasticsearch: false
-    velero: false
-  homeDashboard:
-    name: "Kubernetes / Compute Resources / Cluster"
-    serviceNameOverride: ""
-    cronJob:
-      enabled: true
-      name: set-grafana-home-dashboard
-      image: apteno/alpine-jq:2021-01-19
-  hooks:
-    grafana:
-      image: apteno/alpine-jq:2021-01-19
-      secretKeyRef: dkp-credentials
-    prometheus:
-      jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.19.7
-      configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
