@@ -22,9 +22,9 @@ mesosphereResources:
     cronJob:
       enabled: false
   hooks:
+    kubectlImage: bitnami/kubectl:1.21.3
     prometheus:
       jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.21.3
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true
