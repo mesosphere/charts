@@ -73,7 +73,7 @@ spec:
       serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
       containers:
         - name: kubectl
-          image: {{ .Values.mesosphereResources.hooks.prometheus.kubectlImage | quote }}
+          image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
@@ -98,7 +98,7 @@ spec:
       serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
       containers:
         - name: kubectl
-          image: {{ .Values.mesosphereResources.hooks.prometheus.kubectlImage | quote }}
+          image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
