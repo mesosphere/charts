@@ -15,7 +15,7 @@ metadata:
     # https://github.com/helm/helm/issues/5482
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
-  secretName: dex
+  secretName: {{ template "dex.fullname" . }}-tls
   issuerRef:
   {{- if .Values.certIssuerRef }}
     {{- toYaml .Values.certIssuerRef | nindent 4 }}
