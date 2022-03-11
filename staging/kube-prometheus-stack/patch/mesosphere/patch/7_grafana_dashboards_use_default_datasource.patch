@@ -1,0 +1,88 @@
+commit ab805732609f77875c41708df27d087a06450727
+Author: Grace Do <xgrace@gmail.com>
+Date:   Fri Mar 11 15:32:09 2022 -0800
+
+    fix: Use default datasource instead of Prometheus
+
+    For instances of grafana not using or adding a datasource
+    named "Prometheus", dashboards that are hardcoded to use the
+    "Prometheus" datasource instead pick the next datasource on the
+    list arbitrarily. They should instead be set to use "default", as
+    to not arbitrarily pick another datasource in case there isn't
+    a "Prometheus" datasource.
+
+diff --git a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/alertmanager-overview.yaml b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/alertmanager-overview.yaml
+index 56d67ed60..11ed04b86 100644
+--- a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/alertmanager-overview.yaml
++++ b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/alertmanager-overview.yaml
+@@ -476,8 +476,8 @@ data:
+             "list": [
+                 {
+                     "current": {
+-                        "text": "Prometheus",
+-                        "value": "Prometheus"
++                        "text": "default",
++                        "value": "default"
+                     },
+                     "hide": 0,
+                     "label": "Data Source",
+diff --git a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/etcd.yaml b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/etcd.yaml
+index 72f0f15b0..8cfa82591 100644
+--- a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/etcd.yaml
++++ b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/etcd.yaml
+@@ -1041,8 +1041,8 @@ data:
+             "list": [
+                 {
+                     "current": {
+-                        "text": "Prometheus",
+-                        "value": "Prometheus"
++                        "text": "default",
++                        "value": "default"
+                     },
+                     "hide": 0,
+                     "label": null,
+diff --git a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-cluster-rsrc-use.yaml b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-cluster-rsrc-use.yaml
+index 3bd4bdd59..dc8964c26 100644
+--- a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-cluster-rsrc-use.yaml
++++ b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-cluster-rsrc-use.yaml
+@@ -984,8 +984,8 @@ data:
+             "list": [
+                 {
+                     "current": {
+-                        "text": "Prometheus",
+-                        "value": "Prometheus"
++                        "text": "default",
++                        "value": "default"
+                     },
+                     "hide": 0,
+                     "label": "Data Source",
+diff --git a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-rsrc-use.yaml b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-rsrc-use.yaml
+index 1c6fc1110..169ee2dd7 100644
+--- a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-rsrc-use.yaml
++++ b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/node-rsrc-use.yaml
+@@ -984,8 +984,8 @@ data:
+             "list": [
+                 {
+                     "current": {
+-                        "text": "Prometheus",
+-                        "value": "Prometheus"
++                        "text": "default",
++                        "value": "default"
+                     },
+                     "hide": 0,
+                     "label": "Data Source",
+diff --git a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/nodes.yaml b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/nodes.yaml
+index 51030094e..3b3a6d92f 100644
+--- a/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/nodes.yaml
++++ b/staging/kube-prometheus-stack/templates/grafana/dashboards-1.14/nodes.yaml
+@@ -913,8 +913,8 @@ data:
+             "list": [
+                 {
+                     "current": {
+-                        "text": "Prometheus",
+-                        "value": "Prometheus"
++                        "text": "default",
++                        "value": "default"
+                     },
+                     "hide": 0,
+                     "label": "Data Source",
