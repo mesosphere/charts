@@ -6,7 +6,9 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     monitoring: istio-proxies
-    release: prometheus-kubeaddons
+    {{- if .Values.serviceMonitor.labels }}
+    {{- toYaml .Values.serviceMonitor.labels | nindent 4 }}
+    {{- end }}
 spec:
   selector:
     matchExpressions:
@@ -37,7 +39,9 @@ metadata:
   name: istio-component
   labels:
     monitoring: istio-components
-    release: prometheus-kubeaddons
+    {{- if .Values.serviceMonitor.labels }}
+    {{- toYaml .Values.serviceMonitor.labels | nindent 4 }}
+    {{- end }}
 spec:
   jobLabel: istio
   selector:
