@@ -211,7 +211,7 @@ install_certmanager() {
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
 
-    docker_exec helm install cert-manager --debug \
+    docker_exec helm install cert-manager --debug --timeout=8m0s \
         --values stable/cert-manager-setup/ci/test-values.yaml \
         --namespace cert-manager stable/cert-manager-setup
 
