@@ -3,7 +3,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-grafana-admin
+  name: dkp-{{ template "kube-prometheus-stack.fullname" . }}-grafana-admin
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
@@ -25,7 +25,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-grafana-view
+  name: dkp-{{ template "kube-prometheus-stack.fullname" . }}-grafana-view
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
@@ -50,7 +50,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ template "kube-prometheus-stack.fullname" . }}-dkp-grafana-edit
+  name: dkp-{{ template "kube-prometheus-stack.fullname" . }}-grafana-edit
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-grafana
 {{- if .Values.grafana.ingress.labels }}
