@@ -58,6 +58,15 @@ cost-analyzer:
     # storageClass: "-"
 
   prometheus:
+    configmapReload:
+      alertmanager:
+        image:
+          repository: jimmidyson/configmap-reload
+          tag: v0.7.1
+      prometheus:
+        image:
+          repository: jimmidyson/configmap-reload
+          tag: v0.7.1
     nodeExporter:
       enabled: false
     serviceAccounts:
