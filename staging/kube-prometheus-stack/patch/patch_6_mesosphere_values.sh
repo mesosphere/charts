@@ -18,9 +18,6 @@ mesosphereResources:
   rules:
     elasticsearch: false
     velero: false
-  homeDashboard:
-    cronJob:
-      enabled: false
   hooks:
     kubectlImage: bitnami/kubectl:1.21.3
     prometheus:
