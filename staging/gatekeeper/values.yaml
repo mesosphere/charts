@@ -104,7 +104,7 @@ webhook:
   certManager:
     enabled: false
 
-kubectlImage: bitnami/kubectl:1.15
+kubectlImage: bitnami/kubectl:1.23.5
 
 # enable mutations
 mutations:

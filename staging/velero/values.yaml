@@ -300,3 +300,5 @@ minioBackend: false
 ##
 ## End of additional Velero resource settings.
 ##
+
+kubectlImage: "bitnami/kubectl:1.23.5"
