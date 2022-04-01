@@ -324,7 +324,7 @@ rules:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: githubsources.sources.knative.dev
@@ -372,7 +372,7 @@ metadata:
         { "type": "dev.knative.source.github.team_add" },
         { "type": "dev.knative.source.github.watch" }
       ]
-    helm.sh/hook: crd-install
+    helm.sh/hook: pre-install,pre-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
 spec:
   group: sources.knative.dev
@@ -385,165 +385,168 @@ spec:
     kind: GitHubSource
     plural: githubsources
   scope: Namespaced
-  subresources:
-    status: {}
-  additionalPrinterColumns:
-  - name: Ready
-    type: string
-    JSONPath: ".status.conditions[?(@.type=='Ready')].status"
-  - name: Reason
-    type: string
-    JSONPath: ".status.conditions[?(@.type=='Ready')].reason"
-  - name: Sink
-    type: string
-    JSONPath: ".status.sinkUri"
-  - name: Age
-    type: date
-    JSONPath: .metadata.creationTimestamp
-  validation:
-    openAPIV3Schema:
-      properties:
-        spec:
-          properties:
-            accessToken:
-              properties:
-                secretKeyRef:
-                  type: object
-              type: object
-            eventTypes:
-              items:
-                enum:
-                - check_suite
-                - commit_comment
-                - create
-                - delete
-                - deployment
-                - deployment_status
-                - fork
-                - gollum
-                - installation
-                - integration_installation
-                - issue_comment
-                - issues
-                - label
-                - member
-                - membership
-                - milestone
-                - organization
-                - org_block
-                - page_build
-                - ping
-                - project_card
-                - project_column
-                - project
-                - public
-                - pull_request
-                - pull_request_review
-                - pull_request_review_comment
-                - push
-                - release
-                - repository
-                - status
-                - team
-                - team_add
-                - watch
-                type: string
-              minItems: 1
-              type: array
-            ownerAndRepository:
-              minLength: 1
-              type: string
-            secretToken:
-              properties:
-                secretKeyRef:
-                  type: object
-              type: object
-            serviceAccountName:
-              type: string
-            sink:
-              anyOf:
-              - type: object
-                description: "the destination that should receive events."
+  versions:
+  - name: v1alpha1
+    served: true
+    storage: true
+    subresources:
+      status: {}
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            properties:
+              accessToken:
                 properties:
-                  ref:
+                  secretKeyRef:
                     type: object
-                    description: "a reference to a Kubernetes object from which to
-                      retrieve the target URI."
-                    required:
-                    - apiVersion
-                    - kind
-                    - name
-                    properties:
-                      apiVersion:
-                        type: string
-                        minLength: 1
-                      kind:
-                        type: string
-                        minLength: 1
-                      name:
-                        type: string
-                        minLength: 1
-                  uri:
-                    type: string
-                    description: "the target URI. If ref is provided, this must be
-                      relative URI reference."
-              - type: object
-                description: "DEPRECATED: a reference to a Kubernetes object from
-                  which to retrieve the target URI."
-                required:
-                - apiVersion
-                - kind
-                - name
-                properties:
-                  apiVersion:
-                    type: string
-                    minLength: 1
-                  kind:
-                    type: string
-                    minLength: 1
-                  name:
-                    type: string
-                    minLength: 1
-                  uri:
-                    type: string
-                    description: "the target URI. If ref is provided, this must be
-                      relative URI reference."
-          required:
-          - ownerAndRepository
-          - eventTypes
-          - accessToken
-          - secretToken
-          type: object
-        status:
-          properties:
-            conditions:
-              items:
-                properties:
-                  lastTransitionTime:
-                    # we use a string in the stored object but a wrapper object
-                    # at runtime.
-                    type: string
-                  message:
-                    type: string
-                  reason:
-                    type: string
-                  severity:
-                    type: string
-                  status:
-                    type: string
-                  type:
-                    type: string
-                required:
-                - type
-                - status
                 type: object
-              type: array
-            sinkUri:
-              type: string
-            webhookIDKey:
-              type: string
-          type: object
-  version: v1alpha1
+              eventTypes:
+                items:
+                  enum:
+                  - check_suite
+                  - commit_comment
+                  - create
+                  - delete
+                  - deployment
+                  - deployment_status
+                  - fork
+                  - gollum
+                  - installation
+                  - integration_installation
+                  - issue_comment
+                  - issues
+                  - label
+                  - member
+                  - membership
+                  - milestone
+                  - organization
+                  - org_block
+                  - page_build
+                  - ping
+                  - project_card
+                  - project_column
+                  - project
+                  - public
+                  - pull_request
+                  - pull_request_review
+                  - pull_request_review_comment
+                  - push
+                  - release
+                  - repository
+                  - status
+                  - team
+                  - team_add
+                  - watch
+                  type: string
+                minItems: 1
+                type: array
+              ownerAndRepository:
+                minLength: 1
+                type: string
+              secretToken:
+                properties:
+                  secretKeyRef:
+                    type: object
+                type: object
+              serviceAccountName:
+                type: string
+              sink:
+                anyOf:
+                - type: object
+                  description: "the destination that should receive events."
+                  properties:
+                    ref:
+                      type: object
+                      description: "a reference to a Kubernetes object from which to
+                        retrieve the target URI."
+                      required:
+                      - apiVersion
+                      - kind
+                      - name
+                      properties:
+                        apiVersion:
+                          type: string
+                          minLength: 1
+                        kind:
+                          type: string
+                          minLength: 1
+                        name:
+                          type: string
+                          minLength: 1
+                    uri:
+                      type: string
+                      description: "the target URI. If ref is provided, this must be
+                        relative URI reference."
+                - type: object
+                  description: "DEPRECATED: a reference to a Kubernetes object from
+                    which to retrieve the target URI."
+                  required:
+                  - apiVersion
+                  - kind
+                  - name
+                  properties:
+                    apiVersion:
+                      type: string
+                      minLength: 1
+                    kind:
+                      type: string
+                      minLength: 1
+                    name:
+                      type: string
+                      minLength: 1
+                    uri:
+                      type: string
+                      description: "the target URI. If ref is provided, this must be
+                        relative URI reference."
+            required:
+            - ownerAndRepository
+            - eventTypes
+            - accessToken
+            - secretToken
+            type: object
+          status:
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastTransitionTime:
+                      # we use a string in the stored object but a wrapper object
+                      # at runtime.
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    severity:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - type
+                  - status
+                  type: object
+                type: array
+              sinkUri:
+                type: string
+              webhookIDKey:
+                type: string
+            type: object
+    additionalPrinterColumns:
+    - name: Ready
+      type: string
+      jsonPath: ".status.conditions[?(@.type=='Ready')].status"
+    - name: Reason
+      type: string
+      jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
+    - name: Sink
+      type: string
+      jsonPath: ".status.sinkUri"
+    - name: Age
+      type: date
+      jsonPath: .metadata.creationTimestamp
 
 ---
 # Copyright 2019 The Knative Authors
@@ -653,7 +656,7 @@ spec:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
   name: defaulting.webhook.github.sources.knative.dev
@@ -667,9 +670,10 @@ webhooks:
       name: github-webhook
       namespace: knative-sources
   failurePolicy: Fail
+  sideEffects: None
   name: defaulting.webhook.github.sources.knative.dev
 ---
-apiVersion: admissionregistration.k8s.io/v1beta1
+apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: validation.webhook.github.sources.knative.dev
@@ -683,6 +687,7 @@ webhooks:
       name: github-webhook
       namespace: knative-sources
   failurePolicy: Fail
+  sideEffects: None
   name: validation.webhook.github.sources.knative.dev
 ---
 apiVersion: v1

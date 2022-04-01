@@ -2334,7 +2334,7 @@ spec:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apiregistration.k8s.io/v1beta1
+apiVersion: apiregistration.k8s.io/v1
 kind: APIService
 metadata:
   name: v1beta1.custom.metrics.k8s.io
@@ -2397,7 +2397,7 @@ rules:
 # limitations under the License.
 
 # This is the shared Gateway for all Knative routes to use.
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: knative-ingress-gateway
@@ -2417,7 +2417,7 @@ spec:
     - "*"
 
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: knative-local-gateway
@@ -2457,8 +2457,8 @@ spec:
 ---
 # Allows the Webhooks to be reached by kube-api with or without
 # sidecar injection and with mTLS PERMISSIVE and STRICT.
-apiVersion: "security.istio.io/v1beta1"
-kind: "PeerAuthentication"
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
 metadata:
   name: "webhook"
   namespace: "knative-serving"
@@ -2470,8 +2470,8 @@ spec:
     mode: PERMISSIVE
 
 ---
-apiVersion: "security.istio.io/v1beta1"
-kind: "PeerAuthentication"
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
 metadata:
   name: "istio-webhook"
   namespace: "knative-serving"
@@ -2500,7 +2500,7 @@ spec:
 # A cluster local gateway to allow pods outside of the mesh to access
 # Services and Routes not exposing through an ingress.  If the users
 # do have a service mesh setup, this isn't required.
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   name: cluster-local-gateway

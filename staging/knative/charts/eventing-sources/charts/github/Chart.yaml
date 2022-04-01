@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: v2
 name: github
 version: 0.2.0
 description: "Registers for events of the specified types on the specified GitHub organization/repository. Brings those events into Knative."
