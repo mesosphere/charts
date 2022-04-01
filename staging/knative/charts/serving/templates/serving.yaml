@@ -1497,6 +1497,10 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
         - name: SYSTEM_NAMESPACE
           valueFrom:
             fieldRef:
@@ -1737,6 +1741,8 @@ spec:
           value: config-observability
         - name: WEBHOOK_PORT
           value: "8443"
+        - name: WEBHOOK_NAME
+          value: webhook
         # TODO(https://github.com/knative/pkg/pull/953): Remove stackdriver specific config
         - name: METRICS_DOMAIN
           value: knative.dev/serving
