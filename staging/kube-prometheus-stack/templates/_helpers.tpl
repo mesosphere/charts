@@ -48,7 +48,7 @@ The longest name that gets created adds and extra 37 characters, so truncation s
 {{- define "kube-prometheus-stack.labels" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: "{{ .Chart.Version }}"
+app.kubernetes.io/version: "{{ replace "+" "_" .Chart.Version }}"
 app.kubernetes.io/part-of: {{ template "kube-prometheus-stack.name" . }}
 chart: {{ template "kube-prometheus-stack.chartref" . }}
 release: {{ $.Release.Name | quote }}
@@ -199,10 +199,4 @@ Use the prometheus-node-exporter namespace override for multi-namespace deployme
   {{- $secure := index . 2 -}}
   {{- $userValue := index . 3 -}}
   {{- include "kube-prometheus-stack.kubeVersionDefaultValue" (list $values ">= 1.23-0" $insecure $secure $userValue) -}}
-{{- end -}}
-# Mesosphere-specific templates
-
-{{/* Override grafana service name if applicable, only in cronjob */}}
-{{- define "kube-prometheus-stack.homeDashboard.grafanaServiceName" -}}
-   {{- default (printf "%s-grafana" .Release.Name ) .Values.mesosphereResources.homeDashboard.serviceNameOverride -}}
 {{- end -}}
