@@ -2805,3 +2805,16 @@ prometheus:
     ## https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#podmetricsendpoint
     ##
     # podMetricsEndpoints: []
+# Create mesosphere specific resources
+mesosphereResources:
+  create: false
+  rules:
+    elasticsearch: false
+    velero: false
+  hooks:
+    kubectlImage: bitnami/kubectl:1.21.3
+    prometheus:
+      jobName: prom-get-cluster-id
+      configmapName: cluster-info-configmap
+  ingressRBAC:
+    enabled: true
