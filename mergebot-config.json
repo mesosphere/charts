@@ -1,0 +1,34 @@
+{
+  "override-status": {
+    "enabled": true,
+    "jira_label": "mergebot-override"
+  },
+  "test": true,
+  "test-binding": {
+    "mcharts/lint-charts": {
+      "type": "teamcity",
+      "required": "true",
+      "priority": 2,
+      "ignore": {
+        "labels": [
+          "documentation"
+        ]
+      },
+      "id": "mcharts_LintCharts"
+    },
+    "mcharts/test-charts": {
+      "type": "teamcity",
+      "required": "true",
+      "priority": 2,
+      "ignore": {
+        "labels": [
+          "documentation"
+        ]
+      },
+      "id": "mcharts_TestCharts"
+    }
+  },
+  "autotest-on-backports-and-trains": true,
+  "autotrigger-tests-on-ready-for-review": true,
+  "ready-for-review-label": "ok-to-test"
+}
