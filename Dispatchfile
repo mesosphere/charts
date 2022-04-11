@@ -176,14 +176,11 @@ do_bump_addon = bump_addon("bump-addon", kba_git)
 kommander_chart_path = "stable/kommander/Chart.yaml"
 
 # Robot Actions
-action(tasks=["test-helm"], on=pull_request())
 action(tasks=["publish"], on=push(branches=["master", "release/*"]))
 action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
 action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
 
 # Chatops Actions
-action(tasks=["test-helm"], on=pull_request(chatops=["test"]))
-action(tasks=["test-helm"], on=pull_request(chatops=["test-helm"]))
 action(tasks=[do_bump_kubecost], on=pull_request(chatops=["bump-kubecost"]))
 
 # Cron Actions
