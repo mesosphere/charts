@@ -5,7 +5,7 @@
   },
   "test": true,
   "test-binding": {
-    "mcharts/lint-charts": {
+    "charts/lint-test": {
       "type": "teamcity",
       "required": "true",
       "priority": 2,
@@ -14,18 +14,7 @@
           "documentation"
         ]
       },
-      "id": "mcharts_LintCharts"
-    },
-    "mcharts/test-charts": {
-      "type": "teamcity",
-      "required": "true",
-      "priority": 2,
-      "ignore": {
-        "labels": [
-          "documentation"
-        ]
-      },
-      "id": "mcharts_TestCharts"
+      "id": "ClosedSource_Konvoy_ChartPr"
     }
   },
   "autotest-on-backports-and-trains": true,
