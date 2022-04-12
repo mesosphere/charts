@@ -1,0 +1,23 @@
+{
+  "override-status": {
+    "enabled": true,
+    "jira_label": "mergebot-override"
+  },
+  "test": true,
+  "test-binding": {
+    "charts/lint-test": {
+      "type": "teamcity",
+      "required": "true",
+      "priority": 2,
+      "ignore": {
+        "labels": [
+          "documentation"
+        ]
+      },
+      "id": "ClosedSource_Konvoy_ChartPr"
+    }
+  },
+  "autotest-on-backports-and-trains": true,
+  "autotrigger-tests-on-ready-for-review": true,
+  "ready-for-review-label": "ok-to-test"
+}
