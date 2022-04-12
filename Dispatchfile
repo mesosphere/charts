@@ -176,7 +176,6 @@ do_bump_addon = bump_addon("bump-addon", kba_git)
 kommander_chart_path = "stable/kommander/Chart.yaml"
 
 # Robot Actions
-action(tasks=["publish"], on=push(branches=["master", "release/*"]))
 action(tasks=[do_bump_kommander], on=push(branches=["master"], paths=[kommander_chart_path]))
 action(tasks=[do_bump_addon], on=push(branches=["master"], paths=["!" + kommander_chart_path, "stable/*/Chart.yaml", "staging/*/Chart.yaml"]))
 
