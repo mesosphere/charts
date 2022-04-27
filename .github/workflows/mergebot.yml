@@ -42,7 +42,7 @@ jobs:
         run: pip install -r ./mergebot_code/mergebot/requirements.txt
       - name: Run Mergebot
         env:
-          LOG_STDOUT: "true"
+          LOG_STDOUT: "true
           EVENT_TYPE: ${{ github.event_name }}
           RUN_ID: ${{ github.run_id }}
           MERGEBOT_TC_USERNAME: ${{secrets.MERGEBOT_TC_USERNAME}}
