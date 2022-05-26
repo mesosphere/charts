@@ -29,6 +29,8 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
+REPO_BASE_URL := https://$(GITHUB_USER).github.io/charts
+
 GIT_REF ?= $(shell git rev-parse HEAD)
 CT_VERSION ?= v3.5.1
 
@@ -134,7 +136,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$
 %/index.yaml: $(HELM_BIN) $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM_BIN) repo index $(patsubst %/index.yaml,%,$@) --url=https://$(GITHUB_USER).github.io/charts/$(patsubst gh-pages/%index.yaml,%,$@)
+	$(HELM_BIN) repo index $(patsubst %/index.yaml,%,$@) --url=$(REPO_BASE_URL)/$(patsubst gh-pages/%index.yaml,%,$@)
 
 .PHONY: ct.lint
 ct.lint: $(HELM_BIN)
