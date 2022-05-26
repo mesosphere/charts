@@ -8,6 +8,25 @@ eventing-sources:
   enabled: true
 
 serving:
+  autoscaler:
+    activatorCapacity: "100.0"
+    containerConcurrencyTargetPercentage: "70"
+    containerConcurrencyTargetDefault: "100"
+    requestsPerSecondTargetDefault: "200"
+    targetBurstCapacity: "200"
+    stableWindow: "60s"
+    panicWindowPercentage: "10.0"
+    panicThresholdPercentage: "200.0"
+    maxScaleUpRate: "1000.0"
+    maxScaleDownRate: "2.0"
+    enableScaleToZero: "true"
+    scaleToZeroGracePeriod: "30s"
+    scaleToZeroPodRetentionPeriod: "0s"
+    podAutoscalerClass: "kpa.autoscaling.knative.dev"
+    activatorCapacity: "100.0"
+    initialScale: "1"
+    allowZeroInitialScale: "false"
+    maxScale: "0"
   enabled: true
   domain: example.com
   customMetricsApiservice:
