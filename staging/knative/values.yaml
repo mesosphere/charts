@@ -9,7 +9,6 @@ eventing-sources:
 
 serving:
   autoscaler:
-    activatorCapacity: "100.0"
     containerConcurrencyTargetPercentage: "70"
     containerConcurrencyTargetDefault: "100"
     requestsPerSecondTargetDefault: "200"
