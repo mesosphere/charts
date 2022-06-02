@@ -1,9 +1,8 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: {{ .Release.Namespace }}
-  name: istio-operator
+  namespace: {{.Release.Namespace}}
+  name: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
 spec:
   replicas: 1
   selector:
@@ -13,11 +12,18 @@ spec:
     metadata:
       labels:
         name: istio-operator
+        {{- range $key, $val := .Values.podLabels }}
+        {{ $key }}: "{{ $val }}"
+        {{- end }}
+    {{- if .Values.podAnnotations }}
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+    {{- end }}
     spec:
-      serviceAccountName: istio-operator
+      serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
       containers:
         - name: istio-operator
-          image: {{ .Values.istioOperator.hub }}/operator:{{ .Values.istioOperator.tag }}
+          image: {{.Values.istioOperator.hub}}/operator:{{.Values.istioOperator.tag}}
           command:
           - operator
           - server
@@ -36,7 +42,7 @@ spec:
 {{ toYaml .Values.operator.resources | trim | indent 12 }}
           env:
             - name: WATCH_NAMESPACE
-              value: {{.Release.Namespace | quote}}
+              value: {{.Release.Namespace}}{{- if not (eq .Values.watchedNamespaces "") }},{{ .Values.watchedNamespaces }}{{- end }}
             - name: LEADER_ELECTION_NAMESPACE
               value: {{.Release.Namespace | quote}}
             - name: POD_NAME
@@ -47,3 +53,17 @@ spec:
               value: {{.Release.Namespace | quote}}
             - name: WAIT_FOR_RESOURCES_TIMEOUT
               value: {{.Values.waitForResourcesTimeout | quote}}
+            - name: REVISION
+              value: {{.Values.revision | quote}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
