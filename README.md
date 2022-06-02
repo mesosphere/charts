@@ -18,7 +18,7 @@ $ helm repo add mesosphere-staging https://mesosphere.github.io/charts/staging
 "mesosphere-staging" has been added to your repositories
 ```
 
-You can then run `helm search mesosphere-staging` to see the charts.
+You can then run `helm search repo mesosphere-staging` to see the charts.
 
 ## Chart Format
 
