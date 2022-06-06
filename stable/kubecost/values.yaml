@@ -99,7 +99,7 @@ cost-analyzer:
       # NOTE: This does not affect the external_labels set in prometheus config.
       clusterIDConfigmap: kubecost-cluster-info-configmap
       image:
-        tag: v2.19.2
+        tag: v2.36.0
       extraFlags:
       - web.enable-admin-api
       - web.enable-lifecycle
@@ -133,7 +133,7 @@ cost-analyzer:
           enabled: true
       sidecarContainers:
       - name: thanos-sidecar
-        image: thanosio/thanos:v0.15.0
+        image: thanosio/thanos:v0.26.0
         args:
         - sidecar
         - --log.level=debug
@@ -165,7 +165,7 @@ cost-analyzer:
     alertmanager:
       enabled: true
       image:
-        tag: v0.21.0
+        tag: v0.24.0
       resources:
         limits:
           cpu: 50m

@@ -3,9 +3,10 @@ appVersion: 1.93.2
 description: Kubecost
 name: kubecost
 home: https://github.com/mesosphere/charts
-version: 0.25.0
+version: 0.25.1
 maintainers:
   - name: gracedo
+  - name: bcmendoza
 dependencies:
   - name: cost-analyzer
     version: 1.93.2
