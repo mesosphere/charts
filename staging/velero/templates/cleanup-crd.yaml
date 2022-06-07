@@ -23,7 +23,7 @@ spec:
       serviceAccountName: {{ include "velero.serverServiceAccount" . }}
       containers:
         - name: kubectl
-          image: docker.io/bitnami/kubectl:1.14.1
+          image: docker.io/bitnami/kubectl:1.23.7
           imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
