@@ -7,6 +7,7 @@ excluded-charts:
   - common
   - dex-controller # Moved to a different helm repo
   - kubefed
+  - kommander-cert-federation # Unable to test unless cert-manager is also upgraded
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
