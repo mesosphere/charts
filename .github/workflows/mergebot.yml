@@ -2,7 +2,7 @@ name: mergebot
 
 on:
   pull_request:
-    types: [opened, reopened, edited, synchronize, closed]
+    types: [opened, reopened, edited, synchronize, closed, labeled]
   issue_comment:
     branches: '**'
 
@@ -16,9 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set mergebot username
-        run: git config --global user.name mesosphere-mergebot
+        run: git config --global user.name d2iq-mergebot
       - name: Set mergebot email
         run: git config --global user.email ci-mergebot@d2iq.com
+      - name: Set gpg key id
+        run: git config --global user.signingKey ${{ secrets.MERGEBOT_GPG_KEY_ID }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4
         with:
