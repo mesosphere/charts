@@ -1,0 +1,149 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ required "A valid .Values.secretName is required" .Values.secretName }}-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  commonName: {{ required "A valid .Values.commonName is required" .Values.commonName }}
+  {{- with .Values.dnsNames }}
+  dnsNames:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  duration: 87600h
+  subject:
+    organizations:
+      - D2iQ
+  secretName: {{ .Values.secretName }}
+  issuerRef:
+    name: {{ .Values.clusterIssuerName }}
+    kind: ClusterIssuer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-kommander-secret-edit
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-kommander-secret-edit
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: ["types.kubefed.io"]
+    resources: ["federatedsecrets"]
+    verbs: ["get", "list", "create", "update", "delete"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "create", "update", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-kommander-secret-edit
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-kommander-secret-edit
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-kommander-secret-edit
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  ## .Release.Namespace added to prevent race condition related apply same release to different namespaces at the same time
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-kommander-secret-edit
+  namespace: {{ .Values.kubefedNamespace }}
+rules:
+  - apiGroups: ["core.kubefed.io"]
+    resources: ["*"]
+    verbs: ["get", "list", "create", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  ## .Release.Namespace added to prevent race condition related apply same release to different namespaces at the same time
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-kommander-secret-edit
+  namespace: {{ .Values.kubefedNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-kommander-secret-edit
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-kommander-secret-edit
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-{{ .Release.Namespace }}-cert-federation
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    secret.reloader.stakater.com/reload: {{ .Values.secretName }}
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+      tls-ca-field-to-a-secret: copy-and-federate-{{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        tls-ca-field-to-a-secret: copy-and-federate-{{ .Release.Name }}
+    spec:
+      initContainers:
+      # These initContainers should run at most once (should succeed only once).
+      - name: patch-secret
+        image: bitnami/kubectl:1.23.7
+        command:
+          - sh
+          - "-c"
+          - |
+            /bin/bash <<'EOF'
+            set -uxeo pipefail
+
+            # Ensure FederatedSecret does not exist before patching secret. Otherwise, FederatedSecret will overwrite the patch.
+            echo "ensuring federatedsecret {{ .Values.secretName }} does not exist"
+            kubectl delete federatedsecret {{ .Values.secretName }} --ignore-not-found=true
+
+            # Even though removing FederatedSecret will remove Secret, cert-manager will create it again.
+            # If the recreation does not occur in time, container exits and tries in next attempt.
+            echo "patching {{ .Values.secretName }} secret"
+            CA_CRT=$(kubectl get secrets {{ .Values.secretName }} -o=jsonpath='{.data.ca\.crt}')
+            kubectl patch secret {{ .Values.secretName }} --type='json' -p="[{\"op\": \"add\", \"path\": \"/data/tls.ca\", \"value\": \"${CA_CRT}\"}]"
+
+            echo "{{ .Values.secretName }} secret patched"
+            EOF
+      - name: federate-secret
+        image: quay.io/kubernetes-multicluster/kubefed:v0.9.1
+        command:
+          - sh
+          - "-c"
+          - |
+            /bin/sh <<'EOF'
+            set -uxeo pipefail
+
+            echo "federating secret {{ .Values.secretName }}"
+            /hyperfed/kubefedctl federate --kubefed-namespace {{ .Values.kubefedNamespace }} --namespace {{ .Release.Namespace }} secret {{ .Values.secretName }}
+            EOF
+      containers:
+      # This is a dummy container to ensure deployment is Running. It will be restarted by reloader if/when certs are renewed.
+      - name: wait-for-renewal
+        image: bitnami/kubectl:1.23.7
+        command:
+          - sh
+          - "-c"
+          - |
+            /bin/bash <<'EOF'
+            # Sleep until either reloader restarts the deployment or the default duration of a certificate expires.
+            # This Deployment used to be a Job but this Job was needed to be run whenever the certificate updates (like an on-demand CronJob) and thus it was promoted to be a Deployment.
+            sleep 90d
+            EOF
+      serviceAccountName: {{ .Release.Name }}-kommander-secret-edit
+      terminationGracePeriodSeconds: 10

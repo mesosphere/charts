@@ -1,0 +1,12 @@
+# Secret name of a generated Certificate
+secretName:
+# Common name of a generated Certificate
+commonName:
+# The name of a cluster issuer used to generate clusters. The default value
+# `kommander-ca` is created as part of kommander bootstrap process.
+clusterIssuerName: kommander-ca
+# kubefed namespace is used to access kubefed resources
+kubefedNamespace: kube-federation-system
+
+# dnsNames are used as certificate SANs
+dnsNames: []

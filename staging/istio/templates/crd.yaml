@@ -1,3 +1,0 @@
-{{- if not (.Capabilities.APIVersions.Has "install.istio.io/v1alpha1") }}
-{{.Files.Get "crds/crd.yaml" }}
-{{- end }}
