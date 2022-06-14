@@ -19,8 +19,6 @@ jobs:
         run: git config --global user.name d2iq-mergebot
       - name: Set mergebot email
         run: git config --global user.email ci-mergebot@d2iq.com
-      - name: Set gpg key id
-        run: git config --global user.signingKey ${{ secrets.MERGEBOT_GPG_KEY_ID }}
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v4
         with:
