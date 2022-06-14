@@ -78,12 +78,14 @@ spec:
             {{- end }}
             - name: CONFIG
               value: "/etc/traefik-forward-auth/config/config.ini"
+            {{- if not .Values.traefikForwardAuth.useSystemCA }}
             - name: SSL_CERT_FILE
               {{- if or .Values.traefikForwardAuth.caCertificate .Values.traefikForwardAuth.caSecretName }}
               value: "/etc/traefik-forward-auth/ca/ca.crt"
               {{- else}}
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
               {{- end }}
+            {{- end }}
             - name: LOG_LEVEL
               value: "trace"
             - name: SERVICE_ACCOUNT_TOKEN_PATH
