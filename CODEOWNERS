@@ -5,27 +5,28 @@
 # Order is important: later rules override preceding rules
 
 # These owners will be the default owners for everything in the repo unless a later match takes precedence
-* @mesosphere/sig-ksphere-catalog
+* @mesosphere/sig-ksphere-catalog @mesosphere/kommander
 
-/Dispatchfile @mesosphere/devprod
-/stable/argo-cd @mesosphere/devx
-/stable/awsebscsiprovisioner @mesosphere/sig-ksphere-cluster
-/stable/awsebsprovisioner @mesosphere/sig-ksphere-cluster
-/stable/azuredisk-csi-driver @mesosphere/sig-ksphere-cluster
-/stable/azurediskprovisioner @mesosphere/sig-ksphere-cluster
-/stable/defaultstorageclass @mesosphere/sig-ksphere-cluster
-/stable/dex @mesosphere/sig-ksphere-security
-/stable/dex-controller @mesosphere/sig-ksphere-security
-/stable/dispatch @mesosphere/devx
-/stable/gcpdisk-csi-driver @mesosphere/sig-ksphere-cluster
-/stable/gcpdiskprovisioner @mesosphere/sig-ksphere-cluster
-/stable/kommander @mesosphere/d2iq-ui @mesosphere/sig-ksphere-multi-cluster @mesosphere/sig-ksphere-observability
-/stable/kubecost @mesosphere/sig-ksphere-observability
-/stable/localvolumeprovisioner @mesosphere/sig-ksphere-cluster
-/stable/mtls-proxy @mesosphere/sig-ksphere-observability
-/stable/opsportal @mesosphere/d2iq-ui @mesosphere/sig-ksphere-security
-/stable/tekton @mesosphere/devx
+# TODO: update owners once we decide what to do with SIGs
+# /Dispatchfile @mesosphere/devprod
+# /stable/argo-cd @mesosphere/devx
+# /stable/awsebscsiprovisioner @mesosphere/sig-ksphere-cluster
+# /stable/awsebsprovisioner @mesosphere/sig-ksphere-cluster
+# /stable/azuredisk-csi-driver @mesosphere/sig-ksphere-cluster
+# /stable/azurediskprovisioner @mesosphere/sig-ksphere-cluster
+# /stable/defaultstorageclass @mesosphere/sig-ksphere-cluster
+# /stable/dex @mesosphere/sig-ksphere-security
+# /stable/dex-controller @mesosphere/sig-ksphere-security
+# /stable/dispatch @mesosphere/devx
+# /stable/gcpdisk-csi-driver @mesosphere/sig-ksphere-cluster
+# /stable/gcpdiskprovisioner @mesosphere/sig-ksphere-cluster
+# /stable/kommander @mesosphere/d2iq-ui @mesosphere/sig-ksphere-multi-cluster @mesosphere/sig-ksphere-observability
+# /stable/kubecost @mesosphere/sig-ksphere-observability
+# /stable/localvolumeprovisioner @mesosphere/sig-ksphere-cluster
+# /stable/mtls-proxy @mesosphere/sig-ksphere-observability
+# /stable/opsportal @mesosphere/d2iq-ui @mesosphere/sig-ksphere-security
+# /stable/tekton @mesosphere/devx
 
-/staging/prometheus-operator @mesosphere/sig-ksphere-observability
+# /staging/prometheus-operator @mesosphere/sig-ksphere-observability
 
-/staging/istio/* @mesosphere/sig-ksphere-networking
+# /staging/istio/* @mesosphere/sig-ksphere-networking
