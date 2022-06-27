@@ -8,7 +8,7 @@ replicaCount: 1
 
 image:
   repository: mesosphere/dex-k8s-authenticator
-  tag: v1.1.1-62a0a92-mesosphere
+  tag: v1.2.4
   pullPolicy: Always
 
 dexK8sAuthenticator:
@@ -25,6 +25,10 @@ dexK8sAuthenticator:
     initialDelaySeconds: 10   # Under high load use 'initialDelaySeconds: 15'
     timeoutSeconds: 10   # Under high load use 'timeoutSeconds: 30'
   web_path_prefix: /
+  # When enabled the helm chart will generate HMAC secret value, stores it as
+  # a k8s secret and mounts into the `dex-k8s-authenticator` as an ENV variable
+  # and adds as configuration option.
+  generateHmacSecret: false
   # logoUrl: http://<path-to-your-logo.png>
   # tlsCert: /path/to/dex-client.crt
   # tlsKey: /path/to/dex-client.key
