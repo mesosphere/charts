@@ -97,6 +97,13 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 10 }}
         env:
+          {{- if .Values.dexK8sAuthenticator.generateHmacSecret }}
+          - name: DKA_HMAC_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ template "dex-k8s-authenticator.fullname" . }}-hmac-secret
+                key: hmac-secret
+          {{- end }}
           {{- range $key, $value := .Values.env }}
           - name: {{ $key | quote }}
             value: {{ tpl $value $ | quote }}
@@ -130,7 +137,7 @@ spec:
 {{- end }}
 {{- if .Values.caCerts.enabled }}
 {{- if .Values.caCerts.secrets }}
-{{- range .Values.caCerts.secrets }} 
+{{- range .Values.caCerts.secrets }}
       - name: {{ template "dex-k8s-authenticator.fullname" $ }}-{{ .name }}
         secret:
           secretName: {{ template "dex-k8s-authenticator.fullname" $ }}-{{ .name }}
