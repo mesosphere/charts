@@ -32,8 +32,10 @@ data:
     {{- if .generateHmacSecret }}
     hmac_secret: "${DKA_HMAC_SECRET}"
     {{- end }}
+    {{- if .clusters }}
     clusters:
 {{ toYaml .clusters | indent 4 }}
+    {{- end }}
     {{- end }}
     {{- if .Values.caCerts.enabled }}
     caCerts: "true"
