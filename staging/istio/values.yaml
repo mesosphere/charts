@@ -12,14 +12,14 @@ security:
 prometheus:
   enabled: true
 
-### Default values for istio-operator, bundled with istio-1.13.4
+### Default values for istio-operator, bundled with istio-1.14.1
 
 # Note: These are nested so that additional values can be assigned to the default IstioOperator spec (see operator.yaml)
 # ref: https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.13.4
+  tag: 1.14.1
   components:
     cni:
       enabled: true
@@ -42,6 +42,9 @@ enableCRDTemplates: false
 
 # revision for the operator resources
 revision: ""
+
+# The number of old ReplicaSets to retain in operator deployment
+deploymentHistory: 10
 
 # Operator resource defaults
 operator:
