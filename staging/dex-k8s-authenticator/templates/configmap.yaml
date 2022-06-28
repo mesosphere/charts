@@ -32,6 +32,9 @@ data:
     {{- if .generateHmacSecret }}
     hmac_secret: "${DKA_HMAC_SECRET}"
     {{- end }}
+    {{- if .trusted_root_ca }}
+    trusted_root_ca: {{ toYaml .trusted_root_ca | nindent 4 }}
+    {{- end }}
     {{- if .clusters }}
     clusters:
 {{ toYaml .clusters | indent 4 }}
@@ -47,4 +50,3 @@ data:
     caCertPath: /certs/ca.crt
     {{- end }}
     {{- end }}
-
