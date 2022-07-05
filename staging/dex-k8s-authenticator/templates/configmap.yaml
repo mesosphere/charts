@@ -25,12 +25,20 @@ data:
     {{- if .idpCaPem }}
     idp_ca_pem: {{ toYaml .idpCaPem | indent 4 }}
     {{- end }}
-    {{- if and .tlsCert .tlsKey }} 
+    {{- if and .tlsCert .tlsKey }}
     tls_cert: "{{ .tlsCert }}"
     tls_key: "{{ .tlsKey }}"
     {{- end }}
+    {{- if .generateHmacSecret }}
+    hmac_secret: "${DKA_HMAC_SECRET}"
+    {{- end }}
+    {{- if .trusted_root_ca }}
+    trusted_root_ca: {{ toYaml .trusted_root_ca | nindent 4 }}
+    {{- end }}
+    {{- if .clusters }}
     clusters:
 {{ toYaml .clusters | indent 4 }}
+    {{- end }}
     {{- end }}
     {{- if .Values.caCerts.enabled }}
     caCerts: "true"
@@ -42,4 +50,3 @@ data:
     caCertPath: /certs/ca.crt
     {{- end }}
     {{- end }}
-

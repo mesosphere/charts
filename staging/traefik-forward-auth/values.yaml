@@ -41,6 +41,8 @@ traefikForwardAuth:
   #   ...
   #   -----END
   # or caSecretName: < name of the secret >
+  # To use system trusted CAs
+  # useSystemCA: true
   extraConfig: ""
   userCookieName: "_forward_auth_name"
   enableRBAC: false

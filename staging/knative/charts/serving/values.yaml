@@ -1,7 +1,7 @@
 global:
   serviceLabels: {}
   image: docker.io/bitnami/kubectl
-  tag: 1.22.8
+  tag: 1.24.1
 
 autoscaler:
   containerConcurrencyTargetPercentage: "70"
