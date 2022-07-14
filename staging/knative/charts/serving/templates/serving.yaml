@@ -126,6 +126,23 @@ metadata:
   annotations:
     knative.dev/example-checksum: "7b6520ae"
 data:
+  container-concurrency-target-percentage: "{{ .Values.autoscaler.containerConcurrencyTargetPercentage }}"
+  container-concurrency-target-default: "{{ .Values.autoscaler.containerConcurrencyTargetDefault }}"
+  requests-per-second-target-default: "{{ .Values.autoscaler.requestsPerSecondTargetDefault }}"
+  target-burst-capacity: "{{ .Values.autoscaler.targetBurstCapacity }}"
+  stable-window: "{{ .Values.autoscaler.stableWindow }}"
+  panic-window-percentage: "{{ .Values.autoscaler.panicWindowPercentage }}"
+  panic-threshold-percentage: "{{ .Values.autoscaler.panicThresholdPercentage }}"
+  max-scale-up-rate: "{{ .Values.autoscaler.maxScaleUpRate }}"
+  max-scale-down-rate: "{{ .Values.autoscaler.maxScaleDownRate }}"
+  enable-scale-to-zero: "{{ .Values.autoscaler.enableScaleToZero }}"
+  scale-to-zero-grace-period: "{{ .Values.autoscaler.scaleToZeroGracePeriod }}"
+  scale-to-zero-pod-retention-period: "{{ .Values.autoscaler.scaleToZeroPodRetentionPeriod }}"
+  pod-autoscaler-class: "{{ .Values.autoscaler.podAutoscalerClass }}"
+  activator-capacity: "{{ .Values.autoscaler.activatorCapacity }}"
+  initial-scale: "{{ .Values.autoscaler.initialScale }}"
+  allow-zero-initial-scale: "{{ .Values.autoscaler.allowZeroInitialScale }}"
+  max-scale: "{{ .Values.autoscaler.maxScale }}"
   _example: |
     ################################
     #                              #

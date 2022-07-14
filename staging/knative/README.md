@@ -44,10 +44,27 @@ $ kubectl get crds --output jsonpath='{.items..metadata.name}' \
 
 The following table lists the configurable parameters of the Knative chart and their default values.
 
-| Parameter               | Description                                                                                    | Default        |
-| ----------------------- | ---------------------------------------------------------------------------------------------- | -------------- |
-| `global.serviceLabels`  | Additional labels for all service definitions in every Knative component, specified as a map.  | `{}`           |
-| `serving.domain`        | Domain for the serving component.                                                              | `example.com`  |
+| Parameter                                                 | Description                                                                                   | Default                       |
+|-----------------------------------------------------------|-----------------------------------------------------------------------------------------------|-------------------------------|
+| `global.serviceLabels`                                    | Additional labels for all service definitions in every Knative component, specified as a map. | `{}`                          |
+| `serving.domain`                                          | Domain for the serving component.                                                             | `example.com`                 |
+| `serving.autoscaler.containerConcurrencyTargetPercentage` | Specifies value in ConfigMap `config-autoscaler`, `container-concurrency-target-percentage`     | `70`                          |
+| `serving.autoscaler.containerConcurrencyTargetDefault`    | Specifies value in ConfigMap `config-autoscaler`, `container-concurrency-target-default`        | `100`                         |
+| `serving.autoscaler.requestsPerSecondTargetDefault`       | Specifies value in ConfigMap `config-autoscaler`, `requests-per-second-target-default`          | `200`                         |
+| `serving.autoscaler.targetBurstCapacity`                  | Specifies value in ConfigMap `config-autoscaler`, `target-burst-capacity`                       | `200`                         |
+| `serving.autoscaler.stableWindow`                         | Specifies value in ConfigMap `config-autoscaler`, `stable-window`                               | `60s`                         |
+| `serving.autoscaler.panicWindowPercentage`                | Specifies value in ConfigMap `config-autoscaler`, `panic-window-percentage`                     | `10.0`                        |
+| `serving.autoscaler.panicThresholdPercentage`             | Specifies value in ConfigMap `config-autoscaler`, `panic-threshold-percentage`                  | `200.0`                       |
+| `serving.autoscaler.maxScaleUpRate`                       | Specifies value in ConfigMap `config-autoscaler`, `max-scale-up-rate`                           | `1000.0`                      |
+| `serving.autoscaler.maxScaleDownRate`                     | Specifies value in ConfigMap `config-autoscaler`, `max-scale-down-rate`                         | `2.0`                         |
+| `serving.autoscaler.enableScaleToZero`                    | Specifies value in ConfigMap `config-autoscaler`, `enable-scale-to-zero`                        | `true`                        |
+| `serving.autoscaler.scaleToZeroGracePeriod`               | Specifies value in ConfigMap `config-autoscaler`, `scale-to-zero-grace-period`                  | `30s`                         |
+| `serving.autoscaler.scaleToZeroPodRetentionPeriod`        | Specifies value in ConfigMap `config-autoscaler`, `scale-to-zero-pod-retention-period`          | `0s`                          |
+| `serving.autoscaler.podAutoscalerClass`                   | Specifies value in ConfigMap `config-autoscaler`, `pod-autoscaler-class`                        | `kpa.autoscaling.knative.dev` |
+| `serving.autoscaler.activatorCapacity`                    | Specifies value in ConfigMap `config-autoscaler`, `activator-capacity`                          | `100.0`                       |
+| `serving.autoscaler.initialScale`                         | Specifies value in ConfigMap `config-autoscaler`, `initial-scale`                               | `1`                           |
+| `serving.autoscaler.allowZeroInitialScale`                | Specifies value in ConfigMap `config-autoscaler`, `allow-zero-initial-scale`                    | `false`                       |
+| `serving.autoscaler.maxScale`                             | Specifies value in ConfigMap `config-autoscaler`, `max-scale`                                   | `0`                           |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example:
 
