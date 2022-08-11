@@ -136,7 +136,7 @@ cost-analyzer:
         image: thanosio/thanos:v0.15.0
         args:
         - sidecar
-        - --log.level=debug
+        - --log.level=warn
         - --tsdb.path=/data/
         - --prometheus.url=http://127.0.0.1:9090
         - --reloader.config-file=/etc/config/prometheus.yml
