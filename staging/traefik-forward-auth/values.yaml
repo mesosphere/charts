@@ -81,7 +81,8 @@ resources: {}
   #  cpu: 100m
   #  memory: 128Mi
 
-env: {}
+env:
+  LOG_LEVEL: info
 
 nodeSelector: {}
 

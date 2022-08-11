@@ -86,8 +86,6 @@ spec:
               value: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
               {{- end }}
             {{- end }}
-            - name: LOG_LEVEL
-              value: "trace"
             - name: SERVICE_ACCOUNT_TOKEN_PATH
               value: "/var/run/secrets/kubernetes.io/serviceaccount/token"
             {{- if .Values.traefikForwardAuth.clientSecret.valueFrom.secretKeyRef }}
