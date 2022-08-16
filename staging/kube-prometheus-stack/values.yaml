@@ -3353,3 +3353,16 @@ thanosRuler:
 ## Setting to true produces cleaner resource names, but requires a data migration because the name of the persistent volume changes. Therefore this should only be set once on initial installation.
 ##
 cleanPrometheusOperatorObjectNames: false
+# Create mesosphere specific resources
+mesosphereResources:
+  create: false
+  rules:
+    elasticsearch: false
+    velero: false
+  hooks:
+    kubectlImage: bitnami/kubectl:1.24.1
+    prometheus:
+      jobName: prom-get-cluster-id
+      configmapName: cluster-info-configmap
+  ingressRBAC:
+    enabled: true
