@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
-  name: {{ template "kube-prometheus-stack.fullname" . }}-alertmanager
+  name: {{ template "kube-prometheus-stack.alertmanager.crname" . }}
   namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
@@ -68,6 +68,10 @@ spec:
 {{ else }}
   alertmanagerConfigNamespaceSelector: {}
 {{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.web }}
+  web:
+{{ toYaml .Values.alertmanager.alertmanagerSpec.web | indent 4 }}
+{{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfiguration }}
   alertmanagerConfiguration:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfiguration | indent 4 }}
@@ -84,18 +88,8 @@ spec:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.storage }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
-{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($alertmanager).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Alertmanager resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
-{{- end }}
+  storage:
+{{ toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
@@ -114,7 +108,7 @@ spec:
         labelSelector:
           matchExpressions:
             - {key: app.kubernetes.io/name, operator: In, values: [alertmanager]}
-            - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-alertmanager]}
+            - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.alertmanager.crname" . }}]}
 {{- else if eq .Values.alertmanager.alertmanagerSpec.podAntiAffinity "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -124,7 +118,7 @@ spec:
           labelSelector:
             matchExpressions:
               - {key: app.kubernetes.io/name, operator: In, values: [alertmanager]}
-              - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-alertmanager]}
+              - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.alertmanager.crname" . }}]}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.tolerations }}
   tolerations:
@@ -136,7 +130,7 @@ spec:
 {{- end }}
 {{- if .Values.global.imagePullSecrets }}
   imagePullSecrets:
-{{ toYaml .Values.global.imagePullSecrets | indent 4 }}
+{{ include "kube-prometheus-stack.imagePullSecrets" . | trim | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.containers }}
   containers:

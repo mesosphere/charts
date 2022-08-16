@@ -9,7 +9,7 @@ set -xeuo pipefail
 
 SRCFILE="${BASEDIR}"/values.yaml
 
-sed -i '/# Create mesosphere specific resources/,$d' ${SRCFILE}
+sed -i '.bak' '/# Create mesosphere specific resources/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Create mesosphere specific resources

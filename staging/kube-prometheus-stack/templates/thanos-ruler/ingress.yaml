@@ -1,9 +1,9 @@
-{{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled }}
-{{- $pathType := .Values.alertmanager.ingress.pathType | default "ImplementationSpecific" }}
-{{- $serviceName := printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "alertmanager" }}
-{{- $servicePort := .Values.alertmanager.ingress.servicePort | default .Values.alertmanager.service.port -}}
-{{- $routePrefix := list .Values.alertmanager.alertmanagerSpec.routePrefix }}
-{{- $paths := .Values.alertmanager.ingress.paths | default $routePrefix -}}
+{{- if and .Values.thanosRuler.enabled .Values.thanosRuler.ingress.enabled }}
+{{- $pathType := .Values.thanosRuler.ingress.pathType | default "ImplementationSpecific" }}
+{{- $serviceName := printf "%s-%s" (include "kube-prometheus-stack.fullname" .) "thanos-ruler" }}
+{{- $servicePort := .Values.thanosRuler.service.port -}}
+{{- $routePrefix := list .Values.thanosRuler.thanosRulerSpec.routePrefix }}
+{{- $paths := .Values.thanosRuler.ingress.paths | default $routePrefix -}}
 {{- $apiIsStable := eq (include "kube-prometheus-stack.ingress.isStable" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "kube-prometheus-stack.ingress.supportsPathType" .) "true" -}}
 apiVersion: {{ include "kube-prometheus-stack.ingress.apiVersion" . }}
@@ -11,25 +11,25 @@ kind: Ingress
 metadata:
   name: {{ $serviceName }}
   namespace: {{ template "kube-prometheus-stack.namespace" . }}
-{{- if .Values.alertmanager.ingress.annotations }}
+{{- if .Values.thanosRuler.ingress.annotations }}
   annotations:
-{{ toYaml .Values.alertmanager.ingress.annotations | indent 4 }}
+{{ toYaml .Values.thanosRuler.ingress.annotations | indent 4 }}
 {{- end }}
   labels:
-    app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
-{{- if .Values.alertmanager.ingress.labels }}
-{{ toYaml .Values.alertmanager.ingress.labels | indent 4 }}
+    app: {{ template "kube-prometheus-stack.name" . }}-thanos-ruler
+{{- if .Values.thanosRuler.ingress.labels }}
+{{ toYaml .Values.thanosRuler.ingress.labels | indent 4 }}
 {{- end }}
 {{ include "kube-prometheus-stack.labels" . | indent 4 }}
 spec:
   {{- if $apiIsStable }}
-  {{- if .Values.alertmanager.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.alertmanager.ingress.ingressClassName }}
+  {{- if .Values.thanosRuler.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.thanosRuler.ingress.ingressClassName }}
   {{- end }}
   {{- end }}
   rules:
-  {{- if .Values.alertmanager.ingress.hosts }}
-  {{- range $host := .Values.alertmanager.ingress.hosts }}
+  {{- if .Values.thanosRuler.ingress.hosts }}
+  {{- range $host := .Values.thanosRuler.ingress.hosts }}
     - host: {{ tpl $host $ }}
       http:
         paths:
@@ -70,8 +70,8 @@ spec:
   {{- end }}
   {{- end -}}
   {{- end -}}
-  {{- if .Values.alertmanager.ingress.tls }}
+  {{- if .Values.thanosRuler.ingress.tls }}
   tls:
-{{ tpl (toYaml .Values.alertmanager.ingress.tls | indent 4) . }}
+{{ tpl (toYaml .Values.thanosRuler.ingress.tls | indent 4) . }}
   {{- end -}}
 {{- end -}}

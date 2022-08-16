@@ -8,7 +8,7 @@ set -xeuo pipefail
 
 SRCFILE="${BASEDIR}"/templates/_helpers.tpl
 
-sed -i '/# Mesosphere-specific templates/,$d' ${SRCFILE}
+sed -i '.bak' '/# Mesosphere-specific templates/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Mesosphere-specific templates
