@@ -13,7 +13,7 @@ shopt -s dotglob
 BASEDIR=$(dirname "$(realpath "$0")")
 UPSTREAM_REPO=git@github.com:prometheus-community/helm-charts.git
 PROMETHEUS_PATH=charts/kube-prometheus-stack
-PROMETHEUS_TAG=kube-prometheus-stack-34.9.0
+PROMETHEUS_TAG=kube-prometheus-stack-39.7.0
 TMPDIR=$(mktemp -d)
 STARTING_REV=$(git rev-parse HEAD)
 export STARTING_REV
