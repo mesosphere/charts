@@ -1596,6 +1596,8 @@ prometheusOperator:
   ## rules from making their way into prometheus and potentially preventing the container from starting
   admissionWebhooks:
     failurePolicy: Fail
+    ## The default timeoutSeconds is 10 and the maximum value is 30.
+    timeoutSeconds: 10
     enabled: true
     ## A PEM encoded CA bundle which will be used to validate the webhook's server certificate.
     ## If unspecified, system trust roots on the apiserver are used.
@@ -3188,6 +3190,10 @@ thanosRuler:
     ##
     retention: 24h
 
+    ## Interval between consecutive evaluations.
+    ##
+    evaluationInterval: ""
+
     ## Storage is the definition of how storage will be used by the ThanosRuler instances.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
     ##
@@ -3353,16 +3359,3 @@ thanosRuler:
 ## Setting to true produces cleaner resource names, but requires a data migration because the name of the persistent volume changes. Therefore this should only be set once on initial installation.
 ##
 cleanPrometheusOperatorObjectNames: false
-# Create mesosphere specific resources
-mesosphereResources:
-  create: false
-  rules:
-    elasticsearch: false
-    velero: false
-  hooks:
-    kubectlImage: bitnami/kubectl:1.24.1
-    prometheus:
-      jobName: prom-get-cluster-id
-      configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
