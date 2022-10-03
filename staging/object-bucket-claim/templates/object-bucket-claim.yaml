@@ -12,12 +12,8 @@ spec:
   # `generateBucketName` must be omitted in the OBC.
   bucketName: {{ .Values.bucketName }}
   storageClassName: {{ .Values.storageClassName }}
-  additionalConfig:
+{{- if .Values.additionalConfig }}
     # To set for quota for OBC
-    {{- if .Values.additionalConfig.maxObjects }}
-      maxObjects: {{ .Values.additionalConfig.maxObjects }}
-    {{- end }}
-    # in string format like "2G", minimum is "4K"
-    {{- if .Values.additionalConfig.maxSize }}
-      maxSize: {{ .Values.additionalConfig.maxSize }}
-    {{- end }}
+  additionalConfig:
+{{- toYaml .Values.additionalConfig | nindent 4 }}
+{{- end }}

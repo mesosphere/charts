@@ -9,4 +9,5 @@ storageClassName: s3-provider-sc
 labels: {}
 additionalConfig:
   maxObjects: "1000"
+  # in string format like "2G", minimum is "4K"
   maxSize: "2G"
