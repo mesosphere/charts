@@ -1,0 +1,8 @@
+bucketName: new-s3-bucket
+# generateBucketName: ceph-bkt
+storageClassName: s3-provider-sc
+
+labels: {}
+additionalConfig:
+  maxObjects: "1000"
+  maxSize: "2G"
