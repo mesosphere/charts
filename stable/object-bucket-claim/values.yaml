@@ -1,9 +1,34 @@
-bucketName: new-s3-bucket
-# generateBucketName: ceph-bkt
-storageClassName: s3-provider-sc
+dkp:
+  # name of apps that consumes the S3 bucket to create
+  velero:
+    bucketName: dkp-velero
+    # generateBucketName: ceph-bkt
+    storageClassName: s3-provider-sc
 
-labels: {}
-additionalConfig:
-  maxObjects: "1000"
-  # in string format like "2G", minimum is "4K"
-  maxSize: "2G"
+    labels: {}
+    additionalConfig:
+      # maxObjects: "1000"
+      # in string format like "2G", minimum is "4K"
+      maxSize: "10G"
+
+  loki:
+    bucketName: dkp-loki
+    # generateBucketName: ceph-bkt
+    storageClassName: s3-provider-sc
+
+    labels: {}
+    additionalConfig:
+      # maxObjects: "1000"
+      # in string format like "2G", minimum is "4K"
+      maxSize: "40G"
+  
+  # your-app:
+  #   bucketName: your-app
+  #   # generateBucketName: ceph-bkt
+  #   storageClassName: s3-provider-sc
+
+  #   labels: {}
+  #   additionalConfig:
+  #     # maxObjects: "1000"
+  #     # in string format like "2G", minimum is "4K"
+  #     maxSize: "2G"
