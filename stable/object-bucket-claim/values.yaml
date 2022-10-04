@@ -1,7 +1,3 @@
-# needed for CI
-crds:
-  enabled: true
-
 bucketName: new-s3-bucket
 # generateBucketName: ceph-bkt
 storageClassName: s3-provider-sc
