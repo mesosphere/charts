@@ -41,22 +41,3 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "object-bucket-claim.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "object-bucket-claim.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end }}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "object-bucket-claim.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create }}
-{{- default (include "object-bucket-claim.fullname" .) .Values.serviceAccount.name }}
-{{- else }}
-{{- default "default" .Values.serviceAccount.name }}
-{{- end }}
-{{- end }}

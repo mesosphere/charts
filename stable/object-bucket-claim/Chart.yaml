@@ -1,11 +1,11 @@
 apiVersion: v2
 name: object-bucket-claim
-description: A Helm chart for ObjectBucketClaim to be consumed by other applications. CRD is included to allow testing only.
+description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
 home: https://github.com/mesosphere/charts
 keywords:
   - kommander
 version: 0.1.0
-appVersion: "1.16.0"
+appVersion: "0.1.0"
 maintainers:
   - name: cwyl02
   - name: takirala
