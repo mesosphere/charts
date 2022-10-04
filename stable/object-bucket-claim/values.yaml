@@ -1,6 +1,7 @@
 dkp:
   # name of apps that consumes the S3 bucket to create
   velero:
+    enabled: true
     bucketName: dkp-velero
     # generateBucketName: ceph-bkt
     storageClassName: s3-provider-sc
@@ -12,6 +13,7 @@ dkp:
       maxSize: "10G"
 
   loki:
+    enabled: true
     bucketName: dkp-loki
     # generateBucketName: ceph-bkt
     storageClassName: s3-provider-sc
@@ -23,6 +25,7 @@ dkp:
       maxSize: "40G"
   
   # your-app:
+  #   enabled: true
   #   bucketName: your-app
   #   # generateBucketName: ceph-bkt
   #   storageClassName: s3-provider-sc

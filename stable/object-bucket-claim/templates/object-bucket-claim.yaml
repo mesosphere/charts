@@ -1,4 +1,5 @@
 {{- range $app, $config := .Values.dkp }}
+{{- if $config.enabled }}
 ---
 apiVersion: objectbucket.io/v1alpha1
 kind: ObjectBucketClaim
@@ -20,4 +21,5 @@ spec:
   additionalConfig:
     {{- toYaml $config.additionalConfig | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}
