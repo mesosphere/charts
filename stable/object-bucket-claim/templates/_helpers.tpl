@@ -35,7 +35,6 @@ Common labels
 */}}
 {{- define "object-bucket-claim.labels" -}}
 helm.sh/chart: {{ include "object-bucket-claim.chart" . }}
-{{ include "object-bucket-claim.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
