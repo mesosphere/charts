@@ -1,5 +1,6 @@
 dkp:
   # name of apps that consumes the S3 bucket to create
+  # needs to be the helmrelease name of the consuming app
   velero:
     enabled: true
     bucketName: dkp-velero
@@ -12,7 +13,7 @@ dkp:
       # in string format like "2G", minimum is "4K"
       maxSize: "10G"
 
-  loki:
+  grafana-loki:
     enabled: true
     bucketName: dkp-loki
     # generateBucketName: ceph-bkt
