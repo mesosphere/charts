@@ -78,7 +78,6 @@ spec:
             - |
               /bin/bash <<'EOF'
               set -o nounset
-              # set -o errexit
               set -o pipefail
 
               obc_status_phase=$(kubectl get objectbucketclaim -n {{ $.Release.Namespace }} {{ $config.bucketName }} -o jsonpath='{.status.phase}')
