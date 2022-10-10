@@ -8,6 +8,7 @@ excluded-charts:
   - dex-controller # Moved to a different helm repo
   - kubefed
   - kommander-cert-federation # Unable to test unless cert-manager is also upgraded
+  - object-bucket-claim # chart is only a collection of plain OBC objects
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable

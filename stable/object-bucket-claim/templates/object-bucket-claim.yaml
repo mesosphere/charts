@@ -1,0 +1,120 @@
+{{- range $app, $config := .Values.dkp }}
+{{- if $config.enabled }}
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ $config.bucketName }}
+  labels: 
+    {{ include "object-bucket-claim.labels" $ | nindent 4 }}
+    {{- if $config.labels }}
+    {{ toYaml $config.labels | nindent 4 }}
+    {{- end }}
+spec:
+  # To create a new bucket specify either `bucketName` or
+  # `generateBucketName` here. Both cannot be used. To access
+  # an existing bucket the bucket name needs to be defined in
+  # the StorageClass referenced here, and both `bucketName` and
+  # `generateBucketName` must be omitted in the OBC.
+  bucketName: {{ $config.bucketName }}
+  storageClassName: {{ $config.storageClassName }}
+  {{- if $config.additionalConfig }}
+    # To set for quota for OBC
+  additionalConfig:
+    {{- toYaml $config.additionalConfig | nindent 4 }}
+  {{- end }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: check-{{ $config.bucketName }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: check-{{ $config.bucketName }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "update", "patch", "delete"]
+  - apiGroups: ["objectbucket.io"]
+    resources: ["objectbucketclaims"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["helm.toolkit.fluxcd.io"]
+    resources: ["helmreleases"]
+    verbs: ["get", "list", "patch", "watch", "delete"] #, "create", "update", , ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: check-{{ $config.bucketName }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: check-{{ $config.bucketName }}
+subjects:
+  - kind: ServiceAccount
+    name: check-{{ $config.bucketName }}
+    namespace: {{ $.Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: check-{{ $config.bucketName }}
+spec:
+  backoffLimit: 12
+  template:
+    metadata:
+      name: check-{{ $config.bucketName }}
+    spec:
+      serviceAccountName: check-{{ $config.bucketName }}
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: "bitnami/kubectl:1.24.1" #ghcr.io/fluxcd/flux-cli:v0.31.5
+          command:
+            - sh
+            - -c
+            - |
+              /bin/bash <<'EOF'
+              set -o nounset
+              set -o pipefail
+
+              obc_status_phase=$(kubectl get objectbucketclaim -n {{ $.Release.Namespace }} {{ $config.bucketName }} -o jsonpath='{.status.phase}')
+
+              # check the ObjectBucketClaim is being fulfilled
+              case $obc_status_phase in
+                "")
+                  echo "ObjectBucketClaim {{ $config.bucketName }} is not being reconciled by S3 storage provider yet.."
+                  echo "Waiting for 1 min before exiting.."
+                  sleep 60
+                  exit 1
+                  ;;
+                Bound)
+                  echo "ObjectBucketClaim {{ $config.bucketName }} is Bound"
+                  ;;
+                *)
+                  echo "ObjectBucketClaim {{ $config.bucketName }} is $obc_status_phase phase"
+                  echo "Waiting for 1 min before exiting.."
+                  sleep 60
+                  exit 1
+                  ;;
+              esac
+
+              # check the consumer app HelmRelease exists before kicking off the reconcile
+              kubectl get helmrelease -n kommander {{ $app }}
+              if [[ $? -eq 1 ]]; then
+                  echo "HelmRelease {{ $app }} doesn't exist. Do nothing."
+                  exit 0
+              fi
+
+              # reconcile the storage consumer app HelmRelease
+              kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": true}]'
+              kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": false}]'
+
+              # wait for 10 mins
+              kubectl wait helmrelease -n {{ $.Release.Namespace }} {{ $app }} --for=condition=Ready --timeout 10m
+              EOF
+
+{{- end }}
+{{- end }}
