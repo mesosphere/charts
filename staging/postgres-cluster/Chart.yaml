@@ -1,0 +1,10 @@
+apiVersion: v2
+name: postgres-cluster
+description: Manage Postgres clusters via PGO, the open source Postgres Operator from Crunchy Data
+type: application
+# The version below should match the version on the PostgresCluster CRD
+version: 0.6.0
+appVersion: 5.2.0
+maintainers:
+  - name: jimmidyson
+    email: jimmidyson@gmail.com
