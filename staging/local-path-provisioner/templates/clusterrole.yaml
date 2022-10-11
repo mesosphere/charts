@@ -1,11 +1,13 @@
----
+{{- if .Values.rbac.create -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "local-path-provisioner.fullname" . }}-role
+  name: {{ include "local-path-provisioner.fullname" . }}
+  labels:
+{{ include "local-path-provisioner.labels" . | indent 4 }}
 rules:
 - apiGroups: [""]
-  resources: ["nodes", "persistentvolumeclaims"]
+  resources: ["nodes", "persistentvolumeclaims", "configmaps"]
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]
   resources: ["endpoints", "persistentvolumes", "pods"]
@@ -15,4 +17,5 @@ rules:
   verbs: ["create", "patch"]
 - apiGroups: ["storage.k8s.io"]
   resources: ["storageclasses"]
-  verbs: ["get", "list", "watch", "patch"]
+  verbs: ["get", "list", "watch"]
+{{- end -}}
