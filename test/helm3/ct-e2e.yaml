@@ -33,6 +33,7 @@ excluded-charts:
   - kubefed
   - kommander-cert-federation # Unable to test unless cert-manager is also upgraded
   - object-bucket-claim # chart is only a plain OBC object
+  - postgres-cluster # Requires installing postgres-operator chart as well
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
