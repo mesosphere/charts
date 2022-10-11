@@ -45,7 +45,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use
+Create the name of the service account to use.
 */}}
 {{- define "local-path-provisioner.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
@@ -54,3 +54,18 @@ Create the name of the service account to use
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the provisioner to use.
+*/}}
+{{- define "local-path-provisioner.provisionerName" -}}
+{{- if .Values.storageClass.provisionerName -}}
+{{- printf .Values.storageClass.provisionerName -}}
+{{- else -}}
+cluster.local/{{ template "local-path-provisioner.fullname" . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "local-path-provisioner.secret" }}
+{{- printf "{\"auths\": {\"%s\": {\"auth\": \"%s\"}}}" .Values.privateRegistry.registryUrl (printf "%s:%s" .Values.privateRegistry.registryUser .Values.privateRegistry.registryPasswd | b64enc) | b64enc }}
+{{- end }}
