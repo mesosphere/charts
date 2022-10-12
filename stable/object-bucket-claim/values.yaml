@@ -6,6 +6,8 @@ dkp:
     bucketName: dkp-velero
     # generateBucketName: ceph-bkt
     storageClassName: s3-provider-sc
+    # needed only for rook-ceph-cluster k-app
+    enableOBCHealthCheck: true
 
     labels: {}
     additionalConfig:
@@ -18,6 +20,8 @@ dkp:
     bucketName: dkp-loki
     # generateBucketName: ceph-bkt
     storageClassName: s3-provider-sc
+    # needed only for rook-ceph-cluster k-app
+    enableOBCHealthCheck: true
 
     labels: {}
     additionalConfig:
