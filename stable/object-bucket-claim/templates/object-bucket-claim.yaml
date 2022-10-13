@@ -31,7 +31,7 @@ metadata:
   name: check-{{ $config.bucketName }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
   name: check-{{ $config.bucketName }}
 rules:
@@ -46,12 +46,12 @@ rules:
     verbs: ["get", "list", "patch", "watch", "delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
   name: check-{{ $config.bucketName }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
+  kind: Role
   name: check-{{ $config.bucketName }}
 subjects:
   - kind: ServiceAccount
