@@ -116,7 +116,8 @@ spec:
               jq -e --arg helm_deadlock_msg $helm_deadlock_msg '.status | .conditions | map(.message) | contains([$helm_deadlock_msg])'
               if [[ $? -eq 0 ]]; then
                   echo "Helm storage deadlock detected. Cleaning up the helm storage for {{ $app }}.."
-                  helm_storage_secrets=($(kubectl get secrets -n {{ $.Release.Namespace }} -l name={{ $app }} -o jsonpath='{range .items[*]}{.metadata.name}{" "}{end}'))
+                  helm_storage_secrets=($(kubectl get secrets --sort-by=.metadata.creationTimestamp \
+                  -n {{ $.Release.Namespace }} -l name={{ $app }} -o jsonpath='{range .items[*]}{.metadata.name}{" "}{end}'))
                   # delete the latest secret
                   kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secret[-1]}
               fi
