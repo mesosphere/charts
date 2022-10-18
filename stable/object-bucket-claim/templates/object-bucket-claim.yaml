@@ -137,8 +137,12 @@ spec:
 
                 # wait for 10 mins
                 kubectl wait helmrelease -n {{ $.Release.Namespace }} {{ $app }} --for=condition=Ready --timeout 10m
-                EOF
+                if [[ $? -eq 0 ]]; then
+                  echo "{{ $app }} HelmRelease check succeeded."
+                  exit 0
+                fi
               done
+              EOF
 {{- end }}
 {{- end }}
 {{- end }}
