@@ -77,44 +77,73 @@ spec:
             - sh
             - -c
             - |
-              /bin/bash <<'EOF'
+              timeout --preserve-status 1h /bin/bash <<'EOF'
               set -o nounset
               set -o pipefail
 
-              obc_status_phase=$(kubectl get objectbucketclaim -n {{ $.Release.Namespace }} {{ $config.bucketName }} -o jsonpath='{.status.phase}')
+              while true ; do
+                obc_status_phase=$(kubectl get objectbucketclaim -n {{ $.Release.Namespace }} {{ $config.bucketName }} -o jsonpath='{.status.phase}')
 
-              # check the ObjectBucketClaim is being fulfilled
-              case $obc_status_phase in
-                "")
-                  echo "ObjectBucketClaim {{ $config.bucketName }} is not being reconciled by S3 storage provider yet.."
+                # check the ObjectBucketClaim is being fulfilled
+                case $obc_status_phase in
+                  "")
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is not being reconciled by S3 storage provider yet.."
+                    echo "Waiting for 1 min before exiting.."
+                    sleep 60
+                    continue
+                    ;;
+                  Bound)
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is Bound"
+                    ;;
+                  *)
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is $obc_status_phase phase"
+                    echo "Waiting for 1 min before exiting.."
+                    sleep 60
+                    continue
+                    ;;
+                esac
+
+                # check the consumer app HelmRelease exists before kicking off the reconcile
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }}
+                if [[ $? -eq 1 ]]; then
+                    echo "HelmRelease {{ $app }} doesn't exist. Do nothing."
+                    exit 0
+                fi
+
+                # check if a reconciliation is in progress
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
+                jq -e '.status | .conditions | map(.reason) | contains(["Progressing"])'
+                if [[ $? -eq 0 ]]; then
+                  echo "{{ $app }} HelmRelease is in reconciliation. Do nothing."
                   echo "Waiting for 1 min before exiting.."
                   sleep 60
-                  exit 1
-                  ;;
-                Bound)
-                  echo "ObjectBucketClaim {{ $config.bucketName }} is Bound"
-                  ;;
-                *)
-                  echo "ObjectBucketClaim {{ $config.bucketName }} is $obc_status_phase phase"
-                  echo "Waiting for 1 min before exiting.."
-                  sleep 60
-                  exit 1
-                  ;;
-              esac
+                  continue
+                fi
 
-              # check the consumer app HelmRelease exists before kicking off the reconcile
-              kubectl get helmrelease -n kommander {{ $app }}
-              if [[ $? -eq 1 ]]; then
-                  echo "HelmRelease {{ $app }} doesn't exist. Do nothing."
+                # detect helm storage deadlock
+                # https://github.com/fluxcd/helm-controller/issues/149
+                helm_deadlock_msg="Helm upgrade failed: another operation (install/upgrade/rollback) is in progress"
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
+                jq -e --arg helm_deadlock_msg "$helm_deadlock_msg" '.status | .conditions | map(.message) | contains([$helm_deadlock_msg])'
+                if [[ $? -eq 0 ]]; then
+                    echo "Helm storage deadlock detected. Cleaning up the helm storage for {{ $app }}.."
+                    helm_storage_secrets=($(kubectl get secrets --sort-by=.metadata.creationTimestamp \
+                    -n {{ $.Release.Namespace }} -l name={{ $app }} -o jsonpath='{range .items[*]}{.metadata.name}{" "}{end}'))
+                    # delete the latest secret
+                    kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secrets[-1]}
+                fi
+
+                # reconcile the storage consumer app HelmRelease if it's not in reconciliation progress"
+                kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": true}]'
+                kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": false}]'
+
+                # wait for 10 mins
+                kubectl wait helmrelease -n {{ $.Release.Namespace }} {{ $app }} --for=condition=Ready --timeout 10m
+                if [[ $? -eq 0 ]]; then
+                  echo "{{ $app }} HelmRelease check succeeded."
                   exit 0
-              fi
-
-              # reconcile the storage consumer app HelmRelease
-              kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": true}]'
-              kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": false}]'
-
-              # wait for 10 mins
-              kubectl wait helmrelease -n {{ $.Release.Namespace }} {{ $app }} --for=condition=Ready --timeout 10m
+                fi
+              done
               EOF
 {{- end }}
 {{- end }}
