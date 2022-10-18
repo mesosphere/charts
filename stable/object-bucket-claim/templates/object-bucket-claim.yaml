@@ -127,7 +127,7 @@ spec:
                   helm_storage_secrets=($(kubectl get secrets --sort-by=.metadata.creationTimestamp \
                   -n {{ $.Release.Namespace }} -l name={{ $app }} -o jsonpath='{range .items[*]}{.metadata.name}{" "}{end}'))
                   # delete the latest secret
-                  kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secret[-1]}
+                  kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secrets[-1]}
               fi
 
               # reconcile the storage consumer app HelmRelease if it's not in reconciliation progress"
