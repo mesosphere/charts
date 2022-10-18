@@ -109,11 +109,19 @@ spec:
                   exit 0
               fi
 
+              # check if a reconciliation is in progress
+              kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
+              jq -e '.status | .conditions | map(.reason) | contains(["Progressing"])'
+              if [[ $? -eq 0 ]]; then
+                echo "{{ $app }} HelmRelease is in reconciliation. Do nothing."
+                exit 1
+              fi
+
               # detect helm storage deadlock
               # https://github.com/fluxcd/helm-controller/issues/149
               helm_deadlock_msg="Helm upgrade failed: another operation (install/upgrade/rollback) is in progress"
               kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
-              jq -e --arg helm_deadlock_msg $helm_deadlock_msg '.status | .conditions | map(.message) | contains([$helm_deadlock_msg])'
+              jq -e --arg helm_deadlock_msg "$helm_deadlock_msg" '.status | .conditions | map(.message) | contains([$helm_deadlock_msg])'
               if [[ $? -eq 0 ]]; then
                   echo "Helm storage deadlock detected. Cleaning up the helm storage for {{ $app }}.."
                   helm_storage_secrets=($(kubectl get secrets --sort-by=.metadata.creationTimestamp \
@@ -122,7 +130,7 @@ spec:
                   kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secret[-1]}
               fi
 
-              # reconcile the storage consumer app HelmRelease
+              # reconcile the storage consumer app HelmRelease if it's not in reconciliation progress"
               kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": true}]'
               kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": false}]'
 
