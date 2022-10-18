@@ -90,7 +90,7 @@ spec:
                     echo "ObjectBucketClaim {{ $config.bucketName }} is not being reconciled by S3 storage provider yet.."
                     echo "Waiting for 1 min before exiting.."
                     sleep 60
-                    exit 1
+                    continue
                     ;;
                   Bound)
                     echo "ObjectBucketClaim {{ $config.bucketName }} is Bound"
@@ -99,7 +99,7 @@ spec:
                     echo "ObjectBucketClaim {{ $config.bucketName }} is $obc_status_phase phase"
                     echo "Waiting for 1 min before exiting.."
                     sleep 60
-                    exit 1
+                    continue
                     ;;
                 esac
 
@@ -115,7 +115,9 @@ spec:
                 jq -e '.status | .conditions | map(.reason) | contains(["Progressing"])'
                 if [[ $? -eq 0 ]]; then
                   echo "{{ $app }} HelmRelease is in reconciliation. Do nothing."
-                  exit 1
+                  echo "Waiting for 1 min before exiting.."
+                  sleep 60
+                  continue
                 fi
 
                 # detect helm storage deadlock
