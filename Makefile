@@ -91,19 +91,23 @@ endif
 .SECONDEXPANSION:
 
 .PHONY: all
+all: ## Builds all chart repositories
 all: stagingrepo stablerepo
 
 .PHONY: clean
-clean:
+clean: ## Remove all build artifacts
 	rm -rf gh-pages bin .local
 
 .PHONY: stagingrepo
+stagingrepo: ## Build the staging repository
 stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
 
 .PHONY: stablerepo
+stablerepo: ## Build the stablerepo repository
 stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
 
 .PHONY: publish
+publish: ## Publishes changed helm charts to gh-pages
 publish: export LC_COLLATE := C
 publish: export TZ := UTC
 publish:
@@ -163,6 +167,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$
 	$(HELM_BIN) repo index $(patsubst %/index.yaml,%,$@) --url=$(REPO_BASE_URL)/$(patsubst gh-pages/%index.yaml,%,$@)
 
 .PHONY: ct.lint
+ct.lint: ## Run chart-testing (ct) linter against charts.
 ct.lint: $(HELM_BIN)
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
@@ -170,6 +175,7 @@ endif
 	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
+ct.test: ## Runs e2e tests for charts
 ct.test: $(HELM_BIN)
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
@@ -177,13 +183,20 @@ endif
 	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
 
 .PHONY: lint
+lint: ## Alias for ct.lint
 lint: ct.lint
 
 .PHONY: test.helm
+test.helm: ## Alias for ct.test
 test.helm: ct.test
 
 .PHONY: test
+test: ## Alias for ct.test
 test: ct.test
+
+.PHONY: help
+help: ## Shows this help message
+	awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_\-.]+:.*?##/ { printf "  \033[36m%-15s\033[0m\t %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Download Tools
