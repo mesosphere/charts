@@ -1,0 +1,32 @@
+name: publish
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "staging/*"
+      - "stable/*"
+      - ".github/workflows/publish.yml"
+
+jobs:
+  charts:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install asdf plugins
+        uses: asdf-vm/actions/install@v1
+
+      - name: Publish charts
+        run: make publish
+        env:
+          COMMIT_EMAIL: "ci@mesosphere.com"
+          COMMIT_USERNAME: "D2iQ CI"
+          GIT_REMOTE_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/mesosphere/charts.git"
