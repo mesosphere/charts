@@ -2,10 +2,10 @@ name: publish
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
     paths:
-      - "staging/*"
-      - "stable/*"
+      - "staging/**"
+      - "stable/**"
       - ".github/workflows/publish.yml"
 
 jobs:
@@ -23,6 +23,24 @@ jobs:
 
       - name: Install asdf plugins
         uses: asdf-vm/actions/install@v1
+
+      - name: gather versions
+        uses: endorama/asdf-parse-tool-versions@v1
+        id: versions
+
+      # We're switching directories for building the charts, so we need to set the helm and chart testing plugins
+      # to the correct version globally.
+      # Otherwise, we're getting errors like:
+      #    Consider adding one of the following versions in your config file at
+      #    helm 3.10.1
+      # Even though step giving a warning in the log it's still working.
+      - name: Set global tool versions
+        env:
+          HELM_VERSION: ${{ fromJson(steps.versions.outputs.tools).helm }}
+          HELM_CT_VERSION: ${{ fromJson(steps.versions.outputs.tools).helm-ct  }}
+        run: |
+          asdf global helm $HELM_VERSION
+          asdf global helm-ct $HELM_CT_VERSION
 
       - name: Publish charts
         run: make publish
