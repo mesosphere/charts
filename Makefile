@@ -43,13 +43,16 @@ export PATH := $(GOBIN):$(PATH)
 # Helm configuration
 # ----------------------------------------------------------------------------------------------------------------------
 
-CT_VERSION ?= v3.5.1
-HELM_VERSION ?= v3.6.3
-HELM_BIN ?= bin/$(GOOS)/$(GOARCH)/helm-$(HELM_VERSION)
-
 export HELM_CONFIG_HOME=$(HELM_DIR)/config
 export HELM_CACHE_HOME=$(HELM_DIR)/cache
 export HELM_DATA_HOME=$(HELM_DIR)/data
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Chart Testing configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+export CT_LINT_CONF=config/ct/lintconf.yaml
+export CT_CHART_YAML_SCHEMA=config/ct/chart_schema.yaml
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Git configuration
@@ -78,26 +81,18 @@ STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
 REPO_BASE_URL := https://$(GITHUB_USER).github.io/charts
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Docker configuration
+# Asdf configuration
 # ----------------------------------------------------------------------------------------------------------------------
 
-ifeq (,$(wildcard /teamcity/system/git))
-DRUN := docker run -t --rm \
-			-v $(TMPDIR):/.helm \
-			-v ${PWD}:/charts \
-			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml \
-			-v ${PWD}/$(HELM_BIN):/usr/local/bin/helm \
-			-w /charts \
-			quay.io/helmpack/chart-testing:$(CT_VERSION)
-else
-DRUN := docker run -t --rm \
-            -v /teamcity/system/git:/teamcity/system/git \
-			-v ${PWD}:/charts \
-			-v ${PWD}/test/ct.yaml:/etc/ct/ct.yaml \
-			-v ${PWD}/$(HELM_BIN):/usr/local/bin/helm \
-			-w /charts \
-			quay.io/helmpack/chart-testing:$(CT_VERSION)
+ifeq ($(shell command -v asdf),)
+  $(error "This repo requires asdf - see https://asdf-vm.com/guide/getting-started.html for instructions to install")
 endif
+
+## (aweris) Quick and dirty solution to be able to run the test/e2e-kind.sh script with out changing the script.
+## Space end of the variable is important. I was too lazy to write a regex to match "helm" and "helm-ct" properly.
+## TODO: Remove this once update the test/e2e-kind.sh script to use the asdf version
+HELM_VERSION := v$(shell cat .tool-versions | grep "helm " | cut -d' ' -f2)
+CT_VERSION := v$(shell cat .tool-versions | grep "helm-ct " | cut -d' ' -f2)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Targets
@@ -163,12 +158,12 @@ endif
 #   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
 #   content will result in the same output package
 # - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
+$(STABLE_TARGETS) $(STAGING_TARGETS): tools.install.helm $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
 	$(info $(M)$(M) building $(PACKAGE_SRC))
-	$(HELM_BIN) package $(PACKAGE_SRC) -d $(shell dirname $@)
+	helm package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
 	tar -c \
 			--owner=root:0 --group=root:0 --numeric-owner \
@@ -178,24 +173,24 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$
 			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
 	rm -rf $(UNPACKED_TMP)
 
-%/index.yaml: $(HELM_BIN) $(STABLE_TARGETS) $(STAGING_TARGETS)
+%/index.yaml: tools.install.helm $(STABLE_TARGETS) $(STAGING_TARGETS)
 %/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
 	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	$(HELM_BIN) repo index $(patsubst %/index.yaml,%,$@) --url=$(REPO_BASE_URL)/$(patsubst gh-pages/%index.yaml,%,$@)
+	helm repo index $(patsubst %/index.yaml,%,$@) --url=$(REPO_BASE_URL)/$(patsubst gh-pages/%index.yaml,%,$@)
 
 .PHONY: ct.lint
 ct.lint: ## Run chart-testing (ct) linter against charts.
-ct.lint: $(HELM_BIN) ; $(info $(M) running ct lint)
+ct.lint: tools.install.helm ; $(info $(M) running ct lint)
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
+	git fetch ${GIT_REMOTE_NAME} master
 endif
-	$(DRUN) ct lint --remote=${GIT_REMOTE_NAME} --debug
+	ct lint --remote=${GIT_REMOTE_NAME} --debug
 
 .PHONY: ct.test
 ct.test: ## Runs e2e tests for charts
-ct.test: $(HELM_BIN) ; $(info $(M) running e2e test(kind))
+ct.test: tools.install.helm ; $(info $(M) running e2e test(kind))
 ifneq (,$(wildcard /teamcity/system/git))
-	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
+	git fetch ${GIT_REMOTE_NAME} master
 endif
 	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
 
@@ -216,18 +211,50 @@ help: ## Shows this help message
 	awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_\-.]+:.*?##/ { printf "  \033[36m%-15s\033[0m\t %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 # ----------------------------------------------------------------------------------------------------------------------
-# Download Tools
+# Tools
 # ----------------------------------------------------------------------------------------------------------------------
 
-ifneq (,$(filter tar (GNU tar)%, $(shell tar --version)))
-WILDCARDS := --wildcards
+define install_tool
+	$(if $(1), \
+		(asdf plugin list 2>/dev/null | grep -E '^$(1)$$' &>/dev/null) || asdf plugin add $(1), \
+		grep -Eo '^[^#]\S+' $(REPO_ROOT)/.tool-versions | \
+			xargs $(if $(VERBOSE),--verbose) -I{} bash -ec '(asdf plugin list 2>/dev/null | grep -E "^{}$$" &>/dev/null) || \
+														asdf plugin add {}' \
+	)
+	asdf install $1
+endef
+
+.PHONY: tools.install
+tools.install: ## Install all tools
+tools.install: ; $(info $(M) installing all tools)
+	$(call install_tool,)
+
+.PHONY: tools.install.%
+tools.install.%: ## Install specific tool
+tools.install.%: ; $(info $(M) installing $*)
+	$(call install_tool,$*)
+
+.PHONY: tools.upgrade
+# ASDF plugins use different env vars for GitHub authentication when querying releases. Try to
+# handle this nicely by specifying some of the known env vars to prevent rate limiting.
+ifdef GITHUB_USER_TOKEN
+tools.upgrade: export GITHUB_API_TOKEN=$(GITHUB_USER_TOKEN)
+else
+ifdef GITHUB_TOKEN
+tools.upgrade: export GITHUB_API_TOKEN=$(GITHUB_TOKEN)
 endif
-
-.PHONY: helm
-helm: $(HELM_BIN)
-
-# download helm
-$(HELM_BIN):
-	mkdir -p $(dir $@) _build
-	curl -Ls https://get.helm.sh/helm-$(subst helm-,,$(notdir $@))-$(GOOS)-$(GOARCH).tar.gz | tar xz -C _build $(WILDCARDS) --strip=1 '*/helm'
-	mv _build/helm $@
+endif
+tools.upgrade: export OAUTH_TOKEN=$(GITHUB_API_TOKEN)
+tools.upgrade: ## Upgrades all tools to latest available versions
+tools.upgrade: ; $(info $(M) upgrading all tools to latest available versions)
+	grep -Eo '^[^#]\S+' $(REPO_ROOT)/.tool-versions | \
+						xargs $(if $(VERBOSE),--verbose) -I{} bash -ec '(asdf plugin list 2>/dev/null | grep -E "^{}$$" &>/dev/null) || \
+																 asdf plugin add {}'
+	grep -v '# FREEZE' $(REPO_ROOT)/.tool-versions | \
+		grep -Eo '^[^#]\S+' | \
+		xargs $(if $(VERBOSE),--verbose) -I{} bash -ec '\
+			export VERSION="$$( \
+				asdf list all {} | \
+				grep -vE "(^Available versions:|-src|-dev|-latest|-stm|[-\\.]rc|-alpha|-beta|[-\\.]pre|-next|(a|b|c)[0-9]+|snapshot|master)" | \
+				tail -1 \
+			)" && asdf install {} $${VERSION} && asdf local {} $${VERSION}'
