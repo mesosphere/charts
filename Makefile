@@ -17,14 +17,21 @@ else
 M := =>
 endif
 
+# The CI system will set this to true if it is running in a CI environment.
+export CI ?= false
+
+# If value is true, than publish charts to remote repo would be skipped.
+export DRY_RUN ?= false
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Directories
 # ----------------------------------------------------------------------------------------------------------------------
 
 REPO_ROOT := $(CURDIR)
 
-LOCAL_DIR := $(REPO_ROOT)/.local
-HELM_DIR  := $(LOCAL_DIR)/.helm
+LOCAL_DIR   := $(REPO_ROOT)/.local
+HELM_DIR    := $(LOCAL_DIR)/.helm
+HACK_DIR    := $(REPO_ROOT)/hack
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Go configuration
@@ -95,88 +102,54 @@ HELM_VERSION := v$(shell cat .tool-versions | grep "helm " | cut -d' ' -f2)
 CT_VERSION := v$(shell cat .tool-versions | grep "helm-ct " | cut -d' ' -f2)
 
 # ----------------------------------------------------------------------------------------------------------------------
+# Scripts
+# ----------------------------------------------------------------------------------------------------------------------
+
+# publish script specific variables, duplicated from publish.sh to allow customizing them
+DRY_RUN          ?= true
+BRANCH           ?= gh-pages
+CT_CHART_DIRS    ?= stable,staging
+CT_TARGET_BRANCH ?= master
+CT_SINCE         ?= HEAD~1
+COMMIT_USERNAME  ?= $(shell git config user.name)
+COMMIT_EMAIL 	 ?= $(shell git config user.email)
+COMMIT_MESSAGE   ?= $(shell git log -1 --no-show-signature --pretty=format:'%B') # Use the commit message from the last commit
+HELM_LINT        ?= true
+HELM_DEP_UPDATE  ?= true
+
+PUBLISH_ENV := CI="$(CI)" \
+	DRY_RUN="$(DRY_RUN)" \
+	CT_CHART_DIRS="$(CT_CHART_DIRS)" \
+	CT_TARGET_BRANCH="$(CT_TARGET_BRANCH)" \
+	CT_SINCE="$(CT_SINCE)" \
+	BRANCH="$(BRANCH)" \
+	GIT_REMOTE_URL="$(GIT_REMOTE_URL)" \
+	COMMIT_USERNAME="$(COMMIT_USERNAME)" \
+	COMMIT_EMAIL="$(COMMIT_EMAIL)" \
+	COMMIT_MESSAGE="$(COMMIT_MESSAGE)" \
+	HELM_LINT="$(HELM_LINT)" \
+	HELM_DEP_UPDATE="$(HELM_DEP_UPDATE)" \
+	HELM_CHARTS_URL="$(REPO_BASE_URL)"
+
+# ----------------------------------------------------------------------------------------------------------------------
 # Targets
 # ----------------------------------------------------------------------------------------------------------------------
 
 .SECONDEXPANSION:
 
-.PHONY: all
-all: ## Builds all chart repositories
-all: stagingrepo stablerepo
+.DEFAULT_GOAL := help
 
 .PHONY: clean
 clean: ## Remove all build artifacts
 clean: ; $(info $(M) cleaning build artifacts)
 	rm -rf gh-pages bin .local
 
-.PHONY: stagingrepo
-stagingrepo: ## Build the staging repository
-stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml ; $(info $(M) finished building staging charts)
-
-.PHONY: stablerepo
-stablerepo: ## Build the stablerepo repository
-stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml ; $(info $(M) finished building stable charts)
-
 .PHONY: publish
 publish: ## Publishes changed helm charts to gh-pages
 publish: export LC_COLLATE := C
 publish: export TZ := UTC
 publish: ; $(info $(M) publishing charts)
-ifeq ($(PLATFORM),darwin)
-	$(warning The publish task uses the GNU executables 'tar' and 'find', macOS ships with BSD ones installed by default.)
-endif
-
-	-git remote add publish $(GIT_REMOTE_URL) &>/dev/null
-	rm -rf gh-pages
-	git fetch publish gh-pages
-	git worktree add gh-pages/ publish/gh-pages
-	$(MAKE) GIT_REF=$(GIT_REF) all
-# Check if any existing files other than repo index.yamls have been modified or deleted and exit if
-# there are, showing the list of changed files for easier troubleshooting.
-	cd gh-pages && \
-		export CHANGED=$$(git ls-files -md | grep -v index.yaml) && \
-		( \
-			[[ -z "$${CHANGED}" ]] || \
-			(printf "Aborting: following changed or deleted files:\n\n$${CHANGED}" && exit 1) \
-		)
-
-# Be doubly safe by only adding new files and index.yaml files to prevent overwrites.
-	export LAST_COMMIT_MESSAGE="$$(git log -1 --no-show-signature --pretty=format:'%B')" && \
-	cd gh-pages && \
-		git add $$(git ls-files -o --exclude-standard) staging/index.yaml stable/index.yaml && \
-		git commit -m "$${LAST_COMMIT_MESSAGE}" && \
-		git push publish HEAD:gh-pages
-	git worktree remove gh-pages/
-	rm -rf gh-pages
-
-# Deterministically create helm packages by:
-#
-# - Using `helm package` to create the initial package (useful for including chart dependencies
-#   properly)
-# - Untarring the package
-# - Recreate the package using `tar`, speficying time of the last git commit to the package
-#   source as the files' mtime, as well as ordering files deterministically, meaning that unchanged
-#   content will result in the same output package
-# - Use `gzip -n` to prevent any timestamps being added to `gzip` headers in archive.
-$(STABLE_TARGETS) $(STAGING_TARGETS): tools.install.helm $$(shell find $$(shell echo $$@ | sed -E 's|gh-pages/((stable\|staging)/.+)-([0-9]+.?)+\.tgz|\1|') -type f)
-	@mkdir -p $(shell dirname $@)
-	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
-	$(eval UNPACKED_TMP := $(shell mktemp -d))
-	$(info $(M)$(M) building $(PACKAGE_SRC))
-	helm package $(PACKAGE_SRC) -d $(shell dirname $@)
-	tar -xzmf $@ -C $(UNPACKED_TMP)
-	tar -c \
-			--owner=root:0 --group=root:0 --numeric-owner \
-			--no-recursion \
-			--mtime="@$(shell git log -1 --no-show-signature --format="%at" $(GIT_REF) -- $(PACKAGE_SRC))" \
-			-C $(UNPACKED_TMP) \
-			$$(find $(UNPACKED_TMP) -printf '%P\n' | sort) | gzip -n > $@
-	rm -rf $(UNPACKED_TMP)
-
-%/index.yaml: tools.install.helm $(STABLE_TARGETS) $(STAGING_TARGETS)
-%/index.yaml: $$(wildcard $$(dir $$@)*.tgz)
-	@mkdir -p $(patsubst %/index.yaml,%,$@)
-	helm repo index $(patsubst %/index.yaml,%,$@) --url=$(REPO_BASE_URL)/$(patsubst gh-pages/%index.yaml,%,$@)
+	$(HACK_DIR)/charts/publish.sh $(PUBLISH_ENV)
 
 .PHONY: ct.lint
 ct.lint: ## Run chart-testing (ct) linter against charts.
