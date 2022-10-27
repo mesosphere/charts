@@ -167,18 +167,6 @@ ifneq (,$(wildcard /teamcity/system/git))
 endif
 	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
 
-.PHONY: lint
-lint: ## Alias for ct.lint
-lint: ct.lint
-
-.PHONY: test.helm
-test.helm: ## Alias for ct.test
-test.helm: ct.test
-
-.PHONY: test
-test: ## Alias for ct.test
-test: ct.test
-
 .PHONY: help
 help: ## Shows this help message
 	awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_\-.]+:.*?##/ { printf "  \033[36m%-15s\033[0m\t %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
