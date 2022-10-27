@@ -5,5 +5,4 @@ version: 0.5.2
 dependencies:
 - name: controllermanager
   version: 0.5.2
-  repository: "https://localhost/" # Required but unused.
   condition: controllermanager.enabled
