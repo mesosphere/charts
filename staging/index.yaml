@@ -5522,14 +5522,14 @@ entries:
     version: 0.0.1
   kubefed:
   - apiVersion: v2
-    created: "2022-10-27T21:19:59.075860355Z"
+    created: "2022-10-27T22:26:17.220262966Z"
     dependencies:
     - condition: controllermanager.enabled
       name: controllermanager
-      repository: https://localhost/
+      repository: ""
       version: 0.5.2
     description: KubeFed helm chart
-    digest: 8b78c885129eb00d6733f44f399a0470afdc1e137c775097114fdf8259e3c35d
+    digest: e66901e2415c8a5f51452760ad34f210cbf1939600c9330c11b6ea322fe2fde2
     name: kubefed
     urls:
     - https://mesosphere.github.io/charts/staging/kubefed-0.5.2.tgz
@@ -11445,4 +11445,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2022-10-27T21:19:57.237593106Z"
+generated: "2022-10-27T22:26:17.219299992Z"
