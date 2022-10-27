@@ -5724,9 +5724,9 @@ entries:
   local-path-provisioner:
   - apiVersion: v1
     appVersion: v0.0.22
-    created: "2022-10-24T18:52:30.187283496Z"
+    created: "2022-10-27T18:23:03.340887122Z"
     description: Use HostPath for persistent local storage with Kubernetes
-    digest: 321d78298e3c43a3908a023e058d4b073c6c78382b58900d2e9b314e10ef4c29
+    digest: 4a73b129e32d899e3fac8a926fa2571f869256218d0f1d9037f48d7357fb9319
     home: https://github.com/rancher/local-path-provisioner
     keywords:
     - storage
@@ -6258,10 +6258,10 @@ entries:
   postgres-cluster:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2022-10-24T18:52:30.209780453Z"
+    created: "2022-10-27T18:23:03.341154215Z"
     description: Manage Postgres clusters via PGO, the open source Postgres Operator
       from Crunchy Data
-    digest: 026180370ef57cfe66fb6240cfb03adb6fcb69be8649d087959998d762bfbab2
+    digest: aad9ece62e081a1eb5dddcc844acab2e266163006d7ec9cdfb3dcbc88ba3c14a
     maintainers:
     - email: jimmidyson@gmail.com
       name: jimmidyson
@@ -6273,10 +6273,10 @@ entries:
   postgres-operator:
   - apiVersion: v2
     appVersion: 5.2.0
-    created: "2022-10-24T18:52:30.2139334Z"
+    created: "2022-10-27T18:23:03.344761041Z"
     description: Installer for PGO, the open source Postgres Operator from Crunchy
       Data
-    digest: d68aa79625129d56b42d02d09ff2862e88f70e260d98c7c56f821c75a9837ab4
+    digest: a9e57da83979f5adf6f8258102d8b57c7a81c8bc5063d1dcee588d3b67736b38
     maintainers:
     - email: jimmidyson@gmail.com
       name: jimmidyson
@@ -11445,4 +11445,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2022-10-24T18:52:28.272216369Z"
+generated: "2022-10-27T18:23:03.340467102Z"

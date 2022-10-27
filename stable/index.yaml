@@ -633,9 +633,9 @@ entries:
   cert-manager-crds:
   - apiVersion: v2
     appVersion: v1.9.1
-    created: "2022-10-24T18:52:32.504947494Z"
+    created: "2022-10-27T18:23:02.03268798Z"
     description: A chart that bundles cert-manager CRDs with cert-manager helm chart
-    digest: 9eae7afce67b54ac14d48d348c4030a0f5b117c23c2797f4d2a63eb45b1253b8
+    digest: c95df5246bb2da8b5e6825e51e384eb4508dfc7c2e5f7d7d9167c9036bbe6bc2
     home: https://github.com/mesosphere/kommander
     maintainers:
     - name: mhrabovcin
@@ -15614,21 +15614,6 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/grafana-0.6.1.tgz
     version: 0.6.1
-  - apiVersion: v1
-    created: "2022-10-24T18:52:33.190414521Z"
-    description: The leading tool for querying and visualizing time series and metrics.
-    digest: 6c25c79e16df4c31637d3f8b1b379bb4c0a34157fa5b817f4c518ef50d43911b
-    home: https://grafana.net
-    icon: https://raw.githubusercontent.com/grafana/grafana/master/public/img/logo_transparent_400x.png
-    maintainers:
-    - email: zanhsieh@gmail.com
-      name: Ming Hsieh
-    name: grafana
-    sources:
-    - https://github.com/grafana/grafana
-    urls:
-    - https://mesosphere.github.io/charts/stable/grafana-0.6.tgz
-    version: "0.6"
   - apiVersion: v1
     created: "2022-10-24T18:52:33.187832629Z"
     description: The leading tool for querying and visualizing time series and metrics.
@@ -34906,14 +34891,14 @@ entries:
   kubecost:
   - apiVersion: v2
     appVersion: 1.97.0
-    created: "2022-10-24T18:52:42.10943886Z"
+    created: "2022-10-27T18:23:02.043289978Z"
     dependencies:
     - condition: cost-analyzer.enabled
       name: cost-analyzer
       repository: https://kubecost.github.io/cost-analyzer
       version: 1.97.0
     description: Kubecost
-    digest: b2b79908e105a085d0908fc79f91d064f1b6ab88474f5c897e2b555420865595
+    digest: 66179b98a420f2edbc1d9e637e9c2da9892d675bf8e47dfdf7e615b4d1facde6
     home: https://github.com/mesosphere/charts
     maintainers:
     - name: gracedo
@@ -36043,6 +36028,26 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/kubecost-0.1.0.tgz
     version: 0.1.0
+  local-path-provisioner:
+  - apiVersion: v1
+    appVersion: v0.0.22
+    created: "2022-10-27T18:23:02.043837155Z"
+    description: Use HostPath for persistent local storage with Kubernetes
+    digest: 4a73b129e32d899e3fac8a926fa2571f869256218d0f1d9037f48d7357fb9319
+    home: https://github.com/rancher/local-path-provisioner
+    keywords:
+    - storage
+    - hostpath
+    kubeVersion: '>=1.12.0-r0'
+    maintainers:
+    - email: jimmidyson@gmail.com
+      name: jimmidyson
+    name: local-path-provisioner
+    sources:
+    - https://github.com/rancher/local-path-provisioner.git
+    urls:
+    - https://mesosphere.github.io/charts/staging/local-path-provisioner-0.0.22.tgz
+    version: 0.0.22
   localpathprovisioner:
   - apiVersion: v1
     appVersion: v0.0.9
@@ -36821,9 +36826,9 @@ entries:
   object-bucket-claim:
   - apiVersion: v2
     appVersion: 0.1.4
-    created: "2022-10-24T18:52:42.331476558Z"
+    created: "2022-10-27T18:23:02.043474237Z"
     description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
-    digest: f7cb32238425c753f4c73f9e92b686e841f0f0eb1f1fcd25ccd44657dd232d3b
+    digest: 9ba4a8f84c546e73ef00d82ae7ab45c42932f3bf39a5d96b359e2a8359b98532
     home: https://github.com/mesosphere/charts
     keywords:
     - kommander
@@ -38916,6 +38921,36 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/opsportal-0.0.1.tgz
     version: 0.0.1
+  postgres-cluster:
+  - apiVersion: v2
+    appVersion: 5.2.0
+    created: "2022-10-27T18:23:02.044099329Z"
+    description: Manage Postgres clusters via PGO, the open source Postgres Operator
+      from Crunchy Data
+    digest: aad9ece62e081a1eb5dddcc844acab2e266163006d7ec9cdfb3dcbc88ba3c14a
+    maintainers:
+    - email: jimmidyson@gmail.com
+      name: jimmidyson
+    name: postgres-cluster
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/postgres-cluster-0.6.0.tgz
+    version: 0.6.0
+  postgres-operator:
+  - apiVersion: v2
+    appVersion: 5.2.0
+    created: "2022-10-27T18:23:02.046283246Z"
+    description: Installer for PGO, the open source Postgres Operator from Crunchy
+      Data
+    digest: a9e57da83979f5adf6f8258102d8b57c7a81c8bc5063d1dcee588d3b67736b38
+    maintainers:
+    - email: jimmidyson@gmail.com
+      name: jimmidyson
+    name: postgres-operator
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/postgres-operator-0.6.0.tgz
+    version: 0.6.0
   prometheus-adapter:
   - apiVersion: v1
     appVersion: v0.7.0
@@ -40475,4 +40510,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-10-24T18:52:32.469293091Z"
+generated: "2022-10-27T18:23:02.031463379Z"
