@@ -148,7 +148,7 @@ clean: ; $(info $(M) cleaning build artifacts)
 publish: ## Publishes changed helm charts to gh-pages
 publish: export LC_COLLATE := C
 publish: export TZ := UTC
-publish: ; $(info $(M) publishing charts)
+publish: tools.install.helm tools.install.helm-ct ; $(info $(M) publishing charts)
 	$(HACK_DIR)/charts/publish.sh $(PUBLISH_ENV)
 
 .PHONY: ct.lint
