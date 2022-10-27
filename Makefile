@@ -1,24 +1,46 @@
 SHELL := /bin/bash -euo pipefail
 
+PLATFORM = $(shell uname | tr [A-Z] [a-z])
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Directories
+# ----------------------------------------------------------------------------------------------------------------------
+
+REPO_ROOT := $(CURDIR)
+
+LOCAL_DIR := $(REPO_ROOT)/.local
+HELM_DIR  := $(LOCAL_DIR)/.helm
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Go configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
 GOARCH ?= $(shell go env GOARCH)
 GOOS ?= $(shell go env GOOS)
-GOPATH ?= $(shell go env GOPATH)
-ifndef GOBIN
-ifeq (,$(shell go env GOBIN))
-GOBIN=$(shell go env GOPATH)/bin
-else
-GOBIN=$(shell go env GOBIN)
-endif
-endif
 
+# Explicitly override GOBIN so it does not inherit from the environment - this allows for a truly
+# self-contained build environment for the project.
+override GOBIN := $(LOCAL_DIR)/bin
+export GOBIN
+export PATH := $(GOBIN):$(PATH)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Helm configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+CT_VERSION ?= v3.5.1
 HELM_VERSION ?= v3.6.3
 HELM_BIN ?= bin/$(GOOS)/$(GOARCH)/helm-$(HELM_VERSION)
 
-STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
-STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
-STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
-STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
+export HELM_CONFIG_HOME=$(HELM_DIR)/config
+export HELM_CACHE_HOME=$(HELM_DIR)/cache
+export HELM_DATA_HOME=$(HELM_DIR)/data
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Git configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+GIT_REF ?= $(shell git rev-parse HEAD)
 GIT_REMOTE_NAME ?= origin
 GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 
@@ -29,22 +51,20 @@ GIT_REMOTE_URL ?= $(shell git remote get-url ${GIT_REMOTE_NAME})
 # - git@github.com:mesosphere/charts.git
 GITHUB_USER := $(shell git remote get-url ${GIT_REMOTE_NAME} | sed -E 's|.*github.com[/:]([^/]+)/charts.*|\1|')
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Charts configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+STABLE_CHARTS = $(wildcard stable/*/Chart.yaml)
+STABLE_TARGETS = $(shell hack/chart_destination.sh $(STABLE_CHARTS))
+STAGING_CHARTS = $(wildcard staging/*/Chart.yaml)
+STAGING_TARGETS = $(shell hack/chart_destination.sh $(STAGING_CHARTS))
+
 REPO_BASE_URL := https://$(GITHUB_USER).github.io/charts
 
-GIT_REF ?= $(shell git rev-parse HEAD)
-CT_VERSION ?= v3.5.1
-
-PLATFORM = $(shell uname | tr [A-Z] [a-z])
-
-TMPDIR := $(shell mktemp -d)
-ifeq ($(PLATFORM),darwin)
-	# macOS requires /private prefix as symlink doesn't work when
-	# mounting /var/folders/
-	TMPDIR := /private${TMPDIR}
-endif
-export HELM_CONFIG_HOME=$(TMPDIR)/.helm/config
-export HELM_CACHE_HOME=$(TMPDIR)/.helm/cache
-export HELM_DATA_HOME=$(TMPDIR)/.helm/data
+# ----------------------------------------------------------------------------------------------------------------------
+# Docker configuration
+# ----------------------------------------------------------------------------------------------------------------------
 
 ifeq (,$(wildcard /teamcity/system/git))
 DRUN := docker run -t --rm \
@@ -64,6 +84,10 @@ DRUN := docker run -t --rm \
 			quay.io/helmpack/chart-testing:$(CT_VERSION)
 endif
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Targets
+# ----------------------------------------------------------------------------------------------------------------------
+
 .SECONDEXPANSION:
 
 .PHONY: all
@@ -71,7 +95,7 @@ all: stagingrepo stablerepo
 
 .PHONY: clean
 clean:
-	rm -rf gh-pages bin
+	rm -rf gh-pages bin .local
 
 .PHONY: stagingrepo
 stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
@@ -161,9 +185,9 @@ test.helm: ct.test
 .PHONY: test
 test: ct.test
 
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 # Download Tools
-# ------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
 
 ifneq (,$(filter tar (GNU tar)%, $(shell tar --version)))
 WILDCARDS := --wildcards
