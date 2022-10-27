@@ -3,6 +3,21 @@ SHELL := /bin/bash -euo pipefail
 PLATFORM = $(shell uname | tr [A-Z] [a-z])
 
 # ----------------------------------------------------------------------------------------------------------------------
+# Make Configuration
+# ----------------------------------------------------------------------------------------------------------------------
+
+ifndef VERBOSE
+.SILENT:
+endif
+
+INTERACTIVE := $(shell [ -t 0 ] && echo 1)
+ifeq ($(INTERACTIVE),1)
+M := $(shell printf "\033[34;1m▶\033[0m")
+else
+M := =>
+endif
+
+# ----------------------------------------------------------------------------------------------------------------------
 # Directories
 # ----------------------------------------------------------------------------------------------------------------------
 
@@ -96,21 +111,22 @@ all: stagingrepo stablerepo
 
 .PHONY: clean
 clean: ## Remove all build artifacts
+clean: ; $(info $(M) cleaning build artifacts)
 	rm -rf gh-pages bin .local
 
 .PHONY: stagingrepo
 stagingrepo: ## Build the staging repository
-stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml
+stagingrepo: $(STAGING_TARGETS) | gh-pages/staging/index.yaml ; $(info $(M) finished building staging charts)
 
 .PHONY: stablerepo
 stablerepo: ## Build the stablerepo repository
-stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml
+stablerepo: $(STABLE_TARGETS) | gh-pages/stable/index.yaml ; $(info $(M) finished building stable charts)
 
 .PHONY: publish
 publish: ## Publishes changed helm charts to gh-pages
 publish: export LC_COLLATE := C
 publish: export TZ := UTC
-publish:
+publish: ; $(info $(M) publishing charts)
 ifeq ($(PLATFORM),darwin)
 	$(warning The publish task uses the GNU executables 'tar' and 'find', macOS ships with BSD ones installed by default.)
 endif
@@ -151,6 +167,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$
 	@mkdir -p $(shell dirname $@)
 	$(eval PACKAGE_SRC := $(shell echo $@ | sed 's@gh-pages/\(.*\)-[v0-9][0-9.]*.tgz@\1@'))
 	$(eval UNPACKED_TMP := $(shell mktemp -d))
+	$(info $(M)$(M) building $(PACKAGE_SRC))
 	$(HELM_BIN) package $(PACKAGE_SRC) -d $(shell dirname $@)
 	tar -xzmf $@ -C $(UNPACKED_TMP)
 	tar -c \
@@ -168,7 +185,7 @@ $(STABLE_TARGETS) $(STAGING_TARGETS): $(HELM_BIN) $$(shell find $$(shell echo $$
 
 .PHONY: ct.lint
 ct.lint: ## Run chart-testing (ct) linter against charts.
-ct.lint: $(HELM_BIN)
+ct.lint: $(HELM_BIN) ; $(info $(M) running ct lint)
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
@@ -176,7 +193,7 @@ endif
 
 .PHONY: ct.test
 ct.test: ## Runs e2e tests for charts
-ct.test: $(HELM_BIN)
+ct.test: $(HELM_BIN) ; $(info $(M) running e2e test(kind))
 ifneq (,$(wildcard /teamcity/system/git))
 	$(DRUN) git fetch ${GIT_REMOTE_NAME} master
 endif
