@@ -76,7 +76,7 @@ $ helm delete --purge istio
 This chart wraps Istio Operator so the main component that needs to be updated is the Istio operator version. However, occasionally you might also have to update grafana dashboards and prometheus servicemonitor. Below is the step by step process to upgrade this istio chart:
 - Download latest istio [release](https://github.com/istio/istio/releases/)
 - Istio release is in the form of a tarball. Untar it. You will get istio-VERSION directory
-- Compare and update *crds* and *templates* from istio-operator chart at 'istio-VERSION/manifests/charts/istio-operator'
+- Compare and update *crds/*, *templates/* and *values.yaml* from istio-operator chart at 'istio-VERSION/manifests/charts/istio-operator'
 - Compare and update *charts/grafana/dashboards* from 'istio-VERSION/samples/addons/grafana.yaml' \
   Useful commands:
   ```bash
