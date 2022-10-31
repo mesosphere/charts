@@ -77,12 +77,4 @@ This chart wraps Istio Operator so the main component that needs to be updated i
 - Download latest istio [release](https://github.com/istio/istio/releases/)
 - Istio release is in the form of a tarball. Untar it. You will get istio-VERSION directory
 - Compare and update *crds/*, *templates/* and *values.yaml* from istio-operator chart at 'istio-VERSION/manifests/charts/istio-operator'
-- Compare and update *charts/grafana/dashboards* from 'istio-VERSION/samples/addons/grafana.yaml' \
-  Useful commands:
-  ```bash
-  $ jq . pilot.yaml > istio-pilot-dashboard.json   -- where pilot.yaml is the pilot dashboard section of grafana.yaml
-  ```
-  ```bash
-  $ yaml2json < service.yaml > service.json
-  $ jq '.|fromjson' service.json > istio-service-dashboard.json
-  ```
+- Compare and update *charts/grafana/dashboards* from 'istio-VERSION/manifests/addons/dashboards'
