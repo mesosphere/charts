@@ -154,30 +154,18 @@ publish: tools.install.helm tools.install.helm-ct ; $(info $(M) publishing chart
 .PHONY: ct.lint
 ct.lint: ## Run chart-testing (ct) linter against charts.
 ct.lint: tools.install.helm ; $(info $(M) running ct lint)
-ifneq (,$(wildcard /teamcity/system/git))
-	git fetch ${GIT_REMOTE_NAME} master
+ifneq ($(CI),true)
+	git fetch $(GIT_REMOTE_NAME) master
 endif
-	ct lint --remote=${GIT_REMOTE_NAME} --debug
+	ct lint --remote=$(GIT_REMOTE_NAME) --debug
 
 .PHONY: ct.test
 ct.test: ## Runs e2e tests for charts
 ct.test: tools.install.helm ; $(info $(M) running e2e test(kind))
-ifneq (,$(wildcard /teamcity/system/git))
-	git fetch ${GIT_REMOTE_NAME} master
+ifneq ($(CI),true)
+	git fetch $(GIT_REMOTE_NAME) master
 endif
 	GIT_REMOTE_NAME=$(GIT_REMOTE_NAME) test/e2e-kind.sh $(CT_VERSION) $(HELM_VERSION) --remote=$(GIT_REMOTE_NAME)
-
-.PHONY: lint
-lint: ## Alias for ct.lint
-lint: ct.lint
-
-.PHONY: test.helm
-test.helm: ## Alias for ct.test
-test.helm: ct.test
-
-.PHONY: test
-test: ## Alias for ct.test
-test: ct.test
 
 .PHONY: help
 help: ## Shows this help message

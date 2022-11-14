@@ -21,7 +21,7 @@ jobs:
         uses: asdf-vm/actions/install@v1
 
       - name: Lint charts
-        run: make lint
+        run: make ct.lint
 
   test:
     runs-on: ubuntu-latest
@@ -35,4 +35,4 @@ jobs:
         uses: asdf-vm/actions/install@v1
 
       - name: Test charts
-        run: make test
+        run: make ct.test
