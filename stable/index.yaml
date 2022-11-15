@@ -15615,21 +15615,6 @@ entries:
     - https://mesosphere.github.io/charts/stable/grafana-0.6.1.tgz
     version: 0.6.1
   - apiVersion: v1
-    created: "2022-10-27T21:20:01.871517108Z"
-    description: The leading tool for querying and visualizing time series and metrics.
-    digest: 6c25c79e16df4c31637d3f8b1b379bb4c0a34157fa5b817f4c518ef50d43911b
-    home: https://grafana.net
-    icon: https://raw.githubusercontent.com/grafana/grafana/master/public/img/logo_transparent_400x.png
-    maintainers:
-    - email: zanhsieh@gmail.com
-      name: Ming Hsieh
-    name: grafana
-    sources:
-    - https://github.com/grafana/grafana
-    urls:
-    - https://mesosphere.github.io/charts/stable/grafana-0.6.tgz
-    version: "0.6"
-  - apiVersion: v1
     created: "2022-10-27T21:20:01.868273785Z"
     description: The leading tool for querying and visualizing time series and metrics.
     digest: 68ac750dbdf81637411e56aaaa4e8db7e86a99324a8d34a3f804e2ad14e80a76
@@ -34905,6 +34890,23 @@ entries:
     version: 0.1.0
   kubecost:
   - apiVersion: v2
+    appVersion: 1.98.0
+    created: "2022-11-15T21:19:41.357059868Z"
+    dependencies:
+    - condition: cost-analyzer.enabled
+      name: cost-analyzer
+      repository: https://kubecost.github.io/cost-analyzer
+      version: 1.98.0
+    description: Kubecost
+    digest: a6ab0c965afe5828ad1537e288813d01a1fb4508c23b301332ce118aea9dbe3f
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: gracedo
+    name: kubecost
+    urls:
+    - https://mesosphere.github.io/charts/stable/kubecost-0.29.0.tgz
+    version: 0.29.0
+  - apiVersion: v2
     appVersion: 1.97.0
     created: "2022-10-27T21:20:10.09430185Z"
     dependencies:
@@ -40475,4 +40477,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2022-10-27T21:20:01.244933195Z"
+generated: "2022-11-15T21:19:41.341003453Z"
