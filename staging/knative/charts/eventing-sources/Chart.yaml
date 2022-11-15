@@ -1,7 +1,10 @@
 apiVersion: v2
 name: eventing-sources
-version: 0.2.0
+version: 0.3.0
 description: "Knative Eventing sources"
 maintainers:
 - name: chhsia0
 - name: gilbert88
+dependencies:
+  - name: github
+    version: 0.3.0
