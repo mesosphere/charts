@@ -2,7 +2,6 @@
 
 This is a parent chart that deploys [Kubecost](https://kubecost.com/) along with some other supporting components.
 
-
 ```yaml
 hooks:
   # Modifies the prometheus configmap to set the prometheus cluster_id
@@ -10,7 +9,7 @@ hooks:
   # Creates configmap to pass kube-system ns uid as envvar to kubecost.
   clusterID:
     enabled: true
-    kubectlImage: "bitnami/kubectl:1.19.7"
+    kubectlImage: "bitnami/kubectl:1.24.1"
 
 cost-analyzer:
   enabled: true
@@ -26,6 +25,11 @@ cost-analyzer:
     grafana:
       # If false, Grafana will not be installed
       enabled: true
+
+    notifications:
+      alertmanager:
+        # If true, allow kubecost to write to alertmanager
+        enabled: true
 
   # Enable kubecost ingress with below annotations to use Konvoy traefik auth
   # ingress:
@@ -45,9 +49,11 @@ cost-analyzer:
   #     - ""
   #   tls: []
 
-  # Define persistence volume for cost-analyzer
+  # Define persistence volume for cost-analyzer, more information at https://github.com/kubecost/docs/blob/master/storage.md
   persistentVolume:
-    size: 0.2Gi
+    # Upgrades from original default 0.2Gi may break if automatic disk resize is not supported
+    # https://github.com/kubecost/cost-analyzer-helm-chart/issues/507
+    size: 32Gi
     # Note that setting this to false means configurations will be wiped out on pod restart.
     enabled: true
     # storageClass: "-"
@@ -79,39 +85,51 @@ cost-analyzer:
             action: keep
             regex: {{ .Release.Name }}-network-costs
     server:
+      # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
+      # to use as unique cluster ID in kubecost cost-analyzer deployment.
+      # This overrides the cluster_id set in prometheus.server.global.external_labels.
+      # NOTE: This does not affect the external_labels set in prometheus config.
+      clusterIDConfigmap: kubecost-cluster-info-configmap
+      extraFlags:
+      - web.enable-admin-api
+      - web.enable-lifecycle
+      - storage.tsdb.wal-compression
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 2500Mi
+        requests:
+          cpu: 300m
+          memory: 1500Mi
       global:
         scrape_interval: 1m
         scrape_timeout: 10s
         evaluation_interval: 1m
         external_labels:
           cluster_id: $CLUSTER_ID
-          configmap_key_ref: kubecost-cluster-info-configmap
       persistentVolume:
         size: 32Gi
         enabled: true
       extraArgs:
+        log.level: info
+        log.format: json
         storage.tsdb.min-block-duration: 2h
         storage.tsdb.max-block-duration: 2h
-        storage.tsdb.retention: 2w
-      # extraVolumes: # TODO
-      # - name: object-store-volume
-      #   secret:
-      #     # Ensure this secret name matches thanos.storeSecretName
-      #     secretName: kubecost-thanos
+        query.max-concurrency: 1
+        query.max-samples: 100000000
       enableAdminApi: true
       service:
         gRPC:
           enabled: true
       sidecarContainers:
       - name: thanos-sidecar
-        image: thanosio/thanos:v0.10.1
+        image: thanosio/thanos:v0.15.0
         args:
         - sidecar
         - --log.level=debug
         - --tsdb.path=/data/
         - --prometheus.url=http://127.0.0.1:9090
         - --reloader.config-file=/etc/config/prometheus.yml
-        # - --objstore.config-file=/etc/config/object-store.yaml # TODO
         # Start of time range limit to serve. Thanos sidecar will serve only metrics, which happened
         # later than this value. Option can be a constant time in RFC3339 format or time duration
         # relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.
@@ -134,51 +152,85 @@ cost-analyzer:
         - name: storage-volume
           mountPath: /data
           subPath: ""
-        # - name: object-store-volume # TODO
-        #   mountPath: /etc/config
     alertmanager:
-      enabled: false
+      enabled: true
+      image:
+        tag: v0.21.0
+      resources:
+        limits:
+          cpu: 50m
+          memory: 100Mi
+        requests:
+          cpu: 10m
+          memory: 50Mi
+      persistentVolume:
+        enabled: true
     pushgateway:
       enabled: false
       persistentVolume:
         enabled: false
+    serverFiles:
+      alerts:
+        groups:
+          - name: Kubecost
+            rules:
+              - alert: kubecostDown
+                expr: up{job="kubecost"} == 0
+                annotations:
+                  message: 'Kubecost metrics endpoint is not being scraped successfully.'
+                for: 10m
+                labels:
+                  severity: warning
+              - alert: kubecostMetricsUnavailable
+                expr: sum(sum_over_time(node_cpu_hourly_cost[5m])) == 0
+                annotations:
+                  message: 'Kubecost metrics are not available in Prometheus.'
+                for: 10m
+                labels:
+                  severity: warning
+              - alert: kubecostRecordingRulesNotEvaluated
+                expr: avg_over_time(kubecost_cluster_memory_working_set_bytes[5m]) == 0
+                annotations:
+                  message: 'Kubecost recording rules are not being successfully evaluated.'
+                for: 10m
+                labels:
+                  severity: warning
 
   grafana:
     sidecar:
+      image: kiwigrid/k8s-sidecar:1.15.9
       dashboards:
         enabled: true
         label: kubecost_grafana_dashboard
       datasources:
         enabled: true
-        defaultDatasourceEnabled: true
+        defaultDatasourceEnabled: false
         label: kubecost_grafana_datasource
     # Enable grafana ingress with below annotations to use Konvoy traefik auth
-    # ingress:
-    #   enabled: true
-    #   annotations:
-    #     kubernetes.io/ingress.class: traefik
-    #     ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-    #     traefik.frontend.rule.type: PathPrefixStrip
-    #     traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-    #     traefik.ingress.kubernetes.io/auth-type: forward
-    #     # traefik rules need to be overridden to use kommander auth if federated from kommander
-    #     traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-    #     traefik.ingress.kubernetes.io/priority: "2"
-    #   hosts: [""]
-    #   path: /ops/portal/kubecost/grafana
-    grafana.ini:
-      server:
-        protocol: http
-        enable_gzip: true
-        root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
-      auth.proxy:
-        enabled: true
-        header_name: X-Forwarded-User
-        auto-sign-up: true
-      auth.basic:
-        enabled: false
-      users:
-        auto_assign_org_role: Admin
+    # enabled: true
+    # annotations:
+    #   kubernetes.io/ingress.class: kommander-traefik
+    #   ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
+    #   traefik.ingress.kubernetes.io/router.tls: "true"
+    #   traefik.ingress.kubernetes.io/router.middlewares: "${workspaceNamespace}-stripprefixes@kubernetescrd,${workspaceNamespace}-forwardauth@kubernetescrd"
+    # hosts: [""]
+    # path: "/dkp/kubecost/grafana"
+    # Configure grafana.ini server.root_url properly if ingress is enabled
+    # grafana.ini:
+    #   log:
+    #     level: warn
+    #   server:
+    #     protocol: http
+    #     enable_gzip: true
+    #     root_url: "%(protocol)s://%(domain)s:%(http_port)s/dkp/kubecost/grafana"
+    #   auth.proxy:
+    #     enabled: true
+    #     header_name: X-Forwarded-User
+    #     auto-sign-up: true
+    #   auth.basic:
+    #     enabled: false
+    #   users:
+    #     auto_assign_org_role: Admin
 
   thanos:
     store:
@@ -191,7 +243,4 @@ cost-analyzer:
       enabled: false
     compact:
       enabled: false
-    # This secret name should match the sidecar configured secret name volume
-    # in the prometheus.server.extraVolumes entry
-    # storeSecretName: kubecost-thanos # TODO
 ```

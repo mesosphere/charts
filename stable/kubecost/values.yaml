@@ -58,15 +58,6 @@ cost-analyzer:
     # storageClass: "-"
 
   prometheus:
-    configmapReload:
-      alertmanager:
-        image:
-          repository: jimmidyson/configmap-reload
-          tag: v0.7.1
-      prometheus:
-        image:
-          repository: jimmidyson/configmap-reload
-          tag: v0.7.1
     nodeExporter:
       enabled: false
     serviceAccounts:
@@ -98,8 +89,6 @@ cost-analyzer:
       # This overrides the cluster_id set in prometheus.server.global.external_labels.
       # NOTE: This does not affect the external_labels set in prometheus config.
       clusterIDConfigmap: kubecost-cluster-info-configmap
-      image:
-        tag: v2.19.2
       extraFlags:
       - web.enable-admin-api
       - web.enable-lifecycle
@@ -220,22 +209,18 @@ cost-analyzer:
     # ingress:
     #   enabled: true
     #   annotations:
-    #     kubernetes.io/ingress.class: traefik
+    #     kubernetes.io/ingress.class: kommander-traefik
     #     ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-    #     traefik.frontend.rule.type: PathPrefixStrip
-    #     traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-    #     traefik.ingress.kubernetes.io/auth-type: forward
-    #     # traefik rules need to be overridden to use kommander auth if federated from kommander
-    #     traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-    #     traefik.ingress.kubernetes.io/priority: "2"
+    #     traefik.ingress.kubernetes.io/router.tls: "true"
+    #     traefik.ingress.kubernetes.io/router.middlewares: "${workspaceNamespace}-stripprefixes@kubernetescrd,${workspaceNamespace}-forwardauth@kubernetescrd"
     #   hosts: [""]
-    #   path: /ops/portal/kubecost/grafana
+    #   path: "/dkp/kubecost/grafana"
     # Configure grafana.ini server.root_url properly if ingress is enabled
     # grafana.ini:
     #   server:
     #     protocol: http
     #     enable_gzip: true
-    #     root_url: "%(protocol)s://%(domain)s:%(http_port)s/ops/portal/kubecost/grafana"
+    #     root_url: "%(protocol)s://%(domain)s:%(http_port)s/dkp/kubecost/grafana"
     #   auth.proxy:
     #     enabled: true
     #     header_name: X-Forwarded-User
