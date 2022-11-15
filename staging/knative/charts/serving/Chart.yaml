@@ -1,10 +1,10 @@
 apiVersion: v2
 name: serving
-version: 0.3.9
-kubeVersion: ">=1.17.0"
+version: 0.4.0
+kubeVersion: ">=1.23.0"
 description: "Knative Serving"
 sources:
 - https://github.com/knative/serving
 maintainers:
 - name: akirillov
-appVersion: "v0.22.3"
+appVersion: "v1.8.0"
