@@ -1,0 +1,3 @@
+{{ if not (.Capabilities.APIVersions.Has "messaging.knative.dev/v1")}}
+{{.Files.Get "crds/eventing-crds.yaml" }}
+{{ end }}

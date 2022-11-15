@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: knative-eventing
+  name: knative-crd
+data:
+  crd.yaml: |-
+{{.Files.Get "crds/eventing-crds.yaml" | indent 4}}

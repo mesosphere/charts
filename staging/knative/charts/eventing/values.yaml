@@ -1,2 +1,4 @@
 global:
   serviceLabels: {}
+  image: docker.io/bitnami/kubectl
+  tag: 1.24.1
