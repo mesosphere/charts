@@ -117,6 +117,10 @@ COMMIT_MESSAGE   ?= $(shell git log -1 --no-show-signature --pretty=format:'%B')
 HELM_LINT        ?= true
 HELM_DEP_UPDATE  ?= true
 
+LINT_ENV := CT_CHART_DIRS="$(CT_CHART_DIRS)" \
+            CT_TARGET_BRANCH="$(CT_TARGET_BRANCH)" \
+            CT_SINCE="$(CT_SINCE)"
+
 PUBLISH_ENV := CI="$(CI)" \
 	DRY_RUN="$(DRY_RUN)" \
 	CT_CHART_DIRS="$(CT_CHART_DIRS)" \
@@ -157,7 +161,13 @@ ct.lint: tools.install.helm ; $(info $(M) running ct lint)
 ifneq ($(CI),true)
 	git fetch $(GIT_REMOTE_NAME) master
 endif
-	ct lint --remote=$(GIT_REMOTE_NAME) --debug
+ifeq (, $(shell which yamllint 2>/dev/null))
+	$(error "No yamllint in PATH, consider doing pip install yamllint")
+endif
+ifeq (, $(shell which yamale 2>/dev/null))
+	$(error "No yamale in PATH, consider doing pip install yamale")
+endif
+	$(LINT_ENV) ct lint --remote=$(GIT_REMOTE_NAME) --debug
 
 .PHONY: ct.test
 ct.test: ## Runs e2e tests for charts
