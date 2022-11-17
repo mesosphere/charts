@@ -20,6 +20,15 @@ jobs:
       - name: Install asdf plugins
         uses: asdf-vm/actions/install@v1
 
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+
+      - name: Install chart-testing (ct) lint dependencies
+        run: pip install yamllint yamale
+
       - name: Lint charts
         run: make ct.lint
 
