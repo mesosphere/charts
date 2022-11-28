@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade"
+  namespace: knative-serving
+  annotations:
+    helm.sh/hook: pre-upgrade
+    helm.sh/hook-weight: "-5"
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade"
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources: ["customresourcedefinitions"]
+    verbs: ["create", "get", "list", "watch", "patch"]
+  - apiGroups: ["admissionregistration.k8s.io"]
+    resources: ["validatingwebhookconfigurations"]
+    verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade"
+  namespace: knative-serving
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: "{{ .Release.Name }}-pre-upgrade"
+subjects:
+  - kind: ServiceAccount
+    name: "{{ .Release.Name }}-pre-upgrade"
+    namespace: knative-serving
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: knative-serving
+  name: knative-crd
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+data:
+  crd.yaml: |-
+{{.Files.Get "crds/serving-crds.yaml" | indent 4}}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade-crd"
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: Never
+      serviceAccountName: "{{ .Release.Name }}-pre-upgrade"
+      containers:
+      - name: knative-crd
+        image: "{{.Values.global.image}}:{{.Values.global.tag}}"
+        volumeMounts:
+        - name: crd
+          mountPath: /etc/knative/crd
+          readOnly: true
+        command: ["kubectl",  "apply", "-f", "/etc/knative/crd/crd.yaml"]
+      volumes:
+      - name: crd
+        configMap:
+          name: knative-crd
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "{{ .Release.Name }}-pre-upgrade-webhook"
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  template:
+    metadata:
+      name: "{{ .Release.Name }}"
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      restartPolicy: Never
+      serviceAccountName: "{{ .Release.Name }}-pre-upgrade"
+      containers:
+      - name: pre-upgrade-job
+        image: "{{.Values.global.image}}:{{.Values.global.tag}}"
+        command:
+          - kubectl
+          - delete
+          - ValidatingWebhookConfiguration
+          - config.webhook.serving.knative.dev

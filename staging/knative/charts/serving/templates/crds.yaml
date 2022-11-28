@@ -1,3 +1,0 @@
-{{ if not (.Capabilities.APIVersions.Has "serving.knative.dev/v1")}}
-{{.Files.Get "crds/serving-crds.yaml" }}
-{{ end }}
