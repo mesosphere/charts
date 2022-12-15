@@ -60,7 +60,7 @@ export HELM_DATA_HOME=$(HELM_DIR)/data
 
 export CT_LINT_CONF=config/ct/lintconf.yaml
 export CT_CHART_YAML_SCHEMA=config/ct/chart_schema.yaml
-
+export CT_CONFIG=config/ct/config.yaml
 # ----------------------------------------------------------------------------------------------------------------------
 # Git configuration
 # ----------------------------------------------------------------------------------------------------------------------
@@ -167,7 +167,7 @@ endif
 ifeq (, $(shell which yamale 2>/dev/null))
 	$(error "No yamale in PATH, consider doing pip install yamale")
 endif
-	$(LINT_ENV) ct lint --remote=$(GIT_REMOTE_NAME) --debug
+	$(LINT_ENV) ct lint --remote=$(GIT_REMOTE_NAME) --debug --config $(CT_CONFIG)
 
 .PHONY: ct.test
 ct.test: ## Runs e2e tests for charts
