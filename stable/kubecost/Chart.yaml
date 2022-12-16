@@ -12,5 +12,5 @@ dependencies:
     repository: https://kubecost.github.io/cost-analyzer
     condition: cost-analyzer.enabled
   - name: opencost
-    version: 1.99.0
+    version: 0.1.0
     condition: opencost.enabled
