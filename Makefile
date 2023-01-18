@@ -113,7 +113,7 @@ CT_TARGET_BRANCH ?= master
 CT_SINCE         ?= HEAD~1
 COMMIT_USERNAME  ?= $(shell git config user.name)
 COMMIT_EMAIL 	 ?= $(shell git config user.email)
-COMMIT_MESSAGE   ?= $(shell git log -1 --no-show-signature --pretty=format:'%B') # Use the commit message from the last commit
+COMMIT_MESSAGE   ?= $(shell git log -1 --no-show-signature --pretty=format:'%B' |sed "s/\"/'/g") # Use the commit message from the last commit
 HELM_LINT        ?= true
 HELM_DEP_UPDATE  ?= true
 
