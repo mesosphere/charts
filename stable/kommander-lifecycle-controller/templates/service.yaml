@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  name: {{ template "kommander-lifecycle-controller.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+    - port: 7444 # arbitrary port
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    controller: {{ template "kommander-lifecycle-controller.fullname" . }}
