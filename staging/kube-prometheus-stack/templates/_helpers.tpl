@@ -38,6 +38,11 @@ The longest name that gets created adds and extra 37 characters, so truncation s
 {{- end }}
 {{- end }}
 
+{{/* Prometheus apiVersion for networkpolicy */}}
+{{- define "kube-prometheus-stack.prometheus.networkPolicy.apiVersion" -}}
+{{- print "networking.k8s.io/v1" -}}
+{{- end }}
+
 {{/* Alertmanager custom resource instance name */}}
 {{- define "kube-prometheus-stack.alertmanager.crname" -}}
 {{- if .Values.cleanPrometheusOperatorObjectNames }}
@@ -221,6 +226,25 @@ Use the prometheus-node-exporter namespace override for multi-namespace deployme
   {{- $secure := index . 2 -}}
   {{- $userValue := index . 3 -}}
   {{- include "kube-prometheus-stack.kubeVersionDefaultValue" (list $values ">= 1.23-0" $insecure $secure $userValue) -}}
+{{- end -}}
+
+{{/* Sets default scrape limits for servicemonitor */}}
+{{- define "servicemonitor.scrapeLimits" -}}
+{{- with .sampleLimit }}
+sampleLimit: {{ . }}
+{{- end }}
+{{- with .targetLimit }}
+targetLimit: {{ . }}
+{{- end }}
+{{- with .labelLimit }}
+labelLimit: {{ . }}
+{{- end }}
+{{- with .labelNameLengthLimit }}
+labelNameLengthLimit: {{ . }}
+{{- end }}
+{{- with .labelValueLengthLimit }}
+labelValueLengthLimit: {{ . }}
+{{- end }}
 {{- end -}}
 
 {{/*
