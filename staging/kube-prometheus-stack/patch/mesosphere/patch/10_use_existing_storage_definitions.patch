@@ -46,7 +46,7 @@ index 78d0f7c5b..9f0602e8d 100644
  {{- end }}
  {{- if .Values.alertmanager.alertmanagerSpec.storage }}
 -  storage:
--{{ toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4 }}
+-{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4) . }}
 +{{- $namespace := include "kube-prometheus-stack.namespace" . }}
 +{{- $name := print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
 +{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
@@ -71,7 +71,7 @@ index eb316d64d..ddd7a8d06 100644
  {{- end }}
  {{- if .Values.prometheus.prometheusSpec.storageSpec }}
 -  storage:
--{{ toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4 }}
+-{{ tpl (toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4) . }}
 +{{- $namespace := include "kube-prometheus-stack.namespace" . }}
 +{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
 +{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
