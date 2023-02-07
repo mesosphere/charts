@@ -17,17 +17,17 @@ prometheus:
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.15.3
+  tag: 1.16.2
   components:
     cni:
       enabled: true
       namespace: kube-system
 
-### Default values for istio-operator, bundled with istio-1.15.3
+### Default values for istio-operator, bundled with istio-1.16.2
 
 # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
-#hub: gcr.io/istio-testing
-#tag: latest
+# hub: gcr.io/istio-testing
+# tag: latest
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.
@@ -37,7 +37,7 @@ imagePullSecrets: []
 # D2iQ Note: Rather than use 'istio-system' here, set an empty string.
 # By default, we instruct Istio's operator to only watch the .Release.Namespace where it is installed.
 # Of course, this can be overridden so that additional namespaces can be watched.
-#watchedNamespaces: istio-system
+# watchedNamespaces: istio-system
 watchedNamespaces: ""
 waitForResourcesTimeout: 300s
 
@@ -60,6 +60,8 @@ operator:
     requests:
       cpu: 50m
       memory: 128Mi
+  # Set to `type: RuntimeDefault` to use the default profile if available.
+  seccompProfile: {}
 
 # Node labels for pod assignment
 nodeSelector: {}
