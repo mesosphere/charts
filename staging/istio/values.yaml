@@ -17,13 +17,13 @@ prometheus:
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.15.3
+  tag: 1.16.2
   components:
     cni:
       enabled: true
       namespace: kube-system
 
-### Default values for istio-operator, bundled with istio-1.15.3
+### Default values for istio-operator, bundled with istio-1.16.2
 
 # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 #hub: gcr.io/istio-testing
@@ -60,6 +60,8 @@ operator:
     requests:
       cpu: 50m
       memory: 128Mi
+  # Set to `type: RuntimeDefault` to use the default profile if available.
+  seccompProfile: {}
 
 # Node labels for pod assignment
 nodeSelector: {}
