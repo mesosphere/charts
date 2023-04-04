@@ -5,11 +5,16 @@ Date:   Mon Apr 3 18:17:17 2023 -0700
     refactor: Update deployment.yaml
 
 diff --git a/staging/istio/templates/deployment.yaml b/staging/istio/templates/deployment.yaml
-index bdbd57c471..ffcd3aeb06 100644
+index bdbd57c471..f2e65c88ca 100644
 --- a/staging/istio/templates/deployment.yaml
 +++ b/staging/istio/templates/deployment.yaml
-@@ -24,7 +24,7 @@ spec:
+@@ -22,9 +22,12 @@ spec:
+     {{- end }}
+     spec:
        serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
++      {{- if .Values.priorityClassName }}
++      priorityClassName: "{{ .Values.priorityClassName }}"
++      {{- end }}
        containers:
          - name: istio-operator
 -          image: {{.Values.hub}}/operator:{{.Values.tag}}
@@ -17,7 +22,7 @@ index bdbd57c471..ffcd3aeb06 100644
            command:
            - operator
            - server
-@@ -47,7 +47,7 @@ spec:
+@@ -47,7 +50,7 @@ spec:
  {{ toYaml .Values.operator.resources | trim | indent 12 }}
            env:
              - name: WATCH_NAMESPACE

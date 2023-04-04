@@ -5,7 +5,7 @@ Date:   Mon Apr 3 17:34:17 2023 -0700
     refactor(d2iq): Refactor values for d2iq fork
 
 diff --git a/staging/istio/values.yaml b/staging/istio/values.yaml
-index 61cd77626f..7ec4e279e1 100644
+index 61cd77626f..000b0b44b7 100644
 --- a/staging/istio/values.yaml
 +++ b/staging/istio/values.yaml
 @@ -1,15 +1,48 @@
@@ -36,7 +36,7 @@ index 61cd77626f..7ec4e279e1 100644
 +      enabled: true
 +      namespace: kube-system
 +
-+### Default values for istio-operator, bundled with istio-ISTIO_VERSION_REPLACE
++priorityClassName: ""
 +
 +# D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 +# hub: gcr.io/istio-testing
