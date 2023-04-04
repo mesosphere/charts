@@ -5,10 +5,10 @@ Date:   Mon Apr 3 17:34:17 2023 -0700
     refactor(d2iq): Refactor values for d2iq fork
 
 diff --git a/staging/istio/values.yaml b/staging/istio/values.yaml
-index 61cd77626f..000b0b44b7 100644
+index e4480ba2ac..4cf5396627 100644
 --- a/staging/istio/values.yaml
 +++ b/staging/istio/values.yaml
-@@ -1,15 +1,48 @@
+@@ -1,5 +1,33 @@
 -hub: gcr.io/istio-testing
 -tag: latest
 +### D2iQ custom values for subcharts
@@ -44,7 +44,8 @@ index 61cd77626f..000b0b44b7 100644
 
  # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
  # used to pull operator image. Must be set for any cluster configured with private docker registry.
- imagePullSecrets: []
+@@ -10,10 +38,15 @@ imagePullSecrets: []
+ imagePullPolicy: ""
 
  # Used to replace istioNamespace to support operator watch multiple namespaces.
 -watchedNamespaces: istio-system
