@@ -22,9 +22,12 @@ spec:
     {{- end }}
     spec:
       serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
       containers:
         - name: istio-operator
-          image: {{.Values.hub}}/operator:{{.Values.tag}}
+          image: {{.Values.istioOperator.hub}}/operator:{{.Values.istioOperator.tag}}
           command:
           - operator
           - server
@@ -47,7 +50,7 @@ spec:
 {{ toYaml .Values.operator.resources | trim | indent 12 }}
           env:
             - name: WATCH_NAMESPACE
-              value: {{.Values.watchedNamespaces | quote}}
+              value: {{.Release.Namespace}}{{- if not (eq .Values.watchedNamespaces "") }},{{ .Values.watchedNamespaces }}{{- end }}
             - name: LEADER_ELECTION_NAMESPACE
               value: {{.Release.Namespace | quote}}
             - name: POD_NAME
