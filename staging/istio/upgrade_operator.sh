@@ -65,6 +65,6 @@ cd "${BASEDIR}" || exit
 git add .
 git diff-index --quiet HEAD || git commit -am "chore: copy upstream chart grafana dashboards ${ISTIO_TAG}"
 
-BASEDIR=${BASEDIR} ./patch/patch.sh
+BASEDIR=${BASEDIR} ISTIO_TAG=${ISTIO_TAG} ./patch/patch.sh
 
 echo "Done upgrading istio!"
