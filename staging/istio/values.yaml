@@ -23,7 +23,7 @@ istioOperator:
       enabled: true
       namespace: kube-system
 
-### Default values for istio-operator, bundled with istio-1.16.2
+priorityClassName: ""
 
 # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 # hub: gcr.io/istio-testing

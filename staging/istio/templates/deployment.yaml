@@ -22,6 +22,9 @@ spec:
     {{- end }}
     spec:
       serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
       containers:
         - name: istio-operator
           image: {{.Values.istioOperator.hub}}/operator:{{.Values.istioOperator.tag}}
