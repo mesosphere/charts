@@ -25,6 +25,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ include "kube-oidc-proxy.fullname" . }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
       {{- if .Values.initContainers }}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}

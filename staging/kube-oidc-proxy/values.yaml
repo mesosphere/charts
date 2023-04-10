@@ -144,6 +144,8 @@ tolerations: []
 
 affinity: {}
 
+priorityClassName: ""
+
 # certIssuerRef:
 #   kind: ClusterIssuer
 #   name: kubernetes-ca
