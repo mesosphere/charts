@@ -136,5 +136,7 @@ initContainers: []
 #     - name: plugins
 #       mountPath: /target
 
+priorityClassName: ""
+
 rbac:
   create: false
