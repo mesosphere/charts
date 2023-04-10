@@ -3175,6 +3175,21 @@ entries:
   kube-oidc-proxy:
   - apiVersion: v1
     appVersion: v0.3.0
+    created: "2023-04-10T22:20:42.271225865Z"
+    description: A Helm chart for kube-oidc-proxy
+    digest: de3290a3e133c9bf84aa8ae70a8049f64e469a8da1bc389460f90d9342af00a8
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    name: kube-oidc-proxy
+    sources:
+    - https://github.com/jetstack/kube-oidc-proxy
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v1
+    appVersion: v0.3.0
     created: "2022-10-27T21:19:58.412890485Z"
     description: A Helm chart for kube-oidc-proxy
     digest: 239693856a23148e5a1ebddef05ea21b8afa7bf6c6f289289ed3fbb7d262e19c
@@ -11732,4 +11747,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2023-04-04T22:39:45.99609623Z"
+generated: "2023-04-10T22:20:42.269924252Z"
