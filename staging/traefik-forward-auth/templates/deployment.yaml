@@ -25,6 +25,9 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ include "traefik-forward-auth.fullname" . }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
 {{- if .Values.initContainers }}
       initContainers:
         {{- toYaml .Values.initContainers | nindent 8 }}
