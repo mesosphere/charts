@@ -12,8 +12,8 @@ index bdbd57c471..f2e65c88ca 100644
      {{- end }}
      spec:
        serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
-+      {{- if .Values.priorityClassName }}
-+      priorityClassName: "{{ .Values.priorityClassName }}"
++      {{- if .Values.global.priorityClassName }}
++      priorityClassName: "{{ .Values.global.priorityClassName }}"
 +      {{- end }}
        containers:
          - name: istio-operator

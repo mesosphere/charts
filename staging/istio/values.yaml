@@ -3,6 +3,7 @@
 global:
   image: docker.io/bitnami/kubectl
   tag: 1.24.6
+  priorityClassName: ""
 
 grafana:
   enabled: true
@@ -17,13 +18,11 @@ prometheus:
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.17.1
+  tag: 1.17.2
   components:
     cni:
       enabled: true
       namespace: kube-system
-
-priorityClassName: ""
 
 # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 # hub: gcr.io/istio-testing

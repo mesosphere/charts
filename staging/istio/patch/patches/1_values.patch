@@ -8,7 +8,7 @@ diff --git a/staging/istio/values.yaml b/staging/istio/values.yaml
 index e4480ba2ac..4cf5396627 100644
 --- a/staging/istio/values.yaml
 +++ b/staging/istio/values.yaml
-@@ -1,5 +1,33 @@
+@@ -1,5 +1,32 @@
 -hub: gcr.io/istio-testing
 -tag: latest
 +### D2iQ custom values for subcharts
@@ -16,6 +16,7 @@ index e4480ba2ac..4cf5396627 100644
 +global:
 +  image: docker.io/bitnami/kubectl
 +  tag: 1.24.6
++  priorityClassName: ""
 +
 +grafana:
 +  enabled: true
@@ -36,15 +37,13 @@ index e4480ba2ac..4cf5396627 100644
 +      enabled: true
 +      namespace: kube-system
 +
-+priorityClassName: ""
-+
 +# D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 +# hub: gcr.io/istio-testing
 +# tag: latest
 
  # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
  # used to pull operator image. Must be set for any cluster configured with private docker registry.
-@@ -10,10 +38,15 @@ imagePullSecrets: []
+@@ -10,10 +37,15 @@ imagePullSecrets: []
  imagePullPolicy: ""
 
  # Used to replace istioNamespace to support operator watch multiple namespaces.
