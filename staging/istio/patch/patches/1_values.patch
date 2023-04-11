@@ -16,6 +16,7 @@ index e4480ba2ac..4cf5396627 100644
 +global:
 +  image: docker.io/bitnami/kubectl
 +  tag: 1.24.6
++  priorityClassName: ""
 +
 +grafana:
 +  enabled: true
@@ -35,8 +36,6 @@ index e4480ba2ac..4cf5396627 100644
 +    cni:
 +      enabled: true
 +      namespace: kube-system
-+
-+priorityClassName: ""
 +
 +# D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
 +# hub: gcr.io/istio-testing
