@@ -19,6 +19,8 @@ deploymentAnnotations: {}
 
 initContainers: []
 
+priorityClassName: ""
+
 tolerations: []
   # - key: CriticalAddonsOnly
   #   operator: Exists
