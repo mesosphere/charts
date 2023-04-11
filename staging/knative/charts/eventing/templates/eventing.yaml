@@ -3903,7 +3903,7 @@ spec:
           containerPort: 8008
 
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: broker-ingress-hpa
@@ -3923,7 +3923,7 @@ spec:
         type: Utilization
         averageUtilization: 70
 ---
-apiVersion: autoscaling/v2beta2
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: broker-filter-hpa
