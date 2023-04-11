@@ -601,6 +601,9 @@ spec:
         eventing.knative.dev/release: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: eventing-controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: eventing-controller
         terminationMessagePolicy: FallbackToLogsOnError
@@ -669,6 +672,9 @@ spec:
       labels: *labels
     spec:
       serviceAccountName: eventing-webhook
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: eventing-webhook
         terminationMessagePolicy: FallbackToLogsOnError
@@ -3329,6 +3335,9 @@ spec:
         eventing.knative.dev/release: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: eventing-controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: eventing-controller
         terminationMessagePolicy: FallbackToLogsOnError
@@ -3645,6 +3654,9 @@ spec:
         eventing.knative.dev/release: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: mt-broker-filter
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: filter
         terminationMessagePolicy: FallbackToLogsOnError
@@ -3756,6 +3768,9 @@ spec:
         eventing.knative.dev/release: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: mt-broker-ingress
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: ingress
         terminationMessagePolicy: FallbackToLogsOnError
@@ -3868,6 +3883,9 @@ spec:
         eventing.knative.dev/release: {{ .Chart.AppVersion }}
     spec:
       serviceAccountName: eventing-controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: eventing-controller
         terminationMessagePolicy: FallbackToLogsOnError
@@ -4478,6 +4496,9 @@ spec:
       labels: *labels
     spec:
       serviceAccountName: imc-controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: controller
         image: gcr.io/knative-releases/knative.dev/eventing/cmd/in_memory/channel_controller@sha256:9a084ba0ed6a12862adb3ca00de069f0ec1715fe8d4db6c9921fcca335c675bb
@@ -4535,6 +4556,9 @@ spec:
       labels: *labels
     spec:
       serviceAccountName: imc-dispatcher
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: dispatcher
         image: gcr.io/knative-releases/knative.dev/eventing/cmd/in_memory/channel_dispatcher@sha256:8df896444091f1b34185f0fa3da5d41f32e84c43c48df07605c728e0fe49a9a8
