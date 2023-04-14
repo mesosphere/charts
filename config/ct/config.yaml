@@ -1,0 +1,12 @@
+chart-repos:
+  - mesosphere-staging=https://mesosphere.github.io/charts/staging
+  - mesosphere-stable=https://mesosphere.github.io/charts/stable
+  - kubefed-charts=https://raw.githubusercontent.com/kubernetes-sigs/kubefed/master/charts
+  - jetstack-charts=https://charts.jetstack.io
+  - banzaicloud=https://kubernetes-charts.banzaicloud.com
+  - dex-controller=https://mesosphere.github.io/dex-controller/charts
+  - kommander-ui=https://mesosphere.github.io/kommander-ui/charts
+  - kubecost=https://kubecost.github.io/cost-analyzer
+  - yakcl=https://mesosphere.github.io/yakcl/charts
+  - prometheus-community=https://prometheus-community.github.io/helm-charts
+  - grafana=https://grafana.github.io/helm-charts

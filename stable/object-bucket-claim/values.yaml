@@ -1,0 +1,15 @@
+dkp:
+  # name of apps that consumes the S3 bucket to create
+  # needs to be the helmrelease name of the consuming app
+
+  # your-app:
+  #   enabled: true
+  #   bucketName: your-app
+  #   # generateBucketName: ceph-bkt
+  #   storageClassName: s3-provider-sc
+  #   enableOBCHealthCheck: true
+  #   labels: {}
+  #   additionalConfig:
+  #     # maxObjects: "1000"
+  #     # in string format like "2G", minimum is "4K"
+  #     maxSize: "2G"

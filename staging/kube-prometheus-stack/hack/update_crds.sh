@@ -1,6 +1,10 @@
 #!/bin/bash
 
-VERSION="$(grep ^appVersion ../Chart.yaml | sed 's/appVersion:\s/v/g')"
+if [[ $(uname -s) = "Darwin" ]]; then
+    VERSION="$(grep ^appVersion ../Chart.yaml | sed 's/appVersion: //g')"
+else
+    VERSION="$(grep ^appVersion ../Chart.yaml | sed 's/appVersion:\s//g')"
+fi
 
 FILES=(
   "crd-alertmanagerconfigs.yaml :  monitoring.coreos.com_alertmanagerconfigs.yaml"

@@ -1,0 +1,150 @@
+{{- range $app, $config := .Values.dkp }}
+{{- if $config.enabled }}
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: {{ $config.bucketName }}
+  labels: 
+    {{ include "object-bucket-claim.labels" $ | nindent 4 }}
+    {{- if $config.labels }}
+    {{ toYaml $config.labels | nindent 4 }}
+    {{- end }}
+spec:
+  # To create a new bucket specify either `bucketName` or
+  # `generateBucketName` here. Both cannot be used. To access
+  # an existing bucket the bucket name needs to be defined in
+  # the StorageClass referenced here, and both `bucketName` and
+  # `generateBucketName` must be omitted in the OBC.
+  bucketName: {{ $config.bucketName }}
+  storageClassName: {{ $config.storageClassName }}
+  {{- if $config.additionalConfig }}
+    # To set for quota for OBC
+  additionalConfig:
+    {{- toYaml $config.additionalConfig | nindent 4 }}
+  {{- end }}
+---
+{{- if $config.enableOBCHealthCheck }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: check-{{ $config.bucketName }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: check-{{ $config.bucketName }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "update", "patch", "delete"]
+  - apiGroups: ["objectbucket.io"]
+    resources: ["objectbucketclaims"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["helm.toolkit.fluxcd.io"]
+    resources: ["helmreleases"]
+    verbs: ["get", "list", "patch", "watch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: check-{{ $config.bucketName }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: check-{{ $config.bucketName }}
+subjects:
+  - kind: ServiceAccount
+    name: check-{{ $config.bucketName }}
+    namespace: {{ $.Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: check-{{ $config.bucketName }}
+spec:
+  backoffLimit: 12
+  template:
+    metadata:
+      name: check-{{ $config.bucketName }}
+    spec:
+      serviceAccountName: check-{{ $config.bucketName }}
+      restartPolicy: OnFailure
+      containers:
+        - name: kubectl
+          image: "bitnami/kubectl:1.24.1"
+          command:
+            - sh
+            - -c
+            - |
+              timeout --preserve-status 1h /bin/bash <<'EOF'
+              set -o nounset
+              set -o pipefail
+
+              while true ; do
+                obc_status_phase=$(kubectl get objectbucketclaim -n {{ $.Release.Namespace }} {{ $config.bucketName }} -o jsonpath='{.status.phase}')
+
+                # check the ObjectBucketClaim is being fulfilled
+                case $obc_status_phase in
+                  "")
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is not being reconciled by S3 storage provider yet.."
+                    echo "Waiting for 1 min before exiting.."
+                    sleep 60
+                    continue
+                    ;;
+                  Bound)
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is Bound"
+                    ;;
+                  *)
+                    echo "ObjectBucketClaim {{ $config.bucketName }} is $obc_status_phase phase"
+                    echo "Waiting for 1 min before exiting.."
+                    sleep 60
+                    continue
+                    ;;
+                esac
+
+                # check the consumer app HelmRelease exists before kicking off the reconcile
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }}
+                if [[ $? -eq 1 ]]; then
+                    echo "HelmRelease {{ $app }} doesn't exist. Do nothing."
+                    exit 0
+                fi
+
+                # check if a reconciliation is in progress
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
+                jq -e '.status | .conditions | map(.reason) | contains(["Progressing"])'
+                if [[ $? -eq 0 ]]; then
+                  echo "{{ $app }} HelmRelease is in reconciliation. Do nothing."
+                  echo "Waiting for 1 min before exiting.."
+                  sleep 60
+                  continue
+                fi
+
+                # detect helm storage deadlock
+                # https://github.com/fluxcd/helm-controller/issues/149
+                helm_deadlock_msg="Helm upgrade failed: another operation (install/upgrade/rollback) is in progress"
+                kubectl get helmrelease -n {{ $.Release.Namespace }} {{ $app }} -o json | \
+                jq -e --arg helm_deadlock_msg "$helm_deadlock_msg" '.status | .conditions | map(.message) | contains([$helm_deadlock_msg])'
+                if [[ $? -eq 0 ]]; then
+                    echo "Helm storage deadlock detected. Cleaning up the helm storage for {{ $app }}.."
+                    helm_storage_secrets=($(kubectl get secrets --sort-by=.metadata.creationTimestamp \
+                    -n {{ $.Release.Namespace }} -l name={{ $app }} -o jsonpath='{range .items[*]}{.metadata.name}{" "}{end}'))
+                    # delete the latest secret
+                    kubectl delete secret -n {{ $.Release.Namespace }} ${helm_storage_secrets[-1]}
+                fi
+
+                # reconcile the storage consumer app HelmRelease if it's not in reconciliation progress"
+                kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": true}]'
+                kubectl -n {{ $.Release.Namespace }} patch helmrelease {{ $app }} --type='json' -p='[{"op": "replace", "path": "/spec/suspend", "value": false}]'
+
+                # wait for 10 mins
+                kubectl wait helmrelease -n {{ $.Release.Namespace }} {{ $app }} --for=condition=Ready --timeout 10m
+                if [[ $? -eq 0 ]]; then
+                  echo "{{ $app }} HelmRelease check succeeded."
+                  exit 0
+                fi
+              done
+              EOF
+{{- end }}
+{{- end }}
+{{- end }}

@@ -16,18 +16,25 @@ spec:
         {{- range $key, $val := .Values.podLabels }}
         {{ $key }}: "{{ $val }}"
         {{- end }}
-    {{- if .Values.podAnnotations }}
       annotations:
+        prometheus.io/port: "{{ .Values.operator.monitoring.port }}"
+        prometheus.io/scrape: "true"
+    {{- if .Values.podAnnotations }}
 {{ toYaml .Values.podAnnotations | indent 8 }}
     {{- end }}
     spec:
       serviceAccountName: istio-operator{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: istio-operator
           image: {{.Values.istioOperator.hub}}/operator:{{.Values.istioOperator.tag}}
           command:
           - operator
           - server
+          - --monitoring-host={{ .Values.operator.monitoring.host }}
+          - --monitoring-port={{ .Values.operator.monitoring.port }}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -38,7 +45,13 @@ spec:
             runAsGroup: 1337
             runAsUser: 1337
             runAsNonRoot: true
-          imagePullPolicy: IfNotPresent
+{{- if .Values.operator.seccompProfile }}
+            seccompProfile:
+{{ toYaml .Values.operator.seccompProfile | trim | indent 14 }}
+{{- end }}
+{{- if .Values.imagePullPolicy }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+{{- end }}
           resources:
 {{ toYaml .Values.operator.resources | trim | indent 12 }}
           env:

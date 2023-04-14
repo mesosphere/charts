@@ -66,6 +66,8 @@ affinity: {}
 
 securityContext: {}
 
+priorityClassName: ""
+
 # configuration for liveness probe
 livenessProbe:
   # Disabled by default. karma doesn't start its API, including /health, until it finishes its first pull from its
