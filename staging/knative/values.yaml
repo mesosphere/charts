@@ -1,12 +1,6 @@
 global:
   serviceLabels: {}
 
-eventing:
-  enabled: true
-
-eventing-sources:
-  enabled: true
-
 serving:
   autoscaler:
     containerConcurrencyTargetPercentage: "70"

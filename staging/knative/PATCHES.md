@@ -11,7 +11,7 @@ When fetching `serving-core.yaml` from [upstream](https://github.com/knative/ser
 
 1. Get the latest file
 ```bash
-wget https://github.com/knative/serving/releases/download/knative-v1.9.2/serving-core.yaml
+wget https://github.com/knative/serving/releases/download/knative-v1.9.3/serving-core.yaml
 ```
 
 2. Create the patch kustomization
