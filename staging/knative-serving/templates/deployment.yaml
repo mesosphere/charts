@@ -1,0 +1,545 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-controller
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: controller
+  {{- include "knative-serving.labels" . | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-activator
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: activator
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: activator
+      role: activator
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: activator
+        app.kubernetes.io/component: activator
+        app.kubernetes.io/version: 1.9.3
+        role: activator
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+    spec:
+      containers:
+      - env:
+        - name: GOGC
+          value: {{ quote .Values.activator.activator.env.gogc }}
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.activator.activator.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.activator.activator.env.configObservabilityName }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.activator.activator.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.activator.activator.image.repository }}:{{ .Values.activator.activator.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          failureThreshold: 12
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: activator
+            port: 8012
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        name: activator
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        - containerPort: 8012
+          name: http1
+        - containerPort: 8013
+          name: h2c
+        readinessProbe:
+          failureThreshold: 5
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: activator
+            port: 8012
+          periodSeconds: 5
+        resources: {{- toYaml .Values.activator.activator.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.activator.activator.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+      terminationGracePeriodSeconds: 600
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-autoscaler
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: autoscaler
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.autoscaler.replicas }}
+  selector:
+    matchLabels:
+      app: autoscaler
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: autoscaler
+        app.kubernetes.io/component: autoscaler
+        app.kubernetes.io/version: 1.9.3
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: autoscaler
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.autoscaler.autoscaler.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.autoscaler.autoscaler.env.configObservabilityName }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.autoscaler.autoscaler.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.autoscaler.autoscaler.image.repository }}:{{ .Values.autoscaler.autoscaler.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: autoscaler
+            port: 8080
+        name: autoscaler
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        - containerPort: 8080
+          name: websocket
+        readinessProbe:
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: autoscaler
+            port: 8080
+        resources: {{- toYaml .Values.autoscaler.autoscaler.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.autoscaler.autoscaler.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-controller
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: controller
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: controller
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: controller
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/version: 1.9.3
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: controller
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.controller.controller.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.controller.controller.env.configObservabilityName }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.controller.controller.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.controller.controller.image.repository }}:{{ .Values.controller.controller.image.tag
+          | default .Chart.AppVersion }}
+        name: controller
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        resources: {{- toYaml .Values.controller.controller.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.controller.controller.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-domain-mapping
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: domain-mapping
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: domain-mapping
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: domain-mapping
+        app.kubernetes.io/component: domain-mapping
+        app.kubernetes.io/version: 1.9.3
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: domain-mapping
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.domainMapping.domainMapping.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.domainMapping.domainMapping.env.configObservabilityName
+            }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.domainMapping.domainMapping.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.domainMapping.domainMapping.image.repository }}:{{ .Values.domainMapping.domainMapping.image.tag
+          | default .Chart.AppVersion }}
+        name: domain-mapping
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        resources: {{- toYaml .Values.domainMapping.domainMapping.resources | nindent 10
+          }}
+        securityContext: {{- toYaml .Values.domainMapping.domainMapping.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-domainmapping-webhook
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: domain-mapping
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: domainmapping-webhook
+      role: domainmapping-webhook
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: domainmapping-webhook
+        app.kubernetes.io/component: domain-mapping
+        app.kubernetes.io/version: 1.9.3
+        role: domainmapping-webhook
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: domainmapping-webhook
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.domainmappingWebhook.domainmappingWebhook.env.configLoggingName
+            }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.domainmappingWebhook.domainmappingWebhook.env.configObservabilityName
+            }}
+        - name: WEBHOOK_PORT
+          value: {{ quote .Values.domainmappingWebhook.domainmappingWebhook.env.webhookPort
+            }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.domainmappingWebhook.domainmappingWebhook.env.metricsDomain
+            }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.domainmappingWebhook.domainmappingWebhook.image.repository }}:{{
+          .Values.domainmappingWebhook.domainmappingWebhook.image.tag | default .Chart.AppVersion
+          }}
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: webhook
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 20
+          periodSeconds: 1
+        name: domainmapping-webhook
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        - containerPort: 8443
+          name: https-webhook
+        readinessProbe:
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: webhook
+            port: 8443
+            scheme: HTTPS
+          periodSeconds: 1
+        resources: {{- toYaml .Values.domainmappingWebhook.domainmappingWebhook.resources
+          | nindent 10 }}
+        securityContext: {{- toYaml .Values.domainmappingWebhook.domainmappingWebhook.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+      terminationGracePeriodSeconds: 300
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-webhook
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: webhook
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: webhook
+      role: webhook
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: webhook
+        app.kubernetes.io/component: webhook
+        app.kubernetes.io/version: 1.9.3
+        role: webhook
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: webhook
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.webhook.webhook.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.webhook.webhook.env.configObservabilityName }}
+        - name: WEBHOOK_NAME
+          value: {{ quote .Values.webhook.webhook.env.webhookName }}
+        - name: WEBHOOK_PORT
+          value: {{ quote .Values.webhook.webhook.env.webhookPort }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.webhook.webhook.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.webhook.webhook.image.repository }}:{{ .Values.webhook.webhook.image.tag
+          | default .Chart.AppVersion }}
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: webhook
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 20
+          periodSeconds: 1
+        name: webhook
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        - containerPort: 8443
+          name: https-webhook
+        readinessProbe:
+          httpGet:
+            httpHeaders:
+            - name: k-kubelet-probe
+              value: webhook
+            port: 8443
+            scheme: HTTPS
+          periodSeconds: 1
+        resources: {{- toYaml .Values.webhook.webhook.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.webhook.webhook.containerSecurityContext |
+          nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller
+      terminationGracePeriodSeconds: 300
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-autoscaler-hpa
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: autoscaler-hpa
+    autoscaling.knative.dev/autoscaler-provider: hpa
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: autoscaler-hpa
+    {{- include "knative-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: autoscaler-hpa
+        app.kubernetes.io/component: autoscaler-hpa
+        app.kubernetes.io/version: 1.9.3
+      {{- include "knative-serving.selectorLabels" . | nindent 8 }}
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: autoscaler-hpa
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - env:
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: {{ quote .Values.autoscalerHpa.autoscalerHpa.env.configLoggingName }}
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: {{ quote .Values.autoscalerHpa.autoscalerHpa.env.configObservabilityName
+            }}
+        - name: METRICS_DOMAIN
+          value: {{ quote .Values.autoscalerHpa.autoscalerHpa.env.metricsDomain }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.autoscalerHpa.autoscalerHpa.image.repository }}:{{ .Values.autoscalerHpa.autoscalerHpa.image.tag
+          | default .Chart.AppVersion }}
+        name: autoscaler-hpa
+        ports:
+        - containerPort: 9090
+          name: metrics
+        - containerPort: 8008
+          name: profiling
+        resources: {{- toYaml .Values.autoscalerHpa.autoscalerHpa.resources | nindent 10
+          }}
+        securityContext: {{- toYaml .Values.autoscalerHpa.autoscalerHpa.containerSecurityContext
+          | nindent 10 }}
+      serviceAccountName: {{ include "knative-serving.fullname" . }}-controller

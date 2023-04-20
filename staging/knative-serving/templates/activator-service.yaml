@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-activator-service
+  namespace: knative-serving
+  labels:
+    app: activator
+    app.kubernetes.io/component: activator
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.activatorService.type }}
+  selector:
+    app: activator
+  {{- include "knative-serving.selectorLabels" . | nindent 4 }}
+  ports:
+	{{- .Values.activatorService.ports | toYaml | nindent 2 -}}

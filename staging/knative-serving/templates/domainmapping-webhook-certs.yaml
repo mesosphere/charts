@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-domainmapping-webhook-certs
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: domain-mapping
+  {{- include "knative-serving.labels" . | nindent 4 }}

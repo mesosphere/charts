@@ -50,6 +50,9 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       serviceAccountName: cert-delete-job
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: istio-ca-delete
         image: {{.Values.global.image}}:{{.Values.global.tag}}

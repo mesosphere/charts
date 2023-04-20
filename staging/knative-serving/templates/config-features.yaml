@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-config-features
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: controller
+  {{- include "knative-serving.labels" . | nindent 4 }}
+  annotations:
+    knative.dev/example-checksum: d3565159
+data:
+  _example: {{ .Values.configFeatures.Example | toYaml | indent 1 }}

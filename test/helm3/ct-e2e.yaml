@@ -21,6 +21,7 @@ excluded-charts:
   - generic-ingress       # D2IQ-62811
   - istio                 # D2IQ-62812
   - knative               # D2IQ-62813
+  - knative-serving
   - kube-oidc-proxy       # D2IQ-62814
   - kudo                  # D2IQ-62815
   - nvidia                # D2IQ-62816

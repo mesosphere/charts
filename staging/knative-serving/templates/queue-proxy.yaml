@@ -1,0 +1,10 @@
+apiVersion: caching.internal.knative.dev/v1alpha1
+kind: Image
+metadata:
+  name: {{ include "knative-serving.fullname" . }}-queue-proxy
+  namespace: knative-serving
+  labels:
+    app.kubernetes.io/component: queue-proxy
+  {{- include "knative-serving.labels" . | nindent 4 }}
+spec:
+  image: {{ .Values.queue.queue.image.repository }}:{{ .Values.queue.queue.image.tag }}
