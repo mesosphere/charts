@@ -7,12 +7,12 @@ metadata:
     duck.knative.dev/podspecable: "true"
   {{- include "knative-serving.labels" . | nindent 4 }}
 rules:
-- apiGroups:
-  - serving.knative.dev
-  resources:
-  - configurations
-  - services
-  verbs:
-  - list
-  - watch
-  - patch
+  - apiGroups:
+      - serving.knative.dev
+    resources:
+      - configurations
+      - services
+    verbs:
+      - list
+      - watch
+      - patch

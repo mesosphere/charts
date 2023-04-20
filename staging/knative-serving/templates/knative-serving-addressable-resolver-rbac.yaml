@@ -7,14 +7,14 @@ metadata:
     duck.knative.dev/addressable: "true"
   {{- include "knative-serving.labels" . | nindent 4 }}
 rules:
-- apiGroups:
-  - serving.knative.dev
-  resources:
-  - routes
-  - routes/status
-  - services
-  - services/status
-  verbs:
-  - get
-  - list
-  - watch
+  - apiGroups:
+      - serving.knative.dev
+    resources:
+      - routes
+      - routes/status
+      - services
+      - services/status
+    verbs:
+      - get
+      - list
+      - watch

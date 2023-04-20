@@ -8,29 +8,29 @@ metadata:
   labels:
   {{- include "knative-serving.labels" . | nindent 4 }}
 webhooks:
-- admissionReviewVersions:
-  - v1
-  - v1beta1
-  clientConfig:
-    service:
-      name: '{{ include "knative-serving.fullname" . }}-webhook'
-      namespace: '{{ .Release.Namespace }}'
-  failurePolicy: Fail
-  name: config.webhook.serving.knative.dev
-  objectSelector:
-    matchExpressions:
-    - key: app.kubernetes.io/name
-      operator: In
-      values:
-      - knative-serving
-    - key: app.kubernetes.io/component
-      operator: In
-      values:
-      - autoscaler
-      - controller
-      - logging
-      - networking
-      - observability
-      - tracing
-  sideEffects: None
-  timeoutSeconds: 10
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: '{{ include "knative-serving.fullname" . }}-webhook'
+        namespace: '{{ .Release.Namespace }}'
+    failurePolicy: Fail
+    name: config.webhook.serving.knative.dev
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/name
+          operator: In
+          values:
+            - knative-serving
+        - key: app.kubernetes.io/component
+          operator: In
+          values:
+            - autoscaler
+            - controller
+            - logging
+            - networking
+            - observability
+            - tracing
+    sideEffects: None
+    timeoutSeconds: 10

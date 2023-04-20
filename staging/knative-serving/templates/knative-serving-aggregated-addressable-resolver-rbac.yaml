@@ -7,6 +7,6 @@ metadata:
   {{- include "knative-serving.labels" . | nindent 4 }}
 aggregationRule:
   clusterRoleSelectors:
-  - matchLabels:
-      duck.knative.dev/addressable: "true"
+    - matchLabels:
+        duck.knative.dev/addressable: "true"
 rules: null

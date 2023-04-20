@@ -14,4 +14,4 @@ spec:
     role: domainmapping-webhook
   {{- include "knative-serving.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.domainmappingWebhook.ports | toYaml | nindent 2 -}}
+ {{- .Values.domainmappingWebhook.ports | toYaml | nindent 2 -}}

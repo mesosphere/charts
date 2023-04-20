@@ -11,6 +11,6 @@ roleRef:
   kind: ClusterRole
   name: '{{ include "knative-serving.fullname" . }}-knative-serving-aggregated-addressable-resolver'
 subjects:
-- kind: ServiceAccount
-  name: '{{ include "knative-serving.fullname" . }}-controller'
-  namespace: '{{ .Release.Namespace }}'
+  - kind: ServiceAccount
+    name: '{{ include "knative-serving.fullname" . }}-controller'
+    namespace: '{{ .Release.Namespace }}'

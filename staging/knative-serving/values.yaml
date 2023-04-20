@@ -4,7 +4,7 @@ activator:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -16,7 +16,7 @@ activator:
       metricsDomain: knative.dev/internal/serving
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/activator
-      tag: eebd9aa725b7
+      tag: v1.9.3
     resources:
       limits:
         cpu: "1"
@@ -26,21 +26,21 @@ activator:
         memory: 60Mi
 activatorService:
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
-  - name: http
-    port: 80
-    targetPort: 8012
-  - name: http2
-    port: 81
-    targetPort: 8013
-  - name: https
-    port: 443
-    targetPort: 8112
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
+    - name: http
+      port: 80
+      targetPort: 8012
+    - name: http2
+      port: 81
+      targetPort: 8013
+    - name: https
+      port: 443
+      targetPort: 8112
   type: ClusterIP
 autoscaler:
   autoscaler:
@@ -48,7 +48,7 @@ autoscaler:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -59,7 +59,7 @@ autoscaler:
       metricsDomain: knative.dev/serving
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler
-      tag: 07920fd1f08b
+      tag: v1.9.3
     resources:
       limits:
         cpu: "1"
@@ -68,15 +68,15 @@ autoscaler:
         cpu: 100m
         memory: 100Mi
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
-  - name: http
-    port: 8080
-    targetPort: 8080
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
+    - name: http
+      port: 8080
+      targetPort: 8080
   replicas: 1
   type: ClusterIP
 autoscalerHpa:
@@ -85,7 +85,7 @@ autoscalerHpa:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -96,7 +96,7 @@ autoscalerHpa:
       metricsDomain: knative.dev/serving
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler-hpa
-      tag: 74a89c301fd0
+      tag: v1.9.3
     resources:
       limits:
         cpu: 300m
@@ -105,12 +105,12 @@ autoscalerHpa:
         cpu: 30m
         memory: 40Mi
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
   type: ClusterIP
 configAutoscaler:
   Example: |-
@@ -458,7 +458,7 @@ configDeployment:
     #
     # NOTE THAT THIS IS AN EXPERIMENTAL / ALPHA FEATURE
     concurrency-state-endpoint: ""
-  queueSidecarImage: gcr.io/knative-releases/knative.dev/serving/cmd/queue:146f63f1dc0a
+  queueSidecarImage: gcr.io/knative-releases/knative.dev/serving/cmd/queue:v1.9.3
 configDomain:
   Example: |-
     ################################
@@ -1044,7 +1044,7 @@ controller:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -1055,7 +1055,7 @@ controller:
       metricsDomain: knative.dev/internal/serving
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/controller
-      tag: d3217b10c399
+      tag: v1.9.3
     resources:
       limits:
         cpu: "1"
@@ -1064,12 +1064,12 @@ controller:
         cpu: 100m
         memory: 100Mi
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
   type: ClusterIP
 domainMapping:
   domainMapping:
@@ -1077,7 +1077,7 @@ domainMapping:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -1088,7 +1088,7 @@ domainMapping:
       metricsDomain: knative.dev/serving
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/domain-mapping
-      tag: e0461362a2f2
+      tag: v1.9.3
     resources:
       limits:
         cpu: 300m
@@ -1102,7 +1102,7 @@ domainmappingWebhook:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -1114,7 +1114,7 @@ domainmappingWebhook:
       webhookPort: "8443"
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/domain-mapping-webhook
-      tag: e08873de6397
+      tag: v1.9.3
     resources:
       limits:
         cpu: 500m
@@ -1123,35 +1123,35 @@ domainmappingWebhook:
         cpu: 100m
         memory: 100Mi
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
-  - name: https-webhook
-    port: 443
-    targetPort: 8443
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
+    - name: https-webhook
+      port: 443
+      targetPort: 8443
   type: ClusterIP
 kubernetesClusterDomain: cluster.local
 webhook:
   ports:
-  - name: http-metrics
-    port: 9090
-    targetPort: 9090
-  - name: http-profiling
-    port: 8008
-    targetPort: 8008
-  - name: https-webhook
-    port: 443
-    targetPort: 8443
+    - name: http-metrics
+      port: 9090
+      targetPort: 9090
+    - name: http-profiling
+      port: 8008
+      targetPort: 8008
+    - name: https-webhook
+      port: 443
+      targetPort: 8443
   type: ClusterIP
   webhook:
     containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - ALL
+          - ALL
       readOnlyRootFilesystem: true
       runAsNonRoot: true
       seccompProfile:
@@ -1164,7 +1164,7 @@ webhook:
       webhookPort: "8443"
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/webhook
-      tag: 04a65ceb9f84
+      tag: v1.9.3
     resources:
       limits:
         cpu: 500m
@@ -1176,4 +1176,4 @@ queue:
   queue:
     image:
       repository: gcr.io/knative-releases/knative.dev/serving/cmd/queue
-      tag: 146f63f1dc0a
+      tag: v1.9.3

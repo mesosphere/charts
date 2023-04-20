@@ -7,6 +7,6 @@ metadata:
   {{- include "knative-serving.labels" . | nindent 4 }}
 aggregationRule:
   clusterRoleSelectors:
-  - matchLabels:
-      serving.knative.dev/controller: "true"
+    - matchLabels:
+        serving.knative.dev/controller: "true"
 rules: null

@@ -13,4 +13,4 @@ spec:
     app: activator
   {{- include "knative-serving.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.activatorService.ports | toYaml | nindent 2 -}}
+ {{- .Values.activatorService.ports | toYaml | nindent 2 -}}

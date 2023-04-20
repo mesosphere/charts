@@ -8,26 +8,26 @@ metadata:
   labels:
   {{- include "knative-serving.labels" . | nindent 4 }}
 webhooks:
-- admissionReviewVersions:
-  - v1
-  - v1beta1
-  clientConfig:
-    service:
-      name: '{{ include "knative-serving.fullname" . }}-domainmapping-webhook'
-      namespace: '{{ .Release.Namespace }}'
-  failurePolicy: Fail
-  name: webhook.domainmapping.serving.knative.dev
-  rules:
-  - apiGroups:
-    - serving.knative.dev
-    apiVersions:
-    - '*'
-    operations:
-    - CREATE
-    - UPDATE
-    resources:
-    - domainmappings
-    - domainmappings/status
-    scope: '*'
-  sideEffects: None
-  timeoutSeconds: 10
+  - admissionReviewVersions:
+      - v1
+      - v1beta1
+    clientConfig:
+      service:
+        name: '{{ include "knative-serving.fullname" . }}-domainmapping-webhook'
+        namespace: '{{ .Release.Namespace }}'
+    failurePolicy: Fail
+    name: webhook.domainmapping.serving.knative.dev
+    rules:
+      - apiGroups:
+          - serving.knative.dev
+        apiVersions:
+          - '*'
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - domainmappings
+          - domainmappings/status
+        scope: '*'
+    sideEffects: None
+    timeoutSeconds: 10
