@@ -79,6 +79,9 @@ spec:
     spec:
       restartPolicy: Never
       serviceAccountName: "{{ .Release.Name }}-pre-upgrade"
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: knative-crd
         image: "{{.Values.global.image}}:{{.Values.global.tag}}"
@@ -118,6 +121,9 @@ spec:
     spec:
       restartPolicy: Never
       serviceAccountName: "{{ .Release.Name }}-pre-upgrade"
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: pre-upgrade-job
         image: "{{.Values.global.image}}:{{.Values.global.tag}}"

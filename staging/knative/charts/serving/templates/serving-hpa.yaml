@@ -49,6 +49,9 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: autoscaler-hpa
           # This is the Go import path for the binary that is containerized
