@@ -10,7 +10,7 @@ the `knative-serving`, `knative-eventing` and `knative-sources` namespaces.
 
 ## Prerequisites
 
-- Kubernetes 1.14+ with Beta APIs enabled
+- Kubernetes 1.24+ with Beta APIs enabled
 
 ## A Quick Note on Versioning
 

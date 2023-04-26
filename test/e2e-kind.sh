@@ -5,10 +5,10 @@ set -o nounset
 set -o pipefail
 set -x
 
-readonly KIND_VERSION=v0.11.1
+readonly KIND_VERSION=v0.18.0
 KINDEST_NODE_IMAGE=kindest/node
 # full SHA256!
-KINDEST_NODE_VERSION=v1.19.1@sha256:98cf5288864662e37115e362b23e4369c8c4a408f99cbc06e58ac30ddc721600
+KINDEST_NODE_VERSION=v1.26.3@sha256:61b92f38dff6ccc29969e7aa154d34e38b89443af1a2c14e6cfbd2df6419c66f
 readonly CLUSTER_NAME=chart-testing
 CT_VERSION=$1
 HELM_VERSION=$2
@@ -72,7 +72,7 @@ EOF
 # We started running KIND in a kubernetes pod as part of the CI transition to Dispatch.
 kubeadmConfigPatches:
 - |
-  apiVersion: kubeadm.k8s.io/v1beta2
+  apiVersion: kubeadm.k8s.io/v1beta3
   kind: JoinConfiguration
   metadata:
     name: config
@@ -80,7 +80,7 @@ kubeadmConfigPatches:
     kubeletExtraArgs:
       cgroup-root: "/kubelet"
 - |
-  apiVersion: kubeadm.k8s.io/v1beta2
+  apiVersion: kubeadm.k8s.io/v1beta3
   kind: InitConfiguration
   metadata:
     name: config
@@ -109,80 +109,6 @@ EOF
 
     docker_exec kubectl get nodes
     echo
-
-# TODO as of release v0.8.1 of kind there is still and mtu issue, this resolves it, should remove these lines after next release
-    cat <<EOF | docker_exec kubectl apply -f -
-apiVersion: apps/v1
-kind: DaemonSet
-metadata:
-  name: kindnet
-  namespace: kube-system
-  labels:
-    tier: node
-    app: kindnet
-    k8s-app: kindnet
-spec:
-  selector:
-    matchLabels:
-      app: kindnet
-  template:
-    metadata:
-      labels:
-        tier: node
-        app: kindnet
-        k8s-app: kindnet
-    spec:
-      hostNetwork: true
-      tolerations:
-      - operator: Exists
-        effect: NoSchedule
-      serviceAccountName: kindnet
-      containers:
-      - name: kindnet-cni
-        image: kindest/kindnetd:v20200707-3aec2c7e
-        env:
-        - name: HOST_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.hostIP
-        - name: POD_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: POD_SUBNET
-          value: "10.244.0.0/16"
-        volumeMounts:
-        - name: cni-cfg
-          mountPath: /etc/cni/net.d
-        - name: xtables-lock
-          mountPath: /run/xtables.lock
-          readOnly: false
-        - name: lib-modules
-          mountPath: /lib/modules
-          readOnly: true
-        resources:
-          requests:
-            cpu: "100m"
-            memory: "50Mi"
-          limits:
-            cpu: "100m"
-            memory: "50Mi"
-        securityContext:
-          privileged: false
-          capabilities:
-            add: ["NET_RAW", "NET_ADMIN"]
-      volumes:
-      - name: cni-cfg
-        hostPath:
-          path: /etc/cni/net.d
-      - name: xtables-lock
-        hostPath:
-          path: /run/xtables.lock
-          type: FileOrCreate
-      - name: lib-modules
-        hostPath:
-          path: /lib/modules
-EOF
 
     echo 'Cluster ready!'
     echo
