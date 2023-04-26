@@ -672,6 +672,33 @@ entries:
     version: v1.7.1
   cert-manager-setup:
   - apiVersion: v1
+    appVersion: 1.11.0
+    created: "2023-04-26T23:00:30.04254872Z"
+    dependencies:
+    - condition: installCertManager
+      name: cert-manager
+      repository: https://charts.jetstack.io
+      version: v1.11.0
+    description: Install cert-manager and optionally add a ClusterIssuer
+    digest: 3853f3571fc9e7b7b7250d149dcd24466b9562bbd68c3b71d5e02a58f1c72a23
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - cert-manager
+    - issuer
+    - clusterissuer
+    maintainers:
+    - email: jrodriguez@d2iq.com
+      name: jr0d
+    - email: ajariwala@d2iq.com
+      name: adityajariwala
+    name: cert-manager-setup
+    sources:
+    - https://github.com/jetstack/cert-manager
+    - https://github.com/jetstack/cert-manager/tree/master/deploy/charts/cert-manager
+    urls:
+    - https://mesosphere.github.io/charts/stable/cert-manager-setup-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v1
     appVersion: 1.0.3
     created: "2022-10-27T21:20:01.335434912Z"
     dependencies:
@@ -18277,6 +18304,35 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/kibana-0.1.0.tgz
     version: 0.1.0
+  knative:
+  - apiVersion: v2
+    appVersion: v1.10.0
+    created: "2023-04-26T23:00:30.04799301Z"
+    dependencies:
+    - condition: eventing.enabled
+      name: eventing
+      repository: ""
+      version: 1.10.0
+    - condition: eventing-sources.enabled
+      name: eventing-sources
+      repository: ""
+      version: 1.10.0
+    - condition: serving.enabled
+      name: serving
+      repository: ""
+      version: 1.10.0
+    description: Kubernetes-based platform to build, deploy, and manage modern serverless
+      workloads
+    digest: a22014542ab0e1e4b62e9fd79100c74d2ba270ee7dd25bbad1e2476b5b69bf65
+    home: https://knative.dev/
+    icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
+    maintainers:
+    - name: akirillov
+    - name: adityajariwala
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.10.0.tgz
+    version: 1.10.0
   kommander:
   - apiVersion: v1
     appVersion: 1.4.2
@@ -40725,4 +40781,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2023-04-14T14:10:55.034378544Z"
+generated: "2023-04-26T23:00:30.028470071Z"
