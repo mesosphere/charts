@@ -614,6 +614,9 @@ spec:
       labels: *labels
     spec:
       serviceAccountName: github-controller-manager
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - image: gcr.io/knative-releases/knative.dev/eventing-contrib/github/cmd/controller:{{ .Chart.AppVersion }}
         name: manager
@@ -734,6 +737,9 @@ spec:
       labels: *labels
     spec:
       serviceAccountName: github-webhook
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
       - name: github-webhook
         terminationMessagePolicy: FallbackToLogsOnError
