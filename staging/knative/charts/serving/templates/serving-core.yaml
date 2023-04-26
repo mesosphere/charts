@@ -20,7 +20,7 @@ metadata:
   name: knative-serving
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     # TODO(mattmoor): We should not require any istio annotations.
     istio-injection: enabled
     serving.knative.dev/release: {{ .Chart.AppVersion | quote }}
@@ -51,7 +51,7 @@ metadata:
   # (which should be identical, but isn't guaranteed to be installed alongside serving).
   name: knative-serving-aggregated-addressable-resolver
   labels:
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 aggregationRule:
   clusterRoleSelectors:
@@ -63,7 +63,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-serving-addressable-resolver
   labels:
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
     # Labeled to facilitate aggregated cluster roles that act on Addressables.
     duck.knative.dev/addressable: "true"
@@ -102,7 +102,7 @@ metadata:
   name: knative-serving-namespaced-admin
   labels:
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 rules:
   - apiGroups: ["serving.knative.dev"]
@@ -118,7 +118,7 @@ metadata:
   name: knative-serving-namespaced-edit
   labels:
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 rules:
   - apiGroups: ["serving.knative.dev"]
@@ -134,7 +134,7 @@ metadata:
   name: knative-serving-namespaced-view
   labels:
     rbac.authorization.k8s.io/aggregate-to-view: "true"
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 rules:
   - apiGroups: ["serving.knative.dev", "networking.internal.knative.dev", "autoscaling.internal.knative.dev", "caching.internal.knative.dev"]
@@ -162,7 +162,7 @@ metadata:
   name: knative-serving-core
   labels:
     serving.knative.dev/controller: "true"
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 rules:
   - apiGroups: [""]
@@ -216,7 +216,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-serving-podspecable-binding
   labels:
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
     # Labeled to facilitate aggregated cluster roles that act on PodSpecables.
     duck.knative.dev/podspecable: "true"
@@ -255,7 +255,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 ---
 kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
@@ -263,7 +263,7 @@ metadata:
   name: knative-serving-admin
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 aggregationRule:
   clusterRoleSelectors:
     - matchLabels:
@@ -276,7 +276,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 subjects:
   - kind: ServiceAccount
     name: controller
@@ -293,7 +293,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 subjects:
   - kind: ServiceAccount
     name: controller
@@ -361,11 +361,11 @@ metadata:
   labels:
     app.kubernetes.io/component: queue-proxy
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   # This is the Go import path for the binary that is containerized
   # and substituted here.
-  image: gcr.io/knative-releases/knative.dev/serving/cmd/queue:{{ .Chart.AppVersion }}
+  image: {{ include "serving.queue" . }}
 ---
 # Copyright 2018 The Knative Authors
 #
@@ -389,7 +389,7 @@ metadata:
   labels:
     app.kubernetes.io/component: autoscaler
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "47c2487f"
 data:
@@ -558,7 +558,7 @@ data:
     # The `unit` is one concurrent request proxied by the activator.
     # activator-capacity must be at least 1.
     # This value is used for computation of the Activator subset size.
-    # See the algorithm here: http://bit.ly/38XiCZ3.
+    # See the algorithm here: https://bit.ly/38XiCZ3.
     # TODO(vagababov): tune after actual benchmarking.
     activator-capacity: "100.0"
 
@@ -617,7 +617,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "e7973912"
 data:
@@ -772,13 +772,13 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "dd7ee769"
 data:
   # This is the Go import path for the binary that is containerized
   # and substituted here.
-  queue-sidecar-image: gcr.io/knative-releases/knative.dev/serving/cmd/queue:{{ .Chart.AppVersion }}
+  queue-sidecar-image: {{ include "serving.queue" .}}
   {{- if .Values.configDeployment.registriesSkippingTagResolving }}
   registries-skipping-tag-resolving: "{{ .Values.configDeployment.registriesSkippingTagResolving }}"
   {{- end }}
@@ -842,7 +842,7 @@ data:
     # in at runtime, which will enable the freezer daemonset to be reachable via the node IP.
     #
     # As an example:
-    #     concurrency-state-endpoint: "http://$HOST_IP:9696"
+    #     concurrency-state-endpoint: "https://$HOST_IP:9696"
     #
     # If not set, queue proxy takes no action (this is the default behavior).
     #
@@ -877,7 +877,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "26c09de5"
 data:
@@ -944,7 +944,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "691a192e"
 data:
@@ -1142,7 +1142,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "aa3813a8"
 data:
@@ -1246,7 +1246,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: controller
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "f4b71f57"
 data:
@@ -1306,7 +1306,7 @@ metadata:
   name: config-logging
   namespace: knative-serving
   labels:
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/component: logging
     app.kubernetes.io/name: knative-serving
   annotations:
@@ -1388,7 +1388,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: networking
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "73d96d1b"
 data:
@@ -1574,7 +1574,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: observability
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "fed4756e"
 data:
@@ -1601,7 +1601,7 @@ data:
 
     # logging.revision-url-template provides a template to use for producing the
     # logging URL that is injected into the status of each Revision.
-    logging.revision-url-template: "http://logging.example.com/?revisionUID=${REVISION_UID}"
+    logging.revision-url-template: "https://logging.example.com/?revisionUID=${REVISION_UID}"
 
     # If non-empty, this enables queue proxy writing user request logs to stdout, excluding probe
     # requests.
@@ -1683,7 +1683,7 @@ metadata:
   labels:
     app.kubernetes.io/name: knative-serving
     app.kubernetes.io/component: tracing
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
   annotations:
     knative.dev/example-checksum: "26614636"
 data:
@@ -1740,7 +1740,7 @@ metadata:
   labels:
     app.kubernetes.io/component: activator
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   minReplicas: 1
   maxReplicas: 20
@@ -1768,7 +1768,7 @@ metadata:
   labels:
     app.kubernetes.io/component: activator
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   maxUnavailable: 1
   selector:
@@ -1797,7 +1797,7 @@ metadata:
   namespace: knative-serving
   labels:
     app.kubernetes.io/component: activator
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 spec:
   selector:
@@ -1813,14 +1813,17 @@ spec:
         role: activator
         app.kubernetes.io/component: activator
         app.kubernetes.io/name: knative-serving
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     spec:
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: activator
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/activator:{{ .Chart.AppVersion }}
+          image: {{ include "serving.activator" . }}
           # The numbers are based on performance test results from
           # https://github.com/knative/serving/issues/1625#issuecomment-511930023
           resources:
@@ -1905,7 +1908,7 @@ metadata:
   labels:
     app: activator
     app.kubernetes.io/component: activator
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
     {{- with .Values.global.serviceLabels }}
     {{ toYaml . | indent 4 | trim }}
@@ -1955,7 +1958,7 @@ metadata:
   labels:
     app.kubernetes.io/component: autoscaler
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   replicas: 1
   selector:
@@ -1973,7 +1976,7 @@ spec:
         app: autoscaler
         app.kubernetes.io/component: autoscaler
         app.kubernetes.io/name: knative-serving
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
@@ -1986,11 +1989,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: autoscaler
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/autoscaler:{{ .Chart.AppVersion }}
+          image: {{ include "serving.autoscaler" . }}
           resources:
             requests:
               cpu: 100m
@@ -2055,7 +2061,7 @@ metadata:
     app: autoscaler
     app.kubernetes.io/component: autoscaler
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     {{- with .Values.global.serviceLabels }}
     {{ toYaml . | indent 4 | trim }}
     {{- end }}
@@ -2099,7 +2105,7 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   selector:
     matchLabels:
@@ -2112,7 +2118,7 @@ spec:
         app: controller
         app.kubernetes.io/component: controller
         app.kubernetes.io/name: knative-serving
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
@@ -2125,11 +2131,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: controller
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/controller:{{ .Chart.AppVersion }}
+          image: {{ include "serving.controller" . }}
           resources:
             requests:
               cpu: 100m
@@ -2175,7 +2184,7 @@ metadata:
     app: controller
     app.kubernetes.io/component: controller
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     {{- with .Values.global.serviceLabels }}
     {{ toYaml . | indent 4 | trim }}
     {{- end }}
@@ -2216,7 +2225,7 @@ metadata:
   labels:
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   selector:
     matchLabels:
@@ -2229,7 +2238,7 @@ spec:
         app: domain-mapping
         app.kubernetes.io/component: domain-mapping
         app.kubernetes.io/name: knative-serving
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
@@ -2242,11 +2251,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: domain-mapping
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/domain-mapping:{{ .Chart.AppVersion }}
+          image: {{ include "serving.domain-mapping" . }}
           resources:
             requests:
               cpu: 30m
@@ -2304,7 +2316,7 @@ metadata:
   labels:
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   selector:
     matchLabels:
@@ -2319,7 +2331,7 @@ spec:
         role: domainmapping-webhook
         app.kubernetes.io/component: domain-mapping
         app.kubernetes.io/name: knative-serving
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
@@ -2332,11 +2344,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: domainmapping-webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/domain-mapping-webhook:{{ .Chart.AppVersion }}
+          image: {{ include "serving.domain-mapping-webhook" . }}
           resources:
             requests:
               cpu: 100m
@@ -2407,7 +2422,7 @@ metadata:
     role: domainmapping-webhook
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     {{- with .Values.global.serviceLabels }}
     {{ toYaml . | indent 4 | trim }}
     {{- end }}
@@ -2451,7 +2466,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   minReplicas: 1
   maxReplicas: 5
@@ -2477,7 +2492,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 spec:
   maxUnavailable: 1
   selector:
@@ -2506,7 +2521,7 @@ metadata:
   namespace: knative-serving
   labels:
     app.kubernetes.io/component: webhook
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
 spec:
   selector:
@@ -2520,7 +2535,7 @@ spec:
       labels:
         app: webhook
         role: webhook
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
         app.kubernetes.io/name: knative-serving
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
@@ -2534,11 +2549,14 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 100
       serviceAccountName: controller
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
       containers:
         - name: webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/serving/cmd/webhook:{{ .Chart.AppVersion }}
+          image: {{ include "serving.webhook" .}}
           resources:
             requests:
               cpu: 100m
@@ -2610,7 +2628,7 @@ metadata:
   labels:
     role: webhook
     app.kubernetes.io/component: webhook
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
     app.kubernetes.io/name: knative-serving
     {{- with .Values.global.serviceLabels }}
     {{ toYaml . | indent 4 | trim }}
@@ -2654,7 +2672,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -2696,7 +2714,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -2751,7 +2769,7 @@ metadata:
   labels:
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -2798,7 +2816,7 @@ metadata:
   labels:
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 # The data is populated at install time.
 
 ---
@@ -2823,7 +2841,7 @@ metadata:
   labels:
     app.kubernetes.io/component: domain-mapping
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -2870,7 +2888,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -2927,7 +2945,7 @@ metadata:
   labels:
     app.kubernetes.io/component: webhook
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "{{ .Chart.AppVersion }}"
 # The data is populated at install time.
 
 ---
