@@ -49,6 +49,8 @@ persistence:
   accessMode: ReadWriteOnce
   size: 1Gi
 
+priorityClassName: ""
+
 ## For creating the StorageClass automatically:
 storageClass:
   create: true
