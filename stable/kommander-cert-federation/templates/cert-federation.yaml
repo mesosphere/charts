@@ -97,6 +97,9 @@ spec:
       labels:
         tls-ca-field-to-a-secret: copy-and-federate-{{ .Release.Name }}
     spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
       initContainers:
       # These initContainers should run at most once (should succeed only once).
       - name: patch-secret

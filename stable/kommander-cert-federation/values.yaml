@@ -7,6 +7,7 @@ commonName:
 clusterIssuerName: kommander-ca
 # kubefed namespace is used to access kubefed resources
 kubefedNamespace: kube-federation-system
-
 # dnsNames are used as certificate SANs
 dnsNames: []
+# Priority class assigned to the Pods
+priorityClassName: ""
