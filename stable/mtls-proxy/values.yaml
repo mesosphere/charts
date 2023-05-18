@@ -57,3 +57,6 @@ certSecretName: ""
 
 deployment:
   annotations: {}
+
+# Priority class assigned to the Pods
+priorityClassName: ""
