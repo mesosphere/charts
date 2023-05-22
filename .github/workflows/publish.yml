@@ -25,7 +25,7 @@ jobs:
         uses: asdf-vm/actions/install@v2
 
       - name: gather versions
-        uses: endorama/asdf-parse-tool-versions@v1
+        uses: jimmidyson/asdf-parse-tool-versions@v2
         id: versions
 
       # We're switching directories for building the charts, so we need to set the helm and chart testing plugins
