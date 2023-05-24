@@ -9,6 +9,7 @@ dkp:
   #   storageClassName: s3-provider-sc
   #   enableOBCHealthCheck: true
   #   labels: {}
+  #   priorityClassName: dkp-critical-priority
   #   additionalConfig:
   #     # maxObjects: "1000"
   #     # in string format like "2G", minimum is "4K"
