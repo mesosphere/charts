@@ -70,6 +70,9 @@ spec:
     spec:
       serviceAccountName: check-{{ $config.bucketName }}
       restartPolicy: OnFailure
+      {{- if $config.priorityClassName }}
+      priorityClassName: "{{ $config.priorityClassName }}"
+      {{- end }}
       containers:
         - name: kubectl
           image: "bitnami/kubectl:1.24.1"
