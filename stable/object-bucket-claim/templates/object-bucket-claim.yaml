@@ -73,6 +73,9 @@ spec:
       {{- if $config.priorityClassName }}
       priorityClassName: "{{ $config.priorityClassName }}"
       {{- end }}
+      {{- if $config.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: "{{ $config.ttlSecondsAfterFinished }}"
+      {{- end }}
       containers:
         - name: kubectl
           image: "bitnami/kubectl:1.24.1"
