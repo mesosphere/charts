@@ -65,7 +65,7 @@ metadata:
 spec:
   backoffLimit: 12
   {{- if $config.ttlSecondsAfterFinished }}
-  ttlSecondsAfterFinished: "{{ $config.ttlSecondsAfterFinished }}"
+  ttlSecondsAfterFinished: {{ $config.ttlSecondsAfterFinished }}
   {{- end }}
   template:
     metadata:
