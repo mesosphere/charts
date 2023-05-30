@@ -25,6 +25,8 @@ dkp:
     bucketName: dkp-velero
     # generateBucketName: ceph-bkt
     storageClassName: s3-provider-sc
+    priorityClassName: dkp-critical-priority
+    ttlSecondsAfterFinished: 100
 
     labels: {}
     additionalConfig:
@@ -47,6 +49,8 @@ their default values. (`$app` is `velero`|`loki`|`your-app` in the example above
 | `dkp.$app.labels`                      | labels to set on this object                                             | {}      |
 | `dkp.$app.additionalConfig.maxObjects` | Limit of number of S3 objects this bucket can hold                       | ""      |
 | `dkp.$app.additionalConfig.maxSize`    | Limit of the storage this S3 bucket can use from the S3 storage provider | ""      |
+| `dkp.$app.priorityClassName`           | Priority class to set on pods                                            | ""      |
+| `dkp.$app.ttlSecondsAfterFinished`     | Number of seconds to clean up the Job after it has finished              | ""      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to
 `helm install`.

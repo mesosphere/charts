@@ -10,6 +10,8 @@ dkp:
   #   enableOBCHealthCheck: true
   #   labels: {}
   #   priorityClassName: dkp-critical-priority
+  #   # it is required to set ttl for jobs to avoid immutable errors during upgrades if certain spec fields change
+  #   ttlSecondsAfterFinished: 100
   #   additionalConfig:
   #     # maxObjects: "1000"
   #     # in string format like "2G", minimum is "4K"

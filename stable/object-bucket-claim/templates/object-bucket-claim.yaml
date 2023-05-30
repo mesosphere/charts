@@ -64,6 +64,9 @@ metadata:
   name: check-{{ $config.bucketName }}
 spec:
   backoffLimit: 12
+  {{- if $config.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: "{{ $config.ttlSecondsAfterFinished }}"
+  {{- end }}
   template:
     metadata:
       name: check-{{ $config.bucketName }}
