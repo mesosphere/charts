@@ -13,6 +13,24 @@ data:
 {{- if or .Values.rules.default .Values.rules.custom }}
     rules:
 {{- if .Values.rules.default }}
+    - seriesQuery: 'node_memory_Active_bytes'
+      resources:
+        overrides:
+          node:
+            resource: node
+      name:
+        matches: "^(.*)_Active_bytes"
+        as: "${1}_percentage"
+      metricsQuery: 'avg_over_time(node_memory_Active_bytes[30d])/node_memory_MemTotal_bytes'
+    - seriesQuery: 'node_cpu_seconds_total'
+      resources:
+        overrides:
+          node:
+            resource: node
+      name:
+        matches: "^(.*)_seconds_total"
+        as: "${1}_percentage"
+      metricsQuery: '(1 - rate(node_cpu_seconds_total{mode="idle"}[30d]))'
     - seriesQuery: '{__name__=~"^container_.*",container!="POD",namespace!="",pod!=""}'
       seriesFilters: []
       resources:
