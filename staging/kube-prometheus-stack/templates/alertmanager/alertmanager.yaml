@@ -59,13 +59,13 @@ spec:
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector }}
   alertmanagerConfigSelector:
-{{ toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector | indent 4}}
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector | indent 4) . }}
 {{ else }}
   alertmanagerConfigSelector: {}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector }}
   alertmanagerConfigNamespaceSelector:
-{{ toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector | indent 4}}
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector | indent 4) . }}
 {{ else }}
   alertmanagerConfigNamespaceSelector: {}
 {{- end }}
@@ -93,18 +93,8 @@ spec:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.storage }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
-{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($alertmanager).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Alertmanager resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
-{{- end }}
+  storage:
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4) . }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
@@ -173,6 +163,15 @@ spec:
   portName: {{ .Values.alertmanager.alertmanagerSpec.portName }}
 {{- if .Values.alertmanager.alertmanagerSpec.clusterAdvertiseAddress }}
   clusterAdvertiseAddress: {{ .Values.alertmanager.alertmanagerSpec.clusterAdvertiseAddress }}
+{{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.clusterGossipInterval }}
+  clusterGossipInterval: {{ .Values.alertmanager.alertmanagerSpec.clusterGossipInterval }}
+{{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.clusterPeerTimeout }}
+  clusterPeerTimeout: {{ .Values.alertmanager.alertmanagerSpec.clusterPeerTimeout }}
+{{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.clusterPushpullInterval }}
+  clusterPushpullInterval: {{ .Values.alertmanager.alertmanagerSpec.clusterPushpullInterval }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
   forceEnableClusterMode: {{ .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
