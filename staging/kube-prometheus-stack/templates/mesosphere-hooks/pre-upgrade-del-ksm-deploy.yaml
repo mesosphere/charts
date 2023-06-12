@@ -59,6 +59,9 @@ spec:
     spec:
       serviceAccountName: {{ template "kube-prometheus-stack.fullname" . }}-ksm-hook
       restartPolicy: OnFailure
+      {{- if .Values.kubeStateMetrics.priorityClassName }}
+      priorityClassName: {{ .Values.kubeStateMetrics.priorityClassName }}
+      {{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
