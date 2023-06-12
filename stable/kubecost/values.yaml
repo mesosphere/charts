@@ -202,8 +202,6 @@ cost-analyzer:
   grafana:
     priorityClassName: dkp-high-priority
     sidecar:
-      image:
-        tag: kiwigrid/k8s-sidecar:1.15.9
       dashboards:
         enabled: true
         label: kubecost_grafana_dashboard
