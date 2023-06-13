@@ -181,13 +181,6 @@ replace_priority_class_name_system_x_critical() {
     echo
 }
 
-# create dkp priority classes for charts that use these by default
-create_dkp_priority_classes() {
-    echo 'Creating DKP priority classes...'
-    docker_exec kubectl create priorityclass dkp-high-priority --value=100001000
-    docker_exec kubectl create priorityclass dkp-critical-priority --value=100002000
-}
-
 main() {
     run_ct_container
     shift
@@ -202,7 +195,6 @@ main() {
     # install_elasticsearch
 
     replace_priority_class_name_system_x_critical
-    create_dkp_priority_classes
 
     docker_exec ct install --upgrade --debug "$@"
     echo
