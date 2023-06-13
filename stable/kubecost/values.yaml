@@ -63,8 +63,6 @@ cost-analyzer:
     serviceAccounts:
       nodeExporter:
         create: false
-    kube-state-metrics:
-      priorityClassName: dkp-high-priority
     extraScrapeConfigs: |
       - job_name: kubecost
         honor_labels: true
@@ -119,7 +117,6 @@ cost-analyzer:
         query.max-concurrency: 1
         query.max-samples: 100000000
       enableAdminApi: true
-      priorityClassName: dkp-high-priority
       service:
         gRPC:
           enabled: true
@@ -156,7 +153,6 @@ cost-analyzer:
           subPath: ""
     alertmanager:
       enabled: true
-      priorityClassName: dkp-high-priority
       image:
         tag: v0.21.0
       resources:
@@ -200,7 +196,6 @@ cost-analyzer:
                   severity: warning
 
   grafana:
-    priorityClassName: dkp-high-priority
     sidecar:
       dashboards:
         enabled: true
@@ -235,7 +230,6 @@ cost-analyzer:
     #     auto_assign_org_role: Admin
 
   thanos:
-    priorityClassName: dkp-high-priority
     store:
       enabled: false
     query:
