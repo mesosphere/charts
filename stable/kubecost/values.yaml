@@ -9,6 +9,7 @@ hooks:
   clusterID:
     enabled: true
     kubectlImage: "bitnami/kubectl:1.24.1"
+    priorityClassName: ""
 
 cost-analyzer:
   enabled: true
@@ -29,24 +30,6 @@ cost-analyzer:
       alertmanager:
         # If true, allow kubecost to write to alertmanager
         enabled: true
-
-  # Enable kubecost ingress with below annotations to use Konvoy traefik auth
-  # ingress:
-  #   enabled: true
-  #   annotations:
-  #     kubernetes.io/ingress.class: traefik
-  #     ingress.kubernetes.io/auth-response-headers: X-Forwarded-User
-  #     traefik.frontend.rule.type: PathPrefixStrip
-  #     traefik.ingress.kubernetes.io/auth-response-headers: X-Forwarded-User,Authorization,Impersonate-User,Impersonate-Group
-  #     traefik.ingress.kubernetes.io/auth-type: forward
-  #     # traefik rules need to be overridden to use kommander auth if federated from kommander
-  #     traefik.ingress.kubernetes.io/auth-url: http://traefik-forward-auth-kubeaddons.kubeaddons.svc.cluster.local:4181/
-  #     traefik.ingress.kubernetes.io/priority: "2"
-  #   paths:
-  #     - "/ops/portal/kubecost"
-  #   hosts:
-  #     - ""
-  #   tls: []
 
   # Define persistence volume for cost-analyzer, more information at https://github.com/kubecost/docs/blob/master/storage.md
   persistentVolume:
