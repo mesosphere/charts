@@ -418,6 +418,8 @@ spec:
               value: knative.dev/net-istio
             - name: WEBHOOK_NAME
               value: net-istio-webhook
+            - name: WEBHOOK_PORT
+              value: "8443"
           securityContext:
             runAsNonRoot: true
             allowPrivilegeEscalation: false
