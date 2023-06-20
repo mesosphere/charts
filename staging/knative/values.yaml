@@ -5,9 +5,6 @@ global:
 eventing:
   enabled: false
 
-eventing-sources:
-  enabled: false
-
 serving:
   autoscaler:
     containerConcurrencyTargetPercentage: "70"
