@@ -21,6 +21,9 @@ initContainers: []
 
 priorityClassName: ""
 
+# it is required to set ttl for jobs to avoid immutable errors during upgrades if certain spec fields change
+ttlSecondsAfterFinished: 100
+
 tolerations: []
   # - key: CriticalAddonsOnly
   #   operator: Exists
