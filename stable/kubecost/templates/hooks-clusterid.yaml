@@ -72,6 +72,9 @@ spec:
       name: {{ .Release.Name }}-edit-prom-cluster-id
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+{{- if .Values.hooks.clusterID.priorityClassName }}
+      priorityClassName: "{{ .Values.hooks.clusterID.priorityClassName }}"
+{{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.hooks.clusterID.kubectlImage | quote }}
@@ -109,6 +112,9 @@ spec:
       name: {{ .Release.Name }}-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+{{- if .Values.hooks.clusterID.priorityClassName }}
+      priorityClassName: "{{ .Values.hooks.clusterID.priorityClassName }}"
+{{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.hooks.clusterID.kubectlImage | quote }}
@@ -134,6 +140,9 @@ spec:
       name: {{ .Release.Name }}-cleanup-cluster-id-configmap
     spec:
       serviceAccountName: {{ template "kubecost.fullname" . }}-hook
+{{- if .Values.hooks.clusterID.priorityClassName }}
+      priorityClassName: "{{ .Values.hooks.clusterID.priorityClassName }}"
+{{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.hooks.clusterID.kubectlImage | quote }}

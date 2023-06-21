@@ -71,6 +71,9 @@ spec:
       name: {{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.jobName }}
     spec:
       serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+      {{- if .Values.prometheus.prometheusSpec.priorityClassName }}
+      priorityClassName: {{ .Values.prometheus.prometheusSpec.priorityClassName }}
+      {{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
@@ -96,6 +99,9 @@ spec:
       name: cleanup-{{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
     spec:
       serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+      {{- if .Values.prometheus.prometheusSpec.priorityClassName }}
+      priorityClassName: {{ .Values.prometheus.prometheusSpec.priorityClassName }}
+      {{- end }}
       containers:
         - name: kubectl
           image: {{ .Values.mesosphereResources.hooks.kubectlImage | quote }}
