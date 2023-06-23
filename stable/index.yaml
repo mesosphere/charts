@@ -37111,6 +37111,18 @@ entries:
   mtls-proxy:
   - apiVersion: v1
     appVersion: "1.0"
+    created: "2023-06-23T11:27:29.981032002Z"
+    description: mTLS proxy
+    digest: df481c00535cf5905a3aa678a1a8d0819c94d3ead717d7daaded2e32f9156a6d
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: branden
+    name: mtls-proxy
+    urls:
+    - https://mesosphere.github.io/charts/stable/mtls-proxy-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v1
+    appVersion: "1.0"
     created: "2023-05-18T17:33:13.871716217Z"
     description: mTLS proxy
     digest: 1a95f8ef61c7c75821ee1d26083c2ad9ac6d5101c6c7a4a40540f1e6d973f293
@@ -40907,4 +40919,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2023-06-15T12:55:39.099369919Z"
+generated: "2023-06-23T11:27:29.980079904Z"
