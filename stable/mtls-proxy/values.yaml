@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: ghostunnel/ghostunnel
-  tag: v1.5.3
+  tag: v1.7.1
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
