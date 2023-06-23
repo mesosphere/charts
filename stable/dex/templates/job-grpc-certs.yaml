@@ -17,9 +17,6 @@ metadata:
     app.kubernetes.io/component: "job-grpc-certs"
 spec:
   activeDeadlineSeconds: {{ .Values.certs.grpc.activeDeadlineSeconds }}
-{{- if .Values.ttlSecondsAfterFinished }}
-  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
-{{- end }}
   template:
     metadata:
       labels:

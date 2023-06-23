@@ -1,9 +1,10 @@
 {{- if or .Values.certs.grpc.create .Values.certs.web.create }}
-# For upgrades to 2.12.3+.
+# For upgrades from 2.11.1 to 2.12.3 (AKA DKP 2.5 to DKP 2.6)
+# To avoid unnecessarily rerunning the Jobs during upgrade within 2.6, select using the helm chart
+# version label to only delete the Jobs if they are on dex 2.11.1 (version shipped in DKP 2.5).
 # Delete the Jobs created by the dex chart prior to upgrading. Priority class was added
 # to Job specs, which is an immutable field and requires the Job to be
-# deleted and recreated. After this release, we can remove this pre-upgrade hook because
-# TTL will be set on the Job to automatically clean it up after it runs.
+# deleted and recreated. After this release, we can remove the pre-upgrade hook.
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -72,5 +73,5 @@ spec:
           command:
             - sh
             - -c
-            - kubectl delete jobs.batch -l 'app.kubernetes.io/component in (job-grpc-certs, job-web-certs),app.kubernetes.io/name=dex' --cascade=orphan -n {{ .Release.Namespace }}
+            - kubectl delete jobs.batch -l 'app.kubernetes.io/component in (job-grpc-certs, job-web-certs),app.kubernetes.io/name=dex,helm.sh/chart=dex-2.11.1' --cascade=orphan -n {{ .Release.Namespace }}
 {{- end }}

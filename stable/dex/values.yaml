@@ -21,9 +21,6 @@ initContainers: []
 
 priorityClassName: ""
 
-# it is required to set ttl for jobs to avoid immutable errors during upgrades if certain spec fields change
-ttlSecondsAfterFinished: 100
-
 # kubectl image to use for jobs
 kubectlImage: "bitnami/kubectl:1.26.4"
 

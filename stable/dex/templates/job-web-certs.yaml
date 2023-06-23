@@ -14,9 +14,6 @@ metadata:
     app.kubernetes.io/component: "job-web-certs"
 spec:
   activeDeadlineSeconds: {{ .Values.certs.web.activeDeadlineSeconds }}
-{{- if .Values.ttlSecondsAfterFinished }}
-  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
-{{- end }}
   template:
     metadata:
       labels:
