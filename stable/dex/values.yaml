@@ -21,6 +21,9 @@ initContainers: []
 
 priorityClassName: ""
 
+# kubectl image to use for jobs
+kubectlImage: "bitnami/kubectl:1.26.4"
+
 tolerations: []
   # - key: CriticalAddonsOnly
   #   operator: Exists
