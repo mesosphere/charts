@@ -27,37 +27,43 @@ EVENTING_URL=https://github.com/knative/eventing/releases/download/knative-v${EV
 
 # Get all files, auto-apply PodDisruptionBudget patches
 curl -sSL ${SERVING_URL}/serving-crds.yaml > charts/serving/crds/serving-crds.yaml
-curl -sSL ${SERVING_URL}/serving-core.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/serving/templates/serving-core-1.yaml
+curl -sSL ${SERVING_URL}/serving-core.yaml | gsed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/serving/templates/serving-core-1.yaml
 curl -sSL ${SERVING_URL}/serving-hpa.yaml > charts/serving/templates/serving-hpa-temp.yaml
 
-curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds.yaml
-curl -sSL ${EVENTING_URL}/eventing.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-temp.yaml
+curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds-temp.yaml
+curl -sSL ${EVENTING_URL}/eventing.yaml | gsed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-1.yaml
+
+# Indentation patches
+gsed 's/        name: v1/      name: v1/g' charts/eventing/templates/eventing-1.yaml | gsed -e 's/        served: true/      served: true/' | gsed -e 's/        storage: true/      storage: true/g' > charts/eventing/templates/eventing-temp.yaml
+gsed 's/        name: v1/      name: v1/g' charts/eventing/crds/eventing-crds-temp.yaml | gsed -e 's/        served: true/      served: true/' | gsed -e 's/        storage: true/      storage: true/g' > charts/eventing/crds/eventing-crds.yaml
 
 # Apply patches to fix helm linter
-sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml | sed -e "s/${PATCH_2}/${PATCH_2_FIX}/g" > charts/serving/templates/serving-core-temp.yaml
+gsed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml | gsed -e "s/${PATCH_2}/${PATCH_2_FIX}/g" > charts/serving/templates/serving-core-temp.yaml
 
 # Apply airgapped image patches
-sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-core-temp.yaml > charts/serving/templates/serving-core.yaml
-sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-hpa-temp.yaml > charts/serving/templates/serving-hpa.yaml
-sed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.yaml > charts/eventing/templates/eventing.yaml
+gsed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-core-temp.yaml > charts/serving/templates/serving-core.yaml
+gsed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-hpa-temp.yaml > charts/serving/templates/serving-hpa.yaml
+gsed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.yaml > charts/eventing/templates/eventing.yaml
 
 # Remove junk files
 rm charts/serving/templates/serving-core-1.yaml
 rm charts/serving/templates/serving-core-temp.yaml
 rm charts/serving/templates/serving-hpa-temp.yaml
+rm charts/eventing/crds/eventing-crds-temp.yaml
+rm charts/eventing/templates/eventing-1.yaml
 rm charts/eventing/templates/eventing-temp.yaml
 
 # Bump app version
-sed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" Chart.yaml > Chart.yaml.temp
-sed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" charts/serving/Chart.yaml > charts/serving/Chart.yaml.temp
-sed "s/appVersion:.*/appVersion: \"v${EVENTING_TAG}\"/g" charts/eventing/Chart.yaml > charts/eventing/Chart.yaml.temp
+gsed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" Chart.yaml > Chart.yaml.temp
+gsed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" charts/serving/Chart.yaml > charts/serving/Chart.yaml.temp
+gsed "s/appVersion:.*/appVersion: \"v${EVENTING_TAG}\"/g" charts/eventing/Chart.yaml > charts/eventing/Chart.yaml.temp
 mv Chart.yaml.temp Chart.yaml
 mv charts/serving/Chart.yaml.temp charts/serving/Chart.yaml
 mv charts/eventing/Chart.yaml.temp charts/eventing/Chart.yaml
 
 # Commit changes
- git add .
- git commit -am "chore: bump Knative Serving to \"v${SERVING_TAG}\""
+git add .
+git commit -am "chore: bump Knative Serving to \"v${SERVING_TAG}\""
 
 # Finish
 echo "Done upgrading knative!"
