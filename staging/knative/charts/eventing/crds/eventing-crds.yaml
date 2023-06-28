@@ -1390,10 +1390,10 @@ spec:
           type: string
           jsonPath: ".status.conditions[?(@.type=='Ready')].reason"
     - !!merge <<: *version
-        name: v1
-        served: true
-        storage: true
-        # v1 schema is identical to the v1beta2 schema
+      name: v1
+      served: true
+      storage: true
+      # v1 schema is identical to the v1beta2 schema
   names:
     categories:
       - all

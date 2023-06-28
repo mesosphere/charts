@@ -30,8 +30,12 @@ curl -sSL ${SERVING_URL}/serving-crds.yaml > charts/serving/crds/serving-crds.ya
 curl -sSL ${SERVING_URL}/serving-core.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/serving/templates/serving-core-1.yaml
 curl -sSL ${SERVING_URL}/serving-hpa.yaml > charts/serving/templates/serving-hpa-temp.yaml
 
-curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds.yaml
-curl -sSL ${EVENTING_URL}/eventing.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-temp.yaml
+curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds-temp.yaml
+curl -sSL ${EVENTING_URL}/eventing.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-1.yaml
+
+# Indentation patches
+sed 's/        name: v1/      name: v1/g' charts/eventing/templates/eventing-1.yaml | sed -e 's/        served: true/      served: true/' | sed -e 's/        storage: true/      storage: true/g' > charts/eventing/templates/eventing-temp.yaml
+sed 's/        name: v1/      name: v1/g' charts/eventing/crds/eventing-crds-temp.yaml | sed -e 's/        served: true/      served: true/' | sed -e 's/        storage: true/      storage: true/g' > charts/eventing/crds/eventing-crds.yaml
 
 # Apply patches to fix helm linter
 sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml | sed -e "s/${PATCH_2}/${PATCH_2_FIX}/g" > charts/serving/templates/serving-core-temp.yaml
@@ -45,6 +49,8 @@ sed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.ya
 rm charts/serving/templates/serving-core-1.yaml
 rm charts/serving/templates/serving-core-temp.yaml
 rm charts/serving/templates/serving-hpa-temp.yaml
+rm charts/eventing/crds/eventing-crds-temp.yaml
+rm charts/eventing/templates/eventing-1.yaml
 rm charts/eventing/templates/eventing-temp.yaml
 
 # Bump app version
@@ -56,8 +62,8 @@ mv charts/serving/Chart.yaml.temp charts/serving/Chart.yaml
 mv charts/eventing/Chart.yaml.temp charts/eventing/Chart.yaml
 
 # Commit changes
- git add .
- git commit -am "chore: bump Knative Serving to \"v${SERVING_TAG}\""
+git add .
+git commit -am "chore: bump Knative Serving to \"v${SERVING_TAG}\""
 
 # Finish
 echo "Done upgrading knative!"
