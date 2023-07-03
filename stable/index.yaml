@@ -632,6 +632,19 @@ entries:
     version: 0.1.0
   cert-manager-crds:
   - apiVersion: v2
+    appVersion: v1.12.2
+    created: "2023-07-03T19:04:07.747752315Z"
+    description: A chart that bundles cert-manager CRDs with cert-manager helm chart
+    digest: 544bd99b91e7d8aef2e728dec0183a344e87242f0cf9a1ad5c8883e7bb8265dd
+    home: https://github.com/mesosphere/kommander
+    maintainers:
+    - name: mhrabovcin
+    - name: mikolajb
+    name: cert-manager-crds
+    urls:
+    - https://mesosphere.github.io/charts/stable/cert-manager-crds-v1.12.2.tgz
+    version: v1.12.2
+  - apiVersion: v2
     appVersion: v1.11.0
     created: "2023-02-13T21:16:42.421584604Z"
     description: A chart that bundles cert-manager CRDs with cert-manager helm chart
@@ -40951,4 +40964,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2023-06-27T16:31:40.058237214Z"
+generated: "2023-07-03T19:04:07.744460417Z"
