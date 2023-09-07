@@ -277,3 +277,9 @@ global:
   {{- end }}
 {{- end }}
 {{- end -}}
+# Mesosphere-specific templates
+
+{{/* Override grafana service name if applicable, only in cronjob */}}
+{{- define "kube-prometheus-stack.homeDashboard.grafanaServiceName" -}}
+   {{- default (printf "%s-grafana" .Release.Name ) .Values.mesosphereResources.homeDashboard.serviceNameOverride -}}
+{{- end -}}
