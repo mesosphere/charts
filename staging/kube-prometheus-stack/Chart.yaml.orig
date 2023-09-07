@@ -21,8 +21,13 @@ name: kube-prometheus-stack
 sources:
   - https://github.com/prometheus-community/helm-charts
   - https://github.com/prometheus-operator/kube-prometheus
+<<<<<<< HEAD
 version: 46.8.0
 appVersion: v0.65.2
+=======
+version: 48.3.2
+appVersion: v0.66.0
+>>>>>>> dd9c36131 (feat: add required flag to be able to view grafana dashboard (#1448))
 kubeVersion: ">=1.16.0-0"
 home: https://github.com/prometheus-operator/kube-prometheus
 keywords:
