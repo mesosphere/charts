@@ -3942,7 +3942,7 @@ entries:
       artifacthub.io/operator: "true"
     apiVersion: v2
     appVersion: v0.65.2
-    created: "2023-09-07T20:55:38.297564Z"
+    created: "2023-09-08T10:02:03.931246002Z"
     dependencies:
     - condition: kubeStateMetrics.enabled
       name: kube-state-metrics
@@ -3960,7 +3960,7 @@ entries:
       and Prometheus rules combined with documentation and scripts to provide easy
       to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
       Prometheus Operator.
-    digest: 342cbb94e1df490575b0633b7ce6c7050e329092d490f2755cf1aa7ecf015ce8
+    digest: e25914e48511bfc1f2abede756c21b0aa5f8bb11f111417734012ab0a6b5447f
     home: https://github.com/prometheus-operator/kube-prometheus
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -12395,4 +12395,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2023-09-07T20:55:38.276433Z"
+generated: "2023-09-08T10:02:03.907295906Z"
