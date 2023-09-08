@@ -57,6 +57,18 @@ A Kubernetes Charts maintainer will review the Chart submission, and start a val
 
 Once the Chart has been merged, the release job will automatically run in the CI to package and release the Chart.
 
+### Releasing patch versions of charts
+
+In some instances, we must release patches to previously released/published helm charts.
+For example, if there is a fix we must make to a chart that was released in a previous version of DKP, for which there is already a newer release of the chart on the `main` branch.
+
+Follow this process to create patch releases for a helm chart:
+* Check out the SHA at which the chart was at the version in which you need to patch
+* Create a new release branch from this branch, with the format `release/helm-chart-name-N.N.x` e.g. `release/kube-prometheus-stack-46.8.x`
+* Push the branch (this will be a protected branch)
+* Open a PR against this release branch with your fixes, ensuring that you bump the helm chart patch version
+* Once the PR merges, the publish workflow is triggered (on pushes to `release/*` branches)
+
 ## Support Channels
 
 Whether you are a user or contributor, official support channels include:
