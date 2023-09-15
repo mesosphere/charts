@@ -1,4 +1,4 @@
-CERT_MANAGER_VERSION ?= v1.12.2
+CERT_MANAGER_VERSION ?= v1.12.3
 
 update: update-crds update-version
 
