@@ -22,7 +22,7 @@ initContainers: []
 priorityClassName: ""
 
 # kubectl image to use for jobs
-kubectlImage: "bitnami/kubectl:1.26.4"
+kubectlImage: "bitnami/kubectl:1.27.6"
 
 tolerations: []
   # - key: CriticalAddonsOnly

@@ -19,7 +19,7 @@ mesosphereResources:
     elasticsearch: false
     velero: false
   hooks:
-    kubectlImage: bitnami/kubectl:1.24.1
+    kubectlImage: bitnami/kubectl:1.27.6
     prometheus:
       jobName: prom-get-cluster-id
       configmapName: cluster-info-configmap

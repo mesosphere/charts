@@ -103,7 +103,7 @@ spec:
       initContainers:
       # These initContainers should run at most once (should succeed only once).
       - name: patch-secret
-        image: bitnami/kubectl:1.24.1
+        image: bitnami/kubectl:1.27.6
         command:
           - sh
           - "-c"
@@ -138,7 +138,7 @@ spec:
       containers:
       # This is a dummy container to ensure deployment is Running. It will be restarted by reloader if/when certs are renewed.
       - name: wait-for-renewal
-        image: bitnami/kubectl:1.24.1
+        image: bitnami/kubectl:1.27.6
         command:
           - sh
           - "-c"
