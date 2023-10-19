@@ -1,0 +1,79 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-upgrade-job
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      {{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+      {{- end }}
+      serviceAccountName: {{ .Release.Name }}-dex-pre-upgrade-hook
+      containers:
+        - name: create-secret
+          image: "{{ .Values.kubectlImage }}"
+          command: [ "/bin/sh" ]
+          args:
+            - -c
+            - |
+              kubectl get secret {{ template "dex.fullname" . }}-client-tls -n {{ .Release.namespace }} || \
+              kubectl apply -f - <<EOF
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                labels:
+                  app: {{ template "dex.fullname" . }}
+                  controller.cert-manager.io/fao: "true"
+                name: {{ template "dex.fullname" . }}-client-tls
+                namespace: {{ .Release.namespace }}
+              data: {}
+              EOF
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: dex-pre-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: dex-pre-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
+roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: dex-pre-upgrade-hook
+subjects:
+    - kind: ServiceAccount
+      name: {{ .Release.Name }}-dex-pre-upgrade-hook
+      namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-dex-pre-upgrade-hook
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": hook-succeeded
