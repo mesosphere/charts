@@ -1,0 +1,40 @@
+---
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
+apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
+kind: Certificate
+metadata:
+  name: {{ template "dex.fullname" . }}-client-tls
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    # We have to add the following annotation so that the upgrade does
+    # not fail with "already exists" error. See more details in:
+    # https://github.com/helm/helm/issues/5482
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  secretName: {{ template "dex.fullname" . }}-client-tls
+  issuerRef:
+    name: {{ .Release.Name }}-dex-controller-ca-issuer
+    kind: Issuer
+  # The use of the common name field has been deprecated since 2000 and is
+  duration: 87600h
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  subject:
+    organizations:
+      - D2iQ
+{{- else }}
+  organization:
+    - D2iQ
+{{- end }}
+  dnsNames:
+    # names are the <name of the service>.<namespace>.svc.<domain> and
+    # shortened variations. However, there is no way to determine the domain,
+    # so we only include up to svc.
+    - {{ template "dex.fullname" . }}
+    - {{ template "dex.fullname" . }}.{{ .Release.Namespace }}
+    - {{ template "dex.fullname" . }}.{{ .Release.Namespace }}.svc
+  usages:
+    - client auth
