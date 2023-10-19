@@ -206,7 +206,7 @@ config:
         clientAuthentication:
           clientKeyFile: "/etc/dex/tls/client/tls.key"
           clientCertificateFile: "/etc/dex/tls/client/tls.crt"
-          ClientCAFile: "/etc/dex/tls/client/ca.crt"
+          clientCAFile: "/etc/dex/tls/client/ca.crt"
   tokenClaimsHooks:
     mutatingHooks:
     - name: "dex-controller"
