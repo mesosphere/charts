@@ -41,9 +41,9 @@ cost-analyzer:
     # storageClass: "-"
 
   prometheus:
-    kube-state-metrics:
-      image:
-        tag: v2.9.2
+    # kube-state-metrics:
+    #   image:
+    #     tag: v2.9.2
 
     nodeExporter:
       enabled: false
@@ -71,8 +71,8 @@ cost-analyzer:
             action: keep
             regex: {{ .Release.Name }}-network-costs
     server:
-      image:
-        tag: v2.45.0
+      # image:
+      #   tag: v2.45.0
       # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
       # to use as unique cluster ID in kubecost cost-analyzer deployment.
       # This overrides the cluster_id set in prometheus.server.global.external_labels.
