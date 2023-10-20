@@ -4,7 +4,7 @@
 # name: value
 
 image: docker.io/mesosphere/dex
-imageTag: "v2.35.1-d2iq.1"
+imageTag: "v2.37.0-d2iq.1"
 imagePullPolicy: "IfNotPresent"
 
 inMiniKube: false
@@ -192,7 +192,38 @@ config:
     tlsCert: /etc/dex/tls/grpc/server/tls.crt
     tlsKey: /etc/dex/tls/grpc/server/tls.key
     tlsClientCA: /etc/dex/tls/grpc/ca/tls.crt
-
+#  connectorFiltersHooks:
+#    filterHooks:
+#    - name: "dex-controller"
+#      type: "external"
+#      requestContext:
+#        params:
+#          - "state"
+#          - "tenant-id"
+#      config:
+#        url: "https://fulmicotone-dex-controller-webhook-service:18443/connectors"
+#        tlsRootCAFile: "/etc/dex/tls/client/ca.crt"
+#        clientAuthentication:
+#          clientKeyFile: "/etc/dex/tls/client/tls.key"
+#          clientCertificateFile: "/etc/dex/tls/client/tls.crt"
+#          clientCAFile: "/etc/dex/tls/client/ca.crt"
+#  tokenClaimsHooks:
+#    mutatingHooks:
+#    - name: "dex-controller"
+#      type: "external"
+#      claims:
+#        - "groups"
+#        - "email"
+#        - "username"
+#        - "preferred_username"
+#      config:
+#        url: "https://fulmicotone-dex-controller-webhook-service:18443/claims"
+#        tlsRootCAFile: "/etc/dex/tls/client/ca.crt"
+#        clientAuthentication:
+#          clientKeyFile: "/etc/dex/tls/client/tls.key"
+#          clientCertificateFile: "/etc/dex/tls/client/tls.crt"
+#          clientCAFile: "/etc/dex/tls/client/ca.crt"
+#
   lazyInitConnectors: false
   connectors: []
 #  - type: github
