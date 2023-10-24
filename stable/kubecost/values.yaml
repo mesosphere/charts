@@ -41,9 +41,9 @@ cost-analyzer:
     # storageClass: "-"
 
   prometheus:
-    # kube-state-metrics:
-    #   image:
-    #     tag: v2.9.2
+    kube-state-metrics:
+      image:
+        tag: v2.9.2
 
     nodeExporter:
       enabled: false
