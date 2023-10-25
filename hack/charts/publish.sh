@@ -76,7 +76,7 @@ package() {
 lint() {
   logGroupStart "Linting charts"
 
-  helm lint "${CHARTS[*]}"
+  helm lint "${CHARTS[@]}"
 
   logGroupEnd
 }
