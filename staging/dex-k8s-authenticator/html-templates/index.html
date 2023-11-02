@@ -35,7 +35,7 @@
 
             <div class="theme-form-row">
                 <p class="theme-form-description">{{$cluster.Description}}</p>
-                <a href="{{ $.Web_Path_Prefix }}login/{{$cluster.Name}}" target="_self">
+                <a href="{{ $.Web_Path_Prefix }}login/{{$cluster.Name}}?tenant-id={{$cluster.TenantId}}" target="_self">
                   <button class="dex-btn theme-btn-provider">
                     <span class="dex-btn-icon dex-btn-icon--local"></span>
                     <span class="dex-btn-text">{{$cluster.Short_Description}}</span>
