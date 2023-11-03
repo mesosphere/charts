@@ -17,7 +17,7 @@ spec:
       {{- end }}
       serviceAccountName: {{ .Release.Name }}-dex-pre-upgrade-hook
       containers:
-        - name: create-secret
+        - name: disable-dex-controller
           image: "{{ .Values.kubectlImage }}"
           command: [ "/bin/sh" ]
           args:
