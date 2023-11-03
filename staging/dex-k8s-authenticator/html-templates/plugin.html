@@ -28,8 +28,8 @@
     </p>
     <ul>
       <li>Plugin binary (Choose the appropriate link for your platform): <a href="{{ .DarwinURL }}">Darwin</a> <a href="{{ .LinuxURL }}">Linux</a> <a href="{{ .WindowsURL }}">Windows</a></li>
-      <li>Kubectl configuration (macOS/Linux): <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig">kubeconfig</a></li>
-      <li>Kubectl configuration (Windows): <a href="{{ .Config.Web_Path_Prefix }}/plugin/kubeconfig_windows">kubeconfig</a></li>
+      <li>Kubectl configuration (macOS/Linux): <a href="{{ .Config.Web_Path_Prefix }}plugin/kubeconfig?tenant-id={{.TenantId}}">kubeconfig</a></li>
+      <li>Kubectl configuration (Windows): <a href="{{ .Config.Web_Path_Prefix }}plugin/kubeconfig_windows?tenant-id={{.TenantId}}">kubeconfig</a></li>
     </ul>
     <p>Download both files to your computer. The plugin is a binary and must be marked as executable on Linux and MacOS. To do so, run the following command: </p>
     <p><code>chmod +x konvoy-async-plugin</code></p>
@@ -46,7 +46,7 @@
 
     <p>You can list each context using the <i>config get-contexts</i> command:
     <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config get-contexts </code></p>
-    <p>To select a different context, use the <i>config use-context</i> command: 
+    <p>To select a different context, use the <i>config use-context</i> command:
     <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config use-context context-name</code></p>
 
 <p>For more information on using and managing kubeconfig files, refer to this documentation
@@ -99,11 +99,15 @@
 <script>
     var profileName = "";
     var clusterHostname = "";
+    let basePath = {{ .Config.Web_Path_Prefix }};
+    let tenantId = {{ .TenantId }};
 
     function RenderInstructions() {
         let R = new XMLHttpRequest();
-        let url = "/token/plugin/data";
-        let params = {};
+        let url = basePath + "plugin/data";
+        let params = {
+          "tenant-id": tenantId
+        };
         if (profileName !== "") {
             params.profileName = profileName;
         }
@@ -154,7 +158,18 @@
 
     function RenderClusterSelector() {
         let R = new XMLHttpRequest();
-        let url = "/token/plugin/providers";
+        let url = basePath + "plugin/providers";
+        let params = {
+          "tenant-id": tenantId
+        };
+        let esc = encodeURIComponent;
+        let query = Object.keys(params)
+            .map(k => esc(k) + '=' + esc(params[k]))
+            .join('&');
+        console.log("QUERY: " + query + " " + typeof query);
+        if (query !== "") {
+            url += "?" + query
+        }
         R.open('GET', url);
         R.onload = function () {
             let providerhtml = "";
