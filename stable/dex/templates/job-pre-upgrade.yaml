@@ -24,7 +24,7 @@ spec:
             - -c
             - |
               kubectl scale deploy {{ .Release.Name }}-dex-controller -n {{ .Release.Namespace }} --replicas=0
-              kubectl wait po --for=delete -n {{ .Release.Namespace }} -l control-plane={{ .Release.Name }}-dex-controller
+              kubectl wait pod --for=delete -n {{ .Release.Namespace }} -l control-plane={{ .Release.Name }}-dex-controller
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
