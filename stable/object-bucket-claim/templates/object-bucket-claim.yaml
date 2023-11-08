@@ -78,7 +78,7 @@ spec:
       {{- end }}
       containers:
         - name: kubectl
-          image: "bitnami/kubectl:1.27.6"
+          image: "bitnami/kubectl:1.26.4"
           command:
             - sh
             - -c
