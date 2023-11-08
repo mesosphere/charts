@@ -123,7 +123,7 @@ cost-analyzer:
           enabled: true
       sidecarContainers:
       - name: thanos-sidecar
-        image: thanosio/thanos:v0.29.0
+        image: thanosio/thanos:v0.32.5
         args:
         - sidecar
         - --log.level=debug
