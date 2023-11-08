@@ -9,7 +9,7 @@ hooks:
   # Creates configmap to pass kube-system ns uid as envvar to kubecost.
   clusterID:
     enabled: true
-    kubectlImage: "bitnami/kubectl:1.26.4"
+    kubectlImage: "bitnami/kubectl:1.24.1"
 
 cost-analyzer:
   enabled: true
@@ -123,7 +123,7 @@ cost-analyzer:
           enabled: true
       sidecarContainers:
       - name: thanos-sidecar
-        image: thanosio/thanos:v0.32.5
+        image: thanosio/thanos:v0.15.0
         args:
         - sidecar
         - --log.level=debug
@@ -155,7 +155,7 @@ cost-analyzer:
     alertmanager:
       enabled: true
       image:
-        tag: v0.25.0
+        tag: v0.21.0
       resources:
         limits:
           cpu: 50m
