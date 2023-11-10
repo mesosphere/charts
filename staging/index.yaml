@@ -2744,6 +2744,29 @@ entries:
   knative:
   - apiVersion: v2
     appVersion: v1.10.2
+    created: "2023-11-10T01:04:56.478025794Z"
+    dependencies:
+    - condition: eventing.enabled
+      name: eventing
+      repository: ""
+      version: 1.10.1
+    - condition: serving.enabled
+      name: serving
+      repository: ""
+      version: 1.10.3
+    description: Kubernetes-based platform to build, deploy, and manage modern serverless
+      workloads
+    digest: 65a50b7b876f366ee042a88b575b347bc2fc8f269a227f6bc98c1503225db41f
+    home: https://knative.dev/
+    icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
+    maintainers:
+    - name: adityajariwala
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.10.7.tgz
+    version: 1.10.7
+  - apiVersion: v2
+    appVersion: v1.10.2
     created: "2023-06-28T20:44:28.164335929Z"
     dependencies:
     - condition: eventing.enabled
@@ -3858,6 +3881,73 @@ entries:
     - https://mesosphere.github.io/charts/staging/kube-oidc-proxy-0.1.0.tgz
     version: 0.1.0
   kube-prometheus-stack:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus-operator/kube-prometheus
+      artifacthub.io/operator: "true"
+    apiVersion: v2
+    appVersion: v0.66.0
+    created: "2023-11-10T01:04:56.517896531Z"
+    dependencies:
+    - condition: crds.enabled
+      name: crds
+      repository: ""
+      version: 0.0.0
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 5.10.*
+    - condition: nodeExporter.enabled
+      name: prometheus-node-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.21.*
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 6.58.*
+    - condition: windowsMonitoring.enabled
+      name: prometheus-windows-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 0.1.*
+    description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+      and Prometheus rules combined with documentation and scripts to provide easy
+      to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
+      Prometheus Operator.
+    digest: 363a0af44b051dd4037861cbb33d4e3ea4f8f183dc1c93d2c374a7934d7587c8
+    home: https://github.com/prometheus-operator/kube-prometheus
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    - kube-prometheus
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: andrew@quadcorps.co.uk
+      name: andrewgkew
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - email: github.gkarthiks@gmail.com
+      name: gkarthiks
+    - email: kube-prometheus-stack@sisti.pt
+      name: GMartinez-Sisti
+    - email: scott@r6by.com
+      name: scottrigby
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: quentin.bisson@gmail.com
+      name: QuentinBisson
+    name: kube-prometheus-stack
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/prometheus-operator/kube-prometheus
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-prometheus-stack-48.3.3.tgz
+    version: 48.3.3
   - annotations:
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
@@ -11679,6 +11769,37 @@ entries:
   velero:
   - apiVersion: v1
     appVersion: 1.5.2
+    created: "2023-11-10T01:04:56.522192442Z"
+    dependencies:
+    - condition: minioBackend
+      name: minio
+      repository: ""
+      version: 8.0.9
+    description: A Helm chart for velero
+    digest: db0213f3a11642ed4d7304d67aeb0f90d994a1bb841cf7f6598b3acc8215a265
+    home: https://github.com/vmware-tanzu/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    - email: dlipovetsky@d2iq.com
+      name: dlipovetsky
+    - email: jieyu@d2iq.com
+      name: jieyu
+    name: velero
+    sources:
+    - https://github.com/vmware-tanzu/velero
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-3.2.4.tgz
+    version: 3.2.4
+  - apiVersion: v1
+    appVersion: 1.5.2
     created: "2022-10-27T21:20:00.400979632Z"
     dependencies:
     - condition: minioBackend
@@ -12514,4 +12635,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2023-11-03T07:24:41.704669835Z"
+generated: "2023-11-10T01:04:56.470446897Z"

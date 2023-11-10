@@ -18647,6 +18647,30 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/kibana-0.1.0.tgz
     version: 0.1.0
+  knative:
+  - apiVersion: v2
+    appVersion: v1.10.2
+    created: "2023-11-10T01:04:55.320426197Z"
+    dependencies:
+    - condition: eventing.enabled
+      name: eventing
+      repository: ""
+      version: 1.10.1
+    - condition: serving.enabled
+      name: serving
+      repository: ""
+      version: 1.10.3
+    description: Kubernetes-based platform to build, deploy, and manage modern serverless
+      workloads
+    digest: 65a50b7b876f366ee042a88b575b347bc2fc8f269a227f6bc98c1503225db41f
+    home: https://knative.dev/
+    icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
+    maintainers:
+    - name: adityajariwala
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.10.7.tgz
+    version: 1.10.7
   kommander:
   - apiVersion: v1
     appVersion: 1.4.2
@@ -33208,6 +33232,21 @@ entries:
   kommander-cert-federation:
   - apiVersion: v2
     appVersion: 0.0.5
+    created: "2023-11-10T01:04:55.313565018Z"
+    description: A Helm chart to create and federate TLS certificates used by kommander
+      internals
+    digest: 06d4169f14e6c6ac296ac5dc790c04f2a77a2e1e166001eb0c38cdab6c404079
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: mikolajb
+    - name: takirala
+    name: kommander-cert-federation
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/kommander-cert-federation-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 0.0.5
     created: "2023-05-18T15:19:28.26474703Z"
     description: A Helm chart to create and federate TLS certificates used by kommander
       internals
@@ -33743,6 +33782,74 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/konvoysoaktests-0.1.0.tgz
     version: 0.1.0
+  kube-prometheus-stack:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus-operator/kube-prometheus
+      artifacthub.io/operator: "true"
+    apiVersion: v2
+    appVersion: v0.66.0
+    created: "2023-11-10T01:04:55.358806895Z"
+    dependencies:
+    - condition: crds.enabled
+      name: crds
+      repository: ""
+      version: 0.0.0
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 5.10.*
+    - condition: nodeExporter.enabled
+      name: prometheus-node-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.21.*
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 6.58.*
+    - condition: windowsMonitoring.enabled
+      name: prometheus-windows-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 0.1.*
+    description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+      and Prometheus rules combined with documentation and scripts to provide easy
+      to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
+      Prometheus Operator.
+    digest: 363a0af44b051dd4037861cbb33d4e3ea4f8f183dc1c93d2c374a7934d7587c8
+    home: https://github.com/prometheus-operator/kube-prometheus
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    - kube-prometheus
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: andrew@quadcorps.co.uk
+      name: andrewgkew
+    - email: gianrubio@gmail.com
+      name: gianrubio
+    - email: github.gkarthiks@gmail.com
+      name: gkarthiks
+    - email: kube-prometheus-stack@sisti.pt
+      name: GMartinez-Sisti
+    - email: scott@r6by.com
+      name: scottrigby
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+    - email: quentin.bisson@gmail.com
+      name: QuentinBisson
+    name: kube-prometheus-stack
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/prometheus-operator/kube-prometheus
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-prometheus-stack-48.3.3.tgz
+    version: 48.3.3
   kube-state-metrics:
   - apiVersion: v1
     appVersion: 1.9.7
@@ -37582,6 +37689,21 @@ entries:
   object-bucket-claim:
   - apiVersion: v2
     appVersion: 0.1.7
+    created: "2023-11-10T01:04:55.313920728Z"
+    description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
+    digest: 0da4615c6e34b45281958e34147f4186dbab386b0591bed7469817d5db032a25
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kommander
+    maintainers:
+    - name: cwyl02
+    - name: takirala
+    name: object-bucket-claim
+    urls:
+    - https://mesosphere.github.io/charts/stable/object-bucket-claim-0.1.8.tgz
+    version: 0.1.8
+  - apiVersion: v2
+    appVersion: 0.1.7
     created: "2023-05-30T19:22:21.694639065Z"
     description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
     digest: 1c92fc4582610e50718f538272183937aaa9b5244e8c8c9542c858a18480338a
@@ -41190,6 +41312,38 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/tekton-0.1.2.tgz
     version: 0.1.2
+  velero:
+  - apiVersion: v1
+    appVersion: 1.5.2
+    created: "2023-11-10T01:04:55.363861426Z"
+    dependencies:
+    - condition: minioBackend
+      name: minio
+      repository: ""
+      version: 8.0.9
+    description: A Helm chart for velero
+    digest: db0213f3a11642ed4d7304d67aeb0f90d994a1bb841cf7f6598b3acc8215a265
+    home: https://github.com/vmware-tanzu/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    - email: dlipovetsky@d2iq.com
+      name: dlipovetsky
+    - email: jieyu@d2iq.com
+      name: jieyu
+    name: velero
+    sources:
+    - https://github.com/vmware-tanzu/velero
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-3.2.4.tgz
+    version: 3.2.4
   vsphere-csi-driver:
   - apiVersion: v1
     appVersion: 2.2.0
@@ -41281,4 +41435,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2023-11-03T10:46:31.307585575Z"
+generated: "2023-11-10T01:04:55.313120407Z"
