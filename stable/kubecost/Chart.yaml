@@ -1,13 +1,13 @@
 apiVersion: v2
-appVersion: 1.106.2
+appVersion: 1.106.5
 description: Kubecost
 name: kubecost
 home: https://github.com/mesosphere/charts
-version: 0.37.1
+version: 0.37.2
 maintainers:
   - name: gracedo
 dependencies:
   - name: cost-analyzer
-    version: 1.106.2
+    version: 1.106.5
     repository: https://kubecost.github.io/cost-analyzer
     condition: cost-analyzer.enabled
