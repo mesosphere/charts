@@ -1,7 +1,7 @@
 apiVersion: v2
 name: istio
-version: 1.17.2
-appVersion: 1.17.2
+version: 1.20.2
+appVersion: 1.20.2
 description: Helm chart for deploying Istio operator
 keywords:
   - istio
@@ -12,7 +12,6 @@ engine: gotpl
 icon: https://istio.io/latest/favicons/android-192x192.png
 maintainers:
   - name: goeldeepak
-  - name: bcmendoza
   - name: gracedo
 dependencies:
   - name: grafana

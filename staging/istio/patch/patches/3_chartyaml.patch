@@ -21,13 +21,12 @@ index cb1613b6dc..7f05e5acce 100644
  description: Helm chart for deploying Istio operator
  keywords:
    - istio
-@@ -13,3 +10,17 @@ sources:
+@@ -13,3 +10,16 @@ sources:
    - https://github.com/istio/istio/tree/master/operator
  engine: gotpl
  icon: https://istio.io/latest/favicons/android-192x192.png
 +maintainers:
 +  - name: goeldeepak
-+  - name: bcmendoza
 +  - name: gracedo
 +dependencies:
 +  - name: grafana

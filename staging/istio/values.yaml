@@ -18,7 +18,7 @@ prometheus:
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.17.2
+  tag: 1.20.2
   components:
     cni:
       enabled: true
