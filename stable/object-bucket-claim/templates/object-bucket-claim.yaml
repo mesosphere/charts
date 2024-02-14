@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: check-{{ $config.bucketName }}
+  name: object-bucket-claims-check-{{ $config.bucketName }}
   annotations:
     helm.sh/hook: post-install, post-upgrade
     helm.sh/hook-weight: "-5"
@@ -37,7 +37,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: check-{{ $config.bucketName }}
+  name: object-bucket-claims-check-{{ $config.bucketName }}
   annotations:
     helm.sh/hook: post-install, post-upgrade
     helm.sh/hook-weight: "-5"
@@ -56,7 +56,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: check-{{ $config.bucketName }}
+  name: object-bucket-claims-check-{{ $config.bucketName }}
   annotations:
     helm.sh/hook: post-install, post-upgrade
     helm.sh/hook-weight: "-4"
@@ -64,16 +64,16 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: check-{{ $config.bucketName }}
+  name: object-bucket-claims-check-{{ $config.bucketName }}
 subjects:
   - kind: ServiceAccount
-    name: check-{{ $config.bucketName }}
+    name: object-bucket-claims-check-{{ $config.bucketName }}
     namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: check-{{ $config.bucketName }}
+  name: object-bucket-claims-check-{{ $config.bucketName }}
   annotations:
     helm.sh/hook: post-install, post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation
@@ -81,9 +81,9 @@ spec:
   backoffLimit: 12
   template:
     metadata:
-      name: check-{{ $config.bucketName }}
+      name: object-bucket-claims-check-{{ $config.bucketName }}
     spec:
-      serviceAccountName: check-{{ $config.bucketName }}
+      serviceAccountName: object-bucket-claims-check-{{ $config.bucketName }}
       restartPolicy: OnFailure
       {{- if $config.priorityClassName }}
       priorityClassName: "{{ $config.priorityClassName }}"
