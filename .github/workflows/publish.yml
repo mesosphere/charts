@@ -47,4 +47,4 @@ jobs:
         env:
           COMMIT_EMAIL: "ci@mesosphere.com"
           COMMIT_USERNAME: "D2iQ CI"
-          GIT_REMOTE_URL: "https://x-access-token:${{ secrets.MERGEBOT_TOKEN }}@github.com/mesosphere/charts.git"
+          GIT_REMOTE_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/mesosphere/charts.git"
