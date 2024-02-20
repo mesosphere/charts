@@ -2,7 +2,7 @@
 
 global:
   image: docker.io/bitnami/kubectl
-  tag: 1.24.6
+  tag: 1.29.2
   priorityClassName: ""
 
 grafana:
@@ -18,7 +18,7 @@ prometheus:
 istioOperator:
   profile: default
   hub: docker.io/istio
-  tag: 1.20.2
+  tag: 1.20.3
   components:
     cni:
       enabled: true
