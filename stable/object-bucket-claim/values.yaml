@@ -1,3 +1,5 @@
+kubectlImage: "bitnami/kubectl:1.29.2"
+
 dkp:
   # name of apps that consumes the S3 bucket to create
   # needs to be the helmrelease name of the consuming app

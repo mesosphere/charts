@@ -90,7 +90,7 @@ spec:
       {{- end }}
       containers:
         - name: kubectl
-          image: "bitnami/kubectl:1.26.4"
+          image: "{{ .Values.kubectlImage }}"
           command:
             - sh
             - -c
