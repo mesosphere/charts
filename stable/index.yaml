@@ -1086,6 +1086,38 @@ entries:
   dex:
   - apiVersion: v1
     appVersion: 2.37.0
+    created: "2024-02-20T21:42:15.272797389Z"
+    dependencies:
+    - condition: dex-controller.enabled, global.dex-controller.enabled
+      name: dex-controller
+      repository: https://mesosphere.github.io/dex-controller/charts
+      version: v0.14.0
+    description: Dex
+    digest: 1f1ee975836ee4829da2cb6c89e8b1c7bb30bc00cab4e5e57ef7faeb98e86a0e
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: Kevin.Fox@pnnl.gov
+      name: kfox1111
+    - email: shane.starcher@gmail.com
+      name: sstarcher
+    - email: pete.brown@powerhrg.com
+      name: rendhalver
+    - email: vi7alya@gmail.com
+      name: vi7
+    - email: yujie.jay@gmail.com
+      name: jieyu
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://mesosphere.github.io/charts/stable/dex-2.13.8.tgz
+    version: 2.13.8
+  - apiVersion: v1
+    appVersion: 2.37.0
     created: "2024-01-25T00:22:43.428035448Z"
     dependencies:
     - condition: dex-controller.enabled, global.dex-controller.enabled
@@ -18682,6 +18714,29 @@ entries:
   knative:
   - apiVersion: v2
     appVersion: v1.10.2
+    created: "2024-02-20T21:42:15.278269705Z"
+    dependencies:
+    - condition: eventing.enabled
+      name: eventing
+      repository: ""
+      version: 1.10.1
+    - condition: serving.enabled
+      name: serving
+      repository: ""
+      version: 1.10.4
+    description: Kubernetes-based platform to build, deploy, and manage modern serverless
+      workloads
+    digest: 4043522db46e72f72993006e66b66c392e77fcaa7e42a6611f1739a0f87785f2
+    home: https://knative.dev/
+    icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
+    maintainers:
+    - name: adityajariwala
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.10.8.tgz
+    version: 1.10.8
+  - apiVersion: v2
+    appVersion: v1.10.2
     created: "2023-11-10T01:04:55.320426197Z"
     dependencies:
     - condition: eventing.enabled
@@ -33263,6 +33318,21 @@ entries:
     version: 0.1.0
   kommander-cert-federation:
   - apiVersion: v2
+    appVersion: 0.0.8
+    created: "2024-02-20T21:42:15.273004546Z"
+    description: A Helm chart to create and federate TLS certificates used by kommander
+      internals
+    digest: 85289e002eaf49b4c77579eb02954a2a60ea01b8c76d913087cc0078f3e2543d
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: mikolajb
+    - name: takirala
+    name: kommander-cert-federation
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/kommander-cert-federation-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
     appVersion: 0.0.6
     created: "2024-01-15T15:44:12.752594866Z"
     description: A Helm chart to create and federate TLS certificates used by kommander
@@ -37769,6 +37839,21 @@ entries:
     version: 0.1.0
   object-bucket-claim:
   - apiVersion: v2
+    appVersion: 0.1.10
+    created: "2024-02-20T21:42:15.273244894Z"
+    description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
+    digest: 7c28d259b237efc727ca6966b8ab1b6af082a9e9f403b23682e8d7e2d927fc27
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kommander
+    maintainers:
+    - name: cwyl02
+    - name: takirala
+    name: object-bucket-claim
+    urls:
+    - https://mesosphere.github.io/charts/stable/object-bucket-claim-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
     appVersion: 0.1.9
     created: "2024-02-17T19:55:53.205121Z"
     description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
@@ -41531,4 +41616,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-02-20T21:28:42.510771253Z"
+generated: "2024-02-20T21:42:15.271085613Z"

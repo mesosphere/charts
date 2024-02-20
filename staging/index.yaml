@@ -2821,6 +2821,29 @@ entries:
   knative:
   - apiVersion: v2
     appVersion: v1.10.2
+    created: "2024-02-20T21:42:16.143569278Z"
+    dependencies:
+    - condition: eventing.enabled
+      name: eventing
+      repository: ""
+      version: 1.10.1
+    - condition: serving.enabled
+      name: serving
+      repository: ""
+      version: 1.10.4
+    description: Kubernetes-based platform to build, deploy, and manage modern serverless
+      workloads
+    digest: 4043522db46e72f72993006e66b66c392e77fcaa7e42a6611f1739a0f87785f2
+    home: https://knative.dev/
+    icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
+    maintainers:
+    - name: adityajariwala
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.10.8.tgz
+    version: 1.10.8
+  - apiVersion: v2
+    appVersion: v1.10.2
     created: "2023-11-10T01:04:56.478025794Z"
     dependencies:
     - condition: eventing.enabled
@@ -12986,4 +13009,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2024-02-20T21:34:31.98711705Z"
+generated: "2024-02-20T21:42:16.138550094Z"
