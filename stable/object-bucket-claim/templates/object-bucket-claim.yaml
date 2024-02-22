@@ -90,7 +90,7 @@ spec:
       {{- end }}
       containers:
         - name: kubectl
-          image: "{{ .Values.kubectlImage }}"
+          image: "{{ $.Values.kubectlImage }}"
           command:
             - sh
             - -c
