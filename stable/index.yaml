@@ -37871,6 +37871,21 @@ entries:
     version: 0.1.0
   object-bucket-claim:
   - apiVersion: v2
+    appVersion: 0.1.11
+    created: "2024-02-23T00:02:56.239203735Z"
+    description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
+    digest: d1bab5cfa25cfb75a4f140bb47d6149af6efd2c5b621552373243dcbaafe6248
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kommander
+    maintainers:
+    - name: cwyl02
+    - name: takirala
+    name: object-bucket-claim
+    urls:
+    - https://mesosphere.github.io/charts/stable/object-bucket-claim-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
     appVersion: 0.1.10
     created: "2024-02-20T21:42:15.273244894Z"
     description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
@@ -41648,4 +41663,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-02-22T10:39:02.791413305Z"
+generated: "2024-02-23T00:02:56.238835031Z"
