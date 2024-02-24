@@ -16,7 +16,6 @@ cat << EOF >> ${SRCFILE}
 mesosphereResources:
   create: false
   rules:
-    elasticsearch: false
     velero: false
   hooks:
     kubectlImage: bitnami/kubectl:1.29.2
