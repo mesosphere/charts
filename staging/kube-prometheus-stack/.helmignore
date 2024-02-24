@@ -26,9 +26,3 @@ ci/
 kube-prometheus-*.tgz
 
 unittests/
-# Mesosphere-specific files to ignore
-upgrade_operator.sh
-kube-prometheus-stack-*.tgz
-patch/
-CONTRIBUTING.md
-UPGRADING.md
