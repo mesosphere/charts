@@ -54,8 +54,8 @@ git commit -am "chore: copy upstream chart ${NEW_VERSION}"
 
 BASEDIR=${BASEDIR} ./patch/patch.sh
 
-helm dependency update
-git add .
-git commit -m 'chore: helm dependency update'
+#helm dependency update
+#git add .
+#git commit -m 'chore: helm dependency update'
 
 echo "Done upgrading kube-prometheus-stack!"
