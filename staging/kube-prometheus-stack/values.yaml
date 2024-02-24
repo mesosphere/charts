@@ -4516,3 +4516,15 @@ extraManifests: []
   #     name: prometheus-extra
   #   data:
   #     extra-data: "value"
+# Create mesosphere specific resources
+mesosphereResources:
+  create: false
+  rules:
+    velero: false
+  hooks:
+    kubectlImage: bitnami/kubectl:1.29.2
+    prometheus:
+      jobName: prom-get-cluster-id
+      configmapName: cluster-info-configmap
+  ingressRBAC:
+    enabled: true
