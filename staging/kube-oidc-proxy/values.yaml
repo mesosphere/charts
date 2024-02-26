@@ -40,6 +40,9 @@ oidc:
   # caSystemDefault, will disable (not set) the --oidc-ca-file flag
   # to be able to use container image available root CA's
   caSystemDefault: false
+  # If provided the path will be used as CA certificate in the deployment
+  # container.
+  caSystemDefaultPath: ""
   # CA cert that will verify TLS connection to OIDC issuer URL.
   # If not provided service account CA will be used.
   #
