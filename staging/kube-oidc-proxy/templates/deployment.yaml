@@ -54,7 +54,11 @@ spec:
           - "--oidc-issuer-url=$(OIDC_ISSUER_URL)"
           - "--oidc-username-claim=$(OIDC_USERNAME_CLAIM)"
           {{- if .Values.oidc.caSystemDefault }}
+          {{- if .Values.oidc.caSystemDefaultPath }}
+          - "--oidc-ca-file={{ .Values.oidc.caSystemDefaultPath }}"
+          {{- else }}
           # Not setting `--oidc-ca-file` to use CA bundle from the image
+          {{- end }}
           {{- else if or .Values.oidc.caPEM .Values.oidc.caSecretName .Values.oidc.caCertPemHostPath }}
           - "--oidc-ca-file=/etc/oidc/oidc-ca.pem"
           {{- else }}
