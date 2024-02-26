@@ -16,10 +16,9 @@ cat << EOF >> ${SRCFILE}
 mesosphereResources:
   create: false
   rules:
-    elasticsearch: false
     velero: false
   hooks:
-    kubectlImage: bitnami/kubectl:1.26.4
+    kubectlImage: bitnami/kubectl:1.29.2
     prometheus:
       jobName: prom-get-cluster-id
       configmapName: cluster-info-configmap
