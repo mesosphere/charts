@@ -124,7 +124,7 @@ spec:
             echo "{{ .Values.secretName }} secret patched"
             EOF
       - name: federate-secret
-        image: quay.io/kubernetes-multicluster/kubefed:v0.9.1
+        image: ghcr.io/mesosphere/kubefed:v0.10.4
         command:
           - sh
           - "-c"
