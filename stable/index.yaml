@@ -33363,6 +33363,21 @@ entries:
     version: 0.1.0
   kommander-cert-federation:
   - apiVersion: v2
+    appVersion: 0.0.9
+    created: "2024-02-27T16:07:46.55585822Z"
+    description: A Helm chart to create and federate TLS certificates used by kommander
+      internals
+    digest: ca62b7ee9df890056dcf6b279f93ba9920f6253eca4ed05d844e8ac291054a16
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: mikolajb
+    - name: takirala
+    name: kommander-cert-federation
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/kommander-cert-federation-0.0.9.tgz
+    version: 0.0.9
+  - apiVersion: v2
     appVersion: 0.0.8
     created: "2024-02-20T21:42:15.273004546Z"
     description: A Helm chart to create and federate TLS certificates used by kommander
@@ -41676,4 +41691,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-02-27T03:49:44.710819488Z"
+generated: "2024-02-27T16:07:46.555294301Z"
