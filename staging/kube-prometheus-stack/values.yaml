@@ -658,6 +658,10 @@ alertmanager:
     ##
     secrets: []
 
+    ## If false then the user will opt out of automounting API credentials.
+    ##
+    automountServiceAccountToken: true
+
     ## ConfigMaps is a list of ConfigMaps in the same namespace as the Alertmanager object, which shall be mounted into the Alertmanager Pods.
     ## The ConfigMaps are mounted into /etc/alertmanager/configmaps/.
     ##
@@ -1017,6 +1021,10 @@ grafana:
   #   finalizers:
   #     - kubernetes.io/pvc-protection
 
+  serviceAccount:
+    create: true
+    autoMount: true
+
   sidecar:
     dashboards:
       enabled: true
@@ -1024,6 +1032,9 @@ grafana:
       labelValue: "1"
       # Allow discovery in all namespaces for dashboards
       searchNamespace: ALL
+
+      # Support for new table panels, when enabled grafana auto migrates the old table panels to newer table panels
+      enableNewTablePanelSyntax: false
 
       ## Annotations for Grafana dashboard configmaps
       ##
@@ -2326,6 +2337,10 @@ prometheusOperator:
           drop:
             - ALL
 
+      ## If false then the user will opt out of automounting API credentials.
+      ##
+      automountServiceAccountToken: true
+
     patch:
       enabled: true
       image:
@@ -2435,6 +2450,7 @@ prometheusOperator:
   serviceAccount:
     create: true
     name: ""
+    automountServiceAccountToken: true
 
   ## Configuration for Prometheus operator service
   ##
@@ -2739,6 +2755,18 @@ prometheusOperator:
   ##
   secretFieldSelector: "type!=kubernetes.io/dockercfg,type!=kubernetes.io/service-account-token,type!=helm.sh/release.v1"
 
+  ## If false then the user will opt out of automounting API credentials.
+  ##
+  automountServiceAccountToken: true
+
+  ## Additional volumes
+  ##
+  extraVolumes: []
+
+  ## Additional volume mounts
+  ##
+  extraVolumeMounts: []
+
 ## Deploy a Prometheus instance
 ##
 prometheus:
@@ -2784,6 +2812,7 @@ prometheus:
     create: true
     name: ""
     annotations: {}
+    automountServiceAccountToken: true
 
   # Service for thanos service discovery on sidecar
   # Enable this can make Thanos Query can use
@@ -4516,15 +4545,3 @@ extraManifests: []
   #     name: prometheus-extra
   #   data:
   #     extra-data: "value"
-# Create mesosphere specific resources
-mesosphereResources:
-  create: false
-  rules:
-    velero: false
-  hooks:
-    kubectlImage: bitnami/kubectl:1.29.2
-    prometheus:
-      jobName: prom-get-cluster-id
-      configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
