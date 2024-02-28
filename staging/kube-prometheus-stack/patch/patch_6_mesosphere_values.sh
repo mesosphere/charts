@@ -22,8 +22,6 @@ mesosphereResources:
     prometheus:
       jobName: prom-get-cluster-id
       configmapName: cluster-info-configmap
-  ingressRBAC:
-    enabled: true
 EOF
 
 git_add_and_commit "${BASEDIR}"/values.yaml
