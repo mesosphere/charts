@@ -125,16 +125,15 @@ spec:
             EOF
       - name: federate-secret
         image: ghcr.io/mesosphere/kubefed:v0.10.4
-        command:
-          - sh
-          - "-c"
-          - |
-            /bin/sh <<'EOF'
-            set -uxeo pipefail
-
-            echo "federating secret {{ .Values.secretName }}"
-            /hyperfed/kubefedctl federate --kubefed-namespace {{ .Values.kubefedNamespace }} --namespace {{ .Release.Namespace }} secret {{ .Values.secretName }}
-            EOF
+        command: /hyperfed/kubefedctl
+        args:
+          - federate
+          - --kubefed-namespace
+          - {{ .Values.kubefedNamespace }}
+          - --namespace
+          - {{ .Release.Namespace }}
+          - secret
+          - {{ .Values.secretName }}
       containers:
       # This is a dummy container to ensure deployment is Running. It will be restarted by reloader if/when certs are renewed.
       - name: wait-for-renewal
