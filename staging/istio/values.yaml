@@ -1,6 +1,33 @@
+### D2iQ custom values for subcharts
+
+global:
+  image: docker.io/bitnami/kubectl
+  tag: 1.29.2
+  priorityClassName: ""
+
+grafana:
+  enabled: true
+security:
+  enabled: true
+  issuerName: kommander-ca
+prometheus:
+  enabled: true
+
+# Note: These are nested so that additional values can be assigned to the default IstioOperator spec (see operator.yaml)
+# ref: https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec
+istioOperator:
+  profile: default
+  hub: docker.io/istio
+  tag: 1.21.1
+  components:
+    cni:
+      enabled: true
+      namespace: kube-system
+
 defaults:
-  hub: gcr.io/istio-testing
-  tag: latest
+  # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
+#  hub: gcr.io/istio-testing
+#  tag: latest
 
   # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
   # used to pull operator image. Must be set for any cluster configured with private docker registry.
@@ -11,10 +38,15 @@ defaults:
   imagePullPolicy: ""
 
   # Used to replace istioNamespace to support operator watch multiple namespaces.
-  watchedNamespaces: istio-system
+  # D2iQ Note: Rather than use 'istio-system' here, set an empty string.
+  # By default, we instruct Istio's operator to only watch the .Release.Namespace where it is installed.
+  # Of course, this can be overridden so that additional namespaces can be watched.
+#  watchedNamespaces: istio-system
+  watchedNamespaces: ""
   waitForResourcesTimeout: 300s
 
   # Used for helm2 to add the CRDs to templates.
+  # D2iQ Note: This should always be false since Flux v2 which DKP v2 uses has dropped Helm 2 support.
   enableCRDTemplates: false
 
   # revision for the operator resources
