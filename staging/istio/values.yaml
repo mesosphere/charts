@@ -1,83 +1,52 @@
-### D2iQ custom values for subcharts
+defaults:
+  hub: gcr.io/istio-testing
+  tag: latest
 
-global:
-  image: docker.io/bitnami/kubectl
-  tag: 1.29.2
-  priorityClassName: ""
+  # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
+  # used to pull operator image. Must be set for any cluster configured with private docker registry.
+  imagePullSecrets: []
 
-grafana:
-  enabled: true
-security:
-  enabled: true
-  issuerName: kommander-ca
-prometheus:
-  enabled: true
+  # Specify image pull policy if default behavior isn't desired.
+  # Default behavior: latest images will be Always else IfNotPresent.
+  imagePullPolicy: ""
 
-# Note: These are nested so that additional values can be assigned to the default IstioOperator spec (see operator.yaml)
-# ref: https://istio.io/latest/docs/reference/config/istio.operator.v1alpha1/#IstioOperatorSpec
-istioOperator:
-  profile: default
-  hub: docker.io/istio
-  tag: 1.20.3
-  components:
-    cni:
-      enabled: true
-      namespace: kube-system
+  # Used to replace istioNamespace to support operator watch multiple namespaces.
+  watchedNamespaces: istio-system
+  waitForResourcesTimeout: 300s
 
-# D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
-# hub: gcr.io/istio-testing
-# tag: latest
+  # Used for helm2 to add the CRDs to templates.
+  enableCRDTemplates: false
 
-# ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
-# used to pull operator image. Must be set for any cluster configured with private docker registry.
-imagePullSecrets: []
+  # revision for the operator resources
+  revision: ""
 
-# Specify image pull policy if default behavior isn't desired.
-# Default behavior: latest images will be Always else IfNotPresent.
-imagePullPolicy: ""
+  # The number of old ReplicaSets to retain in operator deployment
+  deploymentHistory: 10
 
-# Used to replace istioNamespace to support operator watch multiple namespaces.
-# D2iQ Note: Rather than use 'istio-system' here, set an empty string.
-# By default, we instruct Istio's operator to only watch the .Release.Namespace where it is installed.
-# Of course, this can be overridden so that additional namespaces can be watched.
-# watchedNamespaces: istio-system
-watchedNamespaces: ""
-waitForResourcesTimeout: 300s
+  # Operator resource defaults
+  operator:
+    monitoring:
+      host: 127.0.0.1
+      port: 15014
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    # Set to `type: RuntimeDefault` to use the default profile if available.
+    seccompProfile: {}
 
-# Used for helm2 to add the CRDs to templates.
-# D2iQ Note: This should always be false since Flux v2 which DKP v2 uses has dropped Helm 2 support.
-enableCRDTemplates: false
+  # Node labels for pod assignment
+  nodeSelector: {}
 
-# revision for the operator resources
-revision: ""
+  # Tolerations for pod assignment
+  tolerations: []
 
-# The number of old ReplicaSets to retain in operator deployment
-deploymentHistory: 10
+  # Affinity for pod assignment
+  affinity: {}
 
-# Operator resource defaults
-operator:
-  monitoring:
-    host: 127.0.0.1
-    port: 15014
-  resources:
-    limits:
-      cpu: 200m
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi
-  # Set to `type: RuntimeDefault` to use the default profile if available.
-  seccompProfile: {}
-
-# Node labels for pod assignment
-nodeSelector: {}
-
-# Tolerations for pod assignment
-tolerations: []
-
-# Affinity for pod assignment
-affinity: {}
-
-# Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
-podLabels: {}
-podAnnotations: {}
+  # Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
+  podLabels: {}
+  podAnnotations: {}
