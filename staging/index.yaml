@@ -1759,6 +1759,37 @@ entries:
     version: 0.1.0
   istio:
   - apiVersion: v2
+    appVersion: 1.21.1
+    created: "2024-04-16T20:49:41.543781508Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: ""
+      version: 1.1.0
+    - condition: prometheus.enabled
+      name: prometheus-operator
+      repository: ""
+      version: 1.1.1
+    - condition: security.enabled
+      name: security
+      repository: ""
+      version: 0.0.2
+    description: Helm chart for deploying Istio operator
+    digest: 60074ce4ce204ebdf874486132c8d77c0a2bcb239b8c0d8128d9231c72c140da
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    maintainers:
+    - name: goeldeepak
+    - name: gracedo
+    name: istio
+    sources:
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-1.21.1.tgz
+    version: 1.21.1
+  - apiVersion: v2
     appVersion: 1.20.3
     created: "2024-02-20T21:34:31.989163302Z"
     dependencies:
@@ -13162,4 +13193,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2024-02-28T03:17:22.6160801Z"
+generated: "2024-04-16T20:49:41.542218085Z"
