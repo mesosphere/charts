@@ -1099,6 +1099,38 @@ entries:
   dex:
   - apiVersion: v1
     appVersion: 2.37.0
+    created: "2024-05-07T09:47:10.101807494Z"
+    dependencies:
+    - condition: dex-controller.enabled, global.dex-controller.enabled
+      name: dex-controller
+      repository: https://mesosphere.github.io/dex-controller/charts
+      version: v0.14.6
+    description: Dex
+    digest: 0147d1cd4f2f45f6b36c17d09870ba792acbebd9d0d1e3a5904f8ec04ecf2f1c
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: Kevin.Fox@pnnl.gov
+      name: kfox1111
+    - email: shane.starcher@gmail.com
+      name: sstarcher
+    - email: pete.brown@powerhrg.com
+      name: rendhalver
+    - email: vi7alya@gmail.com
+      name: vi7
+    - email: yujie.jay@gmail.com
+      name: jieyu
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://mesosphere.github.io/charts/stable/dex-2.13.11.tgz
+    version: 2.13.11
+  - apiVersion: v1
+    appVersion: 2.37.0
     created: "2024-05-06T14:51:38.694436129Z"
     dependencies:
     - condition: dex-controller.enabled, global.dex-controller.enabled
@@ -41753,4 +41785,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-05-06T14:51:38.692752499Z"
+generated: "2024-05-07T09:47:10.100107213Z"
