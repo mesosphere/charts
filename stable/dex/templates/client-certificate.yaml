@@ -17,7 +17,7 @@ metadata:
 spec:
   secretName: {{ template "dex.fullname" . }}-client-tls
   issuerRef:
-    name: {{ .Release.Name }}-dex-controller-ca-issuer
+    name: {{ .Release.Name }}-dex-controller-ca-issuer-1
     kind: Issuer
   # The use of the common name field has been deprecated since 2000 and is
   duration: 87600h
