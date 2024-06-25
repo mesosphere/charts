@@ -23,7 +23,7 @@ spec:
   {{- else }}
   image: "{{ $registry }}/{{ .Values.alertmanager.alertmanagerSpec.image.repository }}"
   {{- end }}
-  version: {{ .Values.alertmanager.alertmanagerSpec.image.tag }}
+  version: {{ default .Values.alertmanager.alertmanagerSpec.image.tag .Values.alertmanager.alertmanagerSpec.version }}
   {{- if .Values.alertmanager.alertmanagerSpec.image.sha }}
   sha: {{ .Values.alertmanager.alertmanagerSpec.image.sha }}
   {{- end }}
@@ -47,6 +47,10 @@ spec:
   logFormat: {{ .Values.alertmanager.alertmanagerSpec.logFormat | quote  }}
   logLevel:  {{ .Values.alertmanager.alertmanagerSpec.logLevel | quote  }}
   retention: {{ .Values.alertmanager.alertmanagerSpec.retention | quote  }}
+  {{- with .Values.alertmanager.enableFeatures }}
+  enableFeatures:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.secrets }}
   secrets:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.secrets | indent 4 }}
@@ -94,18 +98,8 @@ spec:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.storage }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
-{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($alertmanager).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Alertmanager resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
-{{- end }}
+  storage:
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4) . }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
