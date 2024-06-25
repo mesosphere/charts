@@ -12,6 +12,7 @@ sed -i '/# Mesosphere-specific files to ignore/,$d' ${SRCFILE}
 
 cat << EOF >> ${SRCFILE}
 # Mesosphere-specific files to ignore
+.editorconfig
 upgrade_operator.sh
 kube-prometheus-stack-*.tgz
 patch/
