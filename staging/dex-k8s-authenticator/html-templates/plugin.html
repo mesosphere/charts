@@ -27,7 +27,14 @@
       If you are using Kommander and add a new cluster, come back to this page to download an updated kubeconfig.
     </p>
     <ul>
-      <li>Plugin binary (Choose the appropriate link for your platform): <a href="{{ .DarwinURL }}">Darwin</a> <a href="{{ .LinuxURL }}">Linux</a> <a href="{{ .WindowsURL }}">Windows</a></li>
+      <li>Plugin binary (Choose the appropriate link for your platform):
+          <a href="{{ .DarwinURL }}">Darwin (arm64)</a>
+          {{ if .DarwinAmd64URL }}
+          <a href="{{ .DarwinAmd64URL }}">Darwin (amd64)</a>
+          {{ end }}
+          <a href="{{ .LinuxURL }}">Linux</a>
+          <a href="{{ .WindowsURL }}">Windows</a>
+      </li>
       <li>Kubectl configuration (macOS/Linux): <a href="{{ .Config.Web_Path_Prefix }}plugin/kubeconfig?tenant-id={{.TenantId}}">kubeconfig</a></li>
       <li>Kubectl configuration (Windows): <a href="{{ .Config.Web_Path_Prefix }}plugin/kubeconfig_windows?tenant-id={{.TenantId}}">kubeconfig</a></li>
     </ul>
