@@ -16,7 +16,7 @@ EOF</code></pre>
 
 <h3>Download and Install Konvoy credentials plugin</h3>
 <p>Use the command appropriate for your operating system to download and install the plugin.</p>
-<p><b>OSX:</b></p>
+<p><b>macOS (arm64):</b></p>
 <div class="command">
   <button class="btn" style="float:right" data-clipboard-snippet="">
     <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
@@ -33,6 +33,25 @@ EOF</code></pre>
     </code></pre>
 {{ end }}
 </div>
+{{ if .darwinAmd64URL }}
+<p><b>macOS (amd64):</b></p>
+<div class="command">
+  <button class="btn" style="float:right" data-clipboard-snippet="">
+    <img class="clippy" width="13" src="{{ .webPathPrefix }}static/clippy.svg" alt=""/>
+  </button>
+{{ if .caPem }}
+  <pre><code>curl --create-dirs --cacert ${HOME}/.kube/certs/{{ .clusterName }}/k8s-ca.crt -sL {{ .darwinAmd64URL }} \
+      -o ${HOME}/{{ .installPath }} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+{{ else }}
+    <pre><code>curl --create-dirs {{ .darwinAmd64URL }} \
+      -o ${HOME}/{{ .installPath }} && \
+      chmod +x ${HOME}/{{ .installPath }}
+    </code></pre>
+{{ end }}
+</div>
+{{ end }}
 <p><b>LINUX:</b></p>
 <div class="command">
   <button class="btn" style="float:right" data-clipboard-snippet="">
@@ -69,7 +88,7 @@ kubectl config set-cluster {{ .clusterName }} \
 </div>
 
 <h3>Create kubeconfig user profile</h3>
-<p>The default profile name is fine for most use cases. However, if you plan to authenticate with the same cluster, using multiple user accounts, then you must create a profile for each user. 
+<p>The default profile name is fine for most use cases. However, if you plan to authenticate with the same cluster, using multiple user accounts, then you must create a profile for each user.
   Use the form below to change the profile name in the instructions.</p>
 <p><label for="plugin-profile-name-input">Set profile name (optional):</label>
 <input type="text" id="plugin-profile-name-input" value="{{ .profileName }}" onsubmit="SetProfileName()">
