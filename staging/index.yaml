@@ -549,6 +549,21 @@ entries:
     version: 0.1.0
   dex-k8s-authenticator:
   - apiVersion: v1
+    appVersion: v1.4.1
+    created: "2024-09-12T19:50:44.363981313Z"
+    description: Authenticator for using Dex with Kubernetes
+    digest: 6b8cfca85e579a4eb1a4903459b3b59a9b0866ae8567bf3287ffa050659f1cb0
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    name: dex-k8s-authenticator
+    sources:
+    - https://github.com/mesosphere/dex-k8s-authenticator
+    urls:
+    - https://mesosphere.github.io/charts/staging/dex-k8s-authenticator-1.4.1.tgz
+    version: 1.4.1
+  - apiVersion: v1
     appVersion: v1.3.2
     created: "2024-01-24T12:55:17.242814752Z"
     description: Authenticator for using Dex with Kubernetes
@@ -13293,4 +13308,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2024-08-01T21:08:15.237234667Z"
+generated: "2024-09-12T19:50:44.363064014Z"
