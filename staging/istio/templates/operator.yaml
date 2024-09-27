@@ -1,7 +1,0 @@
-apiVersion: install.istio.io/v1alpha1
-kind: IstioOperator
-metadata:
-  namespace: {{ .Release.Namespace }}
-  name: istio-default
-spec:
-  {{ toYaml .Values.istioOperator | nindent 4 }}
