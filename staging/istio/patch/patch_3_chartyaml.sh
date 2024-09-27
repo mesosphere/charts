@@ -8,6 +8,6 @@ patch -d "${BASEDIR}" -p3 --no-backup-if-mismatch < patch/patches/3_chartyaml.pa
 
 # Replace hardcoded 1.0.0 chart version with istio tag
 SRCFILE="${BASEDIR}"/Chart.yaml
-sed -i '' "s/1.23.2/${ISTIO_TAG}/g" ${SRCFILE}
+sed -i '' "s/1.0.0/${ISTIO_TAG}/g" ${SRCFILE}
 
 git_add_and_commit "${SRCFILE}"
