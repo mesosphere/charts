@@ -1,5 +1,5 @@
 {{- /*
-Generated from 'kubernetes-resources' group from https://raw.githubusercontent.com/prometheus-operator/kube-prometheus/65922b9fd8c3869c06686b44f5f3aa9f96560666/manifests/kubernetesControlPlane-prometheusRule.yaml
+Generated from 'kubernetes-resources' group from https://github.com/prometheus-operator/kube-prometheus.git
 Do not change in-place! In order to change this file first read following link:
 https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack/hack
 */ -}}
@@ -38,7 +38,7 @@ spec:
         runbook_url: {{ .Values.defaultRules.runbookUrl }}/kubernetes/kubecpuovercommit
         summary: Cluster has overcommitted CPU resource requests.
       expr: |-
-        sum(namespace_cpu:kube_pod_container_resource_requests:sum{job="{{ $kubeStateMetricsJob }}",}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster) - (sum(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster) - max(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster)) > 0
+        sum(namespace_cpu:kube_pod_container_resource_requests:sum{}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster) - (sum(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster) - max(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster)) > 0
         and
         (sum(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster) - max(kube_node_status_allocatable{job="{{ $kubeStateMetricsJob }}",resource="cpu"}) by ({{ range $.Values.defaultRules.additionalAggregationLabels }}{{ . }},{{ end }}cluster)) > 0
       for: {{ dig "KubeCPUOvercommit" "for" "10m" .Values.customRules }}
