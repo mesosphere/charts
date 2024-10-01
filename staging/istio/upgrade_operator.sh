@@ -15,7 +15,7 @@ UPSTREAM_REPO=git@github.com:istio/istio.git
 ISTIO_PATH=manifests/charts/istio-operator
 ISTIO_DASHBOARDS_PATH=manifests/addons/dashboards
 FORK_DASHBOARDS_PATH=charts/grafana/dashboards
-ISTIO_TAG=1.22.3
+ISTIO_TAG=1.23.2
 TMPDIR=$(mktemp -d)
 STARTING_REV=$(git rev-parse HEAD)
 export STARTING_REV
