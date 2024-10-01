@@ -15,7 +15,7 @@ UPSTREAM_REPO=git@github.com:istio/istio.git
 ISTIO_PATH=manifests/charts/istio-operator
 ISTIO_DASHBOARDS_PATH=manifests/addons/dashboards
 FORK_DASHBOARDS_PATH=charts/grafana/dashboards
-ISTIO_TAG=1.22.3
+ISTIO_TAG=1.23.2
 TMPDIR=$(mktemp -d)
 STARTING_REV=$(git rev-parse HEAD)
 export STARTING_REV
@@ -57,7 +57,9 @@ cd "${TMPDIR}/${ISTIO_DASHBOARDS_PATH}" || exit
 
 for f in *; do
   rm -rf "${BASEDIR:?}"/${FORK_DASHBOARDS_PATH}"/${f}"
-  cp -R "$f" "${BASEDIR}/${FORK_DASHBOARDS_PATH}"
+  if [[ "$f" == *".json" && "$f" != "jsonnetfile"* ]]; then
+    cp -R "$f" "${BASEDIR}/${FORK_DASHBOARDS_PATH}"
+  fi
 done
 
 cd "${BASEDIR}" || exit
