@@ -57,7 +57,9 @@ cd "${TMPDIR}/${ISTIO_DASHBOARDS_PATH}" || exit
 
 for f in *; do
   rm -rf "${BASEDIR:?}"/${FORK_DASHBOARDS_PATH}"/${f}"
-  cp -R "$f" "${BASEDIR}/${FORK_DASHBOARDS_PATH}"
+  if [[ "$f" == *".json" && "$f" != "jsonnetfile"* ]]; then
+    cp -R "$f" "${BASEDIR}/${FORK_DASHBOARDS_PATH}"
+  fi
 done
 
 cd "${BASEDIR}" || exit
