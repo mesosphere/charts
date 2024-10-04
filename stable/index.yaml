@@ -16840,6 +16840,20 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/grafana-0.2.0.tgz
     version: 0.2.0
+  kafka-operator:
+  - apiVersion: v1
+    appVersion: v0.25.1
+    created: "2024-10-04T14:05:18.818606241Z"
+    description: kafka-operator manages Kafka deployments on Kubernetes
+    digest: 8cd0031bf26a5c6a14076ceaecbe286626b72164db5d693b01fc2b3478eafc7c
+    maintainers:
+    - name: mhrabovcin
+    name: kafka-operator
+    sources:
+    - https://github.com/banzaicloud/koperator
+    urls:
+    - https://mesosphere.github.io/charts/stable/kafka-operator-0.25.1.tgz
+    version: 0.25.1
   karma:
   - apiVersion: v1
     appVersion: v0.70
@@ -41894,4 +41908,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-01T06:30:03.899187345Z"
+generated: "2024-10-04T14:05:18.812938126Z"
