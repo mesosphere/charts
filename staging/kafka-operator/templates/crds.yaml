@@ -4096,6 +4096,12 @@ spec:
                         - pvcSpec
                         type: object
                       type: array
+                    terminationGracePeriodSeconds:
+                      default: 120
+                      description: TerminationGracePeriod defines the pod termination
+                        grace period
+                      format: int64
+                      type: integer
                     tolerations:
                       items:
                         description: The pod this Toleration is attached to tolerates
@@ -9948,6 +9954,12 @@ spec:
                             - pvcSpec
                             type: object
                           type: array
+                        terminationGracePeriodSeconds:
+                          default: 120
+                          description: TerminationGracePeriod defines the pod termination
+                            grace period
+                          format: int64
+                          type: integer
                         tolerations:
                           items:
                             description: The pod this Toleration is attached to tolerates
@@ -11680,6 +11692,23 @@ spec:
                   - id
                   type: object
                 type: array
+              clientSSLCertSecret:
+                description: ClientSSLCertSecret is a reference to the Kubernetes
+                  secret where custom client SSL certificate can be provided. It will
+                  be used by the koperator, cruise control, cruise control metrics
+                  reporter to communicate on SSL with that internal listener which
+                  is used for interbroker communication. The client certificate must
+                  share the same chain of trust as the server certificate used by
+                  the corresponding internal listener. The secret must contains the
+                  keystore, truststore jks files and the password for them in base64
+                  encoded format under the keystore.jks, truststore.jks, password
+                  data fields.
+                properties:
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                type: object
               clusterImage:
                 type: string
               clusterMetricsReporterImage:
@@ -15804,6 +15833,17 @@ spec:
                         - maxUnavailable
                         type: string
                     type: object
+                  envoyCommandLineArgs:
+                    description: Envoy command line arguments
+                    properties:
+                      concurrency:
+                        description: Envoy --concurrency command line argument. See
+                          https://www.envoyproxy.io/docs/envoy/latest/operations/cli#cmdoption-concurrency
+                        format: int32
+                        minimum: 1
+                        type: integer
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                   healthCheckPort:
                     description: Envoy health-check port
                     format: int32
@@ -17722,6 +17762,17 @@ spec:
                                             - maxUnavailable
                                             type: string
                                         type: object
+                                      envoyCommandLineArgs:
+                                        description: Envoy command line arguments
+                                        properties:
+                                          concurrency:
+                                            description: Envoy --concurrency command
+                                              line argument. See https://www.envoyproxy.io/docs/envoy/latest/operations/cli#cmdoption-concurrency
+                                            format: int32
+                                            minimum: 1
+                                            type: integer
+                                        type: object
+                                        x-kubernetes-preserve-unknown-fields: true
                                       healthCheckPort:
                                         description: Envoy health-check port
                                         format: int32
@@ -18400,6 +18451,22 @@ spec:
                         name:
                           pattern: ^[a-z0-9\-]+
                           type: string
+                        serverSSLCertSecret:
+                          description: ServerSSLCertSecret is a reference to the Kubernetes
+                            secret that contains the server certificate for the listener
+                            to be used for SSL communication. The secret must contain
+                            the keystore, truststore jks files and the password for
+                            them in base64 encoded format under the keystore.jks,
+                            truststore.jks, password data fields. If this field is
+                            omitted koperator will auto-create a self-signed server
+                            certificate using the configuration provided in 'sslSecrets'
+                            field.
+                          properties:
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                          type: object
                         serviceAnnotations:
                           additionalProperties:
                             type: string
@@ -18440,6 +18507,22 @@ spec:
                         name:
                           pattern: ^[a-z0-9\-]+
                           type: string
+                        serverSSLCertSecret:
+                          description: ServerSSLCertSecret is a reference to the Kubernetes
+                            secret that contains the server certificate for the listener
+                            to be used for SSL communication. The secret must contain
+                            the keystore, truststore jks files and the password for
+                            them in base64 encoded format under the keystore.jks,
+                            truststore.jks, password data fields. If this field is
+                            omitted koperator will auto-create a self-signed server
+                            certificate using the configuration provided in 'sslSecrets'
+                            field.
+                          properties:
+                            name:
+                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                TODO: Add other useful fields. apiVersion, kind, uid?'
+                              type: string
+                          type: object
                         type:
                           description: 'SecurityProtocol is the protocol used to communicate
                             with brokers. Valid values are: plaintext, ssl, sasl_plaintext,
@@ -18541,6 +18624,12 @@ spec:
                   RollingUpgrade
                 properties:
                   failureThreshold:
+                    description: FailureThreshold controls how many failures the cluster
+                      can tolerate during a rolling upgrade. Once the number of failures
+                      reaches this threshold a rolling upgrade flow stops. The number
+                      of failures is computed as the sum of distinct broker replicas
+                      with either offline replicas or out of sync replicas and the
+                      number of alerts triggered by alerts with 'rollingupgrade'
                     type: integer
                 required:
                 - failureThreshold
@@ -18708,6 +18797,9 @@ spec:
                 description: RollingUpgradeStatus defines status of rolling upgrade
                 properties:
                   errorCount:
+                    description: ErrorCount keeps track the number of errors reported
+                      by alerts labeled with 'rollingupgrade'. It's reset once these
+                      alerts stop firing.
                     type: integer
                   lastSuccess:
                     type: string
