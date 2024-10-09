@@ -53,7 +53,7 @@ The following table lists the configurable parameters of the Banzaicloud Kafka O
 Parameter | Description | Default
 --------- | ----------- | -------
 `operator.image.repository` | Operator container image repository | `ghcr.io/banzaicloud/kafka-operator`
-`operator.image.tag` | Operator container image tag | `v0.12.4`
+`operator.image.tag` | Operator container image tag | `v0.22.0`
 `operator.image.pullPolicy` | Operator container image pull policy | `IfNotPresent`
 `operator.serviceAccount.name` | ServiceAccount used by the operator pod | `kafka-operator`
 `operator.serviceAccount.create` | If true, create the `operator.serviceAccount.name` service account | `true`
@@ -65,12 +65,13 @@ Parameter | Description | Default
 `prometheusMetrics.authProxy.serviceAccount.create` | If true, create the service account (see `prometheusMetrics.authProxy.serviceAccount.name`) used by prometheus auth proxy | `true`
 `prometheusMetrics.authProxy.serviceAccount.name` | ServiceAccount used by prometheus auth proxy | `kafka-operator-authproxy`
 `prometheusMetrics.authProxy.image.repository` | Auth proxy container image repository | `gcr.io/kubebuilder/kube-rbac-proxy`
-`prometheusMetrics.authProxy.image.tag` | Auth proxy container image tag | `v0.8.0`
+`prometheusMetrics.authProxy.image.tag` | Auth proxy container image tag | `v0.13.0`
 `prometheusMetrics.authProxy.image.pullPolicy` | Auth proxy container image pull policy | `IfNotPresent`
 `rbac.enabled` | Create rbac service account and roles | `true`
 `imagePullSecrets` | Image pull secrets can be set | `[]`
 `replicaCount` | Operator replica count can be set | `1`
 `alertManager.enable` | AlertManager can be enabled | `true`
+`alertManager.permissivePeerAuthentication.create` | Permissive PeerAuthentication (Istio resource) for AlertManager can be created | `true`
 `nodeSelector` | Operator pod node selector can be set | `{}`
 `tolerations` | Operator pod tolerations can be set | `[]`
 `affinity` | Operator pod affinity can be set | `{}`

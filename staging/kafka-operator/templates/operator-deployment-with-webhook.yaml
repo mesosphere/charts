@@ -31,13 +31,13 @@ metadata:
   name: {{ include "kafka-operator.name" . }}-validating-webhook
 webhooks:
 - admissionReviewVersions:
-  - v1beta1
+  - v1
   clientConfig:
     caBundle: {{ $caCrt }}
     service:
       name: "{{ include "kafka-operator.fullname" . }}-operator"
       namespace: {{ .Release.Namespace }}
-      path: /validate
+      path: /validate-kafka-banzaicloud-io-v1alpha1-kafkatopic
   failurePolicy: Fail
   name: kafkatopics.kafka.banzaicloud.io
   rules:
@@ -50,6 +50,26 @@ webhooks:
     - UPDATE
     resources:
     - kafkatopics
+  sideEffects: None
+- admissionReviewVersions:
+  - v1
+  clientConfig:
+    caBundle: {{ $caCrt }}
+    service:
+      name: "{{ include "kafka-operator.fullname" . }}-operator"
+      namespace: {{ .Release.Namespace }}
+      path: /validate-kafka-banzaicloud-io-v1beta1-kafkacluster
+  failurePolicy: Fail
+  name: kafkaclusters.kafka.banzaicloud.io
+  rules:
+  - apiGroups:
+    - kafka.banzaicloud.io
+    apiVersions:
+    - v1beta1
+    operations:
+    - UPDATE
+    resources:
+    - kafkaclusters
   sideEffects: None
 ---
 apiVersion: v1
@@ -115,6 +135,10 @@ spec:
         app: prometheus
         component: alertmanager
     spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       serviceAccountName: {{ include "operator.serviceAccountName" .}}
       volumes:
       {{- if .Values.webhook.enabled }}
@@ -181,6 +205,7 @@ spec:
             - name: POD_NAMESPACE
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.namespace
           {{- if .Values.additionalEnv }}
           {{ toYaml .Values.additionalEnv | nindent 12 }}
@@ -194,7 +219,7 @@ spec:
             - containerPort: {{ (.Values.metricEndpoint).port | default 8080 }}
               name: metrics
               protocol: TCP
-            - containerPort: 9001
+            - containerPort: {{ .Values.alertManager.port }}
               name: alerts
               protocol: TCP
           volumeMounts:
