@@ -1,9 +1,9 @@
 apiVersion: v2
 name: eventing
-version: 1.10.1
+version: 1.15.2
 description: "Knative Eventing"
 sources:
-- https://github.com/knative/eventing
+  - https://github.com/knative/eventing
 maintainers:
-- name: adityajariwala
-appVersion: "v1.10.1"
+  - name: adityajariwala
+appVersion: "v1.15.2"
