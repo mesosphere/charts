@@ -48,6 +48,9 @@ sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml
 # Remove CRDs from templates files as these are stored separately in the crds directory.
 yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/serving/templates/serving-core-temp.yaml
 yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/eventing/templates/eventing-temp.yaml
+# Remove _example from ConfigMap which are blocking the upgrade
+yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/serving/templates/serving-core-temp.yaml
+yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/eventing/templates/eventing-temp.yaml
 
 # Apply airgapped image patches
 sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-core-temp.yaml > charts/serving/templates/serving-core.yaml
