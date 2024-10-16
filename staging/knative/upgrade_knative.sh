@@ -11,8 +11,8 @@ set -xeuo pipefail
 shopt -s dotglob
 
 # Tags for current version of knative
-SERVING_TAG=1.10.2
-EVENTING_TAG=1.10.1
+SERVING_TAG=1.15.2
+EVENTING_TAG=1.15.2
 
 # Two basic patches needed for helm linter
 PATCH_1=$'# eg. \'{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}\''
@@ -20,6 +20,9 @@ PATCH_1_FIX=$'# eg. \'{{ `{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}
 
 PATCH_2=$'logging.request-log-template: \'{"httpRequest": {"requestMethod": "{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}"}\''
 PATCH_2_FIX=$'logging.request-log-template: \'{"httpRequest": {"requestMethod": "{{ `{{.Request.Method}}", "requestUrl": "{{js .Request.RequestURI}}", "requestSize": "{{.Request.ContentLength}}", "status": {{.Response.Code}}, "responseSize": "{{.Response.Size}}", "userAgent": "{{js .Request.UserAgent}}", "remoteIp": "{{js .Request.RemoteAddr}}", "serverIp": "{{.Revision.PodIP}}", "referer": "{{js .Request.Referer}}", "latency": "{{.Response.Latency}}s", "protocol": "{{.Request.Proto}}"}, "traceId": "{{index .Request.Header "X-B3-Traceid"}}` }}"}\''
+
+PATCH_3=$'#               serving.knative.dev/revision: {{revision-name}}'
+PATCH_3_FIX=$'#               serving.knative.dev/revision: {{ `{{revision-name}}` }}'
 
 # Base URLs
 SERVING_URL=https://github.com/knative/serving/releases/download/knative-v${SERVING_TAG}
@@ -31,26 +34,35 @@ curl -sSL ${SERVING_URL}/serving-core.yaml | sed -e 's/minAvailable: 80%/maxUnav
 curl -sSL ${SERVING_URL}/serving-hpa.yaml > charts/serving/templates/serving-hpa-temp.yaml
 
 curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds-temp.yaml
-curl -sSL ${EVENTING_URL}/eventing.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-1.yaml
+curl -sSL ${EVENTING_URL}/eventing-core.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-core-1.yaml
 
 # Indentation patches
-sed 's/        name: v1/      name: v1/g' charts/eventing/templates/eventing-1.yaml | sed -e 's/        served: true/      served: true/' | sed -e 's/        storage: true/      storage: true/g' > charts/eventing/templates/eventing-temp.yaml
+sed 's/        name: v1/      name: v1/g' charts/eventing/templates/eventing-core-1.yaml | sed -e 's/        served: true/      served: true/' | sed -e 's/        storage: true/      storage: true/g' > charts/eventing/templates/eventing-temp.yaml
 sed 's/        name: v1/      name: v1/g' charts/eventing/crds/eventing-crds-temp.yaml | sed -e 's/        served: true/      served: true/' | sed -e 's/        storage: true/      storage: true/g' > charts/eventing/crds/eventing-crds.yaml
 
 # Apply patches to fix helm linter
-sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml | sed -e "s/${PATCH_2}/${PATCH_2_FIX}/g" > charts/serving/templates/serving-core-temp.yaml
+sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml | \
+  sed -e "s/${PATCH_2}/${PATCH_2_FIX}/g" | \
+  sed -e "s|${PATCH_3}|${PATCH_3_FIX}|g" > charts/serving/templates/serving-core-temp.yaml
+
+# Remove CRDs from templates files as these are stored separately in the crds directory.
+yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/serving/templates/serving-core-temp.yaml
+yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/eventing/templates/eventing-temp.yaml
+# Remove _example from ConfigMap which are blocking the upgrade
+yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/serving/templates/serving-core-temp.yaml
+yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/eventing/templates/eventing-temp.yaml
 
 # Apply airgapped image patches
 sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-core-temp.yaml > charts/serving/templates/serving-core.yaml
 sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-hpa-temp.yaml > charts/serving/templates/serving-hpa.yaml
-sed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.yaml > charts/eventing/templates/eventing.yaml
+sed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.yaml > charts/eventing/templates/eventing-core.yaml
 
 # Remove junk files
 rm charts/serving/templates/serving-core-1.yaml
 rm charts/serving/templates/serving-core-temp.yaml
 rm charts/serving/templates/serving-hpa-temp.yaml
 rm charts/eventing/crds/eventing-crds-temp.yaml
-rm charts/eventing/templates/eventing-1.yaml
+rm charts/eventing/templates/eventing-core-1.yaml
 rm charts/eventing/templates/eventing-temp.yaml
 
 # Bump app version
