@@ -62,11 +62,17 @@ spec:
   configMaps:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.configMaps | indent 4 }}
 {{- end }}
-{{- if not (kindIs "invalid" .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector) }}
-  alertmanagerConfigSelector: {{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector) . | nindent 4 }}
+{{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector }}
+  alertmanagerConfigSelector:
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigSelector | indent 4) . }}
+{{ else }}
+  alertmanagerConfigSelector: {}
 {{- end }}
-{{- if not (kindIs "invalid" .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector) }}
-  alertmanagerConfigNamespaceSelector: {{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector) . | nindent 4 }}
+{{- if .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector }}
+  alertmanagerConfigNamespaceSelector:
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.alertmanagerConfigNamespaceSelector | indent 4) . }}
+{{ else }}
+  alertmanagerConfigNamespaceSelector: {}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.web }}
   web:
@@ -92,18 +98,8 @@ spec:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.securityContext | indent 4 }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.storage }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-alertmanager" }}
-{{- $alertmanager := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($alertmanager).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Alertmanager resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
-{{- end }}
+  storage:
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4) . }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
@@ -181,6 +177,9 @@ spec:
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.clusterPushpullInterval }}
   clusterPushpullInterval: {{ .Values.alertmanager.alertmanagerSpec.clusterPushpullInterval }}
+{{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.clusterLabel }}
+  clusterLabel: {{ .Values.alertmanager.alertmanagerSpec.clusterLabel }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
   forceEnableClusterMode: {{ .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
