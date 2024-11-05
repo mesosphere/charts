@@ -13,6 +13,10 @@ hooks:
 
 cost-analyzer:
   enabled: true
+  kubecostFrontend:
+    fullImageName: ghcr.io/mesosphere/dkp-container-images/gcr.io/kubecost1/frontend:prod-1.106.7-d2iq.1
+  priority:
+    enabled: true
 
   global:
     prometheus:
@@ -30,7 +34,8 @@ cost-analyzer:
       alertmanager:
         # If true, allow kubecost to write to alertmanager
         enabled: true
-
+  podSecurityPolicy:
+    enabled: false
   # Define persistence volume for cost-analyzer, more information at https://github.com/kubecost/docs/blob/master/storage.md
   persistentVolume:
     # Upgrades from original default 0.2Gi may break if automatic disk resize is not supported
@@ -41,6 +46,10 @@ cost-analyzer:
     # storageClass: "-"
 
   prometheus:
+    kubeStateMetrics:
+      enabled: false
+    kube-state-metrics:
+      disabled: true
     nodeExporter:
       enabled: false
     serviceAccounts:
@@ -67,6 +76,8 @@ cost-analyzer:
             action: keep
             regex: {{ .Release.Name }}-network-costs
     server:
+      image:
+        tag: v2.55.0
       # If clusterIDConfigmap is defined, instead use user-generated configmap with key CLUSTER_ID
       # to use as unique cluster ID in kubecost cost-analyzer deployment.
       # This overrides the cluster_id set in prometheus.server.global.external_labels.
@@ -105,7 +116,7 @@ cost-analyzer:
           enabled: true
       sidecarContainers:
       - name: thanos-sidecar
-        image: thanosio/thanos:v0.15.0
+        image: quay.io/thanos/thanos:v0.36.1
         args:
         - sidecar
         - --log.level=debug
@@ -137,7 +148,8 @@ cost-analyzer:
     alertmanager:
       enabled: true
       image:
-        tag: v0.21.0
+        repository: quay.io/prometheus/alertmanager
+        tag: v0.27.0
       resources:
         limits:
           cpu: 50m
@@ -147,6 +159,15 @@ cost-analyzer:
           memory: 50Mi
       persistentVolume:
         enabled: true
+    configmapReload:
+      prometheus:
+        image:
+          repository: ghcr.io/jimmidyson/configmap-reload
+          tag: v0.14.0
+      alertmanager:
+        image:
+          repository: ghcr.io/jimmidyson/configmap-reload
+          tag: v0.14.0
     pushgateway:
       enabled: false
       persistentVolume:
@@ -177,9 +198,33 @@ cost-analyzer:
                 for: 10m
                 labels:
                   severity: warning
-
   grafana:
+    image:
+      repository: ghcr.io/mesosphere/dkp-container-images/docker.io/grafana/grafana
+      tag: 10.3.3-d2iq.0
+    grafana.ini:
+      log:
+        level: warn
+      server:
+        protocol: http
+        enable_gzip: true
+        root_url: "%(protocol)s://%(domain)s:%(http_port)s/dkp/kubecost/grafana"
+        serve_from_sub_path: false # Set to false on Grafana v10+
+      auth.proxy:
+        enabled: true
+        header_name: X-Forwarded-User
+        auto-sign-up: true
+      auth.basic:
+        enabled: false
+      users:
+        auto_assign_org_role: Admin
+      analytics:
+        reporting_enabled: false
+        check_for_updates: false
     sidecar:
+      image:
+        repository: docker.io/kiwigrid/k8s-sidecar
+        tag: 1.28.0
       dashboards:
         enabled: true
         label: kubecost_grafana_dashboard
