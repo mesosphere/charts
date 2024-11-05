@@ -13,10 +13,6 @@ hooks:
 
 cost-analyzer:
   enabled: true
-  kubecostFrontend:
-    fullImageName: ghcr.io/mesosphere/dkp-container-images/gcr.io/kubecost1/frontend:prod-1.106.7-d2iq.1
-  priority:
-    enabled: true
 
   global:
     prometheus:
