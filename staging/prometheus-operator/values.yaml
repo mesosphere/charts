@@ -1849,16 +1849,15 @@ prometheusOperator:
 
   ##
   configmapReloadImage:
-    repository: ghcr.io/jimmidyson/configmap-reload
-    tag: v0.14.0
+    repository: docker.io/jimmidyson/configmap-reload
+    tag: v0.4.0
     sha: ""
   ## Prometheus-config-reloader image to use for config and rule reloading
 
   ##
   prometheusConfigReloaderImage:
-    registry: quay.io
-    repository: prometheus-operator/prometheus-config-reloader
-    tag: v0.60.1
+    repository: quay.io/prometheus-operator/prometheus-config-reloader
+    tag: v0.44.0
     sha: ""
   ## Set the prometheus config reloader side-car CPU limit
 
