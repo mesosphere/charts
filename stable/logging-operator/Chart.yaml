@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 4.10.0
+description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
+home: https://kube-logging.github.io
+keywords:
+- logging
+- fluentd
+- fluentbit
+kubeVersion: '>=1.22.0-0'
+name: logging-operator
+sources:
+- https://github.com/kube-logging/logging-operator
+- https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
+type: application
+version: 4.10.0
+maintainers:
+- name: mhrabovcin
