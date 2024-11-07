@@ -37471,6 +37471,28 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/localvolumeprovisioner-0.1.0.tgz
     version: 0.1.0
+  logging-operator:
+  - apiVersion: v2
+    appVersion: 4.10.0
+    created: "2024-11-07T16:07:45.911179136Z"
+    description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
+    digest: 5074052ec82fe75168329e9e1823b9cbe5142f930b9566fb0a5bd898c706ada6
+    home: https://kube-logging.github.io
+    keywords:
+    - logging
+    - fluentd
+    - fluentbit
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - name: mhrabovcin
+    name: logging-operator
+    sources:
+    - https://github.com/kube-logging/logging-operator
+    - https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/logging-operator-4.10.0.tgz
+    version: 4.10.0
   metallb:
   - apiVersion: v1
     appVersion: 0.8.1
@@ -41921,4 +41943,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-10-16T10:53:06.289548096Z"
+generated: "2024-11-07T16:07:45.903100665Z"
