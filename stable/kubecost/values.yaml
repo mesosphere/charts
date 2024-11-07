@@ -186,28 +186,6 @@ cost-analyzer:
                 labels:
                   severity: warning
   grafana:
-    image:
-      repository: ghcr.io/mesosphere/dkp-container-images/docker.io/grafana/grafana
-      tag: 10.3.3-d2iq.0
-    grafana.ini:
-      log:
-        level: warn
-      server:
-        protocol: http
-        enable_gzip: true
-        root_url: "%(protocol)s://%(domain)s:%(http_port)s/dkp/kubecost/grafana"
-        serve_from_sub_path: false # Set to false on Grafana v10+
-      auth.proxy:
-        enabled: true
-        header_name: X-Forwarded-User
-        auto-sign-up: true
-      auth.basic:
-        enabled: false
-      users:
-        auto_assign_org_role: Admin
-      analytics:
-        reporting_enabled: false
-        check_for_updates: false
     sidecar:
       image:
         repository: docker.io/kiwigrid/k8s-sidecar
