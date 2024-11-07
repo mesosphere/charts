@@ -155,15 +155,6 @@ cost-analyzer:
           memory: 50Mi
       persistentVolume:
         enabled: true
-    configmapReload:
-      prometheus:
-        image:
-          repository: ghcr.io/jimmidyson/configmap-reload
-          tag: v0.14.0
-      alertmanager:
-        image:
-          repository: ghcr.io/jimmidyson/configmap-reload
-          tag: v0.14.0
     pushgateway:
       enabled: false
       persistentVolume:
