@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 4.10.0
+appVersion: 4.10.1
 description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
 home: https://kube-logging.github.io
 keywords:
@@ -12,6 +12,6 @@ sources:
 - https://github.com/kube-logging/logging-operator
 - https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
 type: application
-version: 4.10.0
 maintainers:
 - name: mhrabovcin
+version: 4.10.1
