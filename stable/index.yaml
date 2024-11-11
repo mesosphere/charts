@@ -37490,6 +37490,27 @@ entries:
     version: 0.1.0
   logging-operator:
   - apiVersion: v2
+    appVersion: 4.10.1
+    created: "2024-11-11T11:41:33.641781839Z"
+    description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
+    digest: 5cc23621b197af78bf660c072c8b0d143e9f4d81e71afc69044ad9104ac96363
+    home: https://kube-logging.github.io
+    keywords:
+    - logging
+    - fluentd
+    - fluentbit
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - name: mhrabovcin
+    name: logging-operator
+    sources:
+    - https://github.com/kube-logging/logging-operator
+    - https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/logging-operator-4.10.1.tgz
+    version: 4.10.1
+  - apiVersion: v2
     appVersion: 4.10.0
     created: "2024-11-07T16:07:45.911179136Z"
     description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
@@ -41960,4 +41981,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-11T09:23:20.569415331Z"
+generated: "2024-11-11T11:41:33.633701523Z"
