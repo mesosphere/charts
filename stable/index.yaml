@@ -35948,6 +35948,23 @@ entries:
     version: 0.1.0
   kubecost:
   - apiVersion: v2
+    appVersion: 1.108.1
+    created: "2024-11-11T09:23:20.58123096Z"
+    dependencies:
+    - condition: cost-analyzer.enabled
+      name: cost-analyzer
+      repository: https://kubecost.github.io/cost-analyzer
+      version: 1.108.1
+    description: Kubecost
+    digest: 5c96d8c6386aea00107520ba66346167a5618d8df4c13c8665dbeddb44cd9818
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: gracedo
+    name: kubecost
+    urls:
+    - https://mesosphere.github.io/charts/stable/kubecost-0.37.4.tgz
+    version: 0.37.4
+  - apiVersion: v2
     appVersion: 1.106.7
     created: "2024-02-20T21:28:42.523800534Z"
     dependencies:
@@ -41943,4 +41960,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-07T16:07:45.903100665Z"
+generated: "2024-11-11T09:23:20.569415331Z"
