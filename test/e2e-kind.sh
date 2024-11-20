@@ -160,7 +160,7 @@ install_reloader() {
     LATEST_TAG=$(set -o pipefail; curl ${CURL_RETRY_OPTS} -s https://api.github.com/repos/stakater/Reloader/releases/latest | awk '/tag_name/ {gsub("\"","",$2); gsub(",","",$2); print $2}')
     curl ${CURL_RETRY_OPTS} -sL "https://raw.githubusercontent.com/stakater/Reloader/$LATEST_TAG/deployments/kubernetes/reloader.yaml" |
       docker_exec kubectl apply -f -
-      docker_exec kubectl wait --for=condition=Available --selector=app=reloader-reloader deploy
+      docker_exec kubectl wait --for=condition=Available deploy reloader-reloader
     echo
 }
 

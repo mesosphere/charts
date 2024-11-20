@@ -13,6 +13,7 @@ shopt -s dotglob
 # Tags for current version of knative
 SERVING_TAG=1.15.2
 EVENTING_TAG=1.15.2
+NET_ISTIO_TAG=1.15.1
 
 # Two basic patches needed for helm linter
 PATCH_1=$'# eg. \'{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}\''
@@ -27,11 +28,13 @@ PATCH_3_FIX=$'#               serving.knative.dev/revision: {{ `{{revision-name}
 # Base URLs
 SERVING_URL=https://github.com/knative/serving/releases/download/knative-v${SERVING_TAG}
 EVENTING_URL=https://github.com/knative/eventing/releases/download/knative-v${EVENTING_TAG}
+NET_ISTIO_URL=https://github.com/knative-extensions/net-istio/releases/download/knative-v${NET_ISTIO_TAG}
 
 # Get all files, auto-apply PodDisruptionBudget patches
 curl -sSL ${SERVING_URL}/serving-crds.yaml > charts/serving/crds/serving-crds.yaml
 curl -sSL ${SERVING_URL}/serving-core.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/serving/templates/serving-core-1.yaml
 curl -sSL ${SERVING_URL}/serving-hpa.yaml > charts/serving/templates/serving-hpa-temp.yaml
+curl -sSL ${NET_ISTIO_URL}/net-istio.yaml > charts/serving/templates/net-istio-temp.yaml
 
 curl -sSL ${EVENTING_URL}/eventing-crds.yaml > charts/eventing/crds/eventing-crds-temp.yaml
 curl -sSL ${EVENTING_URL}/eventing-core.yaml | sed -e 's/minAvailable: 80%/maxUnavailable: 1/g' > charts/eventing/templates/eventing-core-1.yaml
@@ -48,14 +51,17 @@ sed "s/${PATCH_1}/${PATCH_1_FIX}/g" charts/serving/templates/serving-core-1.yaml
 # Remove CRDs from templates files as these are stored separately in the crds directory.
 yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/serving/templates/serving-core-temp.yaml
 yq -i eval 'select(.kind != "CustomResourceDefinition")' charts/eventing/templates/eventing-temp.yaml
-# Remove _example from ConfigMap which are blocking the upgrade
-yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/serving/templates/serving-core-temp.yaml
-yq -I eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/eventing/templates/eventing-temp.yaml
+yq -i eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/serving/templates/serving-core-temp.yaml
+# Remove default knative gateway
+yq -i eval 'select((.kind != "Gateway") or (.metadata.name != "knative-ingress-gateway"))' charts/serving/templates/net-istio-temp.yaml
+# Remove examples from config-istio
+yq -i eval 'select(.kind == "ConfigMap") |= (.data._example = null | .data |= with_entries(select(.key != "_example"))) | select(.)' charts/serving/templates/net-istio-temp.yaml
 
 # Apply airgapped image patches
 sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-core-temp.yaml > charts/serving/templates/serving-core.yaml
 sed "s/@sha256.*/:v${SERVING_TAG}/g" charts/serving/templates/serving-hpa-temp.yaml > charts/serving/templates/serving-hpa.yaml
 sed "s/@sha256.*/:v${EVENTING_TAG}/g" charts/eventing/templates/eventing-temp.yaml > charts/eventing/templates/eventing-core.yaml
+sed "s/@sha256.*/:v${NET_ISTIO_TAG}/g" charts/serving/templates/net-istio-temp.yaml > charts/serving/templates/net-istio.yaml
 
 # Remove junk files
 rm charts/serving/templates/serving-core-1.yaml
@@ -64,6 +70,7 @@ rm charts/serving/templates/serving-hpa-temp.yaml
 rm charts/eventing/crds/eventing-crds-temp.yaml
 rm charts/eventing/templates/eventing-core-1.yaml
 rm charts/eventing/templates/eventing-temp.yaml
+rm charts/serving/templates/net-istio-temp.yaml
 
 # Bump app version
 sed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" Chart.yaml > Chart.yaml.temp

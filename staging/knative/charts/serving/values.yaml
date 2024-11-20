@@ -1,41 +1,12 @@
-global:
-  serviceLabels: {}
-  image: docker.io/bitnami/kubectl
-  tag: 1.30.5
-
-autoscaler:
-  containerConcurrencyTargetPercentage: "70"
-  containerConcurrencyTargetDefault: "100"
-  requestsPerSecondTargetDefault: "200"
-  targetBurstCapacity: "200"
-  stableWindow: "60s"
-  panicWindowPercentage: "10.0"
-  panicThresholdPercentage: "200.0"
-  maxScaleUpRate: "1000.0"
-  maxScaleDownRate: "2.0"
-  enableScaleToZero: "true"
-  scaleToZeroGracePeriod: "30s"
-  scaleToZeroPodRetentionPeriod: "0s"
-  podAutoscalerClass: "kpa.autoscaling.knative.dev"
-  activatorCapacity: "100.0"
-  initialScale: "1"
-  allowZeroInitialScale: "false"
-  maxScale: "0"
-
-domain: example.com
-
-namespaceKnativeServing:
-  additionalLabels: {}
-
-configDeployment:
-  registriesSkippingTagResolving: ""
-
-gc:
-  # Duration since creation before considering a revision for GC or "disabled".
-  retainSinceCreateTime: "48h"
-  # Duration since active before considering a revision for GC or "disabled".
-  retainSinceLastActiveTime: "15h"
-  # Minimum number of non-active revisions to retain.
-  minNonActiveRevisions: "20"
-  # Maximum number of non-active revisions to retain or "disabled" to disable any maximum limit.
-  maxNonActiveRevisions: "1000"
+# Overriding this value will allow to provide a custom knative-ingress-gateway configuration
+knativeIngressGateway:
+  spec:
+    selector:
+      istio: ingressgateway
+    servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+          - "*"
