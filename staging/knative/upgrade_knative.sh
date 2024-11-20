@@ -72,6 +72,9 @@ rm charts/eventing/templates/eventing-core-1.yaml
 rm charts/eventing/templates/eventing-temp.yaml
 rm charts/serving/templates/net-istio-temp.yaml
 
+# Inject helm templating for enabling config map updates from values.yaml
+BASEDIR=$(dirname "$(realpath "$0")") ./patch/patch.sh
+
 # Bump app version
 sed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" Chart.yaml > Chart.yaml.temp
 sed "s/appVersion:.*/appVersion: \"v${SERVING_TAG}\"/g" charts/serving/Chart.yaml > charts/serving/Chart.yaml.temp

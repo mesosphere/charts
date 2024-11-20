@@ -1,0 +1,16 @@
+diff --git a/staging/knative/charts/eventing/templates/eventing-core.yaml b/staging/knative/charts/eventing/templates/eventing-core.yaml
+index 25f89a9b..71a699d7 100644
+--- a/staging/knative/charts/eventing/templates/eventing-core.yaml
++++ b/staging/knative/charts/eventing/templates/eventing-core.yaml
+@@ -492,6 +492,11 @@ data:
+   # ALPHA feature: The new-apiserversource-filters flag allows you to use the new `filters` field
+   # in APIServerSource objects with its rich filtering capabilities.
+   new-apiserversource-filters: "disabled"
++{{- if .Values.configMaps.configFeatures.additionalData }}
++{{- range $key, $value := .Values.configMaps.configFeatures.additionalData }}
++  {{ $key }}: "{{ $value }}"
++{{- end }}
++{{- end }}
+ # Copyright 2021 The Knative Authors
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
