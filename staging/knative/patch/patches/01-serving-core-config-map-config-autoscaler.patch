@@ -1,0 +1,18 @@
+diff --git a/staging/knative/charts/serving/templates/serving-core.yaml b/staging/knative/charts/serving/templates/serving-core.yaml
+index 52dc335d..364d0eb4 100644
+--- a/staging/knative/charts/serving/templates/serving-core.yaml
++++ b/staging/knative/charts/serving/templates/serving-core.yaml
+@@ -466,7 +466,12 @@ metadata:
+     app.kubernetes.io/version: "1.15.2"
+   annotations:
+     knative.dev/example-checksum: "47c2487f"
+-data: {}
++data:
++{{- if .Values.configMaps.configAutoscaler.additionalData }}
++{{- range $key, $value := .Values.configMaps.configAutoscaler.additionalData }}
++  {{ $key }}: "{{ $value }}"
++{{- end }}
++{{- end }}
+ # Copyright 2020 The Knative Authors
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");

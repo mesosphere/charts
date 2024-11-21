@@ -1,10 +1,11 @@
 apiVersion: v2
 name: knative
-version: 1.15.4
+version: 1.15.5
 description: "Kubernetes-based platform to build, deploy, and manage modern serverless workloads"
 home: https://knative.dev/
 maintainers:
-  - name: adityajariwala
+  - name: mhrabovcin
+  - name: takirala
 icon: https://raw.githubusercontent.com/knative/docs/master/docs/images/logo/rgb/knative-logo-rgb.jpg
 appVersion: "v1.15.2"
 dependencies:
