@@ -11091,6 +11091,20 @@ entries:
     version: 0.1.0
   thanos-traefik:
   - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2024-12-19T07:40:23.887969562Z"
+    description: A Helm chart for Kubernetes that exposes thanos GRPC service over
+      traefik with mTLS termination
+    digest: 1000c919204a2c7a0da2d43ad65c2e165328d5f20bfbae03d83919a30896e53f
+    maintainers:
+    - email: mhrabovcin.c@d2iq.com
+      name: mhrabovcin
+    name: thanos-traefik
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/thanos-traefik-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
     appVersion: 0.0.1
     created: "2022-10-27T21:20:00.229059242Z"
     description: A Helm chart for Kubernetes that exposes thanos GRPC service over
@@ -13640,4 +13654,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2024-11-25T20:49:20.21841592Z"
+generated: "2024-12-19T07:40:23.887631101Z"
