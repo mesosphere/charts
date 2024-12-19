@@ -4,9 +4,15 @@ global:
 
 eventing:
   enabled: false
+  configMaps:
+    configFeatures:
+      additionalData: {}
 
 serving:
   enabled: true
+  configMaps:
+    configAutoscaler:
+      additionalData: {}
   knativeIngressGateway:
     spec:
       selector:
