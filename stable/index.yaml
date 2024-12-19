@@ -1013,6 +1013,24 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/cluster-autoscaler-7.1.0.tgz
     version: 7.1.0
+  cosi:
+  - apiVersion: v2
+    appVersion: 0.0.1-alpha.1
+    created: "2024-12-19T18:32:32.467048028Z"
+    description: Container Object Storage Interface (COSI) provisioner for Kubernetes
+    digest: 91b383779ffed9ed30147bc4bfc579b4d971e6e5496eab9b5498a0f1969f9025
+    home: https://container-object-storage-interface.github.io/
+    icon: https://raw.githubusercontent.com/container-object-storage-interface/container-object-storage-interface.github.io/refs/heads/master/static/img/logo-15.svg
+    keywords:
+    - cosi
+    maintainers:
+    - name: takirala
+    name: cosi
+    sources:
+    - https://github.com/kubernetes-sigs/container-object-storage-interface
+    urls:
+    - https://mesosphere.github.io/charts/stable/cosi-0.0.1-alpha.1.tgz
+    version: 0.0.1-alpha.1
   defaultstorageclass:
   - apiVersion: v1
     appVersion: 0.0.1
@@ -41981,4 +41999,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2024-11-11T11:41:33.633701523Z"
+generated: "2024-12-19T18:32:32.466365325Z"
