@@ -1,0 +1,28 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  annotations:
+    api-approved.kubernetes.io: https://github.com/kubernetes/enhancements/tree/master/keps/sig-storage/1979-object-storage-support
+    objectstorage.k8s.io/authors: Kubernetes Authors
+    objectstorage.k8s.io/license: Apache V2
+    objectstorage.k8s.io/support: https://github.com/kubernetes-sigs/container-object-storage-api
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: container-object-storage-interface-controller
+    app.kubernetes.io/part-of: container-object-storage-interface
+    app.kubernetes.io/version: main
+  name: container-object-storage-controller
+  namespace: container-object-storage-system
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - watch
+  - list
+  - delete
+  - update
+  - create
