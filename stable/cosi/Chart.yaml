@@ -1,0 +1,13 @@
+apiVersion: v2
+name: cosi
+version: 0.0.1-alpha.1
+appVersion: 0.0.1-alpha.1
+description: Container Object Storage Interface (COSI) provisioner for Kubernetes
+keywords:
+- cosi
+icon: https://raw.githubusercontent.com/container-object-storage-interface/container-object-storage-interface.github.io/refs/heads/master/static/img/logo-15.svg
+home: https://container-object-storage-interface.github.io/
+sources:
+- https://github.com/kubernetes-sigs/container-object-storage-interface
+maintainers:
+- name: takirala
