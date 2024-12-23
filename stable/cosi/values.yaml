@@ -1,0 +1,8 @@
+image:
+  registry: gcr.io
+  repository: k8s-staging-sig-storage/objectstorage-controller
+  tag: v20230915-v0.1.1-33-g9ad2990
+  pullPolicy: IfNotPresent
+
+extraArgs:
+  v: 5
