@@ -1,0 +1,23 @@
+{{- if .Values.cosiProviders }}
+{{- with .Values.cosiProviders.ceph }}
+{{- if .driver.enabled }}
+apiVersion: ceph.rook.io/v1
+kind: CephCOSIDriver
+metadata:
+  name: {{ .driver.name }}
+  namespace: {{ .driver.namespace }}
+spec:
+{{ toYaml .driver.spec | indent 2 }}
+{{- end }}
+---
+{{- if .adminuser.enabled }}
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: {{ .adminuser.name }}
+  namespace: {{ .adminuser.namespace }}
+spec:
+{{ toYaml .adminuser.spec | indent 2 }}
+{{- end }}
+{{- end }}
+{{- end }}
