@@ -7,8 +7,6 @@ driverName: {{ .driverName }}
 authenticationType: {{ .authenticationType }}
 {{- if .parameters }}
 parameters:
-  {{- range $key, $value := .parameters }}
-  {{ $key }}: {{ $value }}
-  {{- end }}
+{{ toYaml .parameters | indent 2 }}
 {{- end }}
 {{- end }}
