@@ -111,6 +111,10 @@ spec:
   storage: {{ toYaml .Values.alertmanager.alertmanagerSpec.storage | nindent 4 }}
 {{- end }}
 {{- end }}
+{{- with .Values.alertmanager.alertmanagerSpec.persistentVolumeClaimRetentionPolicy }}
+  persistentVolumeClaimRetentionPolicy:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
 {{ toYaml .Values.alertmanager.alertmanagerSpec.podMetadata | indent 4 }}
