@@ -1,0 +1,12 @@
+{{- range .Values.bucketAccesses }}
+apiVersion: objectstorage.k8s.io/v1alpha1
+kind: BucketAccess
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  bucketAccessClassName: {{ .bucketAccessClassName }}
+  bucketClaimName: {{ .bucketClaimName }}
+  protocol: {{ .protocol }}
+  credentialsSecretName: {{ .credentialsSecretName }}
+{{- end }}

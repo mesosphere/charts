@@ -1,0 +1,13 @@
+{{- range .Values.bucketClaims }}
+apiVersion: objectstorage.k8s.io/v1alpha1
+kind: BucketClaim
+metadata:
+  name: {{ .name }}
+  namespace: {{ .namespace }}
+spec:
+  bucketClassName: {{ .bucketClassName }}
+  protocols:
+    {{- range .protocols }}
+    - {{ . }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: cosi-bucket-kit
+description: A Helm chart for COSI BucketClaim(s) to be consumed by other applications.
+home: https://github.com/mesosphere/charts
+keywords:
+  - kubernetes
+  - cosi
+  - bucket
+  - storage
+  - ceph
+version: 0.0.1-alpha.0
+appVersion: 0.0.1-alpha.0
+maintainers:
+  - name: takirala

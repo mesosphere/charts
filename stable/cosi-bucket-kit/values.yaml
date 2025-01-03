@@ -1,0 +1,52 @@
+# # Cluster scoped resources
+# bucketClasses:
+#   - name: example-bucket-class
+#     driverName: example.driver.com
+#     deletionPolicy: Delete
+#     parameters:
+#       param1: value1
+#       param2: value2
+
+# bucketAccessClasses:
+#   - name: example-bucket-class
+#     driverName: example.driver.com
+#     authenticationType: KEY # KEY or IAM (Implicit).
+#     parameters:
+#       param1: value1
+#       param2: value2
+
+# # Namespace scoped resources
+# bucketClaims:
+#   - name: example-bucket-claim
+#     namespace: default
+#     bucketClassName: example-bucket-class
+#     protocols: # 1 or more of S3, Azure, GCS
+#       - s3
+
+# bucketAccesses:
+#   - name: example-bucket-access
+#     namespace: default
+#     bucketAccessClassName: example-bucket-access-class
+#     bucketClaimName: example-bucket-claim
+#     protocol: s3 # Or azure or gcs
+#     credentialsSecretName: example-credentials-secret
+
+# cosiProviders:
+#   # Add more supported COSI providers here
+#   ceph:
+#     driver:
+#       enabled: true
+#       name: ceph-cosi-driver
+#       namespace: kommander
+#       spec:
+#         deploymentStrategy: Auto
+#     adminuser:
+#       enabled: true
+#       name: cosi-admin
+#       namespace: kommander
+#       spec:
+#         displayName: "ceph cosi admin"
+#         store: dkp-object-store # name of the CephObjectStore
+#         capabilities:
+#           bucket: "*"
+#           user: "*"
