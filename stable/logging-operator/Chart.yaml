@@ -1,5 +1,14 @@
 apiVersion: v2
-appVersion: 4.10.1
+appVersion: 5.0.1
+dependencies:
+- condition: logging-operator-crds.install
+  name: logging-operator-crds
+  repository: ""
+  version: 0.0.0
+- condition: telemetry-controller.install
+  name: telemetry-controller
+  repository: oci://ghcr.io/kube-logging/helm-charts
+  version: 0.0.15
 description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
 home: https://kube-logging.github.io
 keywords:
@@ -14,4 +23,4 @@ sources:
 type: application
 maintainers:
 - name: mhrabovcin
-version: 4.10.1
+version: 5.0.1

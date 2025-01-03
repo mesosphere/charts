@@ -37,6 +37,18 @@ annotations: {}
 # -- Deploy CRDs used by Logging Operator.
 createCustomResource: false
 
+## Custom resource configuration defined as a dependency chart
+logging-operator-crds:
+  # -- Toggle to install and upgrade CRDs from a subchart. Make sure to use it with `--skip-crds` to avoid conflicts. [More info about limitations on CRDs in Helm 3](https://helm.sh/docs/topics/charts/#limitations-on-crds)
+  install: false
+  # -- Annotations to be added to all CRDs
+  annotations: {}
+
+## Telemetry Controller defined as a dependency chart
+telemetry-controller:
+  # -- Toggle to install and upgrade Telemetry Controller from a subchart.
+  install: false
+
 http:
   # -- HTTP listen port number.
   port: 8080
@@ -53,6 +65,8 @@ http:
 rbac:
   # -- Create rbac service account and roles.
   enabled: true
+  # -- Keep the operators RBAC resources after the operator is deleted to allow removing pending finalizers.
+  retainOnDelete: false
 
   # specify service account manually
   # serviceAccountName: custom
@@ -109,6 +123,12 @@ tolerations: []
 
 # -- Node Affinity
 affinity: {}
+
+# -- Pod Topology Spread Constraints
+topologySpreadConstraints: []
+
+# -- Deployment Strategy
+strategy: {}
 
 # -- Define which Nodes the Pods are scheduled on.
 podLabels: {}

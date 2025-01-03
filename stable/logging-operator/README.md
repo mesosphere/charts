@@ -48,9 +48,13 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | namespaceOverride | string | `""` | A namespace override for the app. |
 | annotations | object | `{}` | Define annotations for logging-operator pods. |
 | createCustomResource | bool | `false` | Deploy CRDs used by Logging Operator. |
+| logging-operator-crds.install | bool | `false` | Toggle to install and upgrade CRDs from a subchart. Make sure to use it with `--skip-crds` to avoid conflicts. [More info about limitations on CRDs in Helm 3](https://helm.sh/docs/topics/charts/#limitations-on-crds) |
+| logging-operator-crds.annotations | object | `{}` | Annotations to be added to all CRDs |
+| telemetry-controller.install | bool | `false` | Toggle to install and upgrade Telemetry Controller from a subchart. |
 | http.port | int | `8080` | HTTP listen port number. |
 | http.service | object | `{"annotations":{},"clusterIP":"None","labels":{},"type":"ClusterIP"}` | Service definition for query http service. |
 | rbac.enabled | bool | `true` | Create rbac service account and roles. |
+| rbac.retainOnDelete | bool | `false` | Keep the operators RBAC resources after the operator is deleted to allow removing pending finalizers. |
 | monitoring.serviceMonitor.enabled | bool | `false` | Create a Prometheus Operator ServiceMonitor object. |
 | monitoring.serviceMonitor.additionalLabels | object | `{}` |  |
 | monitoring.serviceMonitor.metricRelabelings | list | `[]` |  |
@@ -63,6 +67,8 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | nodeSelector | object | `{}` |  |
 | tolerations | list | `[]` | Node Tolerations |
 | affinity | object | `{}` | Node Affinity |
+| topologySpreadConstraints | list | `[]` | Pod Topology Spread Constraints |
+| strategy | object | `{}` | Deployment Strategy |
 | podLabels | object | `{}` | Define which Nodes the Pods are scheduled on. |
 | logging.enabled | bool | `false` | Logging resources are disabled by default |
 | logging.loggingRef | string | `""` | Reference to the logging system. Each of the loggingRefs can manage a fluentbit daemonset and a fluentd statefulset. |
