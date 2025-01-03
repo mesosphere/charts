@@ -160,12 +160,12 @@ run_cmd() {
     exit 0
   fi
 
-  if [[ "${HELM_LINT}" == "true" ]]; then
-    lint
-  fi
-
   if [[ "${HELM_DEP_UPDATE}" == "true" ]]; then
     depUpdate
+  fi
+
+  if [[ "${HELM_LINT}" == "true" ]]; then
+    lint
   fi
 
   package
