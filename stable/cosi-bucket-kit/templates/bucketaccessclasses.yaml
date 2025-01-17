@@ -1,4 +1,5 @@
-{{- range .Values.bucketAccessClasses }}
+{{- if .Values.cosiBucketKit.enabled }}
+{{- range .Values.cosiBucketKit.bucketAccessClasses }}
 apiVersion: objectstorage.k8s.io/v1alpha1
 kind: BucketAccessClass
 metadata:
@@ -8,5 +9,6 @@ authenticationType: {{ .authenticationType }}
 {{- if .parameters }}
 parameters:
 {{ toYaml .parameters | indent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}

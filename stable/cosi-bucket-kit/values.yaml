@@ -1,37 +1,40 @@
-# # Cluster scoped resources
-# bucketClasses:
+cosiBucketKit:
+  # Setting this value to false will disable all the manifests in this chart.
+  # Default to false because this chart assumes CRDs are already installed, and it is the responsibility of the user to ensure the presence of CRDs.
+  enabled: false
+#  # Cluster scoped resources
+#  bucketClasses:
 #   - name: example-bucket-class
 #     driverName: example.driver.com
 #     deletionPolicy: Delete
 #     parameters:
 #       param1: value1
 #       param2: value2
-
-# bucketAccessClasses:
+#  bucketAccessClasses:
 #   - name: example-bucket-class
 #     driverName: example.driver.com
 #     authenticationType: KEY # KEY or IAM (Implicit).
 #     parameters:
 #       param1: value1
 #       param2: value2
-
-# # Namespace scoped resources
-# bucketClaims:
+#
+#  # Namespace scoped resources
+#  bucketClaims:
 #   - name: example-bucket-claim
 #     namespace: default
 #     bucketClassName: example-bucket-class
 #     protocols: # 1 or more of S3, Azure, GCS
 #       - s3
-
-# bucketAccesses:
+#  bucketAccesses:
 #   - name: example-bucket-access
 #     namespace: default
 #     bucketAccessClassName: example-bucket-access-class
 #     bucketClaimName: example-bucket-claim
 #     protocol: s3 # Or azure or gcs
 #     credentialsSecretName: example-credentials-secret
-
-# cosiProviders:
+#
+#  # Drivers for COSI.
+#  cosiProviders:
 #   # Add more supported COSI providers here
 #   ceph:
 #     driver:
