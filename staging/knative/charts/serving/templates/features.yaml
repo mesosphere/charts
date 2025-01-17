@@ -10,6 +10,7 @@ metadata:
   annotations:
     knative.dev/example-checksum: "632d47dd"
 data:
+{{- if .Values.config.features }}
 {{- range $key, $value := .Values.config.features }}
   {{ $key }}: {{ $value }}
 {{- end }}
