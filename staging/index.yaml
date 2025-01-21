@@ -547,6 +547,21 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/cert-manager-setup-0.1.0.tgz
     version: 0.1.0
+  cosi-driver-nutanix:
+  - apiVersion: v2
+    appVersion: v0.0.5
+    created: "2025-01-21T19:18:02.309892142Z"
+    description: A Helm chart to deploy Nutanix COSI driver
+    digest: 76312981c010670443efadd8ec66453ec9dda2923e0a0e392fc728f74d80e84d
+    icon: https://www.nutanix.com/content/dam/nutanix/global/icons/products/svg/Nutanix-Objects-40.svg
+    maintainers:
+    - email: cloudnative@nutanix.com
+      name: nutanix-cloud-native-bot
+    name: cosi-driver-nutanix
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/cosi-driver-nutanix-0.0.5.tgz
+    version: 0.0.5
   dex-k8s-authenticator:
   - apiVersion: v1
     appVersion: v1.4.1
@@ -13792,4 +13807,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-01-03T11:01:42.485514683Z"
+generated: "2025-01-21T19:18:02.309282986Z"
