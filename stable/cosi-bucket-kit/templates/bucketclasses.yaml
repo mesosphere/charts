@@ -1,4 +1,5 @@
-{{- range .Values.bucketClasses }}
+{{- if .Values.cosiBucketKit.enabled }}
+{{- range .Values.cosiBucketKit.bucketClasses }}
 apiVersion: objectstorage.k8s.io/v1alpha1
 kind: BucketClass
 metadata:
@@ -8,5 +9,6 @@ deletionPolicy: {{ .deletionPolicy }}
 {{- if .parameters }}
 parameters:
 {{ toYaml .parameters | indent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}

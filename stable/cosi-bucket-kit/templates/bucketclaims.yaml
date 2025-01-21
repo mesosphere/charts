@@ -1,4 +1,5 @@
-{{- range .Values.bucketClaims }}
+{{- if .Values.cosiBucketKit.enabled }}
+{{- range .Values.cosiBucketKit.bucketClaims }}
 apiVersion: objectstorage.k8s.io/v1alpha1
 kind: BucketClaim
 metadata:
@@ -10,4 +11,5 @@ spec:
     {{- range .protocols }}
     - {{ . }}
     {{- end }}
+{{- end }}
 {{- end }}

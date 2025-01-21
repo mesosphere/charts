@@ -1,5 +1,6 @@
-{{- if .Values.cosiProviders }}
-{{- with .Values.cosiProviders.ceph }}
+{{- if .Values.cosiBucketKit.enabled }}
+{{- if .Values.cosiBucketKit.cosiProviders }}
+{{- with .Values.cosiBucketKit.cosiProviders.ceph }}
 {{- if .driver.enabled }}
 apiVersion: ceph.rook.io/v1
 kind: CephCOSIDriver
@@ -18,6 +19,7 @@ metadata:
   namespace: {{ .adminuser.namespace }}
 spec:
 {{ toYaml .adminuser.spec | indent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
