@@ -1,0 +1,105 @@
+{{- if .Values.cosiController.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "watch", "list", "delete", "update", "create"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller-role
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: ["objectstorage.k8s.io"]
+    resources: ["bucketclaims", "bucketaccesses", "bucketclaims/status", "bucketaccesses/status"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["objectstorage.k8s.io"]
+    resources: ["buckets"]
+    verbs: ["get", "list", "watch", "update", "create", "delete"]
+  - apiGroups: ["objectstorage.k8s.io"]
+    resources: ["bucketclasses","bucketaccessclasses"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["list", "watch", "create", "update", "patch"]
+  - apiGroups: [""]
+    resources: ["configmaps", "serviceaccounts"]
+    verbs: ["list", "get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: objectstorage-controller
+subjects:
+- kind: ServiceAccount
+  name: objectstorage-controller-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: objectstorage-controller-role
+subjects:
+- kind: ServiceAccount
+  name: objectstorage-controller-sa
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
+  name: objectstorage-controller
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.cosiController.replicas }}
+  selector:
+    matchLabels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 6 }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+{{ include "cosi-driver-nutanix.resource.labels" . | indent 8 }}
+    spec:
+      containers:
+      - args:
+        - "--v={{ .Values.cosiController.logLevel }}"
+        image: "{{ .Values.cosiController.image.registry }}/{{ .Values.cosiController.image.repository }}:{{ .Values.cosiController.image.tag }}"
+        imagePullPolicy: {{ .Values.cosiController.image.pullPolicy }}
+        name: objectstorage-controller
+      serviceAccountName: objectstorage-controller-sa
+{{- end}}
