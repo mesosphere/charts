@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/name: container-object-storage-interface-controller
     app.kubernetes.io/part-of: container-object-storage-interface
   name: container-object-storage-controller
-  namespace: container-object-storage-system
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: 1
   selector:

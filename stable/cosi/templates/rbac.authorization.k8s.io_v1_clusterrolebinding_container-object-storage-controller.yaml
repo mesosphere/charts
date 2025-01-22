@@ -21,4 +21,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: container-object-storage-controller-sa
-  namespace: container-object-storage-system
+  namespace: {{ .Release.Namespace }}
