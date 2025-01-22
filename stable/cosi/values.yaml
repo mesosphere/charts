@@ -1,6 +1,6 @@
 image:
-  registry: gcr.io
-  repository: k8s-staging-sig-storage/objectstorage-controller
+  registry: ghcr.io
+  repository: mesosphere/dkp-container-images/objectstorage-controller
   tag: v20250110-a29e5f6
   pullPolicy: IfNotPresent
 
