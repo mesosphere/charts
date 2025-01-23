@@ -38,10 +38,10 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: cosi-job-readiness-role
+  name: {{ .Release.Name }}-readiness
 subjects:
 - kind: ServiceAccount
-  name: cosi-bucket-kit
+  name: {{ .Release.Name }}-readiness
   namespace: {{ .Release.Namespace }}
 ---
 # This job has a container for each transformation enabled. There is a shared container for bucket readiness check.
@@ -50,6 +50,9 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-readiness
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   template:
     metadata:
@@ -114,10 +117,10 @@ spec:
               echo() {
                   command echo $(date) "$@"
               }
+              # TODO(takirala): Fail fast if there is more than one bucketAccess with harbor is found.
 
               {{- $cmName := .Values.cosiBucketKit.transformations.harbor.cmName }}
               {{- $ns := .Release.Namespace -}}
-              # TODO(takirala): Fail fast if there is more than one bucketAccess with harbor is found.
               {{- range .Values.cosiBucketKit.bucketAccesses }}
               # Update the cosi secret with harbor specific keys.
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
