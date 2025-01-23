@@ -53,3 +53,11 @@ cosiBucketKit:
 #         capabilities:
 #           bucket: "*"
 #           user: "*"
+  transformations:
+    priorityClassName: dkp-high-priority
+    kubectlImage: bitnami/kubectl:1.31.4
+    kubecost:
+      enabled: false
+    harbor:
+      enabled: false
+      cmName: harbor-cosi-overrides

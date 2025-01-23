@@ -1,0 +1,135 @@
+{{- if .Values.cosiBucketKit.enabled }} # COSI Bucket chart is enabled
+{{- if gt (len .Values.cosiBucketKit.bucketAccesses) 0 }} # At least one BucketAccess is created
+{{- if or .Values.cosiBucketKit.transformations.kubecost.enabled .Values.cosiBucketKit.transformations.harbor }} # At least one transformation is enabled
+# Add rbac for the Job Readiness Check
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-readiness
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-readiness
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "configmaps" ]
+    verbs: [ "get", "list", "create", "patch"] # A new configmap is created for harbor
+  - apiGroups: [ "" ]
+    resources: [ "secrets" ]
+    verbs: [ "get", "list", "patch" ] # Existing secrets are updated for kubecost and harbor.
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-readiness
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cosi-job-readiness-role
+subjects:
+- kind: ServiceAccount
+  name: cosi-bucket-kit
+  namespace: {{ .Release.Namespace }}
+---
+# This job has a container for each transformation enabled. There is a shared container for bucket readiness check.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-readiness
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    metadata:
+      name: {{ .Release.Name }}-readiness
+    spec:
+      serviceAccountName: {{ .Release.Name }}-readiness
+      restartPolicy: OnFailure
+      {{- if .Values.cosiBucketKit.transformations.priorityClassName }}
+      priorityClassName: {{ .Values.cosiBucketKit.transformations.priorityClassName }}
+      {{- end }}
+      containers:
+        - name: wait-for-cosi-secret
+          image: {{ .Values.cosiBucketKit.transformations.kubectlImage }}
+          command:
+            - bash
+            - -c
+            - |
+              set -o nounset
+              set -o pipefail
+
+              echo() {
+                  command echo $(date) "$@"
+              }
+
+              {{- $ns := .Release.Namespace -}}
+              {{- range .Values.cosiBucketKit.bucketAccesses }}
+              # For each bucketAccess, check if the secret exists.
+              while ! kubectl get secret -n {{ $ns }} {{ .credentialsSecretName }}; do
+                  echo "Secret {{ .credentialsSecretName }} not found in namespace {{ $ns }}. Waiting for it to be created."
+                  sleep 5
+              done
+              # TODO(takirala): Wait for .data.BucketInfo field to be populated with a valid cosi secret value.
+              {{- end }}
+        {{- if .Values.cosiBucketKit.transformations.kubecost.enabled }}
+        # This job will exit with one of the following outcomes:
+        # - If namespace is not kommander namespace then exit successfully (targets attached clusters).
+        # - If kubecostClusterMode is not set to primary then exit successfully (targets attached clusters that have been expanded).
+        # - In kommander namespace and when running in primary mode, wait until the federated-store secret is found. Could be a user created secret or be created by cosi-bucket-kit helmrelease.
+        - name: transform-kubecost-cosi-secret
+          image: {{ .Values.cosiBucketKit.transformations.kubectlImage }}
+          command:
+            - bash
+            - -c
+            - |
+              set -o nounset
+              set -o pipefail
+
+              echo() {
+                command echo $(date) "$@"
+              }
+        {{- end }}
+        {{- if .Values.cosiBucketKit.transformations.harbor.enabled }}
+        - name: transform-harbor-cosi-secret
+          image: {{ .Values.cosiBucketKit.transformations.kubectlImage }}
+          command:
+            - bash
+            - -c
+            - |
+              set -o nounset
+              set -o pipefail
+
+              echo() {
+                  command echo $(date) "$@"
+              }
+
+              {{- $cmName := .Values.cosiBucketKit.transformations.harbor.cmName }}
+              {{- $ns := .Release.Namespace -}}
+              # TODO(takirala): Fail fast if there is more than one bucketAccess with harbor is found.
+              {{- range .Values.cosiBucketKit.bucketAccesses }}
+              # Update the cosi secret with harbor specific keys.
+              kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
+                --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessKeyID') \
+                --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessSecretKey') \
+                --dry-run=client -o yaml | kubectl apply -f -
+              # Create a configmap with the name of the secret from above.
+              kubectl create configmap {{ $cmName }} -n {{ $ns }} \
+                --from-literal="values.yaml=$(printf -- '---\npersistence:\n  imageChartStorage:\n    s3:\n      existingSecret: {{ .credentialsSecretName }}')" \
+                --dry-run=client -o yaml | kubectl apply -f -
+              {{- end }}
+        {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
