@@ -12,7 +12,6 @@ metadata:
     app.kubernetes.io/name: container-object-storage-interface-controller
     app.kubernetes.io/part-of: container-object-storage-interface
   name: container-object-storage-controller-role
-  namespace: default
 rules:
 - apiGroups:
   - objectstorage.k8s.io

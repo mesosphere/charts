@@ -44,7 +44,15 @@ git checkout ${TAG}
 
 mkdir chart
 kustomize build --output chart .
-#rm chart/v1_namespace_container-object-storage-system.yaml # No need to create a namespace explicitly, helm will take care of it.
+
+# Let Helm create the namespace
+rm chart/v1_namespace_container-object-storage-system.yaml # No need to create a namespace explicitly, helm will take care of it.
+for f in chart/*; do
+  rm -rf "${BASEDIR:?}"/templates/"${f}"
+  sed -i 's/namespace: container-object-storage-system/namespace: {{ .Release.Namespace }}/g' "$f"
+  cp -R "$f" "${BASEDIR}"/templates
+done
+sed -i '/^\s*namespace: default$/d' chart/rbac.authorization.k8s.io_v1_clusterrole_container-object-storage-controller-role.yaml
 
 for f in chart/apiextensions.k8s.io_v1_customresourcedefinition*; do
   rm -rf "${BASEDIR:?}"/crds/"${f}"
@@ -59,7 +67,7 @@ cd "${BASEDIR}" || exit
 
 # TODO(takirala): Add patching logic here (e.g. patch the priority class)
 
-git add .
-git commit -am "chore: copy upstream manifests @ ${TAG}"
+#git add .
+#git commit -am "chore: copy upstream manifests @ ${TAG}"
 
 echo "Done upgrading cosi!"
