@@ -1015,6 +1015,24 @@ entries:
     version: 7.1.0
   cosi:
   - apiVersion: v2
+    appVersion: 0.0.1-alpha.3
+    created: "2025-01-23T09:21:33.266985234Z"
+    description: Container Object Storage Interface (COSI) provisioner for Kubernetes
+    digest: 40847ddc0d2d0d0aab70a431e05f4423bf2a77cdd8f40aac11e41bb99da96ea4
+    home: https://container-object-storage-interface.github.io/
+    icon: https://raw.githubusercontent.com/container-object-storage-interface/container-object-storage-interface.github.io/refs/heads/master/static/img/logo-15.svg
+    keywords:
+    - cosi
+    maintainers:
+    - name: takirala
+    - name: dkoshkin
+    name: cosi
+    sources:
+    - https://github.com/kubernetes-sigs/container-object-storage-interface
+    urls:
+    - https://mesosphere.github.io/charts/stable/cosi-0.0.1-alpha.3.tgz
+    version: 0.0.1-alpha.3
+  - apiVersion: v2
     appVersion: 0.0.1-alpha.2
     created: "2025-01-16T16:45:56.587210116Z"
     description: Container Object Storage Interface (COSI) provisioner for Kubernetes
@@ -42127,4 +42145,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-01-21T19:28:34.046018865Z"
+generated: "2025-01-23T09:21:33.266457508Z"
