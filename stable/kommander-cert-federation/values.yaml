@@ -12,3 +12,4 @@ dnsNames: []
 # Priority class assigned to the Pods
 priorityClassName: ""
 kubectlImage: "bitnami/kubectl:1.29.2"
+kubefedImage: "ghcr.io/mesosphere/kubefed:v0.11.1"

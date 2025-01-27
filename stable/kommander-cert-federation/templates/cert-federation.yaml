@@ -124,7 +124,7 @@ spec:
             echo "{{ .Values.secretName }} secret patched"
             EOF
       - name: federate-secret
-        image: ghcr.io/mesosphere/kubefed:v0.10.4
+        image: "{{ .Values.kubefedImage }}"
         command: ["/hyperfed/kubefedctl"]
         args:
           - federate
