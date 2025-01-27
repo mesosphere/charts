@@ -177,10 +177,22 @@ spec:
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
                 --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessKeyID') \
                 --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessSecretKey') \
+                --from-literal=REGISTRY_STORAGE_S3_REGION=none \
+                --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.nedpoint') \
+                --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.bucketName') \
+                --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
+                --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply -f -
               # Create a configmap with the name of the secret from above.
               kubectl create configmap {{ $cmName }} -n {{ $ns }} \
-                --from-literal="values.yaml=$(printf -- '---\npersistence:\n  imageChartStorage:\n    s3:\n      existingSecret: {{ .credentialsSecretName }}')" \
+                --from-file=values.yaml=<(cat <<EOF
+                persistence:
+                  imageChartStorage:
+                    type: s3
+                    s3:
+                      existingSecret: {{ .credentialsSecretName }}
+                EOF
+                ) \
                 --dry-run=client -o yaml | kubectl apply -f -
               {{- end }}
         {{- end }}
