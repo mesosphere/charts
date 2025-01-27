@@ -171,6 +171,7 @@ spec:
               {{- end }}
 
               {{- $cmName := .Values.cosiBucketKit.transformations.harbor.cmName }}
+              {{- $cmNamespace := .Values.cosiBucketKit.transformations.harbor.cmNamespace }}
               {{- $ns := .Release.Namespace -}}
               {{- range .Values.cosiBucketKit.bucketAccesses }}
               # Update the cosi secret with harbor specific keys.
@@ -184,7 +185,7 @@ spec:
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply -f -
               # Create a configmap with the name of the secret from above.
-              kubectl create configmap {{ $cmName }} -n {{ $ns }} \
+              kubectl create configmap {{ $cmName }} -n {{ $cmNamespace }} \
                 --from-file=values.yaml=<(cat <<EOF
                 persistence:
                   imageChartStorage:
