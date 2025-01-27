@@ -179,7 +179,7 @@ spec:
                 --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessKeyID') \
                 --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.accessSecretKey') \
                 --from-literal=REGISTRY_STORAGE_S3_REGION=none \
-                --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.nedpoint') \
+                --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.secretS3.endpoint') \
                 --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | base64 --decode | jq -r '.spec.bucketName') \
                 --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
