@@ -53,3 +53,12 @@ cosiBucketKit:
 #         capabilities:
 #           bucket: "*"
 #           user: "*"
+  transformations:
+    priorityClassName: dkp-high-priority
+    kubectlImage: bitnami/kubectl:1.31.4
+    kubecost:
+      enabled: false
+    harbor:
+      enabled: false
+      cmName: harbor-cosi-overrides
+      cmNamespace:  # This should point to the namespace where the harbor flux helm release is created (not the .targetNamespace of the flux helm release).
