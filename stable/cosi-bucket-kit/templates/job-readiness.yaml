@@ -184,13 +184,13 @@ spec:
                 --dry-run=client -o yaml | kubectl apply -f -
               # Create a configmap with the name of the secret from above.
               kubectl create configmap {{ $cmName }} -n {{ $cmNamespace }} \
-                --from-file=values.yaml=<(cat <<EOF
-                persistence:
-                  imageChartStorage:
-                    type: s3
-                    s3:
-                      existingSecret: {{ .credentialsSecretName }}
-                EOF
+                --from-file=values.yaml=<(cat <<'EOF'
+              persistence:
+                imageChartStorage:
+                  type: s3
+                  s3:
+                    existingSecret: {{ .credentialsSecretName }}
+              EOF
                 ) \
                 --dry-run=client -o yaml | kubectl apply -f -
               {{- end }}
