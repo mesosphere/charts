@@ -1087,6 +1087,25 @@ entries:
     version: 0.0.1-alpha.1
   cosi-bucket-kit:
   - apiVersion: v2
+    appVersion: 0.0.1-alpha.3
+    created: "2025-01-28T10:33:06.53597445Z"
+    description: A Helm chart for COSI BucketClaim(s) to be consumed by other applications.
+    digest: e37e32a9f873892d9af5fd61a6b9611f1f3fc71fd183d7c1fa753b69b5737c12
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kubernetes
+    - cosi
+    - bucket
+    - storage
+    - ceph
+    maintainers:
+    - name: takirala
+    - name: mhrabovcin
+    name: cosi-bucket-kit
+    urls:
+    - https://mesosphere.github.io/charts/stable/cosi-bucket-kit-0.0.1-alpha.3.tgz
+    version: 0.0.1-alpha.3
+  - apiVersion: v2
     appVersion: 0.0.1-alpha.2
     created: "2025-01-27T20:43:12.588601675Z"
     description: A Helm chart for COSI BucketClaim(s) to be consumed by other applications.
@@ -42197,4 +42216,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-01-27T20:43:12.587586171Z"
+generated: "2025-01-28T10:33:06.535546972Z"
