@@ -2,6 +2,10 @@
 nameOverride: ""
 fullnameOverride: ""
 
+serviceAccount:
+  create: true
+  nameOverride: ""
+
 # cosi-driver-nutanix sidecar image.
 image:
   registry: ghcr.io
@@ -9,6 +13,8 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
   pullPolicy: IfNotPresent
+
+replicas: 1
 
 # Secret used by the cosi-driver-nutanix sidecar for objects management.
 secret:
@@ -32,6 +38,7 @@ secret:
 
 # COSI central controller specifications.
 cosiController:
+  replicas: 1
   enabled: true
   logLevel: 5
   image:

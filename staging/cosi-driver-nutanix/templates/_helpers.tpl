@@ -55,9 +55,9 @@ Create the name of the service account to use
 */}}
 {{- define "cosi-driver-nutanix.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "cosi-driver-nutanix.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "cosi-driver-nutanix.name" .) .Values.serviceAccount.nameOverride }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+{{- default "default" .Values.serviceAccount.nameOverride }}
 {{- end }}
 {{- end }}
 

@@ -5,7 +5,7 @@ metadata:
 {{ include "cosi-driver-nutanix.resource.annotations" . | indent 4 }}
   labels:
 {{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
-  name: objectstorage-provisioner
+  name: {{ include "cosi-driver-nutanix.name" . }}
   namespace: {{ .Release.Namespace }}
 spec:
   minReadySeconds: 30
@@ -53,7 +53,7 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/cosi
             name: socket
-      serviceAccountName: objectstorage-provisioner-sa
+      serviceAccountName: {{ include "cosi-driver-nutanix.serviceAccountName" . }}
       volumes:
       - emptyDir: {}
         name: socket
