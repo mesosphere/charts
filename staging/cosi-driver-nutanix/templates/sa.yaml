@@ -5,5 +5,5 @@ metadata:
 {{ include "cosi-driver-nutanix.resource.annotations" . | indent 4 }}
   labels:
 {{ include "cosi-driver-nutanix.resource.labels" . | indent 4 }}
-  name: objectstorage-provisioner-sa
+  name: {{ include "cosi-driver-nutanix.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
