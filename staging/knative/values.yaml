@@ -7,6 +7,9 @@ eventing:
 
 serving:
   enabled: true
+  config:
+    features: {}
+    autoscaler: {}
   knativeIngressGateway:
     spec:
       selector:
