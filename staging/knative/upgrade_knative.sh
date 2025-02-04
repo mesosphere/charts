@@ -11,9 +11,9 @@ set -xeuo pipefail
 shopt -s dotglob
 
 # Tags for current version of knative
-SERVING_TAG=1.15.2
-EVENTING_TAG=1.15.2
-NET_ISTIO_TAG=1.15.1
+SERVING_TAG=1.17.0
+EVENTING_TAG=1.17.1
+NET_ISTIO_TAG=1.17.0
 
 # Two basic patches needed for helm linter
 PATCH_1=$'# eg. \'{{.Name}}-{{.Namespace}}.{{ index .Annotations "sub"}}.{{.Domain}}\''
