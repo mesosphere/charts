@@ -30,7 +30,7 @@ spec:
       containers:
       - envFrom:
         - secretRef:
-            name: objectstorage-provisioner
+            name: {{ include "cosi-driver-nutanix.name" . }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         name: cosi-driver-nutanix
@@ -44,7 +44,7 @@ spec:
           - "--v={{ .Values.objectstorageProvisionerSidecar.logLevel }}"
         envFrom:
           - secretRef:
-              name: objectstorage-provisioner
+              name: {{ include "cosi-driver-nutanix.name" . }}
         env:
           - name: POD_NAMESPACE
             valueFrom:
