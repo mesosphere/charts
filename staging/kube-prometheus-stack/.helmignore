@@ -27,10 +27,7 @@ kube-prometheus-*.tgz
 
 unittests/
 files/dashboards/
-# Mesosphere-specific files to ignore
-.editorconfig
-upgrade_operator.sh
-kube-prometheus-stack-*.tgz
-patch/
+
+README.md
 CONTRIBUTING.md
-UPGRADING.md
+.editorconfig
