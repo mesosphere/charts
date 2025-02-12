@@ -1,0 +1,88 @@
+{{- if .Values.harborCopySecret.enabled }}
+{{ $sourceNamespace := .Release.Namespace }}
+{{ $sourceSecretName := .Values.harborCopySecret.sourceSecretName }}
+{{ $targetNamespace := .Values.harborCopySecret.targetNamespace }}
+{{ $targetSecretName := .Values.harborCopySecret.targetSecretName }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "harbor-copy-secret.fullname" . }}
+  labels:
+    {{- include "harbor-copy-secret.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "harbor-copy-secret.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.harborCopySecret.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- if .Values.harborCopySecret.reloader }}
+          secret.reloader.stakater.com/reload: "{{ $sourceSecretName }}"
+        {{- end }}
+      labels:
+        {{- include "harbor-copy-secret.labels" . | nindent 8 }}
+        {{- with .Values.harborCopySecret.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.harborCopySecret.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "harbor-copy-secret.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.harborCopySecret.podSecurityContext | nindent 8 }}
+      initContainers:
+      - name: copy-secret
+        image: {{ .Values.harborCopySecret.kubectlImage }}
+        command:
+          - bash
+          - -c
+          - |
+            set -o nounset
+            set -o pipefail
+            set -e
+
+            echo() {
+                command echo $(date) "$@"
+            }
+
+            while true; do
+              echo "Waiting for {{ $sourceSecretName }} secret in namespace {{ $sourceNamespace }}"
+              if kubectl wait --for=create -n {{ $sourceNamespace }} secret/{{ $sourceSecretName }}; then
+                echo "Secret {{ $sourceSecretName }} found in namespace {{ $sourceNamespace }}."
+                break
+              fi
+            done
+
+            kubectl get -n {{ $sourceNamespace }} secret/{{ $sourceSecretName }} -o yaml | \
+              yq 'del(.metadata.creationTimestamp, .metadata.uid, .metadata.resourceVersion, .metadata.namespace)' | \
+              env TARGET_SECRET_NAME="{{ $targetSecretName }}"  yq e '.metadata.name = env(TARGET_SECRET_NAME)' | \
+              kubectl apply -n "{{ $targetNamespace }}" -f -
+
+            echo "Secret {{ $targetNamespace }}/{{ $targetSecretName }} has been create/updated"
+      containers:
+        - name: wait
+          securityContext:
+            {{- toYaml .Values.harborCopySecret.securityContext | nindent 12 }}
+          image: "{{ .Values.harborCopySecret.pauseImage }}"
+          imagePullPolicy: {{ .Values.harborCopySecret.pullPolicy }}
+          resources:
+            {{- toYaml .Values.harborCopySecret.resources | nindent 12 }}
+      {{- with .Values.harborCopySecret.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.harborCopySecret.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.harborCopySecret.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}
