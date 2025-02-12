@@ -17018,6 +17018,21 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/grafana-0.2.0.tgz
     version: 0.2.0
+  harbor-copy-secret:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2025-02-12T12:31:57.241056583Z"
+    description: A helm chart that copies secret content between namespaces
+    digest: d04dee98524b52fb4da3475138971a187040e94197d8540bf10333f0df4ee44d
+    keywords:
+    - harbor
+    maintainers:
+    - name: mhrabovcin
+    name: harbor-copy-secret
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/harbor-copy-secret-0.1.0.tgz
+    version: 0.1.0
   kafka-operator:
   - apiVersion: v1
     appVersion: v0.25.1
@@ -42234,4 +42249,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-02-11T20:53:50.799161784Z"
+generated: "2025-02-12T12:31:57.24060915Z"
