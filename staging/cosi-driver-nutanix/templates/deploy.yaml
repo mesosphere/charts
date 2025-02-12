@@ -54,6 +54,9 @@ spec:
           - mountPath: /var/lib/cosi
             name: socket
       serviceAccountName: {{ include "cosi-driver-nutanix.serviceAccountName" . }}
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
       volumes:
       - emptyDir: {}
         name: socket

@@ -6,6 +6,8 @@ serviceAccount:
   create: true
   nameOverride: ""
 
+priorityClassName: system-cluster-critical
+
 # cosi-driver-nutanix sidecar image.
 image:
   registry: ghcr.io
