@@ -1,0 +1,10 @@
+apiVersion: v2
+name: harbor-copy-secret
+description: A helm chart that copies secret content between namespaces
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - harbor
+maintainers:
+  - name: mhrabovcin

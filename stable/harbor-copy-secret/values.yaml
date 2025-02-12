@@ -1,0 +1,53 @@
+harborCopySecret:
+  enabled: false
+  kubectlImage: bitnami/kubectl:1.31.4
+  pauseImage: registry.k8s.io/pause:3.10
+  imagePullPolicy: IfNotPresent
+
+  sourceSecretName: "secret"
+  targetNamespace: "default"
+  targetSecretName: "secret"
+  reloader: true
+
+  imagePullSecrets: []
+  nameOverride: ""
+  fullnameOverride: ""
+
+  serviceAccount:
+    create: true
+    automount: true
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the fullname template
+    name: ""
+
+  podAnnotations: {}
+  podLabels: {}
+
+  podSecurityContext:
+    {}
+    # fsGroup: 2000
+
+  securityContext:
+    {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  # Pause wait image limits
+  resources:
+    limits:
+      cpu: 50m
+      memory: 50Mi
+    requests:
+      cpu: 10m
+      memory: 10Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
