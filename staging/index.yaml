@@ -549,6 +549,20 @@ entries:
     version: 0.1.0
   cosi-driver-nutanix:
   - apiVersion: v2
+    appVersion: v0.2.0
+    created: "2025-02-12T22:33:50.32091989Z"
+    description: A Helm chart to deploy Nutanix COSI driver
+    digest: cc3818d6a6ec6886a218c8274b873cebf7e0196b538e645f66b8441b35cb2514
+    icon: https://www.nutanix.com/content/dam/nutanix/global/icons/products/svg/Nutanix-Objects-40.svg
+    maintainers:
+    - email: cloudnative@nutanix.com
+      name: nutanix-cloud-native-bot
+    name: cosi-driver-nutanix
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/cosi-driver-nutanix-0.0.8.tgz
+    version: 0.0.8
+  - apiVersion: v2
     appVersion: v0.0.4
     created: "2025-02-06T11:33:03.95922257Z"
     description: A Helm chart to deploy Nutanix COSI driver
@@ -13935,4 +13949,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-02-07T08:40:22.21210826Z"
+generated: "2025-02-12T22:33:50.320307669Z"
