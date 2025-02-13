@@ -22,12 +22,16 @@ cosiBucketKit:
 #  bucketClaims:
 #   - name: example-bucket-claim
 #     namespace: default
+#     annotations:
+#       helm.sh/resource-policy: keep
 #     bucketClassName: example-bucket-class
 #     protocols: # 1 or more of S3, Azure, GCS
 #       - s3
 #  bucketAccesses:
 #   - name: example-bucket-access
 #     namespace: default
+#     annotations:
+#       helm.sh/resource-policy: keep
 #     bucketAccessClassName: example-bucket-access-class
 #     bucketClaimName: example-bucket-claim
 #     protocol: s3 # Or azure or gcs

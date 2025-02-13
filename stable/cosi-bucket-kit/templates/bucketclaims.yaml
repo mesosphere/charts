@@ -5,6 +5,12 @@ kind: BucketClaim
 metadata:
   name: {{ .name }}
   namespace: {{ .namespace }}
+  annotations:
+    {{- if .annotations }}
+    {{- range $key, $value := .annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
 spec:
   bucketClassName: {{ .bucketClassName }}
   protocols:
