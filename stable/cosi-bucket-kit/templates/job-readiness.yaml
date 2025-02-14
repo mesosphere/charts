@@ -61,6 +61,10 @@ spec:
       priorityClassName: {{ .Values.cosiBucketKit.transformations.priorityClassName }}
       {{- end }}
       containers:
+        - name: completed
+          image: {{ .Values.cosiBucketKit.transformations.kubectlImage }}
+          command: ["bash", "-c", "echo completed"]
+      initContainers:
         - name: wait-for-cosi-secret
           image: {{ .Values.cosiBucketKit.transformations.kubectlImage }}
           command:
@@ -69,6 +73,7 @@ spec:
             - |
               set -o nounset
               set -o pipefail
+              set -e
 
               echo() {
                   command echo $(date) "$@"
@@ -160,6 +165,7 @@ spec:
             - |
               set -o nounset
               set -o pipefail
+              set -e
 
               echo() {
                   command echo $(date) "$@"
