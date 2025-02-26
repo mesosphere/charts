@@ -167,9 +167,6 @@ spec:
               set -o pipefail
               set -e
 
-              echo() {
-                  command echo $(date) "$@"
-              }
               {{- if gt (len .Values.cosiBucketKit.bucketAccesses) 1 }}
               {{- fail "Error: .Values.cosiBucketKit.bucketAccesses array size must not exceed 1 if harbor transformation is enabled." }}
               {{- end }}
@@ -179,17 +176,18 @@ spec:
               {{- $ns := .Release.Namespace -}}
               {{- range .Values.cosiBucketKit.bucketAccesses }}
               # Update the cosi secret with harbor specific keys.
+              bucketInfoJSON="$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o json | jq -r '.data.BucketInfo | @base64d | fromjson')"
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
-                --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | jq -r '.spec.secretS3.accessKeyID | @base64d') \
-                --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | jq -r '.spec.secretS3.accessSecretKey | @base64d') \
-                --from-literal=REGISTRY_STORAGE_S3_REGION=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | jq -r '(.spec.secretS3.region // ("none" | @base64)) | @base64d') \
-                --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | jq -r '.spec.secretS3.endpoint | @base64d') \
-                --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o jsonpath="{.data.BucketInfo}" | jq -r '.spec.bucketName | @base64d') \
+                --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessKeyID') \
+                --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessSecretKey') \
+                --from-literal=REGISTRY_STORAGE_S3_REGION=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.region // "none"') \
+                --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint') \
+                --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(echo "${bucketInfoJSON}" | jq -r '.spec.bucketName') \
                 --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
               # Create a configmap with the name of the secret from above.
-              kubectl create configmap {{ $cmName }} -n {{ $cmNamespace }} \
+              kubectl create configmap {{ $cmName }} -n {{ $cmNamespace }} --dry-run=client -o yaml \
                 --from-file=values.yaml=<(cat <<'EOF'
               persistence:
                 imageChartStorage:
@@ -197,8 +195,7 @@ spec:
                   s3:
                     existingSecret: {{ .credentialsSecretName }}
               EOF
-                ) \
-                --dry-run=client -o yaml | kubectl apply -f -
+              ) | kubectl apply --server-side --force-conflicts -f -
               {{- end }}
         {{- end }}
 {{- end }}
