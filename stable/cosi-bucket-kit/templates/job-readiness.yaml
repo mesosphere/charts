@@ -180,7 +180,7 @@ spec:
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
                 --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessKeyID') \
                 --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessSecretKey') \
-                --from-literal=REGISTRY_STORAGE_S3_REGION=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.region // "none"') \
+                --from-literal=REGISTRY_STORAGE_S3_REGION=$(echo "${bucketInfoJSON}" | jq -r 'if (.spec.secretS3.region // "") == "" then "none" else .spec.secretS3.region end') \
                 --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint') \
                 --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(echo "${bucketInfoJSON}" | jq -r '.spec.bucketName') \
                 --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
