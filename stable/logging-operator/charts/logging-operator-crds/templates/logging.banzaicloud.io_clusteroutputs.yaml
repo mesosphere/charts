@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.17.2
 {{- with .Values.annotations }}
 {{- toYaml . | nindent 4 }}
 {{- end }}
@@ -1913,10 +1913,6 @@ spec:
                   write_operation:
                     type: string
                 type: object
-              enabledNamespaces:
-                items:
-                  type: string
-                type: array
               file:
                 properties:
                   add_path_suffix:
@@ -2855,6 +2851,8 @@ spec:
                       type:
                         type: string
                     type: object
+                  compress:
+                    type: string
                   content_type:
                     type: string
                   endpoint:
@@ -2882,6 +2880,10 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
+                  headers_from_placeholders:
+                    additionalProperties:
+                      type: string
+                    type: object
                   http_method:
                     type: string
                   json_array:
@@ -2896,6 +2898,8 @@ spec:
                     items:
                       type: integer
                     type: array
+                  reuse_connections:
+                    type: boolean
                   slow_flush_log_threshold:
                     type: string
                   ssl_timeout:
@@ -9352,10 +9356,6 @@ spec:
                   write_operation:
                     type: string
                 type: object
-              enabledNamespaces:
-                items:
-                  type: string
-                type: array
               file:
                 properties:
                   add_path_suffix:
@@ -10294,6 +10294,8 @@ spec:
                       type:
                         type: string
                     type: object
+                  compress:
+                    type: string
                   content_type:
                     type: string
                   endpoint:
@@ -10321,6 +10323,10 @@ spec:
                     additionalProperties:
                       type: string
                     type: object
+                  headers_from_placeholders:
+                    additionalProperties:
+                      type: string
+                    type: object
                   http_method:
                     type: string
                   json_array:
@@ -10335,6 +10341,8 @@ spec:
                     items:
                       type: integer
                     type: array
+                  reuse_connections:
+                    type: boolean
                   slow_flush_log_threshold:
                     type: string
                   ssl_timeout:

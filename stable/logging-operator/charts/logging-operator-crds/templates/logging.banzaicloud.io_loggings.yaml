@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.17.2
 {{- with .Values.annotations }}
 {{- toYaml . | nindent 4 }}
 {{- end }}
@@ -69,6 +69,9 @@ spec:
             properties:
               allowClusterResourcesFromAllNamespaces:
                 type: boolean
+                x-kubernetes-validations:
+                - message: Value is immutable, please recreate the resource
+                  rule: self == oldSelf
               clusterDomain:
                 type: string
               configCheck:
@@ -1984,6 +1987,8 @@ spec:
                       type: string
                     type: object
                   disableKubernetesFilter:
+                    type: boolean
+                  disableVarLibDockerContainers:
                     type: boolean
                   dnsConfig:
                     properties:
@@ -4713,6 +4718,8 @@ spec:
                           x-kubernetes-int-or-string: true
                         type: object
                     type: object
+                  configReloaderUseGracefulReloadWebhook:
+                    type: boolean
                   disablePvc:
                     type: boolean
                   dnsConfig:
