@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 0.0.16
+dependencies:
+- name: opentelemetry-operator
+  repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  version: 0.79.0
+description: A Helm chart for deploying telemetry-controller
+keywords:
+- opentelemetry-collector
+- telemetry-controller
+- collector
+kubeVersion: '>=1.26.0'
+name: telemetry-controller
+sources:
+- https://github.com/kube-logging/telemetry-controller
+type: application
+version: 0.0.16
