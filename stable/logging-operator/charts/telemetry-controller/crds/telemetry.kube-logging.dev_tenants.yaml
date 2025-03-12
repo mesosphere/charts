@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.16.5
+    controller-gen.kubebuilder.io/version: v0.17.1
   name: tenants.telemetry.kube-logging.dev
 spec:
   group: telemetry.kube-logging.dev
@@ -159,8 +159,8 @@ spec:
                   Cannot be used together with LogSourceNamespaceSelectors.
                 type: boolean
               subscriptionNamespaceSelectors:
-                description: Determines the namespaces from which subscriptions are
-                  collected by this tenant.
+                description: Determines the namespaces from which subscriptions and
+                  outputs are collected by this tenant.
                 items:
                   description: |-
                     A label selector is a label query over a set of resources. The result of matchLabels and
