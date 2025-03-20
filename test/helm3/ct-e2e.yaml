@@ -29,6 +29,7 @@ excluded-charts:
   - traefik-forward-auth  # D2IQ-62819
   - local-path-provisioner
   - thanos-traefik        # This requires installing dependencies like traefik2
+  - cilium-hubble-relay-traefik # This requires installing dependencies like traefik2
   - vsphere-csi-driver
   - kubefed
   - kommander-cert-federation # Unable to test unless cert-manager is also upgraded
