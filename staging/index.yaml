@@ -547,6 +547,22 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/cert-manager-setup-0.1.0.tgz
     version: 0.1.0
+  cilium-hubble-relay-traefik:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-03-21T18:42:38.279565495Z"
+    description: A Helm chart for Kubernetes that exposes the Cilium Hubble Relay
+      gRPC service over traefik. TLS passthrough is enabled, because Hubble Relay
+      terminates mTLS.
+    digest: a618dc5e74d12ae32b559fde8577ef87103649660baf52951adf8ef4ba433f5d
+    maintainers:
+    - email: daniel.lipovetsky@nutanix.com
+      name: dlipovetsky
+    name: cilium-hubble-relay-traefik
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/cilium-hubble-relay-traefik-0.0.1.tgz
+    version: 0.0.1
   cosi-driver-nutanix:
   - apiVersion: v2
     appVersion: v0.3.0
@@ -14087,4 +14103,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-03-10T09:08:06.938933934Z"
+generated: "2025-03-21T18:42:38.27892654Z"
