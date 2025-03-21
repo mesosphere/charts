@@ -1,0 +1,9 @@
+apiVersion: v2
+name: cilium-hubble-relay-traefik
+description: A Helm chart for Kubernetes that exposes the Cilium Hubble Relay gRPC service over traefik. TLS passthrough is enabled, because Hubble Relay terminates mTLS.
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+maintainers:
+- name: dlipovetsky
+  email: daniel.lipovetsky@nutanix.com
