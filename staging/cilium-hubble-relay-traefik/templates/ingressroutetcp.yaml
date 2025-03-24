@@ -4,6 +4,9 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRouteTCP
 metadata:
   name: {{ include "cilium-hubble-relay-traefik.fullname" . }}-ingress
+  # NOTE We use the service namespace, because the default traefik configuration
+  # requires routes to be in the same namespace as their service.
+  namespace: {{ .Values.route.service.namespace }}
   labels:
 {{ include "cilium-hubble-relay-traefik.labels" . | indent 4 }}
 spec:
@@ -11,8 +14,10 @@ spec:
     {{- toYaml .Values.route.endpoints | nindent 4}}
   routes:
     - match: HostSNI(`{{ .Values.route.sni }}`)
-      services:
-      {{- toYaml .Values.route.services | nindent 6 }}
+      service:
+      - name: {{ .Values.route.service.name }}
+        namespace: {{ .Values.route.service.namespace }}
+        port: {{ .Values.route.service.port }}
   tls:
     passthrough: true
 {{ end }}
