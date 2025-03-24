@@ -19,7 +19,8 @@ route:
   # must send this exact value in the SNI header of its request.
   sni: hubble.hubble-relay.cilium.io
 
-  # The Hubble Cilium Relay Kubernetes Service(s) to which requests are routed.
-  services:
-    - name: hubble-relay
-      port: 443
+  # The Hubble Cilium Relay Kubernetes Service to which requests are routed.
+  service:
+    name: hubble-relay
+    namespace: kube-system
+    port: 443
