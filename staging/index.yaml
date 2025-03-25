@@ -549,6 +549,21 @@ entries:
     version: 0.1.0
   cilium-hubble-relay-traefik:
   - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2025-03-25T17:34:45.849544622Z"
+    description: A Helm chart for Kubernetes that exposes the Cilium Hubble Relay
+      gRPC service over traefik. TLS passthrough is enabled, because Hubble Relay
+      terminates mTLS.
+    digest: a6c2907d56d8275738f9f43f558352b2641b445195403dc803fca878cd267d32
+    maintainers:
+    - email: daniel.lipovetsky@nutanix.com
+      name: dlipovetsky
+    name: cilium-hubble-relay-traefik
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/cilium-hubble-relay-traefik-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: 0.0.2
     created: "2025-03-24T21:05:05.910969874Z"
     description: A Helm chart for Kubernetes that exposes the Cilium Hubble Relay
@@ -14118,4 +14133,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-03-24T21:05:05.910230926Z"
+generated: "2025-03-25T17:34:45.849142193Z"
