@@ -14,7 +14,7 @@ spec:
     {{- toYaml .Values.route.endpoints | nindent 4}}
   routes:
     - match: HostSNI(`{{ .Values.route.sni }}`)
-      service:
+      services:
       - name: {{ .Values.route.service.name }}
         namespace: {{ .Values.route.service.namespace }}
         port: {{ .Values.route.service.port }}
