@@ -101,5 +101,8 @@ spec:
         image: "{{ .Values.cosiController.image.registry }}/{{ .Values.cosiController.image.repository }}:{{ .Values.cosiController.image.tag }}"
         imagePullPolicy: {{ .Values.cosiController.image.pullPolicy }}
         name: objectstorage-controller
+{{- if .Values.priorityClassName }}
+      priorityClassName: "{{ .Values.priorityClassName }}"
+{{- end }}
       serviceAccountName: objectstorage-controller-sa
 {{- end}}
