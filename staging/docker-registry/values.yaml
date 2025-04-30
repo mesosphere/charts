@@ -71,6 +71,8 @@ persistence:
   enabled: false
   size: 10Gi
   # storageClass: '-'
+  ## Name of an existing PVC. Can be templated.
+  # existingClaim:
 
 # set the type of filesystem to use: filesystem, s3
 storage: filesystem
@@ -258,3 +260,6 @@ garbageCollect:
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+
+# Use StatefulSet instead of Deployment. Default uses Deployment.
+useStatefulSet: false

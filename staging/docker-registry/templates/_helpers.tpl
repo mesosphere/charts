@@ -23,6 +23,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
+{{- define "docker-registry.headless-service.name" -}}
+{{- printf "%s-headless" (include "docker-registry.fullname" .) -}}
+{{- end -}}
+
 {{- define "docker-registry.envs" -}}
 - name: REGISTRY_HTTP_SECRET
   valueFrom:
@@ -187,7 +191,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
       path: htpasswd
 {{- end }}
 
-{{- if eq .Values.storage "filesystem" }}
+{{- if (and (eq .Values.storage "filesystem") (not .Values.useStatefulSet)) }}
 - name: data
   {{- if .Values.persistence.enabled }}
   persistentVolumeClaim:

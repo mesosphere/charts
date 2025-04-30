@@ -1,0 +1,37 @@
+{{- if .Values.useStatefulSet }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "docker-registry.headless-service.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ template "docker-registry.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+{{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig:
+    {{ toYaml .Values.service.sessionAffinityConfig | nindent 4 }}
+  {{- end -}}
+{{- end }}
+  ports:
+    - port: {{ .Values.service.port }}
+      protocol: TCP
+      name: {{ if .Values.tlsSecretName }}https{{ else }}http{{ end }}-{{ .Values.service.port }}
+      targetPort: 5000
+  selector:
+    app: {{ template "docker-registry.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}
