@@ -1,0 +1,265 @@
+From 1022cb3e72678fc0a495ee2b94096bc6fb440d32 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Wed, 30 Apr 2025 14:07:45 -0700
+Subject: [PATCH] chore: apply patch_2_support_statefulset.patch
+
+---
+ .../docker-registry/templates/_helpers.tpl    |   6 +-
+ .../docker-registry/templates/deployment.yaml |   2 +
+ staging/docker-registry/templates/pvc.yaml    |   4 +-
+ .../templates/service-headless.yaml           |  37 ++++++
+ .../templates/statefulset.yaml                | 123 ++++++++++++++++++
+ staging/docker-registry/values.yaml           |   5 +
+ 6 files changed, 175 insertions(+), 2 deletions(-)
+ create mode 100644 staging/docker-registry/templates/service-headless.yaml
+ create mode 100644 staging/docker-registry/templates/statefulset.yaml
+
+diff --git a/staging/docker-registry/templates/_helpers.tpl b/staging/docker-registry/templates/_helpers.tpl
+index d9d7531b..a9125757 100644
+--- a/staging/docker-registry/templates/_helpers.tpl
++++ b/staging/docker-registry/templates/_helpers.tpl
+@@ -23,6 +23,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+ {{- end -}}
+ {{- end -}}
+ 
++{{- define "docker-registry.headless-service.name" -}}
++{{- printf "%s-headless" (include "docker-registry.fullname" .) -}}
++{{- end -}}
++
+ {{- define "docker-registry.envs" -}}
+ - name: REGISTRY_HTTP_SECRET
+   valueFrom:
+@@ -187,7 +191,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+       path: htpasswd
+ {{- end }}
+ 
+-{{- if eq .Values.storage "filesystem" }}
++{{- if (and (eq .Values.storage "filesystem") (not .Values.useStatefulSet)) }}
+ - name: data
+   {{- if .Values.persistence.enabled }}
+   persistentVolumeClaim:
+diff --git a/staging/docker-registry/templates/deployment.yaml b/staging/docker-registry/templates/deployment.yaml
+index dff79cb5..f8d5f2ba 100644
+--- a/staging/docker-registry/templates/deployment.yaml
++++ b/staging/docker-registry/templates/deployment.yaml
+@@ -1,3 +1,4 @@
++{{- if not .Values.useStatefulSet }}
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+@@ -98,3 +99,4 @@ spec:
+       tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+       {{- end }}
+       volumes: {{ include "docker-registry.volumes" . | nindent 8 }}
++{{- end }}
+diff --git a/staging/docker-registry/templates/pvc.yaml b/staging/docker-registry/templates/pvc.yaml
+index dea05397..78e0fcc8 100644
+--- a/staging/docker-registry/templates/pvc.yaml
++++ b/staging/docker-registry/templates/pvc.yaml
+@@ -1,3 +1,4 @@
++{{- if not .Values.useStatefulSet }}
+ {{- if .Values.persistence.enabled }}
+ {{- if not .Values.persistence.existingClaim -}}
+ kind: PersistentVolumeClaim
+@@ -24,4 +25,5 @@ spec:
+ {{- end }}
+ {{- end }}
+ {{- end }}
+-{{- end -}}
++{{- end }}
++{{- end }}
+diff --git a/staging/docker-registry/templates/service-headless.yaml b/staging/docker-registry/templates/service-headless.yaml
+new file mode 100644
+index 00000000..09e20186
+--- /dev/null
++++ b/staging/docker-registry/templates/service-headless.yaml
+@@ -0,0 +1,37 @@
++{{- if .Values.useStatefulSet }}
++apiVersion: v1
++kind: Service
++metadata:
++  name: {{ template "docker-registry.headless-service.name" . }}
++  namespace: {{ .Values.namespace | default .Release.Namespace }}
++  labels:
++    app: {{ template "docker-registry.name" . }}
++    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
++    release: {{ .Release.Name }}
++    heritage: {{ .Release.Service }}
++{{- if .Values.service.labels }}
++{{ toYaml .Values.service.labels | indent 4 }}
++{{- end }}
++{{- if .Values.service.annotations }}
++  annotations:
++{{ toYaml .Values.service.annotations | indent 4 }}
++{{- end }}
++spec:
++  type: ClusterIP
++  clusterIP: None
++{{- if .Values.service.sessionAffinity }}
++  sessionAffinity: {{ .Values.service.sessionAffinity }}
++  {{- if .Values.service.sessionAffinityConfig }}
++  sessionAffinityConfig:
++    {{ toYaml .Values.service.sessionAffinityConfig | nindent 4 }}
++  {{- end -}}
++{{- end }}
++  ports:
++    - port: {{ .Values.service.port }}
++      protocol: TCP
++      name: {{ if .Values.tlsSecretName }}https{{ else }}http{{ end }}-{{ .Values.service.port }}
++      targetPort: 5000
++  selector:
++    app: {{ template "docker-registry.name" . }}
++    release: {{ .Release.Name }}
++{{- end }}
+diff --git a/staging/docker-registry/templates/statefulset.yaml b/staging/docker-registry/templates/statefulset.yaml
+new file mode 100644
+index 00000000..68e05f3f
+--- /dev/null
++++ b/staging/docker-registry/templates/statefulset.yaml
+@@ -0,0 +1,123 @@
++{{- if .Values.useStatefulSet }}
++apiVersion: apps/v1
++kind: StatefulSet
++metadata:
++  name: {{ template "docker-registry.fullname" . }}
++  namespace: {{ .Values.namespace | default .Release.Namespace }}
++  labels:
++    app: {{ template "docker-registry.name" . }}
++    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
++    release: {{ .Release.Name }}
++    heritage: {{ .Release.Service }}
++spec:
++  selector:
++    matchLabels:
++      app: {{ template "docker-registry.name" . }}
++      release: {{ .Release.Name }}
++  replicas: {{ .Values.replicaCount }}
++  serviceName: {{ template "docker-registry.headless-service.name" . }}
++  {{- if .Values.updateStrategy }}
++  strategy: {{ toYaml .Values.updateStrategy | nindent 4 }}
++  {{- end }}
++  minReadySeconds: 5
++  template:
++    metadata:
++      labels:
++        app: {{ template "docker-registry.name" . }}
++        release: {{ .Release.Name }}
++        {{- with .Values.podLabels }}
++        {{ toYaml . | nindent 8 }}
++        {{- end }}
++      annotations:
++        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
++        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
++        {{- if .Values.podAnnotations }}
++        {{ toYaml .Values.podAnnotations | nindent 8 }}
++        {{- end }}
++    spec:
++      {{- if or (eq .Values.serviceAccount.create true) (ne .Values.serviceAccount.name "") }}
++      serviceAccountName: {{ .Values.serviceAccount.name | default (include "docker-registry.fullname" .) }}
++      {{- end }}
++      {{- if .Values.imagePullSecrets }}
++      imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 8 }}
++      {{- end }}
++      {{- if .Values.priorityClassName }}
++      priorityClassName: "{{ .Values.priorityClassName }}"
++      {{- end }}
++      {{- if .Values.securityContext.enabled }}
++      securityContext:
++        fsGroup: {{ .Values.securityContext.fsGroup }}
++        runAsUser: {{ .Values.securityContext.runAsUser }}
++      {{- end }}
++      {{- with .Values.initContainers }}
++      initContainers:
++        {{- toYaml . | nindent 8 }}
++      {{- end }}
++      containers:
++        - name: {{ .Chart.Name }}
++          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
++          imagePullPolicy: {{ .Values.image.pullPolicy }}
++          command:
++          - /bin/registry
++          - serve
++          - /etc/docker/registry/config.yml
++          ports:
++            - containerPort: 5000
++            {{- if .Values.metrics.enabled }}
++            - containerPort: {{ (split ":" .Values.configData.http.debug.addr)._1 }}
++              name: http-metrics
++              protocol: TCP
++            {{- end }}
++          livenessProbe:
++            httpGet:
++              {{- if .Values.tlsSecretName }}
++              scheme: HTTPS
++              {{- end }}
++              path: /
++              port: 5000
++          readinessProbe:
++            httpGet:
++              {{- if .Values.tlsSecretName }}
++              scheme: HTTPS
++              {{- end }}
++              path: /
++              port: 5000
++          resources: {{ toYaml .Values.resources | nindent 12 }}
++          env: {{ include "docker-registry.envs" . | nindent 12 }}
++          volumeMounts: {{ include "docker-registry.volumeMounts" . | nindent 12 }}
++      {{- if .Values.nodeSelector }}
++      nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
++      {{- end }}
++      {{- if .Values.affinity }}
++      affinity: {{ toYaml .Values.affinity | nindent 8 }}
++      {{- end }}
++      {{- if .Values.tolerations }}
++      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
++      {{- end }}
++      volumes: {{ include "docker-registry.volumes" . | nindent 8 }}
++  {{- if .Values.persistence.enabled}}
++  volumeClaimTemplates:
++  - metadata:
++      # This should match the name defined in the file _helpers.tpl when the 
++      # condition (if eq .Values.storage "filesystem") is met.
++      name: data
++      namespace: {{ .Values.namespace | default .Release.Namespace }}
++      labels:
++        app: {{ template "docker-registry.fullname" . }}
++        chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
++        release: "{{ .Release.Name }}"
++        heritage: "{{ .Release.Service }}"
++    spec:
++      accessModes:
++        - {{ .Values.persistence.accessMode | quote }}
++      storageClassName: {{ .Values.persistence.storageClass }}
++      resources:
++        requests:
++          storage: {{ .Values.persistence.size }}
++      {{- with .Values.persistence.selectorLabels }}
++      selector:
++        matchLabels:
++          {{- toYaml . | nindent 10 }}
++      {{- end }}
++  {{- end }}
++{{- end }}
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index ef8f0414..034e1c40 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -71,6 +71,8 @@ persistence:
+   enabled: false
+   size: 10Gi
+   # storageClass: '-'
++  ## Name of an existing PVC. Can be templated.
++  # existingClaim:
+ 
+ # set the type of filesystem to use: filesystem, s3
+ storage: filesystem
+@@ -258,3 +260,6 @@ garbageCollect:
+   # requests:
+   #   cpu: 100m
+   #   memory: 128Mi
++
++# Use StatefulSet instead of Deployment. Default uses Deployment.
++useStatefulSet: false
+-- 
+2.47.1
+

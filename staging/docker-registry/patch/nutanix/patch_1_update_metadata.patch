@@ -1,0 +1,53 @@
+From c086cfd76c895dc9917b6170b0906f388b12c10b Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Wed, 30 Apr 2025 14:20:08 -0700
+Subject: [PATCH] chore: apply patch_1_update_metadata.patch
+
+---
+ staging/docker-registry/Chart.yaml | 10 +++++-----
+ staging/docker-registry/README.md  |  4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/staging/docker-registry/Chart.yaml b/staging/docker-registry/Chart.yaml
+index c0355720..e5ebdb9c 100644
+--- a/staging/docker-registry/Chart.yaml
++++ b/staging/docker-registry/Chart.yaml
+@@ -4,10 +4,10 @@ name: docker-registry
+ version: 2.3.0
+ appVersion: 2.8.1
+ home: https://hub.docker.com/_/registry/
+-icon: https://helm.twun.io/docker-registry.png
++icon: https://raw.githubusercontent.com/distribution/distribution/refs/heads/main/distribution-logo.svg
+ maintainers:
+-- email: devin@canterberry.cc
+-  name: Devin Canterberry
+-  url: https://canterberry.cc/
++  - email: dimitri.koshkin@nutanix.com
++    name: dkoshkin
+ sources:
+-- https://github.com/docker/distribution-library-image
++  - https://github.com/docker/distribution-library-image
++  - https://github.com/twuni/docker-registry.helm
+diff --git a/staging/docker-registry/README.md b/staging/docker-registry/README.md
+index 622ec9fa..f3a31c92 100644
+--- a/staging/docker-registry/README.md
++++ b/staging/docker-registry/README.md
+@@ -17,13 +17,13 @@ This chart will do the following:
+ First, add the repo:
+ 
+ ```console
+-helm repo add twuni https://helm.twun.io
++helm repo add mesosphere-staging https://mesosphere.github.io/charts/staging
+ ```
+ 
+ To install the chart, use the following:
+ 
+ ```console
+-helm install twuni/docker-registry
++helm install docker-registry
+ ```
+ 
+ ## Configuration
+-- 
+2.47.1
+

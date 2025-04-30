@@ -1,0 +1,203 @@
+From 26ee45ae522859afbfe962ed592139df049bd236 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Wed, 30 Apr 2025 14:07:45 -0700
+Subject: [PATCH] chore: apply patch_3_sync_data_across_instances.patch
+
+---
+ .../docker-registry/templates/_helpers.tpl    | 47 ++++++++++++++++++-
+ .../templates/configmap-syncer.yaml           | 15 ++++++
+ .../docker-registry/templates/deployment.yaml |  2 +-
+ staging/docker-registry/templates/pvc.yaml    |  2 +-
+ .../templates/service-headless.yaml           |  2 +-
+ .../templates/statefulset.yaml                | 13 ++++-
+ staging/docker-registry/values.yaml           | 17 ++++++-
+ 7 files changed, 91 insertions(+), 7 deletions(-)
+ create mode 100644 staging/docker-registry/templates/configmap-syncer.yaml
+
+diff --git a/staging/docker-registry/templates/_helpers.tpl b/staging/docker-registry/templates/_helpers.tpl
+index a9125757..f0b7bb30 100644
+--- a/staging/docker-registry/templates/_helpers.tpl
++++ b/staging/docker-registry/templates/_helpers.tpl
+@@ -27,6 +27,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+ {{- printf "%s-headless" (include "docker-registry.fullname" .) -}}
+ {{- end -}}
+ 
++{{- define "docker-registry.syncer.config.name" -}}
++{{- printf "%s-syncer-config" (include "docker-registry.fullname" .) -}}
++{{- end -}}
++
+ {{- define "docker-registry.envs" -}}
+ - name: REGISTRY_HTTP_SECRET
+   valueFrom:
+@@ -177,6 +181,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+ 
+ {{- end -}}
+ 
++{{- define "docker-registry.syncer.volumeMounts" -}}
++- name: "{{ template "docker-registry.syncer.config.name" . }}"
++  mountPath: "/config/"
++{{- end -}}
++
+ {{- define "docker-registry.volumes" -}}
+ - name: {{ template "docker-registry.fullname" . }}-config
+   configMap:
+@@ -191,7 +200,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+       path: htpasswd
+ {{- end }}
+ 
+-{{- if (and (eq .Values.storage "filesystem") (not .Values.useStatefulSet)) }}
++{{- if (and (eq .Values.storage "filesystem") (not .Values.statefulSet.enabled)) }}
+ - name: data
+   {{- if .Values.persistence.enabled }}
+   persistentVolumeClaim:
+@@ -207,7 +216,43 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+     secretName: {{ .Values.tlsSecretName }}
+ {{- end }}
+ 
++{{- if .Values.statefulSet.syncer.enabled }}
++- name: {{ template "docker-registry.syncer.config.name" . }}
++  configMap:
++    name: {{ template "docker-registry.syncer.config.name" . }}
++{{- end }}
++
+ {{- with .Values.extraVolumes }}
+ {{ toYaml . }}
+ {{- end }}
+ {{- end -}}
++
++{{- define "docker-registry.syncer.config.data" -}}
++defaults:
++  ratelimit:
++    min: 100
++    retry: 15m
++  parallel: 10
++creds:
++{{- $root := . }}
++{{- $name := (include "docker-registry.fullname" $root) }}
++{{- $service := (include "docker-registry.headless-service.name" $root) }}
++{{- $ns := $root.Release.Namespace }}
++{{- if not $root.Values.tlsSecretName }}
++  - registry: 0.0.0.0:5000
++    tls: disabled
++{{- $replicas := $root.Values.replicaCount }}
++{{- range $i := until (int $replicas) }}
++  - registry: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
++    tls: disabled
++{{- end }}
++{{- end }}
++sync:
++{{- $replicas := $root.Values.replicaCount }}
++{{- range $i := until (int $replicas) }}
++  - source: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
++    target: 0.0.0.0:5000
++    type: registry
++    interval: {{ $root.Values.statefulSet.syncer.interval }}
++{{- end }}
++{{- end }}
+diff --git a/staging/docker-registry/templates/configmap-syncer.yaml b/staging/docker-registry/templates/configmap-syncer.yaml
+new file mode 100644
+index 00000000..0715f99d
+--- /dev/null
++++ b/staging/docker-registry/templates/configmap-syncer.yaml
+@@ -0,0 +1,15 @@
++{{- if .Values.statefulSet.syncer.enabled -}}
++apiVersion: v1
++kind: ConfigMap
++metadata:
++  name: {{ template "docker-registry.syncer.config.name" . }}
++  namespace: {{ .Values.namespace | default .Release.Namespace }}
++  labels:
++    app: {{ template "docker-registry.name" . }}
++    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
++    heritage: {{ .Release.Service }}
++    release: {{ .Release.Name }}
++data:
++  config.yml: |-
++{{ include "docker-registry.syncer.config.data" . | indent 4 }}
++{{- end }}
+diff --git a/staging/docker-registry/templates/deployment.yaml b/staging/docker-registry/templates/deployment.yaml
+index f8d5f2ba..13c9d147 100644
+--- a/staging/docker-registry/templates/deployment.yaml
++++ b/staging/docker-registry/templates/deployment.yaml
+@@ -1,4 +1,4 @@
+-{{- if not .Values.useStatefulSet }}
++{{- if not .Values.statefulSet.enabled }}
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+diff --git a/staging/docker-registry/templates/pvc.yaml b/staging/docker-registry/templates/pvc.yaml
+index 78e0fcc8..e245fbbe 100644
+--- a/staging/docker-registry/templates/pvc.yaml
++++ b/staging/docker-registry/templates/pvc.yaml
+@@ -1,4 +1,4 @@
+-{{- if not .Values.useStatefulSet }}
++{{- if not .Values.statefulSet.enabled }}
+ {{- if .Values.persistence.enabled }}
+ {{- if not .Values.persistence.existingClaim -}}
+ kind: PersistentVolumeClaim
+diff --git a/staging/docker-registry/templates/service-headless.yaml b/staging/docker-registry/templates/service-headless.yaml
+index 09e20186..221defe8 100644
+--- a/staging/docker-registry/templates/service-headless.yaml
++++ b/staging/docker-registry/templates/service-headless.yaml
+@@ -1,4 +1,4 @@
+-{{- if .Values.useStatefulSet }}
++{{- if .Values.statefulSet.enabled }}
+ apiVersion: v1
+ kind: Service
+ metadata:
+diff --git a/staging/docker-registry/templates/statefulset.yaml b/staging/docker-registry/templates/statefulset.yaml
+index 68e05f3f..95b46bc3 100644
+--- a/staging/docker-registry/templates/statefulset.yaml
++++ b/staging/docker-registry/templates/statefulset.yaml
+@@ -1,4 +1,4 @@
+-{{- if .Values.useStatefulSet }}
++{{- if .Values.statefulSet.enabled }}
+ apiVersion: apps/v1
+ kind: StatefulSet
+ metadata:
+@@ -85,6 +85,17 @@ spec:
+           resources: {{ toYaml .Values.resources | nindent 12 }}
+           env: {{ include "docker-registry.envs" . | nindent 12 }}
+           volumeMounts: {{ include "docker-registry.volumeMounts" . | nindent 12 }}
++        {{- if .Values.statefulSet.syncer.enabled}}
++        - name: {{ .Chart.Name }}-syncer
++          image: "{{ .Values.statefulSet.syncer.image.repository }}:{{ .Values.statefulSet.syncer.image.tag }}"
++          imagePullPolicy: {{ .Values.statefulSet.syncer.image.pullPolicy }}
++          args:
++          - -c
++          - /config/config.yml
++          - server
++          resources: {{ toYaml .Values.statefulSet.syncer.resources | nindent 12 }}
++          volumeMounts: {{ include "docker-registry.syncer.volumeMounts" . | nindent 12 }}
++        {{- end }}
+       {{- if .Values.nodeSelector }}
+       nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+       {{- end }}
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index 034e1c40..5c236da9 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -261,5 +261,18 @@ garbageCollect:
+   #   cpu: 100m
+   #   memory: 128Mi
+ 
+-# Use StatefulSet instead of Deployment. Default uses Deployment.
+-useStatefulSet: false
++statefulSet:
++  # Use StatefulSet instead of Deployment. Default uses Deployment.
++  enabled: false
++
++  # Sync registry data between multiple registry instances.
++  # When enabled, a sidecar container will run in every instance of the StatefulSet to sync the data.
++  syncer:
++    enabled: true
++    image:
++      repository: regclient/regsync
++      tag: latest
++      pullPolicy: IfNotPresent
++    resources: {}
++    # The frequency of syncing the data between the registry instances.
++    interval: 5m
+-- 
+2.47.1
+
