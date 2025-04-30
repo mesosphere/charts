@@ -1,0 +1,82 @@
+{{- if .Values.garbageCollect.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "docker-registry.fullname" . }}-garbage-collector
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ template "docker-registry.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.garbageCollect.schedule | quote }}
+  jobTemplate:
+    metadata:
+      labels:
+        app: {{ template "docker-registry.name" . }}
+        release: {{ .Release.Name }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      template:
+        metadata:
+          labels:
+            release: {{ .Release.Name }}
+            {{- if or .Values.podLabels .Values.garbageCollect.podLabels }}
+            {{- toYaml (merge (.Values.garbageCollect.podLabels | default (dict)) (.Values.podLabels | default (dict))) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.podAnnotations .Values.garbageCollect.podAnnotations }}
+          annotations:
+            {{- toYaml (merge (.Values.garbageCollect.podAnnotations | default (dict)) (.Values.podAnnotations | default (dict))) | nindent 12 }}
+          {{- end}}
+        spec:
+          {{- if or (eq .Values.serviceAccount.create true) (ne .Values.serviceAccount.name "") }}
+          serviceAccountName: {{ .Values.serviceAccount.name | default (include "docker-registry.fullname" .) }}
+          {{- end }}
+          {{- if .Values.imagePullSecrets }}
+          imagePullSecrets: {{ toYaml .Values.imagePullSecrets | nindent 12 }}
+          {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: "{{ .Values.priorityClassName }}"
+          {{- end }}
+          {{- if .Values.securityContext.enabled }}
+          securityContext: {{ omit .Values.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+              - /bin/registry
+              - garbage-collect
+              - --delete-untagged={{ .Values.garbageCollect.deleteUntagged }}
+              - /etc/docker/registry/config.yml
+              {{- if .Values.garbageCollect.resources }}
+              resources:
+              {{- toYaml .Values.garbageCollect.resources | nindent 16 }}
+              {{- end }}
+              env: {{ include "docker-registry.envs" . | nindent 16 }}
+              {{- if .Values.containerSecurityContext.enabled }}
+              securityContext: {{ omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              volumeMounts: {{ include "docker-registry.volumeMounts" . | nindent 16 }}
+          restartPolicy: OnFailure
+          {{- if .Values.nodeSelector }}
+          nodeSelector: {{ toYaml .Values.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if .Values.affinity }}
+          affinity: {{ toYaml .Values.affinity | nindent 12 }}
+          {{- end }}
+          {{- if .Values.tolerations }}
+          tolerations: {{ toYaml .Values.tolerations | nindent 12 }}
+          {{- end }}
+          volumes: {{ include "docker-registry.volumes" . | nindent 12 }}
+{{- end }}
