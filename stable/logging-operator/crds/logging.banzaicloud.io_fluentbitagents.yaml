@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.2
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: fluentbitagents.logging.banzaicloud.io
 spec:
   group: logging.banzaicloud.io
@@ -1272,6 +1272,26 @@ spec:
                     type: boolean
                   vpc_id:
                     type: boolean
+                type: object
+              filterGrep:
+                properties:
+                  Exclude:
+                    items:
+                      type: string
+                    type: array
+                  LogicalOp:
+                    default: legacy
+                    enum:
+                    - legacy
+                    - AND
+                    - OR
+                    type: string
+                  Match:
+                    type: string
+                  Regex:
+                    items:
+                      type: string
+                    type: array
                 type: object
               filterKubernetes:
                 properties:

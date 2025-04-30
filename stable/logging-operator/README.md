@@ -20,7 +20,7 @@ helm install --generate-name --wait oci://ghcr.io/kube-logging/helm-charts/loggi
 
 ## Introduction
 
-This chart bootstraps a [Logging Operator](https://github.com/kube-logging/logging-operator) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Logging operator](https://github.com/kube-logging/logging-operator) deployment on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 ## Prerequisites
 
@@ -47,7 +47,7 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | fullnameOverride | string | `""` | A name to substitute for the full names of resources. |
 | namespaceOverride | string | `""` | A namespace override for the app. |
 | annotations | object | `{}` | Define annotations for logging-operator pods. |
-| createCustomResource | bool | `false` | Deploy CRDs used by Logging Operator. |
+| createCustomResource | bool | `false` | Deploy CRDs used by Logging operator. |
 | logging-operator-crds.install | bool | `false` | Toggle to install and upgrade CRDs from a subchart. Make sure to use it with `--skip-crds` to avoid conflicts. [More info about limitations on CRDs in Helm 3](https://helm.sh/docs/topics/charts/#limitations-on-crds) |
 | logging-operator-crds.annotations | object | `{}` | Annotations to be added to all CRDs |
 | telemetry-controller.install | bool | `false` | Toggle to install and upgrade Telemetry Controller from a subchart. |
@@ -55,6 +55,9 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | http.service | object | `{"annotations":{},"clusterIP":"None","labels":{},"type":"ClusterIP"}` | Service definition for query http service. |
 | rbac.enabled | bool | `true` | Create rbac service account and roles. |
 | rbac.retainOnDelete | bool | `false` | Keep the operators RBAC resources after the operator is deleted to allow removing pending finalizers. |
+| rbac.createAggregatedViewClusterRole | bool | `false` | Create ClusterRole that extend the existing view ClusterRole to interact with logging-operator CRDs # Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles |
+| rbac.createAggregatedEditClusterRole | bool | `true` | Create ClusterRole that extend the existing edit ClusterRole to interact with logging-operator CRDs # Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles |
+| rbac.createAggregatedAdminClusterRole | bool | `true` | Create ClusterRole that extend the existing admin ClusterRole to interact with logging-operator CRDs # Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles |
 | monitoring.serviceMonitor.enabled | bool | `false` | Create a Prometheus Operator ServiceMonitor object. |
 | monitoring.serviceMonitor.additionalLabels | object | `{}` |  |
 | monitoring.serviceMonitor.metricRelabelings | list | `[]` |  |
@@ -88,7 +91,7 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | logging.clusterDomain | string | `"cluster.local."` | Cluster domain name to be used when templating URLs to services |
 | logging.controlNamespace | string | `""` | Namespace for cluster wide configuration resources like ClusterFlow and ClusterOutput. This should be a protected namespace from regular users. Resources like fluentbit and fluentd will run in this namespace as well. |
 | logging.allowClusterResourcesFromAllNamespaces | bool | `false` | Allow configuration of cluster resources from any namespace. Mutually exclusive with ControlNamespace restriction of Cluster resources |
-| logging.nodeAgents | object | `{}` | NodeAgent Configuration |
+| logging.nodeAgents | list | `[]` | NodeAgent Configuration DEPRECATED: This field will be removed in a future release. |
 | logging.configCheck | object | `{}` | configCheck provides possibility for timeout-based configuration checks https://kube-logging.dev/docs/whats-new/#timeout-based-configuration-checks |
 | logging.enableRecreateWorkloadOnImmutableFieldChange | bool | `false` | EnableRecreateWorkloadOnImmutableFieldChange enables the operator to recreate the fluentbit daemonset and the fluentd statefulset (and possibly other resource in the future) in case there is a change in an immutable field that otherwise couldn’t be managed with a simple update. |
 | logging.enableDockerParserCompatibilityForCRI | bool | `false` | EnableDockerParserCompatibilityForCRI enables Docker log format compatibility for CRI workloads. |

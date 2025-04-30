@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.2
+    controller-gen.kubebuilder.io/version: v0.17.3
   name: syslogngclusteroutputs.logging.banzaicloud.io
 spec:
   group: logging.banzaicloud.io
@@ -70,7 +70,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -354,7 +354,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -622,7 +622,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -671,7 +671,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -933,7 +933,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -1203,7 +1203,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -1444,7 +1444,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -1464,6 +1464,8 @@ spec:
                   retries:
                     type: integer
                   template:
+                    type: string
+                  tenant-id:
                     type: string
                   time_reopen:
                     type: integer
@@ -1511,7 +1513,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -1629,7 +1631,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2035,7 +2037,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2122,7 +2124,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2212,7 +2214,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2326,7 +2328,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2690,7 +2692,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -2930,7 +2932,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
@@ -3133,7 +3135,7 @@ spec:
                       mem_buf_size:
                         format: int64
                         type: integer
-                      q_out_size:
+                      qout_size:
                         format: int64
                         type: integer
                       reliable:
