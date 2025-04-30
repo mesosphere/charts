@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.2
+    controller-gen.kubebuilder.io/version: v0.17.3
 {{- with .Values.annotations }}
 {{- toYaml . | nindent 4 }}
 {{- end }}
@@ -359,6 +359,8 @@ spec:
                                   type: string
                                 format_firstline:
                                   type: string
+                                format_key:
+                                  type: string
                                 grok_failure_key:
                                   type: string
                                 grok_name_key:
@@ -447,6 +449,8 @@ spec:
                                       expression:
                                         type: string
                                       format:
+                                        type: string
+                                      format_name:
                                         type: string
                                       grok_failure_key:
                                         type: string
@@ -566,6 +570,8 @@ spec:
                                     type: string
                                   format_firstline:
                                     type: string
+                                  format_key:
+                                    type: string
                                   grok_failure_key:
                                     type: string
                                   grok_name_key:
@@ -654,6 +660,8 @@ spec:
                                         expression:
                                           type: string
                                         format:
+                                          type: string
+                                        format_name:
                                           type: string
                                         grok_failure_key:
                                           type: string
@@ -2123,6 +2131,26 @@ spec:
                         type: boolean
                       vpc_id:
                         type: boolean
+                    type: object
+                  filterGrep:
+                    properties:
+                      Exclude:
+                        items:
+                          type: string
+                        type: array
+                      LogicalOp:
+                        default: legacy
+                        enum:
+                        - legacy
+                        - AND
+                        - OR
+                        type: string
+                      Match:
+                        type: string
+                      Regex:
+                        items:
+                          type: string
+                        type: array
                     type: object
                   filterKubernetes:
                     properties:
@@ -6440,6 +6468,8 @@ spec:
                                   - port
                                   type: object
                               type: object
+                            stopSignal:
+                              type: string
                           type: object
                         livenessProbe:
                           properties:
@@ -7262,6 +7292,8 @@ spec:
                               type: string
                             format_firstline:
                               type: string
+                            format_key:
+                              type: string
                             grok_failure_key:
                               type: string
                             grok_name_key:
@@ -7350,6 +7382,8 @@ spec:
                                   expression:
                                     type: string
                                   format:
+                                    type: string
+                                  format_name:
                                     type: string
                                   grok_failure_key:
                                     type: string
@@ -7469,6 +7503,8 @@ spec:
                                 type: string
                               format_firstline:
                                 type: string
+                              format_key:
+                                type: string
                               grok_failure_key:
                                 type: string
                               grok_name_key:
@@ -7557,6 +7593,8 @@ spec:
                                     expression:
                                       type: string
                                     format:
+                                      type: string
+                                    format_name:
                                       type: string
                                     grok_failure_key:
                                       type: string
@@ -8735,6 +8773,8 @@ spec:
                                                         - port
                                                         type: object
                                                     type: object
+                                                  stopSignal:
+                                                    type: string
                                                 type: object
                                               livenessProbe:
                                                 properties:
@@ -9442,6 +9482,8 @@ spec:
                                                         - port
                                                         type: object
                                                     type: object
+                                                  stopSignal:
+                                                    type: string
                                                 type: object
                                               livenessProbe:
                                                 properties:
@@ -10155,6 +10197,8 @@ spec:
                                                         - port
                                                         type: object
                                                     type: object
+                                                  stopSignal:
+                                                    type: string
                                                 type: object
                                               livenessProbe:
                                                 properties:
@@ -13803,6 +13847,8 @@ spec:
                                       - port
                                       type: object
                                   type: object
+                                stopSignal:
+                                  type: string
                               type: object
                             livenessProbe:
                               properties:
@@ -14510,6 +14556,8 @@ spec:
                                       - port
                                       type: object
                                   type: object
+                                stopSignal:
+                                  type: string
                               type: object
                             livenessProbe:
                               properties:
@@ -15223,6 +15271,8 @@ spec:
                                       - port
                                       type: object
                                   type: object
+                                stopSignal:
+                                  type: string
                               type: object
                             livenessProbe:
                               properties:
@@ -17992,6 +18042,8 @@ spec:
                                                   - port
                                                   type: object
                                               type: object
+                                            stopSignal:
+                                              type: string
                                           type: object
                                         livenessProbe:
                                           properties:
@@ -18699,6 +18751,8 @@ spec:
                                                   - port
                                                   type: object
                                               type: object
+                                            stopSignal:
+                                              type: string
                                           type: object
                                         livenessProbe:
                                           properties:
@@ -19412,6 +19466,8 @@ spec:
                                                   - port
                                                   type: object
                                               type: object
+                                            stopSignal:
+                                              type: string
                                           type: object
                                         livenessProbe:
                                           properties:
