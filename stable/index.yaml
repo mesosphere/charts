@@ -37795,6 +37795,36 @@ entries:
     version: 0.1.0
   logging-operator:
   - apiVersion: v2
+    appVersion: 5.3.0
+    created: "2025-04-30T07:24:10.436851145Z"
+    dependencies:
+    - condition: logging-operator-crds.install
+      name: logging-operator-crds
+      repository: ""
+      version: 0.0.0
+    - condition: telemetry-controller.install
+      name: telemetry-controller
+      repository: oci://ghcr.io/kube-logging/helm-charts
+      version: '>=0.0.10'
+    description: Logging operator for Kubernetes based on Fluentd and Fluentbit.
+    digest: e586cdc2b39bff568447084d4c655a4a12b7b2d33a99881f3a4b79a79ea159ee
+    home: https://kube-logging.github.io
+    keywords:
+    - logging
+    - fluentd
+    - fluentbit
+    kubeVersion: '>=1.22.0-0'
+    maintainers:
+    - name: mhrabovcin
+    name: logging-operator
+    sources:
+    - https://github.com/kube-logging/logging-operator
+    - https://github.com/kube-logging/helm-charts/tree/main/charts/logging-operator
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/logging-operator-5.3.0.tgz
+    version: 5.3.0
+  - apiVersion: v2
     appVersion: 5.2.0
     created: "2025-03-12T14:47:07.005337622Z"
     dependencies:
@@ -42432,4 +42462,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-04-16T11:30:30.664993678Z"
+generated: "2025-04-30T07:24:10.408422543Z"
