@@ -261,5 +261,18 @@ garbageCollect:
   #   cpu: 100m
   #   memory: 128Mi
 
-# Use StatefulSet instead of Deployment. Default uses Deployment.
-useStatefulSet: false
+statefulSet:
+  # Use StatefulSet instead of Deployment. Default uses Deployment.
+  enabled: false
+
+  # Sync registry data between multiple registry instances.
+  # When enabled, a sidecar container will run in every instance of the StatefulSet to sync the data.
+  syncer:
+    enabled: true
+    image:
+      repository: regclient/regsync
+      tag: latest
+      pullPolicy: IfNotPresent
+    resources: {}
+    # The frequency of syncing the data between the registry instances.
+    interval: 5m

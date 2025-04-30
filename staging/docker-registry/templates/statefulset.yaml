@@ -1,4 +1,4 @@
-{{- if .Values.useStatefulSet }}
+{{- if .Values.statefulSet.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -85,6 +85,17 @@ spec:
           resources: {{ toYaml .Values.resources | nindent 12 }}
           env: {{ include "docker-registry.envs" . | nindent 12 }}
           volumeMounts: {{ include "docker-registry.volumeMounts" . | nindent 12 }}
+        {{- if .Values.statefulSet.syncer.enabled}}
+        - name: {{ .Chart.Name }}-syncer
+          image: "{{ .Values.statefulSet.syncer.image.repository }}:{{ .Values.statefulSet.syncer.image.tag }}"
+          imagePullPolicy: {{ .Values.statefulSet.syncer.image.pullPolicy }}
+          args:
+          - -c
+          - /config/config.yml
+          - server
+          resources: {{ toYaml .Values.statefulSet.syncer.resources | nindent 12 }}
+          volumeMounts: {{ include "docker-registry.syncer.volumeMounts" . | nindent 12 }}
+        {{- end }}
       {{- if .Values.nodeSelector }}
       nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}

@@ -1,4 +1,4 @@
-{{- if not .Values.useStatefulSet }}
+{{- if not .Values.statefulSet.enabled }}
 {{- if .Values.persistence.enabled }}
 {{- if not .Values.persistence.existingClaim -}}
 kind: PersistentVolumeClaim

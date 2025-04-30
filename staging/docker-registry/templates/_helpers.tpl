@@ -27,6 +27,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- printf "%s-headless" (include "docker-registry.fullname" .) -}}
 {{- end -}}
 
+{{- define "docker-registry.syncer.config.name" -}}
+{{- printf "%s-syncer-config" (include "docker-registry.fullname" .) -}}
+{{- end -}}
+
 {{- define "docker-registry.envs" -}}
 - name: REGISTRY_HTTP_SECRET
   valueFrom:
@@ -177,6 +181,11 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 
 {{- end -}}
 
+{{- define "docker-registry.syncer.volumeMounts" -}}
+- name: "{{ template "docker-registry.syncer.config.name" . }}"
+  mountPath: "/config/"
+{{- end -}}
+
 {{- define "docker-registry.volumes" -}}
 - name: {{ template "docker-registry.fullname" . }}-config
   configMap:
@@ -191,7 +200,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
       path: htpasswd
 {{- end }}
 
-{{- if (and (eq .Values.storage "filesystem") (not .Values.useStatefulSet)) }}
+{{- if (and (eq .Values.storage "filesystem") (not .Values.statefulSet.enabled)) }}
 - name: data
   {{- if .Values.persistence.enabled }}
   persistentVolumeClaim:
@@ -207,7 +216,43 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
     secretName: {{ .Values.tlsSecretName }}
 {{- end }}
 
+{{- if .Values.statefulSet.syncer.enabled }}
+- name: {{ template "docker-registry.syncer.config.name" . }}
+  configMap:
+    name: {{ template "docker-registry.syncer.config.name" . }}
+{{- end }}
+
 {{- with .Values.extraVolumes }}
 {{ toYaml . }}
 {{- end }}
 {{- end -}}
+
+{{- define "docker-registry.syncer.config.data" -}}
+defaults:
+  ratelimit:
+    min: 100
+    retry: 15m
+  parallel: 10
+creds:
+{{- $root := . }}
+{{- $name := (include "docker-registry.fullname" $root) }}
+{{- $service := (include "docker-registry.headless-service.name" $root) }}
+{{- $ns := $root.Release.Namespace }}
+{{- if not $root.Values.tlsSecretName }}
+  - registry: 0.0.0.0:5000
+    tls: disabled
+{{- $replicas := $root.Values.replicaCount }}
+{{- range $i := until (int $replicas) }}
+  - registry: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
+    tls: disabled
+{{- end }}
+{{- end }}
+sync:
+{{- $replicas := $root.Values.replicaCount }}
+{{- range $i := until (int $replicas) }}
+  - source: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
+    target: 0.0.0.0:5000
+    type: registry
+    interval: {{ $root.Values.statefulSet.syncer.interval }}
+{{- end }}
+{{- end }}

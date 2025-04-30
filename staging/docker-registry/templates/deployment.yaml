@@ -1,4 +1,4 @@
-{{- if not .Values.useStatefulSet }}
+{{- if not .Values.statefulSet.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

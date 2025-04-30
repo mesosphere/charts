@@ -1,4 +1,4 @@
-{{- if .Values.useStatefulSet }}
+{{- if .Values.statefulSet.enabled }}
 apiVersion: v1
 kind: Service
 metadata:

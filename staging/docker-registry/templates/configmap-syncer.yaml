@@ -1,0 +1,15 @@
+{{- if .Values.statefulSet.syncer.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "docker-registry.syncer.config.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ template "docker-registry.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  config.yml: |-
+{{ include "docker-registry.syncer.config.data" . | indent 4 }}
+{{- end }}
