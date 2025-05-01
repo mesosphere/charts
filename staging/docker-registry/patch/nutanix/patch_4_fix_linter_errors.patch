@@ -1,0 +1,29 @@
+From 99c82fbaffa2dc458b51ad66c6f3b0837f1a0144 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Wed, 30 Apr 2025 15:28:01 -0700
+Subject: [PATCH] chore: apply patch_4_fix_linter_errors.patch
+
+---
+ staging/docker-registry/values.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index 5c236da9..40c802aa 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -191,8 +191,10 @@ autoscaling:
+   minReplicas: 1
+   maxReplicas: 2
+   targetCPUUtilizationPercentage: 60
+-  targetMemoryUtilizationPercentage: 60 # available only on Kubernetes ≥1.23 [required "autoscaling/v2"]
+-  behavior: {} # available only on Kubernetes ≥1.23 [required "autoscaling/v2"]
++  # available only on Kubernetes ≥1.23 [required "autoscaling/v2"]
++  targetMemoryUtilizationPercentage: 60
++  # available only on Kubernetes ≥1.23 [required "autoscaling/v2"]
++  behavior: {}
+ #   scaleDown:
+ #     stabilizationWindowSeconds: 300
+ #     policies:
+-- 
+2.47.1
+
