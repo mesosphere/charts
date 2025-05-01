@@ -1328,6 +1328,24 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/dispatch-0.3.0.tgz
     version: 0.3.0
+  docker-registry:
+  - apiVersion: v1
+    appVersion: 2.8.1
+    created: "2025-05-01T23:13:39.348381528Z"
+    description: A Helm chart for Docker Registry
+    digest: ddb64e8e3f955a59e4e04ff6688199847d88b8674e5da100654fc0204ed70b27
+    home: https://hub.docker.com/_/registry/
+    icon: https://raw.githubusercontent.com/distribution/distribution/refs/heads/main/distribution-logo.svg
+    maintainers:
+    - email: dimitri.koshkin@nutanix.com
+      name: dkoshkin
+    name: docker-registry
+    sources:
+    - https://github.com/docker/distribution-library-image
+    - https://github.com/twuni/docker-registry.helm
+    urls:
+    - https://mesosphere.github.io/charts/staging/docker-registry-2.3.0.tgz
+    version: 2.3.0
   flagger:
   - apiVersion: v1
     appVersion: 0.19.0
@@ -14291,4 +14309,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-04-29T12:09:20.385243092Z"
+generated: "2025-05-01T23:13:39.347100369Z"
