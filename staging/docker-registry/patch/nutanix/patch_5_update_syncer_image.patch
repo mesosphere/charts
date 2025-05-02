@@ -1,0 +1,27 @@
+From 045f2d011abf0de516e1be43ae8cec3f5cc99d86 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Fri, 2 May 2025 11:19:28 -0700
+Subject: [PATCH] chore: apply patch_5_update_syncer_image.patch
+
+---
+ staging/docker-registry/values.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index 40c802aa..052f4f8d 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -272,8 +272,8 @@ statefulSet:
+   syncer:
+     enabled: true
+     image:
+-      repository: regclient/regsync
+-      tag: latest
++      repository: docker.io/regclient/regsync
++      tag: v0.8.3
+       pullPolicy: IfNotPresent
+     resources: {}
+     # The frequency of syncing the data between the registry instances.
+-- 
+2.47.1
+

@@ -272,8 +272,8 @@ statefulSet:
   syncer:
     enabled: true
     image:
-      repository: regclient/regsync
-      tag: latest
+      repository: docker.io/regclient/regsync
+      tag: v0.8.3
       pullPolicy: IfNotPresent
     resources: {}
     # The frequency of syncing the data between the registry instances.
