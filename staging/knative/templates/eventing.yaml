@@ -1,0 +1,24 @@
+{{- if .Values.eventing.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.eventing.namespace }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-features
+  namespace: {{ .Values.eventing.namespace }}
+data:
+    # Enable the nodeselector and tolerations for NAI
+    kubernetes.podspec-nodeselector: "enabled"
+    kubernetes.podspec-tolerations: "enabled"
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeEventing
+metadata:
+  name: kommander-nai-knative-eventing
+  namespace: {{ .Values.eventing.namespace }}
+spec:
+  {{- toYaml .Values.eventing.manifest.spec | nindent 2 }}
+{{- end }}
