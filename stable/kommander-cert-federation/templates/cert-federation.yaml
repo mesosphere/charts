@@ -33,7 +33,7 @@ metadata:
 rules:
   - apiGroups: ["types.kubefed.io"]
     resources: ["federatedsecrets"]
-    verbs: ["get", "list", "create", "update", "delete"]
+    verbs: ["get", "list", "create", "update", "delete", "watch"]
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "create", "update", "patch"]
