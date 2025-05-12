@@ -1,5 +1,9 @@
 apiVersion: v2
 name: knative
 version: 1.18.1
-description: "Wrapper chart for Knative Operator that installs Serving and Eventing"
+description: "Wrapper chart for Knative Operator that installs Serving and Eventing using the operator"
 appVersion: "v1.18.1"
+maintainers:
+  - name: lukeogg
+source:
+  -
