@@ -23,7 +23,7 @@ serving:
     spec:
       # The version of Knative Serving to install - you can upgrade one version at a time
       # See https://knative.dev/docs/install/operator/knative-with-operators/#install-knative-serving
-      version: "v1.18.1"
+      version: "v1.18.0"
       config:
         istio:
           external-gateways: |
@@ -38,4 +38,4 @@ eventing:
     spec:
       # The version of Knative Serving to install - you can upgrade one version at a time
       # See https://knative.dev/docs/install/operator/knative-with-operators/#installing-a-specific-version-of-eventing
-      version: "v1.18.1"
+      version: "v1.18.0"
