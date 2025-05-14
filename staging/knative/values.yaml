@@ -15,6 +15,17 @@ knativeIngressGateway:
           protocol: HTTP
         hosts:
           - "*"
+        tls:
+          httpsRedirect: true
+      - port:
+          number: 443
+          name: https
+          protocol: HTTPS
+        hosts:
+          - "*"
+        tls:
+          mode: SIMPLE
+          credentialName: nai-self-signed-cert
 
 serving:
   enabled: true
@@ -23,13 +34,18 @@ serving:
     spec:
       # The version of Knative Serving to install - you can upgrade one version at a time
       # See https://knative.dev/docs/install/operator/knative-with-operators/#install-knative-serving
-      version: "v1.18.0"
+      version: "1.18"
       config:
         istio:
           external-gateways: |
-            - name: knative-local-gateway
+            - name: knative-ingress-gateway
               namespace: knative-serving
               service: istio-ingressgateway.istio-system.svc.cluster.local
+        features:
+          kubernetes.podspec-nodeselector: "enabled"
+          kubernetes.podspec-tolerations: "enabled"
+        autoscaler:
+          enable-scale-to-zero: "false"
 
 eventing:
   enabled: true
@@ -38,4 +54,4 @@ eventing:
     spec:
       # The version of Knative Serving to install - you can upgrade one version at a time
       # See https://knative.dev/docs/install/operator/knative-with-operators/#installing-a-specific-version-of-eventing
-      version: "v1.18.0"
+      version: "1.18"
