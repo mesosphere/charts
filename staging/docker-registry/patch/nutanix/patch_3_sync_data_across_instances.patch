@@ -1,7 +1,7 @@
 From 26ee45ae522859afbfe962ed592139df049bd236 Mon Sep 17 00:00:00 2001
 From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
 Date: Wed, 30 Apr 2025 14:07:45 -0700
-Subject: [PATCH] chore: apply patch_3_sync_data_across_instances.patch
+Subject: [PATCH 1/2] chore: apply patch_3_sync_data_across_instances.patch
 
 ---
  .../docker-registry/templates/_helpers.tpl    | 47 ++++++++++++++++++-
@@ -198,6 +198,54 @@ index 034e1c40..5c236da9 100644
 +    resources: {}
 +    # The frequency of syncing the data between the registry instances.
 +    interval: 5m
+-- 
+2.47.1
+
+
+From fa5063151397f3e9b886585e2459af5adeeeb0bc Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Wed, 14 May 2025 09:16:08 -0700
+Subject: [PATCH 2/2] fix: docker-registry syncer when TLS enabled
+
+---
+ staging/docker-registry/templates/_helpers.tpl | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/staging/docker-registry/templates/_helpers.tpl b/staging/docker-registry/templates/_helpers.tpl
+index f0b7bb30..695a72d0 100644
+--- a/staging/docker-registry/templates/_helpers.tpl
++++ b/staging/docker-registry/templates/_helpers.tpl
+@@ -184,6 +184,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this
+ {{- define "docker-registry.syncer.volumeMounts" -}}
+ - name: "{{ template "docker-registry.syncer.config.name" . }}"
+   mountPath: "/config/"
++{{- if .Values.tlsSecretName }}
++{{- $root := . }}
++{{- $name := (include "docker-registry.fullname" $root) }}
++{{- $service := (include "docker-registry.headless-service.name" $root) }}
++{{- $ns := $root.Release.Namespace }}
++{{- $replicas := $root.Values.replicaCount }}
++{{- range $i := until (int $replicas) }}
++- mountPath: {{ printf "/etc/docker/certs.d/%s-%d.%s.%s.svc.cluster.local:5000/" $name $i $service $ns }}
++  name: tls-cert
++  readOnly: true
++{{- end }}
++- mountPath: "/etc/docker/certs.d/127.0.0.1:5000/"
++  name: tls-cert
++  readOnly: true
++{{- end -}}
+ {{- end -}}
+ 
+ {{- define "docker-registry.volumes" -}}
+@@ -251,7 +266,7 @@ sync:
+ {{- $replicas := $root.Values.replicaCount }}
+ {{- range $i := until (int $replicas) }}
+   - source: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
+-    target: 0.0.0.0:5000
++    target: 127.0.0.1:5000
+     type: registry
+     interval: {{ $root.Values.statefulSet.syncer.interval }}
+ {{- end }}
 -- 
 2.47.1
 
