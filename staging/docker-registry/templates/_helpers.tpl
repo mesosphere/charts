@@ -184,6 +184,21 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- define "docker-registry.syncer.volumeMounts" -}}
 - name: "{{ template "docker-registry.syncer.config.name" . }}"
   mountPath: "/config/"
+{{- if .Values.tlsSecretName }}
+{{- $root := . }}
+{{- $name := (include "docker-registry.fullname" $root) }}
+{{- $service := (include "docker-registry.headless-service.name" $root) }}
+{{- $ns := $root.Release.Namespace }}
+{{- $replicas := $root.Values.replicaCount }}
+{{- range $i := until (int $replicas) }}
+- mountPath: {{ printf "/etc/docker/certs.d/%s-%d.%s.%s.svc.cluster.local:5000/" $name $i $service $ns }}
+  name: tls-cert
+  readOnly: true
+{{- end }}
+- mountPath: "/etc/docker/certs.d/127.0.0.1:5000/"
+  name: tls-cert
+  readOnly: true
+{{- end -}}
 {{- end -}}
 
 {{- define "docker-registry.volumes" -}}
@@ -251,7 +266,7 @@ sync:
 {{- $replicas := $root.Values.replicaCount }}
 {{- range $i := until (int $replicas) }}
   - source: {{ printf "%s-%d.%s.%s.svc.cluster.local:5000" $name $i $service $ns }}
-    target: 0.0.0.0:5000
+    target: 127.0.0.1:5000
     type: registry
     interval: {{ $root.Values.statefulSet.syncer.interval }}
 {{- end }}
