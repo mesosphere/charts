@@ -1,0 +1,14 @@
+{{- if .Values.serving.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.serving.namespace }}
+---
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeServing
+metadata:
+  name: kommander-nai-knative-serving
+  namespace: {{ .Values.serving.namespace }}
+spec:
+  {{- toYaml .Values.serving.manifest.spec | nindent 2 }}
+{{- end }}

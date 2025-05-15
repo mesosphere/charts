@@ -1,19 +1,26 @@
 # Upgrading the Knative fork
 
-There are no upstream Helm charts for Knative. Instead, we pull in the required YAML files ([Serving with HPA](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/) and [Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)) and apply patches to them, and add them to our own Charts.
+With the introduction of the Knative Operator, the upgrade process has been simplified. The operator manages the lifecycle of Knative Serving and Eventing components, eliminating the need for manual patching or custom scripts.
 
 ## Upgrading
 
-To upgrade Knative, first check to see if the version tags are correct, then run:
-```sh
-./upgrade_knative.sh
+To upgrade Knative, follow these steps:
+
+1. Update the \`Chart.yaml\` dependencies to the desired version of the Knative Operator:
+  - Update the \`knative-operator\` dependency version in the \`Chart.yaml\` file.
+
+2. Run the following commands to update the dependencies and upgrade the chart:
+
+```bash
+   $ helm dependency update staging/knative
+   $ helm upgrade knative-release staging/knative
 ```
 
-The upgrade script:
-- Pulls in the yaml files for the latest version of Knative Serving and Eventing
-- Applies the following patches to the yaml files:
-  - Relax PodDisruptionBudget
-  - Several miscellaneous linter related fixes
-  - Replaces sha256 tags with standard image tags for airgapped environments
-- Cleans up and commits the changes
-- Reminds you to go in and manually bump the version in the Chart.yaml files for the base chart and two subcharts
+3. Ensure that the \`values.yaml\` file reflects the desired configuration for the new version of Knative Serving and Eventing.
+
+The Knative Operator will handle the deployment and upgrade of the Serving and Eventing components based on the configuration provided in the \`values.yaml\` file.
+
+### Notes
+
+- If there are custom patches or modifications previously applied using the \`./upgrade_knative.sh\` script, ensure that these changes are incorporated into the \`values.yaml\` file or the Helm chart templates.
+- The `./upgrade_knative.sh` script is no longer required and can be deprecated.
