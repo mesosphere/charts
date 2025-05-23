@@ -2,7 +2,6 @@ knativeOperator:
   enabled: true
   priorityClassName: ""
   # Add any specific values for the Knative Operator chart here
-
 # Overriding this value will allow to provide a custom knative-ingress-gateway configuration
 knativeIngressGateway:
   spec:
@@ -26,7 +25,6 @@ knativeIngressGateway:
         tls:
           mode: SIMPLE
           credentialName: nai-self-signed-cert
-
 serving:
   enabled: true
   namespace: knative-serving
@@ -46,7 +44,6 @@ serving:
           kubernetes.podspec-tolerations: "enabled"
         autoscaler:
           enable-scale-to-zero: "false"
-
 eventing:
   enabled: true
   namespace: knative-eventing
