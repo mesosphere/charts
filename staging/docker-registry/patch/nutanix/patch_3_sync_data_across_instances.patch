@@ -1,7 +1,7 @@
 From 26ee45ae522859afbfe962ed592139df049bd236 Mon Sep 17 00:00:00 2001
 From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
 Date: Wed, 30 Apr 2025 14:07:45 -0700
-Subject: [PATCH 1/2] chore: apply patch_3_sync_data_across_instances.patch
+Subject: [PATCH] chore: apply patch_3_sync_data_across_instances.patch
 
 ---
  .../docker-registry/templates/_helpers.tpl    | 47 ++++++++++++++++++-
@@ -201,11 +201,10 @@ index 034e1c40..5c236da9 100644
 -- 
 2.47.1
 
-
 From fa5063151397f3e9b886585e2459af5adeeeb0bc Mon Sep 17 00:00:00 2001
 From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
 Date: Wed, 14 May 2025 09:16:08 -0700
-Subject: [PATCH 2/2] fix: docker-registry syncer when TLS enabled
+Subject: [PATCH] fix: docker-registry syncer when TLS enabled
 
 ---
  staging/docker-registry/templates/_helpers.tpl | 17 ++++++++++++++++-
@@ -246,6 +245,31 @@ index f0b7bb30..695a72d0 100644
      type: registry
      interval: {{ $root.Values.statefulSet.syncer.interval }}
  {{- end }}
+-- 
+2.47.1
+
+From ee94087a61a7d7fa36ea8942686e6422d9805a19 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Thu, 5 Jun 2025 11:37:21 -0700
+Subject: [PATCH] fix: docker-registry syncer when TLS not enabled
+
+---
+ staging/docker-registry/templates/_helpers.tpl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/staging/docker-registry/templates/_helpers.tpl b/staging/docker-registry/templates/_helpers.tpl
+index 695a72d0..f70a2743 100644
+--- a/staging/docker-registry/templates/_helpers.tpl
++++ b/staging/docker-registry/templates/_helpers.tpl
+@@ -254,7 +254,7 @@ creds:
+ {{- $service := (include "docker-registry.headless-service.name" $root) }}
+ {{- $ns := $root.Release.Namespace }}
+ {{- if not $root.Values.tlsSecretName }}
+-  - registry: 0.0.0.0:5000
++  - registry: 127.0.0.1:5000
+     tls: disabled
+ {{- $replicas := $root.Values.replicaCount }}
+ {{- range $i := until (int $replicas) }}
 -- 
 2.47.1
 

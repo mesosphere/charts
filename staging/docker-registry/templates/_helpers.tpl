@@ -254,7 +254,7 @@ creds:
 {{- $service := (include "docker-registry.headless-service.name" $root) }}
 {{- $ns := $root.Release.Namespace }}
 {{- if not $root.Values.tlsSecretName }}
-  - registry: 0.0.0.0:5000
+  - registry: 127.0.0.1:5000
     tls: disabled
 {{- $replicas := $root.Values.replicaCount }}
 {{- range $i := until (int $replicas) }}
