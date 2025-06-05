@@ -1,0 +1,25 @@
+From e7d8a2dc6f825f0f830c00608c43a2de9d7856f5 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Thu, 5 Jun 2025 12:36:15 -0700
+Subject: [PATCH] fix: docker-registry update to 2.8.3
+
+---
+ staging/docker-registry/values.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index 052f4f8d..ca367ebf 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -19,7 +19,7 @@ serviceAccount:
+ 
+ image:
+   repository: registry
+-  tag: 2.8.1
++  tag: 2.8.3
+   pullPolicy: IfNotPresent
+ # imagePullSecrets:
+     # - name: docker
+-- 
+2.47.1
+
