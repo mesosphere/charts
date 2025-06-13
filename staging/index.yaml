@@ -1331,6 +1331,23 @@ entries:
   docker-registry:
   - apiVersion: v1
     appVersion: 2.8.3
+    created: "2025-06-13T19:36:24.269744216Z"
+    description: A Helm chart for Docker Registry
+    digest: 92cf0647fa49d6ba3ac409b9362de3e285059ce5341924dded3e0d0191e9f357
+    home: https://hub.docker.com/_/registry/
+    icon: https://raw.githubusercontent.com/distribution/distribution/refs/heads/main/distribution-logo.svg
+    maintainers:
+    - email: dimitri.koshkin@nutanix.com
+      name: dkoshkin
+    name: docker-registry
+    sources:
+    - https://github.com/docker/distribution-library-image
+    - https://github.com/twuni/docker-registry.helm
+    urls:
+    - https://mesosphere.github.io/charts/staging/docker-registry-2.3.5.tgz
+    version: 2.3.5
+  - apiVersion: v1
+    appVersion: 2.8.3
     created: "2025-06-05T19:50:58.597985704Z"
     description: A Helm chart for Docker Registry
     digest: 7ba22f4e5d146d74ce26a37ec3ed16230acfdaa255558150e0efeac1e78715ed
@@ -14391,4 +14408,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-06-05T19:50:58.596511613Z"
+generated: "2025-06-13T19:36:24.268442146Z"
