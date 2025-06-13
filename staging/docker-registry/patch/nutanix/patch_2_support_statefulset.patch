@@ -263,3 +263,33 @@ index ef8f0414..034e1c40 100644
 -- 
 2.47.1
 
+From e85be4a32282907fdd85343e142f44f78cff1db4 Mon Sep 17 00:00:00 2001
+From: Dimitri Koshkin <dimitri.koshkin@nutanix.com>
+Date: Fri, 13 Jun 2025 11:07:11 -0700
+Subject: [PATCH] fix: use correct port in headless Service
+
+The port here needs to match the targetPort,
+in order for things like kubectl port-forward to work correctly.
+---
+ staging/docker-registry/templates/service-headless.yaml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/staging/docker-registry/templates/service-headless.yaml b/staging/docker-registry/templates/service-headless.yaml
+index 221defe8..8e2dd2d5 100644
+--- a/staging/docker-registry/templates/service-headless.yaml
++++ b/staging/docker-registry/templates/service-headless.yaml
+@@ -27,9 +27,9 @@ spec:
+   {{- end -}}
+ {{- end }}
+   ports:
+-    - port: {{ .Values.service.port }}
++    - port: 5000
+       protocol: TCP
+-      name: {{ if .Values.tlsSecretName }}https{{ else }}http{{ end }}-{{ .Values.service.port }}
++      name: {{ if .Values.tlsSecretName }}https{{ else }}http{{ end }}
+       targetPort: 5000
+   selector:
+     app: {{ template "docker-registry.name" . }}
+-- 
+2.47.1
+
