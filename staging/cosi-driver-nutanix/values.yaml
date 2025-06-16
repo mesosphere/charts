@@ -38,6 +38,23 @@ secret:
   # (Default_Prefix: ntnx-cosi-iam-user)
   account_name: "ntnx-cosi-iam-user"
 
+tls:
+  # If secretName is provided, value of rootCAs
+  # will be ignored and taken from the secret.
+  caSecretName: ""
+  # Objectstore endpoint TLS configuration
+  s3:
+    # Controls whether certificate chain will be validated.
+    # If insecure is set to true, an insecure connection will be made with
+    # the S3 endpoint. (Certs will not be used)
+    insecure: false
+  # Prism Central endpoint TLS configuration
+  pc:
+    # Controls whether certificate chain will be validated.
+    # If insecure is set to true, an insecure connection will be made with
+    # the PC endpoint. (Certs will not be used)
+    insecure: false
+
 # COSI central controller specifications.
 cosiController:
   replicas: 1
