@@ -8,6 +8,7 @@ excluded-charts:
   - dex-controller # Moved to a different helm repo
   - kubefed
   - kommander-cert-federation # Unable to test unless cert-manager is also upgraded
+  - cosi-driver-nutanix # Requires cosi controller and nutanix infra to test
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
