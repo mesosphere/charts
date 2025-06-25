@@ -1,0 +1,48 @@
+{{- /*
+  Render Job when:
+  - installOnly = true AND it's a helm install
+  - OR installOnly = false (always render)
+*/ -}}
+{{- $enabled := .Values.job.enabled }}
+{{- $installOnly := .Values.job.installOnly }}
+{{- $shouldRender := or (and $installOnly .Release.IsInstall) (not $installOnly) }}
+
+{{- if and $enabled $shouldRender }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "registry-syncer.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ template "registry-syncer.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- if .Values.job.annotations }}
+  annotations:
+{{ toYaml .Values.job.annotations | indent 4 }}
+{{- end }}
+spec:
+  {{- if hasKey .Values.job "ttlSecondsAfterFinished" }}
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+  {{- end }}
+  template:
+    spec:
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -c
+            - /config/config.yml
+            - once
+          resources: {{ toYaml .Values.job.resources | nindent 12 }}
+          volumeMounts: {{ include "registry-syncer.job.volumeMounts" . | nindent 12 }}
+      priorityClassName: system-cluster-critical
+      restartPolicy: {{ .Values.job.restartPolicy }}
+      volumes: {{ include "registry-syncer.job.volumes" . | nindent 8 }}
+{{- end }}

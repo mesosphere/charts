@@ -1,0 +1,26 @@
+{{- if .Values.deployment.enabled }}
+{{- if not (hasKey .Values.deployment.config "sync") }}
+{{- fail "The 'deployment.config.sync' field must not be empty" }}
+{{- end }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "registry-syncer.deployment.configmap.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+data:
+  config.yml: |-
+    defaults:
+      ratelimit:
+        min: {{ .Values.deployment.config.ratelimit.min }}
+        retry: {{ .Values.deployment.config.ratelimit.retry }}
+      parallel: {{ .Values.deployment.config.parallel }}
+    {{- with .Values.deployment.config.creds }}
+    creds:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.deployment.config.sync }}
+    sync:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}

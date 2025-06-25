@@ -1,0 +1,74 @@
+# namespace:
+
+image:
+  repository: docker.io/regclient/regsync
+  # Defaults to Charts appVersion
+  tag:
+  pullPolicy: IfNotPresent
+
+initContainers: []
+## Init containers to add to the Deployment and Job.
+# - name: init
+#   image: busybox
+#   command: []
+
+extraVolumes: []
+extraVolumeMounts: []
+
+deployment:
+  enabled: true
+  annotations: {}
+  replicas: 1
+  resources:
+    requests:
+      cpu: 25m
+      memory: 50Mi
+    limits:
+      cpu: 100m
+      memory: 75Mi
+  config:
+    ratelimit:
+      min: 100
+      retry: 15m
+    parallel: 10
+    creds: []
+    # See https://regclient.org/usage/regsync/ for valid configuration.
+    #  - registry: docker-registry.registry-system.svc.cluster.local:443
+    #    reqPerSec: 1
+    sync: []
+    # See https://regclient.org/usage/regsync/ for valid configuration.
+    #  - source: docker-registry.registry-system.svc.cluster.local:443
+    #    target: 127.0.0.1:5000
+    #    type: registry
+    #    interval: 1m
+
+job:
+  enabled: true
+  # If true, the Job will only be created during a Helm install.
+  # If false, the Job will be created on install and Helm upgrade.
+  installOnly: true
+  annotations: {}
+  # Delete a finished Job after 24 hours
+  ttlSecondsAfterFinished: 86400
+  restartPolicy: OnFailure
+  resources:
+    requests:
+      cpu: 100m
+      memory: 200Mi
+    limits:
+      cpu: 200m
+      memory: 300Mi
+  config:
+    ratelimit:
+      min: 100
+      retry: 15m
+    parallel: 10
+    creds: []
+    # See https://regclient.org/usage/regsync/ for valid configuration.
+    #  - registry: docker-registry.registry-system.svc.cluster.local:443
+    sync: []
+    # See https://regclient.org/usage/regsync/ for valid configuration.
+    #  - source: docker-registry.registry-system.svc.cluster.local:443
+    #    target: 127.0.0.1:5000
+    #    type: registry
+    #    interval: 1m

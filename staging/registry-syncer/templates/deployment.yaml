@@ -1,0 +1,44 @@
+{{- if .Values.deployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "registry-syncer.fullname" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+  labels:
+    app: {{ template "registry-syncer.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+{{- if .Values.deployment.annotations }}
+  annotations:
+{{ toYaml .Values.deployment.annotations | indent 4 }}
+{{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "registry-syncer.name" . }}
+      release: {{ .Release.Name }}
+  replicas: {{ .Values.deployment.replicas | default 1 }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "registry-syncer.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            -  -c
+            - /config/config.yml
+            - server
+          resources: {{ toYaml .Values.deployment.resources | nindent 12 }}
+          volumeMounts: {{ include "registry-syncer.deployment.volumeMounts" . | nindent 12 }}
+      priorityClassName: system-cluster-critical
+      volumes: {{ include "registry-syncer.deployment.volumes" . | nindent 8 }}
+{{- end }}

@@ -1,0 +1,10 @@
+apiVersion: v2
+name: registry-syncer
+description: A chart to deploy registry syncer as Deployment and Job
+version: 0.1.0
+appVersion: "v0.8.3"
+maintainers:
+  - email: dimitri.koshkin@nutanix.com
+    name: dkoshkin
+sources:
+  - https://regclient.org/usage/regsync/

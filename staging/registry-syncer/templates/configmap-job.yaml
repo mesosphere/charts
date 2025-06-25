@@ -1,0 +1,26 @@
+{{- if .Values.job.enabled }}
+{{- if not (hasKey .Values.job.config "sync") }}
+{{- fail "The 'job.config.sync' field must not be empty" }}
+{{- end }}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "registry-syncer.job.configmap.name" . }}
+  namespace: {{ .Values.namespace | default .Release.Namespace }}
+data:
+  config.yml: |-
+    defaults:
+      ratelimit:
+        min: {{ .Values.job.config.ratelimit.min }}
+        retry: {{ .Values.deployment.config.ratelimit.retry }}
+      parallel: {{ .Values.deployment.config.parallel }}
+    {{- with .Values.job.config.creds }}
+    creds:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.job.config.sync }}
+    sync:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+{{- end }}
