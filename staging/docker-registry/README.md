@@ -94,7 +94,7 @@ their default values.
 | `proxy.secretRef`           | The ref for an external secret containing the proxyUsername and proxyPassword keys         | `""`            |
 | `namespace`                 | specify a namespace to install the chart to - defaults to `.Release.Namespace`             | `{{ .Release.Namespace }}` |
 | `nodeSelector`              | node labels for pod assignment                                                             | `{}`            |
-| `affinity`                  | affinity settings                                                                          | `{}`            |
+| `nodeAffinity`              | node affinity settings                                                                          | `{}`            |
 | `tolerations`               | pod tolerations                                                                            | `[]`            |
 | `ingress.enabled`           | If true, Ingress will be created                                                           | `false`         |
 | `ingress.annotations`       | Ingress annotations                                                                        | `{}`            |

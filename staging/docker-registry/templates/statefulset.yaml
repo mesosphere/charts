@@ -99,9 +99,21 @@ spec:
       {{- if .Values.nodeSelector }}
       nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
       {{- end }}
-      {{- if .Values.affinity }}
-      affinity: {{ toYaml .Values.affinity | nindent 8 }}
+      affinity:
+      {{- if .Values.nodeAffinity }}
+        nodeAffinity: {{ toYaml .Values.nodeAffinity | nindent 10 }}
       {{- end }}
+        podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: {{ template "docker-registry.name" . }}
+                      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+                      release: {{ .Release.Name }}
+                      heritage: {{ .Release.Service }}
+                  topologyKey: kubernetes.io/hostname
       {{- if .Values.tolerations }}
       tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
       {{- end }}
