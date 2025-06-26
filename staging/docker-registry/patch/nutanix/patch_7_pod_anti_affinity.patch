@@ -1,0 +1,112 @@
+From f628a4ab15c676814a08b68efe2c48e094a3de5a Mon Sep 17 00:00:00 2001
+From: Shalin Patel <shalin.patel@nutanix.com>
+Date: Wed, 25 Jun 2025 15:53:08 -0700
+Subject: [PATCH] fix: set pod anti affinity for docker-registry deployment and
+ statefulset
+
+---
+ staging/docker-registry/Chart.yaml               |  2 +-
+ staging/docker-registry/README.md                |  2 +-
+ .../docker-registry/templates/deployment.yaml    | 16 ++++++++++++++--
+ .../docker-registry/templates/statefulset.yaml   | 16 ++++++++++++++--
+ staging/docker-registry/values.yaml              |  2 +-
+ 5 files changed, 31 insertions(+), 7 deletions(-)
+
+diff --git a/staging/docker-registry/Chart.yaml b/staging/docker-registry/Chart.yaml
+index e657a486..2738072e 100644
+--- a/staging/docker-registry/Chart.yaml
++++ b/staging/docker-registry/Chart.yaml
+@@ -1,7 +1,7 @@
+ apiVersion: v1
+ description: A Helm chart for Docker Registry
+ name: docker-registry
+-version: 2.3.5
++version: 2.3.6
+ appVersion: 2.8.3
+ home: https://hub.docker.com/_/registry/
+ icon: https://raw.githubusercontent.com/distribution/distribution/refs/heads/main/distribution-logo.svg
+diff --git a/staging/docker-registry/README.md b/staging/docker-registry/README.md
+index f3a31c92..204e15be 100644
+--- a/staging/docker-registry/README.md
++++ b/staging/docker-registry/README.md
+@@ -94,7 +94,7 @@ their default values.
+ | `proxy.secretRef`           | The ref for an external secret containing the proxyUsername and proxyPassword keys         | `""`            |
+ | `namespace`                 | specify a namespace to install the chart to - defaults to `.Release.Namespace`             | `{{ .Release.Namespace }}` |
+ | `nodeSelector`              | node labels for pod assignment                                                             | `{}`            |
+-| `affinity`                  | affinity settings                                                                          | `{}`            |
++| `nodeAffinity`              | node affinity settings                                                                          | `{}`            |
+ | `tolerations`               | pod tolerations                                                                            | `[]`            |
+ | `ingress.enabled`           | If true, Ingress will be created                                                           | `false`         |
+ | `ingress.annotations`       | Ingress annotations                                                                        | `{}`            |
+diff --git a/staging/docker-registry/templates/deployment.yaml b/staging/docker-registry/templates/deployment.yaml
+index 13c9d147..d67ac8b2 100644
+--- a/staging/docker-registry/templates/deployment.yaml
++++ b/staging/docker-registry/templates/deployment.yaml
+@@ -92,9 +92,21 @@ spec:
+       {{- if .Values.nodeSelector }}
+       nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+       {{- end }}
+-      {{- if .Values.affinity }}
+-      affinity: {{ toYaml .Values.affinity | nindent 8 }}
++      affinity:
++      {{- if .Values.nodeAffinity }}
++        nodeAffinity: {{ toYaml .Values.nodeAffinity | nindent 10 }}
+       {{- end }}
++        podAntiAffinity:
++            preferredDuringSchedulingIgnoredDuringExecution:
++              - weight: 100
++                podAffinityTerm:
++                  labelSelector:
++                    matchLabels:
++                      app: {{ template "docker-registry.name" . }}
++                      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
++                      release: {{ .Release.Name }}
++                      heritage: {{ .Release.Service }}
++                  topologyKey: kubernetes.io/hostname
+       {{- if .Values.tolerations }}
+       tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+       {{- end }}
+diff --git a/staging/docker-registry/templates/statefulset.yaml b/staging/docker-registry/templates/statefulset.yaml
+index 95b46bc3..bda9c9d2 100644
+--- a/staging/docker-registry/templates/statefulset.yaml
++++ b/staging/docker-registry/templates/statefulset.yaml
+@@ -99,9 +99,21 @@ spec:
+       {{- if .Values.nodeSelector }}
+       nodeSelector: {{ toYaml .Values.nodeSelector | nindent 8 }}
+       {{- end }}
+-      {{- if .Values.affinity }}
+-      affinity: {{ toYaml .Values.affinity | nindent 8 }}
++      affinity:
++      {{- if .Values.nodeAffinity }}
++        nodeAffinity: {{ toYaml .Values.nodeAffinity | nindent 10 }}
+       {{- end }}
++        podAntiAffinity:
++            preferredDuringSchedulingIgnoredDuringExecution:
++              - weight: 100
++                podAffinityTerm:
++                  labelSelector:
++                    matchLabels:
++                      app: {{ template "docker-registry.name" . }}
++                      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
++                      release: {{ .Release.Name }}
++                      heritage: {{ .Release.Service }}
++                  topologyKey: kubernetes.io/hostname
+       {{- if .Values.tolerations }}
+       tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+       {{- end }}
+diff --git a/staging/docker-registry/values.yaml b/staging/docker-registry/values.yaml
+index ca367ebf..b3ec962a 100644
+--- a/staging/docker-registry/values.yaml
++++ b/staging/docker-registry/values.yaml
+@@ -214,7 +214,7 @@ autoscaling:
+ 
+ nodeSelector: {}
+ 
+-affinity: {}
++nodeAffinity: {}
+ 
+ tolerations: []
+ 
+-- 
+2.39.3 (Apple Git-146)
+
