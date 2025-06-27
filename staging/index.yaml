@@ -11847,6 +11847,21 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/prometheus-operator-5.10.0.tgz
     version: 5.10.0
+  registry-syncer:
+  - apiVersion: v2
+    appVersion: v0.8.3
+    created: "2025-06-27T15:55:07.681150695Z"
+    description: A chart to deploy registry syncer as Deployment and Job
+    digest: c132b88c4dbb2395375d43b034adb04279100f3a6ce90f6cce9df6c0e6274ce9
+    maintainers:
+    - email: dimitri.koshkin@nutanix.com
+      name: dkoshkin
+    name: registry-syncer
+    sources:
+    - https://regclient.org/usage/regsync/
+    urls:
+    - https://mesosphere.github.io/charts/staging/registry-syncer-0.1.0.tgz
+    version: 0.1.0
   test:
   - apiVersion: v1
     appVersion: "1.0"
@@ -14422,4 +14437,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-06-18T05:25:42.640851174Z"
+generated: "2025-06-27T15:55:07.680631924Z"
