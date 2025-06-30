@@ -7,6 +7,10 @@ on:
         description: 'Name of the chart to publish'
         required: true
         type: string
+      version:
+        description: 'Version of the chart to publish'
+        required: true
+        type: string
 
 jobs:
   push-single-chart:
@@ -43,6 +47,7 @@ jobs:
           mkdir -p charts
 
           CHART_NAME="${{ github.event.inputs.chart }}"
+          VERSION="${{ github.event.inputs.version }}"
 
           echo "Looking for chart '$CHART_NAME' in hack/charts-sources.yaml"
 
@@ -58,27 +63,12 @@ jobs:
           helm repo add "$CHART_NAME" "$REPO" || true
           helm repo update
 
-          VERSION=$(helm search repo "$CHART_NAME/$CHART_NAME" -o yaml | yq e '.[0].version' -)
-
-          if [ -z "$VERSION" ]; then
-            echo "Failed to find version for $CHART_NAME in repo $REPO"
-            exit 1
-          fi
-
-          echo "Found version $VERSION for $CHART_NAME"
-
           CHART_REF="ghcr.io/mesosphere/charts/$CHART_NAME"
-
-          echo "Checking if $CHART_NAME version $VERSION exists in GHCR"
-          if helm show all "oci://$CHART_REF" --version "$VERSION" > /dev/null 2>&1; then
-            echo "Chart $CHART_NAME version $VERSION already exists in GHCR. Skipping push."
-            exit 0
-          fi
 
           echo "Pulling chart $CHART_NAME version $VERSION..."
           helm pull "$CHART_NAME/$CHART_NAME" --version "$VERSION" --untar --destination charts
 
-          echo "Packaging chart..."
+          echo "Packaging chart"
           helm package "charts/$CHART_NAME"
 
           echo "Pushing chart to GHCR..."
