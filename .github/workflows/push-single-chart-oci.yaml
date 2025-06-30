@@ -1,0 +1,81 @@
+name: Push Single Helm Chart to GHCR (OCI)
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: 'Name of the chart to publish'
+        required: true
+        type: string
+
+jobs:
+  push-chart:
+
+    runs-on:
+    - self-hosted
+    - medium
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - uses: chrisdickinson/setup-yq@latest
+        with:
+          yq-version: v4.25.3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull and push chart to GHCR
+        run: |
+          mkdir -p charts
+
+          CHART_NAME="${{ github.event.inputs.chart }}"
+
+          echo "Looking for chart '$CHART_NAME' in hack/charts-sources.yaml..."
+
+          REPO=$(yq e ".[] | select(.chart == \"$CHART_NAME\") | .helm_repo" hack/charts-sources.yaml)
+
+          if [ -z "$REPO" ]; then
+            echo "Chart '$CHART_NAME' not found in hack/charts-sources.yaml"
+            exit 1
+          fi
+
+          echo "Found repo: $REPO"
+
+          helm repo add "$CHART_NAME" "$REPO" || true
+          helm repo update
+
+          VERSION=$(helm search repo "$CHART_NAME/$CHART_NAME" -o yaml | yq e '.[0].version' -)
+
+          if [ -z "$VERSION" ]; then
+            echo "Failed to find version for $CHART_NAME in repo $REPO"
+            exit 1
+          fi
+
+          echo "Found version $VERSION for $CHART_NAME"
+
+          CHART_REF="ghcr.io/mesosphere/charts/$CHART_NAME"
+
+          echo "Checking if $CHART_NAME version $VERSION exists in GHCR..."
+          if helm show all "oci://$CHART_REF" --version "$VERSION" > /dev/null 2>&1; then
+            echo "Chart $CHART_NAME version $VERSION already exists in GHCR. Skipping push."
+            exit 0
+          fi
+
+          echo "Pulling chart $CHART_NAME version $VERSION..."
+          helm pull "$CHART_NAME/$CHART_NAME" --version "$VERSION" --untar --destination charts
+
+          echo "Packaging chart..."
+          helm package "charts/$CHART_NAME"
+
+          echo "Pushing chart to GHCR..."
+          helm push "$CHART_NAME-$VERSION.tgz" oci://ghcr.io/mesosphere/charts

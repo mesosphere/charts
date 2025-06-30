@@ -8,10 +8,10 @@ on:
 
 jobs:
   push-charts:
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
+
+    runs-on:
+    - self-hosted
+    - medium
 
     steps:
       - name: Checkout repo
