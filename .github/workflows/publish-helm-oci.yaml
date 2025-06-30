@@ -8,10 +8,14 @@ on:
 
 jobs:
   push-charts:
-
     runs-on:
     - self-hosted
     - medium
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ secrets.MESOSPHERECI_USER_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -57,7 +61,7 @@ jobs:
 
             CHART_REF="ghcr.io/mesosphere/charts/$name"
 
-            echo "Checking if $name version $version exists in GHCR..."
+            echo "Checking if $name version $version exists in GHCR"
             if helm show all "oci://$CHART_REF" --version "$version" > /dev/null 2>&1; then
               echo "Chart $name version $version already exists in GHCR. Skipping push."
               continue
@@ -72,8 +76,8 @@ jobs:
 
             echo "Pushing $name-$version to GHCR"
             echo "helm push \"$name-$version.tgz\" oci://ghcr.io/mesosphere/charts"
-            # helm push "$name-$version.tgz" oci://ghcr.io/mesosphere/charts || {
-            #   echo "Failed to push $name-$version to GHCR"
-            #   continue
-            # }
+            helm push "$name-$version.tgz" oci://ghcr.io/mesosphere/charts || {
+              echo "Failed to push $name-$version to GHCR"
+              continue
+            }
           done

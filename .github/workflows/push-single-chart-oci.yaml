@@ -9,11 +9,15 @@ on:
         type: string
 
 jobs:
-  push-chart:
-
+  push-single-chart:
     runs-on:
     - self-hosted
     - medium
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      GH_TOKEN: ${{ secrets.MESOSPHERECI_USER_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -40,7 +44,7 @@ jobs:
 
           CHART_NAME="${{ github.event.inputs.chart }}"
 
-          echo "Looking for chart '$CHART_NAME' in hack/charts-sources.yaml..."
+          echo "Looking for chart '$CHART_NAME' in hack/charts-sources.yaml"
 
           REPO=$(yq e ".[] | select(.chart == \"$CHART_NAME\") | .helm_repo" hack/charts-sources.yaml)
 
@@ -65,7 +69,7 @@ jobs:
 
           CHART_REF="ghcr.io/mesosphere/charts/$CHART_NAME"
 
-          echo "Checking if $CHART_NAME version $VERSION exists in GHCR..."
+          echo "Checking if $CHART_NAME version $VERSION exists in GHCR"
           if helm show all "oci://$CHART_REF" --version "$VERSION" > /dev/null 2>&1; then
             echo "Chart $CHART_NAME version $VERSION already exists in GHCR. Skipping push."
             exit 0
