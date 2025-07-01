@@ -17,11 +17,9 @@ jobs:
     runs-on:
     - self-hosted
     - medium
+
     permissions:
-      contents: read
-      id-token: write
-    env:
-      GH_TOKEN: ${{ secrets.MESOSPHERECI_USER_TOKEN }}
+      packages: write
 
     steps:
       - name: Checkout repo
@@ -65,11 +63,11 @@ jobs:
 
           CHART_REF="ghcr.io/mesosphere/charts/$CHART_NAME"
 
-          echo "Pulling chart $CHART_NAME version $VERSION..."
+          echo "Pulling chart $CHART_NAME version $VERSION"
           helm pull "$CHART_NAME/$CHART_NAME" --version "$VERSION" --untar --destination charts
 
           echo "Packaging chart"
           helm package "charts/$CHART_NAME"
 
-          echo "Pushing chart to GHCR..."
+          echo "Pushing chart to GHCR"
           helm push "$CHART_NAME-$VERSION.tgz" oci://ghcr.io/mesosphere/charts
