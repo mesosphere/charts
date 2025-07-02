@@ -2,9 +2,9 @@ name: Publish Helm Charts to GHCR (OCI)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - sandy/oci-helm-migration # branch updated for testing
+
+  schedule:
+    - cron: '00 07 * * *'
 
 jobs:
   push-charts:
@@ -13,6 +13,7 @@ jobs:
     - medium
 
     permissions:
+      contents: read
       packages: write
 
     steps:
@@ -36,6 +37,7 @@ jobs:
 
       - name: Pull and push Helm charts
         run: |
+          set -euo pipefail
           mkdir -p charts
 
           count=$(yq e 'length' hack/charts-sources.yaml)
