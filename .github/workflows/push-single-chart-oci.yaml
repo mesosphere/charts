@@ -19,6 +19,7 @@ jobs:
     - medium
 
     permissions:
+      contents: read
       packages: write
 
     steps:
@@ -43,6 +44,7 @@ jobs:
       - name: Pull and push chart to GHCR
         run: |
           mkdir -p charts
+          set -euo pipefail
 
           CHART_NAME="${{ github.event.inputs.chart }}"
           VERSION="${{ github.event.inputs.version }}"
