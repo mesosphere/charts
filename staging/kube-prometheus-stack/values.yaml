@@ -5395,3 +5395,13 @@ extraManifests: null
   #   data:
   #     plaintext: Zm9vYmFy
   #     templated: '{{ print "foobar" | upper | b64enc }}'
+# Create mesosphere specific resources
+mesosphereResources:
+  create: false
+  rules:
+    velero: false
+  hooks:
+    kubectlImage: bitnami/kubectl:1.29.2
+    prometheus:
+      jobName: prom-get-cluster-id
+      configmapName: cluster-info-configmap
