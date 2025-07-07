@@ -29,11 +29,11 @@ def change_style(style, representer):
 
 refs = {
     # renovate: git-refs=https://github.com/prometheus-operator/kube-prometheus branch=main
-    'ref.kube-prometheus': '696ce89f1f4d9107bd3a3b026178b320bac03b8e',
+    'ref.kube-prometheus': 'f0abeaf2c817f8ec51f8e6ca0497d0d87b5a1c0c',
     # renovate: git-refs=https://github.com/kubernetes-monitoring/kubernetes-mixin branch=master
-    'ref.kubernetes-mixin': 'aad557d746a4e05d028a2ce542f61dde3b13c621',
+    'ref.kubernetes-mixin': 'cc7c60b9182346be662703df319e4ea56e317208',
     # renovate: git-refs=https://github.com/etcd-io/etcd branch=main
-    'ref.etcd': '21a976e9e254f3938f2ced3eb96310449ccf8bef',
+    'ref.etcd': 'f10ebf6f9d615e2c8f7fd01b1e2e4e2c19407f7e',
 }
 
 # Source files list
@@ -139,6 +139,37 @@ metadata:
 data:
 '''
 
+    # Add GrafanaDashboard custom resource
+grafana_dashboard_operator = """
+---
+{{- if and .Values.grafana.operator.dashboardsConfigMapRefEnabled (or .Values.grafana.enabled .Values.grafana.forceDeployDashboards) (semverCompare ">=%(min_kubernetes)s" $kubeTargetVersion) (semverCompare "<%(max_kubernetes)s" $kubeTargetVersion) .Values.grafana.defaultDashboardsEnabled%(condition)s }}
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: {{ printf "%%s-%%s" (include "kube-prometheus-stack.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
+  namespace: {{ template "kube-prometheus-stack-grafana.namespace" . }}
+  {{ with .Values.grafana.operator.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{ end }}
+  labels:
+    app: {{ template "kube-prometheus-stack.name" $ }}-grafana
+spec:
+  allowCrossNamespaceImport: true
+  resyncPeriod: {{ .Values.grafana.operator.resyncPeriod | quote | default "10m" }}
+  folder: {{ .Values.grafana.operator.folder | quote }}
+  instanceSelector:
+    matchLabels:
+    {{- if .Values.grafana.operator.matchLabels }}
+      {{- toYaml .Values.grafana.operator.matchLabels | nindent 6 }}
+    {{- else }}
+      {{- fail "grafana.operator.matchLabels must be specified when grafana.operator.dashboardsConfigMapRefEnabled is true" }}
+    {{- end }}
+  configMapRef:
+    name: {{ printf "%%s-%%s" (include "kube-prometheus-stack.fullname" $) "%(name)s" | trunc 63 | trimSuffix "-" }}
+    key: %(name)s.json
+{{- end }}
+"""
 
 def init_yaml_styles():
     represent_literal_str = change_style('|', SafeRepresenter.represent_str)
@@ -250,6 +281,15 @@ def write_group_to_file(resource_name, content, url, destination, min_kubernetes
 
     # footer
     lines += '{{- end }}'
+
+    lines_grafana_operator = grafana_dashboard_operator % {
+        'name': resource_name,
+        'condition': condition_map.get(resource_name, ''),
+        'min_kubernetes': min_kubernetes,
+        'max_kubernetes': max_kubernetes
+    }
+
+    lines += lines_grafana_operator
 
     filename = resource_name + '.yaml'
     new_filename = "%s/%s" % (destination, filename)
