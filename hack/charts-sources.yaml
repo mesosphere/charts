@@ -3,6 +3,9 @@
   helm_repo: https://mesosphere.github.io/charts/stable
   source_repo: https://github.com/cert-manager/cert-manager
 - chart: cert-manager
+  helm_repo: https://mesosphere.github.io/charts/stable
+  source_repo: https://github.com/cert-manager/cert-manager
+- chart: cert-manager
   helm_repo: https://charts.jetstack.io
   source_repo: https://github.com/cert-manager/cert-manager
 - chart: cosi-bucket-kit
