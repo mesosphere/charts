@@ -4,7 +4,6 @@ kind: ConfigMap
 metadata:
   labels:
     app: "{{ template "karma.fullname" . }}"
-    chart: "{{ template "karma.chart" . }}"
     heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
 {{- with .Values.configMap.annotations }}
