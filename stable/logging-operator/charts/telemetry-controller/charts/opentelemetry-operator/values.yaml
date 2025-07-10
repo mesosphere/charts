@@ -4,6 +4,10 @@
 
 replicaCount: 1
 
+## The number of old history to retain to allow rollback.
+##
+revisionHistoryLimit: 10
+
 ## Provide a name in place of opentelemetry-operator (includes the chart's release name).
 ##
 nameOverride: ""
@@ -41,8 +45,8 @@ manager:
     repository: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator
     tag: ""
   collectorImage:
-    repository: ""
-    tag: 0.123.1
+    repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
+    tag: 0.126.0
   opampBridgeImage:
     repository: ""
     tag: ""
@@ -83,7 +87,6 @@ manager:
   # operator.targetallocator.fallbackstrategy: false
   # operator.collector.targetallocatorcr: false
   # operator.sidecarcontainers.native: false
-  # operator.observability.prometheus: false
   # operator.golang.flags: false
   # operator.collector.default.config: false
   ports:
@@ -219,7 +222,7 @@ kubeRBACProxy:
   enabled: true
   image:
     repository: quay.io/brancz/kube-rbac-proxy
-    tag: v0.18.1
+    tag: v0.19.1
   ports:
     proxyPort: 8443
   resources: {}
