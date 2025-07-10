@@ -17173,6 +17173,24 @@ entries:
   karma:
   - apiVersion: v1
     appVersion: v0.70
+    created: "2025-07-10T08:05:45.918490816Z"
+    description: A Helm chart for Karma - an UI for Prometheus Alertmanager
+    digest: bfc11c728afd18a7863ac44a7341be879572606fe43ebca733800c4327b6c51a
+    home: https://github.com/prymitive/karma
+    maintainers:
+    - email: david@davidkarlsen.com
+      name: davidkarlsen
+    - email: l.mierzwa@gmail.com
+      name: prymitive
+    name: karma
+    sources:
+    - https://hub.docker.com/r/lmierzwa/karma/
+    - https://github.com/prymitive/karma
+    urls:
+    - https://mesosphere.github.io/charts/stable/karma-2.0.3.tgz
+    version: 2.0.3
+  - apiVersion: v1
+    appVersion: v0.70
     created: "2023-04-11T00:45:02.726997403Z"
     description: A Helm chart for Karma - an UI for Prometheus Alertmanager
     digest: aa7a817338731796fd24605656c946026d032080757517ff4d1f04d37ad1b405
@@ -42490,4 +42508,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-06-04T03:45:02.318042003Z"
+generated: "2025-07-10T08:05:45.917868383Z"
