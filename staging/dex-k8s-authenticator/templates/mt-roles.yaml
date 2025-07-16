@@ -15,7 +15,6 @@ kind: ClusterRoleBinding
 metadata:
   name: {{ template "dex-k8s-authenticator.fullname" . }}-multi-tenancy
   labels:
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 subjects:
