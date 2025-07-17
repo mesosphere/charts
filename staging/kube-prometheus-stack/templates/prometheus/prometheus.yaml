@@ -11,14 +11,11 @@ metadata:
   namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-prometheus
-    {{- include "kube-prometheus-stack.labels" . | nindent 4 }}
-    {{- with .Values.prometheus.additionalLabels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
-  {{- with .Values.prometheus.annotations }}
+{{ include "kube-prometheus-stack.labels" . | indent 4 }}
+{{- if .Values.prometheus.annotations }}
   annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+{{ toYaml .Values.prometheus.annotations | indent 4 }}
+{{- end }}
 spec:
 {{- if not (kindIs "invalid" .Values.prometheus.prometheusSpec.automountServiceAccountToken) }}
   automountServiceAccountToken: {{ .Values.prometheus.prometheusSpec.automountServiceAccountToken }}
@@ -60,7 +57,6 @@ spec:
   {{- else }}
   image: "{{ $registry }}/{{ .Values.prometheus.prometheusSpec.image.repository }}"
   {{- end }}
-  imagePullPolicy: "{{ .Values.prometheus.prometheusSpec.image.pullPolicy }}"
   version: {{ default .Values.prometheus.prometheusSpec.image.tag .Values.prometheus.prometheusSpec.version }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.additionalArgs }}
@@ -101,7 +97,6 @@ spec:
   logLevel:  {{ .Values.prometheus.prometheusSpec.logLevel }}
   logFormat:  {{ .Values.prometheus.prometheusSpec.logFormat }}
   listenLocal: {{ .Values.prometheus.prometheusSpec.listenLocal }}
-  enableOTLPReceiver: {{ .Values.prometheus.prometheusSpec.enableOTLPReceiver }}
 {{- if not .Values.prometheus.agentMode }}
   enableAdminAPI: {{ .Values.prometheus.prometheusSpec.enableAdminAPI }}
 {{- end }}
@@ -119,10 +114,6 @@ spec:
   - {{ tpl $enableFeatures $ }}
 {{- end }}
 {{- end }}
-{{- if .Values.prometheus.prometheusSpec.otlp }}
-  otlp:
-{{ toYaml .Values.prometheus.prometheusSpec.otlp | indent 4 }}
-{{- end }}
 {{- with .Values.prometheus.prometheusSpec.scrapeClasses }}
   scrapeClasses:
     {{- tpl (toYaml . | nindent 4) $ }}
@@ -137,9 +128,8 @@ spec:
 {{- if .Values.prometheus.prometheusSpec.scrapeInterval }}
   scrapeInterval: {{ .Values.prometheus.prometheusSpec.scrapeInterval }}
 {{- end }}
-{{- with .Values.prometheus.prometheusSpec.scrapeProtocols }}
-  scrapeProtocols:
-    {{- toYaml . | nindent 4 }}
+{{- if .Values.prometheus.prometheusSpec.scrapeProtocols }}
+  scrapeProtocols: {{ .Values.prometheus.prometheusSpec.scrapeProtocols }}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.scrapeTimeout }}
   scrapeTimeout: {{ .Values.prometheus.prometheusSpec.scrapeTimeout }}
@@ -288,18 +278,8 @@ spec:
   scrapeConfigNamespaceSelector: {}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.storageSpec }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
-{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($prometheus).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Prometheus resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.prometheus.prometheusSpec.storageSpec | nindent 4 }}
-{{- end }}
+  storage:
+{{ tpl (toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4) . }}
 {{- end }}
 {{- with .Values.prometheus.prometheusSpec.persistentVolumeClaimRetentionPolicy }}
   persistentVolumeClaimRetentionPolicy:

@@ -29,11 +29,11 @@ def change_style(style, representer):
 
 refs = {
     # renovate: git-refs=https://github.com/prometheus-operator/kube-prometheus branch=main
-    'ref.kube-prometheus': 'f0abeaf2c817f8ec51f8e6ca0497d0d87b5a1c0c',
+    'ref.kube-prometheus': '2c1dffebb7419f092b8eea40983f86e74fe41860',
     # renovate: git-refs=https://github.com/kubernetes-monitoring/kubernetes-mixin branch=master
-    'ref.kubernetes-mixin': 'cc7c60b9182346be662703df319e4ea56e317208',
+    'ref.kubernetes-mixin': 'ddfa651bc295d2b6659bfef7333d154c72c6e376',
     # renovate: git-refs=https://github.com/etcd-io/etcd branch=main
-    'ref.etcd': 'f10ebf6f9d615e2c8f7fd01b1e2e4e2c19407f7e',
+    'ref.etcd': 'b6167b7c5d482b14f7a3828628db5de89ad1871e',
 }
 
 # Source files list
@@ -202,13 +202,13 @@ replacement_map = {
         'replacement': 'job="{{ $kubeStateMetricsJob }}"',
         'init': '{{- $kubeStateMetricsJob := include "kube-prometheus-stack-kube-state-metrics.name" . }}'},
     'job="{{ $kubeStateMetricsJob }}"': {
-        'replacement': 'job="{{ $kubeStateMetricsJob }}", namespace{{ $namespaceOperator }}"{{ $targetNamespace }}"',
+        'replacement': 'job="{{ $kubeStateMetricsJob }}", namespace=~"{{ $targetNamespace }}"',
         'limitGroup': ['kubernetes-apps'],
-        'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}{{- $namespaceOperator := .Values.defaultRules.appNamespacesOperator | default "=~" }}'},
+        'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}'},
     'job="kubelet"': {
-        'replacement': 'job="kubelet", namespace{{ $namespaceOperator }}"{{ $targetNamespace }}"',
+        'replacement': 'job="kubelet", namespace=~"{{ $targetNamespace }}"',
         'limitGroup': ['kubernetes-storage'],
-        'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}{{- $namespaceOperator := .Values.defaultRules.appNamespacesOperator | default "=~" }}'},
+        'init': '{{- $targetNamespace := .Values.defaultRules.appNamespacesTarget }}'},
     'runbook_url: https://runbooks.prometheus-operator.dev/runbooks/': {
         'replacement': 'runbook_url: {{ .Values.defaultRules.runbookUrl }}/',
         'init': ''},
