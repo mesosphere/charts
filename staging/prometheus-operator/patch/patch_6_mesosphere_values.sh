@@ -41,7 +41,7 @@ mesosphereResources:
       serviceURL: http://prometheus-kubeaddons-grafana.kubeaddons:3000
     prometheus:
       jobName: prom-get-cluster-id
-      kubectlImage: bitnami/kubectl:1.19.7
+      kubectlImage: bitnamilegacy/kubectl:1.19.7
       configmapName: cluster-info-configmap
   ingressRBAC:
     enabled: true

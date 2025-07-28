@@ -9,7 +9,7 @@ hooks:
   # Creates configmap to pass kube-system ns uid as envvar to kubecost.
   clusterID:
     enabled: true
-    kubectlImage: "bitnami/kubectl:1.29.2"
+    kubectlImage: "bitnamilegacy/kubectl:1.29.2"
 
 cost-analyzer:
   enabled: true

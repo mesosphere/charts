@@ -1,6 +1,6 @@
 harborCopySecret:
   enabled: false
-  kubectlImage: bitnami/kubectl:1.31.4
+  kubectlImage: bitnamilegacy/kubectl:1.31.4
   pauseImage: registry.k8s.io/pause:3.10
   imagePullPolicy: IfNotPresent
 
