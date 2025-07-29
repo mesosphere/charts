@@ -32,7 +32,7 @@ spec:
       serviceAccountName: awsebscsiprovisioner-snapshot-crds
       containers:
         - name: awsebscsiprovisioner-snapshot-crds
-          image: "bitnamilegacy/kubectl:1.17"
+          image: "bitnami/kubectl:1.17"
           volumeMounts:
             - name: awsebscsiprovisioner-snapshot-crds
               mountPath: /etc/awsebscsiprovisioner-snapshot-crds
