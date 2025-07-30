@@ -465,6 +465,23 @@ entries:
   azuredisk-csi-driver:
   - apiVersion: v1
     appVersion: 1.1.1
+    created: "2025-07-30T06:12:44.134066912Z"
+    description: Azure disk Container Storage Interface (CSI) Storage Plugin
+    digest: fb0a232f98e4db593512372d2c28e64588d6f258f3589c1b545ebba275a60fd4
+    home: https://github.com/kubernetes-sigs/azuredisk-csi-driver
+    kubeVersion: '>=1.17.0'
+    maintainers:
+    - name: sebbrandt87
+    - name: hectorj2f
+    - name: dkoshkin
+    name: azuredisk-csi-driver
+    sources:
+    - https://github.com/kubernetes-sigs/azuredisk-csi-driver
+    urls:
+    - https://mesosphere.github.io/charts/stable/azuredisk-csi-driver-0.8.1.tgz
+    version: 0.8.1
+  - apiVersion: v1
+    appVersion: 1.1.1
     created: "2022-10-27T21:20:01.269917248Z"
     description: Azure disk Container Storage Interface (CSI) Storage Plugin
     digest: d93e2f72cbe77e0ed83a0626136700903fe0c0533a2c84a09eee8d8b4d0a0215
@@ -1132,6 +1149,26 @@ entries:
   cosi-bucket-kit:
   - apiVersion: v2
     appVersion: 0.0.5
+    created: "2025-07-30T06:12:44.134437104Z"
+    description: A Helm chart for COSI BucketClaim(s) to be consumed by other applications.
+    digest: 741e76b2f1a75fa063551dfad1d8b9121934bbfb2731f7b349c6c51b92c5a968
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kubernetes
+    - cosi
+    - bucket
+    - storage
+    - ceph
+    maintainers:
+    - name: takirala
+    - name: mhrabovcin
+    - name: jimmidyson
+    name: cosi-bucket-kit
+    urls:
+    - https://mesosphere.github.io/charts/stable/cosi-bucket-kit-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
+    appVersion: 0.0.5
     created: "2025-02-26T21:39:26.844982867Z"
     description: A Helm chart for COSI BucketClaim(s) to be consumed by other applications.
     digest: 1c4600741d10ad570bed14ecc0cf1cf1bfeb04ac4b0b8d935db61d5a167ed4ee
@@ -1411,6 +1448,38 @@ entries:
     - https://mesosphere.github.io/charts/stable/defaultstorageclass-0.0.1.tgz
     version: 0.0.1
   dex:
+  - apiVersion: v2
+    appVersion: 2.37.0
+    created: "2025-07-30T06:12:44.136058447Z"
+    dependencies:
+    - condition: dex-controller.enabled, global.dex-controller.enabled
+      name: dex-controller
+      repository: https://mesosphere.github.io/dex-controller/charts
+      version: v0.16.1
+    description: Dex
+    digest: fd84acc24b8e8f765956d5b74ac21347a93cd82151357de248323b1dad4f1a14
+    home: https://github.com/dexidp/dex/
+    icon: https://github.com/dexidp/dex/raw/master/Documentation/logos/dex-glyph-color.png
+    keywords:
+    - dex
+    - oidc
+    maintainers:
+    - email: Kevin.Fox@pnnl.gov
+      name: kfox1111
+    - email: shane.starcher@gmail.com
+      name: sstarcher
+    - email: pete.brown@powerhrg.com
+      name: rendhalver
+    - email: vi7alya@gmail.com
+      name: vi7
+    - email: yujie.jay@gmail.com
+      name: jieyu
+    name: dex
+    sources:
+    - https://github.com/dexidp/dex/
+    urls:
+    - https://mesosphere.github.io/charts/stable/dex-2.14.1.tgz
+    version: 2.14.1
   - apiVersion: v2
     appVersion: 2.37.0
     created: "2024-10-01T06:30:03.900888399Z"
@@ -6610,6 +6679,27 @@ entries:
     - https://mesosphere.github.io/charts/stable/elasticsearch-exporter-0.1.0.tgz
     version: 0.1.0
   external-dns:
+  - apiVersion: v1
+    appVersion: 0.7.0
+    created: "2025-07-30T06:12:44.13741797Z"
+    deprecated: true
+    description: DEPRECATED ExternalDNS is a Kubernetes addon that configures public
+      DNS servers with information about exposed Kubernetes services to make them
+      discoverable.
+    digest: efdf35c0f1e8235b441c5acc0f9b16aec7ec487275c06d5d74880c8af605d9c7
+    home: https://github.com/kubernetes-sigs/external-dns
+    icon: https://bitnami.com/assets/stacks/external-dns/img/external-dns-stack-110x117.png
+    keywords:
+    - external-dns
+    - network
+    - dns
+    name: external-dns
+    sources:
+    - https://github.com/kubernetes-sigs/external-dns
+    - https://github.com/bitnami/bitnami-docker-external-dns
+    urls:
+    - https://mesosphere.github.io/charts/stable/external-dns-2.20.6.tgz
+    version: 2.20.6
   - apiVersion: v1
     appVersion: 0.7.0
     created: "2022-10-27T21:20:01.69683635Z"
@@ -11860,6 +11950,25 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/fluent-bit-0.1.0.tgz
     version: 0.1.0
+  gatekeeper:
+  - apiVersion: v1
+    appVersion: 3.4.0-rc.1
+    created: "2025-07-30T06:12:44.154868878Z"
+    description: Gatekeeper - Policy Controller for Kubernetes
+    digest: afa781aa537bf7604007aec0585ca44467b06999f3db14cb89a60724b3d50c4e
+    home: https://github.com/open-policy-agent/gatekeeper
+    icon: https://www.openpolicyagent.org/img/opa-logo.svg
+    maintainers:
+    - email: jimmidyson@gmail.com
+      name: jimmidyson
+    - email: dgoel@d2iq.com
+      name: deepakgoel
+    name: gatekeeper
+    sources:
+    - https://github.com/open-policy-agent/gatekeeper
+    urls:
+    - https://mesosphere.github.io/charts/staging/gatekeeper-0.6.11.tgz
+    version: 0.6.11
   gatekeeper-proxy-mutations:
   - apiVersion: v2
     appVersion: 0.0.1
@@ -11877,6 +11986,22 @@ entries:
     - https://mesosphere.github.io/charts/stable/gatekeeper-proxy-mutations-v0.0.1.tgz
     version: v0.0.1
   gcpdisk-csi-driver:
+  - apiVersion: v1
+    appVersion: 0.7.0
+    created: "2025-07-30T06:12:44.138010188Z"
+    description: Google Compute Engine Persistent Disk (GCE PD) Container Storage
+      Interface (CSI) Storage Plugin
+    digest: 2dcef4965c2d179b6fe183ef7bd071d736b5281bf52941c08242595bab430122
+    home: https://github.com/kubernetes-sigs/gcp-compute-persistent-disk-csi-driver
+    kubeVersion: '>=1.15.0'
+    maintainers:
+    - name: sebbrandt87
+    name: gcpdisk-csi-driver
+    sources:
+    - https://github.com/kubernetes-sigs/gcp-compute-persistent-disk-csi-driver
+    urls:
+    - https://mesosphere.github.io/charts/stable/gcpdisk-csi-driver-0.7.3.tgz
+    version: 0.7.3
   - apiVersion: v1
     appVersion: 0.7.0
     created: "2022-10-27T21:20:01.847763954Z"
@@ -17144,6 +17269,20 @@ entries:
   harbor-copy-secret:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-07-30T06:12:44.138445132Z"
+    description: A helm chart that copies secret content between namespaces
+    digest: 28b88f56c3a6e9a8d4367e74d1a2669879830c41e1cc395a767201d5cd1bfa49
+    keywords:
+    - harbor
+    maintainers:
+    - name: mhrabovcin
+    name: harbor-copy-secret
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/harbor-copy-secret-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-02-12T12:31:57.241056583Z"
     description: A helm chart that copies secret content between namespaces
     digest: d04dee98524b52fb4da3475138971a187040e94197d8540bf10333f0df4ee44d
@@ -17156,6 +17295,38 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/harbor-copy-secret-0.1.0.tgz
     version: 0.1.0
+  istio:
+  - apiVersion: v2
+    appVersion: 1.25.0
+    created: "2025-07-30T06:12:44.156338176Z"
+    dependencies:
+    - condition: grafana.enabled
+      name: grafana
+      repository: ""
+      version: 1.1.0
+    - condition: prometheus.enabled
+      name: prometheus-operator
+      repository: ""
+      version: 1.1.1
+    - condition: security.enabled
+      name: security
+      repository: ""
+      version: 0.0.2
+    description: Helm chart for deploying Istio operator
+    digest: 27e3c49fa05550c6eb9d800ffad015e8df8736e21fe3a5aa2e8e246de6d1bf82
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - operator
+    maintainers:
+    - name: goeldeepak
+    - name: gracedo
+    name: istio
+    sources:
+    - https://github.com/istio/istio/tree/master/operator
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-1.25.1.tgz
+    version: 1.25.1
   kafka-operator:
   - apiVersion: v1
     appVersion: v0.25.1
@@ -33884,6 +34055,21 @@ entries:
     version: 0.1.0
   kommander-cert-federation:
   - apiVersion: v2
+    appVersion: 0.0.14
+    created: "2025-07-30T06:12:44.138707903Z"
+    description: A Helm chart to create and federate TLS certificates used by kommander
+      internals
+    digest: 84d18c6a4e7ece2353c018ed1358b27e72c30c084968447b9bbc70b0ac0d7f1d
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: mikolajb
+    - name: takirala
+    name: kommander-cert-federation
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/kommander-cert-federation-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v2
     appVersion: 0.0.13
     created: "2025-05-12T17:30:42.544534713Z"
     description: A Helm chart to create and federate TLS certificates used by kommander
@@ -34541,6 +34727,85 @@ entries:
     - https://mesosphere.github.io/charts/stable/konvoysoaktests-0.1.0.tgz
     version: 0.1.0
   kube-prometheus-stack:
+  - annotations:
+      artifacthub.io/license: Apache-2.0
+      artifacthub.io/links: |
+        - name: Chart Source
+          url: https://github.com/prometheus-community/helm-charts
+        - name: Upstream Project
+          url: https://github.com/prometheus-operator/kube-prometheus
+        - name: Upgrade Process
+          url: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/README.md#upgrading-chart
+      artifacthub.io/operator: "true"
+    apiVersion: v2
+    appVersion: v0.83.0
+    created: "2025-07-30T06:12:44.197315768Z"
+    dependencies:
+    - condition: crds.enabled
+      name: crds
+      repository: ""
+      version: 0.0.0
+    - condition: kubeStateMetrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 6.1.0
+    - condition: nodeExporter.enabled
+      name: prometheus-node-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 4.47.1
+    - condition: grafana.enabled
+      name: grafana
+      repository: https://grafana.github.io/helm-charts
+      version: 9.2.10
+    - condition: windowsMonitoring.enabled
+      name: prometheus-windows-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 0.11.*
+    description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards,
+      and Prometheus rules combined with documentation and scripts to provide easy
+      to operate end-to-end Kubernetes cluster monitoring with Prometheus using the
+      Prometheus Operator.
+    digest: f347266a381314c657b10c4d1cce276760ff9fba2d53fda9f9d2e41b74e40558
+    home: https://github.com/prometheus-operator/kube-prometheus
+    icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+    keywords:
+    - operator
+    - prometheus
+    - kube-prometheus
+    kubeVersion: '>=1.25.0-0'
+    maintainers:
+    - email: andrew@quadcorps.co.uk
+      name: andrewgkew
+      url: https://github.com/andrewgkew
+    - email: gianrubio@gmail.com
+      name: gianrubio
+      url: https://github.com/gianrubio
+    - email: github.gkarthiks@gmail.com
+      name: gkarthiks
+      url: https://github.com/gkarthiks
+    - email: kube-prometheus-stack@sisti.pt
+      name: GMartinez-Sisti
+      url: https://github.com/GMartinez-Sisti
+    - email: github@jkroepke.de
+      name: jkroepke
+      url: https://github.com/jkroepke
+    - email: scott@r6by.com
+      name: scottrigby
+      url: https://github.com/scottrigby
+    - email: miroslav.hadzhiev@gmail.com
+      name: Xtigyro
+      url: https://github.com/Xtigyro
+    - email: quentin.bisson@gmail.com
+      name: QuentinBisson
+      url: https://github.com/QuentinBisson
+    name: kube-prometheus-stack
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/prometheus-operator/kube-prometheus
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/staging/kube-prometheus-stack-75.9.1.tgz
+    version: 75.9.1
   - annotations:
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
@@ -36298,6 +36563,23 @@ entries:
     - https://mesosphere.github.io/charts/stable/kube-state-metrics-0.1.0.tgz
     version: 0.1.0
   kubecost:
+  - apiVersion: v2
+    appVersion: 1.108.1
+    created: "2025-07-30T06:12:44.153678301Z"
+    dependencies:
+    - condition: cost-analyzer.enabled
+      name: cost-analyzer
+      repository: https://kubecost.github.io/cost-analyzer
+      version: 1.108.1
+    description: Kubecost
+    digest: 5b363657ce0f143cde696a1e7529e2e9aaa6fb573c6c0ca3e4276ea014178ab2
+    home: https://github.com/mesosphere/charts
+    maintainers:
+    - name: gracedo
+    name: kubecost
+    urls:
+    - https://mesosphere.github.io/charts/stable/kubecost-0.37.5.tgz
+    version: 0.37.5
   - apiVersion: v2
     appVersion: 1.108.1
     created: "2024-11-11T09:23:20.58123096Z"
@@ -38629,6 +38911,21 @@ entries:
     - https://mesosphere.github.io/charts/stable/mtls-proxy-0.1.0.tgz
     version: 0.1.0
   object-bucket-claim:
+  - apiVersion: v2
+    appVersion: 0.1.11
+    created: "2025-07-30T06:12:44.153953846Z"
+    description: A Helm chart for ObjectBucketClaim to be consumed by other applications.
+    digest: ac7bf65e78c0cec02d478d65c6a33ae9261e42e07e62209d5010ee7e13601045
+    home: https://github.com/mesosphere/charts
+    keywords:
+    - kommander
+    maintainers:
+    - name: cwyl02
+    - name: takirala
+    name: object-bucket-claim
+    urls:
+    - https://mesosphere.github.io/charts/stable/object-bucket-claim-0.1.12.tgz
+    version: 0.1.12
   - apiVersion: v2
     appVersion: 0.1.11
     created: "2024-02-23T00:02:56.239203735Z"
@@ -42388,6 +42685,37 @@ entries:
   velero:
   - apiVersion: v1
     appVersion: 1.5.2
+    created: "2025-07-30T06:12:44.200302054Z"
+    dependencies:
+    - condition: minioBackend
+      name: minio
+      repository: ""
+      version: 8.0.9
+    description: A Helm chart for velero
+    digest: 0fe9813407955f9f85dafbaba0cff25033b5dde25fcbccc0ba6b4a12089e527f
+    home: https://github.com/vmware-tanzu/velero
+    icon: https://cdn-images-1.medium.com/max/1600/1*-9mb3AKnKdcL_QD3CMnthQ.png
+    maintainers:
+    - email: d-caruso@hotmail.it
+      name: domcar
+    - email: hfernandez@mesosphere.com
+      name: hectorj2f
+    - email: brubakern@vmware.com
+      name: nrb
+    - email: aadnan@vmware.com
+      name: prydonius
+    - email: dlipovetsky@d2iq.com
+      name: dlipovetsky
+    - email: jieyu@d2iq.com
+      name: jieyu
+    name: velero
+    sources:
+    - https://github.com/vmware-tanzu/velero
+    urls:
+    - https://mesosphere.github.io/charts/staging/velero-3.2.5.tgz
+    version: 3.2.5
+  - apiVersion: v1
+    appVersion: 1.5.2
     created: "2023-11-10T01:04:55.363861426Z"
     dependencies:
     - condition: minioBackend
@@ -42508,4 +42836,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-07-10T08:05:45.917868383Z"
+generated: "2025-07-30T06:12:44.133092679Z"
