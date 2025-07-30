@@ -6,7 +6,7 @@ annotations:
     - name: os-shell
       image: docker.io/bitnamilegacy/os-shell:12-debian-12-r48
     - name: redis-exporter
-      image: docker.io/oliver006/redis-exporter:1.74.0-debian-12-r2
+      image: docker.io/bitnamilegacy/redis-exporter:1.74.0-debian-12-r3
     - name: valkey
       image: docker.io/bitnamilegacy/valkey:8.1.3-debian-12-r1
     - name: valkey-sentinel
