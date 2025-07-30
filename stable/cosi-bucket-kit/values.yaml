@@ -59,7 +59,7 @@ cosiBucketKit:
 #           user: "*"
   transformations:
     priorityClassName: dkp-high-priority
-    kubectlImage: bitnami/kubectl:1.31.4
+    kubectlImage: bitnamilegacy/kubectl:1.31.4
     kubecost:
       enabled: false
     harbor:

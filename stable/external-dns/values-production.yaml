@@ -12,7 +12,7 @@
 ##
 image:
   registry: docker.io
-  repository: bitnami/external-dns
+  repository: bitnamilegacy/external-dns
   tag: 0.7.0-debian-10-r0
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

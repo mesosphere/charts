@@ -32,7 +32,7 @@ spec:
       serviceAccountName: gcpdisk-csi-driver-snapshot-crds
       containers:
         - name: gcpdisk-csi-driver-snapshot-crds
-          image: "bitnami/kubectl:1.17"
+          image: "bitnamilegacy/kubectl:1.17"
           volumeMounts:
             - name: gcpdisk-csi-driver-snapshot-crds
               mountPath: /etc/gcpdisk-csi-driver-snapshot-crds
