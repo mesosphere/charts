@@ -182,10 +182,8 @@ spec:
               if [[ "${ENDPOINT}" == https://* ]]; then
                 echo "Secure bucket accesss"
                 REGISTRY_STORAGE_S3_SECURE=true
-                REGISTRY_STORAGE_S3_SKIPVERIFY=true
               else
                 REGISTRY_STORAGE_S3_SECURE=false
-                REGISTRY_STORAGE_S3_SKIPVERIFY=false
               fi
 
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
@@ -195,7 +193,7 @@ spec:
                 --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint') \
                 --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(echo "${bucketInfoJSON}" | jq -r '.spec.bucketName') \
                 --from-literal=REGISTRY_STORAGE_S3_SECURE=$REGISTRY_STORAGE_S3_SECURE \
-                --from-literal=REGISTRY_STORAGE_S3_SKIPVERIFY=$REGISTRY_STORAGE_S3_SKIPVERIFY \
+                --from-literal=REGISTRY_STORAGE_S3_SKIPVERIFY=true \
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
               # Create a configmap with the name of the secret from above.
