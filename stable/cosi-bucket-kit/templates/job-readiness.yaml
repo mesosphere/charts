@@ -183,7 +183,8 @@ spec:
                 --from-literal=REGISTRY_STORAGE_S3_REGION=$(echo "${bucketInfoJSON}" | jq -r 'if (.spec.secretS3.region // "") == "" then "none" else .spec.secretS3.region end') \
                 --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint') \
                 --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(echo "${bucketInfoJSON}" | jq -r '.spec.bucketName') \
-                --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
+                --from-literal=REGISTRY_STORAGE_S3_SECURE=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint | test("^https://")')
+                --from-literal=REGISTRY_STORAGE_S3_SKIPVERIFY=true \
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
               # Create a configmap with the name of the secret from above.
