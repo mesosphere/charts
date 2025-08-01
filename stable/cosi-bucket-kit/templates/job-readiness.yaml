@@ -177,13 +177,25 @@ spec:
               {{- range .Values.cosiBucketKit.bucketAccesses }}
               # Update the cosi secret with harbor specific keys.
               bucketInfoJSON="$(kubectl get secret {{ .credentialsSecretName }} -n {{ $ns }} -o json | jq -r '.data.BucketInfo | @base64d | fromjson')"
+
+              ENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint')
+              if [[ "${ENDPOINT}" == https://* ]]; then
+                echo "Secure bucket accesss"
+                REGISTRY_STORAGE_S3_SECURE=true
+                REGISTRY_STORAGE_S3_SKIPVERIFY=true
+              else
+                REGISTRY_STORAGE_S3_SECURE=false
+                REGISTRY_STORAGE_S3_SKIPVERIFY=false
+              fi
+
               kubectl create secret generic {{ .credentialsSecretName }} -n {{ $ns }} \
                 --from-literal=REGISTRY_STORAGE_S3_ACCESSKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessKeyID') \
                 --from-literal=REGISTRY_STORAGE_S3_SECRETKEY=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.accessSecretKey') \
                 --from-literal=REGISTRY_STORAGE_S3_REGION=$(echo "${bucketInfoJSON}" | jq -r 'if (.spec.secretS3.region // "") == "" then "none" else .spec.secretS3.region end') \
                 --from-literal=REGISTRY_STORAGE_S3_REGIONENDPOINT=$(echo "${bucketInfoJSON}" | jq -r '.spec.secretS3.endpoint') \
                 --from-literal=REGISTRY_STORAGE_S3_BUCKET=$(echo "${bucketInfoJSON}" | jq -r '.spec.bucketName') \
-                --from-literal=REGISTRY_STORAGE_S3_SECURE=false \
+                --from-literal=REGISTRY_STORAGE_S3_SECURE=$REGISTRY_STORAGE_S3_SECURE \
+                --from-literal=REGISTRY_STORAGE_S3_SKIPVERIFY=$REGISTRY_STORAGE_S3_SKIPVERIFY \
                 --from-literal=REGISTRY_STORAGE_REDIRECT_DISABLE=true \
                 --dry-run=client -o yaml | kubectl apply --server-side --force-conflicts -f -
               # Create a configmap with the name of the secret from above.
