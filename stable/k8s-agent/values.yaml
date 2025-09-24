@@ -1,0 +1,31 @@
+agent:
+  namespaceOverride: ntnx-system
+  name: nutanix-agent
+  port: 8080
+  image:
+    repository: docker.io/nutanix
+    name: nke-k8s-agent
+    pullPolicy: IfNotPresent
+    tag: "replace_image_tag"
+    privateRegistry: true
+    imageCredentials:
+      dockerconfig: replace_base64_encoded_creds
+  updateConfigInMin: 10
+  updateMetricsInMin: 360
+  config:
+    registration:
+      delete:
+        force: false
+    kubeconfig:
+      delete:
+        force: false  
+
+pc:
+  port: 9440
+  insecure: false #set this to true if PC does not have https enabled
+  endpoint: "" # eg: ip or fqdn
+  username: "" # eg: admin or any other user with Kubernetes Infrastructure provision role
+  password: ""
+k8sClusterName: ""
+k8sDistribution: "CAPX" # eg: CAPX or NKE or OCP or EKSA or NKP
+categoryMappings: "" # "one or more comma separated key=value" eg: "key1=value1" or "key1=value1\,key2=value2"

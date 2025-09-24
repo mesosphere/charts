@@ -1,0 +1,162 @@
+{{/*
+Allow the release namespace to be overridden
+*/}}
+{{- define "k8s-agent.namespace" -}}
+  {{- if .Values.agent.namespaceOverride -}}
+    {{- .Values.agent.namespaceOverride -}}
+  {{- else -}}
+    {{- .Release.Namespace -}}
+  {{- end -}}
+{{- end -}}
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.agent.name }}
+subjects:
+- kind: ServiceAccount
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+type: kubernetes.io/basic-auth
+data:
+  username: {{ required "PC username is required" .Values.pc.username | b64enc}}
+  password: {{ required "PC user password is required" .Values.pc.password | b64enc}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.agent.name }} # This deployment applies to any Pods matching the specified label
+  template: # This deployment will create a set of pods using the configurations in this template
+    metadata:
+      labels: # The labels that will be applied to all of the pods in this deployment
+        app: {{ .Values.agent.name }}
+    spec: # Spec for the container which will run in the Pod
+      {{- if eq .Values.agent.image.privateRegistry true}}
+      imagePullSecrets:
+      - name: nutanix-k8s-agent-pull-secret
+      {{- end }}
+      securityContext:
+        runAsUser: 9999
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccountName: {{ .Values.agent.name }}
+      containers:
+        - name: {{ .Values.agent.name }}
+          image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+          command: ["/k8s-agent/k8s-agent"]
+          volumeMounts:
+            - name: pc-creds-volume
+              mountPath: /certs
+              readOnly: true
+          args:
+            [
+              "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
+              "--pc-port={{ .Values.pc.port }}",
+              "--insecure={{ .Values.pc.insecure }}",
+              "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
+              "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
+              "--k8s-cluster-category={{ .Values.categoryMappings }}",
+              "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
+              "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
+            ]
+          ports:
+            - containerPort: {{ .Values.agent.port }} # Should match the port number that the Go application listens on
+          livenessProbe: # To check the health of the Pod
+            httpGet:
+              path: /health
+              port: {{ .Values.agent.port }}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe: # To check if the Pod is ready to serve traffic or not
+            httpGet:
+              path: /readiness
+              port: {{ .Values.agent.port }}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          securityContext:
+            runAsUser: 9999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: pc-creds-volume
+          secret:
+            secretName: {{ .Values.agent.name }}
+---
+# Case for creating ConfigMap with default categoryMappings
+{{- if eq .Values.categoryMappings "" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntnx-cluster-configmap
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+data:
+  KubernetesClusterName: {{ .Values.k8sClusterName }}
+{{- else }}
+# Case for creating ConfigMap with user provided categoryMappings
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ntnx-cluster-configmap
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+data:
+  {{- $categoryMappings := .Values.categoryMappings | default "" | quote }}
+  {{- $categoryMappings := $categoryMappings | replace "\"" "" }}
+  {{- $mappings := ( split "," $categoryMappings) }}
+  {{- range $idx, $mapping := $mappings }}
+  {{- $mapping := ( split "=" $mapping ) }}
+  {{ $mapping._0 }}: {{ $mapping._1 | quote }}
+  {{- end }}
+{{- end }}

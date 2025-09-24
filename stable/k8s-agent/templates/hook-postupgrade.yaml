@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-postupgrade
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  annotations:
+    "helm.sh/hook": "post-upgrade"
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  {{- if eq .Values.agent.image.privateRegistry true}}
+  imagePullSecrets:
+  - name: nutanix-k8s-agent-pull-secret
+  {{- end }}
+  securityContext:
+    runAsUser: 9999
+    runAsNonRoot: true
+    seccompProfile:
+      type: RuntimeDefault
+  serviceAccountName: {{ .Values.agent.name }}
+  containers:
+  - name: hook-postupgrade-container
+    image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
+    imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+    command: ["/k8s-agent/k8s-agent"]
+    args:
+      [
+        "--chart-hook=post-upgrade",
+        "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
+        "--pc-port={{ .Values.pc.port }}",
+        "--username={{ required "Username is required" .Values.pc.username }}",
+        "--password={{ required "Password is required" .Values.pc.password }}",
+        "--insecure={{ .Values.pc.insecure }}",
+        "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
+        "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
+        "--k8s-cluster-category={{ .Values.categoryMappings }}",
+        "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
+        "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
+      ]
+    securityContext:
+      runAsUser: 9999
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 0
