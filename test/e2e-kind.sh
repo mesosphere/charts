@@ -198,7 +198,7 @@ main() {
     install_dummylb
     install_certmanager
     install_reloader
-    create_namespace("ntnx-system")
+    create_namespace "ntnx-system"
     # may need for kibana but causing issues with ct at the moment
     # install_elasticsearch
 
