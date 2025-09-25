@@ -137,7 +137,7 @@ install_certmanager() {
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
 
-    docker_exec helm install cert-manager --no-hooks --debug --timeout=8m0s \
+    docker_exec helm install cert-manager --debug --timeout=8m0s \
         --values stable/cert-manager-setup/ci/test-values.yaml \
         --namespace cert-manager stable/cert-manager-setup
 
@@ -166,7 +166,7 @@ install_reloader() {
 
 install_elasticsearch() {
     echo 'Installing elasticsearch...'
-    docker_exec helm install elasticsearch --no-hooks --debug stable/elasticsearch
+    docker_exec helm install elasticsearch --debug stable/elasticsearch
 }
 
 replace_priority_class_name_system_x_critical() {
@@ -181,13 +181,6 @@ replace_priority_class_name_system_x_critical() {
     echo
 }
 
-create_namespace() {
-    local namespace=$1
-    echo "Creating namespace ${namespace}..."
-    docker_exec kubectl create namespace "${namespace}" || echo "Namespace ${namespace} already exists"
-    echo
-}   
-
 main() {
     run_ct_container
     shift
@@ -198,7 +191,6 @@ main() {
     install_dummylb
     install_certmanager
     install_reloader
-    create_namespace "ntnx-system"
     # may need for kibana but causing issues with ct at the moment
     # install_elasticsearch
 

@@ -20,4 +20,4 @@ chart-repos:
   - kubecost=https://kubecost.github.io/cost-analyzer
   - prometheus-community=https://prometheus-community.github.io/helm-charts
   - grafana=https://grafana.github.io/helm-charts
-helm-extra-args: --timeout 600s --no-hooks
+helm-extra-args: --timeout 600s
