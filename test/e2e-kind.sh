@@ -181,6 +181,13 @@ replace_priority_class_name_system_x_critical() {
     echo
 }
 
+create_namespace() {
+    local namespace=$1
+    echo "Creating namespace ${namespace}..."
+    docker_exec kubectl create namespace "${namespace}" || echo "Namespace ${namespace} already exists"
+    echo
+}   
+
 main() {
     run_ct_container
     shift
@@ -191,6 +198,7 @@ main() {
     install_dummylb
     install_certmanager
     install_reloader
+    create_namespace("ntnx-system")
     # may need for kibana but causing issues with ct at the moment
     # install_elasticsearch
 
