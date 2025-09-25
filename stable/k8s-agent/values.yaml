@@ -1,5 +1,5 @@
 agent:
-  namespaceOverride: ntnx-system
+  namespaceOverride: {{ .Release.Namespace }}
   name: nutanix-agent
   port: 8080
   image:
