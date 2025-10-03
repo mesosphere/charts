@@ -27,8 +27,8 @@ spec:
         "--chart-hook=post-upgrade",
         "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
         "--pc-port={{ .Values.pc.port }}",
-        "--username={{ required "Username is required" .Values.pc.username }}",
-        "--password={{ required "Password is required" .Values.pc.password }}",
+        "--username=$(PC_USERNAME)",
+        "--password=$(PC_PASSWORD)",
         "--insecure={{ .Values.pc.insecure }}",
         "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
         "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
@@ -45,5 +45,16 @@ spec:
       capabilities:
         drop:
           - ALL
+    env:
+      - name: PC_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.agent.name }}
+            key: username
+      - name: PC_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.agent.name }}
+            key: password        
   restartPolicy: Never
   terminationGracePeriodSeconds: 0

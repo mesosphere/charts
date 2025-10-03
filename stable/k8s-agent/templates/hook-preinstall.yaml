@@ -11,6 +11,22 @@ data:
   .dockerconfigjson: {{ .Values.agent.image.imageCredentials.dockerconfig }}
 {{- end }}
 ---
+{{- if eq .Values.createSecret true}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.agent.name }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  annotations:
+    "helm.sh/hook": "pre-install"
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+type: kubernetes.io/basic-auth
+data:
+  username: {{ required "PC username is required" .Values.pc.username | b64enc}}
+  password: {{ required "PC user password is required" .Values.pc.password | b64enc}}
+{{- end  }} 
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -69,7 +85,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }} 
 ---
 apiVersion: v1
 kind: Pod
@@ -101,8 +117,8 @@ spec:
         "--chart-hook=pre-install",
         "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
         "--pc-port={{ .Values.pc.port }}",
-        "--username={{ required "Username is required" .Values.pc.username }}",
-        "--password={{ required "Password is required" .Values.pc.password }}",
+        "--username=$(PC_USERNAME)",
+        "--password=$(PC_PASSWORD)",
         "--insecure={{ .Values.pc.insecure }}",
         "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
         "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
@@ -119,5 +135,16 @@ spec:
       capabilities:
         drop:
           - ALL
+    env:
+      - name: PC_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.agent.name }}
+            key: username
+      - name: PC_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: {{ .Values.agent.name }}
+            key: password      
   restartPolicy: Never
   terminationGracePeriodSeconds: 0

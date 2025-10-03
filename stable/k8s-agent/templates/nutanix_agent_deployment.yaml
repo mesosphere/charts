@@ -42,16 +42,6 @@ subjects:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
-type: kubernetes.io/basic-auth
-data:
-  username: {{ required "PC username is required" .Values.pc.username | b64enc}}
-  password: {{ required "PC user password is required" .Values.pc.password | b64enc}}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
