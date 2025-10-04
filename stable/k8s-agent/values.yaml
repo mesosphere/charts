@@ -29,4 +29,4 @@ pc:
 k8sClusterName: ""
 k8sDistribution: "CAPX"  # eg: CAPX or NKE or OCP or EKSA or NKP
 categoryMappings: ""  # "one or more comma separated key=value" eg: "key1=value1" or "key1=value1\,key2=value2"
-createSecret: false # set this to true if you want to create the secret with PC credentials. By default CAREN will create this during addon deployment
+createSecret: false  # set this to true if you want to create the secret with PC credentials. By default CAREN will create this during addon deployment
