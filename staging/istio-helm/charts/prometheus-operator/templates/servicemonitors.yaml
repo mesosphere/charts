@@ -1,0 +1,56 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: envoy-stats-monitor
+  namespace: {{ .Release.Namespace }}
+  labels:
+    monitoring: istio-proxies
+    {{- if .Values.serviceMonitor.labels }}
+    {{- toYaml .Values.serviceMonitor.labels | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchExpressions:
+      - {key: istio-prometheus-ignore, operator: DoesNotExist}
+  namespaceSelector:
+    any: true
+  jobLabel: envoy-stats
+  endpoints:
+  - path: /stats/prometheus
+    targetPort: 15090
+    interval: {{ .Values.scrapeInterval }}
+    relabelings:
+    - sourceLabels: [__meta_kubernetes_pod_container_port_name]
+      action: keep
+      regex: '.*-envoy-prom'
+    - action: labelmap
+      regex: "__meta_kubernetes_pod_label_(.+)"
+    - sourceLabels: [__meta_kubernetes_namespace]
+      action: replace
+      targetLabel: namespace
+    - sourceLabels: [__meta_kubernetes_pod_name]
+      action: replace
+      targetLabel: pod_name
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istio-component
+  labels:
+    monitoring: istio-components
+    {{- if .Values.serviceMonitor.labels }}
+    {{- toYaml .Values.serviceMonitor.labels | nindent 4 }}
+    {{- end }}
+spec:
+  jobLabel: istio
+  selector:
+    matchExpressions:
+      - {key: istio, operator: In, values: [pilot, sidecar-injector]}
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: http-monitoring
+    interval: {{ .Values.scrapeInterval }}
+  - port: http-policy-monitoring
+    interval: {{ .Values.scrapeInterval }}

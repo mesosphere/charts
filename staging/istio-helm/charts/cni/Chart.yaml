@@ -1,0 +1,12 @@
+apiVersion: v2
+name: cni
+version: 1.23.6
+appVersion: 1.25.0
+description: Helm chart for deploying Istio CNI
+keywords:
+  - istio
+  - cni
+  - networking
+sources:
+  - https://github.com/istio/istio
+icon: https://istio.io/latest/favicons/android-192x192.png

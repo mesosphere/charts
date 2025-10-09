@@ -1,0 +1,39 @@
+apiVersion: v2
+name: istio-helm
+version: 1.23.6
+appVersion: 1.25.0
+description: Helm chart for deploying Istio components
+keywords:
+  - istio-helm
+sources:
+  - https://github.com/istio/istio/tree/master/operator
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+  - name: goeldeepak
+  - name: gracedo
+dependencies:
+  - name: base
+    version: 1.23.6
+    condition: base.enabled
+  - name: cni
+    version: 1.23.6
+    condition: cni.enabled
+  - name: istiod
+    version: 1.23.6
+    condition: istiod.enabled
+  - name: gateway
+    version: 1.23.6
+    condition: gateway.enabled
+    alias: ingressgateway
+  - name: ztunnel
+    version: 1.23.6
+    condition: ztunnel.enabled
+  - name: grafana
+    version: 1.1.0
+    condition: grafana.enabled
+  - name: prometheus-operator
+    version: 1.1.1
+    condition: prometheus.enabled
+  - name: security
+    version: 0.0.2
+    condition: security.enabled

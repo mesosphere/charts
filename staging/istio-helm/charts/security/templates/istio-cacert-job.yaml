@@ -1,0 +1,42 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cacert-job-{{ randAlphaNum 5 | lower }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+  labels:
+    release: istio
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: istio-cacert-job
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
+      containers:
+      - name: istio-cacert-job
+        image: {{.Values.global.image}}:{{.Values.global.tag}} 
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c",
+            "kubectl", "create", "secret", "generic", "cacerts",
+            "--from-file=ca-cert.pem=/etc/istio-ca/tls.crt",
+            "--from-file=ca-key.pem=/etc/istio-ca/tls.key",
+            "--from-file=root-cert.pem=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+            "--from-file=cert-chain.pem=/etc/istio-ca/tls.crt",
+            "--dry-run -o yaml | kubectl apply -f -"
+        ]
+        volumeMounts:
+        - name: istio-ca
+          mountPath: /etc/istio-ca
+          readOnly: true
+      volumes:
+      - name: istio-ca
+        secret:
+          secretName: istio-ca
+      restartPolicy: OnFailure

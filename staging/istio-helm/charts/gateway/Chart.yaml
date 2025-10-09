@@ -1,0 +1,13 @@
+apiVersion: v2
+name: gateway
+version: 1.23.6
+appVersion: 1.25.0
+description: Helm chart for deploying Istio gateways
+keywords:
+  - istio
+  - gateway
+  - ingress
+  - egress
+sources:
+  - https://github.com/istio/istio
+icon: https://istio.io/latest/favicons/android-192x192.png

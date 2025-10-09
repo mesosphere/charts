@@ -1,0 +1,34 @@
+# cni subchart values
+# These values configure the Istio CNI plugin
+
+global:
+  # Default hub for Istio images.
+  hub: docker.io/istio
+
+  # Default tag for Istio images.
+  tag: 1.25.0
+
+  # Image pull policy
+  imagePullPolicy: IfNotPresent
+
+  # Image pull secrets
+  imagePullSecrets: []
+
+  # Set istio namespace
+  istioNamespace: istio2-system
+
+cni:
+  # CNI namespace - defaults to kube-system
+  namespace: kube-system
+  
+  # CNI image
+  image: install-cni
+  
+  # Image pull policy
+  pullPolicy: IfNotPresent
+  
+  # Repair configuration
+  repair:
+    enabled: true
+    image: install-cni
+    

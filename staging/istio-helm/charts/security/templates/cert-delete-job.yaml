@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cert-delete-job
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cert-delete-job
+  namespace: {{ .Release.Namespace }}
+rules:
+{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+- apiGroups: ["cert-manager.io"]
+  resources: ["certificates"]
+  verbs: ["get", "list", "watch", "delete"]
+{{- else }}
+- apiGroups: ["certmanager.k8s.io"]
+  resources: ["certificates"]
+  verbs: ["get", "list", "watch", "delete"]
+{{- end }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cert-delete-job
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-delete-job
+subjects:
+  - kind: ServiceAccount
+    name: cert-delete-job
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: cert-delete-{{ randAlphaNum 5 | lower }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: cert-delete-job
+      {{- if .Values.global.priorityClassName }}
+      priorityClassName: "{{ .Values.global.priorityClassName }}"
+      {{- end }}
+      containers:
+      - name: istio-ca-delete
+        image: {{.Values.global.image}}:{{.Values.global.tag}}
+        command: ["kubectl",  "delete", "certificate", "istio-ca", "-n", "{{ .Release.Namespace }}", "--ignore-not-found"]
+      restartPolicy: OnFailure

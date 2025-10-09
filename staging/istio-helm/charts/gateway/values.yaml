@@ -1,0 +1,56 @@
+# gateway subchart values
+# These values configure Istio gateways (ingress and egress)
+
+global:
+  # Default hub for Istio images.
+  hub: docker.io/istio
+
+  # Default tag for Istio images.
+  tag: 1.25.0
+
+  # Image pull policy
+  imagePullPolicy: IfNotPresent
+
+  # Image pull secrets
+  imagePullSecrets: []
+
+  # Set istio namespace
+  istioNamespace: istio2-system
+
+# Gateway configuration
+gateways:
+  istio-ingressgateway:
+    name: istio-ingressgateway
+    namespace: istio2-gateway-ns
+    
+    # Labels to apply to the gateway deployment
+    labels:
+      app: istio2-ingressgateway
+      istio: istio2-ingressgateway
+      
+    # Image for the gateway
+    image: proxyv2
+    
+    # Number of replicas
+    replicaCount: 2
+        
+    # Service configuration
+    service:
+      type: LoadBalancer
+      ports:
+      - port: 15021
+        targetPort: 15021
+        name: status-port
+        protocol: TCP
+      - port: 80
+        targetPort: 8080
+        name: http2
+        protocol: TCP
+      - port: 443
+        targetPort: 8443
+        name: https
+        protocol: TCP
+      externalTrafficPolicy: Local
+    
+    # Gateway type (ingress or egress)
+    type: ingress
