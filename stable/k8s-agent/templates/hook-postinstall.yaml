@@ -17,18 +17,24 @@ spec:
     seccompProfile:
       type: RuntimeDefault
   serviceAccountName: {{ .Values.agent.name }}
+  volumes:
+  - name: pc-creds-volume
+    secret:
+      secretName: {{ .Values.agent.name }}  
   containers:
   - name: hook-postinstall-container
     image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
     imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
     command: ["/k8s-agent/k8s-agent"]
+    volumeMounts:
+      - name: pc-creds-volume
+        mountPath: /certs
+        readOnly: true
     args:
       [
         "--chart-hook=post-install",
         "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
         "--pc-port={{ .Values.pc.port }}",
-        "--username=$(PC_USERNAME)",
-        "--password=$(PC_PASSWORD)",
         "--insecure={{ .Values.pc.insecure }}",
         "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
         "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
@@ -44,17 +50,6 @@ spec:
         type: RuntimeDefault
       capabilities:
         drop:
-          - ALL
-    env:
-      - name: PC_USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Values.agent.name }}
-            key: username
-      - name: PC_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: {{ .Values.agent.name }}
-            key: password        
+          - ALL        
   restartPolicy: Never
   terminationGracePeriodSeconds: 0
