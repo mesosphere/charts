@@ -41,11 +41,6 @@ tolerations:
 # Affinity
 affinity: {}
 
-# Primary CNI configuration - will be set dynamically by CAREN
-primaryCNI:
-  provider: "cilium"  # Will be overridden by CAREN handler
-  socketPath: "/run/cilium/cilium.sock"  # Will be overridden by CAREN handler
-  cniConfigDir: "/etc/cni/net.d"
 
 # Multus daemon configuration - readinessIndicatorFile will be dynamic
 daemonConfig:

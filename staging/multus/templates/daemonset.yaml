@@ -7,8 +7,6 @@ metadata:
     {{- include "multus.labels" . | nindent 4 }}
     tier: node
     app: multus
-    caren.nutanix.com/multus: "true"
-    caren.nutanix.com/primary-cni: "{{ .Values.primaryCNI.provider }}"
 spec:
   selector:
     matchLabels:
@@ -23,8 +21,6 @@ spec:
         {{- include "multus.selectorLabels" . | nindent 8 }}
         tier: node
         app: multus
-        caren.nutanix.com/multus: "true"
-        caren.nutanix.com/primary-cni: "{{ .Values.primaryCNI.provider }}"
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
@@ -106,8 +102,8 @@ spec:
           - name: multus-conf-dir
             mountPath: /etc/cni/multus/net.d
           # Dynamic primary CNI socket mount - configured by CAREN
-          - name: {{ .Values.primaryCNI.provider }}-sock
-            mountPath: {{ .Values.primaryCNI.socketPath }}
+          - name: primary-cni-sock
+            mountPath: {{ .Values.daemonConfig.readinessIndicatorFile }}
             readOnly: true
         env:
           - name: MULTUS_NODE_NAME
@@ -146,7 +142,7 @@ spec:
           hostPath:
             path: /etc/cni/multus/net.d
         # Dynamic primary CNI socket volume - configured by CAREN
-        - name: {{ .Values.primaryCNI.provider }}-sock
+        - name: primary-cni-sock
           hostPath:
-            path: {{ .Values.primaryCNI.socketPath }}
+            path: {{ .Values.daemonConfig.readinessIndicatorFile }}
             type: Socket

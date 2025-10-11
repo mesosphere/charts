@@ -7,8 +7,6 @@ metadata:
     {{- include "multus.labels" . | nindent 4 }}
     tier: node
     app: multus
-    caren.nutanix.com/multus: "true"
-    caren.nutanix.com/primary-cni: "{{ .Values.primaryCNI.provider }}"
 data:
   daemon-config.json: |
 {{ include "multus.config" . | indent 4 }}

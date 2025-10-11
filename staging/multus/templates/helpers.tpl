@@ -59,6 +59,7 @@ Multus configuration JSON
     "logLevel": "{{ .Values.daemonConfig.logLevel }}",
     "logToStderr": {{ .Values.daemonConfig.logToStderr }},
     "cniConfigDir": "{{ .Values.daemonConfig.cniConfigDir }}",
+    "readinessIndicatorFile": "{{ .Values.daemonConfig.readinessIndicatorFile }}",
     "multusAutoconfigDir": "{{ .Values.daemonConfig.multusAutoconfigDir }}",
     "multusConfigFile": "{{ .Values.daemonConfig.multusConfigFile }}",
     "socketDir": "{{ .Values.daemonConfig.socketDir }}"
