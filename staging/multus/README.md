@@ -48,8 +48,6 @@ The following table lists the configurable parameters and their default values.
 | `resources.requests.memory` | Memory request | `128Mi` |
 | `daemonConfig.logLevel` | Log level | `verbose` |
 | `daemonConfig.cniVersion` | CNI version | `0.3.1` |
-| `primaryCNI.provider` | Primary CNI provider | `cilium` |
-| `primaryCNI.socketPath` | Primary CNI socket path | `/run/cilium/cilium.sock` |
 | `daemonConfig.readinessIndicatorFile` | Readiness indicator file | `/run/cilium/cilium.sock` |
 
 ## Dynamic Configuration
@@ -58,38 +56,14 @@ This chart supports dynamic configuration based on the primary CNI provider:
 
 ### For Cilium as Primary CNI:
 ```yaml
-primaryCNI:
-  provider: "cilium"
-  socketPath: "/run/cilium/cilium.sock"
 daemonConfig:
   readinessIndicatorFile: "/run/cilium/cilium.sock"
-cniConfig:
-  delegates: |
-    [
-      {
-        "cniVersion": "0.3.1",
-        "name": "cilium",
-        "type": "cilium-cni"
-      }
-    ]
 ```
 
 ### For Calico as Primary CNI:
 ```yaml
-primaryCNI:
-  provider: "calico"
-  socketPath: "/run/calico/calico.sock"
 daemonConfig:
   readinessIndicatorFile: "/run/calico/calico.sock"
-cniConfig:
-  delegates: |
-    [
-      {
-        "cniVersion": "0.3.1",
-        "name": "calico",
-        "type": "calico"
-      }
-    ]
 ```
 
 ## Usage
