@@ -1,13 +1,12 @@
 apiVersion: v2
-name: istiod
-version: 1.23.6
-appVersion: 1.25.0
-description: Helm chart for deploying Istio control plane (istiod)
-keywords:
-  - istio
-  - istiod
-  - control-plane
-  - pilot
-sources:
-  - https://github.com/istio/istio
+appVersion: 1.23.6
+description: Helm chart for istio control plane
 icon: https://istio.io/latest/favicons/android-192x192.png
+keywords:
+- istio
+- istiod
+- istio-discovery
+name: istiod
+sources:
+- https://github.com/istio/istio
+version: 1.23.6

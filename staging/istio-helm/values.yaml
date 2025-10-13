@@ -14,7 +14,7 @@ global:
     hub: docker.io/istio
     
     # Default tag for Istio images  
-    tag: 1.25.0
+    tag: 1.23.6
     
     # Image pull policy
     imagePullPolicy: IfNotPresent
@@ -37,9 +37,6 @@ istiod:
   
 gateway:
   enabled: true
-  
-ztunnel:
-  enabled: false  # Disable by default as it's for ambient mesh
   
 # D2iQ monitoring and security subcharts  
 grafana:
