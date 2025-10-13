@@ -1,0 +1,148 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ include "multus.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "multus.labels" . | nindent 4 }}
+    tier: node
+    app: multus
+spec:
+  selector:
+    matchLabels:
+      {{- include "multus.selectorLabels" . | nindent 6 }}
+      tier: node
+      app: multus
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        {{- include "multus.selectorLabels" . | nindent 8 }}
+        tier: node
+        app: multus
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      hostNetwork: true
+      hostPID: true
+      priorityClassName: system-node-critical
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+      - name: install-multus-binary
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        command:
+          - "sh"
+          - "-c"
+          - "cp /usr/src/multus-cni/bin/multus-shim /host/opt/cni/bin/multus-shim && cp /usr/src/multus-cni/bin/passthru /host/opt/cni/bin/passthru"
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "15Mi"
+        securityContext:
+          privileged: true
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+          - name: cnibin
+            mountPath: /host/opt/cni/bin
+            mountPropagation: Bidirectional
+      containers:
+      - name: kube-multus
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: [ "/usr/src/multus-cni/bin/multus-daemon" ]
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 10 }}
+        terminationMessagePolicy: FallbackToLogsOnError
+        volumeMounts:
+          - name: cni
+            mountPath: /host/etc/cni/net.d
+          - name: cnibin
+            mountPath: /opt/cni/bin
+          - name: host-run
+            mountPath: /host/run
+          - name: host-var-lib-cni-multus
+            mountPath: /var/lib/cni/multus
+          - name: host-var-lib-kubelet
+            mountPath: /var/lib/kubelet
+            mountPropagation: HostToContainer
+          - name: host-run-k8s-cni-cncf-io
+            mountPath: /run/k8s.cni.cncf.io
+          - name: host-run-netns
+            mountPath: /run/netns
+            mountPropagation: HostToContainer
+          - name: multus-daemon-config
+            mountPath: /etc/cni/net.d/multus.d
+            readOnly: true
+          - name: hostroot
+            mountPath: /hostroot
+            mountPropagation: HostToContainer
+          - name: multus-conf-dir
+            mountPath: /etc/cni/multus/net.d
+          # Dynamic primary CNI socket mount - configured by CAREN
+          - name: primary-cni-sock
+            mountPath: {{ .Values.daemonConfig.readinessIndicatorFile }}
+            readOnly: true
+        env:
+          - name: MULTUS_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+      volumes:
+        - name: cni
+          hostPath:
+            path: /etc/cni/net.d
+        - name: cnibin
+          hostPath:
+            path: /opt/cni/bin
+        - name: hostroot
+          hostPath:
+            path: /
+        - name: multus-daemon-config
+          configMap:
+            name: {{ include "multus.fullname" . }}-config
+        - name: host-run
+          hostPath:
+            path: /run
+        - name: host-var-lib-cni-multus
+          hostPath:
+            path: /var/lib/cni/multus
+        - name: host-var-lib-kubelet
+          hostPath:
+            path: /var/lib/kubelet
+        - name: host-run-k8s-cni-cncf-io
+          hostPath:
+            path: /run/k8s.cni.cncf.io
+        - name: host-run-netns
+          hostPath:
+            path: /run/netns/
+        - name: multus-conf-dir
+          hostPath:
+            path: /etc/cni/multus/net.d
+        # Dynamic primary CNI socket volume - configured by CAREN
+        - name: primary-cni-sock
+          hostPath:
+            path: {{ .Values.daemonConfig.readinessIndicatorFile }}
+            type: Socket
