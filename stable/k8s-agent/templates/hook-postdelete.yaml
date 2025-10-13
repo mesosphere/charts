@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: nkp-k8s-agent-postdelete
+  name: k8s-agent-postdelete
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
     "helm.sh/hook": "post-delete"
@@ -11,7 +11,7 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: nkp-k8s-agent-postdelete
+  name: k8s-agent-postdelete
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
     "helm.sh/hook": "post-delete"
@@ -28,7 +28,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: nkp-k8s-agent-postdelete
+  name: k8s-agent-postdelete
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
     "helm.sh/hook": "post-delete"
@@ -37,10 +37,10 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: nkp-k8s-agent-postdelete
+  name: k8s-agent-postdelete
 subjects:
 - kind: ServiceAccount
-  name: nkp-k8s-agent-postdelete
+  name: k8s-agent-postdelete
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
 ---
 apiVersion: v1
@@ -62,7 +62,7 @@ spec:
     runAsNonRoot: true
     seccompProfile:
       type: RuntimeDefault
-  serviceAccountName: nkp-k8s-agent-postdelete
+  serviceAccountName: k8s-agent-postdelete
   volumes:
   - name: pc-creds-volume
     secret:
