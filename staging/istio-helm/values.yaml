@@ -23,7 +23,7 @@ global:
     imagePullSecrets: []
     
     # Istio namespace
-    istioNamespace: istio2-system
+    istioNamespace: istio-system
 
 # Istio component subcharts
 base:
@@ -50,23 +50,12 @@ prometheus:
   enabled: true
 
 defaults:
-  # D2iQ Note: Use istioOperator.hub and istioOperator.tag instead (templates/deployment.yaml)
-#  hub: gcr.io/istio-testing
-#  tag: latest
 
-  # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
-  # used to pull operator image. Must be set for any cluster configured with private docker registry.
   imagePullSecrets: []
-
+  
   # Specify image pull policy if default behavior isn't desired.
   # Default behavior: latest images will be Always else IfNotPresent.
   imagePullPolicy: ""
-
-  # Used to replace istioNamespace to support operator watch multiple namespaces.
-  # D2iQ Note: Rather than use 'istio-system' here, set an empty string.
-  # By default, we instruct Istio's operator to only watch the .Release.Namespace where it is installed.
-  # Of course, this can be overridden so that additional namespaces can be watched.
-#  watchedNamespaces: istio-system
   watchedNamespaces: ""
   waitForResourcesTimeout: 300s
 
@@ -74,7 +63,7 @@ defaults:
   # D2iQ Note: This should always be false since Flux v2 which DKP v2 uses has dropped Helm 2 support.
   enableCRDTemplates: false
 
-  # revision for the operator resources
+  # revision for resources
   revision: "istio-helm"
 
   # Node labels for pod assignment
@@ -85,7 +74,5 @@ defaults:
 
   # Affinity for pod assignment
   affinity: {}
-
-  # Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
   podLabels: {}
   podAnnotations: {}
