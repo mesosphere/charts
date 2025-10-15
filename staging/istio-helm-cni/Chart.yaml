@@ -1,0 +1,19 @@
+apiVersion: v2
+name: istio-helm-cni
+version: 1.23.6
+appVersion: 1.23.6
+description: Helm chart for deploying Istio CNI plugin
+keywords:
+  - istio
+  - istio-cni
+  - cni
+sources:
+  - https://github.com/istio/istio/tree/master/manifests/charts/istio-cni
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+  - name: rohit.kumar5
+dependencies:
+  - name: cni
+    version: 1.23.6
+    condition: cni.enabled
+
