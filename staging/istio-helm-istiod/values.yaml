@@ -1,11 +1,6 @@
 # D2iQ Istio Istiod Chart Values
 
 global:
-  # D2iQ specific global values
-  image: docker.io/bitnamilegacy/kubectl
-  tag: 1.29.2
-  priorityClassName: ""
-  
   # Istio global values
   istio:
     hub: docker.io/istio

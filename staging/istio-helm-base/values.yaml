@@ -1,11 +1,6 @@
 # D2iQ Istio Base Chart Values
 
 global:
-  # D2iQ specific global values
-  image: docker.io/bitnamilegacy/kubectl
-  tag: 1.29.2
-  priorityClassName: ""
-  
   # Istio global values
   istio:
     hub: docker.io/istio
@@ -16,5 +11,4 @@ global:
 # Base component configuration
 base:
   enabled: true
-  enableCRDTemplates: true
 
