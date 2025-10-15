@@ -6,7 +6,7 @@ agent:
     repository: docker.io/nutanix
     name: nke-k8s-agent
     pullPolicy: IfNotPresent
-    tag: "688"
+    tag: ""
     privateRegistry: false
     imageCredentials:
       dockerconfig: replace_base64_encoded_creds
