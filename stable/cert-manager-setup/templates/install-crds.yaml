@@ -52,7 +52,7 @@ spec:
         - name: cert-manager-setup-certificaterequests-crd
           configMap:
             name: cert-manager-setup-certificaterequests-crd
-      restartPolicy: OnFailure
+      restartPolicy: Never
 ---
 apiVersion: batch/v1
 kind: Job
