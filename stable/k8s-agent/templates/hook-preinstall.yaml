@@ -4,8 +4,9 @@ kind: Secret
 metadata:
   name: nutanix-k8s-agent-pull-secret
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Values.agent.image.imageCredentials.dockerconfig }}
@@ -33,9 +34,9 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -43,9 +44,9 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 rules:
 {{- if eq .Values.k8sDistribution "OCP"}}
 - apiGroups:
@@ -75,9 +76,9 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -93,9 +94,9 @@ metadata:
   name: hook-preinstall
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": "pre-install"
+    "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "2"
-    "helm.sh/hook-delete-policy": hook-succeeded
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
   {{- if eq .Values.agent.image.privateRegistry true}}
   imagePullSecrets:
