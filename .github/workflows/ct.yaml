@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install asdf plugins
-        uses: asdf-vm/actions/install@v2
+        uses: asdf-vm/actions/install@v4
 
       - name: Install Python
         uses: actions/setup-python@v4
@@ -41,7 +41,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install asdf plugins
-        uses: asdf-vm/actions/install@v2
+        uses: asdf-vm/actions/install@v4
 
       - name: Test charts
         run: make ct.test
