@@ -45,3 +45,11 @@ jobs:
 
       - name: Test charts
         run: make ct.test
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kind-logs
+          path: .logs
+          include-hidden-files: true
