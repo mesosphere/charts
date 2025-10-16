@@ -56,5 +56,5 @@ spec:
       containers:
       - name: istio-ca-delete
         image: "{{.Values.global.image}}:{{.Values.global.tag}}"
-        command: ["kubectl",  "delete", "certificate", "istio-ca", "-n", "{{ .Release.Namespace }}", "--ignore-not-found"]
+        command: ['kubectl', 'delete', 'certificate', 'istio-ca', '-n', '{{ .Release.Namespace }}', '--ignore-not-found']
       restartPolicy: OnFailure
