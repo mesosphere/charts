@@ -84,7 +84,7 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ template "traefik.fullname" . }}-konvoy-company-cert-deploy-job-pod
-        image: bitnamilegacy/kubectl:1.18.8
+        image: bitnami/kubectl:1.18.8-debian-10-r15
         command:
         - kubectl
         - apply
