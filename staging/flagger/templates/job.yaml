@@ -15,7 +15,7 @@ spec:
       serviceAccountName: {{ template "flagger.fullname" . }}
       containers:
         - name: ns-labeler
-          image: "bitnami/kubectl:1.18.8-debian-10-r15"
+          image: "bitnamilegacy/kubectl:1.18.8"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["/bin/sh", "-c"]
           args: ["kubectl label --overwrite ns {{ .Release.Namespace }} istio-injection=enabled; kubectl label --overwrite ns {{ .Release.Namespace }} ca.istio.io/override=true"]
