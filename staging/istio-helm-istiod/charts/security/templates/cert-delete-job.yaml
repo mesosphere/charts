@@ -11,7 +11,7 @@ metadata:
   name: cert-delete-job
   namespace: {{ .Release.Namespace }}
 rules:
-{{- if  (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+{{- if (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
 - apiGroups: ["cert-manager.io"]
   resources: ["certificates"]
   verbs: ["get", "list", "watch", "delete"]

@@ -11,4 +11,4 @@ global:
 # CNI component configuration
 cni:
   enabled: true
-  priorityClassName: ""
+  priorityClassName: "dkp-critical-priority"
