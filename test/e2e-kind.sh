@@ -41,6 +41,7 @@ cleanup() {
     if [ $exit_code -ne 0 ]; then
         echo "Error occurred, exiting with code ${exit_code}, exporting kind cluster logs..."
         "${tmp}/kind" export logs --name "$CLUSTER_NAME" "$(pwd)/.logs"
+        ls -la "$(pwd)/.logs"
     fi
 
     echo 'Removing ct container...'
@@ -143,7 +144,7 @@ install_certmanager() {
     docker_exec kubectl create secret tls kubernetes-root-ca \
         --namespace=cert-manager --cert=/tmp/ca.crt --key=/tmp/ca.key
 
-    docker_exec helm install cert-manager --debug --timeout=8m0s \
+    docker_exec helm install cert-manager --debug --timeout=1m0s \
         --values stable/cert-manager-setup/ci/test-values.yaml \
         --namespace cert-manager stable/cert-manager-setup
 
