@@ -1,0 +1,18 @@
+apiVersion: v2
+name: istio-helm-gateway
+version: 1.23.6
+appVersion: 1.23.6
+description: Helm chart for deploying Istio ingress gateway
+keywords:
+  - istio
+  - istio-gateway
+  - ingress
+sources:
+  - https://github.com/istio/istio/tree/master/manifests/charts/gateway
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+  - name: rohitkumar0510
+dependencies:
+  - name: gateway
+    version: 1.23.6
+    condition: gateway.enabled

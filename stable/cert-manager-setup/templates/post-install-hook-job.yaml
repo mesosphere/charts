@@ -18,6 +18,6 @@ spec:
       restartPolicy: Never
       containers:
       - name: {{ .Chart.Name }}
-        image: bitnami/kubectl:1.18.8-debian-10-r15
+        image: bitnamilegacy/kubectl:1.18.8
         imagePullPolicy: IfNotPresent
         command: ["sleep", "30"]
