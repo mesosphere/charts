@@ -1,0 +1,248 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "agent",
+        "pc",
+        "k8sClusterName",
+        "k8sDistribution",
+        "categoryMappings"
+    ],
+    "properties": {
+        "agent": {
+            "type": "object",
+            "default": {},
+            "title": "The agent Schema",
+            "required": [
+                "namespaceOverride",
+                "name",
+                "port",
+                "image",
+                "updateConfigInMin",
+                "updateMetricsInMin"
+            ],
+            "properties": {
+                "namespaceOverride": {
+                    "type": "string",
+                    "default": "ntnx-system",
+                    "title": "The namespaceOverride Schema",
+                    "examples": [
+                        "ntnx-system"
+                    ]
+                },
+                "name": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The name Schema",
+                    "examples": [
+                        "nutanix-agent"
+                    ]
+                },
+                "port": {
+                    "type": "integer",
+                    "default": 8080,
+                    "title": "The port Schema",
+                    "examples": [
+                        8080
+                    ]
+                },
+                "image": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The image Schema",
+                    "required": [
+                        "repository",
+                        "pullPolicy",
+                        "tag"
+                    ],
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "default": "quay.io/karbon/k8s-agent",
+                            "title": "The repository Schema",
+                            "examples": [
+                                "quay.io/karbon/k8s-agent"
+                            ]
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "default": "IfNotPresent",
+                            "title": "The pullPolicy Schema",
+                            "examples": [
+                                "IfNotPresent"
+                            ]
+                        },
+                        "tag": {
+                            "type": "string",
+                            "default": "0",
+                            "title": "The tag Schema",
+                            "examples": [
+                                "1.3.0"
+                            ]
+                        }
+                    },
+                    "examples": [
+                        {
+                            "repository": "quay.io/karbon/k8s-agent",
+                            "pullPolicy": "IfNotPresent",
+                            "tag": "365"
+                        }
+                    ]
+                },
+                "updateConfigInMin": {
+                    "type": "integer",
+                    "default": 10,
+                    "title": "The updateConfigInMin Schema",
+                    "examples": [
+                        10
+                    ]
+                },
+                "updateMetricsInMin": {
+                    "type": "integer",
+                    "default": 360,
+                    "title": "The updateMetricsInMin Schema",
+                    "examples": [
+                        360
+                    ]
+                }
+            },
+            "examples": [
+                {
+                    "namespaceOverride": "ntnx-system",
+                    "name": "nutanix-agent",
+                    "port": 8080,
+                    "image": {
+                        "repository": "quay.io/karbon/k8s-agent",
+                        "pullPolicy": "IfNotPresent",
+                        "tag": "365"
+                    },
+                    "updateConfigInMin": 10,
+                    "updateMetricsInMin": 360
+                }
+            ]
+        },
+        "pc": {
+            "type": "object",
+            "default": {},
+            "title": "The pc Schema",
+            "required": [
+                "port",
+                "insecure",
+                "endpoint",
+                "username",
+                "password"
+            ],
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "default": 9440,
+                    "title": "The port Schema",
+                    "examples": [
+                        9440
+                    ]
+                },
+                "insecure": {
+                    "type": "boolean",
+                    "default": false,
+                    "title": "The insecure Schema",
+                    "examples": [
+                        false
+                    ]
+                },
+                "endpoint": {
+                    "type": "string",
+                    "default": "xxx.xxx.xxx.xxx",
+                    "title": "The endpoint Schema",
+                    "examples": [
+                        "10.47.3.5",
+                        "prism-central.mycompany.com"
+                    ]
+                },
+                "username": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The username Schema",
+                    "examples": [
+                        "user1",
+                        "ca_user1@test.com"
+                    ]
+                },
+                "password": {
+                    "type": "string",
+                    "default": "",
+                    "title": "The password Schema",
+                    "examples": [
+                        "PC user password"
+                    ]
+                }
+            },
+            "examples": [
+                {
+                    "port": 9440,
+                    "insecure": false,
+                    "endpoint": "xxx.xxx.xxx.xxx",
+                    "username": "user1",
+                    "password": "xxxxxxxxx"
+                }
+            ]
+        },
+        "k8sClusterName": {
+            "type": "string",
+            "default": "",
+            "title": "The k8sClusterName Schema",
+            "examples": [
+                "dept1-cluster"
+            ]
+        },
+        "k8sDistribution": {
+            "type": "string",
+            "default": "",
+            "title": "The k8sDistribution Schema",
+            "pattern": "^(CAPX|OCP|NKE|EKSA|NKP)$",
+            "examples": [
+                "NKE",
+                "OCP",
+                "EKSA",
+                "NKP"
+            ]
+        },
+        "categoryMappings": {
+            "type": "string",
+            "default": "",
+            "title": "The categoryMappings Schema",
+            "examples": [
+                "key1=value1",
+                "key1=value1,key2=value2"
+            ]
+        }
+    },
+    "examples": [
+        {
+            "agent": {
+                "namespaceOverride": "ntnx-system",
+                "name": "nutanix-agent",
+                "port": 8080,
+                "image": {
+                    "repository": "quay.io/karbon/k8s-agent",
+                    "pullPolicy": "IfNotPresent",
+                    "tag": "365"
+                },
+                "updateConfigInMin": 10,
+                "updateMetricsInMin": 360
+            },
+            "pc": {
+                "port": 9440,
+                "insecure": false,
+                "endpoint": "xxx.xxx.xxx.xxx",
+                "username": "user1",
+                "password": "xxxxxxxxx"
+            },
+            "k8sClusterName": "dept1-cluster",
+            "k8sDistribution": "OCP",
+            "categoryMappings": ""
+        }
+    ]
+}
