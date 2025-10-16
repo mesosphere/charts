@@ -38,8 +38,8 @@ run_ct_container() {
 
 cleanup() {
     local exit_code=$1
-    if [ $exit_code -ne 0 ]; then
-        echo "Error occurred, exiting with code ${exit_code}, exporting kind cluster logs..."
+    if [ "$exit_code" -ne 0 ]; then
+        echo "Error occurred, exiting with code \"${exit_code}\", exporting kind cluster logs..."
         "${tmp}/kind" export logs --name "$CLUSTER_NAME" "$(pwd)/.logs"
         ls -la "$(pwd)/.logs"
     fi
