@@ -36,7 +36,8 @@ excluded-charts:
   - object-bucket-claim # chart is only a plain OBC object
   - postgres-cluster # Requires installing postgres-operator chart as well
   - k8s-agent
-  - istio-helm-gateway
+  - istio-helm-gateway # Requires installing dependencies like istiod-helm-istiod
+  - istio-helm-istiod # Requires installing dependencies like istiod-helm-base
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
