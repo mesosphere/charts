@@ -1,0 +1,76 @@
+{{- if .Values.agent.config }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{.Values.agent.name}}-config
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+data:
+  agent-config.yaml: |
+  {{- if .Values.agent.config.registration }}
+    registration:
+      delete:
+        force: {{ .Values.agent.config.registration.delete.force | default false  }}
+  {{- end  }}   
+  {{- if .Values.agent.config.kubeconfig }} 
+    kubeconfig:
+      delete:
+        force: {{ .Values.agent.config.kubeconfig.delete.force | default false  }}
+  {{- end  }}    
+{{- end }}          
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hook-predelete
+  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  annotations:
+     "helm.sh/hook": "pre-delete"
+     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  {{- if eq .Values.agent.image.privateRegistry true}}
+  imagePullSecrets:
+  - name: nutanix-k8s-agent-pull-secret
+  {{- end }}
+  serviceAccountName: {{ .Values.agent.name }}
+  volumes:
+  - name: predelete-config
+    configMap:
+      name: {{.Values.agent.name}}-config
+  - name: pc-creds-volume
+    secret:
+      secretName: {{ .Values.agent.name }}  
+  containers:
+  - name: hook-predelete-container
+    image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
+    imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
+    command: ["/k8s-agent/k8s-agent"]
+    volumeMounts:
+      - name: pc-creds-volume
+        mountPath: /certs
+        readOnly: true
+      - name: predelete-config
+        mountPath: /k8s-agent/config
+        readOnly: true   
+    args:
+      [
+        "--chart-hook=pre-delete",
+        "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
+        "--pc-port={{ .Values.pc.port }}",
+        "--insecure={{ .Values.pc.insecure }}",
+        "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
+        "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
+        "--k8s-cluster-category={{ .Values.categoryMappings }}",
+        "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
+        "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
+      ]
+    securityContext:
+      runAsUser: 9999
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL    
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 0  

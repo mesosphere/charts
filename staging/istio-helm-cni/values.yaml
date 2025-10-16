@@ -1,0 +1,14 @@
+# D2iQ Istio CNI Chart Values
+
+global:
+  # Istio global values
+  istio:
+    hub: docker.io/istio
+    tag: 1.23.6
+    imagePullPolicy: IfNotPresent
+    istioNamespace: istio-system
+
+# CNI component configuration
+cni:
+  enabled: true
+  priorityClassName: "dkp-critical-priority"

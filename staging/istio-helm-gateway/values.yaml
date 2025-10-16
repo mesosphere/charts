@@ -1,0 +1,18 @@
+# D2iQ Istio Gateway Chart Values
+
+global:
+  # Istio global values
+  istio:
+    hub: docker.io/istio
+    tag: 1.23.6
+    imagePullPolicy: IfNotPresent
+    istioNamespace: istio-system
+
+# Gateway component configuration
+gateway:
+  enabled: true
+  name: istio-ingressgateway
+  priorityClassName: ""
+  replicaCount: 2
+  labels:
+    istio: ingressgateway

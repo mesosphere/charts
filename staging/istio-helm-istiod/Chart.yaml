@@ -1,0 +1,27 @@
+apiVersion: v2
+name: istio-helm-istiod
+version: 1.23.6
+appVersion: 1.23.6
+description: Helm chart for deploying Istio control plane (istiod) with monitoring
+keywords:
+  - istio
+  - istio-istiod
+  - control-plane
+sources:
+  - https://github.com/istio/istio/tree/master/manifests/charts/istiod
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+  - name: rohitkumar0510
+dependencies:
+  - name: istiod
+    version: 1.23.6
+    condition: istiod.enabled
+  - name: grafana
+    version: 1.1.0
+    condition: grafana.enabled
+  - name: prometheus-operator
+    version: 1.1.1
+    condition: prometheus.enabled
+  - name: security
+    version: 0.0.2
+    condition: security.enabled

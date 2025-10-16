@@ -1,0 +1,30 @@
+---
+{{- if (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+apiVersion: cert-manager.io/v1
+{{- else }}
+apiVersion: certmanager.k8s.io/v1alpha1
+{{- end }}
+kind: Certificate
+metadata:
+  name: istio-ca
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install
+spec:
+  isCA: true
+  commonName: istio-ca
+  dnsNames:
+  - ca.istio.io
+  duration: 87600h
+{{- if (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  subject:
+    organizations:
+      - D2iQ
+{{- else }}
+  organization:
+    - D2iQ
+{{- end }}
+  secretName: istio-ca
+  issuerRef:
+    name: {{ .Values.issuerName }}
+    kind: ClusterIssuer

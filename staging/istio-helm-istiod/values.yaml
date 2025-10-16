@@ -1,0 +1,33 @@
+# D2iQ Istio Istiod Chart Values
+
+global:
+  # Istio global values
+  istio:
+    hub: docker.io/istio
+    tag: 1.23.6
+    imagePullPolicy: IfNotPresent
+    istioNamespace: istio-system
+
+# Istiod component configuration
+istiod:
+  enabled: true
+  priorityClassName: ""
+  pilot:
+    replicaCount: 2
+
+# Grafana dashboards
+grafana:
+  enabled: true
+
+# Prometheus Operator ServiceMonitors
+prometheus:
+  enabled: true
+
+prometheus-operator:
+  serviceMonitor:
+    labels: {}
+
+# Security (certificate management)
+security:
+  enabled: true
+  issuerName: kommander-ca
