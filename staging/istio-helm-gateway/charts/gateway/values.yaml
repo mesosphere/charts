@@ -6,6 +6,11 @@ defaults:
   # revision declares which revision this gateway is a part of
   revision: ""
 
+  # Gateway proxy image configuration
+  proxy:
+    # "auto" will be populated at runtime by the mutating webhook. See https://istio.io/latest/docs/setup/additional-setup/sidecar-injection/#customizing-injection
+    image: auto
+
   # Controls the spec.replicas setting for the Gateway deployment if set.
   # Otherwise defaults to Kubernetes Deployment default (1).
   replicaCount:
