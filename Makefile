@@ -162,10 +162,10 @@ ifneq ($(CI),true)
 	git fetch $(GIT_REMOTE_NAME) master
 endif
 ifeq (, $(shell which yamllint 2>/dev/null))
-	$(error "No yamllint in PATH, consider doing pip install yamllint")
+	$(error "No yamllint in PATH, consider doing 'pip install yamllint' or 'devbox shell'")
 endif
 ifeq (, $(shell which yamale 2>/dev/null))
-	$(error "No yamale in PATH, consider doing pip install yamale")
+	$(error "No yamale in PATH, consider doing 'pip install yamale' or 'devbox shell'")
 endif
 	$(LINT_ENV) ct lint --remote=$(GIT_REMOTE_NAME) --debug --config $(CT_CONFIG)
 
