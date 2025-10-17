@@ -1,0 +1,67 @@
+# Default values for multus
+# This is a YAML-formatted file.
+
+# Image configuration
+image:
+  repository: ghcr.io/k8snetworkplumbingwg/multus-cni
+  tag: "snapshot-thick"
+  pullPolicy: IfNotPresent
+
+# Image pull secrets
+imagePullSecrets: []
+
+# Service account configuration
+serviceAccount:
+  name: multus
+  annotations: {}
+
+# Container security context
+securityContext:
+  privileged: true
+
+# Resource limits and requests
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Node selector
+nodeSelector: {}
+
+# Tolerations
+tolerations:
+  - operator: Exists
+    effect: NoSchedule
+  - operator: Exists
+    effect: NoExecute
+
+# Affinity
+affinity: {}
+
+
+# Multus daemon configuration - readinessIndicatorFile will be dynamic
+daemonConfig:
+  chrootDir: "/hostroot"
+  cniVersion: "0.3.1"
+  logLevel: "verbose"
+  logToStderr: true
+  readinessIndicatorFile: "/run/cilium/cilium.sock"  # Will be overridden by CAREN handler
+  cniConfigDir: "/host/etc/cni/net.d"
+  multusAutoconfigDir: "/host/etc/cni/net.d"
+  multusConfigFile: "auto"
+  socketDir: "/host/run/multus/"
+
+# Pod annotations
+podAnnotations: {}
+
+# Pod labels
+podLabels: {}
+
+# Update strategy
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 1
