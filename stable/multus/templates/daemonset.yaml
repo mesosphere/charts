@@ -101,7 +101,7 @@ spec:
             mountPropagation: HostToContainer
           - name: multus-conf-dir
             mountPath: /etc/cni/multus/net.d
-          # Dynamic primary CNI socket mount - configured by CAREN
+          # Dynamic primary CNI socket mount - configured by the client.
           - name: primary-cni-sock
             mountPath: {{ .Values.daemonConfig.readinessIndicatorFile }}
             readOnly: true
@@ -141,7 +141,7 @@ spec:
         - name: multus-conf-dir
           hostPath:
             path: /etc/cni/multus/net.d
-        # Dynamic primary CNI socket volume - configured by CAREN
+        # Dynamic primary CNI socket volume - configured by the client.
         - name: primary-cni-sock
           hostPath:
             path: {{ .Values.daemonConfig.readinessIndicatorFile }}
