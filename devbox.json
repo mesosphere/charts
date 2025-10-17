@@ -1,0 +1,23 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetpack-io/devbox/main/.schema/devbox.schema.json",
+  "packages": {
+    "kubernetes-helm": "latest",
+    "chart-testing": "latest",
+    "yamllint": "latest",
+    "yamale": "latest",
+    "kubectl": "latest",
+    "kind": "latest"
+  },
+  "shell": {
+    "init_hook": [
+      "echo 'Development environment ready!'",
+      "echo 'Tools available: helm, ct, yamllint, yamale, kubectl, kind'",
+      "helm version --short",
+      "ct version"
+    ],
+    "scripts": {
+      "lint": "make ct.lint",
+      "test": "make ct.test"
+    }
+  }
+}
