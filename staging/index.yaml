@@ -3325,14 +3325,14 @@ entries:
   istio-helm-gateway:
   - apiVersion: v2
     appVersion: 1.23.6
-    created: "2025-10-16T14:26:30.154398608Z"
+    created: "2025-10-17T09:41:53.604449961Z"
     dependencies:
     - condition: gateway.enabled
       name: gateway
       repository: ""
       version: 1.23.6
     description: Helm chart for deploying Istio ingress gateway
-    digest: 8fc63be601502d43f740898a8535ffe574c03d4154f695335c3f63a81f814a7d
+    digest: 048e72795d5f570a38b1f995210cd09b8edd698da85011e10b724adc05100cc3
     icon: https://istio.io/latest/favicons/android-192x192.png
     keywords:
     - istio
@@ -14906,4 +14906,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-10-16T14:26:30.150737701Z"
+generated: "2025-10-17T09:41:53.601598664Z"
