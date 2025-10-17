@@ -12,6 +12,8 @@ global:
 gateway:
   enabled: true
   name: istio-ingressgateway
+  proxy:
+    image: auto
   priorityClassName: ""
   replicaCount: 2
   labels:
