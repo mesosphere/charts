@@ -6,11 +6,23 @@ SPDX-License-Identifier: Apache-2.0
 
 2. Multus is now running as a DaemonSet on all nodes.
 
-3. Primary CNI Provider: {{ .Values.primaryCNI.provider }}
-   Socket Path: {{ .Values.primaryCNI.socketPath }}
-   Readiness File: {{ .Values.daemonConfig.readinessIndicatorFile }}
+3. Configuration:
+   - Image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+   - Log Level: {{ .Values.daemonConfig.logLevel }}
+   - CNI Version: {{ .Values.daemonConfig.cniVersion }}
+   {{- if .Values.daemonConfig.readinessIndicatorFile }}
+   - Readiness Indicator: {{ .Values.daemonConfig.readinessIndicatorFile }}
+   {{- else }}
+   - ⚠️  WARNING: readinessIndicatorFile not configured - Multus may not detect primary CNI readiness
+   {{- end }}
 
-4. To use Multus for multi-interface pods, create NetworkAttachmentDefinition resources:
+4. ⚠️  IMPORTANT: CRDs must be installed separately:
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml
+   ```
+   Or install the CRDs from this chart's crds/ directory.
+
+5. To use Multus for multi-interface pods, create NetworkAttachmentDefinition resources:
 
    Example:
    ```yaml
@@ -18,6 +30,7 @@ SPDX-License-Identifier: Apache-2.0
    kind: NetworkAttachmentDefinition
    metadata:
      name: macvlan-conf
+     namespace: default
    spec:
      config: '{
        "cniVersion": "0.3.1",
@@ -31,11 +44,11 @@ SPDX-License-Identifier: Apache-2.0
      }'
    ```
 
-5. Then annotate your pods to use additional networks:
+6. Then annotate your pods to use additional networks:
    ```yaml
    metadata:
      annotations:
        k8s.v1.cni.cncf.io/networks: macvlan-conf
    ```
 
-6. For more information, visit: https://github.com/k8snetworkplumbingwg/multus-cni
+7. For more information, visit: https://github.com/k8snetworkplumbingwg/multus-cni
