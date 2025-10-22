@@ -98,7 +98,7 @@ spec:
   paused: {{ .Values.prometheus.prometheusSpec.paused }}
   replicas: {{ .Values.prometheus.prometheusSpec.replicas }}
   shards: {{ .Values.prometheus.prometheusSpec.shards }}
-  logLevel:  {{ .Values.prometheus.prometheusSpec.logLevel }}
+  logLevel:  {{ .Values.prometheus.prometheusSpec.logLevel | quote }}
   logFormat:  {{ .Values.prometheus.prometheusSpec.logFormat }}
   listenLocal: {{ .Values.prometheus.prometheusSpec.listenLocal }}
   enableOTLPReceiver: {{ .Values.prometheus.prometheusSpec.enableOTLPReceiver }}
@@ -253,6 +253,13 @@ spec:
   securityContext:
 {{ toYaml .Values.prometheus.prometheusSpec.securityContext | indent 4 }}
 {{- end }}
+{{- if .Values.prometheus.prometheusSpec.dnsConfig }}
+  dnsConfig:
+{{ toYaml .Values.prometheus.prometheusSpec.dnsConfig | indent 4 }}
+{{- end }}
+{{- if .Values.prometheus.prometheusSpec.dnsPolicy }}
+  dnsPolicy: {{ .Values.prometheus.prometheusSpec.dnsPolicy }}
+{{- end }}
 {{- if not .Values.prometheus.agentMode }}
 {{- if .Values.prometheus.prometheusSpec.ruleNamespaceSelector }}
   ruleNamespaceSelector:
@@ -267,7 +274,7 @@ spec:
   ruleSelector:
     matchLabels:
       release: {{ $.Release.Name | quote }}
-{{ else }}
+{{ else if not (kindIs "invalid" .Values.prometheus.prometheusSpec.ruleSelector) }}
   ruleSelector: {}
 {{- end }}
 {{- end }}
@@ -288,18 +295,8 @@ spec:
   scrapeConfigNamespaceSelector: {}
 {{- end }}
 {{- if .Values.prometheus.prometheusSpec.storageSpec }}
-{{- $namespace := include "kube-prometheus-stack.namespace" . }}
-{{- $name := print (include "kube-prometheus-stack.fullname" .) "-prometheus" }}
-{{- $prometheus := (lookup "monitoring.coreos.com/v1" "Prometheus" $namespace $name) }}
-{{- $spec := ($prometheus).spec }}
-{{- $storage := ($spec).storage }}
-{{- if $storage }}
-  # This Prometheus resource was already defined. Keeping the existing storage definition.
-  # If this is not the desired behavior, delete this resource before upgrading the helm release.
-  storage: {{ toYaml $storage | nindent 4 }}
-{{- else }}
-  storage: {{ toYaml .Values.prometheus.prometheusSpec.storageSpec | nindent 4 }}
-{{- end }}
+  storage:
+{{ tpl (toYaml .Values.prometheus.prometheusSpec.storageSpec | indent 4) . }}
 {{- end }}
 {{- with .Values.prometheus.prometheusSpec.persistentVolumeClaimRetentionPolicy }}
   persistentVolumeClaimRetentionPolicy:
