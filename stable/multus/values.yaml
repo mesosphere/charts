@@ -32,6 +32,13 @@ securityContext:
 # Priority class
 priorityClassName: system-node-critical
 
+# Pod network configuration
+hostNetwork: true
+hostPID: true
+
+# Pod lifecycle configuration
+terminationGracePeriodSeconds: 10
+
 # Update strategy
 updateStrategy:
   type: RollingUpdate

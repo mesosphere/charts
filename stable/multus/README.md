@@ -9,9 +9,6 @@ A Helm chart for Multus CNI - Meta CNI plugin for attaching multiple network int
 ## TL;DR;
 
 ```bash
-# Install CRDs first (required)
-kubectl apply -f https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml
-
 # Install Multus
 helm install my-multus ./stable/multus --namespace kube-system
 ```
@@ -25,29 +22,17 @@ Multus CNI is a container network interface (CNI) plugin for Kubernetes that ena
 - Kubernetes 1.12+
 - Helm 3.0+
 - A primary CNI plugin (e.g., Calico, Cilium) already installed
-- **CRDs must be installed separately** (see Installation section)
+- **Note:** CRDs are automatically installed by Helm Chart API v2
 
 ## Installing the Chart
 
-### Step 1: Install CRDs (Required)
-
-```bash
-# Option 1: Install from official source
-kubectl apply -f https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml
-
-# Option 2: Install from chart's CRD files
-kubectl apply -f ./stable/multus/crds/crd.yaml
-```
-
-### Step 2: Install Multus
-
+### Step 1: Install Multus
 ```bash
 helm install my-multus ./stable/multus --namespace kube-system
 ```
 
-### Step 3: Configure Primary CNI Detection
-
-Configure the readiness indicator file for your primary CNI:
+### Step 2: Configure Primary CNI Detection
+Set the readiness indicator file for your primary CNI:
 
 ```bash
 # For Cilium
@@ -71,21 +56,33 @@ helm delete my-multus
 | `image.repository` | Multus image repository | `ghcr.io/k8snetworkplumbingwg/multus-cni` |
 | `image.tag` | Multus image tag | `v4.2.2-thick` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
+| `imagePullSecrets` | Image pull secrets | `[]` |
 | `serviceAccount.create` | Create service account | `true` |
 | `serviceAccount.name` | Service account name | `multus` |
+| `serviceAccount.annotations` | Service account annotations | `{}` |
 | `rbac.create` | Create RBAC resources | `true` |
 | `podSecurityContext.privileged` | Pod security context | `true` |
 | `securityContext.privileged` | Container security context | `true` |
 | `securityContext.capabilities.add` | Additional capabilities | `[NET_ADMIN, SYS_ADMIN]` |
 | `priorityClassName` | Priority class name | `system-node-critical` |
+| `hostNetwork` | Enable host network for pods | `true` |
+| `hostPID` | Enable host PID namespace for pods | `true` |
+| `terminationGracePeriodSeconds` | Grace period for pod termination | `10` |
 | `updateStrategy.type` | Update strategy | `RollingUpdate` |
 | `updateStrategy.rollingUpdate.maxUnavailable` | Max unavailable pods | `1` |
+| `tolerations` | Pod tolerations | `[{"operator": "Exists", "effect": "NoSchedule"}, {"operator": "Exists", "effect": "NoExecute"}]` |
+| `nodeSelector` | Node selector | `{}` |
+| `affinity` | Pod affinity | `{}` |
+| `podAnnotations` | Pod annotations | `{}` |
+| `podLabels` | Pod labels | `{}` |
 | `resources.limits.cpu` | CPU limit | `100m` |
 | `resources.limits.memory` | Memory limit | `128Mi` |
 | `resources.requests.cpu` | CPU request | `100m` |
 | `resources.requests.memory` | Memory request | `128Mi` |
-| `daemonConfig.logLevel` | Log level | `verbose` |
+| `daemonConfig.chrootDir` | Chroot directory | `/hostroot` |
 | `daemonConfig.cniVersion` | CNI version | `0.3.1` |
+| `daemonConfig.logLevel` | Log level | `verbose` |
+| `daemonConfig.logToStderr` | Log to stderr | `true` |
 | `daemonConfig.readinessIndicatorFile` | Readiness indicator file | `""` (must be set) |
 | `daemonConfig.cniConfigDir` | CNI config directory | `/host/etc/cni/net.d` |
 | `daemonConfig.multusAutoconfigDir` | Multus autoconfig directory | `/host/etc/cni/net.d` |
@@ -140,14 +137,17 @@ metadata:
 
 ## Troubleshooting
 
-### CRD Not Found Error
-If you see errors about NetworkAttachmentDefinition not being found, ensure CRDs are installed:
+### CRD Verification
+Check if CRDs are installed:
 ```bash
 kubectl get crd network-attachment-definitions.k8s.cni.cncf.io
 ```
 
 ### Primary CNI Not Detected
 Ensure `daemonConfig.readinessIndicatorFile` is set to the correct socket path for your primary CNI.
+
+### Pod Security Policy Errors
+This chart requires privileged containers. Ensure your cluster's Pod Security Policy or Pod Security Standards allow privileged containers for the kube-system namespace.
 
 ## License
 

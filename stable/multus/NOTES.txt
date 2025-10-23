@@ -15,12 +15,22 @@ SPDX-License-Identifier: Apache-2.0
    {{- else }}
    - ⚠️  WARNING: readinessIndicatorFile not configured - Multus may not detect primary CNI readiness
    {{- end }}
+   {{- if .Values.hostNetwork }}
+   - Host Network: {{ .Values.hostNetwork }}
+   {{- end }}
+   {{- if .Values.hostPID }}
+   - Host PID: {{ .Values.hostPID }}
+   {{- end }}
+   {{- if .Values.priorityClassName }}
+   - Priority Class: {{ .Values.priorityClassName }}
+   {{- end }}
+   {{- if .Values.terminationGracePeriodSeconds }}
+   - Termination Grace Period: {{ .Values.terminationGracePeriodSeconds }}s
+   {{- end }}
 
-4. ⚠️  IMPORTANT: CRDs must be installed separately:
-   ```bash
-   kubectl apply -f https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset-thick.yml
-   ```
-   Or install the CRDs from this chart's crds/ directory.
+4. ⚠️  IMPORTANT: CRDs are automatically installed by Helm Chart API v2
+   - NetworkAttachmentDefinition CRD is installed from crds/ directory
+   - To verify: kubectl get crd network-attachment-definitions.k8s.cni.cncf.io
 
 5. To use Multus for multi-interface pods, create NetworkAttachmentDefinition resources:
 
