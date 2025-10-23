@@ -54,7 +54,8 @@ helm delete my-multus
 | Parameter | Description | Default |
 |-----------|-------------|---------|
 | `image.repository` | Multus image repository | `ghcr.io/k8snetworkplumbingwg/multus-cni` |
-| `image.tag` | Multus image tag | `v4.2.2-thick` |
+| `image.tag` | Multus image tag (overrides suffix) | `""` (uses Chart.AppVersion + suffix) |
+| `image.suffix` | Optional suffix for image tag | `"-thick"` |
 | `image.pullPolicy` | Image pull policy | `IfNotPresent` |
 | `imagePullSecrets` | Image pull secrets | `[]` |
 | `serviceAccount.create` | Create service account | `true` |
@@ -92,6 +93,42 @@ helm delete my-multus
 ## Dynamic Configuration
 
 This chart supports dynamic configuration based on the primary CNI provider:
+
+### Image Tag Configuration
+
+The image tag follows this priority order:
+
+1. **Explicit tag** (highest priority):
+   - Set `image.tag` to override everything
+   ```yaml
+   image:
+     tag: "v4.2.2-custom"
+   ```
+
+2. **Base version with suffix** (default):
+   - Uses Chart.AppVersion + image.suffix
+   - Default: `v4.2.2-thick`
+   ```yaml
+   image:
+     tag: ""  # Empty
+     suffix: "-thick"  # Results in: v4.2.2-thick
+   ```
+
+3. **Base version with different suffix**:
+   - Override the default suffix
+   ```yaml
+   image:
+     tag: ""  # Empty
+     suffix: "-thin"  # Results in: v4.2.2-thin
+   ```
+
+4. **Base version without suffix**:
+   - Set `image.suffix=""` to use only Chart.AppVersion
+   ```yaml
+   image:
+     tag: ""  # Empty
+     suffix: ""  # Results in: v4.2.2
+   ```
 
 ### For Cilium as Primary CNI:
 ```yaml

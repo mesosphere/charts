@@ -187,3 +187,16 @@ All volumes definition
     type: Socket
 {{- end }}
 {{- end }}
+
+{{/*
+Create the image tag for Multus
+*/}}
+{{- define "multus.imageTag" -}}
+{{- if .Values.image.tag }}
+{{- .Values.image.tag }}
+{{- else if .Values.image.suffix }}
+{{- .Chart.AppVersion }}{{ .Values.image.suffix }}
+{{- else }}
+{{- .Chart.AppVersion }}
+{{- end }}
+{{- end }}

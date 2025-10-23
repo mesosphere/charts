@@ -61,7 +61,7 @@ spec:
       {{- end }}
       initContainers:
       - name: install-multus-binary
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.image.repository }}:{{ include "multus.imageTag" . }}"
         imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         command:
           - "sh"
@@ -78,7 +78,7 @@ spec:
           {{- include "multus.initContainerVolumeMounts" . | nindent 10 }}
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        image: "{{ .Values.image.repository }}:{{ include "multus.imageTag" . }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command: [ "/usr/src/multus-cni/bin/multus-daemon" ]
         resources:

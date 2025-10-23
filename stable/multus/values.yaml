@@ -5,7 +5,8 @@
 # Image configuration
 image:
   repository: ghcr.io/k8snetworkplumbingwg/multus-cni
-  tag: "v4.2.2-thick"
+  tag: ""  # If empty, will use Chart.AppVersion + suffix
+  suffix: "-thick"  # Default suffix (can be overridden)
   pullPolicy: IfNotPresent
 
 # Image pull secrets
