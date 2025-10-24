@@ -39135,6 +39135,24 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/mtls-proxy-0.1.0.tgz
     version: 0.1.0
+  multus:
+  - apiVersion: v2
+    appVersion: v4.2.2
+    created: "2025-10-24T18:40:35.78396625Z"
+    description: A Helm chart for Multus CNI - Meta CNI plugin for attaching multiple
+      network interfaces to pods
+    digest: 655ee14c4e858261b3b621d2b5943dc249d30e78de103f1b2c38b8c3576ba01d
+    home: https://github.com/k8snetworkplumbingwg/multus-cni
+    maintainers:
+    - email: cloudnative@nutanix.com
+      name: nutanix-cloud-native-bot
+    name: multus
+    sources:
+    - https://github.com/k8snetworkplumbingwg/multus-cni
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/multus-0.1.0.tgz
+    version: 0.1.0
   object-bucket-claim:
   - apiVersion: v2
     appVersion: 0.1.11
@@ -43104,4 +43122,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-10-23T11:11:35.477512141Z"
+generated: "2025-10-24T18:40:35.783356401Z"
