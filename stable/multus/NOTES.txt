@@ -1,0 +1,64 @@
+{{/*
+Copyright 2024 Nutanix. All rights reserved.
+SPDX-License-Identifier: Apache-2.0
+*/}}
+1. Multus CNI has been deployed successfully!
+
+2. Multus is now running as a DaemonSet on all nodes.
+
+3. Configuration:
+   - Image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+   - Log Level: {{ .Values.daemonConfig.logLevel }}
+   - CNI Version: {{ .Values.daemonConfig.cniVersion }}
+   {{- if .Values.daemonConfig.readinessIndicatorFile }}
+   - Readiness Indicator: {{ .Values.daemonConfig.readinessIndicatorFile }}
+   {{- else }}
+   - ⚠️  WARNING: readinessIndicatorFile not configured - Multus may not detect primary CNI readiness
+   {{- end }}
+   {{- if .Values.hostNetwork }}
+   - Host Network: {{ .Values.hostNetwork }}
+   {{- end }}
+   {{- if .Values.hostPID }}
+   - Host PID: {{ .Values.hostPID }}
+   {{- end }}
+   {{- if .Values.priorityClassName }}
+   - Priority Class: {{ .Values.priorityClassName }}
+   {{- end }}
+   {{- if .Values.terminationGracePeriodSeconds }}
+   - Termination Grace Period: {{ .Values.terminationGracePeriodSeconds }}s
+   {{- end }}
+
+4. ⚠️  IMPORTANT: CRDs are automatically installed by Helm Chart API v2
+   - NetworkAttachmentDefinition CRD is installed from crds/ directory
+   - To verify: kubectl get crd network-attachment-definitions.k8s.cni.cncf.io
+
+5. To use Multus for multi-interface pods, create NetworkAttachmentDefinition resources:
+
+   Example:
+   ```yaml
+   apiVersion: "k8s.cni.cncf.io/v1"
+   kind: NetworkAttachmentDefinition
+   metadata:
+     name: macvlan-conf
+     namespace: default
+   spec:
+     config: '{
+       "cniVersion": "0.3.1",
+       "type": "macvlan",
+       "master": "eth0",
+       "mode": "bridge",
+       "ipam": {
+         "type": "host-local",
+         "subnet": "192.168.1.0/24"
+       }
+     }'
+   ```
+
+6. Then annotate your pods to use additional networks:
+   ```yaml
+   metadata:
+     annotations:
+       k8s.v1.cni.cncf.io/networks: macvlan-conf
+   ```
+
+7. For more information, visit: https://github.com/k8snetworkplumbingwg/multus-cni
