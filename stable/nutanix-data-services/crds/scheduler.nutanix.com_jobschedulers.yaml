@@ -1,0 +1,155 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.1
+  creationTimestamp: null
+  name: jobschedulers.scheduler.nutanix.com
+spec:
+  group: scheduler.nutanix.com
+  names:
+    kind: JobScheduler
+    listKind: JobSchedulerList
+    plural: jobschedulers
+    singular: jobscheduler
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: Last time the schedule was active
+      jsonPath: .status.lastActivation
+      name: LastActivation
+      type: string
+    - description: Next time the schedule will be active
+      jsonPath: .status.nextActivation
+      name: NextActivation
+      type: string
+    - description: Last time the schedule was processed
+      jsonPath: .status.lastUpdatedAt
+      name: LastUpdatedAt
+      priority: 1
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: JobScheduler is the Schema for the jobschedulers API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: JobSchedulerSpec defines the desired state of JobScheduler
+            properties:
+              cronSchedule:
+                description: "cronSchedule can be used to specify a schedule in cron
+                  format. Cron format should follow standardSpec format (https://en.wikipedia.org/wiki/Cron)
+                  It requires 5 entries representing: minute, hour, day of month,
+                  month and day of week, in that order. It accepts - \n - Standard
+                  crontab specs, e.g. \"* * * * ?\" \n - Descriptors, e.g. \"@midnight\",
+                  \"@every 1h30m\" \n Cron schedules lower than 60 minute intervals
+                  are not allowed. Examples: \"*/59 * * * *\"  -> Not allowed \"1
+                  * * * *\"     -> Allowed"
+                type: string
+              daily:
+                description: daily accepts the specification for a daily schedule
+                properties:
+                  time:
+                    description: time specifies the time of the day when the event
+                      should be triggered. Time of the day should be specified in
+                      24 hr format like <00-23>:<00-59> i.e 13:54
+                    type: string
+                type: object
+              interval:
+                description: interval accepts the specification for interval based
+                  schedule
+                properties:
+                  minutes:
+                    description: minutes specifies the intervals in minutes at which
+                      the event should be triggered. Should be an integer value greater
+                      than 60. Interval schedules lower than 60 minutes are not allowed.
+                    type: integer
+                type: object
+              monthly:
+                description: monthly accepts the specification for a monthly schedule
+                properties:
+                  dates:
+                    description: dates specifies the dates of the month when the event
+                      should be triggered. Should be between 1 to 31. It can also
+                      be specified as range like "2-7" or list like "3,7,11"
+                    type: string
+                  time:
+                    description: time specifies the time of day when the event should
+                      be triggered. Time of the day should be specified in 24-hr format
+                      like <00-23>:<00-59> i.e 13:54
+                    type: string
+                type: object
+              startTime:
+                description: "startTime specifies the time at which the scheduler
+                  should first trigger. Must be a future time. If StartTime is not
+                  specified, the scheduler will trigger as per the configured schedule.
+                  Should be specified in RFC3339 format. Example: \n 2019-10-12T07:20:50.52Z
+                  \n 2019-10-12T07:20:50.52+00:00 \n 2019-10-12T14:20:50.52+07:00
+                  \n 2019-10-12T03:20:50.52-04:00"
+                type: string
+              timeZoneName:
+                description: "IANA time zone name. See https://w.wiki/4Jx TimeZoneName
+                  should be specified to account for daylight saving changes. If not
+                  specified, the timezone value will be \n 1. taken from `StartTime`
+                  (UTC offset value). \n 2. set to UTC if `StartTime` is not specified.
+                  \n Example: \n America/Los_Angeles"
+                type: string
+              weekly:
+                description: weekly accepts the specification for a weekly schedule
+                properties:
+                  days:
+                    description: "days specifies the days of week when the event should
+                      be triggered. days can be provided either as number or first
+                      3 letters of the day. When specified as number, \"0-6\" maps
+                      to \"SUN-SAT\". If specified as 3 letters then the letters could
+                      be of any case i.e \"SUN\" or \"Sun\" or \"sun\". \n Examples:
+                      \n \"5\" or \"FRI\": Every Friday \n \"1,3,5\" or \"MON,WED,FRI\":
+                      Comma separated list. \n \"1-5\" or \"MON-FRI\": A range of
+                      days."
+                    type: string
+                  time:
+                    description: time specifies the time of day when the event should
+                      be triggered. time of the day should be specified in 24-hr format
+                      like <00-23>:<00-59> i.e 13:54
+                    type: string
+                type: object
+            type: object
+            x-kubernetes-validations:
+            - message: Spec is immutable
+              rule: self == oldSelf
+          status:
+            description: JobSchedulerStatus defines the observed state of JobScheduler
+            properties:
+              lastActivation:
+                description: lastActivation is the last time a scheduled event was
+                  triggered. Timestamp expressed in RFC3339 format in user specified
+                  timezone.
+                type: string
+              lastUpdatedAt:
+                description: lastUpdatedAt is the last time the status was upated.
+                  Timestamp expressed in RFC3339 format in user specified timezone.
+                type: string
+              nextActivation:
+                description: nextActivation is the next time a scheduled event will
+                  be triggered. Timestamp expressed in RFC3339 format in user specified
+                  timezone.
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

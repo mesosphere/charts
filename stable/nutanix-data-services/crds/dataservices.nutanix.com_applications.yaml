@@ -1,0 +1,300 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: applications.dataservices.nutanix.com
+spec:
+  group: dataservices.nutanix.com
+  names:
+    kind: Application
+    listKind: ApplicationList
+    plural: applications
+    shortNames:
+    - app
+    singular: application
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: Creation timestamp
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Application Active status
+      jsonPath: .status.conditions[?(@.type=="Active")].status
+      name: Active
+      type: string
+    - description: Indicates the time the application status was last updated
+      jsonPath: .status.lastUpdatedTime
+      name: Last-Status-Update
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Application is the Schema for the applications API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ApplicationSpec defines the desired state of Application
+            properties:
+              applicationSelector:
+                description: |-
+                  applicationSelector specifies what resources to include as a part of the application.
+                  If not specified, all the resources in the applied namespace will be
+                  included.
+                properties:
+                  resourceLabelSelectors:
+                    description: A list of kind label selectors. The selectors are
+                      ORed.
+                    items:
+                      properties:
+                        excludeResources:
+                          description: |-
+                            Name of all the resources to be excluded.
+                            If this list is omitted or empty, no resources are excluded from consideration.
+                          items:
+                            description: |-
+                              GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+                              concepts during lookup stages without having partially valid types
+                            properties:
+                              group:
+                                type: string
+                              kind:
+                                type: string
+                            required:
+                            - group
+                            - kind
+                            type: object
+                          type: array
+                        includeResources:
+                          description: |-
+                            Name of all the resources to be included as a part of the Application.
+                            If this list is empty or omitted, all resources will be considered.
+                          items:
+                            description: |-
+                              GroupKind specifies a Group and a Kind, but does not force a version.  This is useful for identifying
+                              concepts during lookup stages without having partially valid types
+                            properties:
+                              group:
+                                type: string
+                              kind:
+                                type: string
+                            required:
+                            - group
+                            - kind
+                            type: object
+                          type: array
+                        labelSelector:
+                          description: |-
+                            labelSelector is a label query over all API resources in the same namespace
+                            as the namespace of the Application. If unspecified, no label predicates
+                            will be evaluated.
+                          properties:
+                            matchExpressions:
+                              description: matchExpressions is a list of label selector
+                                requirements. The requirements are ANDed.
+                              items:
+                                description: |-
+                                  A label selector requirement is a selector that contains values, a key, and an operator that
+                                  relates the key and values.
+                                properties:
+                                  key:
+                                    description: key is the label key that the selector
+                                      applies to.
+                                    type: string
+                                  operator:
+                                    description: |-
+                                      operator represents a key's relationship to a set of values.
+                                      Valid operators are In, NotIn, Exists and DoesNotExist.
+                                    type: string
+                                  values:
+                                    description: |-
+                                      values is an array of string values. If the operator is In or NotIn,
+                                      the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                      the values array must be empty. This array is replaced during a strategic
+                                      merge patch.
+                                    items:
+                                      type: string
+                                    type: array
+                                required:
+                                - key
+                                - operator
+                                type: object
+                              type: array
+                            matchLabels:
+                              additionalProperties:
+                                type: string
+                              description: |-
+                                matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                operator is "In", and the values array contains only "value". The requirements are ANDed.
+                              type: object
+                          type: object
+                          x-kubernetes-map-type: atomic
+                      type: object
+                    type: array
+                type: object
+                x-kubernetes-map-type: atomic
+              start:
+                default: true
+                description: |-
+                  start specifies if the Application should be running or not.
+                  When start is set to true, the Application will continuously watch
+                  for changes in the cluster and save the configurations of the resources
+                  that match the Application selector.
+                  When start is set to false, the Application will stop watching for
+                  changes in the cluster and clean up existing resources matching the
+                  Application selector.
+                type: boolean
+              useExistingConfig:
+                default: false
+                description: |-
+                  useExistingConfig specifies if the Application should be started with the
+                  existing configuration saved by the Application previously.
+                  If it is set to true, resources will be restored from the saved
+                  configuration and applied in the cluster. If the same resource is present
+                  in the saved configuration and the cluster, applying the saved
+                  configuration will fail until the conflicting resources are manually cleaned up.
+                  If this is set to false and the Application is started, the current state
+                  of the cluster will be used to create the saved configuration.
+                  For newly setup Applications, this should be set to false.
+                type: boolean
+            type: object
+          status:
+            description: ApplicationStatus defines the observed state of Application
+            properties:
+              conditions:
+                description: |-
+                  Conditions represent the latest available observations of the Application
+                  object's state.
+                items:
+                  description: "Condition contains details for one aspect of the current
+                    state of this API Resource.\n---\nThis struct is intended for
+                    direct use as an array at the field path .status.conditions.  For
+                    example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the
+                    observations of a foo's current state.\n\t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    //
+                    +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t
+                    \   // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\"
+                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t
+                    \   // other fields\n\t}"
+                  properties:
+                    lastTransitionTime:
+                      description: |-
+                        lastTransitionTime is the last time the condition transitioned from one status to another.
+                        This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        message is a human readable message indicating details about the transition.
+                        This may be an empty string.
+                      maxLength: 32768
+                      type: string
+                    observedGeneration:
+                      description: |-
+                        observedGeneration represents the .metadata.generation that the condition was set based upon.
+                        For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date
+                        with respect to the current state of the instance.
+                      format: int64
+                      minimum: 0
+                      type: integer
+                    reason:
+                      description: |-
+                        reason contains a programmatic identifier indicating the reason for the condition's last transition.
+                        Producers of specific condition types may define expected values and meanings for this field,
+                        and whether the values are considered a guaranteed API.
+                        The value should be a CamelCase string.
+                        This field may not be empty.
+                      maxLength: 1024
+                      minLength: 1
+                      pattern: ^[A-Za-z]([A-Za-z0-9_,:]*[A-Za-z0-9_])?$
+                      type: string
+                    status:
+                      description: status of the condition, one of True, False, Unknown.
+                      enum:
+                      - "True"
+                      - "False"
+                      - Unknown
+                      type: string
+                    type:
+                      description: |-
+                        type of condition in CamelCase or in foo.example.com/CamelCase.
+                        ---
+                        Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                        useful (see .node.status.conditions), the ability to deconflict is important.
+                        The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                      maxLength: 316
+                      pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - message
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+              error:
+                description: |-
+                  error is the last observed error, if any.
+                  Upon success after retry, this error field will be cleared.
+                properties:
+                  message:
+                    description: message is a string detailing the encountered error.
+                    type: string
+                  time:
+                    description: time is the timestamp when the error was encountered.
+                    format: date-time
+                    type: string
+                type: object
+              lastUpdatedTime:
+                description: |-
+                  lastUpdatedTime indicates the time the application status
+                  was last updated at.
+                format: date-time
+                type: string
+              summary:
+                description: |-
+                  summary gives details of all the Kubernetes resources that
+                  are part of this application.
+                properties:
+                  resources:
+                    additionalProperties:
+                      items:
+                        description: ApplicationResource contains the resource information.
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    description: Resources is map of K8s resources(i.e GVK) to its
+                      list of resources.
+                    type: object
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

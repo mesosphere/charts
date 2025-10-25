@@ -1,0 +1,64 @@
+{{- if or (eq .Values.tls.webhook.mode "ISSUER") (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
+  {{- if not (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  {{- fail "cert-manager is required for provided tls mode but not installed in this cluster! To install visit https://cert-manager.io/docs/installation/helm/" }}
+  {{- end}}
+{{- end}}
+
+
+{{- if or (eq .Values.tls.webhook.mode "ISSUER") (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
+  {{- if (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ include "chart.fullname" . }}-selfsigned-issuer
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  selfSigned: { }
+---
+  {{- end }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "chart.fullname" . }}-serving-cert
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  dnsNames:
+  - '{{ include "chart.fullname" . }}-webhook-service.{{ .Release.Namespace }}.svc'
+  - '{{ include "chart.fullname" . }}-webhook-service.{{ .Release.Namespace }}.svc.cluster.local'
+  - '{{ include "chart.fullname" . }}-scheduler-webhook-service.{{ .Release.Namespace }}.svc'
+  - '{{ include "chart.fullname" . }}-scheduler-webhook-service.{{ .Release.Namespace }}.svc.cluster.local'
+  issuerRef:
+    kind: Issuer
+  {{- if (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
+    name: '{{ include "chart.fullname" . }}-selfsigned-issuer'
+  secretName: webhook-server-cert
+  {{- else }}
+    name: {{ .Values.tls.webhook.issuer.issuerName }}
+  secretName: {{ .Values.tls.webhook.secretName }}
+  {{- end }}
+{{- end }}
+---
+{{- if .Values.tls.server.enable }}
+  {{- if or (eq .Values.tls.server.mode "ISSUER") (eq .Values.tls.server.mode "SELF_SIGNED")}}
+{{- $clusterName := .Values.tls.server.clusterName | required ".Values.tls.server.clusterName is required." -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "chart.fullname" . }}-ndk-server-cert
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  dnsNames:
+    - {{ $clusterName }}
+  issuerRef:
+    kind: Issuer
+    {{- if (eq .Values.tls.server.mode "SELF_SIGNED")}}
+    name: '{{ include "chart.fullname" . }}-selfsigned-issuer'
+    {{- else }}
+    name: {{ .Values.tls.server.issuer.issuerName }}
+    {{- end }}
+  secretName: {{ .Values.tls.server.secretName }}
+  {{- end }}
+{{- end }}
