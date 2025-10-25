@@ -1,0 +1,24 @@
+# Copyright (c) 2022 Nutanix Inc. All rights reserved.
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "chart.fullname" . }}-intercom-service
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.intercomService.type }}
+  {{ if (eq .Values.intercomService.type "LoadBalancer") }}
+  {{ if .Values.intercomService.useKubevipDHCP }}
+  loadBalancerClass: "kube-vip.io/kube-vip-class"
+  loadBalancerIP: 0.0.0.0
+  {{ else }}
+  loadBalancerClass: {{ .Values.intercomService.loadBalancerClass }}
+  loadBalancerIP: {{ .Values.intercomService.loadBalancerIP }}
+  {{ end }}
+  {{ end }}
+  selector:
+    control-plane: controller-manager
+  {{- include "chart.selectorLabels" . | nindent 4 }}
+  ports:
+    {{- .Values.intercomService.ports | toYaml | nindent 2 -}}

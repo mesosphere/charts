@@ -1,0 +1,257 @@
+# Copyright 2023 Nutanix Inc
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "chart.fullname" . }}-controller-manager
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}-controller-manager
+  labels:
+    control-plane: controller-manager
+  {{- include "chart.labels" . | nindent 4 }}
+  {{- with .Values.deployment.customLabels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+    {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        control-plane: controller-manager
+      {{- include "chart.labels" . | nindent 8 }}
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+    spec:
+      {{- if .Values.imageCredentials.imagePullSecretName }}
+      imagePullSecrets:
+        - name: {{ .Values.imageCredentials.imagePullSecretName }}
+      {{- end }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: control-plane
+                      operator: In
+                      values:
+                        - controller-manager
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+      containers:
+      - name: manager
+        args:
+        - --config=controller_manager_config.yaml
+        - --skip_restoring_existing_group_kinds=ServiceAccount,ConfigMap,Secret,RoleBinding.rbac.authorization.k8s.io,RoleBinding.authorization.openshift.io,Role.rbac.authorization.k8s.io,Role.authorization.openshift.io,ClusterServiceVersion.operators.coreos.com
+        - --exclude-resource-type-list=Job.batch,ReferenceGrant.gateway.networking.k8s.io
+        {{  range .Values.config.controllerManagerConfig.flags }}
+        - {{ . }}
+        {{ end }}
+        command:
+        - /manager
+        env:
+        - name: CSI_SECRET_DIR
+          value: {{ .Values.config.secret.dir }}
+        {{- if .Values.manager.digest }}
+        image: {{ .Values.manager.repository }}@{{ .Values.manager.digest }}
+        {{- else }}
+        image: {{ .Values.manager.repository }}:{{ .Values.manager.tag | default .Chart.AppVersion }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.manager.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.deployment.manager.resources | nindent 10
+          }}
+        securityContext:
+          runAsUser: 0
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /etc/podinfo
+          name: podinfo
+          readOnly: true
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+        - mountPath: /controller_manager_config.yaml
+          name: manager-config
+          subPath: controller_manager_config.yaml
+        - mountPath: {{ .Values.config.secret.dir }}
+          name: pc-secret
+          readOnly: true
+        - mountPath: /tmp/socket
+          name: grpc-uds
+          readOnly: true
+        {{- if .Values.tls.server.enable }}
+        - mountPath: {{ .Values.tls.server.certMountLocation | default "/etc/certs" }}
+          name: ndk-server-tls
+        {{- end }}
+        {{- if .Values.tls.server.enableMTLS }}
+        - mountPath: {{ .Values.tls.server.certMountLocation | default "/etc/certs" }}/serverca
+          name: server-ca-crt
+        {{- end }}
+      - command:
+          - /app/infra_manager
+        args:
+        {{  range .Values.config.infraManagerConfig.flags }}
+        - {{ . }}
+        {{ end }}
+        env:
+        - name: CSI_SECRET_DIR
+          value: {{ .Values.config.secret.dir }}
+        {{- if .Values.infraManager.digest }}
+        image: {{ .Values.infraManager.repository }}@{{ .Values.infraManager.digest }}
+        {{- else }}
+        image: {{ .Values.infraManager.repository }}:{{ .Values.infraManager.tag | default .Chart.AppVersion }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.infraManager.pullPolicy }}
+        name: infra-manager
+        resources: {{- toYaml .Values.deployment.infraManager.resources | nindent 10
+          }}
+        securityContext:
+          runAsUser: 0
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /tmp/socket
+          name: grpc-uds
+        - mountPath: {{ .Values.config.secret.dir }}
+          name: pc-secret
+          readOnly: true
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        {{- if .Values.kubeRbacProxy.digest }}
+        image: {{ .Values.kubeRbacProxy.repository }}@{{ .Values.kubeRbacProxy.digest }}
+        {{- else }}
+        image: {{ .Values.kubeRbacProxy.repository }}:{{ .Values.kubeRbacProxy.tag }}
+        {{- end }}
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources: {{- toYaml .Values.deployment.kubeRbacProxy.resources | nindent
+          10 }}
+      - name: job-scheduler
+        args:
+        - --webhookServerPort={{ .Values.schedulerWebhookService.port }}
+        - --metricsBindAddress=:{{ .Values.deployment.jobScheduler.metricsBindAddress }}
+        - --healthProbeBindAddress=:{{ .Values.deployment.jobScheduler.healthProbeBindAddress }}
+        command:
+        - /manager
+        {{- if .Values.jobScheduler.digest }}
+        image: {{ .Values.jobScheduler.repository }}@{{ .Values.jobScheduler.digest }}
+        {{- else }}
+        image: {{ .Values.jobScheduler.repository }}:{{ .Values.jobScheduler.tag | default .Chart.AppVersion }}
+        {{- end }}
+        imagePullPolicy: {{ .Values.jobScheduler.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.deployment.jobScheduler.healthProbeBindAddress }}
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: {{ .Values.deployment.jobScheduler.healthProbeBindAddress }}
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        ports:
+        - containerPort: {{ .Values.schedulerWebhookService.port }}
+          name: schdlr-webhook
+          protocol: TCP
+        resources: {{- toYaml .Values.deployment.jobScheduler.resources | nindent 10
+          }}
+        securityContext:
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      priorityClassName: system-cluster-critical
+      securityContext:
+        runAsNonRoot: false
+      serviceAccountName: {{ include "chart.fullname" . }}-controller-manager
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels"
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+            - path: "namespace"
+              fieldRef:
+                fieldPath: metadata.namespace
+      - name: cert
+        secret:
+          defaultMode: 420
+          {{- if (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
+          secretName: webhook-server-cert
+          {{- else }}
+          secretName: {{ .Values.tls.webhook.secretName }}
+          {{- end }}
+      - configMap:
+          name: {{ include "chart.fullname" . }}-manager-config
+        name: manager-config
+      - name: pc-secret
+        secret:
+          defaultMode: 420
+          secretName: {{ .Values.config.secret.name }}
+      - name: grpc-uds
+        emptyDir: {}
+      {{- if .Values.tls.server.enable }}
+      - name: ndk-server-tls
+        secret:
+          optional: true
+          secretName: {{ .Values.tls.server.secretName }}
+          items:
+          - key: tls.crt
+            path: tls.crt
+          - key: tls.key
+            path: tls.key
+      {{- end }}
+      {{- if .Values.tls.server.enableMTLS }}
+      - name: server-ca-crt
+        secret:
+          optional: true
+          secretName: {{ .Values.tls.server.secretName }}
+          items:
+          - key: ca.crt
+            path: ca.crt
+      {{- end }}

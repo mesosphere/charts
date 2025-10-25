@@ -1,0 +1,52 @@
+{{- $safeNames := list -}}
+{{- range $filename, $fileContents := .Files.Glob "crds/*.yaml" }}
+{{- $base := (base $filename) | trimSuffix ".yaml" }}
+{{- $safeName := printf "%s-patch-configmap" ($base | replace "_" "-") }}
+{{- $safeNames = append $safeNames $safeName -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $safeName }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+data:
+  {{ $base }}.yaml: |
+{{ $fileContents | toYaml | indent 4 }}
+---
+{{- end }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: apply-crd
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  template:
+    spec:
+      {{- if .Values.imageCredentials.imagePullSecretName }}
+      imagePullSecrets:
+        - name: {{ .Values.imageCredentials.imagePullSecretName }}
+      {{- end }}
+      serviceAccountName: {{ include "chart.fullname" . }}-controller-manager
+      containers:
+      - name: apply-crd
+        {{- if .Values.kubectl.digest }}
+        image: {{ .Values.kubectl.repository }}@{{ .Values.kubectl.digest }}
+        {{- else }}
+        image: {{ .Values.kubectl.repository }}:{{ .Values.kubectl.tag }}
+        {{- end }}
+        imagePullPolicy: IfNotPresent
+        command:
+        - /bin/sh
+        - -c
+        - |
+          for configmap in {{ range $safeNames }}"{{ . }}" {{ end }}; do
+            kubectl get configmap $configmap -n {{ .Release.Namespace }} -o jsonpath='{.data.*}' | base64 -d | kubectl apply -f - || echo "Failed to apply CRD from $configmap"
+          done
+      restartPolicy: OnFailure

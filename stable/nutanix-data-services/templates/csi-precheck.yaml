@@ -1,0 +1,109 @@
+# Copyright 2024 Nutanix Inc
+
+# Exit this validation if we're in dry-run mode
+{{- $checkResource := lookup "v1" "Namespace" "" "kube-system" }}
+{{- if not $checkResource }}
+    {{- /* This indicates we're in dry-run mode and there is no API server connection */}}
+    {{- /* Skip the pc-secret validation */}}
+{{- end }}
+
+# Defines the minimum supported CSI version.
+{{- $csiSupportedMinVersion := "3.3.4" }}
+# We do a semver check of this form: ">=3.3.4-0", so that the check passes for pre-release versions.
+{{- $csiSupportedMinVersionCheck := printf ">=%s-0" $csiSupportedMinVersion }}
+
+# Declare a driver name variable that will be used in log statements and updated based on the detected driver.
+{{- $driverName := "csi.nutanix.com" }}
+
+# Commands to be displayed along with errors to help users debug.  
+{{- $helmListCmd := "'helm list -A'." }}
+{{- $csiDriverCmd := printf "%s%s%s" "'kubectl get csidrivers.storage.k8s.io " $driverName " --show-labels'." }}
+{{- $releaseNS := .Release.Namespace -}}
+
+# Error for CSI driver not found. (No CSI version exists in the cluster).
+{{- $csiDriverNotFoundErr := printf "%s%s%s%s%s"  
+"CSIDriver csi.nutanix.com/com.nutanix.csi not detected. " 
+"CSI is a pre-requisite for NDK and requires version " $csiSupportedMinVersionCheck
+"Check for nutanix-csi chart with " $helmListCmd }}
+
+# Error for either app or chart version label not found in the nutanix csi 
+# driver object. (Likely due to CSI version <= 3.3.4).
+{{- $labelNotFoundErr := printf "%s%s%s%s%s\n%s%s\n%s%s"
+"CSIDriver " $driverName " detected but the version may be incompatible - either "
+"chart version or app version label not detected. Required version is " $csiSupportedMinVersionCheck
+"Check nutanix-csi version information with " $helmListCmd
+"Check existing labels with " $csiDriverCmd }} 
+
+# Error for CSI version incompatibility. 
+{{- $versionErr := printf "%s%s%s%s%s%s%s\n%s%s\n%s%s"
+"CSIDriver " $driverName " detected but the version may be incompatible. "
+"App version label in " $driverName " is not supported. Required version is " $csiSupportedMinVersionCheck
+"Check nutanix-csi version information with " $helmListCmd
+"Check existing labels with " $csiDriverCmd }} 
+
+# Error if the app and chart version labels are mismatched.
+{{- $versionMismatchErr := printf "%s%s%s%s%s%s" 
+"CSIDriver " $driverName " detected but the version may be incompatible. "
+"Version labels found but version mismatch occured between CSI app and chart "
+"version. Check existing labels with " $csiDriverCmd }}
+
+# Lookup the CSIDriver object - csi.nutanix.com.  
+{{- $csiDriver := lookup "storage.k8s.io/v1" "CSIDriver" "" "csi.nutanix.com" }}
+{{- $legacycsiDriver := lookup "storage.k8s.io/v1" "CSIDriver" "" "com.nutanix.csi" }}
+# Fail immediately if the output map is empty (no nutanix csi driver found).
+{{- if and (eq (len ($csiDriver)) 0) (eq (len ($legacycsiDriver)) 0) }}
+    {{- fail $csiDriverNotFoundErr}}
+{{- else }}
+    # If csi.nutanix.com driver is not found, use the legacy driver (com.nutanix.csi).
+    {{- if eq (len ($csiDriver)) 0 }}
+        {{- $csiDriver = $legacycsiDriver }}
+        {{- $driverName = "com.nutanix.csi" }}
+    {{- end }}
+    {{- $labels := $csiDriver.metadata.labels }}
+    {{- $chartVersionLabel := "" }}
+    {{- $appVersionLabel := "" }}
+
+    # Range over all the labels in the nutanix csi driver object and check 
+    # if the matching labels exist.
+    {{- range $label, $value := $labels }}
+        {{- if eq $label "helm.sh/chart" }}
+            {{- $chartVersionLabel = $value }}
+        {{- end }}
+        {{- if eq $label "app.kubernetes.io/version" }}
+            {{- $appVersionLabel = $value }}
+        {{- end }}
+    {{- end }}
+
+    # Fail immediately if the matching labels are not found in the nutanix 
+    # csi driver object. 
+    {{- if or (not $chartVersionLabel) (not $appVersionLabel) }}
+        {{- fail $labelNotFoundErr}}
+    {{- else }}
+        {{- $versionSupported := false }}
+        # Check if the major version of the appVersionLabel is greater than or
+        # equal to the major version of csiSupportedMinVersion. Also check for
+        # non-'beta' versions.
+        # If csiSupportedMinVersion = 3.3.4, and:
+        # 1. appVersionLabel = 3.3.4-rc1; Pass
+        # 2. appVersionLabel = 3.3.3; Fail
+        # 3. appVersionLabel = 3.3.3-rc2; Fail
+        # 4. appVersionLabel = 3.3.5; Pass
+        {{- if semverCompare $csiSupportedMinVersionCheck $appVersionLabel }}
+            {{- $versionSupported = true }}
+            {{- if not (hasSuffix $appVersionLabel $chartVersionLabel)}}
+                # If app version is supported, check if chartVersionLabel
+                # is suffixed with appVersionLabel; and fail if not.
+                # If appVersionLabel: 3.3.4, chartVersionLabel: nutanix-csi-storage-3.3.4-beta; Fail
+                # If appVersionLabel: 3.3.4, chartVersionLabel: nutanix-csi-storage-3.3.4; Pass
+                {{- fail (printf "%s \nApp version: %s, Chart version: %s"
+                $versionMismatchErr $appVersionLabel $chartVersionLabel) }}
+            {{- end }}
+        {{- end }}
+        # If the version is not supported, fail with an appropriate error.
+        {{- if not $versionSupported }}
+            {{- fail (printf "%s \nApp version: %s, Min supported version check: %s"
+            $versionErr $appVersionLabel $csiSupportedMinVersionCheck) }}
+        {{- end }}
+# Continue with installation.
+    {{- end }}
+{{- end }}

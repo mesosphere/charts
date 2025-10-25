@@ -1,0 +1,231 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: applicationsnapshots.dataservices.nutanix.com
+spec:
+  group: dataservices.nutanix.com
+  names:
+    kind: ApplicationSnapshot
+    listKind: ApplicationSnapshotList
+    plural: applicationsnapshots
+    shortNames:
+    - as
+    singular: applicationsnapshot
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: Creation timestamp
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Ready to use
+      jsonPath: .status.readyToUse
+      name: Ready-To-Use
+      type: boolean
+    - description: Bound application snapshot content name
+      jsonPath: .status.boundApplicationSnapshotContentName
+      name: Bound-SnapshotContent
+      type: string
+    - description: Timestamp when the point-in-time snapshot was taken.
+      jsonPath: .status.creationTime
+      name: Snapshot-Age
+      type: date
+    - description: Describes the consistency type of the snapshot.
+      jsonPath: .status.consistencyType
+      name: Consistency-Type
+      type: string
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ApplicationSnapshot is the Schema for the applicationsnapshots
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ApplicationSnapshotSpec defines the desired state of ApplicationSnapshot
+            properties:
+              expiresAfter:
+                description: |-
+                  expiresAfter is the duration after which the snapshot shall be cleaned up.
+                  It is a required field for out-of-band snapshots.
+                  This field is immutable after creation.
+                type: string
+              source:
+                description: |-
+                  source specifies whether the snapshot is (or should be) dynamically provisioned
+                  or already exists, and just requires a Kubernetes object representation.
+                  This field is immutable after creation.
+                  Required.
+                properties:
+                  applicationRef:
+                    description: applicationRef must be set when taking the snapshot
+                      of an application.
+                    properties:
+                      name:
+                        description: |-
+                          Name is the metadata.name of the referenced Application.
+                          This field is required in all cases.
+                        type: string
+                    required:
+                    - name
+                    type: object
+                  applicationSnapshotContentName:
+                    description: |-
+                      applicationSnapshotContentName must be set when creating a representation of an
+                      existing application snapshot inside the Kubernetes cluster.
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: Source is immutable
+                  rule: self == oldSelf
+            required:
+            - source
+            type: object
+          status:
+            description: ApplicationSnapshotStatus defines the observed state of ApplicationSnapshot
+            properties:
+              boundApplicationSnapshotContentName:
+                description: |-
+                  boundApplicationSnapshotContentName is the name of the ApplicationSnapshotContent
+                  object to which this ApplicationSnapshot object intends to bind to.
+                  If not specified, it indicates that the ApplicationSnapshot object has not been
+                  successfully bound to a ApplicationSnapshotContent object yet.
+                type: string
+              consistencyType:
+                description: ConsistencyType is the type of consistency for the snapshot.
+                type: string
+              creationTime:
+                description: |-
+                  creationTime is the timestamp when the point-in-time application snapshot
+                  is taken.
+                  In dynamic snapshot creation case, this field will be filled in at the time
+                  when the application snapshot process is complete with the "creation_time" value
+                  set at the time when the whole application snapshot process is complete.
+                  For a pre-existing snapshot, this field will be filled with the "creation_time"
+                  value set when the ApplicationSnapshotContent status is able to get the
+                  existing snapshot.
+                  If not specified, it indicates the creation time is unknown.
+                format: date-time
+                type: string
+              error:
+                description: |-
+                  error is the last observed error during snapshot creation, if any.
+                  Upon success after retry, this error field will be cleared.
+                properties:
+                  message:
+                    description: |-
+                      message is a string detailing the encountered error during snapshot
+                      creation if specified.
+                      NOTE: message may be logged, and it should not contain sensitive
+                      information.
+                    type: string
+                  reason:
+                    description: reason contains a programmatic identifier indicating
+                      the reason for the error.
+                    type: string
+                  time:
+                    description: time is the timestamp when the error was encountered.
+                    format: date-time
+                    type: string
+                type: object
+              expirationTime:
+                description: |-
+                  ExpirationTime is the timestamp after which the snapshot is scheduled to be cleaned up.
+                  This field will be set only for out-of-band snapshots.
+                format: date-time
+                type: string
+              readyToUse:
+                default: false
+                description: readyToUse indicates if a snapshot is ready to be used.
+                type: boolean
+              summary:
+                description: SnapshotResourceSummary gives the summary of the application
+                  snapshot.
+                properties:
+                  failedSnapshotArtifacts:
+                    additionalProperties:
+                      items:
+                        description: |-
+                          FailedSnapshotArtifact contains the K8s resource information
+                          along with an error.
+                        properties:
+                          error:
+                            description: Error is the error message incase of any
+                              snapshot failures.
+                            type: string
+                          name:
+                            description: Name of the resource.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    description: |-
+                      FailedSnapshotArtifacts is map of K8s resources(i.e GVK) to its list of resources
+                      that failed to get snapshotted.
+                    type: object
+                  skippedSnapshotArtifacts:
+                    additionalProperties:
+                      items:
+                        description: |-
+                          SkippedSnapshotArtifact contains the K8s resource information
+                          along with a reason as to why a resource was skipped.
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                          reason:
+                            description: |-
+                              Reason is the message indicating the reason
+                              to skip the resource.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    description: |-
+                      SkippedSnapshotArtifacts is map of K8s resources(i.e GVK) to its list of resources
+                      that are skipped from being part of the snapshot.
+                    type: object
+                  snapshotArtifacts:
+                    additionalProperties:
+                      items:
+                        description: ApplicationResource contains the resource information.
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    description: |-
+                      SnapshotArtifacts is map of K8s resources(i.e GVK) to its list of resources
+                      that are part of the snapshot.
+                    type: object
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

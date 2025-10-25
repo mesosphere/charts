@@ -1,0 +1,44 @@
+# Copyright 2023 Nutanix Inc
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "chart.fullname" . }}-manager-config
+  labels:
+  {{- include "chart.labels" . | nindent 4 }}
+data:
+  controller_manager_config.yaml: |
+    apiVersion: config.dataservices.nutanix.com/v1alpha1
+    kind: DataServicesConfig
+    health:
+      healthProbeBindAddress: {{ .Values.config.controllerManagerConfig.health.healthProbeBindAddress
+        | quote }}
+    leaderElection:
+      leaderElect: {{ .Values.config.controllerManagerConfig.leaderElection.leaderElect
+        }}
+      resourceName: {{ .Values.config.controllerManagerConfig.leaderElection.resourceName
+        | quote }}
+    metrics:
+      bindAddress: {{ .Values.config.controllerManagerConfig.metrics.bindAddress
+        | quote }}
+    webhook:
+      port: {{ .Values.config.controllerManagerConfig.webhook.port }}
+      host: {{ .Values.config.controllerManagerConfig.webhook.host }}
+      certDir: {{ .Values.config.controllerManagerConfig.webhook.certDir }}
+    ndkServerConfig:
+      port: {{ .Values.config.ndkServerConfig.port }}
+      enableServerReflection: {{ .Values.config.ndkServerConfig.enableServerReflection }}
+      enableTLS: {{ .Values.tls.server.enable }}
+      enableMTLS: {{ .Values.tls.server.enableMTLS }}
+      {{- if (eq .Values.tls.server.mode "SECRET")}}
+        {{- if .Values.tls.server.clusterName}}
+          {{- fail "For NDK installation in mode 'SECRET', clusterName cannot be provided. The DNS subject alternative name (SAN) provided in the certificate secret will be used" }}
+        {{- end}}
+      {{- else}}
+      clusterName: {{ .Values.tls.server.clusterName }}
+      {{- end}}
+      {{- if (eq .Values.tls.server.mode "ISSUER")}}
+      issuerName: {{ .Values.tls.server.issuer.issuerName }}
+      {{- end}}
+      secretName: {{ .Values.tls.server.secretName }}
+      certMountLocation: {{ .Values.tls.server.certMountLocation }}
