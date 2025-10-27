@@ -34,14 +34,17 @@ spec:
   - '{{ include "chart.fullname" . }}-webhook-service.{{ .Release.Namespace }}.svc.cluster.local'
   - '{{ include "chart.fullname" . }}-scheduler-webhook-service.{{ .Release.Namespace }}.svc'
   - '{{ include "chart.fullname" . }}-scheduler-webhook-service.{{ .Release.Namespace }}.svc.cluster.local'
+  {{- if (eq .Values.tls.webhook.mode "SELF_SIGNED") }}
+  secretName: webhook-server-cert
+  {{- else }}
+  secretName: {{ .Values.tls.webhook.secretName }}
+  {{- end }}
   issuerRef:
     kind: Issuer
     {{- if (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
     name: '{{ include "chart.fullname" . }}-selfsigned-issuer'
-    secretName: webhook-server-cert
     {{- else }}
     name: {{ .Values.tls.webhook.issuer.issuerName }}
-    secretName: {{ .Values.tls.webhook.secretName }}
     {{- end }}
 {{- end }}
 ---

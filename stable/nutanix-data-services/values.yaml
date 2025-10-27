@@ -26,9 +26,9 @@ infraManager:
 
 kubeRbacProxy:
   # -- Image Repository
-  repository: 
+  repository: gcr.io/kubebuilder/kube-rbac-proxy
   # -- Image tag
-  tag: 
+  tag: v0.15.0
   # -- Image digest
   digest: 
 
@@ -36,7 +36,7 @@ kubectl:
   # -- Image Repository
   repository: 
   # -- Image tag
-  tag: 
+  tag: v1.28.0
   # -- Image digest
   digest: 
   # -- Image pull policy
