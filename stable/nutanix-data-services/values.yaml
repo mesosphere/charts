@@ -4,23 +4,23 @@
 
 manager:
   # -- Image Repository
-  repository: 
+  repository:
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag:
   # -- Image digest
-  digest: 
+  digest:
   # -- Image pull policy
   pullPolicy: Always
 
 infraManager:
   # -- Image Repository
-  repository: 
+  repository:
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag:
   # -- Image digest
-  digest: 
+  digest:
   # -- Image pull policy
   pullPolicy: Always
 
@@ -30,15 +30,15 @@ kubeRbacProxy:
   # -- Image tag
   tag: v0.15.0
   # -- Image digest
-  digest: 
+  digest:
 
 kubectl:
   # -- Image Repository
-  repository: 
+  repository:
   # -- Image tag
   tag: v1.28.0
   # -- Image digest
-  digest: 
+  digest:
   # -- Image pull policy
 
 # Set Values for NDK Metrics Monitoring using Prometheus
@@ -53,22 +53,22 @@ prometheus:
 # Set Values for Job Scheduler container
 jobScheduler:
   # -- Image Repository
-  repository: 
+  repository:
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag:
   # -- Image digest
-  digest: 
+  digest:
   # -- Image pull policy
   pullPolicy: Always
 
 # Set values for the nutanix-dataservices deployment
 deployment:
-  customLabels: { }
+  customLabels: {}
   # -- List of Kubernetes [`tolerations`](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) to add to the Deployment.
-  tolerations: [ ]
+  tolerations: []
   # -- Kubernetes [`nodeSelector`](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector) to add to the Deployment.
-  nodeSelector: { }
+  nodeSelector: {}
   # Set values for kube-rback-proxy container
   kubeRbacProxy:
     # resources to be allocated to the kube-rbac-proxy
@@ -123,9 +123,9 @@ imageCredentials:
   # exists in the cluster.
   credentials:
     registry: https://index.docker.io/v1/
-    username: 
-    password: 
-    email: 
+    username:
+    password:
+    email:
 # Configuration to expose controller metrics service
 metricsService:
   ports:
@@ -226,7 +226,7 @@ config:
     # pointer to the secret to be consumed by controllers
     name: ntnx-pc-secret
     # path to mount the secret as a volume
-    dir:  "/var/run/ntnx-secret-dir"
+    dir: "/var/run/ntnx-secret-dir"
   # Configurable parametrs for dataservices controller manager
   controllerManagerConfig:
     health:
