@@ -1,17 +1,16 @@
 # D2iQ Istio Istiod Chart Values
 
 global:
-  # Istio global values
-  istio:
-    hub: docker.io/istio
-    tag: 1.23.6
-    imagePullPolicy: IfNotPresent
-    istioNamespace: istio-system
+  # Used by istiod templates as fallback when pilot.hub/tag not set
+  hub: docker.io/istio
+  tag: 1.23.6
+  imagePullPolicy: IfNotPresent
+  istioNamespace: istio-system
 
 # Istiod component configuration
 istiod:
   enabled: true
-  priorityClassName: ""
+  priorityClassName: "dkp-critical-priority"
   pilot:
     replicaCount: 2
 

@@ -1,12 +1,8 @@
 # D2iQ Istio Base Chart Values
 
 global:
-  # Istio global values
-  istio:
-    hub: docker.io/istio
-    tag: 1.23.6
-    imagePullPolicy: IfNotPresent
-    istioNamespace: istio-system
+  # Used by base templates to locate istiod
+  istioNamespace: istio-system
 
 # Base component configuration
 base:

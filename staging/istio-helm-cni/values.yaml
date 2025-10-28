@@ -1,12 +1,11 @@
 # D2iQ Istio CNI Chart Values
 
 global:
-  # Istio global values
-  istio:
-    hub: docker.io/istio
-    tag: 1.23.6
-    imagePullPolicy: IfNotPresent
-    istioNamespace: istio-system
+  # Used by CNI templates as fallback when cni.hub/tag not set
+  hub: docker.io/istio
+  tag: 1.23.6
+  imagePullPolicy: IfNotPresent
+  istioNamespace: istio-system
 
 # CNI component configuration
 cni:
