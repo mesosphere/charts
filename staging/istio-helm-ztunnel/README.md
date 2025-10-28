@@ -35,4 +35,3 @@ To enable ambient mode for your workloads:
 
 - Chart Version: 1.23.6
 - Istio Version: 1.23.6
-
