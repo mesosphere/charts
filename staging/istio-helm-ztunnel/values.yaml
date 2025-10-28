@@ -1,0 +1,15 @@
+# D2iQ Istio Ztunnel Chart Values
+
+global:
+  # Istio global values
+  istio:
+    hub: docker.io/istio
+    tag: 1.23.6
+    imagePullPolicy: IfNotPresent
+    istioNamespace: istio-system
+
+# Ztunnel component configuration
+# Ztunnel is required for Istio ambient mesh mode
+ztunnel:
+  enabled: false 
+
