@@ -13,7 +13,7 @@ This chart contains the Istio istiod subchart plus:
 ## Installation
 
 ```bash
-helm install istio-istiod . --namespace istio-system
+helm install istio-helm-istiod . --namespace istio-system
 ```
 
 ## Version

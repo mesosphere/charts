@@ -11,7 +11,7 @@ This chart contains only the Istio base subchart, which includes:
 ## Installation
 
 ```bash
-helm install istio-base . --namespace istio-system --create-namespace
+helm install istio-helm-base . --namespace istio-system --create-namespace
 ```
 
 ## Version

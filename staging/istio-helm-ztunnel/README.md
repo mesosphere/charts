@@ -19,7 +19,7 @@ Before installing ztunnel, ensure that:
 ## Installation
 
 ```bash
-helm install istio-ztunnel . --namespace istio-system
+helm install istio-helm-ztunnel . --namespace istio-system
 ```
 
 ## Enabling Ambient Mode
