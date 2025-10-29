@@ -181,7 +181,7 @@ install_csi_driver() {
     echo 'Add nutanix helm repository...'
     docker_exec helm repo add ntnx-charts https://nutanix.github.io/helm-releases 
     echo 'Install the csi-snapshot...'
-    docker_exec helm install nutanix-csi-snapshot nutanix-helm/nutanix-csi-snapshot -n ntnx-system --create-namespace
+    docker_exec helm install nutanix-csi-snapshot ntnx-charts/nutanix-csi-snapshot -n ntnx-system --create-namespace
     echo 'Install the csi driver...'
     docker_exec helm install nutanix-csi-storage ntnx-charts/nutanix-csi-storage --namespace ntnx-system --set prismCentralEndPoint=127.0.0.1 --set pcUsername=dummy --set pcPassword='dummy' --set createSecret=false
 }
