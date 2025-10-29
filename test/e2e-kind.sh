@@ -198,7 +198,6 @@ main() {
     install_dummylb
     install_certmanager
     install_reloader
-    
     # may need for kibana but causing issues with ct at the moment
     # install_elasticsearch
 

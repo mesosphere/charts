@@ -38,6 +38,7 @@ excluded-charts:
   - k8s-agent
   - istio-helm-gateway # Requires installing dependencies like istiod-helm-istiod
   - istio-helm-istiod # Requires installing dependencies like istiod-helm-base
+  - nutanix-data-services # Requires installing - PC endpoint and credentials, CSI driver and CSI snapshot
 chart-repos:
   - mesosphere-staging=https://mesosphere.github.io/charts/staging
   - mesosphere-stable=https://mesosphere.github.io/charts/stable
