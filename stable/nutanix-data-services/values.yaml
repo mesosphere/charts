@@ -182,7 +182,7 @@ tls:
   server:
     # Enable TLS for the NDK server.
     # @default -- true
-    enable: true
+    enable: false
     # Enables mTLS for the NDK server.
     # Supports SECRET and ISSUER modes.
     enableMTLS: false

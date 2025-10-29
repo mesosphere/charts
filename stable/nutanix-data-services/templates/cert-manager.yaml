@@ -21,7 +21,7 @@ metadata:
 spec:
   selfSigned: { }
 ---
-  {{- end }}
+  {{ end }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:

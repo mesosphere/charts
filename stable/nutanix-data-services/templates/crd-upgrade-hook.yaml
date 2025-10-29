@@ -1,8 +1,9 @@
 {{- $safeNames := list -}}
-{{- range $filename, $fileContents := .Files.Glob "crds/*.yaml" }}
+{{ range $filename, $fileContents := .Files.Glob "crds/*.yaml" }}
 {{- $base := (base $filename) | trimSuffix ".yaml" }}
 {{- $safeName := printf "%s-patch-configmap" ($base | replace "_" "-") }}
 {{- $safeNames = append $safeNames $safeName -}}
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,8 +15,9 @@ metadata:
 data:
   {{ $base }}.yaml: |
 {{ $fileContents | toYaml | indent 4 }}
+
 ---
-{{- end }}
+{{ end }}
 apiVersion: batch/v1
 kind: Job
 metadata:
