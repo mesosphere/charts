@@ -11,7 +11,7 @@ This chart contains only the Istio CNI subchart, which includes:
 ## Installation
 
 ```bash
-helm install istio-cni . --namespace kube-system
+helm install istio-helm-cni . --namespace kube-system
 ```
 
 ## Version

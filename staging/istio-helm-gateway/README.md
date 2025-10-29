@@ -33,7 +33,7 @@ gateway:
 ## Installation
 
 ```bash
-helm install istio-gateway . --namespace istio-gateway --create-namespace
+helm install istio-helm-gateway . --namespace istio-gateway --create-namespace
 ```
 
 ## Version

@@ -1,0 +1,18 @@
+apiVersion: v2
+name: istio-helm-ztunnel
+version: 1.23.6
+appVersion: 1.23.6
+description: Helm chart for deploying Istio ztunnel for ambient mesh mode
+keywords:
+  - istio
+  - ztunnel
+  - ambient
+sources:
+  - https://github.com/istio/istio/tree/master/manifests/charts/ztunnel
+icon: https://istio.io/latest/favicons/android-192x192.png
+maintainers:
+  - name: rohitkumar0510
+dependencies:
+  - name: ztunnel
+    version: 1.23.6
+    condition: ztunnel.enabled
