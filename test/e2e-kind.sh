@@ -206,9 +206,10 @@ main() {
     create_kind_cluster
     install_helm
     install_dummylb
+    install_csi_driver
     install_certmanager
     install_reloader
-    install_csi_driver
+    
     # may need for kibana but causing issues with ct at the moment
     # install_elasticsearch
 
