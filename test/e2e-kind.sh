@@ -179,7 +179,7 @@ install_elasticsearch() {
 install_csi_driver() {
     echo 'Installing latest csi driver...'
     echo 'Creating the secret for the csi driver...'
-    docker_exec kubectl apply -f "$(pwd)/test/csi-secret.yaml"
+    docker_exec kubectl apply -f test/csi-secret.yaml
     echo 'Add nutanix helm repository...'
     docker_exec helm repo add ntnx-charts https://nutanix.github.io/helm-releases 
     echo 'Install the csi driver...'
