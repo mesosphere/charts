@@ -178,12 +178,12 @@ install_elasticsearch() {
 
 install_csi_driver() {
     echo 'Installing latest csi driver...'
-    echo 'Creating the secret for the csi driver...'
-    docker_exec kubectl apply -f test/csi-secret.yaml
+    echo 'Creating the ntnx-system namespace...'
+    docker_exec kubectl create namespace ntnx-system
     echo 'Add nutanix helm repository...'
     docker_exec helm repo add ntnx-charts https://nutanix.github.io/helm-releases 
     echo 'Install the csi driver...'
-    docker_exec helm install nutanix-csi-storage ntnx-charts/nutanix-csi-storage --namespace ntnx-system --set createPrismCentralSecret=false --set createSecret=false
+    docker_exec helm install nutanix-csi-storage ntnx-charts/nutanix-csi-storage --namespace ntnx-system --set prismCentralEndPoint=127.0.0.1 --set pcUsername=dummy --set pcPassword='dummy'
 }
 
 replace_priority_class_name_system_x_critical() {
