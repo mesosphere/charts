@@ -1,0 +1,41 @@
+apiVersion: v2
+name: ndk
+description: Helm chart for Nutanix Data Services for Kubernetes (NDK). NDK provides for application-centric data management services for containerized workloads managed by Kubernetes.
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+type: application
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 1.3.0
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "1.3.0"
+
+kubeVersion: ">= 1.26.0-0"
+icon: https://avatars2.githubusercontent.com/u/6165865?s=200&v=4
+home: https://github.com/nutanix-core/k8s-juno
+maintainers:
+  - name: nutanix-cloud-native-bot
+    email: cloudnative@nutanix.com
+keywords:
+  - Nutanix
+  - Storage
+  - Volumes
+  - Files
+  - StorageClass
+  - RedHat
+  - CentOS
+  - Ubuntu
+  - Snapshot
+  - AppProtection
+annotations:
+  artifacthub.io/displayName: "NDK"
+  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/changes: |
+    - Initial release
+  artifacthub.io/maintainers: |
+    - name: Nutanix Cloud Native Team
+      email: cloudnative@nutanix.com
