@@ -21,7 +21,7 @@ spec:
       {{- end }}
       containers:
       - name: istio-cacert-job
-        image: "{{.Values.global.image}}:{{.Values.global.tag}}"
+        image: "{{.Values.image}}:{{.Values.tag}}"
         imagePullPolicy: IfNotPresent
         command: ['/bin/sh', '-c',
             'kubectl', 'create', 'secret', 'generic', 'cacerts',

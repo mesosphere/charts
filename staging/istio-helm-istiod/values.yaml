@@ -30,3 +30,5 @@ prometheus-operator:
 security:
   enabled: true
   issuerName: kommander-ca
+  image: docker.io/bitnamilegacy/kubectl
+  tag: 1.29.2
