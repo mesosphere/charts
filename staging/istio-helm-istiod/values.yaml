@@ -12,7 +12,11 @@ istiod:
   enabled: true
   priorityClassName: "dkp-critical-priority"
   pilot:
-    replicaCount: 2
+    autoscaleEnabled: true
+    autoscaleMin: 2
+    autoscaleMax: 2
+    cni:
+      enabled: true
 
 # Grafana dashboards
 grafana:
@@ -30,3 +34,5 @@ prometheus-operator:
 security:
   enabled: true
   issuerName: kommander-ca
+  image: docker.io/mesosphere/kubectl
+  tag: v1.34.1-alpine
