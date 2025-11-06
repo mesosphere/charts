@@ -3325,14 +3325,14 @@ entries:
   istio-helm-gateway:
   - apiVersion: v2
     appVersion: 1.23.6
-    created: "2025-10-29T09:58:08.691339936Z"
+    created: "2025-11-06T14:32:24.1874238Z"
     dependencies:
     - condition: gateway.enabled
       name: gateway
       repository: ""
       version: 1.23.6
     description: Helm chart for deploying Istio ingress gateway
-    digest: c8b9a8c2a86d21c4ad2c4599046238e787c2c85ef8205ebe31304474f192926a
+    digest: 70ec4e2c5940393be8f3b73eaad15f3b7eb9eb8c205dd09936d8c397ef0964d8
     icon: https://istio.io/latest/favicons/android-192x192.png
     keywords:
     - istio
@@ -3349,7 +3349,7 @@ entries:
   istio-helm-istiod:
   - apiVersion: v2
     appVersion: 1.23.6
-    created: "2025-10-29T09:58:08.694021863Z"
+    created: "2025-11-06T14:32:24.190075088Z"
     dependencies:
     - condition: istiod.enabled
       name: istiod
@@ -3368,7 +3368,7 @@ entries:
       repository: ""
       version: 0.0.2
     description: Helm chart for deploying Istio control plane (istiod) with monitoring
-    digest: 11d59067324e2cbbb9d4b4526d61d1b7c861a8a0bc66ebcc25670111b23954d6
+    digest: aa20a6b7739fe7e23afe8df61232780a298ec316b20e53ce15237ee47854d07a
     icon: https://istio.io/latest/favicons/android-192x192.png
     keywords:
     - istio
@@ -15009,4 +15009,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-10-29T09:58:08.685696881Z"
+generated: "2025-11-06T14:32:24.186393663Z"
