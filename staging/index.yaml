@@ -3277,14 +3277,14 @@ entries:
   istio-helm-base:
   - apiVersion: v2
     appVersion: 1.23.6
-    created: "2025-10-29T09:58:08.688701228Z"
+    created: "2025-11-12T08:25:19.409054689Z"
     dependencies:
     - condition: base.enabled
       name: base
       repository: ""
       version: 1.23.6
     description: Helm chart for deploying Istio base resources and CRDs
-    digest: 3ddcbaf8cb67c7f639e35a1c602597457638a183f7814ced1bc4a8946b02b902
+    digest: fc2c3c82358ea965cd33350ccada88bd74d86704eb7500f979a1f07e749d7a21
     icon: https://istio.io/latest/favicons/android-192x192.png
     keywords:
     - istio
@@ -15009,4 +15009,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-11-06T14:32:24.186393663Z"
+generated: "2025-11-12T08:25:19.406764161Z"
