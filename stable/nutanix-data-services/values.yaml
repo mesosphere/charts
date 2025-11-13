@@ -249,7 +249,7 @@ config:
       # Zap logger configuration:
       # Development Mode: encoder=consoleEncoder, logLevel=Debug, stackTraceLevel=Warn
       # Production Mode: encoder=jsonEncoder, logLevel=Info, stackTraceLevel=Error
-      - "--zap-devel=false" # Set to false for production mode (default)
+      - "--zap-devel=false"  # Set to false for production mode (default)
       # Zap logger verbosity level:
       # Can be one of ‘debug’, ‘info’, ‘error’, or an integer > 0 for custom debug levels.
       # @default -- debug
