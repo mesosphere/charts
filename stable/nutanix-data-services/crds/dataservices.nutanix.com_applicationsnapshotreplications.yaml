@@ -168,6 +168,24 @@ spec:
                   - type
                   type: object
                 type: array
+              frpCountNeeded:
+                description: FrpCountNeeded is the total number of FRPs expected for
+                  this ASR.
+                type: integer
+              frpHandles:
+                description: FrpHandles contains unique policy handles for all FRPs.
+                items:
+                  type: string
+                type: array
+              frpReadyCount:
+                description: FrpReadyCount is the number of FRPs currently in a ready
+                  state.
+                type: integer
+              frpStates:
+                additionalProperties:
+                  type: boolean
+                description: FrpStates maps each FRP name to its readiness status.
+                type: object
               replicationCompletionPercent:
                 description: replicationCompletionPercent gives the percentage of
                   replication that's complete.

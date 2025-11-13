@@ -121,6 +121,12 @@ spec:
                 x-kubernetes-validations:
                 - message: ApplicationSnapshotRef is immutable
                   rule: self == oldSelf
+              forceDeleteFilesSnapshot:
+                default: false
+                description: |-
+                  forceDeleteFilesSnapshot indicates whether file volume snapshots should be forcefully deleted.
+                  It must be set to true when deleting base snapshots of file volumes.
+                type: boolean
               source:
                 description: |-
                   Source specifies whether the snapshot is (or should be) dynamically provisioned
@@ -179,6 +185,20 @@ spec:
                           application configuration.
                         type: string
                     type: object
+                  filesReplicationPolicyHandlesList:
+                    description: |-
+                      This is a list of the files replication policy handles that are
+                      associated with files volume replication.
+                    items:
+                      type: string
+                    type: array
+                  filesReplicationPolicyList:
+                    description: |-
+                      This is a list of the files replication policies names that are
+                      associated with files volume replication.
+                    items:
+                      type: string
+                    type: array
                   volumeClaimHandleMap:
                     additionalProperties:
                       type: string

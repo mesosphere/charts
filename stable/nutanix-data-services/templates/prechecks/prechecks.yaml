@@ -1,0 +1,7 @@
+# Copyright 2025 Nutanix Inc
+
+# This file specifies the execution order of prechecks.
+# This ensures the most relevant precheck error is shown to the user.
+
+{{ include "precheck.csiMinVersion" . }}
+{{ include "precheck.pcSecret" . }}

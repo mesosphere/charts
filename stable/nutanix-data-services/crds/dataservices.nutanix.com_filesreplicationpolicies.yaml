@@ -216,6 +216,10 @@ spec:
                     items:
                       type: string
                     type: array
+                  isScheduled:
+                    description: IsScheduled represents if the schedule interval is
+                      non-zero.
+                    type: boolean
                   policyHandle:
                     description: PolicyHandle is a unique identifier for the replication
                       policy.

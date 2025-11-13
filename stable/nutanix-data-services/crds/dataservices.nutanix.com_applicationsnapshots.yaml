@@ -69,6 +69,12 @@ spec:
                   It is a required field for out-of-band snapshots.
                   This field is immutable after creation.
                 type: string
+              forceDeleteFilesSnapshot:
+                default: false
+                description: |-
+                  forceDeleteFilesSnapshot indicates whether file volume snapshots should be forcefully deleted.
+                  It must be set to true when deleting base snapshots of file volumes.
+                type: boolean
               source:
                 description: |-
                   source specifies whether the snapshot is (or should be) dynamically provisioned
@@ -129,7 +135,7 @@ spec:
               error:
                 description: |-
                   error is the last observed error during snapshot creation, if any.
-                  Upon success after retry, this error field will be cleared.
+                  If populated, it indicates that the snapshot has reached a terminal failure.
                 properties:
                   message:
                     description: |-

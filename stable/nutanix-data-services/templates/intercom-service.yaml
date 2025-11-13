@@ -6,6 +6,10 @@ metadata:
   name: {{ include "chart.fullname" . }}-intercom-service
   labels:
   {{- include "chart.labels" . | nindent 4 }}
+  {{- with .Values.intercomService.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.intercomService.type }}
   {{ if (eq .Values.intercomService.type "LoadBalancer") }}
