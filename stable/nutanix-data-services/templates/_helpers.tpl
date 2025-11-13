@@ -63,3 +63,9 @@ Create image pull secret
 {{- printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\",\"auth\":\"%s\"}}}" .registry .username .password .email (printf "%s:%s" .username .password | b64enc) | b64enc }}
 {{- end }}
 {{- end }}
+{{/*
+Flag to enable service-auth - for internal use only
+*/}}
+{{- define "chart.enableServiceAuth" -}}
+false
+{{- end }}

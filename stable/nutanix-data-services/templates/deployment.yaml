@@ -51,14 +51,15 @@ spec:
         args:
         - --config=controller_manager_config.yaml
         - --skip_restoring_existing_group_kinds=ServiceAccount,ConfigMap,Secret,RoleBinding.rbac.authorization.k8s.io,RoleBinding.authorization.openshift.io,Role.rbac.authorization.k8s.io,Role.authorization.openshift.io,ClusterServiceVersion.operators.coreos.com
-        - --exclude-resource-type-list=Job.batch,ReferenceGrant.gateway.networking.k8s.io
+        - --exclude-resource-type-list=Job.batch,ReferenceGrant.gateway.networking.k8s.io,CiliumEndpoint.cilium.io
+        - --enable-service-auth={{ include "chart.enableServiceAuth" . }}
         {{  range .Values.config.controllerManagerConfig.flags }}
         - {{ . }}
         {{ end }}
         command:
         - /manager
         env:
-        - name: CSI_SECRET_DIR
+        - name: NDK_SECRET_DIR
           value: {{ .Values.config.secret.dir }}
         {{- if .Values.manager.digest }}
         image: {{ .Values.manager.repository }}@{{ .Values.manager.digest }}
@@ -85,7 +86,6 @@ spec:
         resources: {{- toYaml .Values.deployment.manager.resources | nindent 10
           }}
         securityContext:
-          runAsUser: 0
           allowPrivilegeEscalation: false
         volumeMounts:
         - mountPath: /etc/podinfo
@@ -114,11 +114,12 @@ spec:
       - command:
           - /app/infra_manager
         args:
+        - --enable-service-auth={{ include "chart.enableServiceAuth" . }}
         {{  range .Values.config.infraManagerConfig.flags }}
         - {{ . }}
         {{ end }}
         env:
-        - name: CSI_SECRET_DIR
+        - name: NDK_SECRET_DIR
           value: {{ .Values.config.secret.dir }}
         {{- if .Values.infraManager.digest }}
         image: {{ .Values.infraManager.repository }}@{{ .Values.infraManager.digest }}
@@ -130,7 +131,6 @@ spec:
         resources: {{- toYaml .Values.deployment.infraManager.resources | nindent 10
           }}
         securityContext:
-          runAsUser: 0
           allowPrivilegeEscalation: false
         volumeMounts:
         - mountPath: /tmp/socket
@@ -202,7 +202,7 @@ spec:
       {{- end }}
       priorityClassName: system-cluster-critical
       securityContext:
-        runAsNonRoot: false
+        runAsNonRoot: true
       serviceAccountName: {{ include "chart.fullname" . }}-controller-manager
       terminationGracePeriodSeconds: 10
       volumes:
