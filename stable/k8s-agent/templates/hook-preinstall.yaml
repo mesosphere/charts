@@ -44,7 +44,7 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook": pre-install,pre-upgrade,pre-delete
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 rules:
@@ -64,11 +64,18 @@ rules:
   - "get"
   - "list"
 - apiGroups:
+  - ""
+  resources:
+  - "pods"
+  verbs:
+  - "get"
+- apiGroups:
   - '*'
   resources:
   - 'namespaces'
   verbs:
   - 'get'
+  - 'list'
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -76,7 +83,7 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook": pre-install,pre-upgrade,pre-delete
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 roleRef:

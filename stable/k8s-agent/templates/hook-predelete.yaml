@@ -4,6 +4,10 @@ kind: ConfigMap
 metadata:
   name:  {{.Values.agent.name}}-config
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  annotations:
+    "helm.sh/hook": "pre-delete"
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 data:
   agent-config.yaml: |
   {{- if .Values.agent.config.registration }}
@@ -25,6 +29,7 @@ metadata:
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
      "helm.sh/hook": "pre-delete"
+     "helm.sh/hook-weight": "0"
      "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   {{- if eq .Values.agent.image.privateRegistry true}}
