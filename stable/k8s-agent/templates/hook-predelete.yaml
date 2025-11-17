@@ -6,7 +6,7 @@ metadata:
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
     "helm.sh/hook": "pre-delete"
-    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 data:
   agent-config.yaml: |
@@ -29,7 +29,7 @@ metadata:
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
   annotations:
      "helm.sh/hook": "pre-delete"
-     "helm.sh/hook-weight": "0"
+     "helm.sh/hook-weight": "1"
      "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   {{- if eq .Values.agent.image.privateRegistry true}}
@@ -49,6 +49,11 @@ spec:
     image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
     imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
     command: ["/k8s-agent/k8s-agent"]
+    env:
+      - name: POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
     volumeMounts:
       - name: pc-creds-volume
         mountPath: /certs
