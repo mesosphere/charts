@@ -1,16 +1,16 @@
 agent:
   namespaceOverride: ntnx-system
-  name: nutanix-agent
+  name: konnector-agent
   port: 8080
   image:
     repository: docker.io/nutanix
-    name: nke-k8s-agent
+    name: konnector-agent
     pullPolicy: IfNotPresent
     tag: ""
     privateRegistry: false
     imageCredentials:
       dockerconfig: replace_base64_encoded_creds
-  updateConfigInMin: 10
+  updateConfigInMin: 5
   updateMetricsInMin: 360
   config:
     registration:
