@@ -1,10 +1,10 @@
 agent:
   namespaceOverride: ntnx-system
-  name: nutanix-agent
+  name: konnector-agent
   port: 8080
   image:
     repository: docker.io/nutanix
-    name: nke-k8s-agent
+    name: konnector-agent
     pullPolicy: IfNotPresent
     tag: ""
     privateRegistry: false
