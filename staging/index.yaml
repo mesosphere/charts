@@ -3503,6 +3503,20 @@ entries:
     version: 1.1.21
   knative:
   - apiVersion: v2
+    appVersion: v1.19.3
+    created: "2025-11-21T13:50:03.101452273Z"
+    description: Wrapper chart for Knative Operator that installs Serving and Eventing
+      using the operator
+    digest: 04ed2f9d68a453f0c497e404cfc7224cd2271c46831eb7385317b5d2152932d5
+    maintainers:
+    - name: lukeogg
+    - name: alembiewski
+    - name: johnliu25
+    name: knative
+    urls:
+    - https://mesosphere.github.io/charts/staging/knative-1.19.3.tgz
+    version: 1.19.3
+  - apiVersion: v2
     appVersion: v1.18.1
     created: "2025-05-23T20:25:49.395797611Z"
     description: Wrapper chart for Knative Operator that installs Serving and Eventing
@@ -15009,4 +15023,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-11-12T08:25:19.406764161Z"
+generated: "2025-11-21T13:50:03.10094426Z"
