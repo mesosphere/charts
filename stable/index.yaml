@@ -34891,6 +34891,24 @@ entries:
     version: 0.1.0
   konnector-agent:
   - apiVersion: v2
+    appVersion: 1.3.1
+    created: "2025-12-05T16:06:36.991141457Z"
+    description: A Helm chart for onboarding a Kubernetes cluster created on Nutanix
+      Infrastructure onto Prism Central.
+    digest: 95b6c3930f0d8ce3c20ed64d6b0e90333e1e2367d06db521e00177e97ba7a8e1
+    maintainers:
+    - email: cloudnative@nutanix.com
+      name: nutanix-cloud-native-bot
+    - email: manoj.surudwad@nutanix.com
+      name: manoj-nutanix
+    - email: vijayaraghavan.r@nutanix.com
+      name: vijayaraghavanr31
+    name: konnector-agent
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/konnector-agent-1.3.2.tgz
+    version: 1.3.2
+  - apiVersion: v2
     appVersion: 1.3.0
     created: "2025-12-03T17:31:17.349627307Z"
     description: A Helm chart for onboarding a Kubernetes cluster created on Nutanix
@@ -43233,4 +43251,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2025-12-03T17:31:17.347159066Z"
+generated: "2025-12-05T16:06:36.988770572Z"
