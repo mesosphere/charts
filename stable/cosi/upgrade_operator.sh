@@ -12,7 +12,7 @@ shopt -s dotglob
 
 BASEDIR=$(dirname "$(realpath "$0")")
 UPSTREAM_REPO=git@github.com:kubernetes-sigs/container-object-storage-interface.git
-TAG=7ddc93baaa3f08c9c8990a17c7b958955d93c044 # Replace this with a real tag
+TAG=v0.2.2 # Replace this with a real tag
 KUSTOMIZATION_PATH=kustomization.yaml
 CRDS_PATH=client/config/crd/
 CONTROLLER_PATH=controller
