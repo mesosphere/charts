@@ -3349,7 +3349,7 @@ entries:
   istio-helm-istiod:
   - apiVersion: v2
     appVersion: 1.23.6
-    created: "2025-11-06T14:32:24.190075088Z"
+    created: "2026-01-05T15:29:10.921324074Z"
     dependencies:
     - condition: istiod.enabled
       name: istiod
@@ -3368,7 +3368,7 @@ entries:
       repository: ""
       version: 0.0.2
     description: Helm chart for deploying Istio control plane (istiod) with monitoring
-    digest: aa20a6b7739fe7e23afe8df61232780a298ec316b20e53ce15237ee47854d07a
+    digest: f32879d9aa205af411e04266e219c477215f6465778418ad6626ed291724dc0a
     icon: https://istio.io/latest/favicons/android-192x192.png
     keywords:
     - istio
@@ -15037,4 +15037,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2025-11-24T11:15:01.301297334Z"
+generated: "2026-01-05T15:29:10.918508914Z"
