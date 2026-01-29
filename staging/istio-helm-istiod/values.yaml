@@ -34,5 +34,3 @@ prometheus-operator:
 security:
   enabled: true
   issuerName: kommander-ca
-  image: docker.io/mesosphere/kubectl
-  tag: v1.35.0-alpine
