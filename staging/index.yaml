@@ -3277,6 +3277,29 @@ entries:
   istio-helm-base:
   - apiVersion: v2
     appVersion: 1.23.6
+    created: "2026-02-03T16:55:47.839652633Z"
+    dependencies:
+    - condition: base.enabled
+      name: base
+      repository: ""
+      version: 1.23.6
+    description: Helm chart for deploying Istio base resources and CRDs
+    digest: 9bd36addb5004674b283b04849aec8dbcb90d27720554c6e4f2df01b7da84a18
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istio-base
+    - crds
+    maintainers:
+    - name: rohitkumar0510
+    name: istio-helm-base
+    sources:
+    - https://github.com/istio/istio/tree/master/manifests/charts/base
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-helm-base-1.23.7.tgz
+    version: 1.23.7
+  - apiVersion: v2
+    appVersion: 1.23.6
     created: "2025-11-12T08:25:19.409054689Z"
     dependencies:
     - condition: base.enabled
@@ -3299,6 +3322,29 @@ entries:
     - https://mesosphere.github.io/charts/staging/istio-helm-base-1.23.6.tgz
     version: 1.23.6
   istio-helm-cni:
+  - apiVersion: v2
+    appVersion: 1.23.6
+    created: "2026-02-03T16:55:47.840464601Z"
+    dependencies:
+    - condition: cni.enabled
+      name: cni
+      repository: ""
+      version: 1.23.6
+    description: Helm chart for deploying Istio CNI plugin
+    digest: cf154535a936e4cc9b4c2c1665a4bd74aa4d29fe27c56fb1bf800134ee634ec9
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istio-cni
+    - cni
+    maintainers:
+    - name: rohitkumar0510
+    name: istio-helm-cni
+    sources:
+    - https://github.com/istio/istio/tree/master/manifests/charts/istio-cni
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-helm-cni-1.23.7.tgz
+    version: 1.23.7
   - apiVersion: v2
     appVersion: 1.23.6
     created: "2025-10-29T09:58:08.68957158Z"
@@ -3325,6 +3371,29 @@ entries:
   istio-helm-gateway:
   - apiVersion: v2
     appVersion: 1.23.6
+    created: "2026-02-03T16:55:47.841894672Z"
+    dependencies:
+    - condition: gateway.enabled
+      name: gateway
+      repository: ""
+      version: 1.23.6
+    description: Helm chart for deploying Istio ingress gateway
+    digest: ff2265ada2ca5ef78067ace86c92f0d9c9335a8598930c383fc6abffb7decffe
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istio-gateway
+    - ingress
+    maintainers:
+    - name: rohitkumar0510
+    name: istio-helm-gateway
+    sources:
+    - https://github.com/istio/istio/tree/master/manifests/charts/gateway
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-helm-gateway-1.23.7.tgz
+    version: 1.23.7
+  - apiVersion: v2
+    appVersion: 1.23.6
     created: "2025-11-06T14:32:24.1874238Z"
     dependencies:
     - condition: gateway.enabled
@@ -3347,6 +3416,41 @@ entries:
     - https://mesosphere.github.io/charts/staging/istio-helm-gateway-1.23.6.tgz
     version: 1.23.6
   istio-helm-istiod:
+  - apiVersion: v2
+    appVersion: 1.23.6
+    created: "2026-02-03T16:55:47.844987423Z"
+    dependencies:
+    - condition: istiod.enabled
+      name: istiod
+      repository: ""
+      version: 1.23.6
+    - condition: grafana.enabled
+      name: grafana
+      repository: ""
+      version: 1.1.0
+    - condition: prometheus.enabled
+      name: prometheus-operator
+      repository: ""
+      version: 1.1.1
+    - condition: security.enabled
+      name: security
+      repository: ""
+      version: 0.0.2
+    description: Helm chart for deploying Istio control plane (istiod) with monitoring
+    digest: a1b49cc7a726a4429b780276a81352cbebb3621f3f7436d0186aef1ffde2b766
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - istio-istiod
+    - control-plane
+    maintainers:
+    - name: rohitkumar0510
+    name: istio-helm-istiod
+    sources:
+    - https://github.com/istio/istio/tree/master/manifests/charts/istiod
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-helm-istiod-1.23.7.tgz
+    version: 1.23.7
   - apiVersion: v2
     appVersion: 1.23.6
     created: "2026-01-05T15:29:10.921324074Z"
@@ -3383,6 +3487,29 @@ entries:
     - https://mesosphere.github.io/charts/staging/istio-helm-istiod-1.23.6.tgz
     version: 1.23.6
   istio-helm-ztunnel:
+  - apiVersion: v2
+    appVersion: 1.23.6
+    created: "2026-02-03T16:55:47.845598332Z"
+    dependencies:
+    - condition: ztunnel.enabled
+      name: ztunnel
+      repository: ""
+      version: 1.23.6
+    description: Helm chart for deploying Istio ztunnel for ambient mesh mode
+    digest: 41b73edccb98502908dea75ddff9a9278f6700fc13fdf99bf06d4463799933d3
+    icon: https://istio.io/latest/favicons/android-192x192.png
+    keywords:
+    - istio
+    - ztunnel
+    - ambient
+    maintainers:
+    - name: rohitkumar0510
+    name: istio-helm-ztunnel
+    sources:
+    - https://github.com/istio/istio/tree/master/manifests/charts/ztunnel
+    urls:
+    - https://mesosphere.github.io/charts/staging/istio-helm-ztunnel-1.23.7.tgz
+    version: 1.23.7
   - apiVersion: v2
     appVersion: 1.23.6
     created: "2025-10-29T09:58:08.694638482Z"
@@ -15037,4 +15164,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/staging/velero-2.1.1.tgz
     version: 2.1.1
-generated: "2026-01-05T15:29:10.918508914Z"
+generated: "2026-02-03T16:55:47.837458605Z"
