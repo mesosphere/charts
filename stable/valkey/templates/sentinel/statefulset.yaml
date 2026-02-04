@@ -59,6 +59,9 @@ spec:
       {{- if .Values.replica.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.replica.hostAliases "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.replica.runtimeClassName }}
+      runtimeClassName: {{ .Values.replica.runtimeClassName }}
+      {{- end }}
       {{- if .Values.replica.podSecurityContext.enabled }}
       securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.replica.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
@@ -125,6 +128,11 @@ spec:
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
+          {{- end }}
+          {{- if include "common.fips.enabled" . }}
+          env:
+            - name: OPENSSL_FIPS
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.volumePermissions.fips "global" .Values.global) | quote }}
           {{- end }}
           volumeMounts:
             - name: empty-dir
@@ -202,6 +210,10 @@ spec:
                   key: {{ template "valkey.secretPasswordKey" . }}
             {{- end }}
             {{- end }}
+            {{- if include "common.fips.enabled" . }}
+            - name: OPENSSL_FIPS
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.fips "global" .Values.global) | quote }}
+            {{- end }}
             - name: VALKEY_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
@@ -267,7 +279,7 @@ spec:
             {{- end }}
           {{- end }}
           ports:
-            - name: valkey
+            - name: redis
               containerPort: {{ .Values.replica.containerPorts.valkey }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.customStartupProbe }}
@@ -417,6 +429,10 @@ spec:
               value: {{ template "valkey.tlsCertKey" . }}
             - name:  VALKEY_SENTINEL_TLS_CA_FILE
               value: {{ template "valkey.tlsCACert" . }}
+            {{- if include "common.fips.enabled" . }}
+            - name: OPENSSL_FIPS
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.sentinel.fips "global" .Values.global) | quote }}
+            {{- end }}
             {{- if .Values.tls.dhParamsFilename }}
             - name:  VALKEY_SENTINEL_TLS_DH_PARAMS_FILE
               value: {{ template "valkey.tlsDHParams" . }}
@@ -573,6 +589,12 @@ spec:
                   key: {{ template "valkey.secretPasswordKey" . }}
             {{- end }}
             {{- end }}
+            {{- if include "common.fips.enabled" . }}
+            - name: OPENSSL_FIPS
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
+            - name: GODEBUG
+              value: {{ include "common.fips.config" (dict "tech" "golang" "fips" .Values.metrics.fips "global" .Values.global) | quote }}
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: REDIS_ADDR
               value: valkeys://{{ .Values.metrics.valkeyTargetHost }}:{{ .Values.replica.containerPorts.valkey }}
@@ -652,6 +674,13 @@ spec:
               mountPath: /opt/bitnami/scripts/kubectl-scripts
           {{- if .Values.kubectl.resources }}
           resources: {{- toYaml .Values.kubectl.resources | nindent 12 }}
+          {{- end }}
+          {{- if include "common.fips.enabled" . }}
+          env:
+            - name: OPENSSL_FIPS
+              value: {{ include "common.fips.config" (dict "tech" "openssl" "fips" .Values.kubectl.fips "global" .Values.global) | quote }}
+            - name: GODEBUG
+              value: {{ include "common.fips.config" (dict "tech" "golang" "fips" .Values.kubectl.fips "global" .Values.global) | quote }}
           {{- end }}
         {{- end }}
         {{- if .Values.replica.sidecars }}

@@ -34,11 +34,11 @@ spec:
   {{- if and .Values.primary.service.clusterIP (eq .Values.primary.service.type "ClusterIP") }}
   clusterIP: {{ .Values.primary.service.clusterIP }}
   {{- end }}
-  {{- if .Values.primary.service.sessionAffinity }}
+  {{- if ne .Values.primary.service.sessionAffinity "None"}}
   sessionAffinity: {{ .Values.primary.service.sessionAffinity }}
-  {{- end }}
   {{- if .Values.primary.service.sessionAffinityConfig }}
   sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- end }}
   {{- if .Values.primary.service.externalIPs }}
   externalIPs: {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.externalIPs "context" $) | nindent 4 }}
