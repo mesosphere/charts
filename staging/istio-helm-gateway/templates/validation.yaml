@@ -1,0 +1,9 @@
+{{/*
+Validation: Ensure gateway (subchart) and gateways (multi-gateway array) are not used simultaneously.
+This template produces no YAML output — it only validates configuration.
+*/}}
+{{- if and .Values.gateways (gt (len .Values.gateways) 0) }}
+{{- if .Values.gateway.enabled }}
+{{- fail "\n\nCONFIGURATION ERROR: Cannot use both 'gateway.enabled: true' and a non-empty 'gateways' array simultaneously.\n\nYou have two options:\n  1. Single gateway (subchart mode):  Set 'gateway.enabled: true' and configure under the 'gateway:' key. Leave 'gateways: []'.\n  2. Multiple gateways (array mode):  Set 'gateway.enabled: false' and configure the 'gateways:' array.\n\nThese two modes are mutually exclusive." }}
+{{- end }}
+{{- end }}
