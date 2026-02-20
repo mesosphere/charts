@@ -45,5 +45,5 @@ dependencies:
   condition: nodeExporter.enabled
 - name: grafana
   version: "6.1.*"
-  repository: https://grafana.github.io/helm-charts
+  repository: https://grafana-community.github.io/helm-charts
   condition: grafana.enabled
