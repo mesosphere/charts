@@ -3,7 +3,7 @@ gateway:
   enabled: true
   name: istio-ingressgateway
   proxy:
-    # "auto" will be populated at runtime by the mutating webhook.
+    # "auto" means image is populated by mutating webhook at runtime
     image: auto
   priorityClassName: ""
   autoscaling:
@@ -12,4 +12,5 @@ gateway:
     maxReplicas: 2
   labels:
     istio: ingressgateway
+  # additional_gateways deploys extra gateway instances.
   additional_gateways: []
