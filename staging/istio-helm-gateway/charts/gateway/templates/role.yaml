@@ -31,3 +31,49 @@ subjects:
 - kind: ServiceAccount
   name: {{ include "gateway.serviceAccountName" . }}
 {{- end }}
+{{/* --- Additional gateways --- */}}
+{{- if $.Values.additional_gateways }}
+{{- range $.Values.additional_gateways }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
+{{- $defaults := deepCopy $.Values }}
+{{- $_ := unset $defaults "enabled" }}
+{{- $_ := unset $defaults "additional_gateways" }}
+{{- $_ := unset $defaults "global" }}
+{{- $gw := mustMergeOverwrite $defaults . }}
+{{- $ctx := dict "gw" $gw "Chart" $.Chart "Release" $.Release }}
+{{- if $gw.rbac.enabled }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "additional.gateway.serviceAccountName" $ctx }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "additional.gateway.labels" $ctx | nindent 4 }}
+  annotations:
+    {{- $gw.annotations | toYaml | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "additional.gateway.serviceAccountName" $ctx }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "additional.gateway.labels" $ctx | nindent 4 }}
+  annotations:
+    {{- $gw.annotations | toYaml | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "additional.gateway.serviceAccountName" $ctx }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "additional.gateway.serviceAccountName" $ctx }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

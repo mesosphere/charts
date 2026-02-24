@@ -36,3 +36,55 @@ spec:
   behavior: {{ toYaml .Values.autoscaling.autoscaleBehavior | nindent 4 }}
   {{- end }}
 {{- end }}
+{{/* --- Additional gateways --- */}}
+{{- if $.Values.additional_gateways }}
+{{- range $.Values.additional_gateways }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
+{{- $defaults := deepCopy $.Values }}
+{{- $_ := unset $defaults "enabled" }}
+{{- $_ := unset $defaults "additional_gateways" }}
+{{- $_ := unset $defaults "global" }}
+{{- $gw := mustMergeOverwrite $defaults . }}
+{{- $ctx := dict "gw" $gw "Chart" $.Chart "Release" $.Release }}
+{{- if and ($gw.autoscaling.enabled) (eq ($gw.kind | default "Deployment") "Deployment") }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ $gw.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "additional.gateway.labels" $ctx | nindent 4 }}
+  annotations:
+    {{- $gw.annotations | toYaml | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: {{ $gw.kind | default "Deployment" }}
+    name: {{ $gw.name }}
+  minReplicas: {{ $gw.autoscaling.minReplicas }}
+  maxReplicas: {{ $gw.autoscaling.maxReplicas }}
+  metrics:
+    {{- if $gw.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          averageUtilization: {{ $gw.autoscaling.targetCPUUtilizationPercentage }}
+          type: Utilization
+    {{- end }}
+    {{- if $gw.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          averageUtilization: {{ $gw.autoscaling.targetMemoryUtilizationPercentage }}
+          type: Utilization
+    {{- end }}
+  {{- if $gw.autoscaling.autoscaleBehavior }}
+  behavior: {{ toYaml $gw.autoscaling.autoscaleBehavior | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
