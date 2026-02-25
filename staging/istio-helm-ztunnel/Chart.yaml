@@ -1,6 +1,7 @@
 apiVersion: v2
 name: istio-helm-ztunnel
-version: 1.23.7
+# 1.24.0 supports migration to ambient mesh mode from sidecar
+version: 1.24.0
 appVersion: 1.23.6
 description: Helm chart for deploying Istio ztunnel for ambient mesh mode
 keywords:

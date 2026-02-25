@@ -93,3 +93,14 @@ defaults:
   # TODO Ambient inpod - for OpenShift, set to the following to get writable sockets in hostmounts to work, eventually consider CSI driver instead
   #seLinuxOptions:
   #  type: spc_t
+
+# Ambient migration hook configuration
+ambientMigration:
+  enabled: true
+  image:
+    repository: mesosphere/kubectl
+    tag: v1.35.0-alpine
+    pullPolicy: IfNotPresent
+  priorityClassName: ""
+  ttlSecondsAfterFinished: 21600 #6hrs
+  backoffLimit: 3
