@@ -12,3 +12,5 @@ gateway:
     maxReplicas: 2
   labels:
     istio: ingressgateway
+  # additional_gateways deploys extra gateway instances.
+  additional_gateways: []

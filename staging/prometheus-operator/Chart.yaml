@@ -18,7 +18,7 @@ name: prometheus-operator
 sources:
   - https://github.com/prometheus-community/helm-charts
   - https://github.com/prometheus-operator/kube-prometheus
-version: 12.11.12
+version: 12.11.13
 appVersion: 0.44.0
 kubeVersion: ">=1.16.0-0"
 home: https://github.com/prometheus-operator/kube-prometheus
@@ -36,14 +36,14 @@ annotations:
 
 dependencies:
 - name: kube-state-metrics
-  version: "2.9.*"
-  repository: https://charts.helm.sh/stable
+  version: "7.1.*"
+  repository: https://prometheus-community.github.io/helm-charts
   condition: kubeStateMetrics.enabled
 - name: prometheus-node-exporter
   version: "1.12.*"
   repository: https://prometheus-community.github.io/helm-charts
   condition: nodeExporter.enabled
 - name: grafana
-  version: "6.1.*"
-  repository: https://grafana.github.io/helm-charts
+  version: "11.1.*"
+  repository: https://grafana-community.github.io/helm-charts
   condition: grafana.enabled

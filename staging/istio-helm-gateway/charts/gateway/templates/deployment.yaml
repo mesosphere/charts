@@ -113,3 +113,131 @@ spec:
       {{- with .Values.priorityClassName }}
       priorityClassName: {{ . }}
       {{- end }}
+{{/* --- Additional gateways --- */}}
+{{- if $.Values.additional_gateways }}
+{{- range $.Values.additional_gateways }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
+{{- $defaults := deepCopy $.Values }}
+{{- $_ := unset $defaults "enabled" }}
+{{- $_ := unset $defaults "additional_gateways" }}
+{{- $_ := unset $defaults "global" }}
+{{- $gw := mustMergeOverwrite $defaults . }}
+{{- $ctx := dict "gw" $gw "Chart" $.Chart "Release" $.Release }}
+---
+apiVersion: apps/v1
+kind: {{ $gw.kind | default "Deployment" }}
+metadata:
+  name: {{ $gw.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "additional.gateway.labels" $ctx | nindent 4 }}
+  annotations:
+    {{- $gw.annotations | toYaml | nindent 4 }}
+spec:
+  {{- if not $gw.autoscaling.enabled }}
+  {{- with $gw.replicaCount }}
+  replicas: {{ . }}
+  {{- end }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "additional.gateway.selectorLabels" $ctx | nindent 6 }}
+  template:
+    metadata:
+      {{- with $gw.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "additional.gateway.sidecarInjectionLabels" $ctx | nindent 8 }}
+        {{- include "additional.gateway.selectorLabels" $ctx | nindent 8 }}
+        app.kubernetes.io/name: {{ $gw.name }}
+        app.kubernetes.io/version: {{ $.Chart.AppVersion | quote }}
+        {{- range $key, $val := $gw.labels }}
+        {{- if and (ne $key "app") (ne $key "istio") }}
+        {{ $key | quote }}: {{ $val | quote }}
+        {{- end }}
+        {{- end }}
+    spec:
+      {{- with $gw.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "additional.gateway.serviceAccountName" $ctx }}
+      securityContext:
+      {{- if $gw.securityContext }}
+        {{- toYaml $gw.securityContext | nindent 8 }}
+      {{- else }}
+        # Safe since 1.22: https://github.com/kubernetes/kubernetes/pull/103326
+        sysctls:
+        - name: net.ipv4.ip_unprivileged_port_start
+          value: "0"
+      {{- end }}
+      {{- with $gw.volumes }}
+      volumes:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: istio-proxy
+          image: {{ $gw.proxy.image }}
+          {{- with $gw.imagePullPolicy }}
+          imagePullPolicy: {{ . }}
+          {{- end }}
+          securityContext:
+          {{- if $gw.containerSecurityContext }}
+            {{- toYaml $gw.containerSecurityContext | nindent 12 }}
+          {{- else }}
+            capabilities:
+              drop:
+              - ALL
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            {{- if not (eq ($gw.platform | default "") "openshift") }}
+            runAsUser: 1337
+            runAsGroup: 1337
+            {{- end }}
+            runAsNonRoot: true
+          {{- end }}
+          env:
+          {{- with $gw.networkGateway }}
+          - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+            value: "{{.}}"
+          {{- end }}
+          {{- range $key, $val := $gw.env }}
+          - name: {{ $key }}
+            value: {{ $val | quote }}
+          {{- end }}
+          ports:
+          - containerPort: 15090
+            protocol: TCP
+            name: http-envoy-prom
+          resources:
+            {{- toYaml $gw.resources | nindent 12 }}
+          {{- with $gw.volumeMounts }}
+          volumeMounts:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with $gw.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $gw.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $gw.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $gw.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ $gw.terminationGracePeriodSeconds }}
+      {{- with $gw.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

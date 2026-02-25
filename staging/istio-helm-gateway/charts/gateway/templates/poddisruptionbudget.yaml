@@ -14,3 +14,33 @@ spec:
     {{- toYaml . | nindent 2 }}
   {{- end }}
 {{- end }}
+{{/* --- Additional gateways --- */}}
+{{- if $.Values.additional_gateways }}
+{{- range $.Values.additional_gateways }}
+{{- if or (not (hasKey . "enabled")) .enabled }}
+{{- $defaults := deepCopy $.Values }}
+{{- $_ := unset $defaults "enabled" }}
+{{- $_ := unset $defaults "additional_gateways" }}
+{{- $_ := unset $defaults "global" }}
+{{- $gw := mustMergeOverwrite $defaults . }}
+{{- $ctx := dict "gw" $gw "Chart" $.Chart "Release" $.Release }}
+{{- if $gw.podDisruptionBudget }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $gw.name }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "additional.gateway.labels" $ctx | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+  {{- include "additional.gateway.selectorLabels" $ctx | nindent 6 }}
+  {{- with $gw.podDisruptionBudget }}
+    {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

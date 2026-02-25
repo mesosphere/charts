@@ -157,3 +157,30 @@ defaults:
   # Refer to https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   # for more detail.
   priorityClassName: ""
+
+  # additional_gateways allows deploying multiple gateway instances (e.g. ingress,
+  # egress, east-west) from a single Helm release, providing parity with the
+  # multi-gateway support that was available in the deprecated Istio Operator.
+  #
+  # Each entry is deep-merged on top of the primary gateway configuration (the
+  # "defaults:" block above), so only the fields that differ need to be specified.
+  #
+  # Example:
+  #
+  #   additional_gateways:
+  #     - name: istio-egressgateway
+  #       labels:
+  #         istio: egressgateway
+  #       service:
+  #         type: ClusterIP
+  #         ports:
+  #           - name: http2
+  #             port: 80
+  #             targetPort: 8080
+  #             protocol: TCP
+  #           - name: https
+  #             port: 443
+  #             targetPort: 8443
+  #             protocol: TCP
+  #
+  additional_gateways: []
