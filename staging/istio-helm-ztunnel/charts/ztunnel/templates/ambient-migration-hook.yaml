@@ -1,4 +1,4 @@
-{{- if .Values.ambientMigration.enabled }}
+{{- if .Values.migration.enabled }}
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -74,8 +74,8 @@ metadata:
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": before-hook-creation
 spec:
-  ttlSecondsAfterFinished: {{ .Values.ambientMigration.ttlSecondsAfterFinished | default 21600 }}
-  backoffLimit: {{ .Values.ambientMigration.backoffLimit | default 3 }}
+  ttlSecondsAfterFinished: {{ .Values.migration.ttlSecondsAfterFinished | default 21600 }}
+  backoffLimit: {{ .Values.migration.backoffLimit | default 3 }}
   template:
     metadata:
       name: {{ .Release.Name }}-ambient-migration
@@ -88,13 +88,12 @@ spec:
     spec:
       serviceAccountName: {{ .Release.Name }}-ambient-migration
       restartPolicy: OnFailure
-      {{- with .Values.ambientMigration.priorityClassName }}
-      priorityClassName: {{ . }}
+      priorityClassName: {{ .Values.migration.priorityClassName | default "" }}
       {{- end }}
       containers:
         - name: ambient-migration
-          image: "{{ .Values.ambientMigration.image.repository }}:{{ .Values.ambientMigration.image.tag }}"
-          imagePullPolicy: {{ .Values.ambientMigration.image.pullPolicy | default "IfNotPresent" }}
+          image: {{ .Values.migration.image.repository }}:{{ .Values.migration.image.tag }}
+          imagePullPolicy: {{ .Values.migration.image.pullPolicy }}
           command:
             - bash
             - -c

@@ -18,3 +18,7 @@ cni:
 
 # Ztunnel doesn't use a namespace, so everything here is mostly for ztunnel
 variant: distroless
+
+# Enable sidecar to ambient migration hook when ambient profile is used
+migration:
+  enabled: true
