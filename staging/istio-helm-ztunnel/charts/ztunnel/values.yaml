@@ -98,10 +98,9 @@ defaults:
   # Automatically enabled when profile=ambient is used
   migration:
     enabled: false
-    image:
-      repository: mesosphere/kubectl
-      tag: v1.35.0-alpine
-      pullPolicy: IfNotPresent
+    image: docker.io/mesosphere/kubectl
+    tag: v1.35.0-alpine
+    imagePullPolicy: IfNotPresent
     priorityClassName: ""
     ttlSecondsAfterFinished: 21600 #6hrs
     backoffLimit: 3

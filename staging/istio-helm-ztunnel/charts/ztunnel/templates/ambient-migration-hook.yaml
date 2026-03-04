@@ -96,8 +96,8 @@ spec:
       {{- end }}
       containers:
         - name: ambient-migration
-          image: {{ .Values.migration.image.repository }}:{{ .Values.migration.image.tag }}
-          imagePullPolicy: {{ .Values.migration.image.pullPolicy }}
+          image: {{ .Values.migration.image }}:{{ .Values.migration.tag }}
+          imagePullPolicy: {{ .Values.migration.imagePullPolicy }}
           command:
             - bash
             - -c
@@ -106,7 +106,6 @@ spec:
               set -o pipefail
 
               # Log function with timestamp - use 'log' for logging, keep 'echo' for data manipulation
-              # Using printf to properly handle escape sequences like \t
               log() {
                 printf "%s  %b\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
               }
