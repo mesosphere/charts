@@ -94,14 +94,14 @@ defaults:
   #seLinuxOptions:
   #  type: spc_t
 
-# Sidecar to Ambient migration hook
-# Automatically enabled when profile=ambient is used
-migration:
-  enabled: false
-  image:
-    repository: mesosphere/kubectl
-    tag: v1.35.0-alpine
-    pullPolicy: IfNotPresent
-  priorityClassName: ""
-  ttlSecondsAfterFinished: 21600 #6hrs
-  backoffLimit: 3
+  # Sidecar to Ambient migration hook
+  # Automatically enabled when profile=ambient is used
+  migration:
+    enabled: false
+    image:
+      repository: mesosphere/kubectl
+      tag: v1.35.0-alpine
+      pullPolicy: IfNotPresent
+    priorityClassName: ""
+    ttlSecondsAfterFinished: 21600 #6hrs
+    backoffLimit: 3
