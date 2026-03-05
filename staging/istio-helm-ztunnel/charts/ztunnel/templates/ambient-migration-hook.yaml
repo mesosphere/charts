@@ -1,0 +1,316 @@
+{{- if .Values.migration.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-ambient-migration
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: ztunnel
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-ambient-migration
+  labels:
+    app: ztunnel
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "list", "patch", "update"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["get", "list"]
+  - apiGroups: ["apps"]
+    resources: ["daemonsets"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ .Release.Name }}-ambient-migration
+  labels:
+    app: ztunnel
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Release.Name }}-ambient-migration
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-ambient-migration
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-ambient-migration
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: ztunnel
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  ttlSecondsAfterFinished: {{ .Values.migration.ttlSecondsAfterFinished | default 21600 }}
+  backoffLimit: {{ .Values.migration.backoffLimit | default 3 }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}-ambient-migration
+      labels:
+        app: ztunnel
+        release: {{ .Release.Name }}
+      annotations:
+        sidecar.istio.io/inject: "false"
+        ambient.istio.io/redirection: disabled
+    spec:
+      serviceAccountName: {{ .Release.Name }}-ambient-migration
+      restartPolicy: OnFailure
+      {{- with .Values.migration.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      containers:
+        - name: ambient-migration
+          image: {{ .Values.migration.image }}:{{ .Values.migration.tag }}
+          imagePullPolicy: {{ .Values.migration.imagePullPolicy }}
+          command:
+            - bash
+            - -c
+            - |
+              set -o nounset
+              set -o pipefail
+
+              # Log function with timestamp - use 'log' for logging, keep 'echo' for data manipulation
+              log() {
+                printf "%s  %b\n" "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
+              }
+
+              ZTUNNEL_NAMESPACE="{{ .Release.Namespace }}"
+              ZTUNNEL_TIMEOUT=300
+
+              log "=========================================="
+              log "Istio Ambient Mode Migration Hook"
+              log "=========================================="
+              log ""
+
+              log "=========================================="
+              log "Step 0: Waiting for ztunnel to be ready"
+              log "=========================================="
+              log ""
+              log "Checking ztunnel DaemonSet in namespace: $ZTUNNEL_NAMESPACE"
+
+              WAITED=0
+              while [ $WAITED -lt $ZTUNNEL_TIMEOUT ]; do
+                DESIRED=$(kubectl get daemonset ztunnel -n "$ZTUNNEL_NAMESPACE" \
+                  -o jsonpath='{.status.desiredNumberScheduled}' 2>/dev/null || echo "0")
+                READY=$(kubectl get daemonset ztunnel -n "$ZTUNNEL_NAMESPACE" \
+                  -o jsonpath='{.status.numberReady}' 2>/dev/null || echo "0")
+
+                if [ "$DESIRED" != "0" ] && [ "$DESIRED" = "$READY" ]; then
+                  log "ztunnel is ready: $READY/$DESIRED pods running"
+                  break
+                fi
+
+                log "Waiting for ztunnel... ($READY/$DESIRED ready, ${WAITED}s elapsed)"
+                sleep 10
+                WAITED=$((WAITED + 10))
+              done
+
+              if [ $WAITED -ge $ZTUNNEL_TIMEOUT ]; then
+                log "ERROR: Timed out waiting for ztunnel to be ready after ${ZTUNNEL_TIMEOUT}s"
+                log "Migration aborted - ztunnel must be running before migrating workloads"
+                exit 1
+              fi
+
+              log ""
+              log "ztunnel is ready - proceeding with migration..."
+              log ""
+
+              # Track migration statistics
+              MIGRATED_NS=0
+              RESTARTED_DEPLOYMENTS=0
+              FAILED_NS=0
+
+              log "=========================================="
+              log "Step 1: Discovering namespaces to migrate"
+              log "=========================================="
+
+              # Find namespaces that have sidecar injection enabled but not ambient mode
+              # Criteria:
+              # - Has istio-injection=enabled OR istio.io/rev label
+              # - Does NOT have istio.io/dataplane-mode=ambient
+
+              # Get namespaces with istio-injection=enabled
+              SIDECAR_NS_INJECTION=$(kubectl get namespaces -l istio-injection=enabled -o jsonpath='{.items[*].metadata.name}' 2>/dev/null || echo "")
+
+              # Get namespaces with istio.io/rev label (revision-based injection)
+              SIDECAR_NS_REV=$(kubectl get namespaces -l 'istio.io/rev' -o jsonpath='{.items[*].metadata.name}' 2>/dev/null || echo "")
+
+              # Namespaces to exclude from migration (Istio system namespaces)
+              EXCLUDED_NS="{{ .Release.Namespace }}"
+
+              # Combine, deduplicate, and filter out excluded namespaces
+              ALL_SIDECAR_NS=$(echo "$SIDECAR_NS_INJECTION $SIDECAR_NS_REV" | tr ' ' '\n' | sort -u | grep -v '^$' | grep -v "^${EXCLUDED_NS}$" | tr '\n' ' ')
+
+              if [ -z "$(echo $ALL_SIDECAR_NS | tr -d ' ')" ]; then
+                log "No namespaces found with sidecar injection enabled."
+                log "Nothing to migrate. Exiting successfully."
+                exit 0
+              fi
+
+              log "Found namespaces with sidecar injection:"
+              for ns in $ALL_SIDECAR_NS; do
+                log "\t- $ns"
+              done
+
+              log ""
+              log "=========================================="
+              log "Step 2: Filtering out already migrated namespaces"
+              log "=========================================="
+
+              NAMESPACES_TO_MIGRATE=""
+              for ns in $ALL_SIDECAR_NS; do
+                # Check if namespace already has ambient mode enabled
+                AMBIENT_MODE=$(kubectl get namespace "$ns" -o jsonpath='{.metadata.labels.istio\.io/dataplane-mode}' 2>/dev/null || echo "")
+                
+                if [ "$AMBIENT_MODE" = "ambient" ]; then
+                  log "\t[SKIP] $ns - already in ambient mode"
+                else
+                  log "\t[MIGRATE] $ns - will be migrated to ambient"
+                  NAMESPACES_TO_MIGRATE="$NAMESPACES_TO_MIGRATE $ns"
+                fi
+              done
+
+              NAMESPACES_TO_MIGRATE=$(echo "$NAMESPACES_TO_MIGRATE" | xargs)
+
+              if [ -z "$NAMESPACES_TO_MIGRATE" ]; then
+                log ""
+                log "All sidecar namespaces are already in ambient mode."
+                log "Nothing to migrate. Exiting successfully."
+                exit 0
+              fi
+
+              log ""
+              log "=========================================="
+              log "Step 3: Migrating namespaces to ambient mode"
+              log "=========================================="
+
+              for ns in $NAMESPACES_TO_MIGRATE; do
+                log ""
+                log "Processing namespace: $ns"
+                log "----------------------------------------"
+                
+                # Step 3a: Add ambient mode label
+                log "\tAdding label: istio.io/dataplane-mode=ambient"
+                if kubectl label namespace "$ns" istio.io/dataplane-mode=ambient --overwrite >/dev/null 2>&1; then
+                  log "\tLabel added successfully"
+                else
+                  log "\tFailed to add ambient label"
+                  FAILED_NS=$((FAILED_NS + 1))
+                  continue
+                fi
+
+                # Step 3b: Remove sidecar injection labels
+                log "\tRemoving sidecar injection labels..."
+                
+                # Remove istio-injection label if present
+                if kubectl get namespace "$ns" -o jsonpath='{.metadata.labels.istio-injection}' 2>/dev/null | grep -q .; then
+                  log "\t\tRemoving: istio-injection"
+                  kubectl label namespace "$ns" istio-injection- >/dev/null 2>&1 || true
+                fi
+
+                # Remove istio.io/rev label if present
+                if kubectl get namespace "$ns" -o jsonpath='{.metadata.labels.istio\.io/rev}' 2>/dev/null | grep -q .; then
+                  log "\t\tRemoving: istio.io/rev"
+                  kubectl label namespace "$ns" istio.io/rev- >/dev/null 2>&1 || true
+                fi
+
+                log "\tSidecar injection labels removed"
+                MIGRATED_NS=$((MIGRATED_NS + 1))
+
+                # Step 3c: Rollout restart deployments to remove sidecars
+                log "\tRestarting deployments to remove sidecars..."
+                
+                # Find deployments that have pods with istio-proxy sidecar
+                PODS_WITH_SIDECAR=$(kubectl get pods -n "$ns" -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.spec.containers[*].name}{"\n"}{end}' 2>/dev/null | grep "istio-proxy" | awk '{print $1}' || echo "")
+                
+                if [ -z "$PODS_WITH_SIDECAR" ]; then
+                  log "\t\tNo pods with istio-proxy sidecar found"
+                  continue
+                fi
+
+                # For each pod with sidecar, find the parent deployment
+                DEPLOYMENTS_TO_RESTART=""
+                for pod in $PODS_WITH_SIDECAR; do
+                  RS_NAME=$(kubectl get pod "$pod" -n "$ns" -o jsonpath='{.metadata.ownerReferences[?(@.kind=="ReplicaSet")].name}' 2>/dev/null || echo "")
+                  if [ -n "$RS_NAME" ]; then
+                    DEPLOY_NAME=$(kubectl get replicaset "$RS_NAME" -n "$ns" -o jsonpath='{.metadata.ownerReferences[?(@.kind=="Deployment")].name}' 2>/dev/null || echo "")
+                    if [ -n "$DEPLOY_NAME" ]; then
+                      DEPLOYMENTS_TO_RESTART="$DEPLOYMENTS_TO_RESTART $DEPLOY_NAME"
+                    fi
+                  fi
+                done
+
+                # Deduplicate deployment names
+                DEPLOYMENTS_TO_RESTART=$(echo "$DEPLOYMENTS_TO_RESTART" | tr ' ' '\n' | sort -u | grep -v '^$' | tr '\n' ' ')
+                
+                if [ -z "$(echo $DEPLOYMENTS_TO_RESTART | tr -d ' ')" ]; then
+                  log "\t\tNo deployments with istio-proxy sidecar found"
+                  continue
+                fi
+
+                for deploy in $DEPLOYMENTS_TO_RESTART; do
+                  log "\t\tRestarting deployment: $deploy"
+                  if kubectl rollout restart deployment/"$deploy" -n "$ns" >/dev/null 2>&1; then
+                    RESTARTED_DEPLOYMENTS=$((RESTARTED_DEPLOYMENTS + 1))
+                  else
+                    log "\t\tWarning: Failed to restart $deploy"
+                  fi
+                done
+                
+                log "\tNamespace migration complete"
+              done
+
+              log ""
+              log "=========================================="
+              log "Migration Summary"
+              log "=========================================="
+              log "\tNamespaces migrated:      $MIGRATED_NS"
+              log "\tDeployments restarted:    $RESTARTED_DEPLOYMENTS"
+              log "\tNamespaces failed:        $FAILED_NS"
+              log ""
+
+              if [ "$FAILED_NS" -gt 0 ]; then
+                log "Some namespaces failed to migrate. Please check the logs above."
+                exit 1
+              fi
+
+              log "Ambient mode migration completed successfully!"
+              exit 0
+{{- end }}
+
