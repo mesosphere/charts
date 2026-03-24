@@ -1,7 +1,11 @@
 # Copyright 2024 Nutanix Inc
 
 {{- define "precheck.csiMinVersion" -}}
-
+    # Exit this validation if we're in dry-run mode
+    {{- $checkResource := lookup "v1" "Namespace" "" "kube-system" }}
+    {{- if eq (len ($checkResource)) 0 }}
+        {{- /* Running in helm template mode (no cluster connection) — skip validation */}}
+    {{- else }}
     # Defines the minimum supported CSI version.
     {{- $csiSupportedMinVersion := "3.3.8" }}
     # We do a semver check of this form: ">=3.3.8-0", so that the check passes for pre-release versions.
@@ -101,6 +105,7 @@
             {{- end }}
     # Continue with installation.
         {{- end }}
+    {{- end }}
     {{- end }}
 
 {{- end }}

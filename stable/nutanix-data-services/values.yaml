@@ -4,10 +4,10 @@
 
 manager:
   # -- Image Repository
-  repository: 
+  repository: nutanix/ndk-manager
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag: 2.1.0
   # -- Image digest
   digest: 
   # -- Image pull policy
@@ -15,10 +15,10 @@ manager:
 
 infraManager:
   # -- Image Repository
-  repository: 
+  repository: nutanix/ndk-infra-manager
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag: 2.1.0
   # -- Image digest
   digest: 
   # -- Image pull policy
@@ -26,17 +26,17 @@ infraManager:
 
 kubeRbacProxy:
   # -- Image Repository
-  repository: 
+  repository: nutanix/kube-rbac-proxy
   # -- Image tag
-  tag: 
+  tag: v0.19.0
   # -- Image digest
   digest: 
 
 kubectl:
   # -- Image Repository
-  repository: 
+  repository: nutanix/kubectl
   # -- Image tag
-  tag: 
+  tag: 1.32.3
   # -- Image digest
   digest: 
   # -- Image pull policy
@@ -53,10 +53,10 @@ prometheus:
 # Set Values for Job Scheduler container
 jobScheduler:
   # -- Image Repository
-  repository: 
+  repository: nutanix/ndk-job-scheduler
   # -- Image tag
   # @default -- .Chart.AppVersion
-  tag: 
+  tag: 2.1.0
   # -- Image digest
   digest: 
   # -- Image pull policy
@@ -218,7 +218,8 @@ tls:
     # in the TLS certificate.
     # If tls.server.mode is set to 'SECRET', the DNS subject alternative name (SAN)
     # already provided in the certificate secret will be used.
-    clusterName:
+    # Must be overridden with the actual cluster DNS name for production deployments.
+    clusterName: ndk.cluster.local
 
 # Configurable parameters for dataservices controllers
 config:
