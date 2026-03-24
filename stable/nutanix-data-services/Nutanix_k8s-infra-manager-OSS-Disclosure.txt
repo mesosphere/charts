@@ -1,4 +1,5 @@
-Nutanix_k8s-juno-aos-pc-client
+Nutanix NDK 2.1.0_k8s-juno-aos-pc-client
+
 
 
 
@@ -6,9 +7,10 @@ This notices file applies to the Nutanix product offering it is distributed with
 
 Nutanix product offerings may include open source software, including without limitation, a Linux distribution base image or utilities, that is copyrighted by the respective authors.  The components and their licenses listed in this Notice are provided for notification as required by the various open source licenses.  Where more than one license is stated for an open source component, Nutanix elects the most permissive license. 
  
-If required by an open source license, Nutanix will provide a copy of the open source component source code upon request,  within a reasonable period of time, and for a reasonable fee.  You may send a request to: Nutanix, Inc.,1740 Technology Dr Ste 150, San Jose, CA 95110;  Attention: Legal.  All requests for source code must include (i) the applicable Nutanix product offering name and version containing the open source component, (ii) the open source component name and version for which the source code is being requested, (iii) your name, (iv) your organization or company’s name (if applicable), (v) your return mailing and email address (if available). 
+If required by an open source license, Nutanix will provide a copy of the open source component source code upon request,  within a reasonable period of time, and for a reasonable fee.  You may send a request to: Nutanix, Inc.,1740 Technology Dr Ste 150, San Jose, CA 95110;  Attention: Legal.  All requests for source code must include (i) the applicable Nutanix product offering name and version containing the open source component, (ii) the open source component name and version for which the source code is being requested, (iii) your name, (iv) your organization or companyâ€™s name (if applicable), (v) your return mailing and email address (if available). 
 
 NOTE: Disclosure files for Nutanix product Patch Releases are generated automatically and may contain errata. For curated disclosure files, please review the files distributed with Major, Minor, and Maintenance Releases in the Nutanix Support Portal.
+
 
 Components: 
 
@@ -104,7 +106,7 @@ google/pprof 20241029-snapshot-d1b30feb: https://github.com/google/pprof : Apach
 google-shlex 20191202-snapshot-e7afc7fb: https://github.com/google/shlex : Apache License 2.0
 google/starlark-go 20200306-snapshot-8dd3e2ee: https://github.com/google/starlark-go : BSD 3-clause "New" or "Revised" License
 Googleuuid v1.6.0: https://github.com/google/uuid : BSD 3-clause "New" or "Revised" License
-go-ole-go-ole v1.2.6: https://pkg.go.dev/github.com/go-ole/go-ole : MIT License
+go-ole-go-ole v1.2.6: https://github.com/go-ole/go-ole : MIT License
 go-openapi/analysis v0.23.0: https://github.com/go-openapi/analysis : Apache License 2.0
 go-openapi/errors v0.22.0: https://github.com/go-openapi/errors : Apache License 2.0
 go-openapi/jsonpointer v0.21.0: https://github.com/go-openapi/jsonpointer : Apache License 2.0
@@ -255,8 +257,8 @@ benbjohnson-clock v1.1.0 github:benbjohnson/clock:v1.1.0: https://github.com/ben
 beorn7-perks v1.0.1 github:beorn7/perks:v1.0.1: https://github.com/beorn7/perks
 	Copyright (C) 2013 Blake Mizerany
 blackfriday v2.1.0 github:russross/blackfrIDay:v2.1.0: https://github.com/russross/blackfriday
-	Copyright © 2011 Russ Ross <russ@russross.com>.
-	Copyright © 2011 Russ Ross > All rights reserved
+	Copyright Â© 2011 Russ Ross <russ@russross.com>.
+	Copyright Â© 2011 Russ Ross > All rights reserved
 btree v1.0.1 github:google/btree:v1.0.1: https://github.com/google/btree
 	Copyright 2014 Google Inc.
 BurntSushi/toml 1.2.1 github:burntsushi/toml:v1.2.1: https://github.com/BurntSushi/toml
@@ -389,9 +391,9 @@ containerd/containerd v1.7.0 github:containerd/containerd:v1.7.0: https://contai
 	Copyright 2021-2022 ADA Logics Ltd
 	Copyright 2023 The go-fuzz-headers Authors.
 	copyright staring in 2011 when the project was ported over: apic.go emitterc.go parserc.go readerc.go scannerc.go writerc.go yamlh.go yamlprivateh.go
-	Copyright © 2011 Russ Ross <russ@russross.com>.
-	Copyright © 2012 The Go Authors. All rights reserved
-	Copyright © 2021-2022 The CDI Authors
+	Copyright Â© 2011 Russ Ross <russ@russross.com>.
+	Copyright Â© 2012 The Go Authors. All rights reserved
+	Copyright Â© 2021-2022 The CDI Authors
 creasty/defaults v1.6.0 github:creasty/defaults:v1.6.0: https://github.com/creasty/defaults
 	Copyright (c) 2017present Yuki Iwanaga
 cyphar/filepath-securejoin v0.2.3 github:cyphar/filepath-securejoin:v0.2.3: https://github.com/cyphar/filepath-securejoin
@@ -510,12 +512,12 @@ docker v20.10.24 github:Docker/docker:v20.10.24: https://github.com/docker/swarm
 	Copyright 2018 gotest.tools authors
 	Copyright 2019 Wataru Ishida. All rights reserved
 	Copyright 2019-2020 OCI Contributors
-	Copyright © 2013 Keith Rarick
-	Copyright © 2013 Steve Francia <spf@spf13.com>.
-	Copyright © 2014-2016 Docker, Inc. All rights reserved
-	Copyright © 2015-2016 Docker, Inc.
-	Copyright © 2016 Docker, Inc. go-events is licensed under the Apache License,
-	Copyright © 2019-2020 OCI Contributors
+	Copyright Â© 2013 Keith Rarick
+	Copyright Â© 2013 Steve Francia <spf@spf13.com>.
+	Copyright Â© 2014-2016 Docker, Inc. All rights reserved
+	Copyright Â© 2015-2016 Docker, Inc.
+	Copyright Â© 2016 Docker, Inc. go-events is licensed under the Apache License,
+	Copyright Â© 2019-2020 OCI Contributors
 docker-cli v20.10.21 github:docker/Cli:v20.10.21: https://github.com/docker/cli
 	No Copyrights found
 docker/go-metrics v0.0.1 unknown: https://github.com/docker/go-metrics
@@ -545,7 +547,7 @@ exponent-io/jsonpath 20151013-snapshot-d6023ce2 github:exponent-io/jsonpath:d602
 fatih-color v1.16.0 github:fatih/color:v1.16.0: http://godoc.org/github.com/fatih/color
 	Copyright (c) 2013 Fatih Arslan
 fsnotify-fsnotify v1.6.0 github:fsnotify/fsnotify:v1.6.0: https://fsnotify.org
-	Copyright © 2012 The Go Authors. All rights reserved
+	Copyright Â© 2012 The Go Authors. All rights reserved
 fullstorydev/grpcurl 1.8.7 github:fullstorydev/grpcurl:v1.8.7: https://github.com/fullstorydev/grpcurl
 	Copyright (c) 2017 FullStory, Inc
 	Copyright 2017 gRPC authors.
@@ -651,13 +653,13 @@ golang.org/x/tools v0.26.0 long_tail:go.googlesource.com/tools#v0.26.0: https://
 	Copyright 2009 The Go Authors. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source 
 	Copyright 2009-2024 The Go Authors. All rights reserved
 	Copyright 2013 jQuery Foundation and other contributors Licensed MIT
-	Copyright © 1994-1999 Lucent Technologies Inc. All rights reserved
-	Copyright © 1995-1997, 2005, 2006-2007 C H Forsyth (forsyth@terzarima.net)
-	Copyright © 1997-1999 Vita Nuova Limited
-	Copyright © 2000-2007 Lucent Technologies Inc. and others
-	Copyright © 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)
-	Copyright © 2004, 2006 Bruce Ellis
-	Copyright © 2009 The Go Authors. All rights reserved
+	Copyright Â© 1994-1999 Lucent Technologies Inc. All rights reserved
+	Copyright Â© 1995-1997, 2005, 2006-2007 C H Forsyth (forsyth@terzarima.net)
+	Copyright Â© 1997-1999 Vita Nuova Limited
+	Copyright Â© 2000-2007 Lucent Technologies Inc. and others
+	Copyright Â© 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)
+	Copyright Â© 2004, 2006 Bruce Ellis
+	Copyright Â© 2009 The Go Authors. All rights reserved
 golang.org/x/xerrors 20200804-snapshot-5ec99f83 long_tail:go.googlesource.com/xerrors#5ec99f83aff198f5fbd629d6c8d8eb38a04218ca
 	No Copyrights found
 Golang Protobuf v1.36.4 long_tail:go.googlesource.com/protobuf#v1.36.4: https://github.com/golang/protobuf
@@ -734,9 +736,9 @@ google/starlark-go 20200306-snapshot-8dd3e2ee github:google/starlark-go:8dd3e2ee
 Googleuuid v1.6.0 github:google/uuid:v1.6.0: https://github.com/google/uuid
 	Copyright (c) 2009, 2014 Google Inc. All rights reserved
 	Copyright 2016-2018, 2021, 2023 Google Inc. All rights reserved
-go-ole-go-ole v1.2.6 github:go-ole/go-ole:v1.2.6: https://pkg.go.dev/github.com/go-ole/go-ole
+go-ole-go-ole v1.2.6 github:go-ole/go-ole:v1.2.6: https://github.com/go-ole/go-ole
 	Copyright (c) 2016 Sebastian Schleemilch <https://github.com/itschleemilch>.
-	Copyright © 2013-2017 Yasuhiro Matsumoto, <mattn.jp@gmail.com>
+	Copyright Â© 2013-2017 Yasuhiro Matsumoto, <mattn.jp@gmail.com>
 go-openapi/analysis v0.23.0 github:go-openapi/analysis:v0.23.0: https://github.com/go-openapi/analysis
 	Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
 	Copyright 2015 go-swagger maintainers
@@ -760,7 +762,7 @@ go-openapi/spec v0.21.0 github:go-openapi/spec:v0.21.0: https://github.com/go-op
 go-openapi/validate v0.24.0 github:go-openapi/validate:v0.24.0: https://github.com/go-openapi/validate
 	Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
 	Copyright 2015, 2017-2018 go-swagger maintainers
-	© 2016 Microsoft",
+	Â© 2016 Microsoft",
 go-playground/locales v0.14.0 unknown: https://github.com/go-playground/locales
 	No Copyrights found
 go-playground-universal-translator v0.18.0 unknown: https://github.com/go-playground/universal-translator
@@ -778,7 +780,7 @@ go-restful v3.11.2 github:emicklei/go-restful:v3.11.2: https://github.com/emickl
 	(c) 2012-2015 http://ernestmicklei.com. MIT License
 	Copyright (c) 2012-2013 Ernest Micklei
 	Copyright 2013-2015, 2018, 2021 Ernest Micklei. All rights reserved
-	© 2012-2023 http://ernestmicklei.com. MIT License. Contributions are welcome.
+	Â© 2012-2023 http://ernestmicklei.com. MIT License. Contributions are welcome.
 go-resty/resty v2.11.0 github:go-resty/resty:v2.11.0: http://github.com/go-resty/resty/
 	Copyright (c) 2015-2023 Jeevanandam M (jeeva@myjeeva.com)
 	Copyright (c) 2015-2023 Jeevanandam M (jeeva@myjeeva.com), All rights reserved
@@ -811,7 +813,7 @@ govalidator 20230301-snapshot-a9d515a0 github:asaskevich/govalidator:a9d515a09cc
 go-zap v1.27.0 github:uber-go/zap:v1.27.0: https://godoc.org/go.uber.org/zap
 	Copyright (c) 2016-2023 Uber Technologies, Inc.
 gregjones/httpcache 20180514-snapshot-9cad4c34 github:gregjones/httpcache:9cad4c3443a7200dd6400aef47183728de563a38: https://github.com/gregjones/httpcache
-	Copyright © 2012 Greg Jones (greg.jones@gmail.com)
+	Copyright Â© 2012 Greg Jones (greg.jones@gmail.com)
 groupcache 20210331-snapshot-41bb18bf github:Golang/groupcache:41bb18bfe9da5321badc438f91158cd790a33aa3: https://github.com/golang/groupcache
 	Copyright 2012-2013 Google Inc.
 grpc-go v1.61.0 github:grpc/grpc-go:v1.61.0: https://github.com/grpc/grpc-go
@@ -873,7 +875,7 @@ k8s.io/utils 20240921-snapshot-49e7df57 github:kubernetes/utils:49e7df575cb6f389
 	Copyright 2014-2024 The Kubernetes Authors.
 Keploy.io v0.8.6 github:keploy/keploy:v0.8.6: https://keploy.io
 	Copyright 2022 Keploy Inc
-	Copyright © 2022 Bitnami
+	Copyright Â© 2022 Bitnami
 kisielk-gotool v1.0.0 github:kisielk/gotool:v1.0.0: https://github.com/kisielk/gotool
 	Copyright (c) 2009 The Go Authors. All rights reserved
 	Copyright (c) 2013 Kamil Kisiel <kamil@kamilkisiel.net>
@@ -1124,7 +1126,7 @@ Sirupsen/logrus v1.9.3 github:Sirupsen/logrus:v1.9.3: https://github.com/Sirupse
 spf13-cast v1.5.0 github:spf13/cast:v1.5.0: https://github.com/spf13/cast
 	Copyright (c) 2014 Steve Francia
 	Copyright 2011 The Go Authors. All rights reserved
-	Copyright © 2014 Steve Francia <spf@spf13.com>.
+	Copyright Â© 2014 Steve Francia <spf@spf13.com>.
 spf13-cobra 1.8.1 github:spf13/cobra:v1.8.1: https://github.com/spf13/cobra
 	Copyright 2013-2023 The Cobra Authors
 sql-migrate v1.3.1 github:rubenv/sql-migrate:v1.3.1: https://github.com/rubenv/sql-migrate
@@ -1164,7 +1166,7 @@ xeipuuv/gojsonschema v1.2.0 github:xeipuuv/gojsonschema:v1.2.0: https://github.c
 	Copyright 2015 xeipuuv ( https://github.com/xeipuuv )
 	Copyright 2017-2018 johandorland ( https://github.com/johandorland )
 xlab/treeprint v1.1.0 github:xlab/treeprint:v1.1.0: https://github.com/xlab/treeprint
-	Copyright © 2016 Maxim Kupriianov <max@kc.vc>
+	Copyright Â© 2016 Maxim Kupriianov <max@kc.vc>
 yaml for Go v2.4.0 unknown: https://github.com/go-yaml/yaml
 	No Copyrights found
 yaml for Go v3.0.1 github:go-YAML/YAML:v3.0.1: https://github.com/go-yaml/yaml
@@ -1376,9 +1378,9 @@ Copyright: 2011 Russ Ross
 License: BSD-2-clause
 
 Files: debian/*
-Copyright: 2014–2015 Tianon Gravi <tianon@debian.org>
+Copyright: 2014â€“2015 Tianon Gravi <tianon@debian.org>
            2015      Martina Ferrari <tincho@debian.org>
-           2015–2020 Anthony Fok <foka@debian.org>
+           2015â€“2020 Anthony Fok <foka@debian.org>
            2016      Dr. Tobias Quathamer <toddy@debian.org>
            2020      Reinhard Tartler <siretart@debian.org>
 License: BSD-2-clause
@@ -1670,7 +1672,7 @@ Redistribution and use in source and binary forms, with or without
 BSD 3-clause "New" or "Revised" License
 (go-inf-inf v0.9.1)
 
-Copyright (c) 2012 Péter Surányi. Portions Copyright (c) 2009 The Go
+Copyright (c) 2012 PÃ©ter SurÃ¡nyi. Portions Copyright (c) 2009 The Go
 Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -2238,10 +2240,10 @@ MIT License
 
 The MIT License (MIT)
 
-Copyright © 2013-2017 Yasuhiro Matsumoto, <mattn.jp@gmail.com>
+Copyright Â© 2013-2017 Yasuhiro Matsumoto, <mattn.jp@gmail.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the “Software”), to deal in
+this software and associated documentation files (the â€œSoftwareâ€), to deal in
 the Software without restriction, including without limitation the rights to
 use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 of the Software, and to permit persons to whom the Software is furnished to do
@@ -2250,7 +2252,7 @@ so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -2498,7 +2500,7 @@ License: Expat
 License: Expat
 
 Permission is hereby granted, free of charge, to any person obtaining a
- copy of this software and associated documentation files (the “Software”),
+ copy of this software and associated documentation files (the â€œSoftwareâ€),
  to deal in the Software without restriction, including without limitation
  the rights to use, copy, modify, merge, publish, distribute, sublicense,
  and/or sell copies of the Software, and to permit persons to whom the
@@ -2507,7 +2509,7 @@ Permission is hereby granted, free of charge, to any person obtaining a
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
  .
- THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -2784,13 +2786,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 MIT License
 (gregjones/httpcache 20180514-snapshot-9cad4c34)
 
-Copyright © 2012 Greg Jones (greg.jones@gmail.com)
+Copyright Â© 2012 Greg Jones (greg.jones@gmail.com)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the â€œSoftwareâ€), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
 ---
 
@@ -2798,10 +2800,10 @@ MIT License
 (xlab/treeprint v1.1.0)
 
 The MIT License (MIT)
-Copyright © 2016 Maxim Kupriianov <max@kc.vc>
+Copyright Â© 2016 Maxim Kupriianov <max@kc.vc>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the “Software”), to deal
+of this software and associated documentation files (the â€œSoftwareâ€), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -2810,7 +2812,7 @@ furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED â€œAS ISâ€, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -3362,17 +3364,17 @@ Version 2.0
 
   2.2. Effective Date
 
-  The licenses granted in Section 2.1 with respect to any Contribution become
+  The licenses granted in SectionÂ 2.1 with respect to any Contribution become
   effective for each Contribution on the date the Contributor first distributes
   such Contribution.
 
 
   2.3. Limitations on Grant Scope
 
-  The licenses granted in this Section 2 are the only rights granted under this
+  The licenses granted in this SectionÂ 2 are the only rights granted under this
   License. No additional rights or licenses will be implied from the distribution
   or licensing of Covered Software under this License. Notwithstanding
-  Section 2.1(b) above, no patent license is granted by a Contributor:
+  SectionÂ 2.1(b) above, no patent license is granted by a Contributor:
 
     a. 
 
@@ -3392,15 +3394,15 @@ Version 2.0
 
   This License does not grant any rights in the trademarks, service marks, or
   logos of any Contributor (except as may be necessary to comply with the notice
-  requirements in Section 3.4).
+  requirements in SectionÂ 3.4).
 
 
   2.4. Subsequent Licenses
 
   No Contributor makes additional grants as a result of Your choice to distribute
   the Covered Software under a subsequent version of this License (see
-  Section 10.2) or under the terms of a Secondary License (if permitted under the
-  terms of Section 3.3).
+  SectionÂ 10.2) or under the terms of a Secondary License (if permitted under the
+  terms of SectionÂ 3.3).
 
 
   2.5. Representation
@@ -3419,7 +3421,7 @@ Version 2.0
   2.7. Conditions
 
   Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted in
-  Section 2.1.
+  SectionÂ 2.1.
 
 
 3. Responsibilities
@@ -3443,7 +3445,7 @@ Version 2.0
     a. 
 
       such Covered Software must also be made available in Source Code Form, as
-      described in Section 3.1, and You must inform recipients of the Executable
+      described in SectionÂ 3.1, and You must inform recipients of the Executable
       Form how they can obtain a copy of such Source Code Form by reasonable
       means in a timely manner, at a charge no more than the cost of distribution
       to the recipient; and
@@ -3524,10 +3526,10 @@ detailed for a recipient of ordinary skill to be able to understand it.
   infringement claim (excluding declaratory judgment actions, counter-claims, and
   cross-claims) alleging that a Contributor Version directly or indirectly
   infringes any patent, then the rights granted to You by any and all
-  Contributors for the Covered Software under Section 2.1 of this License shall
+  Contributors for the Covered Software under SectionÂ 2.1 of this License shall
   terminate.
 
-  5.3. In the event of termination under Sections 5.1 or 5.2 above, all end user
+  5.3. In the event of termination under SectionsÂ 5.1 or 5.2 above, all end user
   license agreements (excluding distributors and resellers) which have been
   validly granted by You or Your distributors under this License prior to
   termination shall survive termination.
@@ -3591,7 +3593,7 @@ a Contributor.
 
   10.1. New Versions
 
-  Mozilla Foundation is the license steward. Except as provided in Section 10.3,
+  Mozilla Foundation is the license steward. Except as provided in SectionÂ 10.3,
   no one other than the license steward has the right to modify or publish new
   versions of this License. Each version will be given a distinguishing version
   number.
@@ -3642,4 +3644,3 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   by the Mozilla Public License, v. 2.0.
 
 ---
-

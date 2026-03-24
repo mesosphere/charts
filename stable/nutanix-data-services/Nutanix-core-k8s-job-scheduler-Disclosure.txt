@@ -1,5 +1,5 @@
-Nutanix-core k8s-job-scheduler_main
-Copyright 2024 Nutanix Inc.
+Nutanix NDK 2.1.0_k8s-job-scheduler
+
 
 
 This notices file applies to the Nutanix product offering it is distributed with and as may be published in the Nutanix portal.
@@ -8,1088 +8,835 @@ Nutanix product offerings may include open source software, including without li
  
 If required by an open source license, Nutanix will provide a copy of the open source component source code upon request,  within a reasonable period of time, and for a reasonable fee.  You may send a request to: Nutanix, Inc.,1740 Technology Dr Ste 150, San Jose, CA 95110;  Attention: Legal.  All requests for source code must include (i) the applicable Nutanix product offering name and version containing the open source component, (ii) the open source component name and version for which the source code is being requested, (iii) your name, (iv) your organization or companyâ€™s name (if applicable), (v) your return mailing and email address (if available). 
 
+NOTE: Disclosure files for Nutanix product Patch Releases are generated automatically and may contain errata. For curated disclosure files, please review the files distributed with Major, Minor, and Maintenance Releases in the Nutanix Support Portal.
 
 Components: 
 
-alecthomas-kingpin v2.2.6 : MIT License
-alecthomas-template 20190718-snapshot-fb15b899 : BSD 3-clause "New" or "Revised" License
-alecthomas-units 20190923-snapshot-f65c72e2 : MIT License
-antlr runtime/Go/antlr/v1.4.10 : BSD 3-clause "New" or "Revised" License
-armon/go-socks5 20160902-snapshot-e7533296 : MIT License
-benbjohnson-clock v1.1.0 : MIT License
-beorn7-perks v1.0.1 : MIT License
-blang-semver v4.0.0 : MIT License
-btree v1.0.1 : Apache License 2.0
-BurntSushi/toml v0.3.1 : MIT License
-cenkalti/backoff v4.1.3 : MIT License
-census-instrumentation/opencensus-go v0.22.4 : Apache License 2.0
-cespare/xxhash v2.1.2 : MIT License
-chzyer/logex v1.1.10 : MIT License
-chzyer-readline 20180828-snapshot-2972be24 : MIT License
-chzyer/test 20190214-snapshot-a1ea475d : MIT License
-client9/misspell v0.3.4 : (MIT License AND BSD 3-clause "New" or "Revised" License)
-client-go v0.26.0 : Apache License 2.0
-client_golang 1.14.0 : Apache License 2.0
-cncf/udpa 20191208-snapshot-269d4d46 : Apache License 2.0
-CoreOS v0.3.0 : Apache License 2.0
-creack/pty v1.1.9 : MIT License
-diskv v2.0.1 : MIT License
-dominikh/go-tools v0.0.1-2020.1.4 : MIT License
-envoyproxy/go-control-plane v0.9.4 : Apache License 2.0
-envoyproxy/protoc-gen-validate v0.1.0 : Apache License 2.0
-errcheck v1.5.0-alpha : MIT License
-evanphx/json-patch v4.12.0 : BSD 3-clause "New" or "Revised" License
-evanphx/json-patch v5.6.0 : BSD 3-clause "New" or "Revised" License
-exp 20200223-snapshot-6cc2880d : BSD 3-clause "New" or "Revised" License
-felixge/httpsnoop v1.0.3 : MIT License
-form3tech-oss/jwt-go v3.2.3 : MIT License
-fsnotify-fsnotify v1.6.0 : BSD 3-clause "New" or "Revised" License
-gengo 20220902-snapshot-c0856e24 : Apache License 2.0
-github.com/docopt/docopt-go 20181101-snapshot-ee0de3bc : MIT License
-github.com/go-kit/log v0.2.0 : MIT License
-github.com/go-logr/zapr v1.2.3 : Apache License 2.0
-github.com/konsorten/go-windows-terminal-sequences v1.0.3 : MIT License
-github.com/moby/spdystream v0.2.0 : Apache License 2.0
-github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61 : BSD 3-clause "New" or "Revised" License
-glfw 20190408-snapshot-e6da0acd : BSD 3-clause "New" or "Revised" License
-glfw 20200222-snapshot-6f7a984d : BSD 3-clause "New" or "Revised" License
-go-ansiterm 20210617-snapshot-d185dfc1 : MIT License
-go-check-check 20201130-snapshot-10cb9826 : BSD 2-clause "Simplified" License
-go-co-op/gocron v1.30.1 : MIT License
-GoDoc Text v0.2.0 : MIT License
-go-errgo-errgo v2.1.0 : BSD 3-clause "New" or "Revised" License
-go-etcd 3.5.5 : Apache License 2.0
-go.etcd.io/bbolt v1.3.6 : MIT License
-go-flags v1.4.0 : BSD 3-clause "New" or "Revised" License
-go-flowrate 20140419-snapshot-cca7078d : BSD 3-clause "New" or "Revised" License
-gogo/protobuf v1.3.2 : BSD 3-clause "New" or "Revised" License
-go humanize v1.0.0 : MIT License
-go-inf-inf v0.9.1 : BSD 3-clause "New" or "Revised" License
-go-kit-kit v0.9.0 : MIT License
-golang/appengine v1.6.7 : Apache License 2.0
-golang-github-spf13-pflag-dev v1.0.5 : BSD 3-clause "New" or "Revised" License
-golang/glog 20160125-snapshot-23def4e6 : Apache License 2.0
-golang-mock v1.4.4 : Apache License 2.0
-golang.org/x/crypto v0.1.0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/image 20190704-snapshot-cff245a6 : BSD 3-clause "New" or "Revised" License
-golang.org/x/lint 20200301-snapshot-738671d3 : BSD 3-clause "New" or "Revised" License
+alecthomas-kingpin v2.2.6: https://github.com/alecthomas/kingpin : MIT License
+alecthomas-template 20190718-snapshot-fb15b899: https://github.com/alecthomas/template : BSD 3-clause "New" or "Revised" License
+alecthomas-units 20190923-snapshot-f65c72e2: https://github.com/alecthomas/units : MIT License
+antlr runtime/Go/antlr/v1.4.10: http://antlr.org : BSD 3-clause "New" or "Revised" License
+armon/go-socks5 20160902-snapshot-e7533296: https://github.com/armon/go-socks5 : MIT License
+benbjohnson-clock v1.1.0: https://github.com/benbjohnson/clock : MIT License
+beorn7-perks v1.0.1: https://github.com/beorn7/perks : MIT License
+blang-semver v4.0.0: https://github.com/blang/semver : MIT License
+btree v1.0.1: https://github.com/google/btree : Apache License 2.0
+BurntSushi/toml v0.3.1: https://github.com/BurntSushi/toml : MIT License
+cenkalti/backoff v4.1.3: https://github.com/cenkalti/backoff : MIT License
+census-instrumentation/opencensus-go v0.22.4: http://opencensus.io : Apache License 2.0
+cespare/xxhash v2.1.2: https://github.com/cespare/xxhash : MIT License
+chzyer/logex v1.1.10: https://github.com/chzyer/logex : MIT License
+chzyer-readline 20180828-snapshot-2972be24: https://github.com/chzyer/readline : MIT License
+chzyer/test 20190214-snapshot-a1ea475d: https://github.com/chzyer/test : MIT License
+client9/misspell v0.3.4: https://pkg.go.dev/github.com/client9/misspell : (MIT License AND BSD 3-clause "New" or "Revised" License)
+client-go v0.26.0: https://github.com/kubernetes/client-go : Apache License 2.0
+client_golang 1.14.0: https://github.com/prometheus/client_golang : Apache License 2.0
+cncf/udpa 20191208-snapshot-269d4d46: https://github.com/cncf/udpa : Apache License 2.0
+CoreOS v0.3.0: https://coreos.com/ : Apache License 2.0
+creack/pty v1.1.9: https://github.com/kr/pty : MIT License
+diskv v2.0.1: http://godoc.org/github.com/peterbourgon/diskv : MIT License
+dmitri.shuralyov.com/gpu/mtl 20190408-snapshot-666a9877: https://dmitri.shuralyov.com/gpu/mtl : BSD 3-clause "New" or "Revised" License
+dominikh/go-tools v0.0.1-2020.1.4: https://github.com/dominikh/go-tools : MIT License
+envoyproxy/go-control-plane v0.9.4: https://github.com/envoyproxy/go-control-plane : Apache License 2.0
+envoyproxy/protoc-gen-validate v0.1.0: https://github.com/envoyproxy/protoc-gen-validate : Apache License 2.0
+errcheck v1.5.0-alpha: https://github.com/kisielk/errcheck : MIT License
+evanphx/json-patch v4.12.0: https://github.com/evanphx/json-patch : BSD 3-clause "New" or "Revised" License
+evanphx/json-patch v5.6.0: https://github.com/evanphx/json-patch : BSD 3-clause "New" or "Revised" License
+exp 20200223-snapshot-6cc2880d: http://code.google.com/p/go.exp : BSD 3-clause "New" or "Revised" License
+felixge/httpsnoop v1.0.3: https://github.com/felixge/httpsnoop : MIT License
+form3tech-oss/jwt-go v3.2.3: https://github.com/form3tech-oss/jwt-go : MIT License
+fsnotify-fsnotify v1.6.0: https://fsnotify.org : BSD 3-clause "New" or "Revised" License
+gengo 20220902-snapshot-c0856e24: https://github.com/kubernetes/gengo : Apache License 2.0
+github.com/docopt/docopt-go 20181101-snapshot-ee0de3bc: https://github.com/docopt/docopt-go : MIT License
+github.com/go-kit/log v0.2.0: https://github.com/go-kit/log : MIT License
+github.com/go-logr/zapr v1.2.3: https://github.com/go-logr/zapr : Apache License 2.0
+github.com/konsorten/go-windows-terminal-sequences v1.0.3: https://github.com/konsorten/go-windows-terminal-sequences : MIT License
+github.com/moby/spdystream v0.2.0: https://github.com/moby/spdystream : Apache License 2.0
+github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61: https://github.com/munnerz/goautoneg : BSD 3-clause "New" or "Revised" License
+glfw 20190408-snapshot-e6da0acd: https://github.com/go-gl/glfw : BSD 3-clause "New" or "Revised" License
+glfw 20200222-snapshot-6f7a984d: https://github.com/go-gl/glfw : BSD 3-clause "New" or "Revised" License
+go-ansiterm 20210617-snapshot-d185dfc1: https://github.com/Azure/go-ansiterm : MIT License
+go-check-check 20201130-snapshot-10cb9826: http://labix.org/gocheck : BSD 2-clause "Simplified" License
+go-co-op/gocron v1.30.1: https://github.com/go-co-op/gocron : MIT License
+GoDoc Text v0.2.0: http://godoc.org/github.com/kr/text : MIT License
+go-errgo-errgo v2.1.0: https://github.com/go-errgo/errgo : BSD 3-clause "New" or "Revised" License
+go-etcd api/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd client/pkg/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd client/v2.305.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd client/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd pkg/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd raft/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go-etcd server/v3.5.5: https://github.com/etcd-io/etcd : Apache License 2.0
+go.etcd.io/bbolt v1.3.6: https://github.com/etcd-io/bbolt : MIT License
+go-flags v1.4.0: http://godoc.org/github.com/jessevdk/go-flags : BSD 3-clause "New" or "Revised" License
+go-flowrate 20140419-snapshot-cca7078d: https://github.com/mxk/go-flowrate : BSD 3-clause "New" or "Revised" License
+gogo/protobuf v1.3.2: http://github.com/gogo/protobuf/ : BSD 3-clause "New" or "Revised" License
+go humanize v1.0.0: http://github.com/dustin/go-humanize : MIT License
+go-inf-inf v0.9.1: https://godoc.org/gopkg.in/inf.v0 : BSD 3-clause "New" or "Revised" License
+go-kit-kit v0.9.0: http://gokit.io : MIT License
+golang/appengine v1.6.7: http://google.golang.org/appengine : Apache License 2.0
+golang-github-spf13-pflag-dev v1.0.5: https://github.com/spf13/pflag : BSD 3-clause "New" or "Revised" License
+golang/glog 20160125-snapshot-23def4e6: https://github.com/golang/glog : Apache License 2.0
+golang-mock v1.4.4: https://github.com/golang/mock : Apache License 2.0
+golang.org/x/crypto v0.1.0: https://godoc.org/golang.org/x/crypto : BSD 3-clause "New" or "Revised" License
+golang.org/x/image 20190704-snapshot-cff245a6: https://pkg.go.dev/golang.org/x/image : BSD 3-clause "New" or "Revised" License
+golang.org/x/lint 20200301-snapshot-738671d3: https://pkg.go.dev/golang.org/x/lint : BSD 3-clause "New" or "Revised" License
 golang.org/x/mod v0.6.0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/net 20221206-snapshot-1e63c2f0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/oauth2 20220223-snapshot-ee480838 : BSD 3-clause "New" or "Revised" License
-golang.org/x/sync 20220722-snapshot-886fb937 : BSD 3-clause "New" or "Revised" License
-golang.org/x/sys 0.3.0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/term v0.3.0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/time v0.3.0 : BSD 3-clause "New" or "Revised" License
-golang.org/x/tools v0.2.0 : BSD 3-clause "New" or "Revised" License
+golang.org/x/net 20221206-snapshot-1e63c2f0: https://godoc.org/golang.org/x/net : BSD 3-clause "New" or "Revised" License
+golang.org/x/oauth2 20220223-snapshot-ee480838: https://pkg.go.dev/golang.org/x/oauth2 : BSD 3-clause "New" or "Revised" License
+golang.org/x/sys 0.3.0: https://pkg.go.dev/golang.org/x/sync : BSD 3-clause "New" or "Revised" License
+golang.org/x/term v0.3.0: https://go.googlesource.com/term : BSD 3-clause "New" or "Revised" License
+golang.org/x/time v0.3.0: https://pkg.go.dev/golang.org/x/time : BSD 3-clause "New" or "Revised" License
+golang.org/x/tools v0.2.0: https://pkg.go.dev/golang.org/x/tools : BSD 3-clause "New" or "Revised" License
 golang.org/x/xerrors 20200804-snapshot-5ec99f83 : BSD 3-clause "New" or "Revised" License
-Golang Protobuf v1.28.1 : BSD 3-clause "New" or "Revised" License
-Golang Protobuf v1.5.2 : BSD 3-clause "New" or "Revised" License
-golang/text v0.5.0 : BSD 3-clause "New" or "Revised" License
-go-logfmt-logfmt v0.5.1 : MIT License
-go-logr/logr v1.2.3 : Apache License 2.0
-go-logr/stdr v1.2.2 : Apache License 2.0
-Go Logrus v1.8.1 : MIT License
-gomega v1.24.1 : MIT License
-gomodules/jsonpatch v2.2.0 : Apache License 2.0
-googleapis/gax-go v2.0.5 : BSD 3-clause "New" or "Revised" License
-googleapis/go-genproto 20220502-snapshot-c8bf987b : Apache License 2.0
+Golang Protobuf v1.28.1: https://github.com/golang/protobuf : BSD 3-clause "New" or "Revised" License
+Golang Protobuf v1.5.2: https://github.com/golang/protobuf : BSD 3-clause "New" or "Revised" License
+golang/sync 20220722-snapshot-886fb937: https://pkg.go.dev/golang.org/x/sync : BSD 3-clause "New" or "Revised" License
+golang/text v0.5.0: https://github.com/golang/text : BSD 3-clause "New" or "Revised" License
+go-logfmt-logfmt v0.5.1: https://github.com/go-logfmt/logfmt : MIT License
+go-logr/logr v1.2.3: https://github.com/go-logr/logr : Apache License 2.0
+go-logr/stdr v1.2.2: https://github.com/go-logr/stdr : Apache License 2.0
+gomega v1.24.1: https://github.com/onsi/gomega : MIT License
+gomodules/jsonpatch v2.2.0: https://github.com/gomodules/jsonpatch : Apache License 2.0
+googleapis/gax-go v2.0.5: https://godoc.org/github.com/googleapis/gax-go : BSD 3-clause "New" or "Revised" License
+googleapis/go-genproto 20220502-snapshot-c8bf987b: https://godoc.org/google.golang.org/genproto : Apache License 2.0
 googleapis/google-api-go-client v0.30.0 : BSD 3-clause "New" or "Revised" License
-google/cel-go v0.12.5 : Apache License 2.0
-google-cloud-go bigquery/v1.8.0 : Apache License 2.0
-google-cloud-go datastore/v1.1.0 : Apache License 2.0
-google-cloud-go pubsub/v1.3.1 : Apache License 2.0
-google-cloud-go storage/v1.10.0 : Apache License 2.0
-google-cloud-go v0.65.0 : Apache License 2.0
+google/cel-go v0.12.5: https://github.com/google/cel-go : Apache License 2.0
+google-cloud-go bigquery/v1.8.0: https://github.com/GoogleCloudPlatform/google-cloud-go : Apache License 2.0
+google-cloud-go datastore/v1.1.0: https://github.com/GoogleCloudPlatform/google-cloud-go : Apache License 2.0
+google-cloud-go pubsub/v1.3.1: https://github.com/GoogleCloudPlatform/google-cloud-go : Apache License 2.0
+google-cloud-go storage/v1.10.0: https://github.com/GoogleCloudPlatform/google-cloud-go : Apache License 2.0
+google-cloud-go v0.65.0: https://github.com/GoogleCloudPlatform/google-cloud-go : Apache License 2.0
 google/gnostic v0.5.7-v3refs : Apache License 2.0
-google/go-cmp v0.5.9 : BSD 3-clause "New" or "Revised" License
-google-gofuzz v1.1.0 : Apache License 2.0
-google/pprof 20210407-snapshot-94a9f03d : Apache License 2.0
-google/renameio v0.1.0 : Apache License 2.0
-google/uuid v.1.1.2 : BSD 3-clause "New" or "Revised" License
-go-openapi/jsonpointer v0.19.5 : Apache License 2.0
-go.opentelemetry.io/proto otlp/v0.19.0 : Apache License 2.0
-goproxy 20180725-snapshot-947c36da : BSD 3-clause "New" or "Revised" License
-go-restful v3.9.0 : MIT License
-gorilla/websocket v1.4.2 : BSD 2-clause "Simplified" License
-go-spew v1.1.1 : ISC License
-go-stack-stack v1.8.0 : MIT License
+google/go-cmp v0.5.9: https://github.com/google/go-cmp : BSD 3-clause "New" or "Revised" License
+google-gofuzz v1.1.0: https://github.com/google/gofuzz : Apache License 2.0
+google/pprof 20210407-snapshot-94a9f03d: https://github.com/google/pprof : Apache License 2.0
+google/renameio v0.1.0: https://github.com/google/renameio : Apache License 2.0
+Googleuuid v.1.1.2: https://github.com/google/uuid : BSD 3-clause "New" or "Revised" License
+go-openapi/jsonpointer v0.19.5: https://github.com/go-openapi/jsonpointer : Apache License 2.0
+go.opentelemetry.io/proto otlp/v0.19.0: https://github.com/open-telemetry/opentelemetry-proto-go : Apache License 2.0
+goproxy 20180725-snapshot-947c36da: https://github.com/elazarl/goproxy : BSD 3-clause "New" or "Revised" License
+go-restful v3.9.0: https://github.com/emicklei/go-restful : MIT License
+gorilla/websocket v1.4.2: https://github.com/gorilla/websocket : BSD 2-clause "Simplified" License
+go-spew v1.1.1: https://github.com/davecgh/go-spew : ISC License
+go-stack-stack v1.8.0: http://github.com/go-stack/stack : MIT License
 Go support for Mobile devices 20190704-snapshot-d2bd2a29 : BSD 3-clause "New" or "Revised" License
-go-systemd v22.3.2 : Apache License 2.0
-go-task/slim-sprig 20210107-snapshot-348f09db : MIT License
-Go Testify v1.8.2 : MIT License
-gotest.tools v3.0.3 : Apache License 2.0
-go.uber.org/goleak v1.2.0 : MIT License
-go.uber.org/multierr v1.7.0 : MIT License
-govalidator 20190424-snapshot-f61b66f8 : MIT License
-go-zap v1.24.0 : MIT License
-gregjones/httpcache 20180514-snapshot-9cad4c34 : MIT License
-groupcache 20210331-snapshot-41bb18bf : Apache License 2.0
-grpc-ecosystem/go-grpc-middleware v1.3.0 : Apache License 2.0
-grpc-ecosystem/go-grpc-prometheus v1.2.0 : Apache License 2.0
-grpc-gateway v1.16.0 : BSD 3-clause "New" or "Revised" License
-grpc-gateway v2.7.0 : BSD 3-clause "New" or "Revised" License
-grpc-go v1.49.0 : Apache License 2.0
-hashicorp-golang-lru v0.5.1 : Mozilla Public License 2.0
-ianlancetaylor/demangle 20181102-snapshot-5e5cf602 : BSD 3-clause "New" or "Revised" License
-inconshreveable/mousetrap v1.0.1 : Apache License 2.0
-jonboulle-clockwork v0.2.2 : Apache License 2.0
-josharian/intern v1.0.0 : MIT License
-jpillora-backoff 1.0.0 : MIT License
-jsoniter-go v1.1.12 : MIT License
-jsonreference v0.20.0 : Apache License 2.0
-jstemmer/go-junit-report v0.9.1 : MIT License
-julienschmidt/httprouter v1.3.0 : BSD 3-clause "New" or "Revised" License
-k3s-io/klog v2.80.1-k3s1 : Apache License 2.0
-k8s.io/code-generator v0.26.0 : Apache License 2.0
-kisielk-gotool v1.0.0 : (MIT License AND BSD 3-clause "New" or "Revised" License)
-kr/pretty v0.3.0 : MIT License
-kubernetes/api v0.26.0 : Apache License 2.0
-kubernetes/apiextensions-apiserver v0.26.0 : Apache License 2.0
-kubernetes/apimachinery v0.26.0 : Apache License 2.0
-kubernetes/apiserver v0.26.0 : Apache License 2.0
-kubernetes/component-base v0.26.0 : Apache License 2.0
-kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33 : Apache License 2.0
-kubernetes-sigs/structured-merge-diff v4.2.3 : Apache License 2.0
-logfmt 20140226-snapshot-b84e30ac : MIT License
-mailru/easyjson v0.7.6 : MIT License
-mapstructure v1.4.1 : MIT License
-martian v2.1.0 : Apache License 2.0
-martian v3.0.0 : Apache License 2.0
-matttproud-golang_protobuf_extensions v1.0.2 : Apache License 2.0
-mergo v0.3.6 : BSD 3-clause "New" or "Revised" License
-moby/term 20220808-snapshot-39b0c02b : Apache License 2.0
-modern-go/concurrent 20180305-snapshot-bacd9c7e : Apache License 2.0
-modern-go/reflect2 v1.0.2 : Apache License 2.0
-mwitkow/go-conntrack 20190716-snapshot-2f068394 : Apache License 2.0
-natefinch/lumberjack v2.0.0 : MIT License
-niemeyer/pretty 20200227-snapshot-a10e7cae : MIT License
-NYTimes-gziphandler v1.1.1 : Apache License 2.0
-onsi/ginkgo v2.6.0 : MIT License
-OpenCensus 0.2.1 : Apache License 2.0
-open-telemetry/opentelemetry-go 1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go exporters/otlp/internal/retry/v1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go exporters/otlp/otlptrace/otlptracegrpc/v1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go exporters/otlp/otlptrace/v1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go metric/v0.31.0 : Apache License 2.0
-open-telemetry/opentelemetry-go sdk/v1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go trace/v1.10.0 : Apache License 2.0
-open-telemetry/opentelemetry-go-contrib instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0 : Apache License 2.0
-open-telemetry/opentelemetry-go-contrib instrumentation/net/http/otelhttp/v0.35.0 : Apache License 2.0
-pkg/diff 20210226-snapshot-20ebb0f2 : BSD 3-clause "New" or "Revised" License
-pkg/errors v0.9.1 : BSD 2-clause "Simplified" License
-pmezard-go-difflib 1.0.0 : BSD 3-clause "New" or "Revised" License
-prometheus-client_model v0.3.0 : Apache License 2.0
-prometheus-common v0.37.0 : Apache License 2.0
-prometheus-procfs 0.8.0 : (Apache License 2.0 AND BSD 3-clause "New" or "Revised" License)
-pty v1.1.1 : MIT License
-purell v1.1.1 : BSD 3-clause "New" or "Revised" License
-robfig/cron v3.0.1 : MIT License
-rogpeppe/go-internal v1.8.1 : BSD 3-clause "New" or "Revised" License
+go-systemd v22.3.2: https://github.com/coreos/go-systemd : Apache License 2.0
+go-task/slim-sprig 20210107-snapshot-348f09db: https://github.com/go-task/slim-sprig : MIT License
+Go Testify v1.8.2: https://github.com/stretchr/testify : MIT License
+gotest.tools v3.0.3: https://github.com/gotestyourself/gotest.tools : Apache License 2.0
+go.uber.org/goleak v1.2.0: https://github.com/uber-go/goleak : MIT License
+go.uber.org/multierr v1.7.0: https://github.com/uber-go/multierr : MIT License
+govalidator 20190424-snapshot-f61b66f8: https://github.com/asaskevich/govalidator : MIT License
+go-zap v1.24.0: https://godoc.org/go.uber.org/zap : MIT License
+gregjones/httpcache 20180514-snapshot-9cad4c34: https://github.com/gregjones/httpcache : MIT License
+groupcache 20210331-snapshot-41bb18bf: https://github.com/golang/groupcache : Apache License 2.0
+grpc-ecosystem/go-grpc-middleware v1.3.0: https://github.com/grpc-ecosystem/go-grpc-middleware : Apache License 2.0
+grpc-ecosystem/go-grpc-prometheus v1.2.0: https://github.com/grpc-ecosystem/go-grpc-prometheus : Apache License 2.0
+grpc-gateway v1.16.0: https://github.com/grpc-ecosystem/grpc-gateway : BSD 3-clause "New" or "Revised" License
+grpc-gateway v2.7.0: https://github.com/grpc-ecosystem/grpc-gateway : BSD 3-clause "New" or "Revised" License
+grpc-go v1.49.0: https://github.com/grpc/grpc-go : Apache License 2.0
+hashicorp-golang-lru v0.5.1: https://github.com/hashicorp/golang-lru : Mozilla Public License 2.0
+ianlancetaylor/demangle 20181102-snapshot-5e5cf602: https://github.com/ianlancetaylor/demangle : BSD 3-clause "New" or "Revised" License
+inconshreveable/mousetrap v1.0.1: https://github.com/inconshreveable/mousetrap : Apache License 2.0
+jonboulle-clockwork v0.2.2: https://github.com/jonboulle/clockwork : Apache License 2.0
+josharian/intern v1.0.0: https://github.com/josharian/intern : MIT License
+jpillora-backoff 1.0.0: https://github.com/jpillora/backoff : MIT License
+jsoniter-go v1.1.12: http://jsoniter.com/ : MIT License
+jsonreference v0.20.0: https://github.com/go-openapi/jsonreference : Apache License 2.0
+jstemmer/go-junit-report v0.9.1: https://github.com/jstemmer/go-junit-report : MIT License
+julienschmidt/httprouter v1.3.0: https://github.com/julienschmidt/httprouter : BSD 3-clause "New" or "Revised" License
+k8s.io/code-generator v0.26.0: https://github.com/kubernetes/code-generator : Apache License 2.0
+k8s.io/klog v2.80.1: https://github.com/kubernetes/klog : Apache License 2.0
+k8s.io/kube-openapi 20221012-snapshot-172d655c: https://github.com/kubernetes/kube-openapi : Apache License 2.0
+k8s.io/utils 20221128-snapshot-99ec85e7: https://github.com/kubernetes/utils : Apache License 2.0
+kisielk-gotool v1.0.0: https://github.com/kisielk/gotool : (MIT License AND BSD 3-clause "New" or "Revised" License)
+kr/pretty v0.3.0: https://github.com/kr/pretty : MIT License
+kubernetes/api v0.26.0: https://github.com/kubernetes/api : Apache License 2.0
+kubernetes/apiextensions-apiserver v0.26.0: https://github.com/kubernetes/apiextensions-apiserver : Apache License 2.0
+kubernetes/apimachinery v0.26.0: https://github.com/kubernetes/apimachinery : Apache License 2.0
+kubernetes/apiserver v0.26.0: https://github.com/kubernetes/apiserver : Apache License 2.0
+kubernetes/component-base v0.26.0: https://github.com/kubernetes/component-base : Apache License 2.0
+kubernetes/kms v0.26.0: https://github.com/kubernetes/kms : Apache License 2.0
+kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33: https://github.com/kubernetes-sigs/apiserver-network-proxy : Apache License 2.0
+kubernetes-sigs/structured-merge-diff v4.2.3: https://github.com/kubernetes-sigs/structured-merge-diff : Apache License 2.0
+logfmt 20140226-snapshot-b84e30ac: http://godoc.org/github.com/kr/logfmt : MIT License
+mailru/easyjson v0.7.6: https://github.com/mailru/easyjson : MIT License
+mapstructure v1.4.1: https://github.com/mitchellh/mapstructure : MIT License
+martian v2.1.0: https://github.com/google/martian : Apache License 2.0
+martian v3.0.0: https://github.com/google/martian : Apache License 2.0
+matttproud-golang_protobuf_extensions v1.0.2: https://github.com/matttproud/golang_protobuf_extensions : Apache License 2.0
+mergo v0.3.6: https://github.com/imdario/mergo : BSD 3-clause "New" or "Revised" License
+moby/term 20220808-snapshot-39b0c02b: https://github.com/moby/term : Apache License 2.0
+modern-go/concurrent 20180305-snapshot-bacd9c7e: https://github.com/modern-go/concurrent : Apache License 2.0
+modern-go/reflect2 v1.0.2: https://github.com/modern-go/reflect2 : Apache License 2.0
+mwitkow/go-conntrack 20190716-snapshot-2f068394: https://github.com/mwitkow/go-conntrack : Apache License 2.0
+natefinch/lumberjack v2.0.0: https://github.com/natefinch/lumberjack : MIT License
+niemeyer/pretty 20200227-snapshot-a10e7cae: https://github.com/niemeyer/pretty : MIT License
+NYTimes-gziphandler v1.1.1: https://github.com/NYTimes/gziphandler : Apache License 2.0
+onsi/ginkgo v2.6.0: https://github.com/onsi/ginkgo : MIT License
+OpenCensus 0.2.1: https://opencensus.io/ : Apache License 2.0
+open-telemetry/opentelemetry-go 1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go exporters/otlp/internal/retry/v1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go exporters/otlp/otlptrace/otlptracegrpc/v1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go exporters/otlp/otlptrace/v1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go metric/v0.31.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go sdk/v1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go trace/v1.10.0: https://github.com/open-telemetry/opentelemetry-go : Apache License 2.0
+open-telemetry/opentelemetry-go-contrib instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0: https://pkg.go.dev/go.opentelemetry.io/contrib : Apache License 2.0
+open-telemetry/opentelemetry-go-contrib instrumentation/net/http/otelhttp/v0.35.0: https://pkg.go.dev/go.opentelemetry.io/contrib : Apache License 2.0
+pkg/diff 20210226-snapshot-20ebb0f2: https://github.com/pkg/diff : BSD 3-clause "New" or "Revised" License
+pkg/errors v0.9.1: https://github.com/pkg/errors : BSD 2-clause "Simplified" License
+pmezard-go-difflib 1.0.0: https://github.com/pmezard/go-difflib : BSD 3-clause "New" or "Revised" License
+prometheus-client_model v0.3.0: https://github.com/prometheus/client_model : Apache License 2.0
+prometheus-common v0.37.0: https://github.com/prometheus/common : Apache License 2.0
+prometheus-procfs 0.8.0: https://github.com/prometheus/procfs.git : (Apache License 2.0 AND BSD 3-clause "New" or "Revised" License)
+pty v1.1.1: https://github.com/kr/pty : MIT License
+purell v1.1.1: https://github.com/PuerkitoBio/purell : BSD 3-clause "New" or "Revised" License
+robfig/cron v3.0.1: https://github.com/robfig/cron : MIT License
+rogpeppe/go-internal v1.8.1: http://github.com/rogpeppe/go-internal/ : BSD 3-clause "New" or "Revised" License
 rsc/binaryregexp v0.2.0 : BSD 3-clause "New" or "Revised" License
 rsc/quote v3.1.0 : BSD 3-clause "New" or "Revised" License
 rsc/sampler v1.3.0 : BSD 3-clause "New" or "Revised" License
-sigs.k8s.io/controller-runtime v0.14.1 : Apache License 2.0
-sigs.k8s.io/json 20220713-snapshot-f223a00b : (Apache License 2.0 AND BSD 3-clause "New" or "Revised" License)
-sigs.k8s.io/yaml v1.3.0 : Apache License 2.0
-soheilhy/cmux v0.1.5 : Apache License 2.0
-spf13-cobra v1.6.0 : Apache License 2.0
-stoewer/go-strcase v1.2.0 : MIT License
-stretchr/objx v0.5.0 : MIT License
-swag v0.19.14 : Apache License 2.0
-tmc/grpc-websocket-proxy 20201229-snapshot-e5319fda : MIT License
-uber-go/atomic v1.9.0 : MIT License
-urlesc 20170810-snapshot-de5bf2ad : BSD 3-clause "New" or "Revised" License
-xgb 20160522-snapshot-27f12275 : BSD 3-clause "New" or "Revised" License
-xiang90-probing 20190116-snapshot-43a291ad : MIT License
-yaml for Go v2.4.0 : Apache License 2.0
-yaml for Go v3.0.1 : (MIT License AND Apache License 2.0)
-yuin/goldmark v1.2.1 : MIT License
+sigs.k8s.io/controller-runtime v0.14.1: https://github.com/kubernetes-sigs/controller-runtime : Apache License 2.0
+sigs.k8s.io/json 20220713-snapshot-f223a00b: https://github.com/kubernetes-sigs/json : (Apache License 2.0 AND BSD 3-clause "New" or "Revised" License)
+sigs.k8s.io/yaml v1.3.0: https://github.com/kubernetes-sigs/yaml : Apache License 2.0
+Sirupsen/logrus v1.8.1: https://github.com/Sirupsen/logrus : MIT License
+soheilhy/cmux v0.1.5: https://github.com/soheilhy/cmux : Apache License 2.0
+spf13-cobra v1.6.0: https://github.com/spf13/cobra : Apache License 2.0
+stoewer/go-strcase v1.2.0: https://github.com/stoewer/go-strcase : MIT License
+stretchr/objx v0.5.0: https://github.com/stretchr/objx : MIT License
+swag v0.19.14: https://github.com/go-openapi/swag : Apache License 2.0
+tmc/grpc-websocket-proxy 20201229-snapshot-e5319fda: https://github.com/tmc/grpc-websocket-proxy : MIT License
+uber-go/atomic v1.9.0: https://go.uber.org/atomic : MIT License
+urlesc 20170810-snapshot-de5bf2ad: https://github.com/PuerkitoBio/urlesc : BSD 3-clause "New" or "Revised" License
+xgb 20160522-snapshot-27f12275: https://github.com/BurntSushi/xgb : BSD 3-clause "New" or "Revised" License
+xiang90-probing 20190116-snapshot-43a291ad: https://github.com/xiang90/probing : MIT License
+yaml for Go v2.4.0: https://github.com/go-yaml/yaml : Apache License 2.0
+yaml for Go v3.0.1: https://github.com/go-yaml/yaml : (MIT License AND Apache License 2.0)
+yuin/goldmark v1.2.1: https://github.com/yuin/goldmark : MIT License
 
 Copyright Text: 
 
-alecthomas-kingpin v2.2.6 github:alecthomas/kingpin:v2.2.6
+alecthomas-kingpin v2.2.6 github:alecthomas/kingpin:v2.2.6: https://github.com/alecthomas/kingpin
 	Copyright (C) 2014 Alec Thomas
-alecthomas-template 20190718-snapshot-fb15b899 github:alecthomas/template:fb15b899a75114aa79cc930e33c46b577cc664b1
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
+alecthomas-template 20190718-snapshot-fb15b899 github:alecthomas/template:fb15b899a75114aa79cc930e33c46b577cc664b1: https://github.com/alecthomas/template
 	Copyright (c) 2012 The Go Authors. All rights reserved
-alecthomas-units 20190923-snapshot-f65c72e2 github:alecthomas/units:f65c72e2690dc4b403c8bd637baf4611cd4c069b
+	Copyright 2011-2012 The Go Authors. All rights reserved
+alecthomas-units 20190923-snapshot-f65c72e2 github:alecthomas/units:f65c72e2690dc4b403c8bd637baf4611cd4c069b: https://github.com/alecthomas/units
 	Copyright (C) 2014 Alec Thomas
-antlr runtime/Go/antlr/v1.4.10 github:antlr/antlr4:runtime/Go/antlr/v1.4.10
-	(C) and get the byte that;EXTRACT	LXI	H,TBUFF	ADD	C	CALL	ADDHL	MOV	A,M	RET
-	(C) bits.;SHIFTL	INR	CSHIFTL1	DCR	C	RZ	DAD	H	;shift left 1 bit.	JMP	SHIFTL1
-	(C) bits.;SHIFTR	INR	CSHIFTR1	DCR	C	RZ	MOV	A,H	ORA	A	RAR	MOV	H,A	MOV	A,L	RAR	MOV	L,A	JMP	SHIFTR1
-	(C) bytes total.;DE2HL	INR	C	;is count down to zero?DE2HL1	DCR	C	RZ		;yes, we are done.	LDAX	D	;no, move one more byte.	MOV	M,A	INX	D	INX	H	JMP	DE2HL1	;and repeat.
-	(C) characters have been checked.;FNDNXT4	INX	D	;bump pointers.	INX	H	INR	B	DCR	C	;adjust character counter.	JMP	FNDNXT2FNDNXT5	LDA	FILEPOS	;return the position of this entry.	ANI	03H	STA	STA
-	(C) contains 0ffh if this is a read; and thus we can not access unwritten disk space. Otherwise,; another extent will be opened (for writing) if required.;POSITION:XRA	A	;set random i/o flag.	STA
-	(C) contains (FE) then; this is a status request. Otherwise we are to output (C).;DIRCIO	MOV	A,C	;test for (FF).	INR	A	JZ	DIRC1	INR	A	;test for (FE).	JZ	CONST	JMP	CONOUT	;just output (C).DIRC
-	(C) contains (FF)
-	(C) contains the; byte, and (A) the 'r2' byte.;;   On return, the zero flag is set if the record is within; bounds. Otherwise, an overflow occured.
-	(C) ha been completed.	MOV	A,B	;is there a better way of doing this?	RRC	RRC	RRC	ANI	1FH	MOV	B,A	;and now (B) is completed.;;   use this as an offset into the disk space allocation; table.
-	Copyright 2012-2022 The ANTLR Project
-	Copyright Â© 2016 Mike Lischke. All rights reserved
-	Copyright 2021 The ANTLR Project
-	Copyright (c) 2011 Cay Horstmann	 All rights reserved
-	Copyright (c) 2012-2017 The ANTLR Project. All rights reserved
-	Copyright (c) 2012-2019 The ANTLR Project. All rights reserved
-	Copyright (c) 2012-2021 The ANTLR Project. All rights reserved
-	Copyright (c) 2012-2022 The ANTLR Project. All rights reserved
+antlr runtime/Go/antlr/v1.4.10 github:antlr/antlr4:runtime/Go/antlr/v1.4.10: http://antlr.org
+	Copyright (c) 2011 Cay Horstmann All rights reserved
+	Copyright (c) 2012 Sam Harwell All rights reserved
+	Copyright (c) 2012-2013 Terence Parr
 	Copyright (c) 2012-2022 The ANTLR Project Contributors. All rights reserved
-	Copyright (c) 2012 Sam Harwell *  All rights reserved
-	Copyright (c) 2012 Terence Parr
-	Copyright (c) 2013 Dan McLaughlin#   All rights reserved
-	Copyright (c) 2013 Terence Parr
-	Copyright (c) 2015 Dan McLaughlin *  All rights reserved
-	Copyright (c) 2016 Mike Lischke *  All rights reserved
-	Copyright (c) 2021 The ANTLR Project. All rights reserved
+	Copyright (c) 2012-2022 The ANTLR Project. All rights reserved
+	Copyright (c) 2013, 2015 Dan McLaughlin All rights reserved
+	Copyright (c) 2016 Mike Lischke All rights reserved
+	Copyright 2012-2022 The ANTLR Project Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions 
+	Copyright 2021 The ANTLR Project Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of so
+	Copyright Â© 2016 Mike Lischke. All rights reserved
 	Copyright>Copyright (c) 2012-2020 The ANTLR Project. All rights reserved
-	Copyright Mathias Bynens <https://mathiasbynens.be/>
-	(C) register is set to the command number; that matched (or NUMCMDS+1 if no match).;SEARCH	LXI	H,CMDTBL	MVI	C,0SEARCH1	MOV	A,C	CPI	NUMCMDS	;this commands exists.	RNC	LXI	D,FCB+1	;check this on
-	(C) should be equal to:	MOV	A,C	;(uuuudddd) where 'uuuu' is the user number	RAR		;and 'dddd' is the drive number.	RAR	RAR	RAR	ANI	0FH	;isolate the user number.	MOV	E,A	CALL	GETSETUC;and set it
-	(C) should contain the number of bytes of the fcb; that must match.;FINDFST	MVI	A,0FFH	STA	FNDSTAT	LXI	H,COUNTER;save character count.	MOV	M,C	LHLD	PARAMS	;get filename to match.	SHLD	SAVEFCB	
-	(C) to indicate writing to un-used disk space.WTSEQ6	LDA	STATUS	;are we ok so far?	ORA	A	RNZ	PUSH	B	;yes, save write flag for bios (register C).	CALL	LOGICAL	;convert (BLKNMBR) over to loical sec
-	(C) to number of bytes to change.	CALL	DE2HLUPDATE1	CALL	TRKSEC	;determine the track and sector affected.	JMP	DIRWRITE	;then write this sector out.;;   Routine to change the name of all files on 
-	(C) to the console device and expand tabs; if necessary.;OUTCON	MOV	A,C	CPI	TAB	;is it a tab?	JNZ	OUTCHAR	;use regular output.OUTCON1	MVI	C,' '	;yes it is, use spaces instead.	CALL	OUTCHAR	LDA
-	(C) to the screen. If the printer flip-flop flag; is set, we will send character to printer also. The console; will be checked in the process.;OUTCHAR	LDA	OUTFLAG	;check output flag.	ORA	A	;anyth
-	(C) to the screen.	POP	B	PUSH	B	LDA	PRTFLAG	;check printer flip-flop flag.	ORA	A	CNZ	LIST	;print it also if non-zero.	POP	BOUTCHR1	MOV	A,C	;update cursors position.	LXI	H,CURPOS	CPI	DEL	;rubo
-armon/go-socks5 20160902-snapshot-e7533296 github:armon/go-socks5:e75332964ef517daa070d7c38a9466a0d687e0a5
+armon/go-socks5 20160902-snapshot-e7533296 github:armon/go-socks5:e75332964ef517daa070d7c38a9466a0d687e0a5: https://github.com/armon/go-socks5
 	Copyright (c) 2014 Armon Dadgar
-benbjohnson-clock v1.1.0 github:benbjohnson/clock:v1.1.0
+benbjohnson-clock v1.1.0 github:benbjohnson/clock:v1.1.0: https://github.com/benbjohnson/clock
 	Copyright (c) 2014 Ben Johnson
-beorn7-perks v1.0.1 github:beorn7/perks:v1.0.1
+beorn7-perks v1.0.1 github:beorn7/perks:v1.0.1: https://github.com/beorn7/perks
 	Copyright (C) 2013 Blake Mizerany
-BurntSushi/toml v0.3.1 github:BurntSushi/toml:v0.3.1
-	Copyright 2010 The Go Authors.  All rights reserved
+blang-semver v4.0.0 github:blang/semver:v4.0.0: https://github.com/blang/semver
+	Copyright (c) 2014 Benedikt Lang <github at benediktlang.de>
+btree v1.0.1 github:google/btree:v1.0.1: https://github.com/google/btree
+	Copyright 2014 Google Inc.
+BurntSushi/toml v0.3.1 github:burntsushi/toml:v0.3.1: https://github.com/BurntSushi/toml
 	Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 	Copyright (c) 2013 TOML authors
-cenkalti/backoff v4.1.3 github:cenkalti/backoff:v4.1.3
+	Copyright 2010 The Go Authors. All rights reserved
+cenkalti/backoff v4.1.3 github:cenkalti/backOff:v4.1.3: https://github.com/cenkalti/backoff
 	Copyright (c) 2014 Cenk Alt
-cespare/xxhash v2.1.2 github:cespare/xxhash:v2.1.2
+census-instrumentation/opencensus-go v0.22.4 unknown: http://opencensus.io
+	No Copyrights found
+cespare/xxhash v2.1.2 github:cespare/xxhash:v2.1.2: https://github.com/cespare/xxhash
 	Copyright (c) 2016 Caleb Spare
-chzyer-readline 20180828-snapshot-2972be24 github:chzyer/readline:2972be24d48e78746da79ba8e24e8b488c9880de
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
+chzyer/logex v1.1.10 github:chzyer/logex:v1.1.10: https://github.com/chzyer/logex
+	No Copyrights found
+chzyer-readline 20180828-snapshot-2972be24 github:chzyer/readline:2972be24d48e78746da79ba8e24e8b488c9880de: https://github.com/chzyer/readline
 	Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
 	Copyright (c) 2015 Chzyer
-chzyer/test 20190214-snapshot-a1ea475d github:chzyer/test:a1ea475d72b168a29f44221e0ad031a842642302
+	Copyright 2011, 2013 The Go Authors. All rights reserved
+chzyer/test 20190214-snapshot-a1ea475d github:chzyer/test:a1ea475d72b168a29f44221e0ad031a842642302: https://github.com/chzyer/test
 	Copyright (c) 2016 chzyer
-client9/misspell v0.3.4 github:client9/misspell:v0.3.4
-	Copyright 2011 The Go Authors. All rights reserved
+client9/misspell v0.3.4 github:client9/misspell:v0.3.4: https://pkg.go.dev/github.com/client9/misspell
 	Copyright (c) 2009 The Go Authors. All rights reserved
 	Copyright (c) 2015-2017 Nick Galbreath
-	copyright Nick Galbreath and distribution is allowed under a
-client-go v0.26.0 github:kubernetes/client-go:v0.26.0
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright (c) 2009 The Go Authors. All rights reserved
-	Copyright The Kubernetes Authors.
-client_golang 1.14.0 github:prometheus/client_golang:v1.14.0
-	Copyright 2010 The Go Authors
-	Copyright 2012-2015 The Prometheus Authors
-	Copyright 2013-2015 Blake Mizerany, Bj
-	Copyright 2013 Matt T. Proud
-	Copyright 2014 The Prometheus Authors
-	Copyright 2015 The Prometheus Authors
-	Copyright 2016 The Prometheus Authors
-	Copyright 2017 The Prometheus Authors
-	Copyright 2018 The Prometheus Authors
-	Copyright 2019 The Prometheus Authors
-	Copyright 2020 The Prometheus Authors
-	Copyright 2021 The Prometheus Authors
-	Copyright 2022 The Prometheus Authors
-	Copyright (c) 2013, The Prometheus Authors
+	Copyright 2011 The Go Authors. All rights reserved
+client-go v0.26.0 github:kubernetes/cLient-go:v0.26.0: https://github.com/kubernetes/client-go
+	No Copyrights found
+client_golang 1.14.0 github:prometheus/client_golang:v1.14.0: https://github.com/prometheus/client_golang
+	Copyright (c) 2013 The Prometheus Authors
 	Copyright (c) 2015 Bj
-	copyright of the original repo.// https://github.com/beorn7/floatspackage internal
-creack/pty v1.1.9 github:creack/pty:v1.1.9
+	Copyright 2010 The Go Authors
+	Copyright 2012-2015 The Prometheus Authors This product includes software developed at SoundCloud Ltd. (http://soundcloud.com/).
+	Copyright 2013 Matt T. Proud
+	Copyright 2013-2015 Blake Mizerany, Bj
+	Copyright 2014-2022 The Prometheus Authors
+cncf/udpa 20191208-snapshot-269d4d46 github:cncf/udpa:269d4d468f6f798d803d140c3016ed6fc6b735c5: https://github.com/cncf/udpa
+	No Copyrights found
+CoreOS v0.3.0 unknown: https://coreos.com/
+	No Copyrights found
+creack/pty v1.1.9 github:creack/pty:v1.1.9: https://github.com/kr/pty
 	Copyright (c) 2011 Keith Rarick
-diskv v2.0.1 github:peterbourgon/diskv:v2.0.1
+diskv v2.0.1 github:peterbourgon/diskv:v2.0.1: http://godoc.org/github.com/peterbourgon/diskv
 	Copyright (c) 2011-2012 Peter Bourgon
-dominikh/go-tools v0.0.1-2020.1.4 github:dominikh/go-tools:v0.0.1-2020.1.4
-	(C) f()func (*C) g()
-	(C) MarshalText() (
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 Dominik Honnef. All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright 2018 Google Inc.
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 Dominik Honnef. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright (c) 2009 The Go Authors. All rights reserved
+dmitri.shuralyov.com/gpu/mtl 20190408-snapshot-666a9877 long_tail:dmitri.shuralyov.com/gpu/mtl#666a987793e9432fbb48592aa2f3bf3463685dfa: https://dmitri.shuralyov.com/gpu/mtl
+	No Copyrights found
+dominikh/go-tools v0.0.1-2020.1.4 github:dominikh/go-tools:v0.0.1-2020.1.4: https://github.com/dominikh/go-tools
+	Copyright (c) 2009, 2013, 2018 The Go Authors. All rights reserved
 	Copyright (c) 2013 Kamil Kisiel <kamil@kamilkisiel.net>
 	Copyright (c) 2013 The Go Authors,
-	Copyright (c) 2013 The Go Authors. All rights reserved
 	Copyright (c) 2013 TOML authors
 	Copyright (c) 2014 Dmitry Vyukov. All rights reserved
 	Copyright (c) 2016 Dominik Honnef
-	Copyright (c) 2016 Dominik Honnef. All rights reserved
-	Copyright (c) 2017, Daniel Mart
-	Copyright (c) 2018 Dominik Honnef. All rights reserved
-	Copyright (c) 2018 The Go Authors. All rights reserved
-	(C) returns all currently known interfaces implemented by C.func (r *rta) interfaces(C types.Type) []*types.Interface {	// Ascertain set of interfaces C implements	// and update 'implements' relati
-envoyproxy/go-control-plane v0.9.4 github:envoyproxy/go-control-plane:v0.9.4
-	Copyright 2018 Envoyproxy Authors
-	Copyright 2019 Envoyproxy Authors
-	Copyright {yyyy
-envoyproxy/protoc-gen-validate v0.1.0 github:envoyproxy/protoc-gen-validate:v0.1.0
-	(C) Chinese (traditional).		"\u4ED6\u5011\u7232\u4EC0\u9EBD\u4E0D\u8AAA\u4E2D\u6587",		"ihqwctvzc91f659drss3x8bo0yb",	},
-	(C)		if ok			that1 = &that2		} else {			return false		}
-	(C)		if ok			that1 = &that2		} else {			return fmt.Errorf("that is not of type *C")		}
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors.  All rights reserved
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors.https://github.com/golang/protobuf
-	Copyright 2011 The Go Authors.  All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors.  All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors.  All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2013 tsuru authors. All rights reserved
-	Copyright Â© 2014 Steve Francia <spf@spf13.com>.
-	Copyright 2014 The Go Authors.  All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright Â© 2015 Jerry Jacobs <jerry.jacobs@xor-gate.org>.
-	Copyright Â© 2015 Steve Francia <spf@spf13.com>.
-	Copyright Â©2015 Steve Francia <spf@spf13.com>
-	Copyright Â©2015 The Go Authors
-	Copyright 2015 The Go Authors.  All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright Â©2015 The Hugo Authors
-	Copyright Â©2015 The Hugo Authors
-	Copyright 2016-present Bj
-	Copyright Â© 2016 Steve Francia <spf@spf13.com>.
-	Copyright 2016 The Go Authors.  All rights reserved
-	Copyright 2016 The Go Authors. All rights reserved
-	Copyright 2017 The Go Authors.  All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright Â© 2018 Steve Francia <spf@spf13.com>.
-	Copyright Â©2018 Steve Francia <spf@spf13.com>
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 Envoy Project Authors
+	Copyright (c) 2016, 2018 Dominik Honnef. All rights reserved
+	Copyright (c) 2017 Daniel Mart Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: Redistributions of source
+	Copyright 2009, 2013-2015, 2017, 2018-2019 The Go Authors. All rights reserved
+	Copyright 2016, 2019 Dominik Honnef. All rights reserved
+	Copyright 2018 Google Inc.
+envoyproxy/go-control-plane v0.9.4 github:envoyproxy/go-control-plane:v0.9.4: https://github.com/envoyproxy/go-control-plane
+	Copyright 2018-2019 Envoyproxy Authors
+envoyproxy/protoc-gen-validate v0.1.0 github:envoyproxy/protoc-gen-validate:v0.1.0: https://github.com/envoyproxy/protoc-gen-validate
 	Copyright (C) 2009 Apple Inc. All rights reserved
 	Copyright (c) 2009 The Go Authors. All rights reserved
-	Copyright (c) 2013, The GoGo Authors. All rights reserved
+	Copyright (c) 2013, 2015-2018 The GoGo Authors. All rights reserved
 	Copyright (c) 2015 Ian Coleman
-	Copyright (c) 2015, The GoGo Authors. All rights reserved
-	Copyright (c) 2015, The GoGo Authors.  rights reserved.// http://github.com/gogo/protobuf
-	Copyright (c) 2016, The GoGo Authors. All rights reserved
-	Copyright (c) 2017, The GoGo Authors. All rights reserved
+	Copyright (c) 2015 The GoGo Authors. rights reserved. http://github.com/gogo/protobuf Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
 	Copyright (c) 2018 Ma_124, <github.com/Ma124>
-	Copyright (c) 2018, The GoGo Authors. All rights reserved
-errcheck v1.5.0-alpha github:kisielk/errcheck:v1.5.0-alpha
+	Copyright 2009-2018 The Go Authors. All rights reserved
+	Copyright 2010 The Go Authors. https://github.com/golang/protobuf This package and the code it generates requires at least Go 1.6.
+	Copyright 2013 tsuru authors. All rights reserved
+	Copyright 2016present Bj
+	Copyright 2019 Envoy Project Authors
+	Copyright Â© 2014-2016, 2018 Steve Francia <spf@spf13.com>.
+	Copyright Â© 2015 Jerry Jacobs <jerry.jacobs@xor-gate.org>.
+	Copyright Â©2015 The Go Authors
+	Copyright Â©2015 The Hugo Authors
+	Copyright Â©2015, 2018 Steve Francia <spf@spf13.com>
+errcheck v1.5.0-alpha github:kisielk/errcheck:v1.5.0-alpha: https://github.com/kisielk/errcheck
 	Copyright (c) 2013 Kamil Kisiel
-felixge/httpsnoop v1.0.3 github:felixge/httpsnoop:v1.0.3
-	Copyright (c) 2016 Felix Geisend
-form3tech-oss/jwt-go v3.2.3 github:form3tech-oss/jwt-go:v3.2.3
+evanphx/json-patch v4.12.0 github:Evanphx/json-patch:v4.12.0: https://github.com/evanphx/json-patch
+	Copyright (c) 2014 Evan Phoenix All rights reserved
+evanphx/json-patch v5.6.0 unknown: https://github.com/evanphx/json-patch
+	No Copyrights found
+exp 20200223-snapshot-6cc2880d long_tail:go.googlesource.com/exp#6cc2880d07d65fc535a1fb4fbd58b397bc1c5312: http://code.google.com/p/go.exp
+	No Copyrights found
+felixge/httpsnoop v1.0.3 unknown: https://github.com/felixge/httpsnoop
+	No Copyrights found
+form3tech-oss/jwt-go v3.2.3 github:Form3tech-oss/jwt-go:v3.2.3: https://github.com/form3tech-oss/jwt-go
 	Copyright (c) 2012 Dave Grijalva
-fsnotify-fsnotify v1.6.0 github:fsnotify/fsnotify:v1.6.0
+fsnotify-fsnotify v1.6.0 github:fsnotify/fsnotify:v1.6.0: https://fsnotify.org
 	Copyright Â© 2012 The Go Authors. All rights reserved
-	Copyright Â© fsnotify Authors. All rights reserved
-github.com/docopt/docopt-go 20181101-snapshot-ee0de3bc github:docopt/docopt-go:ee0de3bc6815ee19d4a46c7eb90f829db0e014b1
+gengo 20220902-snapshot-c0856e24 github:kubernetes/gengo:c0856e24416daea2775735ff996a5870c2033839: https://github.com/kubernetes/gengo
+	No Copyrights found
+github.com/docopt/docopt-go 20181101-snapshot-ee0de3bc github:docopt/docopt-go:ee0de3bc6815ee19d4a46c7eb90f829db0e014b1: https://github.com/docopt/docopt-go
 	Copyright (c) 2013 Keith Batten
 	Copyright (c) 2013 Keith Batten, kbatten@gmail.com
-	Copyright (c) 2013 Keith Batten, kbatten@gmail.com*/
 	Copyright (c) 2016 David Irvine
-	Copyright (c) 2016 David Irvine
-github.com/go-kit/log v0.2.0 github:go-kit/log:v0.2.0
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
+	Copyright (c) 2016 David Irvine package docopt
+github.com/go-kit/log v0.2.0 github:go-kit/log:v0.2.0: https://github.com/go-kit/log
 	Copyright (c) 2014 Simon Eskildsen
 	Copyright (c) 2021 Go kit
-github.com/go-logr/zapr v1.2.3 github:go-logr/zapr:v1.2.3
+	Copyright 2011, 2013 The Go Authors. All rights reserved
+github.com/go-logr/zapr v1.2.3 github:go-logr/zapr:v1.2.3: https://github.com/go-logr/zapr
 	Copyright 2018 Solly Ross
-	Copyright 2019 The logr Authors.
+	Copyright 2019, 2021 The logr Authors.
 	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The logr Authors.
-	Copyright {yyyy
-github.com/konsorten/go-windows-terminal-sequences v1.0.3 github:konsorten/go-windows-terminal-sequences:v1.0.3
+github.com/konsorten/go-windows-terminal-sequences v1.0.3 github:konsorten/go-windows-terminal-sequences:v1.0.3: https://github.com/konsorten/go-windows-terminal-sequences
 	Copyright (c) 2017 marvin
-github.com/moby/spdystream v0.2.0 github:moby/spdystream:v0.2.0
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
+github.com/moby/spdystream v0.2.0 github:moby/spdystream:v0.2.0: https://github.com/moby/spdystream
+	Copyright 2011, 2013 The Go Authors. All rights reserved
 	Copyright 2014-2021 Docker Inc.
-	Copyright 2014-2021 Docker Inc.
-github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61 github:munnerz/goautoneg:a7dc8b61c822528f973a5e4e7b272055c6fdb43e
-	Copyright (c) 2011, Open Knowledge Foundation Ltd.All rights reserved
-GoDoc Text v0.2.0 github:kr/text:v0.2.0
-	Copyright 2012 Keith Rarick
-go-errgo-errgo v2.1.0 github:go-errgo/errgo:v2.1.0
-	Copyright Â© 2013, Roger PeppeAll rights reserved
-	Copyright 2014 Roger Peppe.// See LICENCE file for details.
-go-etcd 3.5.5 github:etcd-io/etcd:v3.5.5
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2013 The etcd Authors
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The etcd Authors
-	Copyright 2015 The etcd Authors
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 The etcd Authors
-	Copyright 2017 The etcd Authors
-	Copyright 2017 The etcd Lockors
-	Copyright 2018 The etcd Authors
-	Copyright 2019 The etcd Authors
-	Copyright 2020 The etcd Authors
-	Copyright 2021 The etcd Authors
-	Copyright 2022 The etcd Authors
-	Copyright|generated
-go.etcd.io/bbolt v1.3.6 github:etcd-io/bbolt:v1.3.6
-	Copyright (c) 2013 Ben Johnson
-go-flags v1.4.0 github:jessevdk/go-flags:v1.4.0
-	Copyright 2012 Jesse van den Kieboom. All rights reserved
-	Copyright (c) 2012 Jesse van den Kieboom. All rights reserved
-go-flowrate 20140419-snapshot-cca7078d github:mxk/go-flowrate:cca7078d478f8520f85629ad7c68962d31ed7682
-	Copyright (c) 2014 The Go-FlowRate Authors. All rights reserved
-go humanize v1.0.0 github:dustin/go-humanize:v1.0.0
-	Copyright (c) 2005-2008  Dustin Sallings <dustin@spy.net>
-go-inf-inf v0.9.1 github:go-inf/inf:v0.9.1
-	Copyright (c) 2009 The GoAuthors. All rights reserved
-	Copyright (c) 2012 P
-go-kit-kit v0.9.0 github:go-kit/kit:v0.9.0
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright (c) 2014 Simon Eskildsen
-	Copyright (c) 2015 Peter Bourgon
-golang/appengine v1.6.7 github:golang/appengine:v1.6.7
-	Copyright 2011 Google Inc. All rights reserved
-	Copyright 2011 Google Inc. All Rights Reserved
-	Copyright 2011 The Go Authors.  All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 Google Inc. All rights reserved
-	Copyright 2012 Google Inc. All Rights Reserved
-	Copyright 2013 Google Inc. All rights reserved
-	Copyright 2014 Google Inc. All rights reserved
-	Copyright 2015 Google Inc. All rights reserved
-	Copyright 2016 Google Inc. All rights reserved
-	Copyright 2016 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC. All rights reserved
-	Copyright 2019 Google Inc. All rights reserved
-	Copyright 2019 Google Inc. All Rights Reserved
-golang-github-spf13-pflag-dev v1.0.5 github:spf13/pflag:v1.0.5
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors.  All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright (c) 2012 Alex Ogier. All rights reserved
+	Copyright 2014-2021 Docker Inc. This product includes software developed at
+github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61 github:munnerz/goautoneg:a7dc8b61c822528f973a5e4e7b272055c6fdb43e: https://github.com/munnerz/goautoneg
+	Copyright (c) 2011 Open Knowledge Foundation Ltd. All rights reserved
+glfw 20190408-snapshot-e6da0acd github:go-gl/glfw:e6da0acd62b1b57ee2799d4d0a76a7d4514dc5bc: https://github.com/go-gl/glfw
+	No Copyrights found
+glfw 20200222-snapshot-6f7a984d github:go-gl/glfw:6f7a984d4dc470c3f197229ad1991ae9e211bba2: https://github.com/go-gl/glfw
+	No Copyrights found
+go-ansiterm 20210617-snapshot-d185dfc1 github:azure/go-ansiterm:d185dfc1b5a126116ea5a19e148e29d16b4574c9: https://github.com/Azure/go-ansiterm
+	Copyright (c) 2015 Microsoft Corporation
+go-check-check 20201130-snapshot-10cb9826 github:go-check/check:10cb98267c6cb43ea9cd6793f29ff4089c306974: http://labix.org/gocheck
+	Copyright (c) 2010-2013 Gustavo Niemeyer <gustavo@niemeyer.net> All rights reserved
 	Copyright (c) 2012 The Go Authors. All rights reserved
-golang/glog 20160125-snapshot-23def4e6 github:golang/glog:23def4e6c14b4da8ac2ed8007337bc5eb5007998
+go-co-op/gocron v1.30.1 github:go-co-op/gocron:v1.30.1: https://github.com/go-co-op/gocron
+	No Copyrights found
+GoDoc Text v0.2.0 github:kr/text:v0.2.0: http://godoc.org/github.com/kr/text
+	Copyright 2012 Keith Rarick
+go-errgo-errgo v2.1.0 github:go-errgo/errgo:v2.1.0: https://github.com/go-errgo/errgo
+	Copyright 2014 Roger Peppe. See LICENCE file for details. package errors_test
+	Copyright 2014 Roger Peppe. See LICENCE file for details. The errors package provides a way to create and diagnose errors. It is compatible with the usual Go error idioms but adds a way to wrap errors
+	Copyright Â© 2013 Roger Peppe All rights reserved
+go-etcd api/v3.5.5 github:etcd-io/etcd:api/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd client/pkg/v3.5.5 github:etcd-io/etcd:client/pkg/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd client/v2.305.5 github:etcd-io/etcd:client/v2.305.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd client/v3.5.5 github:etcd-io/etcd:client/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd pkg/v3.5.5 github:etcd-io/etcd:pkg/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd raft/v3.5.5 github:etcd-io/etcd:raft/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go-etcd server/v3.5.5 github:etcd-io/etcd:server/v3.5.5: https://github.com/etcd-io/etcd
+	Copyright 2009, 2013, 2015 The Go Authors. All rights reserved
+	Copyright 2013-2022 The etcd Authors
+	Copyright 2017 The etcd Lockors
+go.etcd.io/bbolt v1.3.6 github:etcd-io/bbolt:v1.3.6: https://github.com/etcd-io/bbolt
+	Copyright (c) 2013 Ben Johnson
+go-flags v1.4.0 github:jessevdk/go-flags:v1.4.0: http://godoc.org/github.com/jessevdk/go-flags
+	Copyright (c) 2012 Jesse van den Kieboom. All rights reserved
+	Copyright 2012 Jesse van den Kieboom. All rights reserved
+go-flowrate 20140419-snapshot-cca7078d github:mxk/go-flowrate:cca7078d478f8520f85629ad7c68962d31ed7682: https://github.com/mxk/go-flowrate
+	Copyright (c) 2014 The Go-FlowRate Authors. All rights reserved
+gogo/protobuf v1.3.2 unknown: http://github.com/gogo/protobuf/
+	No Copyrights found
+go humanize v1.0.0 github:dustin/go-humanize:v1.0.0: http://github.com/dustin/go-humanize
+	Copyright (c) 2005-2008 Dustin Sallings <dustin@spy.net>
+go-inf-inf v0.9.1 github:go-inf/inf:v0.9.1: https://godoc.org/gopkg.in/inf.v0
+	Copyright (c) 2009 The Go Authors. All rights reserved
+	Copyright (c) 2012 P
+go-kit-kit v0.9.0 unknown: http://gokit.io
+	No Copyrights found
+golang/appengine v1.6.7 github:golang/appengine:v1.6.7: http://google.golang.org/appengine
+	Copyright 2011 The Go Authors. All rights reserved
+	Copyright 2011-2016, 2019 Google Inc. All rights reserved
+	Copyright 2018 Google LLC. All rights reserved
+golang-github-spf13-pflag-dev v1.0.5 unknown: https://github.com/spf13/pflag
+	No Copyrights found
+golang/glog 20160125-snapshot-23def4e6 github:golang/glog:23def4e6c14b4da8ac2ed8007337bc5eb5007998: https://github.com/golang/glog
 	Copyright 2013 Google Inc. All Rights Reserved
-golang-mock v1.4.4 github:golang/mock:v1.4.4
-	Copyright 2010 Google Inc.
-	Copyright 2011 Google Inc.
-	Copyright 2012 Google Inc.
+golang-mock v1.4.4 github:golang/mock:v1.4.4: https://github.com/golang/mock
+	Copyright 2010-2012 Google Inc.
 	Copyright 2019 Google LLC
-	copyright file:		}
-	Copyright file used to add copyright header")
-	copyright header.
-golang.org/x/sys 0.3.0 long_tail:go.googlesource.com/sys#v0.3.0
-	Copyright 2009,2010 The Go Authors. All rights reserved
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 The Go Authors. All rights reserved
+golang.org/x/crypto v0.1.0 long_tail:go.googlesource.com/crypto#v0.1.0: https://godoc.org/golang.org/x/crypto
+	No Copyrights found
+golang.org/x/image 20190704-snapshot-cff245a6 long_tail:go.googlesource.com/image#cff245a6509b8c4de022d0d5b9037c503c5989d6: https://pkg.go.dev/golang.org/x/image
+	No Copyrights found
+golang.org/x/lint 20200301-snapshot-738671d3 long_tail:go.googlesource.com/lint#738671d3881b9731cc63024d5d88cf28db875626: https://pkg.go.dev/golang.org/x/lint
+	No Copyrights found
+golang.org/x/mod v0.6.0 long_tail:go.googlesource.com/mod#v0.6.0
+	No Copyrights found
+golang.org/x/net 20221206-snapshot-1e63c2f0 long_tail:go.googlesource.com/net#1e63c2f08a10a150fa02c50ece89b340ae64efe4: https://godoc.org/golang.org/x/net
+	No Copyrights found
+golang.org/x/oauth2 20220223-snapshot-ee480838 long_tail:go.googlesource.com/oauth2#ee480838109b20d468babcb00b7027c82f962065: https://pkg.go.dev/golang.org/x/oauth2
+	No Copyrights found
+golang.org/x/sys 0.3.0 long_tail:go.googlesource.com/sys#v0.3.0: https://pkg.go.dev/golang.org/x/sync
+	Copyright (c) 2009 The Go Authors. All rights reserved
+	Copyright 2009-2022 The Go Authors. All rights reserved
 	Copyright 2017 The Go Authors. All right reserved.
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2020 The Go Authors. All rights reserved
-	Copyright 2021 The Go Authors. All rights reserved
-	Copyright 2022 The Go Authors. All rights reserved
+golang.org/x/term v0.3.0 long_tail:go.googlesource.com/term#v0.3.0: https://go.googlesource.com/term
 	Copyright (c) 2009 The Go Authors. All rights reserved
-golang.org/x/term v0.3.0 long_tail:go.googlesource.com/term#v0.3.0
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2021 The Go Authors. All rights reserved
+	Copyright 2011, 2013, 2019, 2021 The Go Authors. All rights reserved
+golang.org/x/time v0.3.0 long_tail:go.googlesource.com/time#v0.3.0: https://pkg.go.dev/golang.org/x/time
 	Copyright (c) 2009 The Go Authors. All rights reserved
-golang.org/x/time v0.3.0 long_tail:go.googlesource.com/time#v0.3.0
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2022 The Go Authors. All rights reserved
-	Copyright (c) 2009 The Go Authors. All rights reserved
-Golang Protobuf v1.28.1 long_tail:go.googlesource.com/protobuf#v1.28.1
-	Copyright 2008 Google Inc.  All rights reserved
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2020 The Go Authors. All rights reserved
-	Copyright 2021 The Go Authors. All rights reserved
+	Copyright 2015, 2022 The Go Authors. All rights reserved
+golang.org/x/tools v0.2.0 long_tail:go.googlesource.com/tools#v0.2.0: https://pkg.go.dev/golang.org/x/tools
+	Copyright (c) 2009, 2017 The Go Authors. All rights reserved
+	Copyright (c) 2012-2016 The go-diff Authors. All rights reserved
+	Copyright (c) 2013 TOML authors
+	Copyright (c) 2015, 2019 Daniel Mart
+	Copyright (c) 2016 Dominik Honnef
+	Copyright 2009-2022 The Go Authors. All rights reserved
+	Copyright 2013 jQuery Foundation and other contributors
+	Copyright Â© 1994-1999 Lucent Technologies Inc. All rights reserved
+	Copyright Â© 1995-1997, 2005, 2006-2007 C H Forsyth (forsyth@terzarima.net)
+	Copyright Â© 1997-1999 Vita Nuova Limited
+	Copyright Â© 2000-2007 Lucent Technologies Inc. and others
+	Copyright Â© 2000-2007 Vita Nuova Holdings Limited (www.vitanuova.com)
+	Copyright Â© 2004, 2006 Bruce Ellis
+	Copyright Â© 2009 The Go Authors. All rights reserved
+golang.org/x/xerrors 20200804-snapshot-5ec99f83 long_tail:go.googlesource.com/xerrors#5ec99f83aff198f5fbd629d6c8d8eb38a04218ca
+	No Copyrights found
+Golang Protobuf v1.28.1 long_tail:go.googlesource.com/protobuf#v1.28.1: https://github.com/golang/protobuf
 	Copyright (c) 2018 The Go Authors. All rights reserved
-	Copyright \d\d\d\d Google Inc\.  All rights reserved
-	Copyright \d\d\d\d The Go Authors\. All rights reserved
-	copyright headers:\n	}
-Golang Protobuf v1.5.2 github:golang/protobuf:v1.5.2
-	Copyright 2010 The Go Authors.  All rights reserved
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors.  All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 The Go Authors. All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2020 The Go Authors. All rights reserved
-golang/text v0.5.0 long_tail:go.googlesource.com/text#v0.5.0
-	(C) Chinese (traditional).		"\u4ED6\u5011\u7232\u4EC0\u9EBD\u4E0D\u8AAA\u4E2D\u6587",		"ihqwctvzc91f659drss3x8bo0yb",	},
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 The Go Authors. All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2021 The Go Authors. All rights reserved
+	Copyright 2008 Google Inc. All rights reserved
+	Copyright 2018-2021 The Go Authors. All rights reserved
+Golang Protobuf v1.5.2 github:golang/protobuf:v1.5.2: https://github.com/golang/protobuf
+	Copyright 2010-2011, 2014, 2015-2020 The Go Authors. All rights reserved
+golang/sync 20220722-snapshot-886fb937 long_tail:go.googlesource.com/sync#886fb9371eb4b47af10bff9c8025a8c9e1554b92: https://pkg.go.dev/golang.org/x/sync
+	No Copyrights found
+golang/text v0.5.0 long_tail:go.googlesource.com/text#v0.5.0: https://github.com/golang/text
 	Copyright (c) 2009 The Go Authors. All rights reserved
-	COPYRIGHT SIGNFEMININE ORDI"	"NAL INDICATORLEFT-POINTING DOUBLE ANGLE QUOTATION MARKNOT SIGNSOFT HYPHE" +	"NREGISTERED SIGNMACRONDEGREE SIGNPLUS-MINUS SIGNSUPERSCRIPT TWOSUPERSCRI" +	"PT THREEACUTE
-go-logr/logr v1.2.3 github:go-logr/logr:v1.2.3
-	Copyright 2019 The logr Authors.
+	Copyright 2009, 2011-2019, 2021 The Go Authors. All rights reserved
+go-logfmt-logfmt v0.5.1 github:go-logfmt/logfmt:v0.5.1: https://github.com/go-logfmt/logfmt
+	Copyright (c) 2015 go-logfmt
+go-logr/logr v1.2.3 github:go-logr/logr:v1.2.3: https://github.com/go-logr/logr
+	Copyright 2019-2021 The logr Authors.
 	Copyright 2020 The Kubernetes Authors.
-	Copyright 2020 The logr Authors.
-	Copyright 2021 The logr Authors.
-	Copyright {yyyy
-go-logr/stdr v1.2.2 github:go-logr/stdr:v1.2.2
-	Copyright 2019 The logr Authors.
+go-logr/stdr v1.2.2 github:go-logr/stdr:v1.2.2: https://github.com/go-logr/stdr
+	Copyright 2019, 2021 The logr Authors.
 	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The logr Authors.
-Go Logrus v1.8.1 github:sirupsen/logrus:v1.8.1
-	Copyright (c) 2012 Miki Tebeka <miki.tebeka@gmail.com>.
-	Copyright (c) 2014 Simon Eskildsen
-gomega v1.24.1 github:onsi/gomega:v1.24.1
+gomega v1.24.1 github:onsi/gomega:v1.24.1: https://github.com/onsi/gomega
 	Copyright (c) 2013-2014 Onsi Fakhouri
-gomodules/jsonpatch v2.2.0 github:gomodules/jsonpatch:v2.2.0
-	Copyright {yyyy
-googleapis/gax-go v2.0.5 github:googleapis/gax-go:v2.0.5
-	Copyright 2016, Google Inc.// All rights reserved
-	Copyright 2016, Google Inc.All rights reserved
+gomodules/jsonpatch v2.2.0 github:gomodules/jsonpatch:v2.2.0: https://github.com/gomodules/jsonpatch
+	No Copyrights found
+googleapis/gax-go v2.0.5 github:googleapis/gax-go:v2.0.5: https://godoc.org/github.com/googleapis/gax-go
+	Copyright 2016, 2018-2019 Google Inc. All rights reserved
 	Copyright 2018 Google Inc.
-	Copyright 2018, Google Inc.// All rights reserved
-	Copyright 2019, Google Inc.// All rights reserved
 	Copyright 2019 Google LLC
-google/cel-go v0.12.5 github:google/cel-go:v0.12.5
-	Copyright 2008 Google Inc.  All rights reserved
-	Copyright 2010 The Go Authors.  All rights reserved
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2018 Google LLC
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 Google LLC
-	Copyright 2019 The Go Authors. All rights reserved
-	Copyright 2020 Google LLC
-	Copyright 2020 The Go Authors. All rights reserved
-	Copyright 2021 Google LLC
-	Copyright 2021 The ANTLR Project
-	Copyright 2022 Google LLC
-	Copyright (c) 2009 The Go Authors. All rights reserved
+googleapis/go-genproto 20220502-snapshot-c8bf987b github:googleapis/go-genproto:c8bf987b8c21778beffccfd5a923546432c2d250: https://godoc.org/google.golang.org/genproto
+	No Copyrights found
+googleapis/google-api-go-client v0.30.0 github:googleapis/google-api-go-client:v0.30.0
+	Copyright (c) 2011 Google Inc. All rights reserved
+	Copyright (c) 2013 Joshua Tacoma. All rights reserved
+	Copyright 2011-2013, 2018, 2019-2020 Google LLC. All rights reserved
+	Copyright 2013 Joshua Tacoma. All rights reserved
+	Copyright 2014-2017 The Go Authors. All rights reserved
+	Copyright 2015-2016, 2018, 2020 Google LLC
+	Copyright 2015-2020 Google LLC.
+google/cel-go v0.12.5 github:google/cel-go:v0.12.5: https://github.com/google/cel-go
+	Copyright (c) 2009, 2018 The Go Authors. All rights reserved
 	Copyright (c) 2012-2017 The ANTLR Project. All rights reserved
-	Copyright (c) 2017, Adrian Stoewer <adrian.stoewer@rz.ifi.lmu.de>
-	Copyright (c) 2017, A. Stoewer <adrian.stoewer@rz.ifi.lmu.de>// All rights reserved
-	Copyright (c) 2018 The Go Authors. All rights reserved
-google-cloud-go bigquery/v1.8.0 github:googleapis/google-cloud-go:bigquery/v1.8.0
-	Copyright 2014 Google LLC
-	Copyright 2015 Google LLC
-	Copyright 2016 Google LLC
-	Copyright 2017, Google Inc. All rights reserved
-	Copyright 2017 Google LLC
-	Copyright 2017, Google LLC
-	Copyright 2018 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC.
-	Copyright 2018 Google LLC
-	Copyright 2019 Google LLC
-	Copyright 2020 Google LLC
-	Copyright 2020, Google LLC
-	Copyright (c) 1996-1998 John D. Polstra.  All rights reserved
+	Copyright (c) 2017 A. Stoewer <adrian.stoewer@rz.ifi.lmu.de> All rights reserved
+	Copyright (c) 2017 Adrian Stoewer <adrian.stoewer@rz.ifi.lmu.de>
+	Copyright 2008 Google Inc. All rights reserved
+	Copyright 2010, 2013, 2015, 2018-2020 The Go Authors. All rights reserved
+	Copyright 2018-2022 Google LLC
+	Copyright 2021 The ANTLR Project Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of so
+google-cloud-go bigquery/v1.8.0 github:googleapis/google-cloud-go:bigquery/v1.8.0: https://github.com/GoogleCloudPlatform/google-cloud-go
+	Copyright (c) 1996-1998 John D. Polstra. All rights reserved
 	Copyright (c) 2001 David E. O
-google-cloud-go datastore/v1.1.0 github:googleapis/google-cloud-go:datastore/v1.1.0
-	Copyright 2014 Google LLC
-	Copyright 2015 Google LLC
-	Copyright 2016 Google LLC
-	Copyright 2017, Google Inc. All rights reserved
-	Copyright 2017 Google LLC
-	Copyright 2017, Google LLC
-	Copyright 2018 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC.
-	Copyright 2018 Google LLC
-	Copyright 2019 Google LLC
-	Copyright 2020 Google LLC
-	Copyright 2020, Google LLC
-	Copyright (c) 1996-1998 John D. Polstra.  All rights reserved
+	Copyright 2014-2020 Google LLC
+	Copyright 2017-2018 Google Inc. All Rights Reserved
+	Copyright 2018 Google LLC. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of source c
+google-cloud-go datastore/v1.1.0 github:googleapis/google-cloud-go:datastore/v1.1.0: https://github.com/GoogleCloudPlatform/google-cloud-go
+	Copyright (c) 1996-1998 John D. Polstra. All rights reserved
 	Copyright (c) 2001 David E. O
-google-cloud-go pubsub/v1.3.1 github:googleapis/google-cloud-go:pubsub/v1.3.1
-	Copyright 2014 Google LLC
-	Copyright 2015 Google LLC
-	Copyright 2016 Google LLC
-	Copyright 2017, Google Inc. All rights reserved
-	Copyright 2017 Google LLC
-	Copyright 2017, Google LLC
-	Copyright 2018 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC.
-	Copyright 2018 Google LLC
-	Copyright 2019 Google LLC
-	Copyright 2020 Google LLC
-	Copyright 2020, Google LLC
-	Copyright (c) 1996-1998 John D. Polstra.  All rights reserved
+	Copyright 2014-2020 Google LLC
+	Copyright 2017-2018 Google Inc. All rights reserved
+	Copyright 2018 Google LLC. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of source c
+google-cloud-go pubsub/v1.3.1 github:googleapis/google-cloud-go:pubsub/v1.3.1: https://github.com/GoogleCloudPlatform/google-cloud-go
+	Copyright (c) 1996-1998 John D. Polstra. All rights reserved
 	Copyright (c) 2001 David E. O
-google-cloud-go storage/v1.10.0 github:googleapis/google-cloud-go:storage/v1.10.0
-	Copyright 2014 Google LLC
-	Copyright 2015 Google LLC
-	Copyright 2016 Google LLC
-	Copyright 2017 Google LLC
-	Copyright 2017, Google LLC
-	Copyright 2018 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC.
-	Copyright 2018 Google LLC
-	Copyright 2019 Google LLC
-	Copyright 2020 Google LLC
-	Copyright 2020, Google LLC
-	Copyright (c) 1996-1998 John D. Polstra.  All rights reserved
+	Copyright 2014-2020 Google LLC
+	Copyright 2017-2018 Google Inc. All Rights Reserved
+	Copyright 2018 Google LLC. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of source c
+google-cloud-go storage/v1.10.0 github:googleapis/google-cloud-go:storage/v1.10.0: https://github.com/GoogleCloudPlatform/google-cloud-go
+	Copyright (c) 1996-1998 John D. Polstra. All rights reserved
 	Copyright (c) 2001 David E. O
-google-cloud-go v0.65.0 github:googleapis/google-cloud-go:v0.65.0
-	Copyright 2014 Google LLC
-	Copyright 2015 Google LLC
-	Copyright 2016 Google LLC
-	Copyright 2017 Google LLC
-	Copyright 2017, Google LLC
+	Copyright 2014-2020 Google LLC
 	Copyright 2018 Google Inc. All Rights Reserved
-	Copyright 2018 Google LLC.
-	Copyright 2018 Google LLC
-	Copyright 2019 Google LLC
-	Copyright 2020 Google Inc. All Rights Reserved
-	Copyright 2020 Google LLC
-	Copyright 2020, Google LLC
-	Copyright (c) 1996-1998 John D. Polstra.  All rights reserved
+	Copyright 2018 Google LLC. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of source c
+google-cloud-go v0.65.0 github:googleapis/google-cloud-go:v0.65.0: https://github.com/GoogleCloudPlatform/google-cloud-go
+	Copyright (c) 1996-1998 John D. Polstra. All rights reserved
 	Copyright (c) 2001 David E. O
+	Copyright 2014-2020 Google LLC
+	Copyright 2018 Google LLC. Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistributions of source c
+	Copyright 2018, 2020 Google Inc. All Rights Reserved
 google/gnostic v0.5.7-v3refs github:google/gnostic:v0.5.7-v3refs
-	Copyright 2016 Google LLC. All Rights Reserved
-	Copyright 2017 Google LLC. All Rights Reserved
-	Copyright 2018 Google LLC. All Rights Reserved
-	Copyright 2019 Google LLC. All Rights Reserved
-	Copyright 2020 Google LLC. All Rights Reserved
-google/go-cmp v0.5.9 github:google/go-cmp:v0.5.9
-	Copyright 2017, The Go Authors. All rights reserved
-	Copyright 2018, The Go Authors. All rights reserved
-	Copyright 2019, The Go Authors. All rights reserved
-	Copyright 2020, The Go Authors. All rights reserved
+	Copyright 2016-2020 Google LLC. All Rights Reserved
+google/go-cmp v0.5.9 github:google/go-cmp:v0.5.9: https://github.com/google/go-cmp
 	Copyright (c) 2017 The Go Authors. All rights reserved
-google-gofuzz v1.1.0 github:google/gofuzz:v1.1.0
-	Copyright 2014 Google Inc. All rights reserved
-google/renameio v0.1.0 github:google/renameio:v0.1.0
+	Copyright 2017-2020 The Go Authors. All rights reserved
+google-gofuzz v1.1.0 unknown: https://github.com/google/gofuzz
+	No Copyrights found
+google/pprof 20210407-snapshot-94a9f03d github:google/pprof:94a9f03dee38882adc8bdfc42cdd6a04f8e7056e: https://github.com/google/pprof
+	No Copyrights found
+google/renameio v0.1.0 github:google/renameio:v0.1.0: https://github.com/google/renameio
 	Copyright 2018 Google Inc.
-google/uuid v.1.1.2 github:google/uuid:v1.1.2
-	Copyright 2016 Google Inc.  All rights reserved
-	Copyright 2017 Google Inc.  All rights reserved
-	Copyright 2018 Google Inc.  All rights reserved
-	Copyright (c) 2009,2014 Google Inc. All rights reserved
-go-openapi/jsonpointer v0.19.5 github:go-openapi/jsonpointer:v0.19.5
+Googleuuid v.1.1.2 github:google/uuid:v1.1.2: https://github.com/google/uuid
+	Copyright (c) 2009, 2014 Google Inc. All rights reserved
+	Copyright 2016-2018 Google Inc. All rights reserved
+go-openapi/jsonpointer v0.19.5 github:go-openapi/jsonpointer:v0.19.5: https://github.com/go-openapi/jsonpointer
 	Copyright 2013 sigu-399 ( https://github.com/sigu-399 )
-go.opentelemetry.io/proto otlp/v0.19.0 github:open-telemetry/opentelemetry-proto-go:otlp/v0.19.0
-	Copyright 2019, OpenTelemetry Authors
-	Copyright 2020, OpenTelemetry Authors
-	Copyright The OpenTelemetry Authors
-go-restful v3.9.0 github:emicklei/go-restful:v3.9.0
-	Copyright 2013 Ernest Micklei. All rights reserved
-	Copyright 2014 Ernest Micklei. All rights reserved
-	Copyright 2015 Ernest Micklei. All rights reserved
-	Copyright 2018 Ernest Micklei. All rights reserved
-	Copyright 2021 Ernest Micklei. All rights reserved
-	Copyright (c) 2012,2013 Ernest Micklei
-go-spew v1.1.1 github:davecgh/go-spew:v1.1.1
-	Copyright (c) 2012-2016 Dave Collins <dave@davec.name>
-	Copyright (c) 2013-2016 Dave Collins <dave@davec.name>
-	Copyright (c) 2013-2016 Dave Collins <dave@davec.name> * * Permission to use, copy, modify, and distribute this software for any * purpose with or without fee is hereby granted, provided that the a
-	Copyright (c) 2013 Dave Collins <dave@davec.name>
-	Copyright (c) 2015-2016 Dave Collins <dave@davec.name>
-go-stack-stack v1.8.0 github:go-stack/stack:v1.8.0
+go.opentelemetry.io/proto otlp/v0.19.0 github:open-telemetry/opentelemetry-proto-go:otlp/v0.19.0: https://github.com/open-telemetry/opentelemetry-proto-go
+	Copyright 2019-2020 OpenTelemetry Authors
+goproxy 20180725-snapshot-947c36da github:elazarl/goproxy:947c36da3153ff334e74d9d980de341d25f358ba: https://github.com/elazarl/goproxy
+	No Copyrights found
+go-restful v3.9.0 github:Emicklei/go-restful:v3.9.0: https://github.com/emicklei/go-restful
+	(c) 2012-2015 http://ernestmicklei.com. MIT License
+	Copyright (c) 2012-2013 Ernest Micklei
+	Copyright 2013-2015, 2018, 2021 Ernest Micklei. All rights reserved
+	Â© 2012-2022 http://ernestmicklei.com. MIT License. Contributions are welcome.
+gorilla/websocket v1.4.2 github:gorilla/websocket:v1.4.2: https://github.com/gorilla/websocket
+	Copyright (c) 2008-2009 Bjoern Hoehrmann <bjoern@hoehrmann.de>
+	Copyright (c) 2013 The Gorilla WebSocket Authors. All rights reserved
+	Copyright 2013-2017, 2019 The Gorilla WebSocket Authors. All rights reserved
+go-spew v1.1.1 github:davecgh/go-spew:v1.1.1: https://github.com/davecgh/go-spew
+	Copyright (c) 2012-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and distribute this software for any purpose with or without fee is hereby granted, provided that the above copy
+	Copyright (c) 2012-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above c
+	Copyright (c) 2013 Dave Collins <dave@davec.name> Permission to use, copy, modify, and distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright
+go-stack-stack v1.8.0 github:go-stack/stack:v1.8.0: http://github.com/go-stack/stack
 	Copyright (c) 2014 Chris Hines
-go-systemd v22.3.2 github:coreos/go-systemd:v22.3.2
-	Copyright 2014 Docker, Inc.
-	Copyright 2015-2018 CoreOS, Inc.
-	Copyright 2015, 2018 CoreOS, Inc.
-	Copyright 2015 CoreOS Inc.
-	Copyright 2015 CoreOS, Inc.
-	Copyright 2015 RedHat, Inc.
-	Copyright 2016 CoreOS, Inc.
-	Copyright 2018 CoreOS, Inc
-	Copyright 2018 CoreOS, Inc.
-	Copyright 2019 CoreOS, Inc.
-	Copyright 2020 CoreOS, Inc.
-	Copyright|generated
-Go Testify v1.8.2 github:stretchr/testify:v1.8.2
+Go support for Mobile devices 20190704-snapshot-d2bd2a29 long_tail:go.googlesource.com/mobile#d2bd2a29d028cb94031e5e81788b19b371d00eb8
+	No Copyrights found
+go-systemd v22.3.2 unknown: https://github.com/coreos/go-systemd
+	No Copyrights found
+go-task/slim-sprig 20210107-snapshot-348f09db github:go-task/slim-sprig:348f09dbbbc0ff8b922a311da7a90cd014b69aa3: https://github.com/go-task/slim-sprig
+	No Copyrights found
+Go Testify v1.8.2 github:stretchr/testify:v1.8.2: https://github.com/stretchr/testify
 	Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors.
-gotest.tools v3.0.3 github:gotestyourself/gotest.tools:v3.0.3
-	Copyright 2018 gotest.tools authors
-	Copyright (c) 2013, Patrick MezardAll rights reserved
-go.uber.org/goleak v1.2.0 github:uber-go/goleak:v1.2.0
-	Copyright (c) 2017 Uber Technologies, Inc.
-	Copyright (c) 2018 Uber Technologies, Inc.
-	Copyright (c) 2019 Uber Technologies, Inc.
-	Copyright (c) 2021 Uber Technologies, Inc.
-go.uber.org/multierr v1.7.0 github:uber-go/multierr:v1.7.0
+gotest.tools v3.0.3 unknown: https://github.com/gotestyourself/gotest.tools
+	No Copyrights found
+go.uber.org/goleak v1.2.0 github:uber-go/goleak:v1.2.0: https://github.com/uber-go/goleak
+	Copyright (c) 2017-2019, 2021 Uber Technologies, Inc.
+go.uber.org/multierr v1.7.0 github:uber-go/multierr:v1.7.0: https://github.com/uber-go/multierr
 	Copyright (c) 2017-2021 Uber Technologies, Inc.
-	Copyright (c) 2017 Uber Technologies, Inc.
-	Copyright (c) 2019-2021 Uber Technologies, Inc.
-	Copyright (c) 2020 Uber Technologies, Inc.
-	Copyright (c) 2021 Uber Technologies, Inc.
-govalidator 20190424-snapshot-f61b66f8 github:asaskevich/govalidator:f61b66f89f4a311bef65f13e575bcf1a2ffadda6
+govalidator 20190424-snapshot-f61b66f8 github:asaskevich/govalidator:f61b66f89f4a311bef65f13e575bcf1a2ffadda6: https://github.com/asaskevich/govalidator
 	Copyright (c) 2014 Alex Saskevich
-go-zap v1.24.0 github:uber-go/zap:v1.24.0
-	Copyright (c) 2016, 2017 Uber Technologies, Inc.
+go-zap v1.24.0 github:uber-go/zap:v1.24.0: https://godoc.org/go.uber.org/zap
 	Copyright (c) 2016-2022 Uber Technologies, Inc.
-	Copyright (c) 2016 Uber Technologies, Inc.
-	Copyright (c) 2017 Uber Technologies, Inc.
-	Copyright (c) 2018 Uber Technologies, Inc.
-	Copyright (c) 2019 Uber Technologies, Inc.
-	Copyright (c) 2020 Uber Technologies, Inc.
-	Copyright (c) 2021 Uber Technologies, Inc.
-	Copyright (c) 2022 Uber Technologies, Inc.
-	Copyright (c) "*" Uber Technologies, Inc.")			# everything's cool			;;
-gregjones/httpcache 20180514-snapshot-9cad4c34 github:gregjones/httpcache:9cad4c3443a7200dd6400aef47183728de563a38
+gregjones/httpcache 20180514-snapshot-9cad4c34 github:gregjones/httpcache:9cad4c3443a7200dd6400aef47183728de563a38: https://github.com/gregjones/httpcache
 	Copyright Â© 2012 Greg Jones (greg.jones@gmail.com)
-	copyright goauth2 authors: https://code.google.com/p/goauth2)func cloneRequest(r *http.Request) *http.Request {	// shallow copy of the struct	r2 := new(http.Request)	*r2 = *r	// deep copy of the 
-groupcache 20210331-snapshot-41bb18bf github:golang/groupcache:41bb18bfe9da5321badc438f91158cd790a33aa3
-	Copyright 2013 Google Inc.
-grpc-ecosystem/go-grpc-middleware v1.3.0 github:grpc-ecosystem/go-grpc-middleware:v1.3.0
-	Copyright 2016 Michal Witkowski. All Rights Reserved
+groupcache 20210331-snapshot-41bb18bf github:Golang/groupcache:41bb18bfe9da5321badc438f91158cd790a33aa3: https://github.com/golang/groupcache
+	Copyright 2012-2013 Google Inc.
+grpc-ecosystem/go-grpc-middleware v1.3.0 github:grpc-ecosystem/go-grpc-middleware:v1.3.0: https://github.com/grpc-ecosystem/go-grpc-middleware
+	Copyright 2016-2017 Michal Witkowski. All Rights Reserved
 	Copyright 2017 David Ackroyd. All Rights Reserved
-	Copyright 2017 Michal Witkowski. All Rights Reserved
-	Copyright (c) Improbable Worlds Ltd, All Rights Reserved
-grpc-ecosystem/go-grpc-prometheus v1.2.0 github:grpc-ecosystem/go-grpc-prometheus:v1.2.0
+grpc-ecosystem/go-grpc-prometheus v1.2.0 github:grpc-ecosystem/go-grpc-prometheus:v1.2.0: https://github.com/grpc-ecosystem/go-grpc-prometheus
 	Copyright 2016 Michal Witkowski. All Rights Reserved
-grpc-gateway v2.7.0 github:grpc-ecosystem/grpc-gateway:v2.7.0
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors.  All rights reserved
-	Copyright (c) 2015, Gengo, Inc.All rights reserved
-grpc-go v1.49.0 github:grpc/grpc-go:v1.49.0
-	Copyright 2014 gRPC authors.
-	Copyright 2015-2016 gRPC authors.
-	Copyright 2015 gRPC authors.
-	Copyright 2015 The gRPC Authors
-	Copyright 2016 gRPC authors.
-	Copyright 2017 gRPC authors.
-	Copyright 2018 gRPC authors.
-	Copyright 2018 The gRPC Authors
-	Copyright 2019 gRPC authors.
-	Copyright 2020 gRPC authors.
-	Copyright 2020 The gRPC Authors
-	Copyright 2021 gRPC authors.
-	Copyright 2022 gRPC authors.
-	Copyright 2022 gRPC authors.
-	Copyright 2022 The gRPC Authors
-	copyright message.not git grep -L "\(Copyright [0-9]\{4,\} gRPC authors\)\|DO NOT EDIT" -- '*.go'
-hashicorp-golang-lru v0.5.1 github:hashicorp/golang-lru:v0.5.1
-	copyright doctrines of fair use, fair dealing, or other     equivalents.
-ianlancetaylor/demangle 20181102-snapshot-5e5cf602 github:ianlancetaylor/demangle:5e5cf60278f657d30daa329dd0e7e893b6b8f027
-	Copyright 2015 The Go Authors. All rights reserved
+grpc-gateway v1.16.0 unknown: https://github.com/grpc-ecosystem/grpc-gateway
+	No Copyrights found
+grpc-gateway v2.7.0 github:grpc-ecosystem/GRPC-gateway:v2.7.0: https://github.com/grpc-ecosystem/grpc-gateway
+	Copyright (c) 2015 Gengo, Inc. All rights reserved
+	Copyright 2009-2010 The Go Authors. All rights reserved
+grpc-go v1.49.0 github:grpc/grpc-go:v1.49.0: https://github.com/grpc/grpc-go
+	Copyright 2014-2022 gRPC authors.
+	Copyright 2015, 2018, 2020, 2022 The gRPC Authors
+hashicorp-golang-lru v0.5.1 github:hashicorp/golang-lru:v0.5.1: https://github.com/hashicorp/golang-lru
+	No Copyrights found
+ianlancetaylor/demangle 20181102-snapshot-5e5cf602 github:ianlancetaylor/demangle:5e5cf60278f657d30daa329dd0e7e893b6b8f027: https://github.com/ianlancetaylor/demangle
 	Copyright (c) 2015 The Go Authors. All rights reserved
-jonboulle-clockwork v0.2.2 github:jonboulle/clockwork:v0.2.2
-	Copyright {yyyy
-jpillora-backoff 1.0.0 github:jpillora/backoff:v1.0.0
+	Copyright 2015 The Go Authors. All rights reserved
+inconshreveable/mousetrap v1.0.1 github:inconshreveable/mousetrap:v1.0.1: https://github.com/inconshreveable/mousetrap
+	No Copyrights found
+jonboulle-clockwork v0.2.2 github:jonboulle/clockwork:v0.2.2: https://github.com/jonboulle/clockwork
+	No Copyrights found
+josharian/intern v1.0.0 github:josharian/intern:v1.0.0: https://github.com/josharian/intern
+	Copyright (c) 2019 Josh Bleecher Snyder
+jpillora-backoff 1.0.0 github:jpillora/backoff:v1.0.0: https://github.com/jpillora/backoff
 	Copyright (c) 2017 Jaime Pillora
-jsoniter-go v1.1.12 github:json-iterator/go:v1.1.12
+jsoniter-go v1.1.12 github:json-iterator/go:v1.1.12: http://jsoniter.com/
 	Copyright (c) 2016 json-iterator
-jsonreference v0.20.0 github:go-openapi/jsonreference:v0.20.0
+jsonreference v0.20.0 github:go-openapi/jsonreference:v0.20.0: https://github.com/go-openapi/jsonreference
 	Copyright 2013 sigu-399 ( https://github.com/sigu-399 )
-jstemmer/go-junit-report v0.9.1 github:jstemmer/go-junit-report:v0.9.1
+jstemmer/go-junit-report v0.9.1 github:jstemmer/go-junit-report:v0.9.1: https://github.com/jstemmer/go-junit-report
 	Copyright (c) 2012 Joel Stemmer
-julienschmidt/httprouter v1.3.0 github:julienschmidt/httprouter:v1.3.0
+julienschmidt/httprouter v1.3.0 github:julienschmidt/httprouter:v1.3.0: https://github.com/julienschmidt/httprouter
+	Copyright (c) 2013 Julien Schmidt All rights reserved
 	Copyright 2009 The Go Authors.
 	Copyright 2013 Julien Schmidt. All rights reserved
-	Copyright (c) 2013, Julien SchmidtAll rights reserved
-k3s-io/klog v2.80.1-k3s1 github:k3s-io/klog:v2.80.1-k3s1
-	Copyright 2013 Google Inc. All Rights Reserved
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 Intel Coporation.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-k8s.io/code-generator v0.26.0 github:kubernetes/code-generator:v0.26.0
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
+k8s.io/code-generator v0.26.0 github:kubernetes/code-generator:v0.26.0: https://github.com/kubernetes/code-generator
 	Copyright (c) 2009 The Go Authors. All rights reserved
-	Copyright The Kubernetes Authors.
-kisielk-gotool v1.0.0 github:kisielk/gotool:v1.0.0
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
+	Copyright 2015-2021 The Kubernetes Authors.
+k8s.io/klog v2.80.1 github:kubernetes/klog:v2.80.1: https://github.com/kubernetes/klog
+	No Copyrights found
+k8s.io/kube-openapi 20221012-snapshot-172d655c github:kubernetes/kube-openapi:172d655c2280350c77cf05962948fc67ff043492: https://github.com/kubernetes/kube-openapi
+	No Copyrights found
+k8s.io/utils 20221128-snapshot-99ec85e7 github:kubernetes/utils:99ec85e7a44867095cdb6487884c9882372c819a: https://github.com/kubernetes/utils
+	No Copyrights found
+kisielk-gotool v1.0.0 github:kisielk/gotool:v1.0.0: https://github.com/kisielk/gotool
 	Copyright (c) 2009 The Go Authors. All rights reserved
 	Copyright (c) 2013 Kamil Kisiel <kamil@kamilkisiel.net>
-kr/pretty v0.3.0 github:kr/pretty:v0.3.0
+	Copyright 2011-2012, 2017 The Go Authors. All rights reserved
+kr/pretty v0.3.0 github:kr/pretty:v0.3.0: https://github.com/kr/pretty
 	Copyright 2012 Keith Rarick
-kubernetes/api v0.26.0 github:kubernetes/api:v0.26.0
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright The Kubernetes Authors.
-kubernetes/apiextensions-apiserver v0.26.0 github:kubernetes/apiextensions-apiserver:v0.26.0
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright The Kubernetes Authors.
-kubernetes/apimachinery v0.26.0 github:kubernetes/apimachinery:v0.26.0
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright (c) 2009 The Go Authors. All rights reserved
-	Copyright The Kubernetes Authors.
-kubernetes/apiserver v0.26.0 github:kubernetes/apiserver:v0.26.0
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright The Kubernetes Authors.
-kubernetes/component-base v0.26.0 github:kubernetes/component-base:v0.26.0
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2015 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright The Kubernetes Authors.
-kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33 github:kubernetes-sigs/apiserver-network-proxy:konnectivity-client/v0.0.33
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	copyright 2020 the kubernetes authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright The Kubernetes Authors.
-	Copyright {yyyy
-kubernetes-sigs/structured-merge-diff v4.2.3 github:kubernetes-sigs/structured-merge-diff:v4.2.3
+kubernetes/api v0.26.0 github:kubernetes/api:v0.26.0: https://github.com/kubernetes/api
+	Copyright 2015-2022 The Kubernetes Authors.
+kubernetes/apiextensions-apiserver v0.26.0 github:kubernetes/apiExtensions-apiserver:v0.26.0: https://github.com/kubernetes/apiextensions-apiserver
+	No Copyrights found
+kubernetes/apimachinery v0.26.0 github:kubernetes/apiMachinery:v0.26.0: https://github.com/kubernetes/apimachinery
+	No Copyrights found
+kubernetes/apiserver v0.26.0 github:kubernetes/APIServer:v0.26.0: https://github.com/kubernetes/apiserver
+	Copyright 2014-2022 The Kubernetes Authors.
+kubernetes/component-base v0.26.0 github:kubernetes/component-base:v0.26.0: https://github.com/kubernetes/component-base
+	Copyright 2014-2022 The Kubernetes Authors.
+kubernetes/kms v0.26.0 github:kubernetes/kms:v0.26.0: https://github.com/kubernetes/kms
+	No Copyrights found
+kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33 github:kubernetes-sigs/apiserver-network-proxy:konnectivity-client/v0.0.33: https://github.com/kubernetes-sigs/apiserver-network-proxy
+	Copyright 2017, 2019-2022 The Kubernetes Authors.
+kubernetes-sigs/structured-merge-diff v4.2.3 github:kubernetes-sigs/structured-merge-diff:v4.2.3: https://github.com/kubernetes-sigs/structured-merge-diff
+	Copyright (c) 2016 json-iterator
 	Copyright 2011-2016 Canonical Ltd.
 	Copyright 2014 Google Inc. All rights reserved
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright (c) 2016 json-iterator
-	Copyright {yyyy
-logfmt 20140226-snapshot-b84e30ac github:kr/logfmt:b84e30acd515aadc4b783ad4ff83aff3299bdfe0
-	Copyright 2010 The Go Authors. All rights reserved
+	Copyright 2018-2020 The Kubernetes Authors.
+logfmt 20140226-snapshot-b84e30ac github:kr/logfmt:b84e30acd515aadc4b783ad4ff83aff3299bdfe0: http://godoc.org/github.com/kr/logfmt
 	Copyright (C) 2013 Keith Rarick, Blake Mizerany
-martian v2.1.0 github:google/martian:v2.1.0
-	Copyright 2015 Google Inc. All rights reserved
-	copyright 2016 google inc. all rights reserved
-	Copyright 2016 Google Inc. All rights reserved
-	Copyright 2017 Google Inc. All rights reserved
-	Copyright 2018 Google Inc. All rights reserved
-martian v3.0.0 github:google/martian:v3.0.0
-	Copyright 2015 Google Inc. All rights reserved
-	copyright 2016 google inc. all rights reserved
-	Copyright 2016 Google Inc. All rights reserved
-	Copyright 2017 Google Inc. All rights reserved
-	Copyright 2018 Google Inc. All rights reserved
-matttproud-golang_protobuf_extensions v1.0.2 github:matttproud/golang_protobuf_extensions:v1.0.2
+	Copyright 2010 The Go Authors. All rights reserved
+mailru/easyjson v0.7.6 github:mailru/easyjson:v0.7.6: https://github.com/mailru/easyjson
+	Copyright (c) 2009 The Go Authors. All rights reserved
+	Copyright (c) 2016 Mail.Ru Group
+mapstructure v1.4.1 unknown: https://github.com/mitchellh/mapstructure
+	No Copyrights found
+martian v2.1.0 github:google/martian:v2.1.0: https://github.com/google/martian
+	copyright 2015-2018 google inc. all rights reserved
+martian v3.0.0 github:google/martian:v3.0.0: https://github.com/google/martian
+	Copyright 2015-2018 Google Inc. All rights reserved
+matttproud-golang_protobuf_extensions v1.0.2 github:matttproud/golang_protobuf_extensions:v1.0.2: https://github.com/matttproud/golang_protobuf_extensions
 	Copyright 2012 Matt T. Proud (matt.proud@gmail.com)
-	Copyright 2013 Matt T. Proud
-	Copyright 2016 Matt T. Proud
-	Copyright {yyyy
-mergo v0.3.6 github:imdario/mergo:v0.3.6
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2013 Dario Casta
-	Copyright 2014 Dario Casta
+	Copyright 2013, 2016 Matt T. Proud
+mergo v0.3.6 github:imdario/mergo:v0.3.6: https://github.com/imdario/mergo
 	Copyright (c) 2012 The Go Authors. All rights reserved
 	Copyright (c) 2013 Dario Casta
-mwitkow/go-conntrack 20190716-snapshot-2f068394 github:mwitkow/go-conntrack:2f068394615f73e460c2f3d2c158b0ad9321cadb
+	Copyright 2009 The Go Authors. All rights reserved
+	Copyright 2013-2014 Dario Casta
+moby/term 20220808-snapshot-39b0c02b github:moby/term:39b0c02b01ae42267247a54c2bd47c43672d3315: https://github.com/moby/term
+	No Copyrights found
+modern-go/concurrent 20180305-snapshot-bacd9c7e github:modern-go/concurrent:bacd9c7ef1dd9b15be4a9909b8ac7a4e313eec94: https://github.com/modern-go/concurrent
+	No Copyrights found
+modern-go/reflect2 v1.0.2 github:modern-go/reflect2:v1.0.2: https://github.com/modern-go/reflect2
+	No Copyrights found
+mwitkow/go-conntrack 20190716-snapshot-2f068394 github:mwitkow/go-conntrack:2f068394615f73e460c2f3d2c158b0ad9321cadb: https://github.com/mwitkow/go-conntrack
 	Copyright 2016 Michal Witkowski. All Rights Reserved
-	Copyright {yyyy
-natefinch/lumberjack v2.0.0 github:natefinch/lumberjack:v2.0.0
+natefinch/lumberjack v2.0.0 github:natefinCh/lumberjack:v2.0.0: https://github.com/natefinch/lumberjack
 	Copyright (c) 2014 Nate Finch
-niemeyer/pretty 20200227-snapshot-a10e7cae github:niemeyer/pretty:a10e7caefd8e0d600cea437f5c3613aeb1553d56
+niemeyer/pretty 20200227-snapshot-a10e7cae github:niemeyer/pretty:a10e7caefd8e0d600cea437f5c3613aeb1553d56: https://github.com/niemeyer/pretty
 	Copyright 2012 Keith Rarick
-onsi/ginkgo v2.6.0 github:onsi/ginkgo:v2.6.0
-	Copyright 2013 The Go Authors. All rights reserved
+NYTimes-gziphandler v1.1.1 unknown: https://github.com/NYTimes/gziphandler
+	No Copyrights found
+onsi/ginkgo v2.6.0 github:onsi/ginkgo:v2.6.0: https://github.com/onsi/ginkgo
 	Copyright (c) 2013-2014 Onsi Fakhouri
 	Copyright (c) 2016 Yasuhiro Matsumoto
-OpenCensus 0.2.1 github:census-instrumentation/opencensus-proto:v0.2.1
-	Copyright 2018, OpenCensus Authors
-	Copyright 2019, OpenCensus Authors
-open-telemetry/opentelemetry-go 1.10.0 github:open-telemetry/opentelemetry-go:v1.10.0
+	Copyright 2013 The Go Authors. All rights reserved
+OpenCensus 0.2.1 github:census-instrumentation/opencensus-proto:v0.2.1: https://opencensus.io/
+	Copyright 2018-2019 OpenCensus Authors
+open-telemetry/opentelemetry-go 1.10.0 github:open-telemetry/opentelemetry-go:v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	Copyright (c) 2006 Facebook
+	Copyright (c) 2006-2008 Alexander Chemeris Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 1. Redistribut
+	Copyright (C) 2006-2019 The Apache Software Foundation This product includes software developed at
+	Copyright (c) 2007 Thomas Porschberg <thomas@randspringer.de> Copying and distribution of this file, with or without modification, are permitted in any medium without royalty provided the copyright no
+	Copyright (c) 2008 Patrick Collison <patrick@collison.ie>
 	Copyright 2007 by Nathan C. Myers <ncm@cantrip.org>; some rights reserved.
 	Copyright 2012 Twitter, Inc
-	Copyright (c) 2006-2008 Alexander Chemeris
-	Copyright (C) 2006 - 2019, The Apache Software Foundation
-	Copyright (c) 2006- Facebook
-	Copyright (c) 2007 Thomas Porschberg <thomas@randspringer.de>
-	Copyright (c) 2008- Patrick Collison <patrick@collison.ie>
-	Copyright</key></dict></plist>`)
-	Copyright</key>	<string>1983-2021 Apple Inc.</string>	<key>ProductName</key>	<string>macOS</string>	<key>ProductUserVisibleVersion</key>	<string>11.3</string>	<key>ProductVersion</key>	<string>
-	Copyright The OpenTelemetry Authors
-pkg/errors v0.9.1 github:pkg/errors:v0.9.1
-	Copyright (c) 2015, Dave Cheney <dave@cheney.net>All rights reserved
-pmezard-go-difflib 1.0.0 github:pmezard/go-difflib:v1.0.0
-	Copyright (c) 2013, Patrick MezardAll rights reserved
-	Copyright (c) 2013, Patrick MezardAll rights reserved
-prometheus-client_model v0.3.0 github:prometheus/client_model:v0.3.0
-	Copyright 2012-2015 The Prometheus Authors
-prometheus-common v0.37.0 github:prometheus/common:v0.37.0
-	Copyright 2013 The Prometheus Authors
-	Copyright 2014 The Prometheus Authors
-	Copyright 2015 The Prometheus Authors
-	Copyright 2015 The Prometheus Authors
-	Copyright 2016 The Prometheus Authors
-	Copyright 2017 The Prometheus Authors
-	Copyright 2018 The Prometheus Authors
-	Copyright 2019 The Prometheus Authors
-	Copyright 2020 The Prometheus Authors
+	Copyright</key> <string>1983-2021 Apple Inc.</string> <key>ProductName</key> <string>macOS</string> <key>ProductUserVisibleVersion</key> <string>11.3</string> <key>ProductVersion</key> <string>11.3</s
+open-telemetry/opentelemetry-go exporters/otlp/internal/retry/v1.10.0 github:open-telemetry/opentelemetry-go:exporters/otlp/internal/retry/v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go exporters/otlp/otlptrace/otlptracegrpc/v1.10.0 github:open-telemetry/opentelemetry-go:exporters/otlp/otlptrace/otlptracegrpc/v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go exporters/otlp/otlptrace/v1.10.0 github:open-telemetry/opentelemetry-go:exporters/otlp/otlptrace/v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go metric/v0.31.0 github:open-telemetry/opentelemetry-go:metric/v0.31.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go sdk/v1.10.0 github:open-telemetry/opentelemetry-go:sdk/v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go trace/v1.10.0 github:open-telemetry/opentelemetry-go:trace/v1.10.0: https://github.com/open-telemetry/opentelemetry-go
+	No Copyrights found
+open-telemetry/opentelemetry-go-contrib instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0 github:open-telemetry/opentelemetry-go-contrib:instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0: https://pkg.go.dev/go.opentelemetry.io/contrib
+	No Copyrights found
+open-telemetry/opentelemetry-go-contrib instrumentation/net/http/otelhttp/v0.35.0 github:open-telemetry/opentelemetry-go-contrib:instrumentation/net/http/otelhttp/v0.35.0: https://pkg.go.dev/go.opentelemetry.io/contrib
+	No Copyrights found
+pkg/diff 20210226-snapshot-20ebb0f2 github:pkg/diff:20ebb0f2a09e612109b224b32f79370409108bcc: https://github.com/pkg/diff
+	No Copyrights found
+pkg/errors v0.9.1 github:pkg/errors:v0.9.1: https://github.com/pkg/errors
+	Copyright (c) 2015 Dave Cheney <dave@cheney.net> All rights reserved
+pmezard-go-difflib 1.0.0 github:pmezard/go-difflib:v1.0.0: https://github.com/pmezard/go-difflib
+	Copyright (c) 2013 Patrick Mezard All rights reserved
+prometheus-client_model v0.3.0 github:prometheus/client_model:v0.3.0: https://github.com/prometheus/client_model
+	Copyright 2012-2015 The Prometheus Authors This product includes software developed at
+prometheus-common v0.37.0 github:prometheus/common:v0.37.0: https://github.com/prometheus/common
+	Copyright (c) 2011 Open Knowledge Foundation Ltd. All rights reserved
+	Copyright 2013-2022 The Prometheus Authors
+	Copyright 2015 The Prometheus Authors This product includes software developed at
 	Copyright 2020 The Prometheus-operator Authors
-	Copyright 2021 The Prometheus Authors
-	Copyright 2022 The Prometheus Authors
-	Copyright (c) 2011, Open Knowledge Foundation Ltd.All rights reserved
-prometheus-procfs 0.8.0 github:prometheus/procfs:v0.8.0
-	Copyright 2014-2015 The Prometheus Authors
-	Copyright 2014 Prometheus Team
-	Copyright 2017 Prometheus Team
-	Copyright 2017 The Prometheus Authors
-	Copyright 2018 The Prometheus Authors
-	Copyright 2019 The Prometheus Authors
-	Copyright 2020 The Prometheus Authors
-	Copyright 2021 The Prometheus Authors
-	Copyright 2022 The Prometheus Authors
-	Copyright|generated  done}
-pty v1.1.1 github:kr/pty:v1.1.1
+prometheus-procfs 0.8.0 github:prometheus/procfs:v0.8.0: https://github.com/prometheus/procfs.git
+	Copyright 2014, 2017 Prometheus Team
+	Copyright 2014-2015 The Prometheus Authors This product includes software developed at
+	Copyright 2017-2022 The Prometheus Authors
+pty v1.1.1 github:kr/pty:v1.1.1: https://github.com/kr/pty
 	Copyright (c) 2011 Keith Rarick
-purell v1.1.1 github:PuerkitoBio/purell:v1.1.1
-	Copyright (c) 2012, Martin AngersAll rights reserved
-rogpeppe/go-internal v1.8.1 github:rogpeppe/go-internal:v1.8.1
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
-	Copyright 2016 The Go Authors. All rights reserved
-	Copyright 2017 The Go Authors. All rights reserved
-	Copyright 2018 The Go Authors. All rights reserved
-	Copyright 2019 The Go Authors. All rights reserved
+purell v1.1.1 github:puerkitobio/purell:v1.1.1: https://github.com/PuerkitoBio/purell
+	Copyright (c) 2012 Martin Angers All rights reserved
+robfig/cron v3.0.1 unknown: https://github.com/robfig/cron
+	No Copyrights found
+rogpeppe/go-internal v1.8.1 github:rogpeppe/go-internal:v1.8.1: http://github.com/rogpeppe/go-internal/
 	Copyright (c) 2018 The Go Authors. All rights reserved
+	Copyright 2010-2012, 2014, 2015-2019 The Go Authors. All rights reserved
 rsc/binaryregexp v0.2.0 github:rsc/binaryregexp:v0.2.0
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright 2010 The Go Authors. All rights reserved
-	Copyright 2011 The Go Authors. All rights reserved
-	Copyright 2012 The Go Authors. All rights reserved
-	Copyright 2013 The Go Authors. All rights reserved
-	Copyright 2014 The Go Authors. All rights reserved
-	Copyright 2015 The Go Authors. All rights reserved
 	Copyright (c) 2009 The Go Authors. All rights reserved
+	Copyright 2009-2015 The Go Authors. All rights reserved
 rsc/quote v3.1.0 github:rsc/quote:v3.1.0
-	Copyright 2018 The Go Authors. All rights reserved
 	Copyright (c) 2009 The Go Authors. All rights reserved
+	Copyright 2018 The Go Authors. All rights reserved
 rsc/sampler v1.3.0 github:rsc/sampler:v1.3.0
-	Copyright 2018 The Go Authors. All rights reserved
 	Copyright (c) 2009 The Go Authors. All rights reserved
-sigs.k8s.io/controller-runtime v0.14.1 github:kubernetes-sigs/controller-runtime:v0.14.1
-	Copyright 2014 The Kubernetes Authors.
-	Copyright 2016 The Kubernetes Authors.
-	Copyright 2017 The Kubernetes Authors.
-	Copyright 2018 The Kubernetes authors.
-	Copyright 2018 The Kubernetes Authors.
-	Copyright 2019 The Kubernetes Authors.
-	Copyright 2020 The Kubernetes Authors.
-	Copyright 2021 The Kubernetes Authors
-	Copyright 2021 The Kubernetes Authors.
-	Copyright 2022 The Kubernetes Authors.
-	Copyright {yyyy
-sigs.k8s.io/yaml v1.3.0 github:kubernetes-sigs/yaml:v1.3.0
+	Copyright 2018 The Go Authors. All rights reserved
+sigs.k8s.io/controller-runtime v0.14.1 github:kubernetes-sigs/controller-runtime:v0.14.1: https://github.com/kubernetes-sigs/controller-runtime
+	Copyright 2014, 2016-2022 The Kubernetes Authors.
+	Copyright 2021 The Kubernetes Authors package env
+	Copyright 2021 The Kubernetes Authors package main
+	Copyright 2021 The Kubernetes Authors package remote
+	Copyright 2021 The Kubernetes Authors package store
+	Copyright 2021 The Kubernetes Authors package versions
+	Copyright 2021 The Kubernetes Authors package workflows
+	Copyright 2021 The Kubernetes Authors package workflows_test
+sigs.k8s.io/json 20220713-snapshot-f223a00b github:kubernetes-sigs/json:f223a00ba0e27f539157f69f9c919c204ea7f40b: https://github.com/kubernetes-sigs/json
+	No Copyrights found
+sigs.k8s.io/yaml v1.3.0 github:kubernetes-sigs/yaml:v1.3.0: https://github.com/kubernetes-sigs/yaml
+	Copyright (c) 2012 The Go Authors. All rights reserved
+	Copyright (c) 2012-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above c
+	Copyright (c) 2013-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and distribute this software for any purpose with or without fee is hereby granted, provided that the above copy
+	Copyright (c) 2014 Sam Ghods
 	Copyright 2011-2016 Canonical Ltd.
 	Copyright 2013 The Go Authors. All rights reserved
-	Copyright (c) 2012-2016 Dave Collins <dave@davec.name>
-	Copyright (c) 2012 The Go Authors. All rights reserved
-	Copyright (c) 2013-2016 Dave Collins <dave@davec.name> * * Permission to use, copy, modify, and distribute this software for any * purpose with or without fee is hereby granted, provided that the a
-	Copyright (c) 2014 Sam Ghods
-	Copyright (c) 2015-2016 Dave Collins <dave@davec.name>
-	Copyright {yyyy
-spf13-cobra v1.6.0 github:spf13/cobra:v1.6.0
+Sirupsen/logrus v1.8.1 github:Sirupsen/logrUs:v1.8.1: https://github.com/Sirupsen/logrus
+	Copyright (c) 2012 Miki Tebeka <miki.tebeka@gmail.com>.
+	Copyright (c) 2014 Simon Eskildsen
+soheilhy/cmux v0.1.5 github:soheilhy/cmux:v0.1.5: https://github.com/soheilhy/cmux
+	Copyright 2016 The CMux Authors. All rights reserved
+spf13-cobra v1.6.0 github:spf13/cobra:v1.6.0: https://github.com/spf13/cobra
 	Copyright 2013-2022 The Cobra Authors
-stoewer/go-strcase v1.2.0 github:stoewer/go-strcase:v1.2.0
-	Copyright (c) 2017, Adrian Stoewer <adrian.stoewer@rz.ifi.lmu.de>
-	Copyright (c) 2017, A. Stoewer <adrian.stoewer@rz.ifi.lmu.de>// All rights reserved
-stretchr/objx v0.5.0 github:stretchr/objx:v0.5.0
-	Copyright 2011-2016 Canonical Ltd.
-	Copyright (c) 2006-2010 Kirill Simonov
+stoewer/go-strcase v1.2.0 github:stoewer/go-strcase:v1.2.0: https://github.com/stoewer/go-strcase
+	Copyright (c) 2017 A. Stoewer <adrian.stoewer@rz.ifi.lmu.de> All rights reserved
+	Copyright (c) 2017 Adrian Stoewer <adrian.stoewer@rz.ifi.lmu.de>
+stretchr/objx v0.5.0 github:stretchr/objx:v0.5.0: https://github.com/stretchr/objx
 	Copyright (c) 2006-2011 Kirill Simonov
 	Copyright (c) 2011-2019 Canonical Ltd
-	Copyright (c) 2012-2016 Dave Collins <dave@davec.name>
+	Copyright (c) 2012-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above c
 	Copyright (c) 2012-2020 Mat Ryer, Tyler Bunnell and contributors.
-	Copyright (c) 2013-2016 Dave Collins <dave@davec.name> * * Permission to use, copy, modify, and distribute this software for any * purpose with or without fee is hereby granted, provided that the a
-	Copyright (c) 2013, Patrick MezardAll rights reserved
+	Copyright (c) 2013 Patrick Mezard All rights reserved
+	Copyright (c) 2013-2016 Dave Collins <dave@davec.name> Permission to use, copy, modify, and distribute this software for any purpose with or without fee is hereby granted, provided that the above copy
 	Copyright (c) 2014 Stretchr, Inc.
-	Copyright (c) 2015-2016 Dave Collins <dave@davec.name>
 	Copyright (c) 2017-2018 objx contributors
-	copyright staring in 2011 when the project was ported over:
-swag v0.19.14 github:go-openapi/swag:v0.19.14
-	Copyright 2015 go-swagger maintainers
-uber-go/atomic v1.9.0 github:uber-go/atomic:v1.9.0
-	Copyright (c) 2016-2020 Uber Technologies, Inc.
-	Copyright (c) 2016 Uber Technologies, Inc.
-	Copyright (c) 2019 Uber Technologies, Inc.
-	Copyright (c) 2020-
-	Copyright (c) 2020-2021 Uber Technologies, Inc.
-	Copyright (c) 2020 Uber Technologies, Inc.
-	Copyright (c) 2021 Uber Technologies, Inc.
-urlesc 20170810-snapshot-de5bf2ad github:PuerkitoBio/urlesc:de5bf2ad457846296e2031421a34e2568e304e35
-	Copyright 2009 The Go Authors. All rights reserved
-	Copyright (c) 2012 The Go Authors. All rights reserved
-xgb 20160522-snapshot-27f12275 github:BurntSushi/xgb:27f122750802c950b2c869a5b63dafcf590ced95
-	Copyright          = 61	AtomNotice             = 62	AtomFontName           = 63	AtomFamilyName         = 64	AtomFullName           = 65	AtomCapHeight          = 66	AtomWmClass            = 67	A
-	Copyright (c) 2009 The XGB Authors. All rights reserved
-yaml for Go v3.0.1 github:go-yaml/yaml:v3.0.1
 	Copyright 2011-2016 Canonical Ltd.
-	Copyright (c) 2006-2010 Kirill Simonov
+	copyright staring in 2011 when the project was ported over: apic.go emitterc.go parserc.go readerc.go scannerc.go writerc.go yamlh.go yamlprivateh.go
+swag v0.19.14 github:go-openapi/swag:v0.19.14: https://github.com/go-openapi/swag
+	Copyright 2015 go-swagger maintainers
+tmc/grpc-websocket-proxy 20201229-snapshot-e5319fda github:tmc/grpc-websocket-proxy:e5319fda780223b9d4d06dba2059a26ebff67b8a: https://github.com/tmc/grpc-websocket-proxy
+	No Copyrights found
+uber-go/atomic v1.9.0 github:uber-go/atomic:v1.9.0: https://go.uber.org/atomic
+	Copyright (c) 2016-2021 Uber Technologies, Inc.
+urlesc 20170810-snapshot-de5bf2ad github:PuerkitoBio/urlesc:de5bf2ad457846296e2031421a34e2568e304e35: https://github.com/PuerkitoBio/urlesc
+	Copyright (c) 2012 The Go Authors. All rights reserved
+	Copyright 2009 The Go Authors. All rights reserved
+xgb 20160522-snapshot-27f12275 github:BurntSushi/xgb:27f122750802c950b2c869a5b63dafcf590ced95: https://github.com/BurntSushi/xgb
+	Copyright (c) 2009 The XGB Authors. All rights reserved
+xiang90-probing 20190116-snapshot-43a291ad github:xiang90/probing:43a291ad63a214a207fefbf03c7d9d78b703162b: https://github.com/xiang90/probing
+	No Copyrights found
+yaml for Go v2.4.0 unknown: https://github.com/go-yaml/yaml
+	No Copyrights found
+yaml for Go v3.0.1 github:go-YAML/YAML:v3.0.1: https://github.com/go-yaml/yaml
 	Copyright (c) 2006-2011 Kirill Simonov
 	Copyright (c) 2011-2019 Canonical Ltd
-	copyright staring in 2011 when the project was ported over:
-yuin/goldmark v1.2.1 github:yuin/goldmark:v1.2.1
+	Copyright 2011-2016 Canonical Ltd.
+	copyright staring in 2011 when the project was ported over: apic.go emitterc.go parserc.go readerc.go scannerc.go writerc.go yamlh.go yamlprivateh.go
+yuin/goldmark v1.2.1 github:yuin/goldmark:v1.2.1: https://github.com/yuin/goldmark
 	Copyright (c) 2019 Yusuke Inuzuka
-
 
 Licenses: 
 
 Apache License 2.0
-(btree v1.0.1, census-instrumentation/opencensus-go v0.22.4, client-go v0.26.0, client_golang 1.14.0, cncf/udpa 20191208-snapshot-269d4d46, CoreOS v0.3.0, envoyproxy/go-control-plane v0.9.4, envoyproxy/protoc-gen-validate v0.1.0, gengo 20220902-snapshot-c0856e24, github.com/go-logr/zapr v1.2.3, github.com/moby/spdystream v0.2.0, go-etcd 3.5.5, go-logr/logr v1.2.3, go-logr/stdr v1.2.2, go-openapi/jsonpointer v0.19.5, go-systemd v22.3.2, go.opentelemetry.io/proto otlp/v0.19.0, golang-mock v1.4.4, golang/appengine v1.6.7, golang/glog 20160125-snapshot-23def4e6, gomodules/jsonpatch v2.2.0, google-cloud-go bigquery/v1.8.0, google-cloud-go datastore/v1.1.0, google-cloud-go pubsub/v1.3.1, google-cloud-go storage/v1.10.0, google-cloud-go v0.65.0, google-gofuzz v1.1.0, google/cel-go v0.12.5, google/gnostic v0.5.7-v3refs, google/pprof 20210407-snapshot-94a9f03d, google/renameio v0.1.0, googleapis/go-genproto 20220502-snapshot-c8bf987b, gotest.tools v3.0.3, groupcache 20210331-snapshot-41bb18bf, grpc-ecosystem/go-grpc-middleware v1.3.0, grpc-ecosystem/go-grpc-prometheus v1.2.0, grpc-go v1.49.0, inconshreveable/mousetrap v1.0.1, jonboulle-clockwork v0.2.2, jsonreference v0.20.0, k3s-io/klog v2.80.1-k3s1, k8s.io/code-generator v0.26.0, kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33, kubernetes-sigs/structured-merge-diff v4.2.3, kubernetes/api v0.26.0, kubernetes/apiextensions-apiserver v0.26.0, kubernetes/apimachinery v0.26.0, kubernetes/apiserver v0.26.0, kubernetes/component-base v0.26.0, martian v2.1.0, martian v3.0.0, matttproud-golang_protobuf_extensions v1.0.2, moby/term 20220808-snapshot-39b0c02b, modern-go/concurrent 20180305-snapshot-bacd9c7e, modern-go/reflect2 v1.0.2, mwitkow/go-conntrack 20190716-snapshot-2f068394, NYTimes-gziphandler v1.1.1, open-telemetry/opentelemetry-go 1.10.0, open-telemetry/opentelemetry-go exporters/otlp/internal/retry/v1.10.0, open-telemetry/opentelemetry-go exporters/otlp/otlptrace/otlptracegrpc/v1.10.0, open-telemetry/opentelemetry-go exporters/otlp/otlptrace/v1.10.0, open-telemetry/opentelemetry-go metric/v0.31.0, open-telemetry/opentelemetry-go sdk/v1.10.0, open-telemetry/opentelemetry-go trace/v1.10.0, open-telemetry/opentelemetry-go-contrib instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0, open-telemetry/opentelemetry-go-contrib instrumentation/net/http/otelhttp/v0.35.0, OpenCensus 0.2.1, prometheus-client_model v0.3.0, prometheus-common v0.37.0, prometheus-procfs 0.8.0, sigs.k8s.io/controller-runtime v0.14.1, sigs.k8s.io/json 20220713-snapshot-f223a00b, sigs.k8s.io/yaml v1.3.0, soheilhy/cmux v0.1.5, spf13-cobra v1.6.0, swag v0.19.14, yaml for Go v2.4.0, yaml for Go v3.0.1)
+(btree v1.0.1, census-instrumentation/opencensus-go v0.22.4, client-go v0.26.0, client_golang 1.14.0, cncf/udpa 20191208-snapshot-269d4d46, CoreOS v0.3.0, envoyproxy/go-control-plane v0.9.4, envoyproxy/protoc-gen-validate v0.1.0, gengo 20220902-snapshot-c0856e24, github.com/go-logr/zapr v1.2.3, github.com/moby/spdystream v0.2.0, go-etcd api/v3.5.5, go-etcd client/pkg/v3.5.5, go-etcd client/v2.305.5, go-etcd client/v3.5.5, go-etcd pkg/v3.5.5, go-etcd raft/v3.5.5, go-etcd server/v3.5.5, go-logr/logr v1.2.3, go-logr/stdr v1.2.2, go-openapi/jsonpointer v0.19.5, go-systemd v22.3.2, go.opentelemetry.io/proto otlp/v0.19.0, golang-mock v1.4.4, golang/appengine v1.6.7, golang/glog 20160125-snapshot-23def4e6, gomodules/jsonpatch v2.2.0, google-cloud-go bigquery/v1.8.0, google-cloud-go datastore/v1.1.0, google-cloud-go pubsub/v1.3.1, google-cloud-go storage/v1.10.0, google-cloud-go v0.65.0, google-gofuzz v1.1.0, google/cel-go v0.12.5, google/gnostic v0.5.7-v3refs, google/pprof 20210407-snapshot-94a9f03d, google/renameio v0.1.0, googleapis/go-genproto 20220502-snapshot-c8bf987b, gotest.tools v3.0.3, groupcache 20210331-snapshot-41bb18bf, grpc-ecosystem/go-grpc-middleware v1.3.0, grpc-ecosystem/go-grpc-prometheus v1.2.0, grpc-go v1.49.0, inconshreveable/mousetrap v1.0.1, jonboulle-clockwork v0.2.2, jsonreference v0.20.0, k8s.io/code-generator v0.26.0, k8s.io/klog v2.80.1, k8s.io/kube-openapi 20221012-snapshot-172d655c, k8s.io/utils 20221128-snapshot-99ec85e7, kubernetes-sigs/apiserver-network-proxy konnectivity-client/v0.0.33, kubernetes-sigs/structured-merge-diff v4.2.3, kubernetes/api v0.26.0, kubernetes/apiextensions-apiserver v0.26.0, kubernetes/apimachinery v0.26.0, kubernetes/apiserver v0.26.0, kubernetes/component-base v0.26.0, kubernetes/kms v0.26.0, martian v2.1.0, martian v3.0.0, matttproud-golang_protobuf_extensions v1.0.2, moby/term 20220808-snapshot-39b0c02b, modern-go/concurrent 20180305-snapshot-bacd9c7e, modern-go/reflect2 v1.0.2, mwitkow/go-conntrack 20190716-snapshot-2f068394, NYTimes-gziphandler v1.1.1, open-telemetry/opentelemetry-go 1.10.0, open-telemetry/opentelemetry-go exporters/otlp/internal/retry/v1.10.0, open-telemetry/opentelemetry-go exporters/otlp/otlptrace/otlptracegrpc/v1.10.0, open-telemetry/opentelemetry-go exporters/otlp/otlptrace/v1.10.0, open-telemetry/opentelemetry-go metric/v0.31.0, open-telemetry/opentelemetry-go sdk/v1.10.0, open-telemetry/opentelemetry-go trace/v1.10.0, open-telemetry/opentelemetry-go-contrib instrumentation/google.golang.org/grpc/otelgrpc/v0.35.0, open-telemetry/opentelemetry-go-contrib instrumentation/net/http/otelhttp/v0.35.0, OpenCensus 0.2.1, prometheus-client_model v0.3.0, prometheus-common v0.37.0, prometheus-procfs 0.8.0, sigs.k8s.io/controller-runtime v0.14.1, sigs.k8s.io/json 20220713-snapshot-f223a00b, sigs.k8s.io/yaml v1.3.0, soheilhy/cmux v0.1.5, spf13-cobra v1.6.0, swag v0.19.14, yaml for Go v2.4.0, yaml for Go v3.0.1)
 
 Apache License
 Version 2.0, January 2004
@@ -1398,6 +1145,41 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
+
+---
+
+BSD 3-clause "New" or "Revised" License
+(kisielk-gotool v1.0.0)
+
+Copyright (c) 2009 The Go Authors. All rights reserved.
+
+   
+
+Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are
+    met:
+
+       * Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+       * Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following disclaimer
+    in the documentation and/or other materials provided with the
+    distribution.
+       * Neither the name of Google Inc. nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+    "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+    A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+    OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+    SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+    LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+    DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+    THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+    OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 ---
 
@@ -1841,7 +1623,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 ---
 
 BSD 3-clause "New" or "Revised" License
-(google/uuid v.1.1.2)
+(Googleuuid v.1.1.2)
 
 Copyright (c) 2009,2014 Google Inc. All rights reserved.
 
@@ -1981,39 +1763,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 ---
 
 BSD 3-clause "New" or "Revised" License
-(kisielk-gotool v1.0.0)
-
-License: BSD-3-clause
- All rights reserved.
- .
-
-Redistribution and use in source and binary forms, with or without
- modification, are permitted provided that the following conditions are
- met:
- 1. Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer.
- 2. Redistributions in binary form must reproduce the above copyright
-    notice, this list of conditions and the following disclaimer in the
-    documentation and/or other materials provided with the distribution.
- 3. Neither the name of the Google Inc. nor the names of its contributors
-    may be used to endorse or promote products derived from this
-    software without specific prior written permission.
- .
- THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
- ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS
- BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
- BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
-
----
-
-BSD 3-clause "New" or "Revised" License
 (rsc/binaryregexp v0.2.0, rsc/quote v3.1.0, rsc/sampler v1.3.0)
 
 Copyright (c) 2009 The Go Authors. All rights reserved.
@@ -2113,7 +1862,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 ---
 
 BSD 3-clause "New" or "Revised" License
-(antlr runtime/Go/antlr/v1.4.10, exp 20200223-snapshot-6cc2880d, fsnotify-fsnotify v1.6.0, github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61, glfw 20190408-snapshot-e6da0acd, glfw 20200222-snapshot-6f7a984d, Go support for Mobile devices 20190704-snapshot-d2bd2a29, Golang Protobuf v1.28.1, golang.org/x/crypto v0.1.0, golang.org/x/image 20190704-snapshot-cff245a6, golang.org/x/lint 20200301-snapshot-738671d3, golang.org/x/mod v0.6.0, golang.org/x/net 20221206-snapshot-1e63c2f0, golang.org/x/oauth2 20220223-snapshot-ee480838, golang.org/x/sync 20220722-snapshot-886fb937, golang.org/x/sys 0.3.0, golang.org/x/term v0.3.0, golang.org/x/time v0.3.0, golang.org/x/tools v0.2.0, golang.org/x/xerrors 20200804-snapshot-5ec99f83, golang/text v0.5.0, google/go-cmp v0.5.9, goproxy 20180725-snapshot-947c36da, grpc-gateway v2.7.0, pkg/diff 20210226-snapshot-20ebb0f2, prometheus-procfs 0.8.0, sigs.k8s.io/json 20220713-snapshot-f223a00b, xgb 20160522-snapshot-27f12275)
+(antlr runtime/Go/antlr/v1.4.10, dmitri.shuralyov.com/gpu/mtl 20190408-snapshot-666a9877, exp 20200223-snapshot-6cc2880d, fsnotify-fsnotify v1.6.0, github.com/munnerz/goautoneg 20191010-snapshot-a7dc8b61, glfw 20190408-snapshot-e6da0acd, glfw 20200222-snapshot-6f7a984d, Go support for Mobile devices 20190704-snapshot-d2bd2a29, Golang Protobuf v1.28.1, golang.org/x/crypto v0.1.0, golang.org/x/image 20190704-snapshot-cff245a6, golang.org/x/lint 20200301-snapshot-738671d3, golang.org/x/mod v0.6.0, golang.org/x/net 20221206-snapshot-1e63c2f0, golang.org/x/oauth2 20220223-snapshot-ee480838, golang.org/x/sys 0.3.0, golang.org/x/term v0.3.0, golang.org/x/time v0.3.0, golang.org/x/tools v0.2.0, golang.org/x/xerrors 20200804-snapshot-5ec99f83, golang/sync 20220722-snapshot-886fb937, golang/text v0.5.0, google/go-cmp v0.5.9, goproxy 20180725-snapshot-947c36da, grpc-gateway v2.7.0, pkg/diff 20210226-snapshot-20ebb0f2, prometheus-procfs 0.8.0, sigs.k8s.io/json 20220713-snapshot-f223a00b, xgb 20160522-snapshot-27f12275)
 
 Copyright (c) <YEAR>, <OWNER>
 All rights reserved.
@@ -2170,34 +1919,45 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE
 MIT License
 (josharian/intern v1.0.0)
 
-2020 Roger Shimizu <rosh@debian.org>
-License: Expat
-Comment: Debian packaging is licensed under the same terms as upstream
+MIT License
 
-License: Expat
+Copyright (c) 2019 Josh Bleecher Snyder
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- .
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- .
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE
 
 ---
 
 MIT License
-(Go Logrus v1.8.1)
+(mailru/easyjson v0.7.6)
+
+Copyright (c) 2016 Mail.Ru Group
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+
+---
+
+MIT License
+(Sirupsen/logrus v1.8.1)
 
 The MIT License (MIT)
 
@@ -2220,19 +1980,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE
-
----
-
-MIT License
-(mailru/easyjson v0.7.6)
-
-Copyright (c) 2016 Mail.Ru Group
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
 ---
 
@@ -2287,6 +2034,40 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE
+
+---
+
+MIT License
+(robfig/cron v3.0.1)
+
+Source: https://github.com/robfig/cron
+
+Files: *
+Copyright: 2012 Rob Figueiredo
+License: Expat
+
+Files: debian/*
+Copyright: 2016 Dmitry Smirnov <onlyjob@debian.org>
+License: Expat
+
+License: Expat
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+ this software and associated documentation files (the "Software"), to deal in
+ the Software without restriction, including without limitation the rights to
+ use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
 ---
 
@@ -2372,6 +2153,39 @@ SOFTWARE
 ---
 
 MIT License
+(jpillora-backoff 1.0.0)
+
+Files: *
+Copyright: 2017 Jaime Pillora
+License: Expat
+
+Files: debian/*
+Copyright: 2018 Dmitry Smirnov <onlyjob@debian.org>
+License: Expat
+
+License: Expat
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE
+
+---
+
+MIT License
 (go.uber.org/multierr v1.7.0)
 
 Copyright (c) 2017-2021 Uber Technologies, Inc.
@@ -2422,31 +2236,6 @@ OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
 OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
-
----
-
-MIT License
-(go humanize v1.0.0)
-
-Copyright (c) 2005-2008  Dustin Sallings <dustin@spy.net>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE
 
 ---
 
@@ -2544,6 +2333,41 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ---
 
 MIT License
+(go humanize v1.0.0)
+
+Source: https://github.com/dustin/go-humanize
+
+Files: *
+Copyright: 2005-2008 Dustin Sallings <dustin@spy.net>
+License: Expat
+
+Files: debian/*
+Copyright: 2016 Dmitry Smirnov <onlyjob@debian.org>
+License: Expat
+
+License: Expat
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE
+
+---
+
+MIT License
 (beorn7-perks v1.0.1)
 
 Copyright (C) 2013 Blake Mizerany
@@ -2572,25 +2396,25 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 MIT License
 (kr/pretty v0.3.0)
 
-License: Expat
+Copyright 2012 Keith Rarick
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- .
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
- .
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE
 
 ---
 
@@ -2618,33 +2442,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE
-
----
-
-MIT License
-(robfig/cron v3.0.1)
-
-Copyright (C) 2012 Rob Figueiredo
-All Rights Reserved.
-
-MIT LICENSE
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
 
 ---
 
@@ -2699,33 +2496,6 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
-
----
-
-MIT License
-(jpillora-backoff 1.0.0)
-
-The MIT License (MIT)
-
-Copyright (c) 2017 Jaime Pillora
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE
 
 ---
 

@@ -291,6 +291,29 @@ spec:
                     description: Resources is map of K8s resources(i.e GVK) to its
                       list of resources.
                     type: object
+                  skippedResources:
+                    additionalProperties:
+                      items:
+                        description: |-
+                          SkippedApplicationResource contains the K8s resource information along with
+                          a reason as to why a resource was skipped from the scope of an Application.
+                        properties:
+                          name:
+                            description: Name of the resource.
+                            type: string
+                          reason:
+                            description: |-
+                              Reason is the message indicating the reason
+                              to skip the resource.
+                            type: string
+                        required:
+                        - name
+                        type: object
+                      type: array
+                    description: |-
+                      SkippedResources is map of K8s resources(i.e GVK) to its list of resources
+                      that are skipped from being part of the application.
+                    type: object
                 type: object
             type: object
         type: object

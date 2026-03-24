@@ -47,7 +47,7 @@ spec:
 ---
 {{- if .Values.tls.server.enable }}
   {{- if or (eq .Values.tls.server.mode "ISSUER") (eq .Values.tls.server.mode "SELF_SIGNED")}}
-{{- $clusterName := .Values.tls.server.clusterName | required ".Values.tls.server.clusterName is required." -}}
+{{ $clusterName := .Values.tls.server.clusterName | required ".Values.tls.server.clusterName is required." -}}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
