@@ -1,12 +1,7 @@
 {{- if or (eq .Values.tls.webhook.mode "ISSUER") (eq .Values.tls.webhook.mode "SELF_SIGNED")}}
-  {{- $checkResource := lookup "v1" "Namespace" "" "kube-system" }}
-  {{- if not $checkResource }}
-    {{- /* Skip cert-manager validation in dry-run mode */}}
-  {{- else }}
-    {{- if not (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
-    {{- fail "cert-manager is required for provided tls mode but not installed in this cluster! To install visit https://cert-manager.io/docs/installation/helm/" }}
-    {{- end}}
-  {{- end }}
+  {{- if not (.Capabilities.APIVersions.Has "cert-manager.io/v1") }}
+  {{- fail "cert-manager is required for provided tls mode but not installed in this cluster! To install visit https://cert-manager.io/docs/installation/helm/" }}
+  {{- end}}
 {{- end}}
 
 

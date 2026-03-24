@@ -67,5 +67,5 @@ Create image pull secret
 Flag to enable service-auth - for internal use only
 */}}
 {{- define "chart.enableServiceAuth" -}}
-false
+true
 {{- end }}

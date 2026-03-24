@@ -72,6 +72,9 @@ spec:
                   elsewhere.
                   Required and immutable.
                 type: string
+                x-kubernetes-validations:
+                - message: ApplicationName is immutable for appProtectionPlan.dataservices.nutanix.com
+                  rule: self == oldSelf
               labels:
                 additionalProperties:
                   type: string
@@ -86,13 +89,13 @@ spec:
                 items:
                   type: string
                 type: array
+                x-kubernetes-validations:
+                - message: protectionPlanNames is immutable for appProtectionPlan.dataservices.nutanix.com
+                  rule: self == oldSelf
             required:
             - applicationName
             - protectionPlanNames
             type: object
-            x-kubernetes-validations:
-            - message: Spec is immutable for appProtectionPlan.dataservices.nutanix.com
-              rule: self == oldSelf
           status:
             description: AppProtectionPlanStatus defines the observed state of the
               AppProtectionPlan.

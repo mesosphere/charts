@@ -160,6 +160,9 @@ spec:
         - --webhookServerPort={{ .Values.schedulerWebhookService.port }}
         - --metricsBindAddress=:{{ .Values.deployment.jobScheduler.metricsBindAddress }}
         - --healthProbeBindAddress=:{{ .Values.deployment.jobScheduler.healthProbeBindAddress }}
+        {{- range .Values.config.jobSchedulerConfig.flags }}
+        - {{ . }}
+        {{- end }}
         command:
         - /manager
         {{- if .Values.jobScheduler.digest }}
