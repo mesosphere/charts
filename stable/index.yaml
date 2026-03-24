@@ -39248,6 +39248,43 @@ entries:
         - name: Nutanix Cloud Native Team
           email: cloudnative@nutanix.com
     apiVersion: v2
+    appVersion: 2.1.0
+    created: "2026-03-24T09:55:44.459198244Z"
+    description: Helm chart for Nutanix Data Services for Kubernetes (NDK). NDK provides
+      for application-centric data management services for containerized workloads
+      managed by Kubernetes.
+    digest: d972a79c9d4488d6ba4f46d85e64bc8ca8ff9a9cd01a604315e7e827851b59c3
+    home: https://github.com/nutanix-core/k8s-juno
+    icon: https://avatars2.githubusercontent.com/u/6165865?s=200&v=4
+    keywords:
+    - Nutanix
+    - Storage
+    - Volumes
+    - Files
+    - StorageClass
+    - RedHat
+    - CentOS
+    - Ubuntu
+    - Snapshot
+    - AppProtection
+    kubeVersion: '>= 1.26.0-0'
+    maintainers:
+    - email: cloudnative@nutanix.com
+      name: nutanix-cloud-native-bot
+    name: ndk
+    type: application
+    urls:
+    - https://mesosphere.github.io/charts/stable/ndk-2.1.0.tgz
+    version: 2.1.0
+  - annotations:
+      artifacthub.io/changes: |
+        - Initial release
+      artifacthub.io/containsSecurityUpdates: "true"
+      artifacthub.io/displayName: NDK
+      artifacthub.io/maintainers: |
+        - name: Nutanix Cloud Native Team
+          email: cloudnative@nutanix.com
+    apiVersion: v2
     appVersion: 2.0.0
     created: "2025-11-13T12:49:34.607267719Z"
     description: Helm chart for Nutanix Data Services for Kubernetes (NDK). NDK provides
@@ -43282,4 +43319,4 @@ entries:
     urls:
     - https://mesosphere.github.io/charts/stable/vsphere-csi-driver-1.0.0.tgz
     version: 1.0.0
-generated: "2026-02-20T06:44:21.382727872Z"
+generated: "2026-03-24T09:55:44.457417537Z"
