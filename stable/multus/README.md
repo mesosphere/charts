@@ -102,16 +102,16 @@ The image tag follows this priority order:
    - Set `image.tag` to override everything
    ```yaml
    image:
-     tag: "v4.2.2-custom"
+     tag: "v4.2.4-custom"
    ```
 
 2. **Base version with suffix** (default):
    - Uses Chart.AppVersion + image.suffix
-   - Default: `v4.2.2-thick`
+   - Default: `v4.2.4-thick`
    ```yaml
    image:
      tag: ""  # Empty
-     suffix: "-thick"  # Results in: v4.2.2-thick
+     suffix: "-thick"  # Results in: v4.2.4-thick
    ```
 
 3. **Base version with different suffix**:
@@ -119,7 +119,7 @@ The image tag follows this priority order:
    ```yaml
    image:
      tag: ""  # Empty
-     suffix: "-thin"  # Results in: v4.2.2-thin
+     suffix: "-thin"  # Results in: v4.2.4-thin
    ```
 
 4. **Base version without suffix**:
@@ -127,7 +127,7 @@ The image tag follows this priority order:
    ```yaml
    image:
      tag: ""  # Empty
-     suffix: ""  # Results in: v4.2.2
+     suffix: ""  # Results in: v4.2.4
    ```
 
 ### For Cilium as Primary CNI:
