@@ -1,0 +1,59 @@
+agent:
+  namespaceOverride: ntnx-system
+  name: konnector-agent
+  port: 8080
+  image:
+    repository: docker.io/nutanix
+    name: konnector-agent
+    pullPolicy: IfNotPresent
+    tag: "1.4.0-rc.1"
+    privateRegistry: true
+    imageCredentials:
+      dockerconfig: replace_base64_encoded_creds
+  updateConfigInMin: 5
+  updateMetricsInMin: 360
+  config:
+    registration:
+      delete:
+        force: false
+    kubeconfig:
+      delete:
+        force: false
+
+pc:
+  port: 9440
+  insecure: true  # set this to false and provide PC's trust bundle if secure connection is required
+  endpoint: ""  # eg: ip or fqdn
+  username: ""  # eg: admin or any other user with Kubernetes Infrastructure provision role
+  password: ""
+  additionalTrustBundle: "" # eg: base64 encoded PEM bundle
+
+k8sClusterName: ""
+k8sDistribution: "CAPX"  # eg: CAPX or NKE or OCP or EKSA or NKP
+categoryMappings: ""  # "one or more comma separated key=value" eg: "key1=value1" or "key1=value1\,key2=value2"
+prismCredentialsSecretName: ""  # leave empty to let Helm create the Secret "<release-name>-prism-credentials"; set to an existing Secret name to use a pre-created Secret
+
+# Additional Trust Bundle ConfigMap settings for TLS certificate verification.
+createAdditionalTrustBundleConfigMap: false  # set this to true if you want to create the config map with additional trust bundle.
+additionalTrustBundleConfigMapName: "" # eg: ntnx-additional-trust-bundle-konnector-agent
+
+# RBAC ConfigMap settings for kubeconfig automation.
+# Flow-owned RBAC is provided via a ConfigMap created by Flow (no fallback ConfigMap).
+
+kubeconfigUpload:
+  # Enable/disable automatic kubeconfig upload feature
+  enabled: false
+  # Control plane endpoint (externally routable API server URL)
+  # Required for kubeconfig to work from outside the cluster
+  controlPlaneEndpoint: ""  # eg: https://10.0.0.1:6443 or https://k8s-api.example.com:6443
+  # Note: Token expiry is read from Flow ConfigMap data.kubeconfigExpiryDays (default: 30, range: 1-180 days)
+  # Namespace where Flow CNI creates the RBAC ConfigMap.
+  flowConfigMapNamespace: "flow-cni-system"
+  # Flow ConfigMap name (created and managed by Flow agent)
+  flowConfigMapName: "ntnx-flow-rbac-rules"
+  # Label selector for detecting Flow RBAC ConfigMap
+  flowLabelSelector: "ntnx.rbac.source=flow"
+  # ConfigMap key which contains the ClusterRole YAML definition
+  clusterRoleKey: "clusterrole.yaml"
+  # ServiceAccount name used for kubeconfig generation (created by k8s-agent)
+  serviceAccountName: "ntnx-flow-kubeconfig-sa"

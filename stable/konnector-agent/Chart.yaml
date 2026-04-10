@@ -1,0 +1,15 @@
+apiVersion: v2
+appVersion: 1.4.0-rc.1
+description: A Helm chart for onboarding a Kubernetes cluster created on Nutanix Infrastructure
+  onto Prism Central.
+icon: https://avatars2.githubusercontent.com/u/6165865?s=200&v=4
+maintainers:
+- email: cloudnative@nutanix.com
+  name: nutanix-cloud-native-bot
+- email: manoj.surudwad@nutanix.com
+  name: manoj-nutanix
+- email: vijayaraghavan.r@nutanix.com
+  name: vijayaraghavanr31
+name: konnector-agent
+type: application
+version: 1.4.0-rc.1

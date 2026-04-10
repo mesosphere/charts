@@ -43,7 +43,15 @@ spec:
       name: {{.Values.agent.name}}-config
   - name: pc-creds-volume
     secret:
-      secretName: {{ .Values.agent.name }}  
+      secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
+  {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+  - name: additional-trust-bundle-volume
+    configMap:
+      name: {{ .Values.additionalTrustBundleConfigMapName | default "ntnx-additional-trust-bundle-konnector-agent" }}
+      items:
+        - key: ca.crt
+          path: ca.crt
+  {{- end }}
   containers:
   - name: hook-predelete-container
     image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
@@ -58,6 +66,11 @@ spec:
       - name: pc-creds-volume
         mountPath: /certs
         readOnly: true
+      {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+      - name: additional-trust-bundle-volume
+        mountPath: /ca-certificate
+        readOnly: true
+      {{- end }}
       - name: predelete-config
         mountPath: /k8s-agent/config
         readOnly: true   
@@ -84,3 +97,4 @@ spec:
           - ALL    
   restartPolicy: Never
   terminationGracePeriodSeconds: 0  
+  
