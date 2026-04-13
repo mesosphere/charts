@@ -1,0 +1,236 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "required": [
+      "agent",
+      "pc",
+      "k8sClusterName",
+      "k8sDistribution",
+      "categoryMappings"
+    ],
+    "properties": {
+      "agent": {
+        "type": "object",
+        "required": [
+          "namespaceOverride",
+          "name",
+          "port",
+          "image",
+          "updateConfigInMin",
+          "updateMetricsInMin"
+        ],
+        "properties": {
+          "namespaceOverride": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "image": {
+            "type": "object",
+            "required": [
+              "repository",
+              "pullPolicy",
+              "tag"
+            ],
+            "properties": {
+              "repository": {
+                "type": "string"
+              },
+              "pullPolicy": {
+                "type": "string"
+              },
+              "tag": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "privateRegistry": {
+                "type": "boolean"
+              },
+              "imageCredentials": {
+                "type": "object",
+                "properties": {
+                  "dockerconfig": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "updateConfigInMin": {
+            "type": "integer"
+          },
+          "updateMetricsInMin": {
+            "type": "integer"
+          },
+          "config": {
+            "type": "object"
+          }
+        }
+      },
+      "pc": {
+        "type": "object",
+        "required": [
+          "port",
+          "insecure",
+          "endpoint"
+        ],
+        "properties": {
+          "port": {
+            "type": "integer"
+          },
+          "insecure": {
+            "type": "boolean"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "additionalTrustBundle": {
+            "type": "string"
+          }
+        }
+      },
+      "createAdditionalTrustBundleConfigMap": {
+        "type": "boolean"
+      },
+      "additionalTrustBundleConfigMapName": {
+        "type": "string"
+      },
+      "k8sClusterName": {
+        "type": "string"
+      },
+      "k8sDistribution": {
+        "type": "string",
+        "pattern": "^(CAPX|OCP|NKE|EKSA|NKP)$"
+      },
+      "categoryMappings": {
+        "type": "string"
+      },
+      "prismCredentialsSecretName": {
+        "type": "string"
+      },
+      "kubeconfigUpload": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "controlPlaneEndpoint": {
+            "type": "string"
+          },
+          "flowConfigMapNamespace": {
+            "type": "string",
+            "default": "flow-cni-system",
+            "description": "Namespace where Flow CNI creates the RBAC ConfigMap (ntnx-flow-rbac-rules)."
+          },
+          "flowConfigMapName": {
+            "type": "string"
+          },
+          "flowLabelSelector": {
+            "type": "string"
+          },
+          "clusterRoleKey": {
+            "type": "string"
+          },
+          "serviceAccountName": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "pc": {
+              "properties": {
+                "insecure": {
+                  "const": false
+                }
+              },
+              "required": [
+                "insecure"
+              ]
+            }
+          }
+        },
+        "then": {
+          "anyOf": [
+            {
+              "required": [
+                "additionalTrustBundleConfigMapName"
+              ],
+              "properties": {
+                "additionalTrustBundleConfigMapName": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            {
+              "required": [
+                "createAdditionalTrustBundleConfigMap",
+                "pc"
+              ],
+              "properties": {
+                "createAdditionalTrustBundleConfigMap": {
+                  "const": true
+                },
+                "pc": {
+                  "required": [
+                    "additionalTrustBundle"
+                  ],
+                  "properties": {
+                    "additionalTrustBundle": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+      ,
+      {
+        "if": {
+          "properties": {
+            "prismCredentialsSecretName": {
+              "maxLength": 0
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "pc": {
+              "required": [
+                "username",
+                "password"
+              ],
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+  
