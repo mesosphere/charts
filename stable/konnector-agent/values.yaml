@@ -6,7 +6,7 @@ agent:
     repository: docker.io/nutanix
     name: konnector-agent
     pullPolicy: IfNotPresent
-    tag: "1.4.0-rc.1"
+    tag: "1.4.0"
     privateRegistry: true
     imageCredentials:
       dockerconfig: replace_base64_encoded_creds
