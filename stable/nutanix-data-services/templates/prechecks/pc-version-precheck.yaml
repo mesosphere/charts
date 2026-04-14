@@ -1,0 +1,206 @@
+# Copyright 2025 Nutanix Inc
+
+{{- $checkResource := lookup "v1" "Namespace" "" "kube-system" }}
+{{- if not (eq (len $checkResource) 0) }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pc-version-check
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pc-version-check
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: [{{ .Values.config.secret.name | quote }}]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: pc-version-check
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pc-version-check
+subjects:
+  - kind: ServiceAccount
+    name: pc-version-check
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pc-version-check
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
+    "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      {{- if .Values.imageCredentials.imagePullSecretName }}
+      imagePullSecrets:
+        - name: {{ .Values.imageCredentials.imagePullSecretName }}
+      {{- end }}
+      serviceAccountName: pc-version-check
+      restartPolicy: Never
+      containers:
+      - name: pc-version-check
+        {{- if .Values.kubectl.digest }}
+        image: {{ .Values.kubectl.repository }}@{{ .Values.kubectl.digest }}
+        {{- else }}
+        image: {{ .Values.kubectl.repository }}:{{ .Values.kubectl.tag }}
+        {{- end }}
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: MIN_PC_VERSION
+          value: {{ .Values.prechecks.pcVersionCheck.minVersion | quote }}
+        - name: PC_SECRET_NAME
+          value: {{ .Values.config.secret.name | quote }}
+        - name: RELEASE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -eu
+
+          echo "Minimum required PC version: ${MIN_PC_VERSION}"
+          SECRET_JSON=$(kubectl get secret "${PC_SECRET_NAME}" -n "${RELEASE_NAMESPACE}" -o json)
+
+          AUTH_TYPE_B64=$(echo "${SECRET_JSON}" | jq -r '.data.auth_type // empty')
+          if [ -n "${AUTH_TYPE_B64}" ]; then
+            AUTH_TYPE=$(echo "${AUTH_TYPE_B64}" | base64 -d)
+            if [ "${AUTH_TYPE}" != "service-auth" ]; then
+              echo "ERROR: Unsupported auth_type '${AUTH_TYPE}' in secret '${PC_SECRET_NAME}'."
+              exit 1
+            fi
+            PC_HOST=$(echo "${SECRET_JSON}" | jq -r '.data.host' | base64 -d)
+            PC_PORT=$(echo "${SECRET_JSON}" | jq -r '.data.port' | base64 -d)
+            KEY_VALUE=$(echo "${SECRET_JSON}" | jq -r '.data.key_value' | base64 -d)
+            AUTH_MODE="service-auth"
+          else
+            KEY_B64=$(echo "${SECRET_JSON}" | jq -r '.data.key // empty')
+            if [ -z "${KEY_B64}" ]; then
+              echo "ERROR: Secret '${PC_SECRET_NAME}' is missing required 'key' field for basic-auth."
+              exit 1
+            fi
+            DECODED_KEY=$(echo "${KEY_B64}" | base64 -d)
+            PC_HOST=$(echo "${DECODED_KEY}" | cut -d: -f1)
+            PC_PORT=$(echo "${DECODED_KEY}" | cut -d: -f2)
+            PC_USER=$(echo "${DECODED_KEY}" | cut -d: -f3)
+            PC_PASS=$(echo "${DECODED_KEY}" | cut -d: -f4-)
+            AUTH_MODE="basic-auth"
+          fi
+
+          PC_URL="https://${PC_HOST}:${PC_PORT}/api/prism/v4.2/config/domain-managers"
+          echo "Querying ${AUTH_MODE} endpoint: ${PC_URL}"
+
+          BODY_FILE=/tmp/pc-version-check.body
+
+          if [ "${AUTH_MODE}" = "service-auth" ]; then
+            HTTP_CODE=$(curl -sk --connect-timeout 10 --max-time 30 \
+              -o "${BODY_FILE}" -w "%{http_code}" \
+              -H "X-Ntnx-Api-Key: ${KEY_VALUE}" \
+              "${PC_URL}") || {
+              echo "ERROR: Failed to connect to Prism Central at ${PC_HOST}:${PC_PORT}."
+              exit 1
+            }
+          else
+            HTTP_CODE=$(curl -sk --connect-timeout 10 --max-time 30 \
+              -o "${BODY_FILE}" -w "%{http_code}" \
+              -u "${PC_USER}:${PC_PASS}" \
+              "${PC_URL}") || {
+              echo "ERROR: Failed to connect to Prism Central at ${PC_HOST}:${PC_PORT}."
+              exit 1
+            }
+          fi
+          HTTP_BODY=$(cat "${BODY_FILE}")
+
+          if [ "${HTTP_CODE}" != "200" ]; then
+            echo "ERROR: Prism Central API returned HTTP ${HTTP_CODE}."
+            if [ "${HTTP_CODE}" = "401" ] || [ "${HTTP_CODE}" = "403" ]; then
+              echo "Authentication failed. Please verify the credentials in secret '${PC_SECRET_NAME}'."
+            fi
+            exit 1
+          fi
+
+          RAW_VERSION=$(echo "${HTTP_BODY}" | jq -r '.data[0].config.buildInfo.version // empty')
+          if [ -z "${RAW_VERSION}" ]; then
+            echo "ERROR: Could not parse PC version from API response."
+            exit 1
+          fi
+
+          CLEAN_VERSION=$(echo "${RAW_VERSION}" | tr '[:upper:]' '[:lower:]' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+          echo "Detected PC version: ${CLEAN_VERSION}"
+
+          if [ "${CLEAN_VERSION}" = "master" ]; then
+            echo "Prism Central is running a 'master' build; skipping version comparison."
+            exit 0
+          fi
+
+          MIN_CLEAN_VERSION=$(echo "${MIN_PC_VERSION}" | tr '[:upper:]' '[:lower:]' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+
+          case "${CLEAN_VERSION}" in
+            pc.*) VERSION_NUM="${CLEAN_VERSION#pc.}" ;;
+            *)
+              echo "ERROR: Prism Central version '${RAW_VERSION}' is not in the expected 'pc.x.y' format."
+              exit 1
+              ;;
+          esac
+
+          case "${MIN_CLEAN_VERSION}" in
+            pc.*) MIN_VERSION_NUM="${MIN_CLEAN_VERSION#pc.}" ;;
+            *)
+              echo "ERROR: Minimum required PC version '${MIN_PC_VERSION}' is not in the expected 'pc.x.y' format."
+              exit 1
+              ;;
+          esac
+
+          MAJOR=$(echo "${VERSION_NUM}" | cut -d. -f1)
+          MINOR=$(echo "${VERSION_NUM}" | cut -d. -f2)
+          MIN_MAJOR=$(echo "${MIN_VERSION_NUM}" | cut -d. -f1)
+          MIN_MINOR=$(echo "${MIN_VERSION_NUM}" | cut -d. -f2)
+
+          case "${MAJOR}${MINOR}${MIN_MAJOR}${MIN_MINOR}" in
+            *[!0-9]*)
+              echo "ERROR: Version components are not numeric (detected='${RAW_VERSION}', minimum='${MIN_PC_VERSION}')."
+              exit 1
+              ;;
+          esac
+
+          if [ "${MAJOR}" -gt "${MIN_MAJOR}" ] || { [ "${MAJOR}" -eq "${MIN_MAJOR}" ] && [ "${MINOR}" -ge "${MIN_MINOR}" ]; }; then
+            echo "Prism Central version ${RAW_VERSION} meets the minimum requirement of ${MIN_PC_VERSION}."
+            exit 0
+          fi
+
+          echo "ERROR: Prism Central version '${RAW_VERSION}' is below the minimum required version ${MIN_PC_VERSION} for NDK."
+          echo "Please upgrade Prism Central to version >= ${MIN_PC_VERSION} before installing NDK."
+          exit 1
+{{- end }}
