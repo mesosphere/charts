@@ -1,12 +1,13 @@
 {{- if .Values.prometheus.enabled }}
+{{- $hookSAName := printf "%s-hook" (include "kube-prometheus-stack.fullname" .) }}
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+  name: {{ $hookSAName }}
   namespace: {{ $.Release.Namespace }}
   labels:
-    app: {{ template "kube-prometheus-stack.name" . }}-prometheus
+    app: {{ template "kube-prometheus-stack.name" . }}-hook
 {{ include "kube-prometheus-stack.labels" . | indent 4 }}
   annotations:
     helm.sh/hook: pre-install,pre-delete
@@ -53,7 +54,7 @@ roleRef:
   name: {{ template "kube-prometheus-stack.fullname" . }}-hook
 subjects:
   - kind: ServiceAccount
-    name: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+    name: {{ $hookSAName }}
     namespace: {{ $.Release.Namespace }}
 ---
 apiVersion: batch/v1
@@ -70,7 +71,7 @@ spec:
     metadata:
       name: {{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.jobName }}
     spec:
-      serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+      serviceAccountName: {{ $hookSAName }}
       {{- if .Values.prometheus.prometheusSpec.priorityClassName }}
       priorityClassName: {{ .Values.prometheus.prometheusSpec.priorityClassName }}
       {{- end }}
@@ -98,7 +99,7 @@ spec:
     metadata:
       name: cleanup-{{ .Release.Name }}-{{ .Values.mesosphereResources.hooks.prometheus.configmapName }}
     spec:
-      serviceAccountName: {{ template "kube-prometheus-stack.prometheus.serviceAccountName" . }}
+      serviceAccountName: {{ $hookSAName }}
       {{- if .Values.prometheus.prometheusSpec.priorityClassName }}
       priorityClassName: {{ .Values.prometheus.prometheusSpec.priorityClassName }}
       {{- end }}
