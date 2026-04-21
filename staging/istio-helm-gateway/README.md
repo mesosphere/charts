@@ -25,7 +25,7 @@ gateway:
   proxy:
     image: auto  # Default: auto-injected by Istio webhook
     # Or specify explicitly:
-    # image: docker.io/istio/proxyv2:1.23.6
+    # image: docker.io/istio/proxyv2:1.29.2
 ```
 
 **Note:** Using `image: auto` is the recommended approach as it ensures the proxy version matches your Istio control plane version.
@@ -38,7 +38,7 @@ helm install istio-helm-gateway . --namespace istio-gateway --create-namespace
 
 ## Version
 
-- Chart Version: 1.23.6
-- Istio Version: 1.23.6
+- Chart Version: 1.29.2
+- Istio Version: 1.29.2
 
 
