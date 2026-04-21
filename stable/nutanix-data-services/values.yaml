@@ -281,3 +281,8 @@ config:
     port: 2021
     # Enables or disables server reflection on the grpc server.
     enableServerReflection: true
+
+# Prechecks configuration
+prechecks:
+  pcVersionCheck:
+    minVersion: "pc.7.5"
