@@ -1,7 +1,7 @@
 apiVersion: v2
 name: istio-helm-istiod
-version: 1.24.0
-appVersion: 1.23.6
+version: 1.29.2
+appVersion: 1.29.2
 description: Helm chart for deploying Istio control plane (istiod) with monitoring
 keywords:
   - istio
@@ -14,7 +14,7 @@ maintainers:
   - name: rohitkumar0510
 dependencies:
   - name: istiod
-    version: 1.23.6
+    version: 1.29.2
     condition: istiod.enabled
   - name: grafana
     version: 1.1.0

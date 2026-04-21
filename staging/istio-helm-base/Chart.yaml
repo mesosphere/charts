@@ -1,7 +1,7 @@
 apiVersion: v2
 name: istio-helm-base
-version: 1.24.0
-appVersion: 1.23.6
+version: 1.29.2
+appVersion: 1.29.2
 description: Helm chart for deploying Istio base resources and CRDs
 keywords:
   - istio
@@ -14,5 +14,5 @@ maintainers:
   - name: rohitkumar0510
 dependencies:
   - name: base
-    version: 1.23.6
+    version: 1.29.2
     condition: base.enabled

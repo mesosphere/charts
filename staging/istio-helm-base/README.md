@@ -16,6 +16,6 @@ helm install istio-helm-base . --namespace istio-system --create-namespace
 
 ## Version
 
-- Chart Version: 1.23.6
-- Istio Version: 1.23.6
+- Chart Version: 1.29.2
+- Istio Version: 1.29.2
 

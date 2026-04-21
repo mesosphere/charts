@@ -6,7 +6,7 @@
 ztunnel:
   enabled: false
   hub: docker.io/istio
-  tag: 1.23.6
+  tag: 1.29.2
   variant: ""
   imagePullPolicy: IfNotPresent
   istioNamespace: istio-system
