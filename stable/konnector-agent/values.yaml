@@ -61,4 +61,3 @@ kubeconfigUpload:
   clusterRoleKey: "clusterrole.yaml"
   # ServiceAccount name used for kubeconfig generation (created by k8s-agent)
   serviceAccountName: "ntnx-flow-kubeconfig-sa"
-  
