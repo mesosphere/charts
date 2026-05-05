@@ -1,15 +1,33 @@
 apiVersion: v2
-appVersion: 1.4.0
-description: A Helm chart for onboarding a Kubernetes cluster created on Nutanix Infrastructure
-  onto Prism Central.
-icon: https://avatars2.githubusercontent.com/u/6165865?s=200&v=4
-maintainers:
-- email: cloudnative@nutanix.com
-  name: nutanix-cloud-native-bot
-- email: manoj.surudwad@nutanix.com
-  name: manoj-nutanix
-- email: vijayaraghavan.r@nutanix.com
-  name: vijayaraghavanr31
 name: konnector-agent
+description: A Helm chart for onboarding a Kubernetes cluster created on Nutanix Infrastructure onto Prism Central.
+
+# A chart can be either an 'application' or a 'library' chart.
+#
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+#
+# Library charts provide useful utilities or functions for the chart developer. They're included as
+# a dependency of application charts to inject those utilities and functions into the rendering
+# pipeline. Library charts do not define any templates and therefore cannot be deployed.
 type: application
-version: 1.4.0
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: replace_chart_version
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application. Versions are not expected to
+# follow Semantic Versioning. They should reflect the version the application is using.
+# It is recommended to use it with quotes.
+appVersion: "replace_chart_version"
+maintainers:
+  - name: nutanix-cloud-native-bot
+    email: cloudnative@nutanix.com
+  - name: manoj-nutanix
+    email: manoj.surudwad@nutanix.com
+  - name: vijayaraghavanr31
+    email: vijayaraghavan.r@nutanix.com
+
+icon: https://avatars2.githubusercontent.com/u/6165865?s=200&v=4

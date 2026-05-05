@@ -21,10 +21,10 @@ spec:
   - name: pc-creds-volume
     secret:
       secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
-  {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+  {{- if include "k8s-agent.shouldMountTrustBundle" . }}
   - name: additional-trust-bundle-volume
     configMap:
-      name: {{ .Values.additionalTrustBundleConfigMapName | default "ntnx-additional-trust-bundle-konnector-agent" }}
+      name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
       items:
         - key: ca.crt
           path: ca.crt
@@ -43,7 +43,7 @@ spec:
       - name: pc-creds-volume
         mountPath: /certs
         readOnly: true
-      {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+      {{- if include "k8s-agent.shouldMountTrustBundle" . }}
       - name: additional-trust-bundle-volume
         mountPath: /ca-certificate
         readOnly: true
@@ -71,3 +71,4 @@ spec:
           - ALL        
   restartPolicy: Never
   terminationGracePeriodSeconds: 0
+  
