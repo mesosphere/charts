@@ -33,7 +33,7 @@ pc:
 k8sClusterName: ""
 k8sDistribution: "CAPX"  # eg: CAPX or NKE or OCP or EKSA or NKP
 categoryMappings: ""  # "one or more comma separated key=value"
-                    # eg: "key1=value1" or "key1=value1\,key2=value2"
+                      # eg: "key1=value1" or "key1=value1\,key2=value2"
 prismCredentialsSecretName: ""  # leave empty to let Helm create the Secret
                                 # "<release-name>-prism-credentials"; set to an
                                 # existing Secret name to use a
@@ -61,10 +61,10 @@ kubeconfigUpload:
   enabled: false
   # Control plane endpoint (externally routable API server URL)
   # Required for kubeconfig to work from outside the cluster
-  controlPlaneEndpoint: ""  # eg: https://10.0.0.1:6443 or
-  # https://k8s-api.example.com:6443
-  # Note: Token expiry is read from Flow ConfigMap
-  # data.kubeconfigExpiryDays (default: 30, range: 1-180 days)
+  controlPlaneEndpoint: ""  # eg: https://10.0.0.1:6443
+  # or https://k8s-api.example.com:6443
+  # Note: Token expiry is read from Flow ConfigMap data.kubeconfigExpiryDays
+  # (default: 30, range: 1-180 days)
   # Namespace where Flow CNI creates the RBAC ConfigMap.
   flowConfigMapNamespace: "flow-cni-system"
   # Flow ConfigMap name (created and managed by Flow agent)
