@@ -32,12 +32,117 @@ metadata:
   name: {{ .Values.agent.name }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - '*'
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - namespaces
+      - pods
+      - persistentvolumes
+      - persistentvolumeclaims
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: [""]
+    resources:
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups: ["apps"]
+    resources:
+      - deployments
+    verbs:
+      - get
+      - list
+      - patch
+  - apiGroups: ["apps"]
+    resources:
+      - statefulsets
+      - daemonsets
+      - replicasets
+    verbs:
+      - get
+  - apiGroups: ["batch"]
+    resources:
+      - jobs
+    verbs:
+      - get
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+    verbs:
+      - list
+  - apiGroups: ["config.openshift.io"]
+    resources:
+      - infrastructures
+    verbs:
+      - get
+  - apiGroups: ["dataservices.nutanix.com"]
+    resources:
+      - applications
+      - applicationsnapshots
+    verbs:
+      - list
+  - apiGroups: [""]
+    resources:
+      - secrets
+      - configmaps
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - delete
+      - patch
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - patch
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+      - patch
+  - apiGroups: [""]
+    resources:
+      - serviceaccounts/token
+    verbs:
+      - create
+  - apiGroups: ["authorization.k8s.io"]
+    resources:
+      - selfsubjectaccessreviews
+    verbs:
+      - create
+  - apiGroups: ["networking.nutanix.com"]
+    resources:
+      - addressgroups
+      - applicationpolicies
+      - isolationpolicies
+      - ovninterconnects
+      - vpcfederations
+      - vpcs
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - update
+      - delete
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -92,7 +197,7 @@ spec:
           - name: pc-creds-volume
             mountPath: /certs
             readOnly: true
-          {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+          {{- if include "k8s-agent.shouldMountTrustBundle" . }}
           - name: additional-trust-bundle-volume
             mountPath: /ca-certificate
             readOnly: true
@@ -132,7 +237,7 @@ spec:
             - name: pc-creds-volume
               mountPath: /certs
               readOnly: true
-            {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+            {{- if include "k8s-agent.shouldMountTrustBundle" . }}
             - name: additional-trust-bundle-volume
               mountPath: /ca-certificate
               readOnly: true
@@ -194,21 +299,22 @@ spec:
         - name: pc-creds-volume
           secret:
             secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
-        {{- if or .Values.createAdditionalTrustBundleConfigMap (ne .Values.additionalTrustBundleConfigMapName "") }}
+        {{- if include "k8s-agent.shouldMountTrustBundle" . }}
         - name: additional-trust-bundle-volume
           configMap:
-            name: {{ .Values.additionalTrustBundleConfigMapName | default "ntnx-additional-trust-bundle-konnector-agent" }}
+            name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
             items:
               - key: ca.crt
                 path: ca.crt
         {{- end }}
 ---
-{{- if .Values.createAdditionalTrustBundleConfigMap }}
+{{- include "k8s-agent.validateTrustBundle" . }}
+{{- if include "k8s-agent.shouldCreateTrustBundleConfigMap" . }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.additionalTrustBundleConfigMapName | default "ntnx-additional-trust-bundle-konnector-agent" }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
+  namespace: {{ include "k8s-agent.namespace" . | quote }}
 data:
-  ca.crt: {{ required "Additional trust bundle is required" .Values.pc.additionalTrustBundle }}
+  ca.crt: {{ .Values.pc.additionalTrustBundle }}
 {{- end }}

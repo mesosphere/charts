@@ -6,7 +6,7 @@ agent:
     repository: docker.io/nutanix
     name: konnector-agent
     pullPolicy: IfNotPresent
-    tag: "1.4.0"
+    tag: "1.4.1"
     privateRegistry: true
     imageCredentials:
       dockerconfig: replace_base64_encoded_creds
@@ -22,11 +22,11 @@ agent:
 
 pc:
   port: 9440
-  insecure: true  # set this to false and provide PC's trust bundle if secure
-                    # connection is required
+  insecure: true  # set this to false and provide PC's trust
+                  # bundle if secure connection is required
   endpoint: ""  # eg: ip or fqdn
-  username: ""  # eg: admin or any other user with Kubernetes Infrastructure
-                  # provision role
+  username: ""  # eg: admin or any other user with Kubernetes
+                # Infrastructure provision role
   password: ""
   additionalTrustBundle: ""  # eg: base64 encoded PEM bundle
 
@@ -35,18 +35,26 @@ k8sDistribution: "CAPX"  # eg: CAPX or NKE or OCP or EKSA or NKP
 categoryMappings: ""  # "one or more comma separated key=value"
                       # eg: "key1=value1" or "key1=value1\,key2=value2"
 prismCredentialsSecretName: ""  # leave empty to let Helm create the Secret
-# "<release-name>-prism-credentials"; set to an existing
-# Secret name to use a pre-created Secret
+                                # "<release-name>-prism-credentials"; set to an
+                                # existing Secret name to use a
+                                # pre-created Secret
 
 # Additional Trust Bundle ConfigMap settings for TLS certificate verification.
-createAdditionalTrustBundleConfigMap: false  # set this to true if you want
-# to create the config map with additional trust bundle.
+# Behavior:
+#   - If additionalTrustBundle is provided: ConfigMap will be created
+# (if doesn't exist) or updated (if Helm-managed)
+#   - If additionalTrustBundle is empty and insecure=false:
+# Existing ConfigMap MUST exist (user-managed, not touched by Helm)
+#   - User-managed ConfigMaps (without "app.kubernetes.io/managed-by:
+# Helm" label)
+# are never modified by Helm
+#   - additionalTrustBundleConfigMapName is optional:
+# leave empty to use default "ntnx-additional-trust-bundle-konnector-agent"
 additionalTrustBundleConfigMapName: ""
-# eg: ntnx-additional-trust-bundle-konnector-agent
 
 # RBAC ConfigMap settings for kubeconfig automation.
-# Flow-owned RBAC is provided via a ConfigMap created by Flow
-# (no fallback ConfigMap).
+# Flow-owned RBAC is provided via a ConfigMap created
+# by Flow (no fallback ConfigMap).
 
 kubeconfigUpload:
   # Enable/disable automatic kubeconfig upload feature
