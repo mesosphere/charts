@@ -8,15 +8,18 @@ mutations:
   namespaceSelectorForProxy: {}
   # disable the following namespaces
   excludeNamespacesFromProxy: []
-  # Ship a default Assign mutation that sets pod-level
+  # Optional Assign mutation that sets pod-level
   # spec.securityContext.seccompProfile.type=RuntimeDefault on Pods that do not
   # already specify a seccompProfile. Mitigates the DirtyFrag CVE family
   # (CVE-2026-43284, CVE-2026-43500). A MustNotExist pathTest preserves any
   # explicit Unconfined / Localhost choice. Opt out per-namespace or per-pod by
   # setting the configured label (default kommander.d2iq.io/disable-default-seccomp)
   # to "true".
+  #
+  # Disabled by default so standalone consumers of the chart see no behaviour
+  # change on upgrade. Kommander opts in via its defaults ConfigMap.
   defaultSeccompProfile:
-    enabled: true
+    enabled: false
     optOutLabel: kommander.d2iq.io/disable-default-seccomp
 
 # Copied from gatekeeper values
