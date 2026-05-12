@@ -3,7 +3,7 @@
 # https://github.com/open-policy-agent/gatekeeper/blob/001f4c3f3155e19e26955356e7be24207c5d5ac4/apis/mutations/v1alpha1/assign_types.go#L40
 # also see usage of this []string here: https://github.com/open-policy-agent/gatekeeper/blob/6ceb3f486a0a4b4887526e982762e6857829843a/pkg/mutation/schema/schema.go#L39-L48
 ---
-apiVersion: mutations.gatekeeper.sh/v1beta1
+apiVersion: mutations.gatekeeper.sh/v1
 kind: Assign
 metadata:
   name: "pod-mutation-no-proxy"
@@ -31,7 +31,7 @@ spec:
 {{- end }}
 {{- if and (and .Values.mutations.podProxySettings.httpProxy .Values.mutations.enablePodProxy) (not .Values.disableMutation) }}
 ---
-apiVersion: mutations.gatekeeper.sh/v1beta1
+apiVersion: mutations.gatekeeper.sh/v1
 kind: Assign
 metadata:
   name: "pod-mutation-http-proxy"
@@ -59,7 +59,7 @@ spec:
 {{- end }}
 {{- if and (and .Values.mutations.podProxySettings.httpsProxy .Values.mutations.enablePodProxy) (not .Values.disableMutation) }}
 ---
-apiVersion: mutations.gatekeeper.sh/v1beta1
+apiVersion: mutations.gatekeeper.sh/v1
 kind: Assign
 metadata:
   name: "pod-mutation-https-proxy"
