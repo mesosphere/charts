@@ -1,0 +1,42 @@
+{{- if and .Values.mutations.defaultSeccompProfile.enabled (not .Values.disableMutation) }}
+apiVersion: mutations.gatekeeper.sh/v1
+kind: Assign
+metadata:
+  name: pod-seccomp-runtime-default
+  annotations:
+    metadata.gatekeeper.sh/title: "Default RuntimeDefault seccomp profile"
+    description: >-
+      Sets pod-level securityContext.seccompProfile to RuntimeDefault when unset.
+      Mitigates the DirtyFrag CVE family (CVE-2026-43284, CVE-2026-43500) by
+      ensuring all pods have a baseline syscall filter. Skipped when
+      seccompProfile is already set, or when the pod or its namespace carries
+      the label {{ .Values.mutations.defaultSeccompProfile.optOutLabel }}: "true".
+spec:
+  applyTo:
+    - groups: [""]
+      kinds: ["Pod"]
+      versions: ["v1"]
+  match:
+    scope: Namespaced
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaceSelector:
+      matchExpressions:
+        - key: {{ .Values.mutations.defaultSeccompProfile.optOutLabel }}
+          operator: NotIn
+          values: ["true"]
+    labelSelector:
+      matchExpressions:
+        - key: {{ .Values.mutations.defaultSeccompProfile.optOutLabel }}
+          operator: NotIn
+          values: ["true"]
+  location: "spec.securityContext.seccompProfile"
+  parameters:
+    pathTests:
+      - subPath: "spec.securityContext.seccompProfile"
+        condition: MustNotExist
+    assign:
+      value:
+        type: RuntimeDefault
+{{- end }}
