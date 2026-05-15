@@ -1,3 +1,5 @@
+# Created if cluster resources are not omitted
+{{- if or (eq .Values.global.resourceScope "all") (eq .Values.global.resourceScope "cluster") }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -8,6 +10,8 @@ metadata:
     istio.io/rev: {{ .Values.revision | default "default" }}
     install.operator.istio.io/owning-resource: {{ .Values.ownerName | default "unknown" }}
     operator.istio.io/component: "Cni"
+    app.kubernetes.io/name: {{ template "name" . }}
+    {{- include "istio.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -15,9 +19,9 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "name" . }}
-  namespace: {{ default .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}
 ---
-{{- if .Values.cni.repair.enabled }}
+{{- if .Values.repair.enabled }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -28,6 +32,8 @@ metadata:
     istio.io/rev: {{ .Values.revision | default "default" }}
     install.operator.istio.io/owning-resource: {{ .Values.ownerName | default "unknown" }}
     operator.istio.io/component: "Cni"
+    app.kubernetes.io/name: {{ template "name" . }}
+    {{- include "istio.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
   name: {{ template "name" . }}
@@ -38,7 +44,7 @@ roleRef:
   name: {{ template "name" . }}-repair-role
 {{- end }}
 ---
-{{- if .Values.cni.ambient.enabled }}
+{{- if .Values.ambient.enabled }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -49,6 +55,8 @@ metadata:
     istio.io/rev: {{ .Values.revision | default "default" }}
     install.operator.istio.io/owning-resource: {{ .Values.ownerName | default "unknown" }}
     operator.istio.io/component: "Cni"
+    app.kubernetes.io/name: {{ template "name" . }}
+    {{- include "istio.labels" . | nindent 4 }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "name" . }}
@@ -57,4 +65,5 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: {{ template "name" . }}-ambient
+{{- end }}
 {{- end }}

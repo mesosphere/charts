@@ -7,6 +7,13 @@ meshConfig:
   defaultConfig:
     proxyMetadata:
       ISTIO_META_ENABLE_HBONE: "true"
+  serviceScopeConfigs:
+    - servicesSelector:
+        matchExpressions:
+          - key: istio.io/global
+            operator: In
+            values: ["true"]
+      scope: GLOBAL
 global:
   variant: distroless
 pilot:
@@ -15,6 +22,3 @@ pilot:
 cni:
   ambient:
     enabled: true
-
-# Ztunnel doesn't use a namespace, so everything here is mostly for ztunnel
-variant: distroless

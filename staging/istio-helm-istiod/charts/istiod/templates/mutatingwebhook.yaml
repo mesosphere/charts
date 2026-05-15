@@ -1,7 +1,8 @@
+# TODO BML istiodRemote.injectionURL is invalid to set if `istiodRemote.enabled` is false, we should express that.
 {{- /* Core defines the common configuration used by all webhook segments */}}
 {{/* Copy just what we need to avoid expensive deepCopy */}}
 {{- $whv := dict
- "revision" .Values.revision
+"revision" .Values.revision
   "injectionPath" .Values.istiodRemote.injectionPath
   "injectionURL" .Values.istiodRemote.injectionURL
   "reinvocationPolicy" .Values.sidecarInjectorWebhook.reinvocationPolicy
@@ -34,6 +35,8 @@ a unique prefix to each. */}}
   reinvocationPolicy: "{{ .reinvocationPolicy }}"
   admissionReviewVersions: ["v1"]
 {{- end }}
+
+{{- if or (eq .Values.global.resourceScope "all") (eq .Values.global.resourceScope "cluster") }}
 {{- /* Installed for each revision - not installed for cluster resources ( cluster roles, bindings, crds) */}}
 {{- if not .Values.global.operatorManageWebhooks }}
 apiVersion: admissionregistration.k8s.io/v1
@@ -50,6 +53,12 @@ metadata:
     operator.istio.io/component: "Pilot"
     app: sidecar-injector
     release: {{ .Release.Name }}
+    app.kubernetes.io/name: "istiod"
+    {{- include "istio.labels" . | nindent 4 }}
+{{- if $.Values.sidecarInjectorWebhookAnnotations }}
+  annotations:
+{{ toYaml $.Values.sidecarInjectorWebhookAnnotations | indent 4 }}
+{{- end }}
 webhooks:
 {{- /* Set up the selectors. First section is for revision, rest is for "default" revision */}}
 
@@ -154,5 +163,6 @@ webhooks:
       operator: DoesNotExist
 {{- end }}
 
+{{- end }}
 {{- end }}
 {{- end }}
