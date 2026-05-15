@@ -36,6 +36,7 @@ excluded-charts:
   - object-bucket-claim # chart is only a plain OBC object
   - postgres-cluster # Requires installing postgres-operator chart as well
   - konnector-agent
+  - istio-helm-base # CRD ownership migration from crds/ to templates breaks ct upgrade test
   - istio-helm-gateway # Requires installing dependencies like istiod-helm-istiod
   - istio-helm-istiod # Requires installing dependencies like istiod-helm-base
   - nutanix-data-services # Requires installing - PC endpoint and credentials, CSI driver and CSI snapshot
