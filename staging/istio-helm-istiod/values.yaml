@@ -11,12 +11,11 @@ global:
 # Istiod component configuration
 istiod:
   enabled: true
-  pilot:
-    autoscaleEnabled: true
-    autoscaleMin: 2
-    autoscaleMax: 2
-    cni:
-      enabled: true
+  autoscaleEnabled: true
+  autoscaleMin: 2
+  autoscaleMax: 2
+  cni:
+    enabled: true
 
 # Grafana dashboards
 grafana:
