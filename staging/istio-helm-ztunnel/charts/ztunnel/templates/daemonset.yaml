@@ -1,11 +1,13 @@
+{{- if or (eq .Values.resourceScope "all") (eq .Values.resourceScope "namespace") }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: ztunnel
+  name: {{ include "ztunnel.release-name" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-{{- template "istio-labels" -}}
-{{ with .Values.labels -}}{{ toYaml . | nindent 4}}{{ end }}
+    app.kubernetes.io/name: ztunnel
+    {{- include "istio.labels" . | nindent 4}}
+    {{ with .Values.labels -}}{{ toYaml . | nindent 4}}{{ end }}
   annotations:
 {{- if .Values.revision }}
     {{- $annos := set $.Values.annotations "istio.io/rev" .Values.revision }}
@@ -14,10 +16,10 @@ metadata:
     {{- .Values.annotations | toYaml | nindent 4 }}
 {{- end }}
 spec:
+  {{- with .Values.updateStrategy }}
   updateStrategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   selector:
     matchLabels:
       app: ztunnel
@@ -27,6 +29,8 @@ spec:
         sidecar.istio.io/inject: "false"
         istio.io/dataplane-mode: none
         app: ztunnel
+        app.kubernetes.io/name: ztunnel
+        {{- include "istio.labels" . | nindent 8}}
 {{ with .Values.podLabels -}}{{ toYaml . | indent 8 }}{{ end }}
       annotations:
         sidecar.istio.io/inject: "false"
@@ -44,14 +48,11 @@ spec:
       affinity:
 {{ toYaml .Values.affinity | trim | indent 8 }}
 {{- end }}
-      serviceAccountName: ztunnel
+      serviceAccountName: {{ include "ztunnel.release-name" . }}
+{{- if .Values.tolerations }}
       tolerations:
-        - effect: NoSchedule
-          operator: Exists
-        - key: CriticalAddonsOnly
-          operator: Exists
-        - effect: NoExecute
-          operator: Exists
+{{ toYaml .Values.tolerations | trim | indent 8 }}
+{{- end }}
       containers:
       - name: istio-proxy
 {{- if contains "/" .Values.image }}
@@ -71,7 +72,10 @@ spec:
         imagePullPolicy: {{ . }}
 {{- end }}
         securityContext:
-          allowPrivilegeEscalation: false
+          # K8S docs are clear that CAP_SYS_ADMIN *or* privileged: true
+          # both force this to `true`: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+          # But there is a K8S validation bug that doesn't propery catch this: https://github.com/kubernetes/kubernetes/issues/119568
+          allowPrivilegeEscalation: true
           privileged: false
           capabilities:
             drop:
@@ -107,6 +111,14 @@ spec:
           value: {{ .Values.xdsAddress }}
         {{- else }}
           value: istiod{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}.{{ .Values.istioNamespace }}.svc:15012
+        {{- end }}
+        {{- if .Values.logAsJson }}
+        - name: LOG_FORMAT
+          value: json
+        {{- end}}
+        {{- if .Values.network }}
+        - name: NETWORK
+          value: {{ .Values.network | quote }}
         {{- end }}
         - name: RUST_LOG
           value: {{ .Values.logLevel | quote }}
@@ -144,11 +156,20 @@ spec:
           value: "{{ $value }}"
         {{- end }}
         {{- end }}
+        - name: ZTUNNEL_CPU_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+              divisor: "1"
         {{- with .Values.env }}
         {{- range $key, $val := . }}
         - name: {{ $key }}
           value: "{{ $val }}"
         {{- end }}
+        {{- end }}
+        {{- if .Values.peerCaCrl.enabled }}
+        - name: CRL_PATH
+          value: "/var/run/secrets/istio/crl/ca-crl.pem"
         {{- end }}
         volumeMounts:
         - mountPath: /var/run/secrets/istio
@@ -159,6 +180,11 @@ spec:
           name: cni-ztunnel-sock-dir
         - mountPath: /tmp
           name: tmp
+        {{- if .Values.peerCaCrl.enabled }}
+        - mountPath: /var/run/secrets/istio/crl
+          name: crl-volume
+          readOnly: true
+        {{- end }}
         {{- with .Values.volumeMounts }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -173,15 +199,31 @@ spec:
               expirationSeconds: 43200
               audience: istio-ca
       - name: istiod-ca-cert
+        {{- if eq (.Values.env).ENABLE_CLUSTER_TRUST_BUNDLE_API true }}
+        projected:
+          sources:
+          - clusterTrustBundle:
+              name: istio.io:istiod-ca:{{ .Values.trustBundleName | default "root-cert" }}
+              path: root-cert.pem
+        {{- else }}
         configMap:
-          name: istio-ca-root-cert
+          name: {{ .Values.trustBundleName | default "istio-ca-root-cert" }}
+        {{- end }}
       - name: cni-ztunnel-sock-dir
         hostPath:
           path: /var/run/ztunnel
-          type: DirectoryOrCreate # ideally this would be a socket, but ztunnel may not have started yet.
+          type: DirectoryOrCreate # ideally this would be a socket, but istio-cni may not have started yet.
       # pprof needs a writable /tmp, and we don't have that thanks to `readOnlyRootFilesystem: true`, so mount one
       - name: tmp
         emptyDir: {}
+      {{- if .Values.peerCaCrl.enabled }}
+      # Optional CRL volume - mounts istio-ca-crl ConfigMap if it exists
+      - name: crl-volume
+        configMap:
+          name: istio-ca-crl
+          optional: true
+      {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 6}}
       {{- end }}
+{{- end }}

@@ -256,8 +256,8 @@ spec:
                 # Step 3c: Rollout restart deployments to remove sidecars
                 log "\tRestarting deployments to remove sidecars..."
                 
-                # Find deployments that have pods with istio-proxy sidecar
-                PODS_WITH_SIDECAR=$(kubectl get pods -n "$ns" -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.spec.containers[*].name}{"\n"}{end}' 2>/dev/null | grep "istio-proxy" | awk '{print $1}' || echo "")
+                # Find deployments that have pods with istio-proxy sidecar (check both containers and initContainers for native sidecars)
+                PODS_WITH_SIDECAR=$(kubectl get pods -n "$ns" -o jsonpath='{range .items[*]}{.metadata.name}{" "}{.spec.containers[*].name}{" "}{.spec.initContainers[*].name}{"\n"}{end}' 2>/dev/null | grep "istio-proxy" | awk '{print $1}' || echo "")
                 
                 if [ -z "$PODS_WITH_SIDECAR" ]; then
                   log "\t\tNo pods with istio-proxy sidecar found"
@@ -313,4 +313,3 @@ spec:
               log "Ambient mode migration completed successfully!"
               exit 0
 {{- end }}
-

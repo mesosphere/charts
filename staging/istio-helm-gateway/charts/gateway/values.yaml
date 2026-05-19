@@ -1,6 +1,6 @@
-# "defaults" is a workaround for Helm limitations. Users should NOT set ".defaults" explicitly, but rather directly set the fields internally.
-# For instance, instead of `--set defaults.foo=bar`, just set `--set foo=bar`.
-defaults:
+# "_internal_defaults_do_not_set" is a workaround for Helm limitations. Users should NOT set "._internal_defaults_do_not_set" explicitly, but rather directly set the fields internally.
+# For instance, instead of `--set _internal_defaults_do_not_set.foo=bar``, just set `--set foo=bar`.
+_internal_defaults_do_not_set:
   # Name allows overriding the release name. Generally this should not be set
   name: ""
   # revision declares which revision this gateway is a part of
@@ -47,6 +47,10 @@ defaults:
   service:
     # Type of service. Set to "None" to disable the service entirely
     type: LoadBalancer
+    # Set to a specific ClusterIP, or "" for automatic assignment
+    clusterIP: ""
+    # Additional labels to add to the service selector
+    selectorLabels: {}
     ports:
     - name: status-port
       port: 15021
@@ -69,6 +73,8 @@ defaults:
     ipFamilies: []
     ## Whether to automatically allocate NodePorts (only for LoadBalancers).
     # allocateLoadBalancerNodePorts: false
+    ## Set LoadBalancer class (only for LoadBalancers).
+    # loadBalancerClass: ""
 
   resources:
     requests:
@@ -89,8 +95,33 @@ defaults:
   # Pod environment variables
   env: {}
 
+  # Use envVarFrom to define full environment variable entries with complex sources,
+  # such as valueFrom.secretKeyRef, valueFrom.configMapKeyRef. Each item must include a `name` and `valueFrom`.
+  #
+  # Example:
+  # envVarFrom:
+  #   - name: EXAMPLE_SECRET
+  #     valueFrom:
+  #       secretKeyRef:
+  #         name: example-name
+  #         key: example-key
+  envVarFrom: []
+
+  # Deployment Update strategy
+  strategy: {}
+  
+  # Sets the Deployment minReadySeconds value
+  minReadySeconds:
+  
+  # Optionally configure a custom readinessProbe. By default the control plane
+  # automatically injects the readinessProbe. If you wish to override that
+  # behavior, you may define your own readinessProbe here.
+  readinessProbe: {}
+
   # Labels to apply to all resources
-  labels: {}
+  labels:
+    # By default, don't enroll gateways into the ambient dataplane
+    "istio.io/dataplane-mode": none
 
   # Annotations to apply to all resources
   annotations: {}
@@ -117,6 +148,9 @@ defaults:
   # By default, the `podDisruptionBudget` is disabled (set to `{}`),
   # which means that no PodDisruptionBudget resource will be created.
   #
+  # The PodDisruptionBudget can be only enabled if autoscaling is enabled
+  # with minReplicas > 1 or if autoscaling is disabled but replicaCount > 1.
+  #
   # To enable the PodDisruptionBudget, configure it by specifying the
   # `minAvailable` or `maxUnavailable`. For example, to set the
   # minimum number of available replicas to 1, you can update this value as follows:
@@ -142,6 +176,7 @@ defaults:
   #
   podDisruptionBudget: {}
 
+  # Sets the per-pod terminationGracePeriodSeconds setting.
   terminationGracePeriodSeconds: 30
 
   # A list of `Volumes` added into the Gateway Pods. See
@@ -152,18 +187,28 @@ defaults:
   # https://kubernetes.io/docs/concepts/storage/volumes/.
   volumeMounts: []
 
+  # Inject initContainers into the Gateway Pods.
+  initContainers: []
+
+  # Inject additional containers into the Gateway Pods.
+  additionalContainers: []
+
   # Configure this to a higher priority class in order to make sure your Istio gateway pods
   # will not be killed because of low priority class.
   # Refer to https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   # for more detail.
   priorityClassName: ""
 
+  # Configure the lifecycle hooks for the gateway. See
+  # https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/.
+  lifecycle: {}
+
   # additional_gateways allows deploying multiple gateway instances (e.g. ingress,
   # egress, east-west) from a single Helm release, providing parity with the
   # multi-gateway support that was available in the deprecated Istio Operator.
   #
   # Each entry is deep-merged on top of the primary gateway configuration (the
-  # "defaults:" block above), so only the fields that differ need to be specified.
+  # "_internal_defaults_do_not_set:" block above), so only the fields that differ need to be specified.
   #
   # Example:
   #
@@ -184,3 +229,8 @@ defaults:
   #             protocol: TCP
   #
   additional_gateways: []
+
+  # When enabled, a default NetworkPolicy for gateways will be created
+  global:
+    networkPolicy:
+      enabled: false

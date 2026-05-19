@@ -3,20 +3,19 @@
 global:
   # Used by istiod templates as fallback when pilot.hub/tag not set
   hub: docker.io/istio
-  tag: 1.23.6
+  tag: 1.29.0
   imagePullPolicy: IfNotPresent
   istioNamespace: istio-system
+  priorityClassName: "dkp-critical-priority"
 
 # Istiod component configuration
 istiod:
   enabled: true
-  priorityClassName: "dkp-critical-priority"
-  pilot:
-    autoscaleEnabled: true
-    autoscaleMin: 2
-    autoscaleMax: 2
-    cni:
-      enabled: true
+  autoscaleEnabled: true
+  autoscaleMin: 2
+  autoscaleMax: 2
+  cni:
+    enabled: true
 
 # Grafana dashboards
 grafana:
@@ -34,3 +33,5 @@ prometheus-operator:
 security:
   enabled: true
   issuerName: kommander-ca
+  image: docker.io/mesosphere/kubectl
+  tag: v1.35.0-alpine
