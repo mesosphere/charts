@@ -1,0 +1,20 @@
+apiVersion: v2
+appVersion: v0.40.0
+description: 'A Helm chart that deploys a recurring etcd defragmentation CronJob on
+  kubeadm-managed Nutanix Kubernetes Platform (NKP) clusters. Uses the open-source
+  ahrtr/etcd-defrag tool, which supports leader-last defragmentation, cluster health
+  pre-checks, and threshold-based execution. '
+home: https://github.com/ahrtr/etcd-defrag
+keywords:
+- etcd
+- defragmentation
+- maintenance
+- nkp
+- nutanix
+maintainers:
+- name: harshjha-nuta
+name: nkp-etcd-maintenance
+sources:
+- https://github.com/ahrtr/etcd-defrag
+type: application
+version: 0.2.0

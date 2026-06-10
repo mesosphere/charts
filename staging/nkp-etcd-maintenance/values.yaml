@@ -1,0 +1,66 @@
+# ------------------------------------------------------------------
+# nkp-etcd-maintenance — default values
+# ------------------------------------------------------------------
+
+# -- Top-level toggle. Set to false to disable the CronJob entirely.
+defragmentation:
+  enabled: true
+
+  # -- Cron schedule (UTC). Default: 02:30 every day.
+  schedule: "30 2 * * *"
+
+  # -- Defrag is only triggered when this rule evaluates to true.
+  # Supported variables: dbQuotaUsage, dbSize, dbSizeInUse.
+  # See: https://github.com/ahrtr/etcd-defrag#defrag-rule
+  defragRule: "dbQuotaUsage > 0.5 || dbSize - dbSizeInUse > 200*1024*1024"
+
+  # -- etcd endpoint. For kubeadm clusters this is always localhost.
+  endpoint: "https://127.0.0.1:2379"
+
+  # -- Defrag all cluster members in a single run. Also enables the automatic
+  # cluster health pre-check — defrag is aborted if any member is unhealthy.
+  cluster: true
+
+  # -- Defragment the leader last. Internally maps to --move-leader in
+  # etcd-defrag v0.40.0 (the flag moves leadership away before acting on the
+  # current leader, achieving the same safety guarantee as "leader-last" ordering).
+  leaderLast: true
+
+  # -- Wait duration between consecutive per-member defrag operations.
+  # Gives the cluster time to stabilise between runs. Set to "0s" to disable.
+  waitBetweenDefrags: "1m"
+
+  # -- Automatically clear NOSPACE alarms after a successful defragmentation.
+  # Set to true only if you want the alarm cleared without manual review.
+  autoDisalarm: false
+
+  # -- Path on the host where kubeadm stores etcd PKI material.
+  etcdPkiHostPath: /etc/kubernetes/pki/etcd
+
+# -- Container image for the etcd-defrag tool.
+image:
+  repository: ghcr.io/ahrtr/etcd-defrag
+  tag: v0.40.0
+  pullPolicy: IfNotPresent
+
+# -- Image pull secrets (e.g. for air-gapped / private registry deployments).
+imagePullSecrets: []
+
+# -- Resource requests and limits for the defrag container.
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+# -- Number of successful and failed job history records to retain.
+successfulJobsHistoryLimit: 3
+failedJobsHistoryLimit: 3
+
+# -- Additional labels applied to all resources created by this chart.
+commonLabels: {}
+
+# -- Additional annotations applied to the CronJob.
+cronJobAnnotations: {}

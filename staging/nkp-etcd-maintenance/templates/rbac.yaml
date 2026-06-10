@@ -1,0 +1,64 @@
+{{- if .Values.defragmentation.enabled -}}
+# ------------------------------------------------------------------
+# ServiceAccount, ClusterRole, and ClusterRoleBinding for the
+# nkp-etcd-maintenance defragmentation CronJob.
+#
+# The ClusterRole is intentionally minimal: it only grants the ability
+# to create/patch/update Events so the job can record status information
+# in the cluster event stream without any broader privileges.
+# ------------------------------------------------------------------
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nkp-etcd-maintenance-sa
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nkp-etcd-maintenance-role
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+rules:
+  - apiGroups: ["", "events.k8s.io"]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nkp-etcd-maintenance-rolebinding
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nkp-etcd-maintenance-role
+subjects:
+  - kind: ServiceAccount
+    name: nkp-etcd-maintenance-sa
+    namespace: kube-system
+{{- end }}

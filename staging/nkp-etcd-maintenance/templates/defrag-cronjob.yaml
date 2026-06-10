@@ -1,0 +1,129 @@
+{{- if .Values.defragmentation.enabled -}}
+# ------------------------------------------------------------------
+# CronJob: nkp-etcd-defrag
+#
+# Runs ahrtr/etcd-defrag on a schedule, restricted to control-plane
+# nodes via nodeSelector + toleration. hostNetwork is required so the
+# container can reach the etcd listener on 127.0.0.1:2379.
+# The kubeadm etcd PKI directory is mounted read-only so the tool can
+# authenticate with the etcd cluster.
+# ------------------------------------------------------------------
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nkp-etcd-defrag
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.cronJobAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.defragmentation.schedule | quote }}
+  # Prevent overlapping runs if a previous job is still in progress.
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nkp-etcd-maintenance
+            app.kubernetes.io/component: etcd-defrag
+            {{- with .Values.commonLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          serviceAccountName: nkp-etcd-maintenance-sa
+
+          # Required: share the host network namespace so the container can
+          # reach etcd on loopback (127.0.0.1:2379).
+          hostNetwork: true
+
+          # Never restart — if defrag fails, the CronJob will retry on the
+          # next scheduled run rather than looping indefinitely.
+          restartPolicy: Never
+
+          # ---- Scheduling constraints --------------------------------
+          # Run exclusively on control-plane nodes where etcd is present.
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+
+          tolerations:
+            # Tolerate the standard control-plane NoSchedule taint applied
+            # by kubeadm so the pod is actually schedulable on those nodes.
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+              effect: NoSchedule
+            # Also tolerate the legacy master taint for older clusters.
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+              effect: NoSchedule
+
+          # ---- Volumes -----------------------------------------------
+          volumes:
+            - name: etcd-pki
+              hostPath:
+                # kubeadm places etcd client certs here on every control-plane node.
+                path: {{ .Values.defragmentation.etcdPkiHostPath }}
+                type: Directory
+
+          # ---- Containers --------------------------------------------
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          containers:
+            - name: etcd-defrag
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+              args:
+                - --endpoints={{ .Values.defragmentation.endpoint }}
+                - --cacert={{ .Values.defragmentation.etcdPkiHostPath }}/ca.crt
+                - --cert={{ .Values.defragmentation.etcdPkiHostPath }}/server.crt
+                - --key={{ .Values.defragmentation.etcdPkiHostPath }}/server.key
+                {{- if .Values.defragmentation.cluster }}
+                - --cluster
+                {{- end }}
+                {{- if .Values.defragmentation.leaderLast }}
+                # --move-leader is the v0.40.0 equivalent of "leader-last" ordering:
+                # it transfers etcd leadership away before defragging the current leader.
+                - --move-leader
+                {{- end }}
+                {{- if .Values.defragmentation.autoDisalarm }}
+                - --auto-disalarm
+                {{- end }}
+                - --wait-between-defrags={{ .Values.defragmentation.waitBetweenDefrags }}
+                - --defrag-rule={{ .Values.defragmentation.defragRule }}
+
+              volumeMounts:
+                - name: etcd-pki
+                  mountPath: {{ .Values.defragmentation.etcdPkiHostPath }}
+                  readOnly: true
+
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+
+              # runAsUser: 0 is required. server.key on the host is 0600 root:root.
+              # The etcd-defrag image defines a non-root USER in its Dockerfile
+              # (distroless images typically use UID 65532). runAsNonRoot: false
+              # alone does NOT change the UID — it only disables Kubernetes'
+              # enforcement check. Without runAsUser: 0, the container still runs
+              # as the image's non-root UID and gets "permission denied" on the key.
+              # runAsUser: 0 overrides the image's USER instruction and forces UID 0.
+              securityContext:
+                runAsUser: 0
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+{{- end }}
