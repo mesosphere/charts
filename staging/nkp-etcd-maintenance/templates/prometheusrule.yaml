@@ -1,0 +1,268 @@
+{{- /*
+  --------------------------------------------------------------------------
+  PrometheusRule for nkp-etcd-maintenance (Phase Observability).
+
+  Discovery: the kube-prometheus-stack Prometheus CR's `ruleSelector` picks
+  this resource up by label (default selector matches `release: kube-prometheus-stack`).
+
+  Capability gate: the resource is rendered ONLY if the
+  monitoring.coreos.com/v1 PrometheusRule CRD is present on the cluster.
+  This makes `alerts.enabled: true` (the default) safe on clusters that
+  have not yet installed an observability stack — `helm install` succeeds,
+  and a later `helm upgrade` materialises the rule once the operator arrives.
+
+  See LLD-phase-observability.md §6-§9 for the full rationale.
+  --------------------------------------------------------------------------
+*/ -}}
+{{- if and .Values.alerts.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1/PrometheusRule") -}}
+{{- /*
+  Render-time invariant: warning threshold MUST be strictly less than the
+  critical threshold, otherwise the critical alert is silenced by the warning.
+  See LLD-phase-observability.md §8.1.
+*/ -}}
+{{- if not (lt (float64 .Values.alerts.thresholds.dbHighUsageRatio) (float64 .Values.alerts.thresholds.dbCriticalUsageRatio)) -}}
+  {{- fail "alerts.thresholds.dbHighUsageRatio must be strictly less than dbCriticalUsageRatio (LLD-phase-observability §8.1)" -}}
+{{- end }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nkp-etcd-maintenance
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: prometheus-rules
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.alerts.additionalLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    # ====================================================================
+    # Group A — etcd-health (always rendered)
+    # ====================================================================
+    - name: nkp-etcd-maintenance.etcd-health
+      rules:
+        {{- if .Values.alerts.rules.EtcdMemberNoLeader.enabled }}
+        # ----------------------------------------------------------------
+        # A1 — EtcdMemberNoLeader
+        # Fires when an etcd member has no leader. 1m `for:` avoids paging
+        # on benign elections (e.g., during defrag --move-leader); anything
+        # longer is a real outage.
+        # ----------------------------------------------------------------
+        - alert: EtcdMemberNoLeader
+          expr: etcd_server_has_leader{job="{{ .Values.alerts.etcdScrapeJobLabel }}"} == 0
+          for: {{ .Values.alerts.for.memberNoLeader }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdMemberNoLeader.severity | quote }}
+            component: etcd
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd member has no leader"
+            description: "Etcd member {{ `{{ $labels.instance }}` }} reports no leader for at least {{ .Values.alerts.for.memberNoLeader }}; cluster quorum may be lost."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcdmembernoleader"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+        {{- if .Values.alerts.rules.EtcdDbHighUsage.enabled }}
+        # ----------------------------------------------------------------
+        # A2 — EtcdDbHighUsage (warning tier)
+        # Fires when the etcd DB occupies > dbHighUsageRatio of its quota
+        # for > 1h. Approaching the quota means a NOSPACE alarm is the
+        # next failure mode; defrag should have reduced it by now.
+        # ----------------------------------------------------------------
+        - alert: EtcdDbHighUsage
+          expr: (etcd_mvcc_db_total_size_in_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"} / etcd_server_quota_backend_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"}) > {{ .Values.alerts.thresholds.dbHighUsageRatio }}
+          for: {{ .Values.alerts.for.dbHighUsage }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdDbHighUsage.severity | quote }}
+            component: etcd
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd DB > {{ .Values.alerts.thresholds.dbHighUsageRatio }} of quota on {{ `{{ $labels.instance }}` }}"
+            description: "Etcd member {{ `{{ $labels.instance }}` }} reports DB usage of {{ `{{ $value | humanizePercentage }}` }} of its quota, sustained for > {{ .Values.alerts.for.dbHighUsage }}. The daily defrag should have reduced this; investigate the defrag CronJob or tune `defragmentation.defragRule`."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcddbhighusage"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+        {{- if .Values.alerts.rules.EtcdDbCriticalUsage.enabled }}
+        # ----------------------------------------------------------------
+        # A3 — EtcdDbCriticalUsage (critical tier)
+        # Fires when DB usage > dbCriticalUsageRatio of quota for > 5m.
+        # At 90% the cluster is one bad write storm from NOSPACE; page on-call.
+        # ----------------------------------------------------------------
+        - alert: EtcdDbCriticalUsage
+          expr: (etcd_mvcc_db_total_size_in_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"} / etcd_server_quota_backend_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"}) > {{ .Values.alerts.thresholds.dbCriticalUsageRatio }}
+          for: {{ .Values.alerts.for.dbCriticalUsage }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdDbCriticalUsage.severity | quote }}
+            component: etcd
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd DB > {{ .Values.alerts.thresholds.dbCriticalUsageRatio }} of quota on {{ `{{ $labels.instance }}` }} — NOSPACE imminent"
+            description: "Etcd member {{ `{{ $labels.instance }}` }} reports DB usage of {{ `{{ $value | humanizePercentage }}` }} of its quota, sustained for > {{ .Values.alerts.for.dbCriticalUsage }}. A NOSPACE alarm and write halt is likely soon. Trigger a manual defrag and investigate write patterns immediately."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcddbcriticalusage"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+        {{- if .Values.alerts.rules.EtcdHighFragmentation.enabled }}
+        # ----------------------------------------------------------------
+        # A4 — EtcdHighFragmentation
+        # Fires when fragmentation (db_total - db_in_use) > threshold for
+        # > 1h. This is the SAME signal `defragmentation.defragRule`
+        # watches, but at a higher threshold — when it fires, defrag
+        # either didn't run or didn't help.
+        # ----------------------------------------------------------------
+        - alert: EtcdHighFragmentation
+          expr: (etcd_mvcc_db_total_size_in_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"} - etcd_mvcc_db_total_size_in_use_in_bytes{job="{{ .Values.alerts.etcdScrapeJobLabel }}"}) > {{ int64 .Values.alerts.thresholds.highFragmentationBytes }}
+          for: {{ .Values.alerts.for.highFragmentation }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdHighFragmentation.severity | quote }}
+            component: etcd
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd DB fragmentation > {{ div .Values.alerts.thresholds.highFragmentationBytes 1048576 }} MiB on {{ `{{ $labels.instance }}` }}"
+            description: "Etcd member {{ `{{ $labels.instance }}` }} has {{ `{{ $value | humanize1024 }}` }}B of fragmentation (free pages) sustained for > {{ .Values.alerts.for.highFragmentation }}. The daily defrag should have reclaimed this; check `kubectl get jobs -n kube-system | grep nkp-etcd-defrag` for failures."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcdhighfragmentation"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+    # ====================================================================
+    # Group B — defrag (always rendered)
+    # ====================================================================
+    - name: nkp-etcd-maintenance.defrag
+      rules:
+        {{- if .Values.alerts.rules.EtcdDefragJobFailed.enabled }}
+        # ----------------------------------------------------------------
+        # B1 — EtcdDefragJobFailed
+        # Fires when a defrag Job has failed pods. With backoffLimit: 0
+        # (set in Phase 2) any failed pod ⇒ Job in Failed state.
+        #
+        # NOTE: this fires until the CronJob's failedJobsHistoryLimit
+        # garbage-collects the failed Job (3 by default). That is the
+        # desired behaviour — operators want to know the latest run
+        # failed even if it failed hours ago. Alternative time-windowed
+        # query, for ops who prefer it:
+        #
+        #   kube_job_failed{...} == 1
+        #   unless on(namespace, job_name)
+        #   (time() - kube_job_status_start_time{...}) > 3600
+        # ----------------------------------------------------------------
+        - alert: EtcdDefragJobFailed
+          expr: sum by (namespace, job_name) (kube_job_status_failed{namespace="kube-system", job_name=~"nkp-etcd-defrag-.*"}) > 0
+          for: {{ .Values.alerts.for.defragJobFailed }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdDefragJobFailed.severity | quote }}
+            component: etcd-maintenance
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd defrag Job failed in {{ `{{ $labels.namespace }}` }}"
+            description: "Etcd defrag Job {{ `{{ $labels.job_name }}` }} in namespace {{ `{{ $labels.namespace }}` }} is in the Failed state. Investigate with `kubectl describe job {{ `{{ $labels.job_name }}` }} -n {{ `{{ $labels.namespace }}` }}` and `kubectl logs job/{{ `{{ $labels.job_name }}` }} -n {{ `{{ $labels.namespace }}` }}`."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcddefragjobfailed"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+        {{- if .Values.alerts.rules.EtcdDefragJobMissed.enabled }}
+        # ----------------------------------------------------------------
+        # B2 — EtcdDefragJobMissed
+        # Catches the case where the CronJob never fires (suspended,
+        # deleted, controller crash-loop). Pure failure-counting (B1)
+        # misses this.
+        # ----------------------------------------------------------------
+        - alert: EtcdDefragJobMissed
+          expr: time() - kube_cronjob_status_last_schedule_time{namespace="kube-system", cronjob="nkp-etcd-defrag"} > {{ int64 .Values.alerts.thresholds.missedScheduleSeconds }}
+          for: {{ .Values.alerts.for.defragJobMissed }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdDefragJobMissed.severity | quote }}
+            component: etcd-maintenance
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd defrag CronJob has not scheduled in > {{ div .Values.alerts.thresholds.missedScheduleSeconds 86400 }} day(s)"
+            description: "CronJob nkp-etcd-defrag in kube-system has not emitted a Job for > {{ `{{ $value | humanizeDuration }}` }}. Check `kubectl get cronjob nkp-etcd-defrag -n kube-system` for SUSPEND=True, missing/orphaned Job, or controller issues."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcddefragjobmissed"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+    {{- if .Values.snapshot.enabled }}
+    # ====================================================================
+    # Group C — snapshot (rendered only when snapshot.enabled=true)
+    # A defrag-only deployment must not get paged about a snapshot CronJob
+    # that doesn't exist.
+    # ====================================================================
+    - name: nkp-etcd-maintenance.snapshot
+      rules:
+        {{- if .Values.alerts.rules.EtcdSnapshotJobFailed.enabled }}
+        # ----------------------------------------------------------------
+        # C1 — EtcdSnapshotJobFailed (critical, not warning)
+        # Snapshot failures degrade recoverability; defrag failures only
+        # degrade performance. Page on-call.
+        # ----------------------------------------------------------------
+        - alert: EtcdSnapshotJobFailed
+          expr: sum by (namespace, job_name) (kube_job_status_failed{namespace="kube-system", job_name=~"nkp-etcd-snapshot-.*"}) > 0
+          for: {{ .Values.alerts.for.snapshotJobFailed }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdSnapshotJobFailed.severity | quote }}
+            component: etcd-maintenance
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd snapshot Job failed — recoverability degraded"
+            description: "Etcd snapshot Job {{ `{{ $labels.job_name }}` }} in namespace {{ `{{ $labels.namespace }}` }} is in the Failed state. The cluster's disaster-recovery posture is degraded until the next successful snapshot. Investigate with `kubectl describe job {{ `{{ $labels.job_name }}` }} -n {{ `{{ $labels.namespace }}` }}` and per-container logs (take-snapshot / verify-snapshot / upload)."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcdsnapshotjobfailed"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+
+        {{- if .Values.alerts.rules.EtcdSnapshotJobMissed.enabled }}
+        # ----------------------------------------------------------------
+        # C2 — EtcdSnapshotJobMissed (critical)
+        # Same severity rationale as C1.
+        # ----------------------------------------------------------------
+        - alert: EtcdSnapshotJobMissed
+          expr: time() - kube_cronjob_status_last_schedule_time{namespace="kube-system", cronjob="nkp-etcd-snapshot"} > {{ int64 .Values.alerts.thresholds.missedScheduleSeconds }}
+          for: {{ .Values.alerts.for.snapshotJobMissed }}
+          labels:
+            severity: {{ .Values.alerts.rules.EtcdSnapshotJobMissed.severity | quote }}
+            component: etcd-maintenance
+            {{- with .Values.alerts.defaultLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          annotations:
+            summary: "Etcd snapshot CronJob has not scheduled in > {{ div .Values.alerts.thresholds.missedScheduleSeconds 86400 }} day(s)"
+            description: "CronJob nkp-etcd-snapshot in kube-system has not emitted a Job for > {{ `{{ $value | humanizeDuration }}` }}. Check `kubectl get cronjob nkp-etcd-snapshot -n kube-system` for SUSPEND=True, missing/orphaned Job, or controller issues. No new backups are being created."
+            runbook_url: "{{ .Values.alerts.runbookBaseUrl }}#etcdsnapshotjobmissed"
+            {{- with .Values.alerts.defaultAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        {{- end }}
+    {{- end }}
+{{- end }}

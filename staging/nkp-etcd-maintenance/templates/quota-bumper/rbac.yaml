@@ -1,0 +1,94 @@
+{{- if .Values.quotaBumper.enabled -}}
+# ============================================================================
+# RBAC for the etcd-quota-bumper per-node Jobs.
+#
+# Distinct from the defrag/snapshot ServiceAccount because the quota-bumper
+# has a DIFFERENT, narrower trust profile:
+#
+#   * pods (get/list)         — read .status.containerStatuses[].containerID
+#                               and .status.containerStatuses[].ready on the
+#                               etcd static pod for THIS node so we can
+#                               detect the kubelet-driven restart (Ghost
+#                               Health Check mitigation). Also read
+#                               .spec.containers[0].command to assert the
+#                               new --quota-backend-bytes flag was applied.
+#
+#   * pods/exec (create)      — `kubectl exec etcd-<node> -- etcdctl …`
+#                               We deliberately do NOT bake etcdctl into the
+#                               Job image; we reuse the one already inside
+#                               the etcd pod itself, with its own PKI.
+#
+#   * nodes (get/list)        — only the orchestrator uses this from outside
+#                               the cluster, but the Job's SA carries the
+#                               same permission so a self-contained,
+#                               in-cluster orchestrator variant can be added
+#                               later without an RBAC change.
+#
+# NOT granted (by design):
+#   * any verbs on jobs / configmaps / secrets — the Job itself never
+#     mutates Kubernetes objects, only the host filesystem on its own
+#     node. Mutation rights stay with the orchestrator's (admin) kubeconfig.
+# ============================================================================
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: etcd-quota-bumper-sa
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: quota-bumper
+    app.kubernetes.io/part-of: nkp-etcd-maintenance
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: etcd-quota-bumper-role
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: quota-bumper
+    app.kubernetes.io/part-of: nkp-etcd-maintenance
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+  - apiGroups: [""]
+    resources: ["pods/exec"]
+    verbs: ["create"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: etcd-quota-bumper-rolebinding
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: quota-bumper
+    app.kubernetes.io/part-of: nkp-etcd-maintenance
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: etcd-quota-bumper-role
+subjects:
+  - kind: ServiceAccount
+    name: etcd-quota-bumper-sa
+    namespace: kube-system
+{{- end }}

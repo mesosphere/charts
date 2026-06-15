@@ -1,0 +1,320 @@
+{{- if .Values.snapshot.enabled -}}
+{{- /*
+  -----------------------------------------------------------------------
+  Render-time invariants (LLD-phase5.md §10).
+  Fail fast with a human-readable message instead of producing a CronJob
+  that mysteriously breaks at 03:00 UTC.
+  -----------------------------------------------------------------------
+*/ -}}
+{{- if .Values.snapshot.s3.enabled -}}
+  {{- if not .Values.snapshot.s3.endpoint -}}
+    {{- fail "snapshot.s3.enabled=true but snapshot.s3.endpoint is empty (LLD-phase5 §10)" -}}
+  {{- end -}}
+  {{- if not .Values.snapshot.s3.bucket -}}
+    {{- fail "snapshot.s3.enabled=true but snapshot.s3.bucket is empty (LLD-phase5 §10)" -}}
+  {{- end -}}
+  {{- if not .Values.snapshot.s3.credentialsSecret.name -}}
+    {{- fail "snapshot.s3.enabled=true but snapshot.s3.credentialsSecret.name is empty (LLD-phase5 §10)" -}}
+  {{- end -}}
+{{- end }}
+# ------------------------------------------------------------------
+# CronJob: nkp-etcd-snapshot
+#
+# Captures a consistent etcd snapshot, verifies its integrity, and
+# (optionally) uploads it to an S3-compatible object store.
+#
+# Pod structure (LLD-phase5.md §4 / §11):
+#   initContainer take-snapshot   → etcdctl snapshot save  → /snapshot/etcd.db
+#   initContainer verify-snapshot → etcdutl snapshot status /snapshot/etcd.db
+#   container     upload | noop   → mc cp /snapshot/etcd.db s3://...
+#
+# All three share an emptyDir; the snapshot never lands on the host FS.
+#
+# RESTORE IS MANUAL — see README "Manual Restore Runbook" and LLD-phase5 §13.
+# ------------------------------------------------------------------
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: nkp-etcd-snapshot
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-snapshot
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.cronJobAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: {{ .Values.snapshot.schedule | quote }}
+  # Never overlap with a previous run — two snapshots racing on the same
+  # emptyDir would produce a corrupt upload.
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.snapshot.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.snapshot.failedJobsHistoryLimit }}
+  startingDeadlineSeconds: {{ .Values.snapshot.startingDeadlineSeconds }}
+  jobTemplate:
+    spec:
+      # Don't retry within the same Job — failures are surfaced to the next
+      # cron tick. Retrying immediately against the same (presumably broken)
+      # endpoint achieves nothing. See LLD-phase5.md §12.
+      backoffLimit: 0
+      ttlSecondsAfterFinished: {{ .Values.snapshot.ttlSecondsAfterFinished }}
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: nkp-etcd-maintenance
+            app.kubernetes.io/component: etcd-snapshot
+            {{- with .Values.commonLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          # Reuse the defrag CronJob's SA. The snapshot Pod needs ZERO
+          # Kubernetes API access (LLD-phase5.md §8.3) so the SA's only
+          # permission (write events) is a strict superset of what we need.
+          serviceAccountName: nkp-etcd-maintenance-sa
+          # Required: share the host's network namespace so etcdctl can
+          # reach the etcd listener on 127.0.0.1:2379.
+          hostNetwork: true
+          # With hostNetwork the pod inherits the node's resolver by
+          # default. ClusterFirstWithHostNet lets the uploader still
+          # resolve in-cluster Services (e.g. an in-cluster S3 gateway).
+          dnsPolicy: ClusterFirstWithHostNet
+          # Never restart — surface failures to the next cron tick.
+          restartPolicy: Never
+
+          # ---- Scheduling: control-plane nodes only ------------------
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+          tolerations:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+              effect: NoSchedule
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+              effect: NoSchedule
+
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          # ---- Volumes ----------------------------------------------
+          volumes:
+            # Read-only mount of kubeadm's etcd PKI directory. Mounted ONLY
+            # into the take-snapshot init container — the verify and upload
+            # containers have no business seeing the etcd private key.
+            - name: etcd-pki
+              hostPath:
+                path: {{ .Values.snapshot.etcdPkiHostPath }}
+                type: Directory
+            # Pod-scoped scratch space for the snapshot file. Destroyed
+            # when the Pod terminates → no host-side cleanup needed.
+            - name: snapshot-buffer
+              emptyDir: {}
+            # Pod-scoped /tmp because all containers run with
+            # readOnlyRootFilesystem: true.
+            - name: tmp
+              emptyDir: {}
+
+          # ---- Init containers --------------------------------------
+          # Run in order. The main container does not start unless BOTH
+          # init containers exit 0. This is what enforces "verify before
+          # upload" — see LLD-phase5.md §4.1.
+          initContainers:
+            # --- 1/2: take the snapshot -----------------------------
+            - name: take-snapshot
+              image: "{{ .Values.snapshot.etcdImage.repository }}:{{ .Values.snapshot.etcdImage.tag }}"
+              imagePullPolicy: {{ .Values.snapshot.etcdImage.pullPolicy }}
+              # Invoke etcdctl directly with args; no shell needed. This
+              # works even on distroless etcd image tags that omit /bin/sh.
+              command: ["etcdctl"]
+              args:
+                - --endpoints={{ .Values.snapshot.endpoint }}
+                - --cacert={{ .Values.snapshot.etcdPkiHostPath }}/ca.crt
+                - --cert={{ .Values.snapshot.etcdPkiHostPath }}/server.crt
+                - --key={{ .Values.snapshot.etcdPkiHostPath }}/server.key
+                - snapshot
+                - save
+                - /snapshot/etcd.db
+              volumeMounts:
+                - name: etcd-pki
+                  mountPath: {{ .Values.snapshot.etcdPkiHostPath }}
+                  readOnly: true
+                - name: snapshot-buffer
+                  mountPath: /snapshot
+                - name: tmp
+                  mountPath: /tmp
+              resources:
+                {{- toYaml .Values.snapshot.etcdResources | nindent 16 }}
+              # runAsUser: 0 — same rationale as the defrag CronJob.
+              # server.key is 0600 root:root; the image's default USER (if
+              # any) cannot read it. Explicit UID 0 is required.
+              securityContext:
+                runAsUser: 0
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+
+            # --- 2/2: verify the snapshot ---------------------------
+            - name: verify-snapshot
+              image: "{{ .Values.snapshot.etcdImage.repository }}:{{ .Values.snapshot.etcdImage.tag }}"
+              imagePullPolicy: {{ .Values.snapshot.etcdImage.pullPolicy }}
+              # etcdutl (not etcdctl) is the supported tool for offline
+              # snapshot operations since etcd 3.5. Reads the file only;
+              # the mount is therefore readOnly.
+              command: ["etcdutl"]
+              args:
+                - snapshot
+                - status
+                - /snapshot/etcd.db
+                - -w
+                - table
+              volumeMounts:
+                - name: snapshot-buffer
+                  mountPath: /snapshot
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+              resources:
+                {{- toYaml .Values.snapshot.etcdResources | nindent 16 }}
+              securityContext:
+                runAsUser: 0
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+
+          # ---- Main container ---------------------------------------
+          containers:
+            {{- if .Values.snapshot.s3.enabled }}
+            # ===== upload mode =====================================
+            # Uploads the verified snapshot to the configured S3-compatible
+            # endpoint. Credentials come from a Kubernetes Secret via
+            # secretKeyRef — they are NEVER in values, in templates, or in
+            # any catalog override. See LLD-phase5.md §8.1.
+            - name: upload
+              image: "{{ .Values.snapshot.s3.uploader.image.repository }}:{{ .Values.snapshot.s3.uploader.image.tag }}"
+              imagePullPolicy: {{ .Values.snapshot.s3.uploader.image.pullPolicy }}
+              env:
+                # mc writes its alias config to $HOME/.mc/. Point HOME at
+                # the writable tmp emptyDir so readOnlyRootFilesystem can
+                # stay enabled.
+                - name: HOME
+                  value: /tmp
+                - name: CLUSTER_NAME
+                  value: {{ default .Release.Name .Values.snapshot.clusterName | quote }}
+                - name: S3_ENDPOINT
+                  value: {{ .Values.snapshot.s3.endpoint | quote }}
+                - name: S3_BUCKET
+                  value: {{ .Values.snapshot.s3.bucket | quote }}
+                - name: S3_PREFIX
+                  value: {{ .Values.snapshot.s3.prefix | quote }}
+                - name: S3_REGION
+                  value: {{ .Values.snapshot.s3.region | quote }}
+                # `on` enables path-style addressing (required by MinIO,
+                # Ceph RGW, Nutanix Objects); `off` uses virtual-host-style
+                # (AWS-style).
+                - name: S3_PATH_STYLE
+                  value: {{ ternary "on" "off" .Values.snapshot.s3.pathStyle | quote }}
+                - name: S3_INSECURE
+                  value: {{ .Values.snapshot.s3.insecureSkipTLSVerify | quote }}
+                # --- the SecretRef ---
+                # secretKeyRef (not envFrom.secretRef) so we only import
+                # the two named keys, not the entire Secret. LLD §8.1.
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.snapshot.s3.credentialsSecret.name | quote }}
+                      key: {{ .Values.snapshot.s3.credentialsSecret.accessKeyKey | quote }}
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.snapshot.s3.credentialsSecret.name | quote }}
+                      key: {{ .Values.snapshot.s3.credentialsSecret.secretKeyKey | quote }}
+              command: ["/bin/sh", "-euc"]
+              args:
+                - |
+                  # ------------------------------------------------------
+                  # Upload phase. Log lines follow the convention:
+                  #   [upload] phase=<name> key1=value1 key2=value2 ...
+                  # (logfmt-style). Greppable: `grep 'phase=success'`.
+                  # See LLD-phase-observability §5.2.
+                  # ------------------------------------------------------
+                  START_TS=$(date -u +%s)
+                  ISO_TS=$(date -u +%Y-%m-%dT%H-%M-%SZ)
+                  PREFIX=$(printf '%s' "${S3_PREFIX}" | sed 's:/*$::')
+                  KEY="${PREFIX}/${CLUSTER_NAME}-${ISO_TS}.db"
+
+                  INSECURE=""
+                  if [ "${S3_INSECURE}" = "true" ]; then
+                    INSECURE="--insecure"
+                  fi
+
+                  echo "[upload] phase=start ts=${ISO_TS} target_bucket=${S3_BUCKET} target_key=${KEY}"
+
+                  # Set the alias. mc's --path supports on|off|auto; we map
+                  # it from the chart's snapshot.s3.pathStyle boolean.
+                  echo "[upload] phase=alias-set endpoint=${S3_ENDPOINT} path-style=${S3_PATH_STYLE} api=S3v4"
+                  mc ${INSECURE} alias set target \
+                    "${S3_ENDPOINT}" \
+                    "${AWS_ACCESS_KEY_ID}" \
+                    "${AWS_SECRET_ACCESS_KEY}" \
+                    --api S3v4 \
+                    --path "${S3_PATH_STYLE}" \
+                    || { rc=$?; echo "[upload] phase=alias-set-failed exit_code=${rc}"; exit "${rc}"; }
+
+                  # Single PUT. mc retries internally on transient errors.
+                  echo "[upload] phase=copy source=/snapshot/etcd.db"
+                  mc ${INSECURE} cp \
+                    /snapshot/etcd.db \
+                    "target/${S3_BUCKET}/${KEY}" \
+                    || { rc=$?; echo "[upload] phase=copy-failed exit_code=${rc}"; exit "${rc}"; }
+
+                  END_TS=$(date -u +%s)
+                  BYTES=$(wc -c < /snapshot/etcd.db | tr -d ' ')
+                  echo "[upload] phase=success bytes_uploaded=${BYTES} wall_clock_seconds=$((END_TS - START_TS))"
+              volumeMounts:
+                # Snapshot is mounted READ-ONLY here — once verified, the
+                # uploader has no reason to mutate it. Defence in depth.
+                - name: snapshot-buffer
+                  mountPath: /snapshot
+                  readOnly: true
+                - name: tmp
+                  mountPath: /tmp
+              resources:
+                {{- toYaml .Values.snapshot.s3.resources | nindent 16 }}
+              securityContext:
+                # runAsUser: 0 — the upload container has NO host mounts,
+                # so root here has no special host privilege. We set 0
+                # explicitly for consistency with the init containers and
+                # so a future image change that sets a non-root default
+                # USER doesn't silently break us.
+                runAsUser: 0
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+            {{- else }}
+            # ===== no-upload mode ===================================
+            # snapshot.s3.enabled=false: snapshot is taken & verified by
+            # the init containers, then DISCARDED at Pod termination
+            # (emptyDir disappears with the Pod). The main container is a
+            # no-op that exits 0 immediately so the Pod terminates as
+            # Succeeded. We reuse the etcd image (already pulled for the
+            # init containers) and `etcdctl version` as the no-op — it
+            # exits 0, prints one line, and adds zero supply-chain trust.
+            - name: noop
+              image: "{{ .Values.snapshot.etcdImage.repository }}:{{ .Values.snapshot.etcdImage.tag }}"
+              imagePullPolicy: {{ .Values.snapshot.etcdImage.pullPolicy }}
+              command: ["etcdctl"]
+              args: ["version"]
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 16Mi
+              securityContext:
+                runAsUser: 0
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+            {{- end }}
+{{- end }}

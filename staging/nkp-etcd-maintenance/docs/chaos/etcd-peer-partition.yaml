@@ -1,0 +1,102 @@
+# ============================================================================
+# etcd-peer-partition: ssh-less chaos Pod to trigger EtcdMemberNoLeader.
+#
+# Schedules a privileged hostNetwork=true Pod onto ONE follower control-plane
+# node and installs iptables DROP rules on tcp/2380 (etcd peer). The Pod auto-
+# heals after 180s; the preStop hook also heals it if the operator deletes the
+# Pod sooner.
+#
+# Tcp/2381 (metrics) and tcp/2379 (client) are intentionally LEFT OPEN so:
+#   - Prometheus keeps scraping `etcd_server_has_leader` (we need this to == 0)
+#   - kube-apiserver on the SAME node still talks to local etcd over loopback
+#
+# Usage:
+#   1) Pick a follower:
+#        kubectl exec -n kube-system etcd-<any-cp> -- etcdctl \
+#          --endpoints https://127.0.0.1:2379 \
+#          --cacert /etc/kubernetes/pki/etcd/ca.crt \
+#          --cert  /etc/kubernetes/pki/etcd/server.crt \
+#          --key   /etc/kubernetes/pki/etcd/server.key \
+#          endpoint status --cluster -w table
+#      Pick any node where IS LEADER is `false`.
+#
+#   2) Replace REPLACE_ME_WITH_FOLLOWER_NODE below with that node's name.
+#
+#   3) kubectl apply -f docs/chaos/etcd-peer-partition.yaml
+#
+#   4) Watch alert fire (chaos thresholds; see CHAOS-RECIPE.md for `for:` overrides):
+#        kubectl exec -n kube-prometheus-stack <prom-pod> -- \
+#          wget -qO- http://localhost:9090/api/v1/alerts \
+#        | jq '.data.alerts[] | select(.labels.alertname=="EtcdMemberNoLeader")'
+#
+#   5) Cleanup (preStop will remove iptables rules):
+#        kubectl delete pod -n kube-system etcd-peer-partition
+#
+# Safety bounds:
+#   - Partition is unilateral (one follower); the remaining 2 members keep
+#     quorum and serve writes throughout.
+#   - 180s self-heal cap means worst-case forgotten-pod recovery is bounded.
+#   - Privileged + NET_ADMIN are required for iptables in hostNetwork ns; this
+#     manifest is intentionally NOT installed by the chart.
+# ============================================================================
+apiVersion: v1
+kind: Pod
+metadata:
+  name: etcd-peer-partition
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/managed-by: chaos-test
+    app.kubernetes.io/component: etcd-peer-partition
+  annotations:
+    nkp-etcd-maintenance.purpose: "chaos test - drop tcp/2380 to/from this node to force EtcdMemberNoLeader"
+spec:
+  restartPolicy: Never
+  nodeName: REPLACE_ME_WITH_FOLLOWER_NODE
+  hostNetwork: true
+  hostPID: false
+  terminationGracePeriodSeconds: 10
+  tolerations:
+    - key: node-role.kubernetes.io/control-plane
+      operator: Exists
+      effect: NoSchedule
+    - key: node-role.kubernetes.io/master
+      operator: Exists
+      effect: NoSchedule
+  containers:
+    - name: blocker
+      image: alpine:3.20
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
+        runAsUser: 0
+        capabilities:
+          add: [NET_ADMIN, NET_RAW]
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          set -eu
+          apk add --no-cache iptables >/dev/null 2>&1 || apk add --no-cache iptables
+          echo "[$(date -u +%H:%M:%SZ)] installing chaos rules on $(hostname)"
+          iptables -I INPUT  -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380
+          iptables -I OUTPUT -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380
+          iptables -I INPUT  -p tcp --sport 2380 -j DROP -m comment --comment chaos-test-2380
+          echo "[$(date -u +%H:%M:%SZ)] rules installed:"
+          iptables -L INPUT  -n -v --line-numbers | grep -E '(chaos|2380)' || true
+          iptables -L OUTPUT -n -v --line-numbers | grep -E '(chaos|2380)' || true
+          echo "[$(date -u +%H:%M:%SZ)] partition active; sleeping 180s then auto-cleaning"
+          sleep 180
+          echo "[$(date -u +%H:%M:%SZ)] removing chaos rules"
+          iptables -D INPUT  -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380 || true
+          iptables -D OUTPUT -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380 || true
+          iptables -D INPUT  -p tcp --sport 2380 -j DROP -m comment --comment chaos-test-2380 || true
+          echo "[$(date -u +%H:%M:%SZ)] done; partition healed"
+      lifecycle:
+        preStop:
+          exec:
+            command:
+              - /bin/sh
+              - -c
+              - |
+                iptables -D INPUT  -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380 || true
+                iptables -D OUTPUT -p tcp --dport 2380 -j DROP -m comment --comment chaos-test-2380 || true
+                iptables -D INPUT  -p tcp --sport 2380 -j DROP -m comment --comment chaos-test-2380 || true

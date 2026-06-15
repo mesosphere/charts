@@ -1,20 +1,37 @@
 apiVersion: v2
-appVersion: v0.40.0
-description: 'A Helm chart that deploys a recurring etcd defragmentation CronJob on
-  kubeadm-managed Nutanix Kubernetes Platform (NKP) clusters. Uses the open-source
-  ahrtr/etcd-defrag tool, which supports leader-last defragmentation, cluster health
-  pre-checks, and threshold-based execution. '
-home: https://github.com/ahrtr/etcd-defrag
-keywords:
-- etcd
-- defragmentation
-- maintenance
-- nkp
-- nutanix
-maintainers:
-- name: harshjha-nuta
 name: nkp-etcd-maintenance
-sources:
-- https://github.com/ahrtr/etcd-defrag
+
+description: >
+  A Helm chart that deploys recurring etcd maintenance (defragmentation
+  and snapshot) CronJobs on kubeadm-managed Nutanix Kubernetes Platform
+  (NKP) clusters. Defragmentation uses the open-source ahrtr/etcd-defrag
+  tool; snapshotting uses the upstream etcd image's etcdctl/etcdutl tools
+  with an optional S3-compatible upload via the minio/mc client.
 type: application
-version: 0.2.0
+# 0.3.0 — Phase 5: snapshot MVP.
+#  - Adds nkp-etcd-snapshot CronJob (off by default; opt-in via
+#    snapshot.enabled=true).
+#  - Two-init-container design: take-snapshot (etcdctl snapshot save) +
+#    verify-snapshot (etcdutl snapshot status); upload via minio/mc with
+#    SecretRef-only credentials (no plaintext keys in values).
+#  - Restore is deliberately NOT automated — see README "Manual Restore
+#    Runbook" and LLD-phase5.md §13.
+#
+# 0.2.0 — Phase 2 validated snapshot.
+#  - --move-leader flag (renamed from --leader-last) shipped
+#  - runAsUser: 0 fix shipped
+#  - waitBetweenDefrags + autoDisalarm exposed
+#  - End-to-end leader-safe defrag verified on 3-CP cluster, 2026-06-01
+version: 0.3.0
+appVersion: "v0.40.0"
+keywords:
+  - etcd
+  - defragmentation
+  - maintenance
+  - nkp
+  - nutanix
+home: https://github.com/ahrtr/etcd-defrag
+sources:
+  - https://github.com/ahrtr/etcd-defrag
+maintainers:
+  - name: harshjha-nuta

@@ -1,0 +1,180 @@
+---
+# ============================================================================
+# Per-node Job template for the etcd quota-bumper.
+#
+# IMPORTANT — this file is INTENTIONALLY NOT under templates/ in the chart.
+# Helm must not install it: a Job rendered by Helm would be tied to the
+# release and would re-create on every `helm upgrade`. This template is
+# instead rendered ONCE PER NODE PER RUN by scripts/quota-bumper/
+# orchestrator.sh and applied via raw `kubectl apply`. The chart's job is
+# only to install the ConfigMap + RBAC that this Job references.
+#
+# The orchestrator substitutes four placeholders at apply time:
+#
+#   __JOB_NAME__      unique per-run job name (orchestrator appends epoch)
+#   __NODE_NAME__     target control-plane node, used for both nodeName
+#                     pinning and the env var both shell scripts read
+#   __QUOTA_BYTES__   the new --quota-backend-bytes value
+#   __KUBECTL_IMAGE__ image for record-id + verify containers (default
+#                     docker.io/mesosphere/kubectl:v1.35.2-alpine; override
+#                     for airgapped clusters or non-NKP environments)
+#
+# Hard guarantees baked into the spec:
+#
+#   * backoffLimit: 0          — never retry a failed Job. If anything trips
+#                                the orchestrator sees Failed and aborts the
+#                                rollout. Idempotent retry is the operator's
+#                                call, not the Job's.
+#   * concurrencyPolicy n/a    — there is no controller spawning these Jobs;
+#                                the orchestrator runs them strictly serially.
+#   * nodeName: __NODE_NAME__  — the Pod CANNOT land on any other node.
+#                                Combined with the hostPath mount, this
+#                                guarantees we only ever edit ONE etcd
+#                                static-pod manifest at a time.
+#   * restartPolicy: Never     — the Pod cannot self-restart on failure
+#                                inside the verify container.
+#
+# Security: no `privileged: true`. Writing /etc/kubernetes/manifests/etcd.yaml
+# only requires UID 0 to satisfy the directory's `0700 root:root` perms;
+# we do NOT need capability(7) extras or device access.
+# ============================================================================
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: __JOB_NAME__
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: quota-bumper-per-node-job
+    app.kubernetes.io/part-of: nkp-etcd-maintenance
+    nkp-etcd-maintenance/target-node: __NODE_NAME__
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nkp-etcd-maintenance
+        app.kubernetes.io/component: quota-bumper-per-node-job
+        app.kubernetes.io/part-of: nkp-etcd-maintenance
+        nkp-etcd-maintenance/target-node: __NODE_NAME__
+    spec:
+      serviceAccountName: etcd-quota-bumper-sa
+      restartPolicy: Never
+
+      # ---- pinning + scheduling ------------------------------------------
+      # nodeName bypasses the scheduler — the Pod is created directly on
+      # this node. CP nodes are tainted; tolerate both the modern and the
+      # legacy keys so this works on every kubeadm version we ship.
+      nodeName: __NODE_NAME__
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+          operator: Exists
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+          operator: Exists
+
+      # ---- pod-level security context ------------------------------------
+      # UID 0 propagates to every container UNLESS that container overrides
+      # it (mikefarah/yq's image USER is overridden below). We do not need
+      # hostNetwork — kubectl talks to the API server over the cluster
+      # network like any other Pod.
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      hostNetwork: false
+
+      # ---- volumes -------------------------------------------------------
+      volumes:
+        - name: scripts
+          configMap:
+            name: etcd-quota-bumper-scripts
+            defaultMode: 0755
+        - name: workspace
+          emptyDir:
+            sizeLimit: 1Mi
+        # The single hostPath mount of the whole tool. ReadWrite, because
+        # writing the patched manifest is the entire point. Scoped to
+        # /etc/kubernetes/manifests so we can never touch anything else on
+        # the host (PKI, kubelet config, …).
+        - name: host-manifests
+          hostPath:
+            path: /etc/kubernetes/manifests
+            type: Directory
+
+      # ---- init containers -----------------------------------------------
+      initContainers:
+
+        # 1. Record the etcd pod's pre-patch containerID into a shared
+        #    workspace file. This must precede the manifest edit; if it
+        #    didn't, we could not distinguish "etcd never restarted" from
+        #    "etcd restarted some time ago, possibly into a broken state".
+        - name: record-current-id
+          image: __KUBECTL_IMAGE__
+          imagePullPolicy: IfNotPresent
+          env:
+            - { name: NODE_NAME, value: "__NODE_NAME__" }
+          command: ["/bin/sh", "/scripts/record-current-id.sh"]
+          volumeMounts:
+            - { name: scripts,   mountPath: /scripts,   readOnly: true }
+            - { name: workspace, mountPath: /workspace }
+          resources:
+            requests: { cpu: "25m",  memory: "64Mi" }
+            limits:   { cpu: "200m", memory: "256Mi" }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+
+        # 2. Back up the host's etcd.yaml and patch it idempotently via yq.
+        #    yq's image USER is `yq` (UID 1000); we override to 0 explicitly
+        #    so we can write to the root-owned manifest dir.
+        - name: backup-and-patch
+          image: mikefarah/yq:4.44.3
+          imagePullPolicy: IfNotPresent
+          env:
+            - { name: NODE_NAME,   value: "__NODE_NAME__" }
+            - { name: QUOTA_BYTES, value: "__QUOTA_BYTES__" }
+          command: ["/bin/sh", "/scripts/patch-manifest.sh"]
+          volumeMounts:
+            - { name: scripts,        mountPath: /scripts,                       readOnly: true }
+            - { name: workspace,      mountPath: /workspace }
+            - { name: host-manifests, mountPath: /host/etc/kubernetes/manifests }
+          resources:
+            requests: { cpu: "25m",  memory: "64Mi" }
+            limits:   { cpu: "200m", memory: "256Mi" }
+          securityContext:
+            runAsUser: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+
+      # ---- main container ------------------------------------------------
+      # Once both init containers complete (backup ✓, patch ✓), the kubelet
+      # starts ticking towards its next manifest poll (≤ 20 s). This
+      # container starts in parallel; its job is to BLOCK until the kubelet
+      # has fully cycled the etcd container AND quorum is healthy. If
+      # anything fails, Job → Failed → orchestrator aborts.
+      containers:
+        - name: verify
+          image: __KUBECTL_IMAGE__
+          imagePullPolicy: IfNotPresent
+          env:
+            - { name: NODE_NAME,                 value: "__NODE_NAME__" }
+            - { name: QUOTA_BYTES,               value: "__QUOTA_BYTES__" }
+            - { name: VERIFY_TIMEOUT_SECONDS,    value: "360" }
+          command: ["/bin/sh", "/scripts/verify-restart.sh"]
+          volumeMounts:
+            - { name: scripts,   mountPath: /scripts,   readOnly: true }
+            - { name: workspace, mountPath: /workspace, readOnly: true }
+          resources:
+            requests: { cpu: "50m",  memory: "128Mi" }
+            limits:   { cpu: "300m", memory: "384Mi" }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

@@ -37,13 +37,308 @@ defragmentation:
   # -- Path on the host where kubeadm stores etcd PKI material.
   etcdPkiHostPath: /etc/kubernetes/pki/etcd
 
-# -- Container image for the etcd-defrag tool.
+# ------------------------------------------------------------------
+# Snapshot CronJob (Phase 5)
+# ------------------------------------------------------------------
+# Takes a consistent etcd snapshot on a schedule, verifies its integrity,
+# and optionally uploads it to an S3-compatible object store.
+#
+# Architecture (see LLD-phase5.md §4 for the full diagram):
+#
+#   Pod = (initContainer take-snapshot)  →  (initContainer verify-snapshot)
+#         → (container upload | container noop, depending on snapshot.s3.enabled)
+#
+# The init containers and the upload container share an emptyDir volume,
+# so the snapshot never lands on the node's host filesystem.
+#
+# RESTORE IS DELIBERATELY NOT AUTOMATED by this addon. See LLD-phase5.md §13
+# and README.md "Manual Restore Runbook" for the supported recovery procedure.
+snapshot:
+  # -- Master toggle. Default false; snapshots require operator-supplied
+  # S3 configuration (or, for snapshot.s3.enabled=false, an operator
+  # decision to discard the snapshot after verification) so we opt out.
+  enabled: false
+
+  # -- Cron schedule (UTC). Default 03:00 — 30 minutes after the defrag
+  # job's default, so the two jobs don't compete for control-plane I/O.
+  schedule: "0 3 * * *"
+
+  # -- Cluster name used in the S3 object key. Defaults to the Helm release
+  # name when empty. Useful when one bucket holds snapshots from many
+  # clusters, e.g. `<bucket>/<prefix>/<clusterName>-<timestamp>.db`.
+  clusterName: ""
+
+  # -- etcd client endpoint. For kubeadm clusters this is always localhost.
+  endpoint: "https://127.0.0.1:2379"
+
+  # -- Path on the host where kubeadm stores etcd PKI material. Mounted
+  # read-only into the snapshot init container only.
+  etcdPkiHostPath: /etc/kubernetes/pki/etcd
+
+  # -- Container image that provides etcdctl AND etcdutl. We default to the
+  # upstream Kubernetes etcd image because:
+  #   (a) it is already pulled on every NKP control-plane node (kubeadm
+  #       uses it for the etcd static pod), so the CronJob has near-zero
+  #       image-pull latency at 03:00 UTC; and
+  #   (b) it ships both `etcdctl` (snapshot save) and `etcdutl` (snapshot
+  #       status), with no custom build pipeline required.
+  #
+  # Pin this to the same minor as your cluster's etcd to avoid client/server
+  # protocol mismatches. Discover your cluster's etcd version with:
+  #   kubectl exec -n kube-system <etcd-pod> -- etcd --version
+  etcdImage:
+    repository: quay.io/coreos/etcd
+    tag: "v3.5.15"
+    pullPolicy: IfNotPresent
+
+  # -- Resources for each of the etcd init containers. Snapshot save is
+  # sequential disk I/O; memory roughly tracks the snapshot's working set.
+  # ephemeral-storage requests/limits sizes the emptyDir buffer.
+  etcdResources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+      ephemeral-storage: 2Gi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+      ephemeral-storage: 10Gi
+
+  # ----------------------------------------------------------------
+  # S3-compatible upload — OPTIONAL.
+  # If snapshot.s3.enabled=false, the snapshot is taken and verified but
+  # DISCARDED at Pod termination. Useful for validating the snapshot path
+  # before wiring up an object store.
+  # ----------------------------------------------------------------
+  s3:
+    enabled: false
+
+    # -- Endpoint URL (with scheme). Examples:
+    #   https://s3.amazonaws.com               (AWS S3)
+    #   https://minio.example.com              (MinIO)
+    #   https://objects.nutanix.example.com    (Nutanix Objects)
+    endpoint: ""
+
+    # -- Region. Most S3-compatible implementations accept "us-east-1"
+    # as a universal default even when the endpoint is not on AWS.
+    region: "us-east-1"
+
+    # -- Bucket. Must already exist; the addon does not create buckets.
+    bucket: ""
+
+    # -- Optional prefix inside the bucket. The final object key is:
+    #   <prefix>/<clusterName>-<UTC-ISO8601-timestamp>.db
+    prefix: "etcd-snapshots"
+
+    # -- Path-style addressing. Required by most non-AWS endpoints
+    # (MinIO, Ceph RGW, Nutanix Objects). AWS S3 still supports it.
+    # Maps to `mc --path on|off`.
+    pathStyle: true
+
+    # -- Skip TLS verification for the S3 endpoint. Use ONLY in lab /
+    # test environments with self-signed certificates. Production should
+    # leave this false and trust a real CA on the node.
+    insecureSkipTLSVerify: false
+
+    # -- SecretRef for the bucket credentials.
+    #
+    # The chart NEVER receives the credential values themselves; it only
+    # holds the name of an existing Secret and the names of the keys
+    # within it. Create the Secret out-of-band, e.g.:
+    #
+    #   kubectl create secret generic etcd-backup-s3-creds \
+    #     --namespace kube-system \
+    #     --from-literal=access-key-id='AKIAEXAMPLE' \
+    #     --from-literal=secret-access-key='wJalrXUtnFEMI/K7MDENG/EXAMPLE'
+    #
+    # See LLD-phase5.md §8.1 for the full rationale of why this is a
+    # SecretRef and not a value, and why secretKeyRef (granular) is
+    # preferred over envFrom.secretRef (whole-secret import).
+    credentialsSecret:
+      # -- Name of an existing Secret in the chart's release namespace.
+      name: ""
+      # -- Key inside the Secret holding the S3 access key ID.
+      accessKeyKey: "access-key-id"
+      # -- Key inside the Secret holding the S3 secret access key.
+      secretKeyKey: "secret-access-key"
+
+    # -- Uploader container image. We default to minio/mc because:
+    #   (a) it's ~30 MB, vs ~200 MB for amazon/aws-cli;
+    #   (b) it has first-class support for non-AWS S3 endpoints; and
+    #   (c) it ships a single static Go binary with no runtime deps.
+    # Operators with a hard "use AWS CLI" requirement can override
+    # this — but they must also adjust the chart's upload script.
+    uploader:
+      image:
+        repository: minio/mc
+        tag: "RELEASE.2024-11-21T17-21-54Z"
+        pullPolicy: IfNotPresent
+
+    # -- Resources for the uploader. Single PUT of a few-GB file → small.
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+  # -- CronJob lifecycle knobs for the snapshot job.
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 7
+  # -- Skip a missed run if the controller is more than this many seconds
+  # late firing it. Avoids stale snapshots from a long control-plane outage.
+  startingDeadlineSeconds: 300
+  # -- Clean up completed Jobs (and their Pods) after this many seconds.
+  ttlSecondsAfterFinished: 86400
+
+# ------------------------------------------------------------------
+# PrometheusRule alerts (Phase Observability)
+# ------------------------------------------------------------------
+# Ships 8 alerts covering the four classes named in the outcome criteria:
+#   * unhealthy etcd members (A1: EtcdMemberNoLeader)
+#   * high fragmentation     (A2 EtcdDbHighUsage, A3 EtcdDbCriticalUsage,
+#                             A4 EtcdHighFragmentation)
+#   * defrag failures        (B1 EtcdDefragJobFailed, B2 EtcdDefragJobMissed)
+#   * snapshot failures      (C1 EtcdSnapshotJobFailed, C2 EtcdSnapshotJobMissed)
+#
+# Group C is rendered only when snapshot.enabled=true.
+#
+# The PrometheusRule resource is rendered ONLY when BOTH conditions hold:
+#   1. alerts.enabled=true (this knob)
+#   2. The Prometheus Operator CRD (monitoring.coreos.com/v1 PrometheusRule)
+#      is present on the cluster (auto-detected via .Capabilities.APIVersions).
+# This makes alerts.enabled=true safe on bare clusters: install succeeds,
+# helm upgrade will materialise the rule once the operator arrives.
+#
+# See LLD-phase-observability.md §6-§9 for the full rationale.
+alerts:
+  # -- Master toggle. Default true; capability-gated so installs on
+  # clusters without a Prometheus Operator simply no-op the rule.
+  enabled: true
+
+  # -- Labels added to the PrometheusRule's metadata.labels so the
+  # Prometheus Operator's `ruleSelector` discovers it. Default value
+  # matches a vanilla kube-prometheus-stack install. Override if your
+  # Prometheus's ruleSelector uses different label values.
+  #
+  # Find your operator's expected labels with:
+  #   kubectl get prometheus -A -o jsonpath='{range .items[*]}{.spec.ruleSelector}{"\n"}{end}'
+  additionalLabels:
+    release: kube-prometheus-stack
+
+  # -- Default labels applied to every alert (useful for routing in
+  # Alertmanager, e.g., team: platform → platform on-call).
+  defaultLabels: {}
+
+  # -- Default annotations applied to every alert.
+  defaultAnnotations: {}
+
+  # -- Base URL for the runbook_url annotation. Each alert appends
+  # its anchor (e.g., #etcdmembernoleader) to produce the final link.
+  # Override for airgapped clusters with internal documentation mirrors.
+  runbookBaseUrl: "https://github.com/nutanix-cloud-native/nkp-etcd-maintenance/blob/main/README.md"
+
+  # -- Scrape-job label used in PromQL `{job="<label>"}` filters for
+  # etcd-self metrics. Default matches kube-prometheus-stack's built-in
+  # etcd ServiceMonitor. Override if your scrape config labels the etcd
+  # job differently (e.g., "etcd-static-pod").
+  etcdScrapeJobLabel: "kube-etcd"
+
+  # -- Per-alert thresholds.
+  # INVARIANT: dbHighUsageRatio MUST be strictly less than
+  # dbCriticalUsageRatio. The chart's render-time fail check enforces this.
+  thresholds:
+    # warning when db_total/quota > this
+    dbHighUsageRatio: 0.7
+    # critical when db_total/quota > this
+    dbCriticalUsageRatio: 0.9
+    # warning when (db_total - db_in_use) > this (bytes). 500 MiB default.
+    highFragmentationBytes: 524288000
+    # warning when CronJob has not scheduled a Job in this many seconds.
+    # 2 days catches a missed daily tick without flapping on `concurrencyPolicy: Forbid`.
+    missedScheduleSeconds: 172800
+
+  # -- Per-alert `for:` durations. Sized so brief, expected transients
+  # (leader elections during defrag, single missed cron tick) do not page.
+  for:
+    memberNoLeader: 1m
+    dbHighUsage: 1h
+    dbCriticalUsage: 5m
+    highFragmentation: 1h
+    defragJobFailed: 5m
+    defragJobMissed: 30m
+    snapshotJobFailed: 5m
+    snapshotJobMissed: 30m
+
+  # -- Per-alert enable + severity. Operators who already have their own
+  # etcd-health alerts can disable the four etcd-health rules and keep
+  # only the CronJob-failure ones (or vice versa).
+  rules:
+    EtcdMemberNoLeader:
+      enabled: true
+      severity: critical
+    EtcdDbHighUsage:
+      enabled: true
+      severity: warning
+    EtcdDbCriticalUsage:
+      enabled: true
+      severity: critical
+    EtcdHighFragmentation:
+      enabled: true
+      severity: warning
+    EtcdDefragJobFailed:
+      enabled: true
+      severity: warning
+    EtcdDefragJobMissed:
+      enabled: true
+      severity: warning
+    EtcdSnapshotJobFailed:
+      enabled: true
+      severity: critical
+    EtcdSnapshotJobMissed:
+      enabled: true
+      severity: critical
+
+# ------------------------------------------------------------------
+# Quota-bumper (one-shot rolling --quota-backend-bytes update)
+# ------------------------------------------------------------------
+# Rolls a new --quota-backend-bytes value across every control-plane
+# node's etcd static-pod manifest. This is a ONE-SHOT, OPERATOR-DRIVEN
+# tool — NOT a CronJob. The chart's job here is only to install the
+# ConfigMap + RBAC that the per-node Jobs need; the actual roll-out is
+# triggered from a workstation by scripts/quota-bumper/orchestrator.sh
+# (which renders files/quota-bumper/job-template.yaml ONCE PER NODE).
+#
+# Off by default: turning it on installs a ServiceAccount with hostPath
+# access to /etc/kubernetes/manifests, which is a wider blast radius
+# than the defrag/snapshot jobs. Enable only when you are ready to use
+# the bumper.
+#
+# See:  scripts/quota-bumper/orchestrator.sh --help
+#       README.md "Etcd Quota Bumper" section
+quotaBumper:
+  # -- Master toggle. When false, none of the quota-bumper resources are
+  # installed (ConfigMap, ServiceAccount, ClusterRole, ClusterRoleBinding).
+  # When true, those resources are installed but no Job is created —
+  # Jobs are spawned out-of-band by the orchestrator script.
+  enabled: false
+
+# ------------------------------------------------------------------
+# Shared / defrag-only settings below.
+# NOTE: `image`, `resources`, `successfulJobsHistoryLimit`, and
+# `failedJobsHistoryLimit` apply to the DEFRAG CronJob only.
+# The snapshot CronJob has its own equivalents under `snapshot.*`.
+# ------------------------------------------------------------------
+
+# -- Container image for the etcd-defrag tool (defrag CronJob).
 image:
   repository: ghcr.io/ahrtr/etcd-defrag
   tag: v0.40.0
   pullPolicy: IfNotPresent
 
-# -- Image pull secrets (e.g. for air-gapped / private registry deployments).
+# -- Image pull secrets (applies to BOTH CronJobs).
+# e.g. for air-gapped / private registry deployments.
 imagePullSecrets: []
 
 # -- Resource requests and limits for the defrag container.
@@ -55,12 +350,13 @@ resources:
     cpu: 200m
     memory: 128Mi
 
-# -- Number of successful and failed job history records to retain.
+# -- Number of successful and failed defrag job history records to retain.
 successfulJobsHistoryLimit: 3
 failedJobsHistoryLimit: 3
 
-# -- Additional labels applied to all resources created by this chart.
+# -- Additional labels applied to all resources created by this chart
+# (defrag AND snapshot).
 commonLabels: {}
 
-# -- Additional annotations applied to the CronJob.
+# -- Additional annotations applied to the CronJobs.
 cronJobAnnotations: {}
