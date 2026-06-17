@@ -58,19 +58,34 @@ metadata:
     {{- with .Values.commonLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+# Each `rules[]` entry is `apiGroups` × `resources` × `verbs`.
+# Empty apiGroup ("") = core API objects (pods, nodes, configmaps, …).
+# Verbs are HTTP-verb equivalents: get/list (read), watch (stream),
+# create/update/patch (write), delete (remove), * (everything).
 rules:
+  # Read Pods so the verify-restart script can inspect the etcd
+  # static pod's containerID + ready flag.
   - apiGroups: [""]
     resources: ["pods"]
     verbs: ["get", "list"]
+  # `pods/exec` is a "subresource" — granting it lets the SA open
+  # an exec channel into a pod (equivalent to `kubectl exec`).
+  # `create` is the verb the API server checks; there is no
+  # separate "exec" verb.
   - apiGroups: [""]
     resources: ["pods/exec"]
     verbs: ["create"]
+  # Node read access lets the orchestrator (and any future
+  # in-cluster orchestrator variant) iterate control-plane nodes
+  # without an extra RBAC change.
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get", "list"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+# ClusterRoleBinding glues the SA to the ClusterRole. Without it
+# the rules above grant nothing.
 kind: ClusterRoleBinding
 metadata:
   name: etcd-quota-bumper-rolebinding
@@ -83,10 +98,15 @@ metadata:
     {{- with .Values.commonLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+# `roleRef` = which ClusterRole's rules we want to grant.
+# Once created, it is IMMUTABLE — to change, delete + recreate.
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: etcd-quota-bumper-role
+# `subjects` = who receives those rules. Here, exactly one SA
+# (etcd-quota-bumper-sa in kube-system). Pods using this SA will
+# present a token that the API server resolves to this identity.
 subjects:
   - kind: ServiceAccount
     name: etcd-quota-bumper-sa

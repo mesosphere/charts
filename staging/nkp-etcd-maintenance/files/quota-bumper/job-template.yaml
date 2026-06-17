@@ -49,7 +49,10 @@ metadata:
     app.kubernetes.io/part-of: nkp-etcd-maintenance
     nkp-etcd-maintenance/target-node: __NODE_NAME__
 spec:
+  # No retries — if the Job fails, the orchestrator aborts the rollout.
   backoffLimit: 0
+  # Auto-delete the Job (and its Pod) one hour after completion. The
+  # orchestrator already harvests the Pod's logs before TTL expires.
   ttlSecondsAfterFinished: 3600
   template:
     metadata:
@@ -88,10 +91,17 @@ spec:
 
       # ---- volumes -------------------------------------------------------
       volumes:
+        # `configMap` volume = project a ConfigMap's data keys as files
+        # under the mount path. `defaultMode: 0755` makes them executable
+        # so the containers can run them via `/bin/sh /scripts/foo.sh`.
         - name: scripts
           configMap:
             name: etcd-quota-bumper-scripts
             defaultMode: 0755
+        # Pod-scoped scratch. `sizeLimit: 1Mi` is a hard cap — only used
+        # for tiny state hand-off files between init containers (e.g.
+        # pre-patch containerID). Anything larger trips the limit and
+        # the Pod is evicted, which is the correct failure mode here.
         - name: workspace
           emptyDir:
             sizeLimit: 1Mi
@@ -112,10 +122,20 @@ spec:
         #    didn't, we could not distinguish "etcd never restarted" from
         #    "etcd restarted some time ago, possibly into a broken state".
         - name: record-current-id
+          # Image carries `kubectl` and a busybox shell — that's all the
+          # script needs. Pinned in the orchestrator so airgapped clusters
+          # can override it.
           image: __KUBECTL_IMAGE__
+          # IfNotPresent: don't re-pull if the node already has the tag.
           imagePullPolicy: IfNotPresent
+          # `env:` injects environment variables into the container.
+          # NODE_NAME is consumed by record-current-id.sh (and asserted
+          # via the `: "${NODE_NAME:?…}"` guard at the top of that script).
           env:
             - { name: NODE_NAME, value: "__NODE_NAME__" }
+          # `command:` overrides the image's ENTRYPOINT. We invoke /bin/sh
+          # explicitly so the script runs even if the file isn't chmod +x
+          # (the configMap mount sets 0755 but explicitness > convention).
           command: ["/bin/sh", "/scripts/record-current-id.sh"]
           volumeMounts:
             - { name: scripts,   mountPath: /scripts,   readOnly: true }
@@ -133,8 +153,13 @@ spec:
         #    yq's image USER is `yq` (UID 1000); we override to 0 explicitly
         #    so we can write to the root-owned manifest dir.
         - name: backup-and-patch
+          # mikefarah/yq ships a small Alpine layer with `yq` + `sh`.
+          # Pinned by tag for reproducibility — newer yq has incompat
+          # syntax changes (v4 ≠ v3).
           image: mikefarah/yq:4.44.3
           imagePullPolicy: IfNotPresent
+          # patch-manifest.sh reads BOTH env vars: NODE_NAME to find the
+          # right manifest file, QUOTA_BYTES as the new flag value.
           env:
             - { name: NODE_NAME,   value: "__NODE_NAME__" }
             - { name: QUOTA_BYTES, value: "__QUOTA_BYTES__" }
@@ -162,6 +187,13 @@ spec:
         - name: verify
           image: __KUBECTL_IMAGE__
           imagePullPolicy: IfNotPresent
+          # verify-restart.sh reads:
+          #   NODE_NAME              — which etcd-<node> pod to inspect
+          #   QUOTA_BYTES            — to assert the new flag is in argv
+          #   VERIFY_TIMEOUT_SECONDS — max wall-time before giving up
+          #                            (360s = 6 min; covers kubelet's
+          #                            20-30s manifest poll + restart +
+          #                            etcd's own startup + quorum-elect).
           env:
             - { name: NODE_NAME,                 value: "__NODE_NAME__" }
             - { name: QUOTA_BYTES,               value: "__QUOTA_BYTES__" }

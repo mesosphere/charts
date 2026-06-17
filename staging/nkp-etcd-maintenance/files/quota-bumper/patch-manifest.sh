@@ -18,6 +18,21 @@ set -eu
 # (files/quota-bumper/job-template.yaml). Fail loud if missing — otherwise
 # the script would silently patch with an empty value or against an
 # empty NODE_NAME context.
+#
+# Variables used in this script:
+#   NODE_NAME    — control-plane node we're patching (set by Job env).
+#   QUOTA_BYTES  — new --quota-backend-bytes value (set by Job env;
+#                  expected as a decimal byte count, e.g. 8589934592).
+#   MANIFEST     — absolute path to the etcd static-pod manifest on the
+#                  host, reached via the host-manifests hostPath mount.
+#   BACKUP_DIR   — directory of MANIFEST. We deliberately don't write
+#                  the backup outside this dir (the hostPath mount is
+#                  scoped to it and nothing else).
+#   BACKUP       — timestamped, dot-prefixed copy of MANIFEST. Dot prefix
+#                  hides it from kubelet's static-pod walker.
+#   TMP          — pod-side scratch path (emptyDir). We build the patched
+#                  manifest here, then atomically mv it into MANIFEST.
+#   OLD          — previous --quota-backend-bytes flag value, for logging.
 : "${NODE_NAME:?NODE_NAME must be set by the Job spec env}"
 : "${QUOTA_BYTES:?QUOTA_BYTES must be set by the Job spec env}"
 

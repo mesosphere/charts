@@ -46,9 +46,28 @@
 #   4  post-flight assertion failed (running spec lacks target quota)
 # =============================================================================
 
+# bash strict mode:
+#   -E  ERR trap inherited by funcs/subshells
+#   -e  exit on first error
+#   -u  unset var = error (catches typos)
+#   -o pipefail  pipeline fails if any stage fails (not just the last)
 set -Eeuo pipefail
 
 # -------------------- defaults (override via env or flags) -------------------
+# Bash parameter expansion `${X:-default}` = use X if set & non-empty,
+# else `default`. Lets each knob be overridden either by env or by CLI flag.
+#
+# Variables used throughout the orchestrator:
+#   QUOTA_BYTES          — the target --quota-backend-bytes value, in bytes.
+#                          8 GiB = 8 * 1024^3 = 8589934592.
+#   NAMESPACE            — kube-system; not overridden in practice.
+#   JOB_TIMEOUT_SECONDS  — wall-clock budget per per-node Job. Must be
+#                          >= verify-restart.sh's VERIFY_TIMEOUT_SECONDS
+#                          (360) plus pull + scheduling overhead.
+#   KUBECTL_IMAGE        — image used by record-id + verify containers;
+#                          must carry kubectl + /bin/sh.
+#   DRY_RUN              — "1" = print rendered Jobs, don't apply.
+#   AUTO_APPROVE         — "1" = skip the operator confirmation prompt.
 QUOTA_BYTES="${QUOTA_BYTES:-8589934592}"           # 8 GiB
 NAMESPACE="${NAMESPACE:-kube-system}"
 JOB_TIMEOUT_SECONDS="${JOB_TIMEOUT_SECONDS:-600}"   # 10 min per node
@@ -56,6 +75,10 @@ KUBECTL_IMAGE="${KUBECTL_IMAGE:-docker.io/mesosphere/kubectl:v1.35.2-alpine}"
 DRY_RUN="${DRY_RUN:-0}"
 AUTO_APPROVE="${AUTO_APPROVE:-0}"
 
+# `BASH_SOURCE[0]` = path to *this* script (even when sourced).
+# `cd … && pwd` canonicalises the path (resolves "..", symlinks-ish).
+# JOB_TEMPLATE = absolute path to the per-node Job YAML template
+#                we'll render once per node.
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 CHART_ROOT=$(cd "${SCRIPT_DIR}/../.." && pwd)
 JOB_TEMPLATE="${CHART_ROOT}/files/quota-bumper/job-template.yaml"

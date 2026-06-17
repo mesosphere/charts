@@ -23,16 +23,42 @@
 {{- if not (lt (float64 .Values.alerts.thresholds.dbHighUsageRatio) (float64 .Values.alerts.thresholds.dbCriticalUsageRatio)) -}}
   {{- fail "alerts.thresholds.dbHighUsageRatio must be strictly less than dbCriticalUsageRatio (LLD-phase-observability §8.1)" -}}
 {{- end }}
+{{- /*
+  -------- PrometheusRule field legend (applies to every rule below) ------
+  - alert       : the alert name. Shown in Alertmanager UI and routed by name.
+  - expr        : PromQL expression. Sample at each evaluation interval; if it
+                  returns a non-empty vector the alert is "pending".
+  - for         : how long `expr` must stay true before the alert moves from
+                  "pending" to "firing". Suppresses flapping on transient events.
+  - labels      : key/value pairs attached to the alert sample. Alertmanager
+                  uses these for routing (`severity`, team labels, etc.).
+  - annotations : human-readable metadata. Not used for routing; surfaced in
+                  the UI / page / Slack. We always set summary, description,
+                  runbook_url.
+  - $labels.X   : Prometheus templating — substitutes label X from the firing
+                  series at render time (escaped via Helm's `{{ ` `}}` block).
+  - $value      : the numeric value of `expr` at the moment it fired.
+*/ -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
+  # Object name. Kommander/Prometheus-operator looks up rules by this name.
   name: nkp-etcd-maintenance
+  # Render-namespace = wherever Helm is installing the chart (e.g.
+  # kube-system or kommander-default-workspace). PrometheusRule is
+  # namespaced, but with `ruleNamespaceSelector` set to match everything
+  # the operator still discovers it.
   namespace: {{ .Release.Namespace }}
   labels:
+    # Standard "app.kubernetes.io/*" recommended labels used for selectors.
     app.kubernetes.io/name: nkp-etcd-maintenance
     app.kubernetes.io/component: prometheus-rules
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    # `alerts.additionalLabels` MUST include whatever selector key the
+    # Prometheus CR's ruleSelector matches (default kube-prometheus-stack
+    # selector is `release: kube-prometheus-stack`). Otherwise the operator
+    # ignores this rule and the alerts silently never fire.
     {{- with .Values.alerts.additionalLabels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -40,6 +66,11 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
+  # `groups` partition rules into named evaluation buckets. Each group is
+  # evaluated as a single unit; rules in the same group share the
+  # evaluation interval and can reference each other's recording-rule
+  # outputs. We use three groups: etcd-health (cluster-state alerts),
+  # defrag (job-state alerts), snapshot (job-state alerts, gated).
   groups:
     # ====================================================================
     # Group A — etcd-health (always rendered)

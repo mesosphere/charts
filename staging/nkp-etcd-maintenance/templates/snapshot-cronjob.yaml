@@ -50,12 +50,21 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  # Cron expression in UTC. Default "0 3 * * *" = 03:00 UTC every day,
+  # placed 30 minutes after the defrag job's 02:30 default so the two
+  # don't compete for control-plane I/O.
   schedule: {{ .Values.snapshot.schedule | quote }}
   # Never overlap with a previous run — two snapshots racing on the same
   # emptyDir would produce a corrupt upload.
   concurrencyPolicy: Forbid
+  # Retain N successful Job records for forensic review. The CronJob
+  # controller deletes older Jobs and their associated Pods.
   successfulJobsHistoryLimit: {{ .Values.snapshot.successfulJobsHistoryLimit }}
+  # Same idea for failed runs — keep N for debugging.
   failedJobsHistoryLimit: {{ .Values.snapshot.failedJobsHistoryLimit }}
+  # If the CronJob controller is late firing the scheduled Job by more
+  # than this many seconds, skip the missed run entirely. Prevents a
+  # backlog of "stale" snapshots after a control-plane outage.
   startingDeadlineSeconds: {{ .Values.snapshot.startingDeadlineSeconds }}
   jobTemplate:
     spec:
@@ -63,6 +72,9 @@ spec:
       # cron tick. Retrying immediately against the same (presumably broken)
       # endpoint achieves nothing. See LLD-phase5.md §12.
       backoffLimit: 0
+      # Once the Job finishes (success or failure), auto-delete it (and
+      # its Pod) after this many seconds. Keeps the namespace tidy on
+      # long-running clusters.
       ttlSecondsAfterFinished: {{ .Values.snapshot.ttlSecondsAfterFinished }}
       template:
         metadata:
@@ -104,17 +116,29 @@ spec:
           {{- end }}
 
           # ---- Volumes ----------------------------------------------
+          # Three named volumes used by the containers below:
+          # 1. etcd-pki      — host TLS material, read-only, take-snapshot only.
+          # 2. snapshot-buffer — pod-scoped scratch space; the snapshot lives here.
+          # 3. tmp           — pod-scoped /tmp because every container is
+          #                    readOnlyRootFilesystem.
           volumes:
             # Read-only mount of kubeadm's etcd PKI directory. Mounted ONLY
             # into the take-snapshot init container — the verify and upload
             # containers have no business seeing the etcd private key.
             - name: etcd-pki
               hostPath:
+                # Same kubeadm path used by the defrag CronJob.
                 path: {{ .Values.snapshot.etcdPkiHostPath }}
+                # `type: Directory` makes kubelet fail-fast if the path
+                # doesn't exist on this node (catches mis-scheduling).
                 type: Directory
             # Pod-scoped scratch space for the snapshot file. Destroyed
             # when the Pod terminates → no host-side cleanup needed.
             - name: snapshot-buffer
+              # emptyDir = ephemeral volume backed by node disk (or RAM
+              # if `medium: Memory`). Lives only as long as the Pod.
+              # Empty {} = default settings (no size limit beyond the
+              # node's ephemeral storage).
               emptyDir: {}
             # Pod-scoped /tmp because all containers run with
             # readOnlyRootFilesystem: true.
@@ -203,21 +227,40 @@ spec:
                 # stay enabled.
                 - name: HOME
                   value: /tmp
+                # Used in the S3 object key: <prefix>/<CLUSTER_NAME>-<ts>.db
+                # `default .Release.Name .Values.snapshot.clusterName` =
+                # "use values.clusterName if set, else the Helm release name".
+                # That way each cluster's snapshots land at a distinct key
+                # without the operator having to remember to set clusterName.
                 - name: CLUSTER_NAME
                   value: {{ default .Release.Name .Values.snapshot.clusterName | quote }}
+                # S3 endpoint URL (includes the scheme). Example values:
+                #   https://s3.amazonaws.com
+                #   https://minio.example.com
+                #   https://objects.nutanix.example.com
                 - name: S3_ENDPOINT
                   value: {{ .Values.snapshot.s3.endpoint | quote }}
+                # Target bucket. Must already exist; the chart does not
+                # create buckets — that's an out-of-band IaC concern.
                 - name: S3_BUCKET
                   value: {{ .Values.snapshot.s3.bucket | quote }}
+                # Optional path prefix inside the bucket.
                 - name: S3_PREFIX
                   value: {{ .Values.snapshot.s3.prefix | quote }}
+                # S3 region. Many non-AWS implementations accept
+                # "us-east-1" as a universal default.
                 - name: S3_REGION
                   value: {{ .Values.snapshot.s3.region | quote }}
                 # `on` enables path-style addressing (required by MinIO,
                 # Ceph RGW, Nutanix Objects); `off` uses virtual-host-style
                 # (AWS-style).
+                # `ternary "on" "off" <bool>` = Helm/sprig conditional;
+                # if the bool is true → "on", else → "off".
                 - name: S3_PATH_STYLE
                   value: {{ ternary "on" "off" .Values.snapshot.s3.pathStyle | quote }}
+                # Toggle for "--insecure" (skip TLS verify). LAB ONLY.
+                # Value is the literal string "true"/"false"; the shell
+                # script below tests it as a string.
                 - name: S3_INSECURE
                   value: {{ .Values.snapshot.s3.insecureSkipTLSVerify | quote }}
                 # --- the SecretRef ---

@@ -20,15 +20,44 @@ set -eu
 # SC2153 — which otherwise can't see the Kubernetes-side assignment.
 : "${NODE_NAME:?NODE_NAME must be set by the Job spec env}"
 
+# Variables used in this script:
+#   NODE_NAME                — control-plane node we're verifying.
+#   POD_NAME                 — derived: kubeadm names etcd's static
+#                              pod "etcd-<node>".
+#   OLD_CID                  — pre-patch containerID, written by
+#                              record-current-id.sh into the shared
+#                              emptyDir.
+#   VERIFY_TIMEOUT_SECONDS   — wall-clock budget for the whole script
+#                              (env, default 360s).
+#   DEADLINE                 — absolute epoch second at which we give up
+#                              and exit FATAL.
+#   NEW_CID                  — current containerID after the patch; must
+#                              differ from OLD_CID for step 1 to pass.
+#   READY                    — kubelet-reported readiness flag (string
+#                              "true"/"false").
+#   APPLIED                  — the --quota-backend-bytes line read back
+#                              from the *running* pod spec for step 5.
+#   QUOTA_BYTES              — expected new value (Job env). Used to
+#                              assert APPLIED matches.
 POD_NAME="etcd-${NODE_NAME}"
 OLD_CID=$(cat /workspace/old-container-id)
-# Total wall-clock budget for the whole verify phase.
+# Total wall-clock budget for the whole verify phase. `${VAR:-default}` =
+# use VAR if set & non-empty, else fall back to default.
 DEADLINE=$(( $(date +%s) + ${VERIFY_TIMEOUT_SECONDS:-360} ))
 
 echo "[verify] node=${NODE_NAME} pod=${POD_NAME}"
 echo "[verify] old containerID = ${OLD_CID}"
 
 # ----------- helpers --------------------------------------------------------
+# `now`        : current epoch seconds (UTC, monotonic-ish).
+# `remaining`  : seconds left until DEADLINE (negative once expired).
+# `check_deadline`: bail out immediately if we've overshot DEADLINE.
+#                   Takes a single arg = human-readable step label,
+#                   used only in the FATAL log line.
+# `etcdctl_in_pod`: exec etcdctl inside the etcd pod with the in-pod PKI.
+#                   We deliberately don't ship etcdctl in our Job image;
+#                   reusing the one inside etcd guarantees client/server
+#                   protocol parity.
 now()              { date +%s; }
 remaining()        { echo $(( DEADLINE - $(now) )); }
 check_deadline()   {
@@ -111,6 +140,11 @@ until etcdctl_in_pod endpoint health --cluster; do
 done
 
 # ----------- step 5: assert flag applied -----------------------------------
+# Read the *running* pod's spec back from the API and confirm the new flag
+# is present. `{range …}{@}{"\n"}{end}` is the jsonpath trick for emitting
+# one element per line so grep can match a whole flag. If grep finds
+# nothing the `|| echo "MISSING"` keeps APPLIED non-empty so the equality
+# check below fires the right error message.
 APPLIED=$(kubectl get pod "${POD_NAME}" -n kube-system \
   -o jsonpath='{range .spec.containers[?(@.name=="etcd")].command[*]}{@}{"\n"}{end}' \
   | grep '^--quota-backend-bytes=' || echo "MISSING")
