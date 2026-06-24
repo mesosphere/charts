@@ -328,37 +328,86 @@ quotaBumper:
 # Job safety constraints — applied to BOTH the defrag and snapshot Jobs
 # (i.e. CronJob.spec.jobTemplate.spec).
 # ------------------------------------------------------------------
-# Rationale:
-#   * Kubernetes defaults are `backoffLimit: 6` (≈ 10+ minutes of
-#     silent exponential backoff before the Job is marked Failed) and
-#     NO activeDeadlineSeconds (a frozen Pod hangs indefinitely and
-#     never trips the EtcdDefragJobFailed / EtcdSnapshotJobFailed
-#     alert). Both are unacceptable for a maintenance job whose
-#     failure signal is the operator's only feedback channel.
-#   * `jobs.backoffLimit: 4` survives a small number of transient
-#     network blips (typical Pod backoff sequence: 10 s, 20 s, 40 s,
-#     80 s — ≈ 150 s total worst case) but still lets the Failed
-#     alert fire well within the 5-minute `for:` window.
-#   * `jobs.activeDeadlineSeconds: 600` (10 minutes) is a hard kill
-#     ceiling. Any Pod that hangs past this is terminated with
-#     reason=DeadlineExceeded, which a Failed Job — which trips the
-#     alert. 600 s is far above the observed p99 for both defrag and
-#     snapshot on a 3-CP NKP cluster (~30 s for snapshot, ~2 min for
-#     defrag including --wait-between-defrags=1m × 3 members).
+# WHY THIS BLOCK EXISTS
+#   Kubernetes defaults are unsuitable for a control-plane maintenance
+#   job whose failure signal is the operator's only feedback channel:
+#     * default backoffLimit=6  →  ≈ 10+ min of silent exponential
+#       backoff before the Job is marked Failed
+#     * no activeDeadlineSeconds →  a frozen Pod hangs indefinitely
+#       and never trips the EtcdDefragJobFailed /
+#       EtcdSnapshotJobFailed alert
+#   The settings below give every CronJob run a bounded, predictable
+#   failure window.
 #
-# Override these per release (e.g. larger clusters with multi-GB
-# snapshots may legitimately need a higher activeDeadlineSeconds).
+# SIZING activeDeadlineSeconds  — READ THIS BEFORE OVERRIDING
+#
+#   The deadline is a hard wall-clock kill: any Pod that runs past it
+#   is terminated with reason=DeadlineExceeded → Job Failed → alert.
+#   If you set it BELOW your cluster's real p99 runtime you will
+#   produce false-positive pages every night. If you set it too HIGH
+#   a genuinely hung job pages later than necessary. Pick a value
+#   that comfortably bounds the legitimate runtime but no higher.
+#
+#   The two jobs share this single knob, so size for the SLOWER of
+#   the two on your cluster:
+#
+#     defrag p99  ≈  30s × N_cp × max(1, db_GB)
+#                  + waitBetweenDefrags × (N_cp − 1)
+#                  + ~10s leader-move overhead
+#
+#     snapshot p99 ≈ ( 30s etcdctl save
+#                    + 5s  etcdutl verify
+#                    + 60s S3 upload [if snapshot.s3.enabled=true] )
+#                  × max(1, db_GB)
+#
+#   Then take roughly 2× the larger of those two, rounded up to the
+#   nearest 5 minutes:
+#
+#     activeDeadlineSeconds  ≈  2 × max(defrag_p99, snapshot_p99)
+#
+#   Cheat-sheet (with snapshot.s3.enabled=true unless noted):
+#
+#     | db size | CP nodes | recommended activeDeadlineSeconds |
+#     |---------|----------|-----------------------------------|
+#     | ≤ 1 GB  |   3      | 600   (default; s3-off or s3-on)  |
+#     | ≤ 1 GB  |   5      | 900                               |
+#     |   2 GB  |   3      | 1200                              |
+#     |   2 GB  |   5      | 1800                              |
+#     |   4 GB  |   3      | 1800                              |
+#     |   4 GB  |   5      | 3600                              |
+#     |   8 GB  |   3      | 3600                              |
+#     |   8 GB  |   5      | 7200                              |
+#
+#   Validate empirically on YOUR cluster after install:
+#     kubectl get jobs -n kube-system -l app.kubernetes.io/name=nkp-etcd-maintenance \
+#       --sort-by=.metadata.creationTimestamp \
+#       -o custom-columns='NAME:.metadata.name,DUR:.status.completionTime'
+#   then set activeDeadlineSeconds to 2× the observed p99 duration.
+#
+# SIZING backoffLimit
+#   * 4 (default) — survives transient kubelet / network blips
+#     (Pod backoff sequence 10s, 20s, 40s, 80s ≈ 150 s total) and
+#     still lets the Failed alert fire well within its 5-minute
+#     `for:` window. Recommended for every cluster.
+#   * 0 — Job is Failed the moment any Pod exits non-zero. Pages
+#     fast, but a single flaky kubelet restart will wake on-call.
+#     Do not use unless you specifically WANT zero retry tolerance.
+#   * ≥ 6 — re-introduces silent multi-minute backoff before any
+#     alert fires. Do not raise above 4 without a clear reason.
+# ------------------------------------------------------------------
 jobs:
-  # -- Max number of retries before the Job is marked Failed. Cannot
-  # be 0 (use Kubernetes default behaviour) — we always want at least
-  # one retry to absorb a transient kubelet hiccup. Set to a low
-  # positive integer.
+  # -- Max number of retries before the Job is marked Failed.
+  # Recommended: 4 for every cluster. See the sizing notes above.
   backoffLimit: 4
-  # -- Hard wall-clock deadline. The Job controller terminates the
-  # Pod with reason=DeadlineExceeded once this elapses, which makes
-  # the Job Failed and trips the EtcdDefragJobFailed /
-  # EtcdSnapshotJobFailed alert. Pick a value comfortably above your
-  # cluster's observed p99 runtime; 600 s is good for NKP defaults.
+  # -- Hard wall-clock deadline, in seconds. The Job controller
+  # terminates the Pod with reason=DeadlineExceeded once this
+  # elapses, which marks the Job Failed and trips the
+  # EtcdDefragJobFailed / EtcdSnapshotJobFailed alert.
+  #
+  # MUST be set ABOVE your cluster's observed p99 Job runtime — see
+  # the sizing notes above. The 600 s default covers 3-CP clusters
+  # with db_size ≤ 1 GB (the NKP reference topology). Override on
+  # larger clusters or multi-GB etcd databases.
   activeDeadlineSeconds: 600
 
 # ------------------------------------------------------------------
