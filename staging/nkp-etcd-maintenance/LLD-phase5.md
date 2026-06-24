@@ -181,7 +181,7 @@ the uploader has no business modifying the snapshot it's uploading.
 By default `emptyDir` inherits the node's ephemeral storage capacity. We do
 **not** set a `sizeLimit` because:
 
-- etcd databases of ~10 GB are realistic on large clusters; setting an
+- etcd databases of ~6 GB are realistic on large clusters; setting an
   arbitrary `sizeLimit` would manufacture failures.
 - We DO set an ephemeral-storage `requests.ephemeral-storage` on the Pod
   (configurable; default `2Gi`) so the scheduler accounts for the snapshot

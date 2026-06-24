@@ -68,10 +68,21 @@ spec:
   startingDeadlineSeconds: {{ .Values.snapshot.startingDeadlineSeconds }}
   jobTemplate:
     spec:
-      # Don't retry within the same Job — failures are surfaced to the next
-      # cron tick. Retrying immediately against the same (presumably broken)
-      # endpoint achieves nothing. See LLD-phase5.md §12.
-      backoffLimit: 0
+      # NOTE: this supersedes the original LLD-phase5.md §12 stance of
+      # `backoffLimit: 0`. The previous reasoning was "retrying against
+      # a presumably-broken endpoint achieves nothing" — but in practice
+      # the vast majority of snapshot Job failures are transient
+      # (kubelet flapping a static pod, brief peer-network blip, etcd
+      # mid-leader-election). Allowing a small in-Job retry budget
+      # absorbs those without delaying the Failed-alert signal past
+      # the 5-minute `for:` window.
+      backoffLimit: {{ .Values.jobs.backoffLimit }}
+      # Hard wall-clock kill. The snapshot Pod has init containers
+      # (take-snapshot, verify-snapshot) that could in theory hang on
+      # a wedged etcd; this guarantees the Pod is terminated with
+      # reason=DeadlineExceeded inside the window, which marks the
+      # Job Failed and trips EtcdSnapshotJobFailed.
+      activeDeadlineSeconds: {{ .Values.jobs.activeDeadlineSeconds }}
       # Once the Job finishes (success or failure), auto-delete it (and
       # its Pod) after this many seconds. Keeps the namespace tidy on
       # long-running clusters.

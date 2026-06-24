@@ -56,6 +56,16 @@ spec:
   # every time the schedule fires. The Job in turn creates a Pod.
   jobTemplate:
     spec:
+      # Allow a small number of retries to survive transient kubelet /
+      # network blips, but stay well below the 5-minute `for:` window
+      # on EtcdDefragJobFailed so a real failure still pages within
+      # ~3 minutes (4 backoff cycles ≈ 150 s + alert eval).
+      backoffLimit: {{ .Values.jobs.backoffLimit }}
+      # Hard wall-clock kill so a frozen defrag (e.g. wedged etcdctl
+      # exec) does not hang silently past the next cron tick. Pod is
+      # terminated with reason=DeadlineExceeded, which makes the Job
+      # Failed and trips the alert.
+      activeDeadlineSeconds: {{ .Values.jobs.activeDeadlineSeconds }}
       template:
         metadata:
           labels:
