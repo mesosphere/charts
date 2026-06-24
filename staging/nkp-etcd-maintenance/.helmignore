@@ -1,0 +1,37 @@
+# Patterns matched here are excluded from the chart tarball when running
+# `helm package`. This is the chart's last line of defence against shipping
+# internship-internal documentation, chaos-test fixtures, ad-hoc command
+# logs, and macOS metadata cruft to consumers. KEEP THIS FILE.
+
+# --- Standard Helm defaults ---
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*.orig
+*~
+# Various IDEs
+.project
+.idea/
+*.tmproj
+.vscode/
+
+# --- nkp-etcd-maintenance-specific exclusions ---
+# Internal design docs — see the Google-Doc design index linked from each PR.
+LLD-*.md
+# Chaos-testing recipes, manifests, and captured evidence.
+docs/
+# Demo & development scratchpads.
+DEMO.txt
+COMMANDS.md
+# Stale tarballs from previous `helm package` runs in-tree.
+*.tgz
