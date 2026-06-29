@@ -10,9 +10,11 @@ The chart ships three independent, optional features:
 ### 1. Defragmentation CronJob (default: **on**)
 Wraps the open-source [ahrtr/etcd-defrag](https://github.com/ahrtr/etcd-defrag) tool:
 
-- **Leader-last defragmentation** — transfers etcd leadership away before defragging
-  the current leader (`--move-leader`), ensuring the cluster always has a healthy
-  active leader throughout the maintenance window.
+- **Leader-last defragmentation (mandatory, not configurable)** — etcd leadership
+  is always transferred away from the current leader before that member is
+  defragged. This is a hardcoded safety invariant of the chart, not a user
+  toggle: a frozen Raft leader during a bbolt rewrite would trigger an
+  apiserver-visible election storm, so the behaviour is non-negotiable.
 - **Cluster-wide execution** — defragments every member in a single run.
 - **Built-in health pre-check** — aborts if the cluster is unhealthy before
   touching any member (automatically enabled when `--cluster` is passed).
@@ -236,7 +238,6 @@ with `--set` or `-f custom-values.yaml`.
 | `defragmentation.defragRule` | `"dbQuotaUsage > 0.5 \|\| dbSize - dbSizeInUse > 200*1024*1024"` | Rule evaluated before each defrag. Defrag is skipped when the expression is `false`. See [rule syntax](https://github.com/ahrtr/etcd-defrag#defrag-rule). |
 | `defragmentation.endpoint` | `"https://127.0.0.1:2379"` | etcd endpoint. For kubeadm this is always localhost (reached via `hostNetwork`). |
 | `defragmentation.cluster` | `true` | Defragment all cluster members, not just the contacted endpoint. Also enables the automatic cluster health pre-check — the run is aborted if any member is unhealthy. |
-| `defragmentation.leaderLast` | `true` | Defragment the leader last. Maps to `--move-leader` in etcd-defrag v0.40.0, which transfers leadership away before defragging the current leader — the same safety guarantee as strict "leader-last" ordering. |
 | `defragmentation.waitBetweenDefrags` | `"1m"` | Wait duration between consecutive per-member defrag operations. Gives the cluster time to stabilise. Set to `"0s"` to disable. |
 | `defragmentation.autoDisalarm` | `false` | Automatically clear `NOSPACE` alarms after a successful defragmentation. Leave `false` to require manual operator review before clearing alarms. |
 | `defragmentation.etcdPkiHostPath` | `"/etc/kubernetes/pki/etcd"` | Host path containing the kubeadm etcd PKI files. Mounted read-only into the container. |
@@ -1176,7 +1177,7 @@ override via `alerts.additionalLabels`. See
 │                  ┌──────────────────────────────────┐       │
 │                  │ --endpoints=https://127.0.0.1:2379│       │
 │                  │ --cluster                         │       │
-│                  │ --leader-last=true                │       │
+│                  │ --move-leader   (mandatory)       │       │
 │                  │ --defrag-rule="..."               │       │
 │                  │ --cacert / --cert / --key         │       │
 │                  └──────────────────────────────────┘       │
@@ -1280,7 +1281,7 @@ Source DB (fragmented)        Destination DB (new file)
 
 The result is a file where every page contains real data — no gaps, no holes.
 
-### Step 4 — Leader-safe ordering (`--move-leader`)
+### Step 4 — Leader-safe ordering (`--move-leader`, mandatory invariant)
 
 `etcd-defrag` processes members in order: **non-leaders first, then the
 leader**. When it is the leader's turn, it first issues a `MoveLeader` RPC to
@@ -1289,6 +1290,16 @@ moved does it defragment the former leader.
 
 This ensures the cluster always has an active, non-defragging leader and
 maintains write availability throughout the entire maintenance window.
+
+**Why this is hardcoded, not a values toggle.** Defragging the active Raft
+leader without first moving leadership freezes that member for the duration
+of the bbolt rewrite. For a leader, "frozen" means no heartbeats reach the
+followers, an election is called, and the kube-apiserver loses its etcd
+backend until a new leader is elected. The flag is therefore baked into the
+defrag CronJob template (`templates/defrag-cronjob.yaml`) and is **not**
+exposed under `defragmentation.*` in `values.yaml`. Disabling it would
+convert a routine maintenance run into an apiserver-visible outage, so the
+chart treats it as a non-negotiable safety invariant.
 
 ### What the numbers mean in practice
 

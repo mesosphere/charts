@@ -21,10 +21,16 @@ defragmentation:
   # cluster health pre-check — defrag is aborted if any member is unhealthy.
   cluster: true
 
-  # -- Defragment the leader last. Internally maps to --move-leader in
-  # etcd-defrag v0.40.0 (the flag moves leadership away before acting on the
-  # current leader, achieving the same safety guarantee as "leader-last" ordering).
-  leaderLast: true
+  # NOTE: leader-last ordering (etcd-defrag's --move-leader) is a MANDATORY
+  # safety invariant of this chart and is NOT user-configurable.
+  #
+  # Rationale: defragmenting the active Raft leader without first moving
+  # leadership away freezes that member for the duration of the defrag (the
+  # bbolt file is rewritten under a write lock). For a leader, "frozen" means
+  # no heartbeats → followers call an election → the kube-apiserver loses its
+  # etcd backend until a new leader is elected. That is an avoidable
+  # control-plane outage. The flag is therefore hardcoded ON in the defrag
+  # CronJob template; do not add a values toggle for it.
 
   # -- Wait duration between consecutive per-member defrag operations.
   # Gives the cluster time to stabilise between runs. Set to "0s" to disable.

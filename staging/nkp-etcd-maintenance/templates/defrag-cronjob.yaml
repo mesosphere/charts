@@ -180,11 +180,13 @@ spec:
                 # Implies pre-flight health check (refuses on degraded cluster).
                 - --cluster
                 {{- end }}
-                {{- if .Values.defragmentation.leaderLast }}
-                # --move-leader is the v0.40.0 equivalent of "leader-last" ordering:
-                # it transfers etcd leadership away before defragging the current leader.
+                # --move-leader: MANDATORY safety invariant — hardcoded, not
+                # rendered conditionally. Transfers etcd leadership away from
+                # the active leader before that member is defragged, so the
+                # leader is never frozen under a bbolt rewrite. Removing this
+                # flag would cause an apiserver-visible election storm during
+                # every maintenance window. See values.yaml for full rationale.
                 - --move-leader
-                {{- end }}
                 {{- if .Values.defragmentation.autoDisalarm }}
                 # After a successful defrag, automatically clear any NOSPACE
                 # alarm that was raised by previous quota-exhaustion events.
