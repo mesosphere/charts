@@ -298,8 +298,25 @@ spec:
                   # ------------------------------------------------------
                   START_TS=$(date -u +%s)
                   ISO_TS=$(date -u +%Y-%m-%dT%H-%M-%SZ)
-                  PREFIX=$(printf '%s' "${S3_PREFIX}" | sed 's:/*$::')
-                  KEY="${PREFIX}/${CLUSTER_NAME}-${ISO_TS}.db"
+
+                  # Strip trailing slashes from S3_PREFIX using POSIX
+                  # parameter expansion. The upload container's image
+                  # (minio/mc) is scratch-based and ships ONLY the `mc`
+                  # binary plus BusyBox `sh`; standalone utilities such
+                  # as `sed`, `awk`, `grep`, `tr` are NOT in the image.
+                  # The previous `sed 's:/*$::'` crashed with
+                  # "sed: command not found" on RELEASE.2024-11-21 and
+                  # later. Anything not (a) a shell builtin or (b) the
+                  # `mc` binary itself MUST stay out of this script.
+                  PREFIX="${S3_PREFIX}"
+                  while [ "${PREFIX}" != "${PREFIX%/}" ]; do
+                    PREFIX="${PREFIX%/}"
+                  done
+                  # The `${var:+...}` form keeps the key clean when
+                  # PREFIX is empty: KEY becomes "<cluster>-<ts>.db"
+                  # instead of "/<cluster>-<ts>.db", which would land
+                  # in a "//"-prefixed object on some S3 backends.
+                  KEY="${PREFIX:+${PREFIX}/}${CLUSTER_NAME}-${ISO_TS}.db"
 
                   INSECURE=""
                   if [ "${S3_INSECURE}" = "true" ]; then
@@ -327,7 +344,19 @@ spec:
                     || { rc=$?; echo "[upload] phase=copy-failed exit_code=${rc}"; exit "${rc}"; }
 
                   END_TS=$(date -u +%s)
-                  BYTES=$(wc -c < /snapshot/etcd.db | tr -d ' ')
+
+                  # Read the snapshot byte count without depending on
+                  # `tr` (NOT in the minio/mc image — see the comment
+                  # above the sed replacement). `wc` is a BusyBox
+                  # applet so it's safe; we then strip any whitespace
+                  # the wc implementation might emit (BusyBox `wc -c`
+                  # emits none, but GNU `wc -c` right-pads in a
+                  # column) using the POSIX `read` builtin, which is
+                  # 100% in-shell and never spawns a child process.
+                  BYTES_RAW=$(wc -c < /snapshot/etcd.db)
+                  read -r BYTES _ <<EOF
+                  ${BYTES_RAW}
+                  EOF
                   echo "[upload] phase=success bytes_uploaded=${BYTES} wall_clock_seconds=$((END_TS - START_TS))"
               volumeMounts:
                 # Snapshot is mounted READ-ONLY here — once verified, the
