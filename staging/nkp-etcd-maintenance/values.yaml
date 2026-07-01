@@ -313,7 +313,7 @@ alerts:
 # node's etcd static-pod manifest. This is a ONE-SHOT, OPERATOR-DRIVEN
 # tool — NOT a CronJob. The chart's job here is only to install the
 # ConfigMap + RBAC that the per-node Jobs need; the actual roll-out is
-# triggered from a workstation by scripts/quota-bumper/orchestrator.sh
+# triggered from a workstation by files/quota-bumper/orchestrator.sh
 # (which renders files/quota-bumper/job-template.yaml ONCE PER NODE).
 #
 # Off by default: turning it on installs a ServiceAccount with hostPath
@@ -321,7 +321,7 @@ alerts:
 # than the defrag/snapshot jobs. Enable only when you are ready to use
 # the bumper.
 #
-# See:  scripts/quota-bumper/orchestrator.sh --help
+# See:  files/quota-bumper/orchestrator.sh --help
 #       README.md "Etcd Quota Bumper" section
 quotaBumper:
   # -- Master toggle. When false, none of the quota-bumper resources are

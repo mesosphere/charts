@@ -9,7 +9,7 @@
 # This script is part of the nkp-etcd-maintenance Helm chart, but it is a
 # WORKSTATION-side tool: Helm cannot template per-node, single-shot,
 # throw-away Jobs cleanly, so this script renders the per-node Job template
-# (../../files/quota-bumper/job-template.yaml) and applies one Job at a time.
+# (job-template.yaml, alongside this file) and applies one Job at a time.
 #
 # Prerequisites (installed by the chart when quotaBumper.enabled=true):
 #   * ConfigMap        kube-system/etcd-quota-bumper-scripts
@@ -78,10 +78,11 @@ AUTO_APPROVE="${AUTO_APPROVE:-0}"
 # `BASH_SOURCE[0]` = path to *this* script (even when sourced).
 # `cd … && pwd` canonicalises the path (resolves "..", symlinks-ish).
 # JOB_TEMPLATE = absolute path to the per-node Job YAML template
-#                we'll render once per node.
+#                we'll render once per node. It sits alongside this
+#                script under files/quota-bumper/.
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 CHART_ROOT=$(cd "${SCRIPT_DIR}/../.." && pwd)
-JOB_TEMPLATE="${CHART_ROOT}/files/quota-bumper/job-template.yaml"
+JOB_TEMPLATE="${SCRIPT_DIR}/job-template.yaml"
 
 # -------------------- usage --------------------------------------------------
 usage() {
