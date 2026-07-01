@@ -61,11 +61,11 @@ containers, no custom event-emission logic:
 
 | Phase | Status | Notes |
 |---|---|---|
-| Phase 1: Research & Spike | ✅ Complete | Cluster topology validated. Design note written. |
-| Phase 2: Defrag Helm chart (this chart) | ✅ **Complete & validated end-to-end** | 3-member etcd run with leader transfer succeeded on `nkp-harsh-test` (2026-06-01). ~229 MiB reclaimed across the cluster. |
-| Phase 3: Kommander catalog application | ✅ **Complete** (pending cluster validation) | Design: [LLD-phase3.md](./LLD-phase3.md). Catalog app shipped to [`nkp-nutanix-product-catalog/applications/nkp-etcd-maintenance/0.3.0`](../nkp-nutanix-product-catalog/applications/nkp-etcd-maintenance/0.3.0/) under the standard Flux/Kustomize pattern. |
-| Phase 5: Snapshot MVP | 🟡 **In progress** | Design: [LLD-phase5.md](./LLD-phase5.md). Chart implementation, fail-fast invariants, catalog defaults, and docs done. Pending: live-cluster validation against a real S3 endpoint. |
-| Phase Observability | ✅ **Complete** (chart-side; live alert firing pending) | Design: [LLD-phase-observability.md](./LLD-phase-observability.md). Adds `templates/prometheusrule.yaml` with 8 alerts (capability-gated), logfmt upload logs, and the docs sections below: [Default Schedules](#default-schedules), [Enabling and Disabling](#enabling-and-disabling), [Observability — Events, Logs, Alerts](#observability--events-logs-alerts), [Limitations and Non-Goals](#limitations-and-non-goals). |
+| Phase 1: Research & Spike | ✅ **Complete** | Cluster topology validated. Design note written. |
+| Phase 2: Defrag Helm chart (this chart) | ✅ **Complete & tested** | 3-member etcd run with leader transfer succeeded on `nkp-harsh-test` (2026-06-01). ~229 MiB reclaimed across the cluster. |
+| Phase 3: Kommander catalog application | ✅ **Complete & tested** | Design: [LLD-phase3.md](./LLD-phase3.md). Catalog app shipped to [`nkp-nutanix-product-catalog/applications/nkp-etcd-maintenance/0.3.0`](../nkp-nutanix-product-catalog/applications/nkp-etcd-maintenance/0.3.0/) under the standard Flux/Kustomize pattern. |
+| Phase 5: Snapshot MVP | ✅ **Complete & tested** | Design: [LLD-phase5.md](./LLD-phase5.md). Chart implementation, fail-fast invariants, catalog defaults, and docs done. End-to-end validated against a live S3 endpoint. |
+| Phase Observability | ✅ **Complete & tested** | Design: [LLD-phase-observability.md](./LLD-phase-observability.md). Adds `templates/prometheusrule.yaml` with 8 alerts (capability-gated), logfmt upload logs, and the docs sections below: [Default Schedules](#default-schedules), [Enabling and Disabling](#enabling-and-disabling), [Observability — Events, Logs, Alerts](#observability--events-logs-alerts), [Limitations and Non-Goals](#limitations-and-non-goals). Live alert-firing validated end-to-end. |
 
 ### Phase 2 validation evidence — 2026-06-01, 3-control-plane NKP cluster
 
