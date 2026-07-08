@@ -1,0 +1,51 @@
+{{- if .Values.quotaBumper.enabled -}}
+# ============================================================================
+# ConfigMap that ships the three per-node Job scripts:
+#
+#   record-current-id.sh  (init #1)  — capture pre-patch containerID
+#   patch-manifest.sh     (init #2)  — backup + yq-patch /etc/kubernetes/
+#                                       manifests/etcd.yaml atomically
+#   verify-restart.sh     (main)     — wait for restart, prove quorum
+#
+# Scripts are kept as standalone files under files/quota-bumper/ and pulled
+# in here via .Files.Get so they remain readable / diff-able / shellcheck-
+# able on disk. Editing the ConfigMap in-cluster will be reverted on the
+# next `helm upgrade`; treat the files under files/quota-bumper/ as the
+# source of truth.
+# ============================================================================
+# `apiVersion: v1` + `kind: ConfigMap` = a key/value bag mounted into
+# Pods as files or env vars. We use the file-mount form below.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  # Object name. The per-node Job (files/quota-bumper/job-template.yaml)
+  # references this name when mounting the scripts as a volume.
+  name: etcd-quota-bumper-scripts
+  # Lives next to the etcd static pod so the scripts can be applied
+  # without cross-namespace permissions.
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: quota-bumper
+    app.kubernetes.io/part-of: nkp-etcd-maintenance
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+# `data` = map<string,string>. Each key becomes a file inside the
+# mounted volume, with the value as the file body. `|` (block-scalar)
+# preserves newlines so the scripts arrive verbatim.
+#
+# `.Files.Get` reads the raw script file from the chart's files/
+# directory at render time. `indent 4` re-indents every line by 4
+# spaces so they align under the `key: |` block-scalar header
+# without breaking YAML.
+data:
+  record-current-id.sh: |
+{{ .Files.Get "files/quota-bumper/record-current-id.sh" | indent 4 }}
+  patch-manifest.sh: |
+{{ .Files.Get "files/quota-bumper/patch-manifest.sh" | indent 4 }}
+  verify-restart.sh: |
+{{ .Files.Get "files/quota-bumper/verify-restart.sh" | indent 4 }}
+{{- end }}
