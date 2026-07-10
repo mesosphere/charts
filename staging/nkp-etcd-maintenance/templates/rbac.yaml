@@ -1,0 +1,95 @@
+{{/*
+  Render this whole RBAC bundle only when the defrag CronJob is enabled.
+  The snapshot CronJob reuses the same ServiceAccount, so we don't need
+  a separate `if .Values.snapshot.enabled` guard — defrag-enabled is
+  the gate for "any maintenance CronJob runs at all".
+*/}}
+{{- if .Values.defragmentation.enabled -}}
+# ------------------------------------------------------------------
+# ServiceAccount, ClusterRole, and ClusterRoleBinding for the
+# nkp-etcd-maintenance defragmentation CronJob.
+#
+# The ClusterRole is intentionally minimal: it only grants the ability
+# to create/patch/update Events so the job can record status information
+# in the cluster event stream without any broader privileges.
+# ------------------------------------------------------------------
+
+# A ServiceAccount is the cluster-side identity a Pod runs as. The
+# CronJob's Pod will reference this SA via `serviceAccountName`, and
+# Kubernetes will mount its token so the Pod can call the API server.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nkp-etcd-maintenance-sa
+  # `kube-system` is where the etcd static pod lives. We co-locate the
+  # SA here for convention — RBAC could grant access from any namespace.
+  namespace: kube-system
+  labels:
+    # Standard Kubernetes recommended labels — searchable across the cluster.
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    # `.Release.Service` evaluates to "Helm" at install time. Lets ops
+    # tell at a glance "Helm owns this, don't kubectl-edit it".
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+
+---
+# A ClusterRole defines a set of permissions cluster-wide. We use
+# ClusterRole rather than Role because events are namespace-scoped but
+# we want the Pod to be able to write events about etcd in kube-system
+# regardless of which namespace it ends up in.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: nkp-etcd-maintenance-role
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+# `rules` is a list of allowed (apiGroup, resource, verb) combinations.
+# Anything not listed here is denied. This rule says: "may create,
+# patch, and update Event objects in either the core API group ("")
+# or the events.k8s.io group." Two API groups exist for events because
+# of a historical migration; we cover both for compatibility.
+rules:
+  - apiGroups: ["", "events.k8s.io"]
+    resources: ["events"]
+    verbs: ["create", "patch", "update"]
+
+---
+# A ClusterRoleBinding binds a ClusterRole to a list of subjects (Users,
+# Groups, or ServiceAccounts). Without a binding the ClusterRole has no
+# effect — it's just a definition until something is bound to it.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: nkp-etcd-maintenance-rolebinding
+  labels:
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+# `roleRef` says WHICH ClusterRole this binding grants. Immutable
+# after creation — to switch to a different role, delete and recreate.
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: nkp-etcd-maintenance-role
+# `subjects` says WHO gets the permissions. For a Pod-side identity
+# this is the ServiceAccount we defined above; for a human admin it
+# would be a `kind: User` entry.
+subjects:
+  - kind: ServiceAccount
+    name: nkp-etcd-maintenance-sa
+    namespace: kube-system
+{{- end }}

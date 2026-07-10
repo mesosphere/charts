@@ -1,0 +1,59 @@
+# apiVersion v2 = modern Helm 3 chart format. v1 was Helm 2 and is deprecated.
+apiVersion: v2
+
+# Chart name. Used as the default Helm release name, in resource labels
+# (`helm.sh/chart`), and as the directory name under templates/.
+name: nkp-etcd-maintenance
+
+# Human-readable description shown by `helm search` and the NKP catalog tile.
+description: >
+  A Helm chart that deploys recurring etcd maintenance (defragmentation
+  and snapshot) CronJobs on kubeadm-managed Nutanix Kubernetes Platform
+  (NKP) clusters. Defragmentation uses the open-source ahrtr/etcd-defrag
+  tool; snapshotting uses the upstream etcd image's etcdctl/etcdutl tools
+  with an optional S3-compatible upload via the minio/mc client.
+
+# `application` = a chart that installs workloads (vs. `library` charts
+# which only provide template helpers and install nothing themselves).
+type: application
+# 0.3.0 — Phase 5: snapshot MVP.
+#  - Adds nkp-etcd-snapshot CronJob (off by default; opt-in via
+#    snapshot.enabled=true).
+#  - Two-init-container design: take-snapshot (etcdctl snapshot save) +
+#    verify-snapshot (etcdutl snapshot status); upload via minio/mc with
+#    SecretRef-only credentials (no plaintext keys in values).
+#  - Restore is deliberately NOT automated — see README "Manual Restore
+#    Runbook" and LLD-phase5.md §13.
+#
+# 0.2.0 — Phase 2 validated snapshot.
+#  - --move-leader flag (renamed from --leader-last) shipped
+#  - runAsUser: 0 fix shipped
+#  - waitBetweenDefrags + autoDisalarm exposed
+#  - End-to-end leader-safe defrag verified on 3-CP cluster, 2026-06-01
+# Chart version. SemVer-compliant. Helm uses this to decide upgrade ordering.
+# Bump on every change to chart contents (templates, values, helpers).
+version: 0.3.0
+
+# Version of the upstream tool being packaged. Surfaced by `helm list`.
+# Quoted because "v0.40.0" starts with a letter, but the SemVer values
+# we use here (e.g. "1.21") would otherwise be parsed as numbers.
+appVersion: "v0.40.0"
+
+# Keywords surface this chart in `helm search` and in catalog filters.
+keywords:
+  - etcd
+  - defragmentation
+  - maintenance
+  - nkp
+  - nutanix
+
+# Project homepage. Rendered as a clickable link in catalogs.
+home: https://github.com/ahrtr/etcd-defrag
+
+# Upstream source code URLs. Used for licensing/audit purposes.
+sources:
+  - https://github.com/ahrtr/etcd-defrag
+
+# Chart maintainers. `helm show chart` surfaces this; bug reports go here.
+maintainers:
+  - name: harshjha-nuta
