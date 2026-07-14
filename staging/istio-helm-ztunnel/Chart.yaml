@@ -3,9 +3,6 @@ name: istio-helm-ztunnel
 # 1.24.0 supports migration to ambient mesh mode from sidecar
 # Tracker: https://jira.nutanix.com/browse/NCN-112389
 version: 1.25.0
-# appVersion = the vendored Istio version. hack/istio-helm-upgrade/upgrade.sh
-# reads this as the version to upgrade *from* and bumps it automatically; keep it
-# accurate and in lockstep across all istio-helm-* wrappers.
 appVersion: 1.29.0
 description: Helm chart for deploying Istio ztunnel for ambient mesh mode
 keywords:

@@ -39,6 +39,13 @@ To upgrade, run:
 ./upgrade.sh 1.30.0     # or pass a tag explicitly
 ```
 
+> The wrapper `Chart.yaml` `appVersion` is the vendored Istio version and is
+> what the script reads as the "from" (base) version. Keep it accurate and in
+> lockstep across all `istio-helm-*` wrappers: if it is edited out of sync with
+> the upstream the charts were actually vendored from, the 3-way merge base is
+> wrong and the replay can misfire. `upgrade.sh` bumps it automatically on a
+> successful upgrade, so you normally never edit it by hand.
+
 For each chart the script:
 
 - reads the Istio version we are **currently on** from the wrapper
