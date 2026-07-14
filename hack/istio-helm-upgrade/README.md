@@ -2,6 +2,15 @@
 
 Automation for upgrading the Istio (Helm based) charts
 
+## Prerequisites
+
+- `git` and `helm` (>= 3.8, for OCI registry pulls) on `PATH`.
+- Standard POSIX tools: `bash`, `sed`, `find`, `cmp`, `mktemp` (all present by
+  default on macOS and Linux).
+- A **clean working tree on a dedicated branch.** On any error the script
+  hard-resets the tree to the starting commit, which discards uncommitted
+  changes (including unrelated ones).
+
 ## Upgrading
 
 Run from `hack/istio-helm-upgrade/`:

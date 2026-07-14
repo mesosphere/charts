@@ -18,6 +18,10 @@
 # run and leaves conflict markers for you to resolve. On any other error the
 # working tree is rolled back.
 #
+# Requires: git, helm (>= 3.8, for OCI) and standard POSIX tools (bash, sed,
+# find, cmp, mktemp) on PATH. Run on a CLEAN working tree / dedicated branch:
+# on error the script hard-resets and discards uncommitted changes.
+#
 # Usage:
 #   ./upgrade.sh 1.30.0          # upgrade to a specific tag
 
@@ -30,7 +34,9 @@ shopt -s dotglob
 DEFAULT_ISTIO_TAG=1.29.0
 ISTIO_TAG="${1:-${ISTIO_TAG:-${DEFAULT_ISTIO_TAG}}}"
 
-BASEDIR=$(dirname "$(realpath "$0")")
+# Resolve the script's own directory without relying on realpath, which is not
+# available on stock macOS. cd + pwd is portable across macOS and Linux.
+BASEDIR=$(cd "$(dirname "$0")" && pwd)
 REPO_ROOT=$(git -C "${BASEDIR}" rev-parse --show-toplevel)
 STARTING_REV=$(git -C "${REPO_ROOT}" rev-parse HEAD)
 export BASEDIR REPO_ROOT ISTIO_TAG
@@ -38,11 +44,18 @@ export BASEDIR REPO_ROOT ISTIO_TAG
 source "${BASEDIR}/lib/charts.sh"
 source "${BASEDIR}/lib/helpers.sh"
 
-# The Istio version we are upgrading *from*, read from a wrapper Chart.yaml.
+# The Istio version we are upgrading *from* (the merge "base"), read from the
+# istio-helm-base wrapper's appVersion. All wrapper charts are kept in lockstep
+# on the same Istio appVersion, so base is representative. This value must match
+# the upstream the charts were actually vendored from - if appVersion is edited
+# out of sync, the 3-way merge base is wrong and the replay can misfire.
 OLD_ISTIO_TAG=$(sed -n 's/^appVersion:[[:space:]]*//p' "${REPO_ROOT}/staging/istio-helm-base/Chart.yaml" | head -1)
 
 rollback() {
     set +x
+    # WARNING: this hard-resets the working tree to STARTING_REV and discards ALL
+    # uncommitted changes, including unrelated ones. This is why the script must
+    # be run on a clean working tree / dedicated branch.
     echo "ERROR running upgrade. Rolling back to ${STARTING_REV}." >&2
     git -C "${REPO_ROOT}" reset --hard "${STARTING_REV}"
     exit 1
@@ -54,7 +67,7 @@ trap 'rm -rf "${TMPDIR}"' EXIT
 
 echo "Upgrading istio-helm charts ${OLD_ISTIO_TAG} -> ${ISTIO_TAG}"
 
-CONFLICTS=""
+CONFLICTS=()
 
 for name in "${CHARTS[@]}"; do
     wrapper="${REPO_ROOT}/staging/istio-helm-${name}"
@@ -68,8 +81,9 @@ for name in "${CHARTS[@]}"; do
     # Replay our customizations (base -> live) onto the new upstream tree.
     chart_conflicts=$(replay_customizations "${live}" "${TMPDIR}/base/${name}" "${TMPDIR}/new/${name}")
     if [ -n "${chart_conflicts}" ]; then
-        CONFLICTS+="  ${name}:"$'\n'
-        CONFLICTS+=$(echo "${chart_conflicts}" | sed 's|^|    charts/'"${name}"'/|')$'\n'
+        while IFS= read -r cf; do
+            [ -n "${cf}" ] && CONFLICTS+=("charts/${name}/${cf}")
+        done <<< "${chart_conflicts}"
     fi
 
     # Swap the merged result in for the vendored sub-chart.
@@ -83,14 +97,16 @@ for name in "${CHARTS[@]}"; do
     bump_istio_version "${wrapper}/values.yaml" "${OLD_ISTIO_TAG}" "${ISTIO_TAG}"
 done
 
-if [ -n "${CONFLICTS}" ]; then
+if [ "${#CONFLICTS[@]}" -gt 0 ]; then
     # Conflicts are expected human decisions, not script failures: keep the
     # merged tree (with markers) so they can be resolved, and do not roll back.
     trap - ERR
     echo
     echo "Upgrade merged, but these files need manual conflict resolution" >&2
     echo "(edit the <<<<<<< / ======= / >>>>>>> markers, then commit):" >&2
-    echo "${CONFLICTS}" >&2
+    for cf in "${CONFLICTS[@]}"; do
+        echo "  ${cf}" >&2
+    done
     exit 1
 fi
 

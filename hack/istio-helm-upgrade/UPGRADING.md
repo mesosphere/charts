@@ -28,6 +28,11 @@ there is nothing to keep in sync.
 
 ## Upgrading
 
+Prerequisites: `git` and `helm` (>= 3.8, for OCI) plus standard POSIX tools
+(`bash`, `sed`, `find`, `cmp`, `mktemp`) on `PATH`. Run on a **clean working
+tree / dedicated branch** - on any error the script hard-resets to the starting
+commit and discards uncommitted changes.
+
 To upgrade, run:
 
 ```sh
