@@ -3,7 +3,7 @@
 global:
   # Used by istiod templates as fallback when pilot.hub/tag not set
   hub: docker.io/istio
-  tag: 1.29.0
+  tag: 1.30.2
   imagePullPolicy: IfNotPresent
   istioNamespace: istio-system
   priorityClassName: "dkp-critical-priority"
