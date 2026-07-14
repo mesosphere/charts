@@ -1,6 +1,9 @@
 apiVersion: v2
 name: istio-helm-istiod
 version: 1.25.0
+# appVersion = the vendored Istio version. hack/istio-helm-upgrade/upgrade.sh
+# reads this as the version to upgrade *from* and bumps it automatically; keep it
+# accurate and in lockstep across all istio-helm-* wrappers.
 appVersion: 1.29.0
 description: Helm chart for deploying Istio control plane (istiod) with monitoring
 keywords:
