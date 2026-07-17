@@ -53,8 +53,21 @@ function replay_customizations {
         mkdir -p "${result}/$(dirname "${rel}")"
         cp "${live}/${rel}" "${result}/${rel}"
         echo "  note: upstream removed ${rel}; kept our modified copy" >&2
-      elif ! git merge-file --quiet "${result}/${rel}" "${base}/${rel}" "${live}/${rel}" 2>/dev/null; then
-        echo "${rel}"
+      else
+        # git merge-file exit codes: 0 = clean, 1..N = that many conflict
+        # regions, and >= 128 = a hard error (e.g. an unreadable input). Only
+        # the conflict range should be reported as a manual conflict; a hard
+        # error must propagate (return non-zero) so the caller's ERR trap rolls
+        # back instead of mislabelling a real failure as a conflict. --quiet
+        # suppresses the conflict warning but still prints genuine errors.
+        local rc=0
+        git merge-file --quiet "${result}/${rel}" "${base}/${rel}" "${live}/${rel}" || rc=$?
+        if [ "${rc}" -ge 128 ]; then
+          echo "  error: git merge-file failed (exit ${rc}) for ${rel}" >&2
+          return "${rc}"
+        elif [ "${rc}" -ne 0 ]; then
+          echo "${rel}"
+        fi
       fi
     fi
   done < <(cd "${live}" && find . -type f | sed 's|^\./||')
@@ -62,6 +75,12 @@ function replay_customizations {
   # Files we deleted relative to the upstream we came from.
   while IFS= read -r rel; do
     if [ ! -e "${live}/${rel}" ] && [ -e "${result}/${rel}" ]; then
+      # Our deletion wins. If the new upstream also changed this file
+      # (result != base), we are discarding an upstream change, so surface it -
+      # symmetric with the "upstream removed a file we modified" note above.
+      if ! cmp -s "${base}/${rel}" "${result}/${rel}"; then
+        echo "  note: upstream still ships and changed ${rel}; honoring our deletion" >&2
+      fi
       rm -f "${result}/${rel}"
     fi
   done < <(cd "${base}" && find . -type f | sed 's|^\./||')

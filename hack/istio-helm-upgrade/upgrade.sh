@@ -51,11 +51,22 @@ source "${BASEDIR}/lib/helpers.sh"
 # out of sync, the 3-way merge base is wrong and the replay can misfire.
 OLD_ISTIO_TAG=$(sed -n 's/^appVersion:[[:space:]]*//p' "${REPO_ROOT}/staging/istio-helm-base/Chart.yaml" | head -1)
 
+# Set when we intentionally stop for manual conflict resolution. rollback()
+# reads it to decide whether an exit is an expected conflict stop (keep the
+# merged tree) or a genuine failure (hard-reset). See the conflict block below.
+STOP_FOR_CONFLICTS=0
+
 rollback() {
     set +x
-    # WARNING: this hard-resets the working tree to STARTING_REV and discards ALL
-    # uncommitted changes, including unrelated ones. This is why the script must
-    # be run on a clean working tree / dedicated branch.
+    # A conflict stop is an expected outcome, not a failure: keep the merged
+    # tree (with markers) so it can be resolved. Any *other* error hard-resets
+    # to STARTING_REV and discards ALL uncommitted changes, including unrelated
+    # ones - which is why the script must run on a clean working tree / branch.
+    # This flag (not the ordering of a `trap - ERR`) decides the behaviour, so
+    # the rollback path is not fragile to how/where we exit.
+    if [ "${STOP_FOR_CONFLICTS:-0}" = "1" ]; then
+        exit 1
+    fi
     echo "ERROR running upgrade. Rolling back to ${STARTING_REV}." >&2
     git -C "${REPO_ROOT}" reset --hard "${STARTING_REV}"
     exit 1
@@ -98,9 +109,10 @@ for name in "${CHARTS[@]}"; do
 done
 
 if [ "${#CONFLICTS[@]}" -gt 0 ]; then
-    # Conflicts are expected human decisions, not script failures: keep the
-    # merged tree (with markers) so they can be resolved, and do not roll back.
-    trap - ERR
+    # Conflicts are expected human decisions, not script failures. Mark the run
+    # so rollback() keeps the merged tree (with markers) instead of resetting,
+    # then report and exit non-zero.
+    STOP_FOR_CONFLICTS=1
     echo
     echo "Upgrade merged, but these files need manual conflict resolution" >&2
     echo "(edit the <<<<<<< / ======= / >>>>>>> markers, then commit):" >&2
