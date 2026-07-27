@@ -162,9 +162,15 @@ spec:
               resource: limits.cpu
               divisor: "1"
         {{- with .Values.env }}
+        {{/* CA_ADDRESS and XDS_ADDRESS are already rendered above; skip them here so a
+             legacy override (ztunnel.env.CA_ADDRESS/XDS_ADDRESS) can't create a duplicate
+             env entry that strict server-side apply rejects. */}}
+        {{- $reserved := list "CA_ADDRESS" "XDS_ADDRESS" }}
         {{- range $key, $val := . }}
+        {{- if not (has $key $reserved) }}
         - name: {{ $key }}
           value: "{{ $val }}"
+        {{- end }}
         {{- end }}
         {{- end }}
         {{- if .Values.peerCaCrl.enabled }}
