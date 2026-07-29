@@ -1,0 +1,242 @@
+{{- /*
+  Top-level if-gate: when defragmentation.enabled is false (or unset),
+  this whole file renders as empty. Helm will not create the CronJob.
+*/}}
+{{- if .Values.defragmentation.enabled -}}
+# ------------------------------------------------------------------
+# CronJob: nkp-etcd-defrag
+#
+# Runs ahrtr/etcd-defrag on a schedule, restricted to control-plane
+# nodes via nodeSelector + toleration. hostNetwork is required so the
+# container can reach the etcd listener on 127.0.0.1:2379.
+# The kubeadm etcd PKI directory is mounted read-only so the tool can
+# authenticate with the etcd cluster.
+# ------------------------------------------------------------------
+
+# `batch/v1` is the stable Kubernetes API group for Job and CronJob.
+apiVersion: batch/v1
+# `CronJob` is a workload that creates a Job at every cron schedule tick.
+kind: CronJob
+metadata:
+  # Object name. Combined with namespace, this uniquely identifies the
+  # CronJob in the cluster.
+  name: nkp-etcd-defrag
+  # Pinned to kube-system because that's where etcd lives. We never
+  # want the operator to install this into a workload namespace.
+  namespace: kube-system
+  labels:
+    # Recommended Kubernetes labels. Lets `kubectl get cj -l ...` find
+    # this object and lets monitoring stacks key on `app.kubernetes.io/name`.
+    app.kubernetes.io/name: nkp-etcd-maintenance
+    app.kubernetes.io/component: etcd-defrag
+    # `.Release.Service` = "Helm" — flags this resource as Helm-managed.
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    # Comes from _helpers.tpl: "nkp-etcd-maintenance-<version>".
+    helm.sh/chart: {{ include "nkp-etcd-maintenance.chart" . }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.cronJobAnnotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  # Cron expression in standard 5-field format (UTC, by default).
+  # Default "30 2 * * *" = 02:30 UTC every day.
+  schedule: {{ .Values.defragmentation.schedule | quote }}
+  # Prevent overlapping runs if a previous job is still in progress.
+  # `Forbid` = if the previous run hasn't finished, skip this tick.
+  # Alternative is `Allow` (concurrent) or `Replace` (kill the old one).
+  concurrencyPolicy: Forbid
+  # How many successful/failed Job records the CronJob controller keeps
+  # in etcd for forensic review. Higher = more history but more etcd churn.
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  # `jobTemplate.spec` is the template the CronJob clones into a Job
+  # every time the schedule fires. The Job in turn creates a Pod.
+  jobTemplate:
+    spec:
+      # Allow a small number of retries to survive transient kubelet /
+      # network blips, but stay well below the 5-minute `for:` window
+      # on EtcdDefragJobFailed so a real failure still pages within
+      # ~3 minutes (4 backoff cycles ≈ 150 s + alert eval).
+      backoffLimit: {{ .Values.jobs.backoffLimit }}
+      # Hard wall-clock kill so a frozen defrag (e.g. wedged etcdctl
+      # exec) does not hang silently past the next cron tick. Pod is
+      # terminated with reason=DeadlineExceeded, which makes the Job
+      # Failed and trips the alert.
+      activeDeadlineSeconds: {{ .Values.jobs.activeDeadlineSeconds }}
+      template:
+        metadata:
+          labels:
+            # Same labels as the CronJob so `kubectl get pod -l ...` finds
+            # the running defrag Pod too. Inheriting labels via Helm
+            # template would also work but explicit is easier to read.
+            app.kubernetes.io/name: nkp-etcd-maintenance
+            app.kubernetes.io/component: etcd-defrag
+            {{- with .Values.commonLabels }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+        spec:
+          # The identity the Pod runs as. The SA is defined in rbac.yaml
+          # and only carries permissions to write Events. The Pod does
+          # NOT call the Kubernetes API for etcd itself — it talks
+          # directly to etcd over the local 127.0.0.1:2379 port using TLS.
+          serviceAccountName: nkp-etcd-maintenance-sa
+
+          # Required: share the host network namespace so the container can
+          # reach etcd on loopback (127.0.0.1:2379).
+          hostNetwork: true
+
+          # Never restart — if defrag fails, the CronJob will retry on the
+          # next scheduled run rather than looping indefinitely.
+          restartPolicy: Never
+
+          # ---- Scheduling constraints --------------------------------
+          # `nodeSelector` is a hard "I will only run on a node whose
+          # labels match this" filter. Empty string value means "label
+          # exists, value doesn't matter" — same as how kubeadm labels
+          # control-plane nodes.
+          # Run exclusively on control-plane nodes where etcd is present.
+          nodeSelector:
+            node-role.kubernetes.io/control-plane: ""
+
+          # `tolerations` let the Pod survive taints that would
+          # otherwise repel it. Control-plane nodes carry a
+          # `NoSchedule` taint specifically so user workloads don't
+          # land there. We tolerate it because we DO want to be there.
+          tolerations:
+            # Tolerate the standard control-plane NoSchedule taint applied
+            # by kubeadm so the pod is actually schedulable on those nodes.
+            # `operator: Exists` = match the taint regardless of value;
+            # `effect: NoSchedule` = match only NoSchedule taints (not
+            # NoExecute or PreferNoSchedule).
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+              effect: NoSchedule
+            # Also tolerate the legacy master taint for older clusters.
+            # K8s < 1.24 used this key; tolerating both keys means the
+            # chart works on any kubeadm version we still support.
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+              effect: NoSchedule
+
+          # ---- Volumes -----------------------------------------------
+          # A Volume is storage available to all containers in the Pod.
+          # We mount the host's etcd PKI directory so the defrag tool
+          # can authenticate to etcd. PKI = Public Key Infrastructure;
+          # the directory holds the TLS certs and private keys etcd
+          # uses for client + peer authentication.
+          volumes:
+            - name: etcd-pki
+              # hostPath = mount a path from the underlying node into
+              # the Pod. Risky in general, but the only way to access
+              # kubeadm's PKI material without copying it elsewhere.
+              hostPath:
+                # kubeadm places etcd client certs here on every control-plane node.
+                path: {{ .Values.defragmentation.etcdPkiHostPath }}
+                # `type: Directory` makes kubelet refuse to schedule the
+                # Pod unless that path exists AND is a directory. Catches
+                # mis-pinned nodeSelectors that landed the Pod on a
+                # non-control-plane node.
+                type: Directory
+
+          # ---- Containers --------------------------------------------
+          # When the chart's image is in a private registry, the
+          # operator can list secrets here so kubelet can authenticate
+          # to pull. Default empty list = no private-registry auth.
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          containers:
+            - name: etcd-defrag
+              # Full image reference: <repo>:<tag>. The repo defaults
+              # to ghcr.io/ahrtr/etcd-defrag (the upstream maintainer's
+              # registry); tag defaults to a pinned version (NOT :latest).
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              # IfNotPresent = pull only when the image isn't on the
+              # node's local image cache. Reduces registry load and
+              # makes air-gapped operation possible. Always = pull
+              # every time (good for :latest); Never = require pre-pull.
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+              args:
+                # Client endpoint the tool talks to. Localhost works
+                # because hostNetwork=true puts the container in the
+                # node's network namespace, so 127.0.0.1 = the node.
+                - --endpoints={{ .Values.defragmentation.endpoint }}
+                # TLS CA: lets etcd-defrag verify it's talking to the
+                # real etcd (mutual auth).
+                - --cacert={{ .Values.defragmentation.etcdPkiHostPath }}/ca.crt
+                # Client cert + key: prove our identity to etcd. server.crt
+                # is reused as the "admin" cert here — kubeadm tags it
+                # with the right CN ("etcd-server") for full access.
+                - --cert={{ .Values.defragmentation.etcdPkiHostPath }}/server.crt
+                - --key={{ .Values.defragmentation.etcdPkiHostPath }}/server.key
+                {{- if .Values.defragmentation.cluster }}
+                # --cluster: defrag every member, not just the local one.
+                # Implies pre-flight health check (refuses on degraded cluster).
+                - --cluster
+                {{- end }}
+                # --move-leader: MANDATORY safety invariant — hardcoded, not
+                # rendered conditionally. Transfers etcd leadership away from
+                # the active leader before that member is defragged, so the
+                # leader is never frozen under a bbolt rewrite. Removing this
+                # flag would cause an apiserver-visible election storm during
+                # every maintenance window. See values.yaml for full rationale.
+                - --move-leader
+                {{- if .Values.defragmentation.autoDisalarm }}
+                # After a successful defrag, automatically clear any NOSPACE
+                # alarm that was raised by previous quota-exhaustion events.
+                # Off by default — operator usually wants to investigate first.
+                - --auto-disalarm
+                {{- end }}
+                # Sleep between consecutive per-member defrags. Gives the
+                # cluster time to rebalance leadership and catch up on writes
+                # before we hit the next member. "0s" disables the pause.
+                - --wait-between-defrags={{ .Values.defragmentation.waitBetweenDefrags }}
+                # Conditional defrag: only defrag when this PromQL-like
+                # expression evaluates true (e.g. "dbQuotaUsage > 0.5").
+                # Avoids defragging a tiny DB just because the cron tick fired.
+                - --defrag-rule={{ .Values.defragmentation.defragRule }}
+
+              # volumeMounts make the named volumes above visible inside
+              # this container at the given filesystem path.
+              volumeMounts:
+                - name: etcd-pki
+                  mountPath: {{ .Values.defragmentation.etcdPkiHostPath }}
+                  # readOnly=true so a compromised defrag image cannot
+                  # mutate the cluster's PKI material on the host.
+                  readOnly: true
+
+              # CPU/memory requests + limits. Defaults are tight because
+              # defrag is short-lived and mostly I/O-bound. Overrideable
+              # via .Values.resources.
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+
+              # runAsUser: 0 is required. server.key on the host is 0600 root:root.
+              # The etcd-defrag image defines a non-root USER in its Dockerfile
+              # (distroless images typically use UID 65532). runAsNonRoot: false
+              # alone does NOT change the UID — it only disables Kubernetes'
+              # enforcement check. Without runAsUser: 0, the container still runs
+              # as the image's non-root UID and gets "permission denied" on the key.
+              # runAsUser: 0 overrides the image's USER instruction and forces UID 0.
+              securityContext:
+                # Process UID inside the container. 0 = root. Required to
+                # read the 0600-permissioned etcd private key from the
+                # mounted PKI volume.
+                runAsUser: 0
+                # When true, a process inside the container could call
+                # setuid() to escalate privileges. We never need that;
+                # turning it off makes the container's blast radius
+                # strictly smaller than its starting UID.
+                allowPrivilegeEscalation: false
+                # Root filesystem is read-only. Defragmenter only needs
+                # to read PKI + write to a TCP socket; it never writes
+                # files. Read-only root prevents image-tampering attacks
+                # that try to drop a binary somewhere.
+                readOnlyRootFilesystem: true
+{{- end }}
