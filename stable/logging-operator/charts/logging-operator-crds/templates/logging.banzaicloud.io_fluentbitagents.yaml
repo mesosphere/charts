@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.3
+    controller-gen.kubebuilder.io/version: v0.21.0
 {{- with .Values.annotations }}
 {{- toYaml . | nindent 4 }}
 {{- end }}
@@ -792,6 +792,8 @@ spec:
                 type: object
               bufferVolumeMetrics:
                 properties:
+                  enabled:
+                    type: boolean
                   interval:
                     type: string
                   path:
@@ -803,6 +805,10 @@ spec:
                     type: boolean
                   prometheusRules:
                     type: boolean
+                  prometheusRulesLabels:
+                    additionalProperties:
+                      type: string
+                    type: object
                   prometheusRulesOverride:
                     items:
                       properties:
@@ -882,7 +888,6 @@ spec:
                               type: string
                             sourceLabels:
                               items:
-                                pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                                 type: string
                               type: array
                             targetLabel:
@@ -929,7 +934,6 @@ spec:
                               type: string
                             sourceLabels:
                               items:
-                                pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                                 type: string
                               type: array
                             targetLabel:
@@ -1142,6 +1146,8 @@ spec:
                 type: boolean
               disableVarLibDockerContainers:
                 type: boolean
+              disableVarLog:
+                type: boolean
               dnsConfig:
                 properties:
                   nameservers:
@@ -1201,6 +1207,23 @@ spec:
                               type: string
                           required:
                           - fieldPath
+                          type: object
+                          x-kubernetes-map-type: atomic
+                        fileKeyRef:
+                          properties:
+                            key:
+                              type: string
+                            optional:
+                              default: false
+                              type: boolean
+                            path:
+                              type: string
+                            volumeName:
+                              type: string
+                          required:
+                          - key
+                          - path
+                          - volumeName
                           type: object
                           x-kubernetes-map-type: atomic
                         resourceFieldRef:
@@ -1331,6 +1354,8 @@ spec:
                   Kube_URL:
                     type: string
                   Kube_meta_preload_cache_dir:
+                    type: string
+                  Kubelet_Host:
                     type: string
                   Kubelet_Port:
                     type: string
@@ -1508,6 +1533,8 @@ spec:
                 properties:
                   Require_ack_response:
                     type: boolean
+                  Retain_Metadata_In_Forward_Mode:
+                    type: boolean
                   Retry_Limit:
                     type: string
                   Send_options:
@@ -1572,6 +1599,8 @@ spec:
                   Docker_Mode_Parser:
                     type: string
                   Exclude_Path:
+                    type: string
+                  File_Cache_Advise:
                     type: string
                   Ignore_Older:
                     type: string
@@ -1709,6 +1738,8 @@ spec:
                 type: string
               metrics:
                 properties:
+                  enabled:
+                    type: boolean
                   interval:
                     type: string
                   path:
@@ -1720,6 +1751,10 @@ spec:
                     type: boolean
                   prometheusRules:
                     type: boolean
+                  prometheusRulesLabels:
+                    additionalProperties:
+                      type: string
+                    type: object
                   prometheusRulesOverride:
                     items:
                       properties:
@@ -1799,7 +1834,6 @@ spec:
                               type: string
                             sourceLabels:
                               items:
-                                pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                                 type: string
                               type: array
                             targetLabel:
@@ -1846,7 +1880,6 @@ spec:
                               type: string
                             sourceLabels:
                               items:
-                                pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
                                 type: string
                               type: array
                             targetLabel:
@@ -2717,6 +2750,10 @@ spec:
                 type: string
               targetPort:
                 format: int32
+                type: integer
+              terminationGracePeriodSeconds:
+                format: int64
+                minimum: 0
                 type: integer
               tls:
                 properties:

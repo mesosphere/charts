@@ -156,6 +156,7 @@ rules:
 - apiGroups:
   - logging.banzaicloud.io
   resources:
+  - axosyslogs
   - clusterflows
   - clusteroutputs
   - flows
@@ -163,7 +164,6 @@ rules:
   - fluentdconfigs
   - loggingroutes
   - loggings
-  - nodeagents
   - outputs
   - syslogngclusterflows
   - syslogngclusteroutputs
@@ -181,6 +181,7 @@ rules:
 - apiGroups:
   - logging.banzaicloud.io
   resources:
+  - axosyslogs/status
   - clusterflows/status
   - clusteroutputs/status
   - flows/status
@@ -188,7 +189,6 @@ rules:
   - fluentdconfigs/status
   - loggingroutes/status
   - loggings/status
-  - nodeagents/status
   - outputs/status
   - syslogngclusterflows/status
   - syslogngclusteroutputs/status

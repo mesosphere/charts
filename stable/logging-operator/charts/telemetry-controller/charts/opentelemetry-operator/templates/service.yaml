@@ -9,15 +9,9 @@ metadata:
     {{- include "opentelemetry-operator.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller-manager
   name: {{ template "opentelemetry-operator.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ template "opentelemetry-operator.namespace" . }}
 spec:
   ports:
-    {{- if .Values.kubeRBACProxy.enabled }}
-    - name: https
-      port: {{ .Values.kubeRBACProxy.ports.proxyPort }}
-      protocol: TCP
-      targetPort: https
-    {{- end }}
     - name: metrics
       port: {{ .Values.manager.ports.metricsPort }}
       protocol: TCP
@@ -39,7 +33,7 @@ metadata:
     {{- include "opentelemetry-operator.labels" . | nindent 4 }}
     app.kubernetes.io/component: controller-manager
   name: {{ template "opentelemetry-operator.fullname" . }}-webhook
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ template "opentelemetry-operator.namespace" . }}
 spec:
   ports:
     - port: {{ .Values.admissionWebhooks.servicePort }}
