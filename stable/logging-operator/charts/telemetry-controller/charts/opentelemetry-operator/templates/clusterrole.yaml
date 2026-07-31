@@ -30,12 +30,63 @@ rules:
       - events
     verbs:
       - create
+      - get
+      - list
       - patch
+      - watch
   - apiGroups:
       - ""
     resources:
       - namespaces
     verbs:
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - nodes/spec
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - pods/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - replicationcontrollers
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - replicationcontrollers/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - resourcequotas
+    verbs:
+      - get
       - list
       - watch
   - apiGroups:
@@ -57,6 +108,22 @@ rules:
       - extensions
     resources:
       - replicasets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - daemonsets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - deployments
     verbs:
       - get
       - list
@@ -107,9 +174,21 @@ rules:
       - list
       - watch
   - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - ""
     resources:
+{{- if semverCompare ">=1.33-0" .Capabilities.KubeVersion.Version }}
+      - nodes/pods
+{{- else }}
       - nodes/proxy
+{{- end }}
     verbs:
       - get
   - apiGroups:
@@ -137,6 +216,34 @@ rules:
       - list
       - update
   - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+  - apiGroups:
+      - events.k8s.io
+    resources:
+      - events
+    verbs:
+      - create
+      - list
+      - patch
+      - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - httproutes
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
       - monitoring.coreos.com
     resources:
       - podmonitors
@@ -153,6 +260,7 @@ rules:
       - networking.k8s.io
     resources:
       - ingresses
+      - networkpolicies
     verbs:
       - create
       - delete
@@ -269,6 +377,14 @@ rules:
     - patch
     - update
   - apiGroups:
+    - opentelemetry.io
+    resources:
+    - targetallocators/finalizers
+    verbs:
+    - get
+    - patch
+    - update
+  - apiGroups:
       - cert-manager.io
     resources:
       - issuers
@@ -282,8 +398,20 @@ rules:
       - update
       - patch
       - delete
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
 
-{{ if .Values.kubeRBACProxy.enabled }}
+{{ if .Values.manager.metrics.secure }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -297,26 +425,5 @@ rules:
       - /metrics
     verbs:
       - get
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  labels:
-    {{- include "opentelemetry-operator.labels" . | nindent 4 }}
-    app.kubernetes.io/component: controller-manager
-  name: {{ template "opentelemetry-operator.fullname" . }}-proxy
-rules:
-  - apiGroups:
-      - authentication.k8s.io
-    resources:
-      - tokenreviews
-    verbs:
-      - create
-  - apiGroups:
-      - authorization.k8s.io
-    resources:
-      - subjectaccessreviews
-    verbs:
-      - create
 {{- end }}
 {{ end }}

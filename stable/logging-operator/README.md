@@ -64,7 +64,7 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | monitoring.serviceMonitor.relabelings | list | `[]` |  |
 | podSecurityContext | object | `{}` | Pod SecurityContext for Logging operator. [More info](https://kubernetes.io/docs/concepts/policy/security-context/) # SecurityContext holds pod-level security attributes and common container settings. # This defaults to non root user with uid 1000 and gid 2000.	*v1.PodSecurityContext	false # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/ |
 | securityContext | object | `{}` | Container SecurityContext for Logging operator. [More info](https://kubernetes.io/docs/concepts/policy/security-context/) |
-| priorityClassName | object | `{}` | Operator priorityClassName. |
+| priorityClassName | string | `nil` | Operator priorityClassName. |
 | serviceAccount.annotations | object | `{}` | Define annotations for logging-operator ServiceAccount. |
 | resources | object | `{}` | CPU/Memory resource requests/limits |
 | nodeSelector | object | `{}` |  |
@@ -81,6 +81,7 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | logging.fluentbitDisabled | bool | `false` | Flag to disable fluentbit completely |
 | logging.fluentbit | object | `{}` | Fluent-bit configurations https://kube-logging.github.io/docs/configuration/crds/v1beta1/fluentbit_types/ |
 | logging.fluentdDisabled | bool | `false` | Flag to disable fluentd completely |
+| logging.fluentdConfig | object | `{"create":false}` | Create a FluentdConfig as a separate custom resource. Default is false, which means that the fluentd configuration will be generated as part of the Logging custom resource if fluentd is enabled. Setting this to true will create a separate FluentdConfig custom resource with the same name as the Logging resource. |
 | logging.fluentd | object | `{}` | Fluentd configurations https://kube-logging.github.io/docs/configuration/crds/v1beta1/fluentd_types/ |
 | logging.syslogNG | object | `{}` | Syslog-NG statefulset configuration |
 | logging.defaultFlow | object | `{}` | Default flow for unmatched logs. This Flow configuration collects all logs that didn’t match any other Flow. |
@@ -90,37 +91,27 @@ Use `createCustomResource=false` with Helm v3 to avoid trying to create CRDs fro
 | logging.watchNamespaceSelector | object | `{}` | Limit namespaces to watch Flow and Output custom resources. |
 | logging.clusterDomain | string | `"cluster.local."` | Cluster domain name to be used when templating URLs to services |
 | logging.controlNamespace | string | `""` | Namespace for cluster wide configuration resources like ClusterFlow and ClusterOutput. This should be a protected namespace from regular users. Resources like fluentbit and fluentd will run in this namespace as well. |
+| logging.fluentBitAgentNamespace | string | `""` | Namespace to deploy FluentBit resources into. If empty, defaults to controlNamespace for backward compatibility. |
 | logging.allowClusterResourcesFromAllNamespaces | bool | `false` | Allow configuration of cluster resources from any namespace. Mutually exclusive with ControlNamespace restriction of Cluster resources |
-| logging.nodeAgents | list | `[]` | NodeAgent Configuration DEPRECATED: This field will be removed in a future release. |
 | logging.configCheck | object | `{}` | configCheck provides possibility for timeout-based configuration checks https://kube-logging.dev/docs/whats-new/#timeout-based-configuration-checks |
 | logging.enableRecreateWorkloadOnImmutableFieldChange | bool | `false` | EnableRecreateWorkloadOnImmutableFieldChange enables the operator to recreate the fluentbit daemonset and the fluentd statefulset (and possibly other resource in the future) in case there is a change in an immutable field that otherwise couldn’t be managed with a simple update. |
 | logging.enableDockerParserCompatibilityForCRI | bool | `false` | EnableDockerParserCompatibilityForCRI enables Docker log format compatibility for CRI workloads. |
 | logging.clusterFlows | list | `[]` | ClusterFlows to deploy |
 | logging.clusterOutputs | list | `[]` | ClusterOutputs to deploy |
-| logging.eventTailer.enabled | bool | `false` |  |
-| logging.eventTailer.name | string | `"event-tailer"` |  |
-| logging.eventTailer.image.repository | string | `nil` | repository of eventTailer image |
-| logging.eventTailer.image.tag | string | `nil` | tag of eventTailer image |
-| logging.eventTailer.image.pullPolicy | string | `nil` | pullPolicy of eventTailer image |
-| logging.eventTailer.image.imagePullSecrets | list | `[]` | imagePullSecrets of eventTailer image |
-| logging.eventTailer.pvc.enabled | bool | `true` | enable pvc for |
-| logging.eventTailer.pvc.accessModes | list | `["ReadWriteOnce"]` | storage class for event tailer pvc |
-| logging.eventTailer.pvc.volumeMode | string | `"Filesystem"` | storage class for event tailer pvc |
-| logging.eventTailer.pvc.storage | string | `"1Gi"` | storage for event tailer pvc |
-| logging.eventTailer.pvc.storageClassName | string | `nil` | storage class for event tailer pvc |
-| logging.eventTailer.workloadMetaOverrides | string | `nil` | workloadMetaOverrides |
-| logging.eventTailer.workloadOverrides | string | `nil` | workloadOverrides |
-| logging.eventTailer.containerOverrides | string | `nil` | containerOverrides |
-| logging.hostTailer.enabled | bool | `false` | HostTailer |
-| logging.hostTailer.name | string | `"hosttailer"` | name of HostTailer |
-| logging.hostTailer.image.repository | string | `nil` | repository of eventTailer image |
-| logging.hostTailer.image.tag | string | `nil` | tag of eventTailer image |
-| logging.hostTailer.image.pullPolicy | string | `nil` | pullPolicy of eventTailer image |
-| logging.hostTailer.image.imagePullSecrets | list | `[]` | imagePullSecrets of eventTailer image |
-| logging.hostTailer.workloadMetaOverrides | string | `nil` | workloadMetaOverrides of HostTailer |
-| logging.hostTailer.workloadOverrides | string | `nil` | workloadOverrides of HostTailer |
-| logging.hostTailer.fileTailers | list | `[]` | configure fileTailers of HostTailer example:   - name: sample-file     path: /var/log/sample-file     disabled: false     buffer_max_size:     buffer_chunk_size:     skip_long_lines:     read_from_head: false     containerOverrides:     image: |
-| logging.hostTailer.systemdTailers | list | `[]` | configure systemdTailers of HostTailer example:   - name: system-sample     disabled: false     systemdFilter: kubelet.service     maxEntries: 20     containerOverrides:     image: |
+| logging.eventTailer.enabled | bool | `false` | Enable EventTailer |
+| logging.eventTailer.name | string | `"event-tailer"` | Name of the EventTailer resource |
+| logging.eventTailer.image.repository | string | `"ghcr.io/kube-logging/eventrouter"` | Repository of the EventTailer image |
+| logging.eventTailer.image.tag | string | `"1.0.0"` | Tag of the EventTailer image |
+| logging.eventTailer.image.pullPolicy | string | `"IfNotPresent"` | Image pull policy for the EventTailer image |
+| logging.eventTailer.image.imagePullSecrets | list | `[]` | Image pull secrets for the EventTailer image |
+| logging.eventTailer.pvc.enabled | bool | `true` | Enable PVC for position storage |
+| logging.eventTailer.pvc.accessModes | list | `["ReadWriteOnce"]` | Access modes for the PVC |
+| logging.eventTailer.pvc.volumeMode | string | `"Filesystem"` | Volume mode for the PVC |
+| logging.eventTailer.pvc.storage | string | `"1Gi"` | Storage size for the PVC |
+| logging.eventTailer.pvc.storageClassName | string | `""` | Storage class name for the PVC. If not set, the default storage class will be used |
+| logging.eventTailer.workloadMetaOverrides | object | `{}` | workloadMetaOverrides allows adding labels and annotations to the EventTailer workload |
+| logging.eventTailer.workloadOverrides | object | `{}` | workloadOverrides allows customization of the EventTailer workload (e.g., affinity, tolerations, resources) |
+| logging.eventTailer.containerOverrides | object | `{}` | containerOverrides allows customization of the EventTailer container (e.g., resources, env vars) |
 | logging.hostTailers.enabled | bool | `false` | Enable all hostTailers |
 | logging.hostTailers.instances | list | `[]` | List of hostTailers configurations |
 | testReceiver.enabled | bool | `false` |  |

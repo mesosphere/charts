@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.17.3
+    controller-gen.kubebuilder.io/version: v0.21.0
   name: outputs.telemetry.kube-logging.dev
 spec:
   group: telemetry.kube-logging.dev
@@ -51,7 +51,7 @@ spec:
               authentication:
                 description: Output Authentication configuration.
                 properties:
-                  basicauth:
+                  basicAuth:
                     properties:
                       passwordField:
                         type: string
@@ -73,7 +73,7 @@ spec:
                       usernameField:
                         type: string
                     type: object
-                  bearerauth:
+                  bearerAuth:
                     properties:
                       secretRef:
                         description: |-
@@ -93,6 +93,249 @@ spec:
                       tokenField:
                         type: string
                     type: object
+                type: object
+                x-kubernetes-validations:
+                - message: 'Only one authentication method can be specified: either
+                    basicAuth or bearerAuth, not both'
+                  rule: (has(self.basicAuth) && has(self.bearerAuth)) == false
+              awss3:
+                description: |-
+                  AWSS3 defines configuration for the AWS S3 exporter.
+                  ref: https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/awss3exporter
+                properties:
+                  encoding:
+                    description: Encoding extension ID. When set, overrides the marshaler.
+                    type: string
+                  encoding_file_extension:
+                    description: EncodingFileExtension is appended to the uploaded
+                      file when an Encoding is configured.
+                    type: string
+                  marshaler:
+                    description: |-
+                      MarshalerName specifies how telemetry is serialized before upload.
+                      Supported values: `otlp_proto`, `otlp_json`, `sumo_ic`, `body`. Default: `otlp_json`.
+                    enum:
+                    - otlp_proto
+                    - otlp_json
+                    - sumo_ic
+                    - body
+                    type: string
+                  resource_attrs_to_s3:
+                    description: ResourceAttrsToS3 allows S3 uploader fields to be
+                      sourced from resource attributes.
+                    properties:
+                      s3_bucket:
+                        description: S3Bucket is the resource attribute key whose
+                          value is used as the bucket name.
+                        type: string
+                      s3_prefix:
+                        description: S3Prefix is the resource attribute key whose
+                          value is used as the object key prefix.
+                        type: string
+                    type: object
+                  retry_on_failure:
+                    description: RetryConfig configures the retry behavior on export
+                      failure.
+                    properties:
+                      initial_interval:
+                        description: |-
+                          InitialInterval the time to wait after the first failure before retrying.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
+                      max_elapsed_time:
+                        description: |-
+                          MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
+                          Once this value is reached, the data is discarded. If set to 0, the retries are never stopped.
+                          Default value is 0 to ensure that the data is never discarded.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
+                      max_interval:
+                        description: |-
+                          MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
+                          consecutive retries will always be `MaxInterval`. See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
+                      multiplier:
+                        description: Multiplier is the value multiplied by the backoff
+                          interval bounds
+                        type: string
+                      randomization_factor:
+                        description: |-
+                          RandomizationFactor is a random factor used to calculate next backoffs
+                          Randomized interval = RetryInterval * (1 ± RandomizationFactor)
+                        type: string
+                    type: object
+                  s3uploader:
+                    description: S3Uploader configures the S3 upload behavior (bucket,
+                      prefix, region, etc.).
+                    properties:
+                      acl:
+                        description: ACL is the canned ACL to apply to uploaded objects
+                          (e.g. `private`, `public-read`).
+                        type: string
+                      compression:
+                        description: |-
+                          Compression algorithm applied to the payload before upload.
+                          Supported values: `gzip`, `zstd`.
+                        enum:
+                        - gzip
+                        - zstd
+                        type: string
+                      disable_ssl:
+                        description: DisableSSL forces communication via HTTP instead
+                          of HTTPS.
+                        type: boolean
+                      endpoint:
+                        description: |-
+                          Endpoint is the URL used to communicate with S3 (useful for S3-compatible stores).
+                          Either S3Bucket or Endpoint must be set.
+                        type: string
+                      file_prefix:
+                        description: FilePrefix is prepended to the file name to avoid
+                          potential collisions.
+                        type: string
+                      region:
+                        description: 'Region is the AWS region the bucket lives in.
+                          Default: `us-east-1`.'
+                        type: string
+                      retry_max_attempts:
+                        description: 'RetryMaxAttempts is the maximum number of retry
+                          attempts for the S3 client. Default: 3.'
+                        type: integer
+                      retry_max_backoff:
+                        description: |-
+                          RetryMaxBackoff is the maximum backoff delay for the S3 client.
+                          See time.ParseDuration for valid values. Default: 20s.
+                        format: duration
+                        type: string
+                      retry_mode:
+                        description: |-
+                          RetryMode for the S3 client. Supported values: `standard`, `adaptive`, `nop`.
+                          Default: `standard`.
+                        enum:
+                        - standard
+                        - adaptive
+                        - nop
+                        type: string
+                      role_arn:
+                        description: RoleArn is the role policy to assume when interacting
+                          with S3.
+                        type: string
+                      s3_base_prefix:
+                        description: S3BasePrefix is the root key (directory) prefix
+                          used to write the file.
+                        type: string
+                      s3_bucket:
+                        description: |-
+                          S3Bucket is the name of the destination bucket.
+                          Either S3Bucket or Endpoint must be set.
+                        type: string
+                      s3_force_path_style:
+                        description: S3ForcePathStyle forces path-style addressing
+                          of S3 objects.
+                        type: boolean
+                      s3_partition_format:
+                        description: |-
+                          S3PartitionFormat controls the time-based rollup of object keys using strftime
+                          formatting. Default: `year=%Y/month=%m/day=%d/hour=%H/minute=%M`.
+                        type: string
+                      s3_partition_timezone:
+                        description: S3PartitionTimezone is the timezone used for
+                          partition time. Defaults to local time.
+                        type: string
+                      s3_prefix:
+                        description: S3Prefix is the key (directory) prefix used inside
+                          the bucket; appended to S3BasePrefix.
+                        type: string
+                      storage_class:
+                        description: |-
+                          StorageClass is the S3 storage class for uploaded objects (e.g. `STANDARD`,
+                          `STANDARD_IA`, `GLACIER`). Default: `STANDARD`.
+                        type: string
+                      unique_key_func_name:
+                        description: |-
+                          UniqueKeyFuncName specifies which function to use for generating a unique
+                          component of the S3 key. Supported values: `uuidv7`.
+                        enum:
+                        - uuidv7
+                        type: string
+                    type: object
+                  sending_queue:
+                    description: QueueConfig configures the sending queue.
+                    properties:
+                      batch:
+                        description: Batch configures batching within the sending
+                          queue. Disabled by default.
+                        properties:
+                          flush_timeout:
+                            description: |-
+                              FlushTimeout is the time after which a batch is sent regardless of size.
+                              Must be non-zero. Default: 200ms.
+                            format: duration
+                            type: string
+                          max_size:
+                            description: 'MaxSize is the maximum batch size; enables
+                              splitting. Default: 0 (no limit).'
+                            type: integer
+                          metadata_keys:
+                            description: |-
+                              MetadataKeys partitions batches by client.Metadata keys.
+                              When empty, a single batcher is used.
+                            items:
+                              type: string
+                            type: array
+                          min_size:
+                            description: 'MinSize is the minimum number of items/bytes
+                              before a batch is sent. Default: 8192.'
+                            type: integer
+                          sizer:
+                            description: 'Sizer defines how batch size is measured:
+                              "items" (default) or "bytes".'
+                            enum:
+                            - items
+                            - bytes
+                            type: string
+                        type: object
+                      block_on_overflow:
+                        description: |-
+                          BlockOnOverflow blocks the request until the queue has space when true,
+                          otherwise rejects data immediately when the queue is full.
+                          Default: false.
+                        type: boolean
+                      num_consumers:
+                        description: |-
+                          NumConsumers is the number of consumers from the queue. Defaults to 10.
+                          If batching is enabled, a combined batch cannot contain more requests than the number of consumers.
+                          So it's recommended to set higher number of consumers if batching is enabled.
+                        type: integer
+                      queue_size:
+                        description: |-
+                          QueueSize is the maximum size the queue can accept, measured in units defined by Sizer.
+                          Default value is 1000.
+                        type: integer
+                      sizer:
+                        description: |-
+                          Sizer defines how the queue size and batching are measured.
+                          Available options: "requests" (default), "items", "bytes".
+                        enum:
+                        - requests
+                        - items
+                        - bytes
+                        type: string
+                      wait_for_result:
+                        description: |-
+                          WaitForResult determines if incoming requests are blocked until the request is processed.
+                          Default: false.
+                        type: boolean
+                    type: object
+                  timeout:
+                    description: |-
+                      Timeout is the timeout for every attempt to send data to the backend.
+                      A zero timeout means no timeout. See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                 type: object
               batch:
                 description: Batch processor configuration.
@@ -139,6 +382,349 @@ spec:
                       When this is set to zero, batched data will be sent immediately.
                     format: duration
                     type: string
+                type: object
+              elasticsearch:
+                properties:
+                  api_key:
+                    description: APIKey for Elasticsearch API Key authentication (encoded
+                      format).
+                    type: string
+                  cloudid:
+                    description: |-
+                      CloudID is the Elastic Cloud ID.
+                      Mutually exclusive with Endpoint and Endpoints.
+                    type: string
+                  discover:
+                    description: Discover configures node discovery.
+                    properties:
+                      interval:
+                        description: Interval to refresh node list. Set to 0 to disable.
+                        type: string
+                      on_start:
+                        description: OnStart queries ES for nodes on startup.
+                        type: boolean
+                    type: object
+                  endpoint:
+                    description: |-
+                      Endpoint is the Elasticsearch URL (e.g. https://elasticsearch:9200).
+                      Mutually exclusive with Endpoints and CloudID.
+                    type: string
+                  endpoints:
+                    description: |-
+                      Endpoints is a list of Elasticsearch URLs for round-robin.
+                      Mutually exclusive with Endpoint and CloudID.
+                    items:
+                      type: string
+                    type: array
+                  flush:
+                    description: Flush settings for bulk indexing.
+                    properties:
+                      bytes:
+                        description: Bytes threshold to trigger a flush.
+                        type: integer
+                      interval:
+                        description: Interval between flushes.
+                        type: string
+                    type: object
+                  logs_index:
+                    description: LogsIndex is the static index/data stream for logs.
+                    type: string
+                  mapping:
+                    description: Mapping configures document mapping.
+                    properties:
+                      mode:
+                        description: 'Mode is the document mapping mode: "none", "ecs",
+                          "otel", "raw", "bodymap".'
+                        enum:
+                        - none
+                        - ecs
+                        - otel
+                        - raw
+                        - bodymap
+                        type: string
+                    type: object
+                  metrics_index:
+                    description: MetricsIndex is the static index/data stream for
+                      metrics.
+                    type: string
+                  num_workers:
+                    description: NumWorkers is the number of workers for bulk indexing.
+                    type: integer
+                  password:
+                    description: Password for HTTP Basic Authentication.
+                    type: string
+                  pipeline:
+                    description: Pipeline is the Elasticsearch ingest pipeline ID.
+                    type: string
+                  retry:
+                    description: Retry settings for bulk indexing.
+                    properties:
+                      enabled:
+                        description: 'Enabled enables/disables retry on error. Default:
+                          true.'
+                        type: boolean
+                      initial_interval:
+                        description: 'InitialInterval before first retry. Default:
+                          100ms.'
+                        type: string
+                      max_interval:
+                        description: 'MaxInterval upper bound on retry delay. Default:
+                          1m.'
+                        type: string
+                      max_retries:
+                        description: 'MaxRetries is the number of retries. Default:
+                          2.'
+                        type: integer
+                      retry_on_status:
+                        description: 'RetryOnStatus are HTTP status codes that trigger
+                          retries. Default: [429].'
+                        items:
+                          type: integer
+                        type: array
+                    type: object
+                  sending_queue:
+                    description: QueueConfig for the sending queue.
+                    properties:
+                      batch:
+                        description: Batch configures batching within the sending
+                          queue. Disabled by default.
+                        properties:
+                          flush_timeout:
+                            description: |-
+                              FlushTimeout is the time after which a batch is sent regardless of size.
+                              Must be non-zero. Default: 200ms.
+                            format: duration
+                            type: string
+                          max_size:
+                            description: 'MaxSize is the maximum batch size; enables
+                              splitting. Default: 0 (no limit).'
+                            type: integer
+                          metadata_keys:
+                            description: |-
+                              MetadataKeys partitions batches by client.Metadata keys.
+                              When empty, a single batcher is used.
+                            items:
+                              type: string
+                            type: array
+                          min_size:
+                            description: 'MinSize is the minimum number of items/bytes
+                              before a batch is sent. Default: 8192.'
+                            type: integer
+                          sizer:
+                            description: 'Sizer defines how batch size is measured:
+                              "items" (default) or "bytes".'
+                            enum:
+                            - items
+                            - bytes
+                            type: string
+                        type: object
+                      block_on_overflow:
+                        description: |-
+                          BlockOnOverflow blocks the request until the queue has space when true,
+                          otherwise rejects data immediately when the queue is full.
+                          Default: false.
+                        type: boolean
+                      num_consumers:
+                        description: |-
+                          NumConsumers is the number of consumers from the queue. Defaults to 10.
+                          If batching is enabled, a combined batch cannot contain more requests than the number of consumers.
+                          So it's recommended to set higher number of consumers if batching is enabled.
+                        type: integer
+                      queue_size:
+                        description: |-
+                          QueueSize is the maximum size the queue can accept, measured in units defined by Sizer.
+                          Default value is 1000.
+                        type: integer
+                      sizer:
+                        description: |-
+                          Sizer defines how the queue size and batching are measured.
+                          Available options: "requests" (default), "items", "bytes".
+                        enum:
+                        - requests
+                        - items
+                        - bytes
+                        type: string
+                      wait_for_result:
+                        description: |-
+                          WaitForResult determines if incoming requests are blocked until the request is processed.
+                          Default: false.
+                        type: boolean
+                    type: object
+                  tls:
+                    description: TLSSetting for TLS configuration.
+                    properties:
+                      ca_file:
+                        description: |-
+                          Path to the CA cert. For a client this verifies the server certificate.
+                          For a server this verifies client certificates. If empty uses system root CA.
+                          (optional)
+                        type: string
+                      ca_pem:
+                        description: In memory PEM encoded cert. (optional)
+                        type: string
+                      cert_file:
+                        description: Path to the TLS cert to use for TLS required
+                          connections. (optional)
+                        type: string
+                      cert_pem:
+                        description: In memory PEM encoded TLS cert to use for TLS
+                          required connections. (optional)
+                        type: string
+                      cipher_suites:
+                        description: |-
+                          CipherSuites is a list of TLS cipher suites that the TLS transport can use.
+                          If left blank, a safe default list is used.
+                          See https://go.dev/src/crypto/tls/cipher_suites.go for a list of supported cipher suites.
+                        items:
+                          type: string
+                        type: array
+                      curve_preferences:
+                        description: |-
+                          contains the elliptic curves that will be used in
+                          an ECDHE handshake, in preference order
+                          Defaults to empty list and "crypto/tls" defaults are used, internally.
+                        items:
+                          type: string
+                        type: array
+                      include_system_ca_certs_pool:
+                        description: |-
+                          If true, load system CA certificates pool in addition to the certificates
+                          configured in this struct.
+                        type: boolean
+                      insecure:
+                        description: |-
+                          In gRPC and HTTP when set to true, this is used to disable the client transport security.
+                          See https://godoc.org/google.golang.org/grpc#WithInsecure for gRPC.
+                          Please refer to https://godoc.org/crypto/tls#Config for more information.
+                          (optional, default false)
+                        type: boolean
+                      insecure_skip_verify:
+                        description: InsecureSkipVerify will enable TLS but not verify
+                          the certificate.
+                        type: boolean
+                      key_file:
+                        description: Path to the TLS key to use for TLS required connections.
+                          (optional)
+                        type: string
+                      key_pem:
+                        description: In memory PEM encoded TLS key to use for TLS
+                          required connections. (optional)
+                        type: string
+                      max_version:
+                        description: |-
+                          MaxVersion sets the maximum TLS version that is acceptable.
+                          If not set, refer to crypto/tls for defaults. (optional)
+                        type: string
+                      min_version:
+                        description: |-
+                          MinVersion sets the minimum TLS version that is acceptable.
+                          If not set, TLS 1.2 will be used. (optional)
+                        type: string
+                      reload_interval:
+                        description: |-
+                          ReloadInterval specifies the duration after which the certificate will be reloaded.
+                          If not set, it will never be reloaded (optional). See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
+                      server_name_override:
+                        description: |-
+                          ServerName requested by client for virtual hosting.
+                          This sets the ServerName in the TLSConfig. Please refer to
+                          https://godoc.org/crypto/tls#Config for more information. (optional)
+                        type: string
+                    type: object
+                  traces_index:
+                    description: TracesIndex is the static index/data stream for traces.
+                    type: string
+                  user:
+                    description: User for HTTP Basic Authentication.
+                    type: string
+                type: object
+              file:
+                description: File defines configuration for the file exporter.
+                properties:
+                  append:
+                    description: |-
+                      Mode defines whether the exporter should append to the file.
+                      Options:
+                      - false[default]:  truncates the file
+                      - true:  appends to the file.
+                    type: boolean
+                  compression:
+                    description: |-
+                      Compression Codec used to export telemetry data
+                      Supported compression algorithms:`zstd`
+                    enum:
+                    - zstd
+                    type: string
+                  encoding:
+                    description: |-
+                      Encoding defines the encoding of the telemetry data.
+                      If specified, it overrides `FormatType` and applies an encoding extension.
+                    type: string
+                  flush_interval:
+                    description: |-
+                      FlushInterval is the duration between flushes.
+                      See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
+                  format:
+                    type: string
+                  group_by:
+                    description: GroupBy enables writing to separate files based on
+                      a resource attribute.
+                    properties:
+                      enabled:
+                        description: Enables group_by. When group_by is enabled, rotation
+                          setting is ignored.  Default is false.
+                        type: boolean
+                      max_open_files:
+                        description: |-
+                          MaxOpenFiles specifies the maximum number of open file descriptors for the output files.
+                          The default is 100.
+                        type: integer
+                      resource_attribute:
+                        description: |-
+                          ResourceAttribute specifies the name of the resource attribute that
+                          contains the path segment of the file to write to. The final path will be
+                          the Path config value, with the * replaced with the value of this resource
+                          attribute. Default is "fileexporter.path_segment".
+                        type: string
+                    type: object
+                  path:
+                    description: Path of the file to write to. Path is relative to
+                      current directory.
+                    type: string
+                  rotation:
+                    description: |-
+                      Rotation defines an option about rotation of telemetry files. Ignored
+                      when GroupByAttribute is used.
+                    properties:
+                      localtime:
+                        description: |-
+                          LocalTime determines if the time used for formatting the timestamps in
+                          backup files is the computer's local time.  The default is to use UTC
+                          time.
+                        type: boolean
+                      max_backups:
+                        description: |-
+                          MaxBackups is the maximum number of old log files to retain. The default
+                          is to 100 files.
+                        type: integer
+                      max_days:
+                        description: |-
+                          MaxDays is the maximum number of days to retain old log files based on the
+                          timestamp encoded in their filename.  Note that a day is defined as 24
+                          hours and may not exactly correspond to calendar days due to daylight
+                          savings, leap seconds, etc. The default is not to remove old log files
+                          based on age.
+                        type: integer
+                      max_megabytes:
+                        description: |-
+                          MaxMegabytes is the maximum size in megabytes of the file before it gets
+                          rotated. It defaults to 100 megabytes.
+                        type: integer
+                    type: object
                 type: object
               fluentforward:
                 description: Configuration for the fluentforward exporter.
@@ -191,23 +777,25 @@ spec:
                       The current supported strategy is exponential backoff.
                     properties:
                       initial_interval:
-                        description: InitialInterval the time to wait after the first
-                          failure before retrying.
-                        format: int64
-                        type: integer
+                        description: |-
+                          InitialInterval the time to wait after the first failure before retrying.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_elapsed_time:
                         description: |-
                           MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
                           Once this value is reached, the data is discarded. If set to 0, the retries are never stopped.
                           Default value is 0 to ensure that the data is never discarded.
-                        format: int64
-                        type: integer
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_interval:
                         description: |-
                           MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-                          consecutive retries will always be `MaxInterval`.
-                        format: int64
-                        type: integer
+                          consecutive retries will always be `MaxInterval`. See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       multiplier:
                         description: Multiplier is the value multiplied by the backoff
                           interval bounds
@@ -222,10 +810,44 @@ spec:
                     description: QueueSettings defines configuration for queueing
                       batches before sending to the consumerSender.
                     properties:
-                      blocking:
+                      batch:
+                        description: Batch configures batching within the sending
+                          queue. Disabled by default.
+                        properties:
+                          flush_timeout:
+                            description: |-
+                              FlushTimeout is the time after which a batch is sent regardless of size.
+                              Must be non-zero. Default: 200ms.
+                            format: duration
+                            type: string
+                          max_size:
+                            description: 'MaxSize is the maximum batch size; enables
+                              splitting. Default: 0 (no limit).'
+                            type: integer
+                          metadata_keys:
+                            description: |-
+                              MetadataKeys partitions batches by client.Metadata keys.
+                              When empty, a single batcher is used.
+                            items:
+                              type: string
+                            type: array
+                          min_size:
+                            description: 'MinSize is the minimum number of items/bytes
+                              before a batch is sent. Default: 8192.'
+                            type: integer
+                          sizer:
+                            description: 'Sizer defines how batch size is measured:
+                              "items" (default) or "bytes".'
+                            enum:
+                            - items
+                            - bytes
+                            type: string
+                        type: object
+                      block_on_overflow:
                         description: |-
-                          Blocking controls the queue behavior when full.
-                          If true it blocks until enough space to add the new request to the queue.
+                          BlockOnOverflow blocks the request until the queue has space when true,
+                          otherwise rejects data immediately when the queue is full.
+                          Default: false.
                         type: boolean
                       num_consumers:
                         description: |-
@@ -235,9 +857,23 @@ spec:
                         type: integer
                       queue_size:
                         description: |-
-                          QueueSize is the maximum number of batches allowed in queue at a given time.
-                          Default value is 100.
+                          QueueSize is the maximum size the queue can accept, measured in units defined by Sizer.
+                          Default value is 1000.
                         type: integer
+                      sizer:
+                        description: |-
+                          Sizer defines how the queue size and batching are measured.
+                          Available options: "requests" (default), "items", "bytes".
+                        enum:
+                        - requests
+                        - items
+                        - bytes
+                        type: string
+                      wait_for_result:
+                        description: |-
+                          WaitForResult determines if incoming requests are blocked until the request is processed.
+                          Default: false.
+                        type: boolean
                     type: object
                   shared_key:
                     description: SharedKey is used for authorization with the server
@@ -318,10 +954,10 @@ spec:
                         type: string
                       reload_interval:
                         description: |-
-                          ReloadInterval specifies the duration after which the certificate will be reloaded
-                          If not set, it will never be reloaded (optional)
-                        format: int64
-                        type: integer
+                          ReloadInterval specifies the duration after which the certificate will be reloaded.
+                          If not set, it will never be reloaded (optional). See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       server_name_override:
                         description: |-
                           ServerName requested by client for virtual hosting.
@@ -379,18 +1015,16 @@ spec:
                         type: boolean
                       time:
                         description: |-
-                          A Duration represents the elapsed time between two instants
-                          as an int64 nanosecond count. The representation limits the
-                          largest representable duration to approximately 290 years.
-                        format: int64
-                        type: integer
+                          Time is the duration of inactivity after which the client pings the server.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       timeout:
                         description: |-
-                          A Duration represents the elapsed time between two instants
-                          as an int64 nanosecond count. The representation limits the
-                          largest representable duration to approximately 290 years.
-                        format: int64
-                        type: integer
+                          Timeout is the duration to wait for the ping ack before assuming the connection is dead.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                     type: object
                   read_buffer_size:
                     description: |-
@@ -403,23 +1037,25 @@ spec:
                       The current supported strategy is exponential backoff.
                     properties:
                       initial_interval:
-                        description: InitialInterval the time to wait after the first
-                          failure before retrying.
-                        format: int64
-                        type: integer
+                        description: |-
+                          InitialInterval the time to wait after the first failure before retrying.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_elapsed_time:
                         description: |-
                           MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
                           Once this value is reached, the data is discarded. If set to 0, the retries are never stopped.
                           Default value is 0 to ensure that the data is never discarded.
-                        format: int64
-                        type: integer
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_interval:
                         description: |-
                           MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-                          consecutive retries will always be `MaxInterval`.
-                        format: int64
-                        type: integer
+                          consecutive retries will always be `MaxInterval`. See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       multiplier:
                         description: Multiplier is the value multiplied by the backoff
                           interval bounds
@@ -434,10 +1070,44 @@ spec:
                     description: QueueSettings defines configuration for queueing
                       batches before sending to the consumerSender.
                     properties:
-                      blocking:
+                      batch:
+                        description: Batch configures batching within the sending
+                          queue. Disabled by default.
+                        properties:
+                          flush_timeout:
+                            description: |-
+                              FlushTimeout is the time after which a batch is sent regardless of size.
+                              Must be non-zero. Default: 200ms.
+                            format: duration
+                            type: string
+                          max_size:
+                            description: 'MaxSize is the maximum batch size; enables
+                              splitting. Default: 0 (no limit).'
+                            type: integer
+                          metadata_keys:
+                            description: |-
+                              MetadataKeys partitions batches by client.Metadata keys.
+                              When empty, a single batcher is used.
+                            items:
+                              type: string
+                            type: array
+                          min_size:
+                            description: 'MinSize is the minimum number of items/bytes
+                              before a batch is sent. Default: 8192.'
+                            type: integer
+                          sizer:
+                            description: 'Sizer defines how batch size is measured:
+                              "items" (default) or "bytes".'
+                            enum:
+                            - items
+                            - bytes
+                            type: string
+                        type: object
+                      block_on_overflow:
                         description: |-
-                          Blocking controls the queue behavior when full.
-                          If true it blocks until enough space to add the new request to the queue.
+                          BlockOnOverflow blocks the request until the queue has space when true,
+                          otherwise rejects data immediately when the queue is full.
+                          Default: false.
                         type: boolean
                       num_consumers:
                         description: |-
@@ -447,16 +1117,30 @@ spec:
                         type: integer
                       queue_size:
                         description: |-
-                          QueueSize is the maximum number of batches allowed in queue at a given time.
-                          Default value is 100.
+                          QueueSize is the maximum size the queue can accept, measured in units defined by Sizer.
+                          Default value is 1000.
                         type: integer
+                      sizer:
+                        description: |-
+                          Sizer defines how the queue size and batching are measured.
+                          Available options: "requests" (default), "items", "bytes".
+                        enum:
+                        - requests
+                        - items
+                        - bytes
+                        type: string
+                      wait_for_result:
+                        description: |-
+                          WaitForResult determines if incoming requests are blocked until the request is processed.
+                          Default: false.
+                        type: boolean
                     type: object
                   timeout:
                     description: |-
                       Timeout is the timeout for every attempt to send data to the backend.
-                      A zero timeout means no timeout.
-                    format: int64
-                    type: integer
+                      A zero timeout means no timeout. See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                   tls:
                     description: TLSSetting struct exposes TLS client configuration.
                     properties:
@@ -529,10 +1213,10 @@ spec:
                         type: string
                       reload_interval:
                         description: |-
-                          ReloadInterval specifies the duration after which the certificate will be reloaded
-                          If not set, it will never be reloaded (optional)
-                        format: int64
-                        type: integer
+                          ReloadInterval specifies the duration after which the certificate will be reloaded.
+                          If not set, it will never be reloaded (optional). See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       server_name_override:
                         description: |-
                           ServerName requested by client for virtual hosting.
@@ -612,24 +1296,21 @@ spec:
                   http2_ping_timeout:
                     description: |-
                       HTTP2PingTimeout if there's no response to the ping within the configured value, the connection will be closed.
-                      If not set or set to 0, it defaults to 15s.
-                    format: int64
-                    type: integer
+                      If not set or set to 0, it defaults to 15s. See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                   http2_read_idle_timeout:
                     description: |-
-                      This is needed in case you run into
-                      https://github.com/golang/go/issues/59690
-                      https://github.com/golang/go/issues/36026
-                      HTTP2ReadIdleTimeout if the connection has been idle for the configured value send a ping frame for health check
-                      0s means no health check will be performed.
-                    format: int64
-                    type: integer
+                      HTTP2ReadIdleTimeout if the connection has been idle for the configured value send a ping frame for health check.
+                      0s means no health check will be performed. See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                   idle_conn_timeout:
                     description: |-
                       IdleConnTimeout is the maximum amount of time a connection will remain open before closing itself.
-                      By default, it is set to [http.DefaultTransport.IdleConnTimeout]
-                    format: int64
-                    type: integer
+                      By default, it is set to [http.DefaultTransport.IdleConnTimeout]. See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                   max_conns_per_host:
                     description: |-
                       MaxConnsPerHost limits the total number of connections per host, including connections in the dialing,
@@ -660,23 +1341,25 @@ spec:
                       The current supported strategy is exponential backoff.
                     properties:
                       initial_interval:
-                        description: InitialInterval the time to wait after the first
-                          failure before retrying.
-                        format: int64
-                        type: integer
+                        description: |-
+                          InitialInterval the time to wait after the first failure before retrying.
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_elapsed_time:
                         description: |-
                           MaxElapsedTime is the maximum amount of time (including retries) spent trying to send a request/batch.
                           Once this value is reached, the data is discarded. If set to 0, the retries are never stopped.
                           Default value is 0 to ensure that the data is never discarded.
-                        format: int64
-                        type: integer
+                          See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       max_interval:
                         description: |-
                           MaxInterval is the upper bound on backoff interval. Once this value is reached the delay between
-                          consecutive retries will always be `MaxInterval`.
-                        format: int64
-                        type: integer
+                          consecutive retries will always be `MaxInterval`. See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       multiplier:
                         description: Multiplier is the value multiplied by the backoff
                           interval bounds
@@ -691,10 +1374,44 @@ spec:
                     description: QueueSettings defines configuration for queueing
                       batches before sending to the consumerSender.
                     properties:
-                      blocking:
+                      batch:
+                        description: Batch configures batching within the sending
+                          queue. Disabled by default.
+                        properties:
+                          flush_timeout:
+                            description: |-
+                              FlushTimeout is the time after which a batch is sent regardless of size.
+                              Must be non-zero. Default: 200ms.
+                            format: duration
+                            type: string
+                          max_size:
+                            description: 'MaxSize is the maximum batch size; enables
+                              splitting. Default: 0 (no limit).'
+                            type: integer
+                          metadata_keys:
+                            description: |-
+                              MetadataKeys partitions batches by client.Metadata keys.
+                              When empty, a single batcher is used.
+                            items:
+                              type: string
+                            type: array
+                          min_size:
+                            description: 'MinSize is the minimum number of items/bytes
+                              before a batch is sent. Default: 8192.'
+                            type: integer
+                          sizer:
+                            description: 'Sizer defines how batch size is measured:
+                              "items" (default) or "bytes".'
+                            enum:
+                            - items
+                            - bytes
+                            type: string
+                        type: object
+                      block_on_overflow:
                         description: |-
-                          Blocking controls the queue behavior when full.
-                          If true it blocks until enough space to add the new request to the queue.
+                          BlockOnOverflow blocks the request until the queue has space when true,
+                          otherwise rejects data immediately when the queue is full.
+                          Default: false.
                         type: boolean
                       num_consumers:
                         description: |-
@@ -704,16 +1421,30 @@ spec:
                         type: integer
                       queue_size:
                         description: |-
-                          QueueSize is the maximum number of batches allowed in queue at a given time.
-                          Default value is 100.
+                          QueueSize is the maximum size the queue can accept, measured in units defined by Sizer.
+                          Default value is 1000.
                         type: integer
+                      sizer:
+                        description: |-
+                          Sizer defines how the queue size and batching are measured.
+                          Available options: "requests" (default), "items", "bytes".
+                        enum:
+                        - requests
+                        - items
+                        - bytes
+                        type: string
+                      wait_for_result:
+                        description: |-
+                          WaitForResult determines if incoming requests are blocked until the request is processed.
+                          Default: false.
+                        type: boolean
                     type: object
                   timeout:
                     description: |-
                       Timeout parameter configures `http.Client.Timeout`.
-                      Default is 0 (unlimited).
-                    format: int64
-                    type: integer
+                      Default is 0 (unlimited). See time.ParseDuration for valid values.
+                    format: duration
+                    type: string
                   tls:
                     description: TLSSetting struct exposes TLS client configuration.
                     properties:
@@ -786,10 +1517,10 @@ spec:
                         type: string
                       reload_interval:
                         description: |-
-                          ReloadInterval specifies the duration after which the certificate will be reloaded
-                          If not set, it will never be reloaded (optional)
-                        format: int64
-                        type: integer
+                          ReloadInterval specifies the duration after which the certificate will be reloaded.
+                          If not set, it will never be reloaded (optional). See time.ParseDuration for valid values.
+                        format: duration
+                        type: string
                       server_name_override:
                         description: |-
                           ServerName requested by client for virtual hosting.
@@ -807,6 +1538,12 @@ spec:
           status:
             description: OutputStatus defines the observed state of Output
             properties:
+              problems:
+                items:
+                  type: string
+                type: array
+              problemsCount:
+                type: integer
               state:
                 type: string
               tenant:
