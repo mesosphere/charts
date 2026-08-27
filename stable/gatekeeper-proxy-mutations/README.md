@@ -8,7 +8,7 @@ This chart creates proxy mutations for a given configuration.
 
 # Prerequisites
 
-This chart requires gatekeeper chart to be installed.
+This chart requires Gatekeeper >= 3.23 (for `applyTo.operations` on `Assign` resources).
 
 ## Configuration
 

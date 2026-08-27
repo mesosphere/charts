@@ -12,6 +12,9 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
+      # CREATE-only: Pod container env is immutable; applying on UPDATE fails admission
+      # (e.g. Job/CronJob finalizer cleanup). Requires Gatekeeper >= 3.23.
+      operations: ["CREATE"]
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
@@ -40,6 +43,9 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
+      # CREATE-only: Pod container env is immutable; applying on UPDATE fails admission
+      # (e.g. Job/CronJob finalizer cleanup). Requires Gatekeeper >= 3.23.
+      operations: ["CREATE"]
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
@@ -68,6 +74,9 @@ spec:
     - groups: [""]
       kinds: ["Pod"]
       versions: ["v1"] # we want to mutate all versions of Pod, but this will do for now. see top of file for details.
+      # CREATE-only: Pod container env is immutable; applying on UPDATE fails admission
+      # (e.g. Job/CronJob finalizer cleanup). Requires Gatekeeper >= 3.23.
+      operations: ["CREATE"]
   match:
     scope: "*"
     {{- if .Values.mutations.namespaceSelectorForProxy }}
