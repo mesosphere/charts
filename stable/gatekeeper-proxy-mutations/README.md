@@ -8,7 +8,7 @@ This chart creates proxy mutations for a given configuration.
 
 # Prerequisites
 
-This chart requires gatekeeper chart to be installed.
+This chart requires Gatekeeper >= 3.23 (for `applyTo.operations` on `Assign` resources).
 
 ## Configuration
 
@@ -21,3 +21,4 @@ This chart requires gatekeeper chart to be installed.
 | mutations.podProxySettings.httpsProxy            | Value of `HTTPS_PROXY` environment variable.                                                                                                                                                                                                                                                                                                                                                                                           |                                          |
 | mutations.namespaceSelectorForProxy              | Applies proxy mutations on objects whose namespace labels match.                                                                                                                                                                                                                                                                                                                                                                       | {}                                       |
 | mutations.excludeNamespacesFromProxy             | Disables proxy mutations for listed namespaces.                                                                                                                                                                                                                                                                                                                                                                                        | []                                       |
+| mutations.applyToOperations                      | Gatekeeper `Assign` `applyTo.operations` (e.g. `["CREATE"]`). Requires Gatekeeper >= 3.23 when set. Empty omits the field.                                                                                                                                                                                                                                                                                                            | ["CREATE"]                               |

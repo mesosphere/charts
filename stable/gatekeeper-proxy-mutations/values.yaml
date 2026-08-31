@@ -8,6 +8,10 @@ mutations:
   namespaceSelectorForProxy: {}
   # disable the following namespaces
   excludeNamespacesFromProxy: []
+  # Gatekeeper Assign applyTo.operations. CREATE-only avoids mutating immutable
+  # Pod container env on UPDATE (requires Gatekeeper >= 3.23). Set to [] to omit.
+  applyToOperations:
+    - CREATE
 
 # Copied from gatekeeper values
 disableMutation: false
