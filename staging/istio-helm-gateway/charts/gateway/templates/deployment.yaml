@@ -8,7 +8,10 @@ metadata:
     {{- include "istio.labels" . | nindent 4}}
     {{- include "gateway.labels" . | nindent 4}}
   annotations:
-    {{- .Values.annotations | toYaml | nindent 4 }}
+    e2e-demo-chart-source: pawan/e2e-demo
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   {{- if and (hasKey .Values "replicaCount") (ne .Values.replicaCount nil) }}
