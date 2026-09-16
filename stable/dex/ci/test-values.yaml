@@ -1,0 +1,6 @@
+dex-controller:
+  controller:
+    proxy:
+      image:
+        repository: quay.io/brancz/kube-rbac-proxy
+        tag: v0.21.1
