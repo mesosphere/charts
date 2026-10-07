@@ -1,34 +1,47 @@
-{{- if not .Values.prismCredentialsSecretName }}
+# {{- if not .Values.prismCredentialsSecretName}}
+---
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ printf "%s-prism-credentials" .Release.Name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{include "k8s-agent.prismCredentialsSecretName" .}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
-type: kubernetes.io/basic-auth
+type: Opaque
 data:
-  username: {{ required "pc.username is required when prismCredentialsSecretName is not set" .Values.pc.username | b64enc}}
-  password: {{ required "pc.password is required when prismCredentialsSecretName is not set" .Values.pc.password | b64enc}}
-{{- end }}
+  # {{- if .Values.pc.apiKey}}
+  apiKey: {{.Values.pc.apiKey | b64enc}}
+  # {{- else}}
+  username: >-
+    {{required
+    "pc.username is required when prismCredentialsSecretName is not set"
+    .Values.pc.username | b64enc}}
+  password: >-
+    {{required
+    "pc.password is required when prismCredentialsSecretName is not set"
+    .Values.pc.password | b64enc}}
+  # {{- end}}
+# {{- end}}
+
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: k8s-agent-postdelete
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "1"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: k8s-agent-postdelete
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "1"
@@ -45,6 +58,7 @@ rules:
       - get
       - list
       - watch
+
   - apiGroups: [""]
     resources:
       - services
@@ -52,6 +66,7 @@ rules:
       - get
       - list
       - watch
+
   - apiGroups: ["apps"]
     resources:
       - deployments
@@ -59,6 +74,7 @@ rules:
       - get
       - list
       - patch
+
   - apiGroups: ["apps"]
     resources:
       - statefulsets
@@ -66,21 +82,25 @@ rules:
       - replicasets
     verbs:
       - get
+
   - apiGroups: ["batch"]
     resources:
       - jobs
     verbs:
       - get
+
   - apiGroups: ["storage.k8s.io"]
     resources:
       - storageclasses
     verbs:
       - list
+
   - apiGroups: ["config.openshift.io"]
     resources:
       - infrastructures
     verbs:
       - get
+
   - apiGroups: ["dataservices.nutanix.com"]
     resources:
       - applications
@@ -88,6 +108,7 @@ rules:
     verbs:
       - get
       - list
+
   - apiGroups: [""]
     resources:
       - secrets
@@ -100,6 +121,7 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: [""]
     resources:
       - serviceaccounts
@@ -110,6 +132,7 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
       - clusterroles
@@ -121,16 +144,19 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: [""]
     resources:
       - serviceaccounts/token
     verbs:
       - create
+
   - apiGroups: ["authorization.k8s.io"]
     resources:
       - selfsubjectaccessreviews
     verbs:
       - create
+
   - apiGroups: ["networking.nutanix.com"]
     resources:
       - addressgroups
@@ -145,13 +171,15 @@ rules:
       - list
       - watch
       - update
+      - patch
       - delete
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-agent-postdelete
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "1"
@@ -161,24 +189,25 @@ roleRef:
   kind: ClusterRole
   name: k8s-agent-postdelete
 subjects:
-- kind: ServiceAccount
-  name: k8s-agent-postdelete
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  - kind: ServiceAccount
+    name: k8s-agent-postdelete
+    namespace: {{(include "k8s-agent.namespace" .) | quote}}
+
 ---
 apiVersion: v1
 kind: Pod
 metadata:
   name: hook-postdelete
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "2"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
-  {{- if eq .Values.agent.image.privateRegistry true}}
+  # {{- if eq .Values.agent.image.privateRegistry true}}
   imagePullSecrets:
-  - name: nutanix-k8s-agent-pull-secret
-  {{- end }}
+    - name: nutanix-k8s-agent-pull-secret
+  # {{- end}}
   securityContext:
     runAsUser: 9999
     runAsNonRoot: true
@@ -186,71 +215,81 @@ spec:
       type: RuntimeDefault
   serviceAccountName: k8s-agent-postdelete
   volumes:
-  - name: pc-creds-volume
-    secret:
-      secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
-  {{- if include "k8s-agent.shouldMountTrustBundle" . }}
-  - name: additional-trust-bundle-volume
-    configMap:
-      name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
-      items:
-        - key: ca.crt
-          path: ca.crt
-  {{- end }}
+    - name: pc-creds-volume
+      secret:
+        secretName: {{include "k8s-agent.prismCredentialsSecretName" .}}
+    # {{- if include "k8s-agent.shouldMountTrustBundle" .}}
+    - name: additional-trust-bundle-volume
+      configMap:
+        name: {{include "k8s-agent.trustBundleConfigMapName" .}}
+        items:
+          - key: ca.crt
+            path: ca.crt
+  # {{- end}}
   containers:
-  - name: hook-postdelete-container
-    image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
-    imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-    command: ["/k8s-agent/k8s-agent"]
-    env:
-      - name: POD_NAMESPACE
-        valueFrom:
-          fieldRef:
-            fieldPath: metadata.namespace
-    volumeMounts:
-      - name: pc-creds-volume
-        mountPath: /certs
-        readOnly: true
-      {{- if include "k8s-agent.shouldMountTrustBundle" . }}
-      - name: additional-trust-bundle-volume
-        mountPath: /ca-certificate
-        readOnly: true
-      {{- end }}
-    args:
-      [
-        "--chart-hook=post-delete",
-        "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
-        "--pc-port={{ .Values.pc.port }}",
-        "--insecure={{ .Values.pc.insecure }}",
-        "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
-        "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
-        "--k8s-cluster-category={{ .Values.categoryMappings }}",
-        "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
-        "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
-      ]
-    securityContext:
-      runAsUser: 9999
-      runAsNonRoot: true
-      allowPrivilegeEscalation: false
-      seccompProfile:
-        type: RuntimeDefault
-      capabilities:
-        drop:
-          - ALL       
+    - name: hook-postdelete-container
+      image: >-
+        {{.Values.agent.image.repository}}/{{.Values.agent.image.name}}:{{
+        .Values.agent.image.tag | default .Chart.AppVersion}}
+      imagePullPolicy: {{.Values.agent.image.pullPolicy}}
+      command:
+        - /k8s-agent/k8s-agent
+      env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+      volumeMounts:
+        - name: pc-creds-volume
+          mountPath: /certs
+          readOnly: true
+        # {{- if include "k8s-agent.shouldMountTrustBundle" .}}
+        - name: additional-trust-bundle-volume
+          mountPath: /ca-certificate
+          readOnly: true
+      # {{- end}}
+      args:
+        - "--chart-hook=post-delete"
+        - >-
+          --pc-endpoint={{required "Endpoint is required"
+          .Values.pc.endpoint}}
+        - "--pc-port={{.Values.pc.port}}"
+        - "--insecure={{.Values.pc.insecure}}"
+        - >-
+          --k8s-cluster-name={{required
+          "Name of kubernetes cluster is required"
+          .Values.k8sClusterName}}
+        - >-
+          --k8s-distribution={{required
+          "Kubernetes distribution is required"
+          .Values.k8sDistribution}}
+        - "--k8s-cluster-category={{.Values.categoryMappings}}"
+        - "--update-config-in-min={{.Values.agent.updateConfigInMin}}"
+        - "--update-metrics-in-min={{.Values.agent.updateMetricsInMin}}"
+      securityContext:
+        runAsUser: 9999
+        runAsNonRoot: true
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+            - ALL
   restartPolicy: Never
   terminationGracePeriodSeconds: 0
+
 ---
-{{- include "k8s-agent.validateTrustBundle" . }}
-{{- if include "k8s-agent.shouldCreateTrustBundleConfigMap" . }}
+# {{- include "k8s-agent.validateTrustBundle" .}}
+# {{- if include "k8s-agent.shouldCreateTrustBundleConfigMap" .}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
-  namespace: {{ include "k8s-agent.namespace" . | quote }}
+  name: {{include "k8s-agent.trustBundleConfigMapName" .}}
+  namespace: {{include "k8s-agent.namespace" . | quote}}
   annotations:
     "helm.sh/hook": "post-delete"
     "helm.sh/hook-weight": "0"
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 data:
-  ca.crt: {{ .Values.pc.additionalTrustBundle }}
-{{- end }}
+  ca.crt: {{.Values.pc.additionalTrustBundle}}
+# {{- end}}

@@ -6,6 +6,19 @@ Return the namespace
 {{- end }}
 
 {{/*
+Return the name of the Prism Central credentials Secret.
+Honors the user-supplied `prismCredentialsSecretName` (bring-your-own secret);
+otherwise uses a chart-managed name. The "-v2" suffix intentionally differs from
+the legacy "<release>-prism-credentials" name: older releases created that Secret
+as `type: kubernetes.io/basic-auth`, and a Secret's `type` is immutable, so reusing
+the name would break `helm upgrade` when the type changes to `Opaque`. Using a new
+name lets Helm create the new Opaque Secret and garbage-collect the legacy one.
+*/}}
+{{- define "k8s-agent.prismCredentialsSecretName" -}}
+{{- .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials-v2" .Release.Name) }}
+{{- end }}
+
+{{/*
 Return the ConfigMap name for trust bundle
 */}}
 {{- define "k8s-agent.trustBundleConfigMapName" -}}

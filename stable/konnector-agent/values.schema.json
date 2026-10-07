@@ -96,6 +96,9 @@
         "password": {
           "type": "string"
         },
+        "apiKey": {
+          "type": "string"
+        },
         "additionalTrustBundle": {
           "type": "string"
         }
@@ -114,6 +117,12 @@
     "categoryMappings": {
       "type": "string"
     },
+    "projectId": {
+      "type": "string"
+    },
+    "projectName": {
+      "type": "string"
+    },
     "prismCredentialsSecretName": {
       "type": "string"
     },
@@ -125,11 +134,6 @@
         },
         "controlPlaneEndpoint": {
           "type": "string"
-        },
-        "flowConfigMapNamespace": {
-          "type": "string",
-          "default": "flow-cni-system",
-          "description": "Namespace where Flow CNI creates the RBAC ConfigMap (ntnx-flow-rbac-rules)."
         },
         "flowConfigMapName": {
           "type": "string"
@@ -208,18 +212,78 @@
       "then": {
         "properties": {
           "pc": {
-            "required": [
-              "username",
-              "password"
-            ],
-            "properties": {
-              "username": {
-                "type": "string"
+            "$comment": "When the chart creates the credentials Secret (prismCredentialsSecretName empty), validate the credential combination.",
+            "allOf": [
+              {
+                "$comment": "An API key must not be combined with basic-auth credentials.",
+                "if": {
+                  "required": [
+                    "apiKey"
+                  ],
+                  "properties": {
+                    "apiKey": {
+                      "minLength": 1
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "username": {
+                      "maxLength": 0
+                    },
+                    "password": {
+                      "maxLength": 0
+                    }
+                  }
+                }
               },
-              "password": {
-                "type": "string"
+              {
+                "$comment": "Basic auth requires a password when a username is set.",
+                "if": {
+                  "required": [
+                    "username"
+                  ],
+                  "properties": {
+                    "username": {
+                      "minLength": 1
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "password"
+                  ],
+                  "properties": {
+                    "password": {
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              {
+                "$comment": "Basic auth requires a username when a password is set.",
+                "if": {
+                  "required": [
+                    "password"
+                  ],
+                  "properties": {
+                    "password": {
+                      "minLength": 1
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "username"
+                  ],
+                  "properties": {
+                    "username": {
+                      "minLength": 1
+                    }
+                  }
+                }
               }
-            }
+            ]
           }
         }
       }
