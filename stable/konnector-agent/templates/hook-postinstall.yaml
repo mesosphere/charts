@@ -20,7 +20,7 @@ spec:
   volumes:
   - name: pc-creds-volume
     secret:
-      secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
+      secretName: {{ include "k8s-agent.prismCredentialsSecretName" . }}
   {{- if include "k8s-agent.shouldMountTrustBundle" . }}
   - name: additional-trust-bundle-volume
     configMap:

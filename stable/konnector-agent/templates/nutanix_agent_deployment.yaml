@@ -12,12 +12,16 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
+  name: {{ include "k8s-agent.prismCredentialsSecretName" . }}
   namespace: {{ (include "k8s-agent.namespace" .) | quote }}
-type: kubernetes.io/basic-auth
+type: Opaque
 data:
+{{- if .Values.pc.apiKey }}
+  apiKey: {{ .Values.pc.apiKey | b64enc}}
+{{- else }}
   username: {{ required "pc.username is required when prismCredentialsSecretName is not set" .Values.pc.username | b64enc}}
   password: {{ required "pc.password is required when prismCredentialsSecretName is not set" .Values.pc.password | b64enc}}
+{{- end }}
 {{- end }}
 ---
 apiVersion: v1
@@ -142,7 +146,32 @@ rules:
       - list
       - watch
       - update
+      - patch
       - delete
+  - apiGroups: ["flow-container-security.nutanix.com"]
+    resources:
+      - entitygroups
+      - entitygroups/status
+      - entitygroups/finalizers
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - delete
+      - patch
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - networkpolicies
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - delete
+      - patch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -213,6 +242,12 @@ spec:
             "--k8s-cluster-category={{ .Values.categoryMappings }}",
             "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
             "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
+            {{- if .Values.projectId }}
+            "--project-id={{ .Values.projectId }}",
+            {{- end }}
+            {{- if .Values.projectName }}
+            "--project-name={{ .Values.projectName }}",
+            {{- end }}
           ]
         securityContext:
           runAsUser: 9999
@@ -252,11 +287,16 @@ spec:
               "--k8s-cluster-category={{ .Values.categoryMappings }}",
               "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
               "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",            
+              {{- if .Values.projectId }}
+              "--project-id={{ .Values.projectId }}",
+              {{- end }}
+              {{- if .Values.projectName }}
+              "--project-name={{ .Values.projectName }}",
+              {{- end }}
               "--kubeconfig-upload-enabled={{ .Values.kubeconfigUpload.enabled }}",
               {{- if .Values.kubeconfigUpload.enabled }}
               "--control-plane-endpoint={{ required "Control plane endpoint is required when kubeconfigUpload is enabled" .Values.kubeconfigUpload.controlPlaneEndpoint }}",
               "--flow-rbac-configmap-name={{ .Values.kubeconfigUpload.flowConfigMapName }}",
-              "--flow-rbac-configmap-namespace={{ .Values.kubeconfigUpload.flowConfigMapNamespace }}",
               "--flow-rbac-label-selector={{ .Values.kubeconfigUpload.flowLabelSelector }}",
               "--flow-rbac-clusterrole-key={{ .Values.kubeconfigUpload.clusterRoleKey }}",
               "--flow-kubeconfig-sa-name={{ .Values.kubeconfigUpload.serviceAccountName }}",
@@ -298,7 +338,7 @@ spec:
       volumes:
         - name: pc-creds-volume
           secret:
-            secretName: {{ .Values.prismCredentialsSecretName | default (printf "%s-prism-credentials" .Release.Name) }}
+            secretName: {{ include "k8s-agent.prismCredentialsSecretName" . }}
         {{- if include "k8s-agent.shouldMountTrustBundle" . }}
         - name: additional-trust-bundle-volume
           configMap:
