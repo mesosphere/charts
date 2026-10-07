@@ -1,3 +1,4 @@
+---
 agent:
   namespaceOverride: ntnx-system
   name: konnector-agent
@@ -22,45 +23,71 @@ agent:
 
 pc:
   port: 9440
-  insecure: true  # set this to false and provide PC's trust bundle if secure connection is required
-  endpoint: ""  # eg: ip or fqdn
-  username: ""  # basic auth; eg: admin or any user with the Kubernetes Infrastructure Provision role
-  password: ""  # basic auth
-  apiKey: ""  # service account API key; takes precedence when set
-  additionalTrustBundle: "" # eg: base64 encoded PEM bundle
+  # Set this to false and provide PC's trust bundle if secure connection
+  # is required.
+  insecure: true
+  # Eg: ip or fqdn.
+  endpoint: ""
+  # Basic auth; eg: admin or any user with the Kubernetes Infrastructure
+  # Provision role.
+  username: ""
+  # Basic auth.
+  password: ""
+  # Service account API key; takes precedence when set.
+  apiKey: ""
+  # Eg: base64 encoded PEM bundle.
+  additionalTrustBundle: ""
 
 k8sClusterName: ""
-k8sDistribution: "CAPX"  # eg: CAPX or NKE or OCP or EKSA or NKP
-categoryMappings: ""  # "one or more comma separated key=value" eg: "key1=value1" or "key1=value1\,key2=value2"
+# Eg: CAPX, NKE, OCP, EKSA, or NKP.
+k8sDistribution: "CAPX"
+# One or more comma separated key=value pairs.
+# Eg: "key1=value1" or "key1=value1\,key2=value2".
+categoryMappings: ""
 
-# Project 2.0 integration. Associates this cluster's registration with a Prism Central project.
-# Both are optional; leave empty to register the cluster without a project association.
-projectId: ""    # Project 2.0 project UUID
-projectName: ""  # Project 2.0 project name
-prismCredentialsSecretName: ""  # leave empty to let Helm create the Secret "<release-name>-prism-credentials-v2"; set to an existing Secret name to use a pre-created Secret
+# Project 2.0 integration. Associates this cluster's registration with a
+# Prism Central project.
+# Both are optional; leave empty to register the cluster without a project
+# association.
+# Project 2.0 project UUID.
+projectId: ""
+# Project 2.0 project name.
+projectName: ""
+# Leave empty to let Helm create the Secret
+# "<release-name>-prism-credentials-v2"; set to an existing Secret name
+# to use a pre-created Secret.
+prismCredentialsSecretName: ""
 
 # Additional Trust Bundle ConfigMap settings for TLS certificate verification.
+#
 # Behavior:
-#   - If additionalTrustBundle is provided: ConfigMap will be created (if doesn't exist) or updated (if Helm-managed)
-#   - If additionalTrustBundle is empty and insecure=false: Existing ConfigMap MUST exist (user-managed, not touched by Helm)
-#   - User-managed ConfigMaps (without "app.kubernetes.io/managed-by: Helm" label) are never modified by Helm
-#   - additionalTrustBundleConfigMapName is optional: leave empty to use default "ntnx-additional-trust-bundle-konnector-agent"
+# - If additionalTrustBundle is provided: ConfigMap will be created (if it
+#   doesn't exist) or updated (if Helm-managed).
+# - If additionalTrustBundle is empty and insecure=false: Existing ConfigMap
+#   MUST exist (user-managed, not touched by Helm).
+# - User-managed ConfigMaps (without "app.kubernetes.io/managed-by: Helm"
+#   label) are never modified by Helm.
+# - additionalTrustBundleConfigMapName is optional: leave empty to use
+#   default "ntnx-additional-trust-bundle-konnector-agent".
 additionalTrustBundleConfigMapName: ""
 
 # RBAC ConfigMap settings for kubeconfig automation.
-# Flow-owned RBAC is provided via a ConfigMap created by Flow (no fallback ConfigMap).
+# Flow-owned RBAC is provided via a ConfigMap created by Flow
+# (no fallback ConfigMap).
 
 kubeconfigUpload:
-  # Enable/disable automatic kubeconfig upload feature
+  # Enable/disable automatic kubeconfig upload feature.
   enabled: false
-  # Control plane endpoint (externally routable API server URL)
-  # Required for kubeconfig to work from outside the cluster
-  controlPlaneEndpoint: ""  # eg: https://10.0.0.1:6443 or https://k8s-api.example.com:6443
-  # Note: Token expiry is read from Flow ConfigMap data.kubeconfigExpiryDays (default: 30, range: 1-180 days)
+  # Control plane endpoint (externally routable API server URL).
+  # Required for kubeconfig to work from outside the cluster.
+  controlPlaneEndpoint: ""
+  # Note: Token expiry is read from Flow ConfigMap data.kubeconfigExpiryDays
+  # (default: 30, range: 1-180 days).
   flowConfigMapName: "ntnx-flow-rbac-rules"
-  # Label selector for detecting Flow RBAC ConfigMap
+  # Label selector for detecting Flow RBAC ConfigMap.
   flowLabelSelector: "ntnx.rbac.source=flow"
-  # ConfigMap key which contains the ClusterRole YAML definition
+  # ConfigMap key which contains the ClusterRole YAML definition.
   clusterRoleKey: "clusterrole.yaml"
-  # ServiceAccount name used for kubeconfig generation (created by k8s-agent)
+  # ServiceAccount name used for kubeconfig generation
+  # (created by k8s-agent).
   serviceAccountName: "ntnx-flow-kubeconfig-sa"

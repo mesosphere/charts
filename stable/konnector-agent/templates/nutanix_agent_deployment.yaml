@@ -1,40 +1,50 @@
-{{- if eq .Values.agent.image.privateRegistry true}}
+# {{- if eq .Values.agent.image.privateRegistry true}}
+---
 apiVersion: v1
 kind: Secret
 metadata:
   name: nutanix-k8s-agent-pull-secret
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.agent.image.imageCredentials.dockerconfig }}
-{{- end }}
+  .dockerconfigjson: {{.Values.agent.image.imageCredentials.dockerconfig}}
+# {{- end}}
+
 ---
-{{- if not .Values.prismCredentialsSecretName }}
+# {{- if not .Values.prismCredentialsSecretName}}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: {{ include "k8s-agent.prismCredentialsSecretName" . }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{include "k8s-agent.prismCredentialsSecretName" .}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
 type: Opaque
 data:
-{{- if .Values.pc.apiKey }}
-  apiKey: {{ .Values.pc.apiKey | b64enc}}
-{{- else }}
-  username: {{ required "pc.username is required when prismCredentialsSecretName is not set" .Values.pc.username | b64enc}}
-  password: {{ required "pc.password is required when prismCredentialsSecretName is not set" .Values.pc.password | b64enc}}
-{{- end }}
-{{- end }}
+  # {{- if .Values.pc.apiKey}}
+  apiKey: {{.Values.pc.apiKey | b64enc}}
+  # {{- else}}
+  username: >-
+    {{required
+    "pc.username is required when prismCredentialsSecretName is not set"
+    .Values.pc.username | b64enc}}
+  password: >-
+    {{required
+    "pc.password is required when prismCredentialsSecretName is not set"
+    .Values.pc.password | b64enc}}
+  # {{- end}}
+# {{- end}}
+
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{.Values.agent.name}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{.Values.agent.name}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
 rules:
   - apiGroups: [""]
     resources:
@@ -47,6 +57,7 @@ rules:
       - get
       - list
       - watch
+
   - apiGroups: [""]
     resources:
       - services
@@ -54,6 +65,7 @@ rules:
       - get
       - list
       - watch
+
   - apiGroups: ["apps"]
     resources:
       - deployments
@@ -61,6 +73,7 @@ rules:
       - get
       - list
       - patch
+
   - apiGroups: ["apps"]
     resources:
       - statefulsets
@@ -68,27 +81,32 @@ rules:
       - replicasets
     verbs:
       - get
+
   - apiGroups: ["batch"]
     resources:
       - jobs
     verbs:
       - get
+
   - apiGroups: ["storage.k8s.io"]
     resources:
       - storageclasses
     verbs:
       - list
+
   - apiGroups: ["config.openshift.io"]
     resources:
       - infrastructures
     verbs:
       - get
+
   - apiGroups: ["dataservices.nutanix.com"]
     resources:
       - applications
       - applicationsnapshots
     verbs:
       - list
+
   - apiGroups: [""]
     resources:
       - secrets
@@ -101,6 +119,7 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: [""]
     resources:
       - serviceaccounts
@@ -111,6 +130,7 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: ["rbac.authorization.k8s.io"]
     resources:
       - clusterroles
@@ -122,16 +142,19 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: [""]
     resources:
       - serviceaccounts/token
     verbs:
       - create
+
   - apiGroups: ["authorization.k8s.io"]
     resources:
       - selfsubjectaccessreviews
     verbs:
       - create
+
   - apiGroups: ["networking.nutanix.com"]
     resources:
       - addressgroups
@@ -148,6 +171,7 @@ rules:
       - update
       - patch
       - delete
+
   - apiGroups: ["flow-container-security.nutanix.com"]
     resources:
       - entitygroups
@@ -161,6 +185,7 @@ rules:
       - update
       - delete
       - patch
+
   - apiGroups: ["networking.k8s.io"]
     resources:
       - networkpolicies
@@ -172,97 +197,63 @@ rules:
       - update
       - delete
       - patch
+
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{.Values.agent.name}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ .Values.agent.name }}
+  name: {{.Values.agent.name}}
 subjects:
-- kind: ServiceAccount
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  - kind: ServiceAccount
+    name: {{.Values.agent.name}}
+    namespace: {{(include "k8s-agent.namespace" .) | quote}}
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.agent.name }}
-  namespace: {{ (include "k8s-agent.namespace" .) | quote }}
+  name: {{.Values.agent.name}}
+  namespace: {{(include "k8s-agent.namespace" .) | quote}}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.agent.name }} # This deployment applies to any Pods matching the specified label
-  template: # This deployment will create a set of pods using the configurations in this template
+      # This deployment applies to Pods matching the specified label.
+      app: {{.Values.agent.name}}
+
+  # This deployment creates Pods using the configuration in this template.
+  template:
     metadata:
-      labels: # The labels that will be applied to all of the pods in this deployment
-        app: {{ .Values.agent.name }}
-    spec: # Spec for the container which will run in the Pod
-      {{- if eq .Values.agent.image.privateRegistry true}}
+      # Labels applied to all Pods in this deployment.
+      labels:
+        app: {{.Values.agent.name}}
+    spec:
+      # {{- if eq .Values.agent.image.privateRegistry true}}
       imagePullSecrets:
-      - name: nutanix-k8s-agent-pull-secret
-      {{- end }}
+        - name: nutanix-k8s-agent-pull-secret
+      # {{- end}}
+
       securityContext:
         runAsUser: 9999
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
-      serviceAccountName: {{ .Values.agent.name }}
+
+      serviceAccountName: {{.Values.agent.name}}
+
       initContainers:
-      - name: onboarding-container
-        image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
-        imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-        command: ["/k8s-agent/k8s-agent"]
-        env:
-          - name: POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-        volumeMounts:
-          - name: pc-creds-volume
-            mountPath: /certs
-            readOnly: true
-          {{- if include "k8s-agent.shouldMountTrustBundle" . }}
-          - name: additional-trust-bundle-volume
-            mountPath: /ca-certificate
-            readOnly: true
-          {{- end }}            
-        args:
-          [
-            "--chart-hook=pre-install",
-            "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
-            "--pc-port={{ .Values.pc.port }}",
-            "--insecure={{ .Values.pc.insecure }}",
-            "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
-            "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
-            "--k8s-cluster-category={{ .Values.categoryMappings }}",
-            "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
-            "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",
-            {{- if .Values.projectId }}
-            "--project-id={{ .Values.projectId }}",
-            {{- end }}
-            {{- if .Values.projectName }}
-            "--project-name={{ .Values.projectName }}",
-            {{- end }}
-          ]
-        securityContext:
-          runAsUser: 9999
-          runAsNonRoot: true
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-              - ALL
-      containers:
-        - name: {{ .Values.agent.name }}
-          image: "{{ .Values.agent.image.repository }}/{{ .Values.agent.image.name }}:{{ .Values.agent.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.agent.image.pullPolicy }}
-          command: ["/k8s-agent/k8s-agent"]
+        - name: onboarding-container
+          image: >-
+            {{.Values.agent.image.repository}}/{{.Values.agent.image.name}}:
+            {{- .Values.agent.image.tag | default .Chart.AppVersion}}
+          imagePullPolicy: {{.Values.agent.image.pullPolicy}}
+          command:
+            - /k8s-agent/k8s-agent
           env:
             - name: POD_NAMESPACE
               valueFrom:
@@ -272,60 +263,35 @@ spec:
             - name: pc-creds-volume
               mountPath: /certs
               readOnly: true
-            {{- if include "k8s-agent.shouldMountTrustBundle" . }}
+            # {{- if include "k8s-agent.shouldMountTrustBundle" .}}
             - name: additional-trust-bundle-volume
               mountPath: /ca-certificate
               readOnly: true
-            {{- end }}
+          # {{- end}}
           args:
-            [
-              "--pc-endpoint={{ required "Endpoint is required" .Values.pc.endpoint }}",
-              "--pc-port={{ .Values.pc.port }}",
-              "--insecure={{ .Values.pc.insecure }}",
-              "--k8s-cluster-name={{ required "Name of kubernetes cluster is required" .Values.k8sClusterName }}",
-              "--k8s-distribution={{ required "Kubernetes distribution is required" .Values.k8sDistribution }}",
-              "--k8s-cluster-category={{ .Values.categoryMappings }}",
-              "--update-config-in-min={{ .Values.agent.updateConfigInMin }}",
-              "--update-metrics-in-min={{ .Values.agent.updateMetricsInMin }}",            
-              {{- if .Values.projectId }}
-              "--project-id={{ .Values.projectId }}",
-              {{- end }}
-              {{- if .Values.projectName }}
-              "--project-name={{ .Values.projectName }}",
-              {{- end }}
-              "--kubeconfig-upload-enabled={{ .Values.kubeconfigUpload.enabled }}",
-              {{- if .Values.kubeconfigUpload.enabled }}
-              "--control-plane-endpoint={{ required "Control plane endpoint is required when kubeconfigUpload is enabled" .Values.kubeconfigUpload.controlPlaneEndpoint }}",
-              "--flow-rbac-configmap-name={{ .Values.kubeconfigUpload.flowConfigMapName }}",
-              "--flow-rbac-label-selector={{ .Values.kubeconfigUpload.flowLabelSelector }}",
-              "--flow-rbac-clusterrole-key={{ .Values.kubeconfigUpload.clusterRoleKey }}",
-              "--flow-kubeconfig-sa-name={{ .Values.kubeconfigUpload.serviceAccountName }}",
-              {{- end }}
-            ]
-          ports:
-            - containerPort: {{ .Values.agent.port }} # Should match the port number that the Go application listens on
-          livenessProbe: # To check the health of the Pod
-            httpGet:
-              path: /health
-              port: {{ .Values.agent.port }}
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
-          readinessProbe: # To check if the Pod is ready to serve traffic or not
-            httpGet:
-              path: /readiness
-              port: {{ .Values.agent.port }}
-              scheme: HTTP
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-          resources:
-            requests:
-              memory: "128Mi"
-              cpu: "120m"
-            limits:
-              memory: "256Mi"
-              cpu: "500m"
+            - "--chart-hook=pre-install"
+            - >-
+              --pc-endpoint={{
+              required "Endpoint is required" .Values.pc.endpoint}}
+            - "--pc-port={{.Values.pc.port}}"
+            - "--insecure={{.Values.pc.insecure}}"
+            - >-
+              --k8s-cluster-name={{
+              required "Name of kubernetes cluster is required"
+              .Values.k8sClusterName}}
+            - >-
+              --k8s-distribution={{
+              required "Kubernetes distribution is required"
+              .Values.k8sDistribution}}
+            - "--k8s-cluster-category={{.Values.categoryMappings}}"
+            - "--update-config-in-min={{.Values.agent.updateConfigInMin}}"
+            - "--update-metrics-in-min={{.Values.agent.updateMetricsInMin}}"
+            # {{- if .Values.projectId}}
+            - "--project-id={{.Values.projectId}}"
+            # {{- end}}
+            # {{- if .Values.projectName}}
+            - "--project-name={{.Values.projectName}}"
+            # {{- end}}
           securityContext:
             runAsUser: 9999
             runAsNonRoot: true
@@ -335,26 +301,139 @@ spec:
             capabilities:
               drop:
                 - ALL
+
+      containers:
+        - name: {{.Values.agent.name}}
+          image: >-
+            {{.Values.agent.image.repository}}/{{.Values.agent.image.name}}:
+            {{- .Values.agent.image.tag | default .Chart.AppVersion}}
+          imagePullPolicy: {{.Values.agent.image.pullPolicy}}
+          command:
+            - /k8s-agent/k8s-agent
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          volumeMounts:
+            - name: pc-creds-volume
+              mountPath: /certs
+              readOnly: true
+            # {{- if include "k8s-agent.shouldMountTrustBundle" .}}
+            - name: additional-trust-bundle-volume
+              mountPath: /ca-certificate
+              readOnly: true
+          # {{- end}}
+          args:
+            - >-
+              --pc-endpoint={{
+              required "Endpoint is required" .Values.pc.endpoint}}
+            - "--pc-port={{.Values.pc.port}}"
+            - "--insecure={{.Values.pc.insecure}}"
+            - >-
+              --k8s-cluster-name={{
+              required "Name of kubernetes cluster is required"
+              .Values.k8sClusterName}}
+            - >-
+              --k8s-distribution={{
+              required "Kubernetes distribution is required"
+              .Values.k8sDistribution}}
+            - "--k8s-cluster-category={{.Values.categoryMappings}}"
+            - "--update-config-in-min={{.Values.agent.updateConfigInMin}}"
+            - "--update-metrics-in-min={{.Values.agent.updateMetricsInMin}}"
+            # {{- if .Values.projectId}}
+            - "--project-id={{.Values.projectId}}"
+            # {{- end}}
+            # {{- if .Values.projectName}}
+            - "--project-name={{.Values.projectName}}"
+            # {{- end}}
+            - >-
+              --kubeconfig-upload-enabled={{
+              .Values.kubeconfigUpload.enabled}}
+            # {{- if .Values.kubeconfigUpload.enabled}}
+            - >-
+              --control-plane-endpoint={{
+              required (printf "%s %s"
+              "Control plane endpoint is required when"
+              "kubeconfigUpload is enabled")
+              .Values.kubeconfigUpload.controlPlaneEndpoint}}
+            - >-
+              --flow-rbac-configmap-name={{
+              .Values.kubeconfigUpload.flowConfigMapName}}
+            - >-
+              --flow-rbac-label-selector={{
+              .Values.kubeconfigUpload.flowLabelSelector}}
+            - >-
+              --flow-rbac-clusterrole-key={{
+              .Values.kubeconfigUpload.clusterRoleKey}}
+            - >-
+              --flow-kubeconfig-sa-name={{
+              .Values.kubeconfigUpload.serviceAccountName}}
+            # {{- end}}
+
+          ports:
+            # Should match the port that the Go application listens on.
+            - containerPort: {{.Values.agent.port}}
+
+          # Check the health of the Pod.
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{.Values.agent.port}}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+
+          # Check whether the Pod is ready to serve traffic.
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: {{.Values.agent.port}}
+              scheme: HTTP
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "120m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+
+          securityContext:
+            runAsUser: 9999
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+
       volumes:
         - name: pc-creds-volume
           secret:
-            secretName: {{ include "k8s-agent.prismCredentialsSecretName" . }}
-        {{- if include "k8s-agent.shouldMountTrustBundle" . }}
+            secretName: >-
+              {{include "k8s-agent.prismCredentialsSecretName" .}}
+        # {{- if include "k8s-agent.shouldMountTrustBundle" .}}
         - name: additional-trust-bundle-volume
           configMap:
-            name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
+            name: {{include "k8s-agent.trustBundleConfigMapName" .}}
             items:
               - key: ca.crt
                 path: ca.crt
-        {{- end }}
+# {{- end}}
+
 ---
-{{- include "k8s-agent.validateTrustBundle" . }}
-{{- if include "k8s-agent.shouldCreateTrustBundleConfigMap" . }}
+# {{- include "k8s-agent.validateTrustBundle" .}}
+# {{- if include "k8s-agent.shouldCreateTrustBundleConfigMap" .}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "k8s-agent.trustBundleConfigMapName" . }}
-  namespace: {{ include "k8s-agent.namespace" . | quote }}
+  name: {{include "k8s-agent.trustBundleConfigMapName" .}}
+  namespace: {{include "k8s-agent.namespace" . | quote}}
 data:
-  ca.crt: {{ .Values.pc.additionalTrustBundle }}
-{{- end }}
+  ca.crt: {{.Values.pc.additionalTrustBundle}}
+# {{- end}}
