@@ -33,8 +33,8 @@ spec:
   containers:
     - name: hook-postinstall-container
       image: >-
-        "{{.Values.agent.image.repository}}/{{.Values.agent.image.name}}:{{
-        .Values.agent.image.tag | default .Chart.AppVersion}}"
+        {{.Values.agent.image.repository}}/{{.Values.agent.image.name}}:{{
+        .Values.agent.image.tag | default .Chart.AppVersion}}
       imagePullPolicy: {{.Values.agent.image.pullPolicy}}
       command:
         - /k8s-agent/k8s-agent
