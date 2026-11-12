@@ -21,6 +21,20 @@
     When using the plugin, <i>kubectl</i> initiates an authentication session in your browser and stores identity tokens locally.
     When a token expires, the plugin starts a new authentication session and refreshes the token.</p>
 
+  {{ if not .TenantId }}
+  <div id="plugin-unscoped-notice">
+    <h2>Workspace not specified</h2>
+    <p>
+      Cluster lists and kubeconfig downloads are scoped to a
+      workspace, so they are not shown here.
+    </p>
+    <p>
+      Open <b>Generate Token</b> from a workspace in the UI, or add
+      <b>?tenant-id=&lt;workspace-name&gt;</b> to this URL.
+    </p>
+  </div>
+  {{ else }}
+
   <div id="plugin-download-kubeconfig">
     <h2><b>Method 1</b>: Download a kubectl configuration file</h2>
     <p>The easiest way to get started is to download the plugin binary and a cluster generated kubectl configuration file.
@@ -54,7 +68,7 @@
     <p>You can list each context using the <i>config get-contexts</i> command:
     <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config get-contexts </code></p>
     <p>To select a different context, use the <i>config use-context</i> command:
-    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config use-context context-name</code></p>
+    <code>kubectl --kubeconfig /path/to/downloaded/kubeconfig config use-context &lt;context-name&gt;</code></p>
 
 <p>For more information on using and managing kubeconfig files, refer to this documentation
     </p>
@@ -97,6 +111,7 @@
     This opens a browser window and lets you authenticate. If you are using a remote terminal, a link is displayed that you can copy and paste into a local browser window.
     </p>
   </div>
+  {{ end }}
 </div>
 
 <script src="{{ .Config.Web_Path_Prefix }}static/highlight.pack.min.js"></script>
@@ -131,8 +146,12 @@
         }
         R.open('GET', url);
         R.onload = function () {
-            let instructionsData = R.responseText;
-            renderInstructionsHandler(instructionsData);
+            // 400 = missing tenant-id (unscoped catalog). Do not inject error HTML.
+            if (R.status !== 200) {
+                document.getElementById("plugin-config-form").innerHTML = "";
+                return;
+            }
+            renderInstructionsHandler(R.responseText);
         };
         R.send();
     }
@@ -179,9 +198,25 @@
         }
         R.open('GET', url);
         R.onload = function () {
+            // 400 = missing tenant-id. Treat as no cluster list, do not JSON.parse the error body.
+            if (R.status !== 200) {
+                providerJSON = [];
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
+            try {
+                providerJSON = JSON.parse(R.responseText);
+            } catch (e) {
+                providerJSON = [];
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
+            if (!Array.isArray(providerJSON) || providerJSON.length === 0) {
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
             let providerhtml = "";
-            providerJSON = JSON.parse(R.responseText);
-            if (providerJSON.length > 1 || providerJSON[0].clusters.length > 1) {
+            if (providerJSON.length > 1 || (providerJSON[0].clusters && providerJSON[0].clusters.length > 1)) {
                 document.getElementById("plugin-select-cluster").style.display = "block";
             } else {
                 console.log("Only one cluster");
@@ -197,6 +232,9 @@
     }
 
     function setClusterList(idx) {
+        if (!providerJSON[idx] || !providerJSON[idx].clusters) {
+            return;
+        }
         let clusters = providerJSON[idx].clusters;
         let clusterhtml = "";
         for (let i = 0; i < clusters.length; i++) {
@@ -215,8 +253,10 @@
         RenderInstructions();
     }
 
-    RenderClusterSelector();
-    RenderInstructions();
+    if (tenantId !== "") {
+        RenderClusterSelector();
+        RenderInstructions();
+    }
 </script>
 </body>
 </html>
