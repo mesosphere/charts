@@ -131,8 +131,12 @@
         }
         R.open('GET', url);
         R.onload = function () {
-            let instructionsData = R.responseText;
-            renderInstructionsHandler(instructionsData);
+            // 400 = missing tenant-id (unscoped catalog). Do not inject error HTML.
+            if (R.status !== 200) {
+                document.getElementById("plugin-config-form").innerHTML = "";
+                return;
+            }
+            renderInstructionsHandler(R.responseText);
         };
         R.send();
     }
@@ -179,9 +183,25 @@
         }
         R.open('GET', url);
         R.onload = function () {
+            // 400 = missing tenant-id. Treat as no cluster list, do not JSON.parse the error body.
+            if (R.status !== 200) {
+                providerJSON = [];
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
+            try {
+                providerJSON = JSON.parse(R.responseText);
+            } catch (e) {
+                providerJSON = [];
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
+            if (!Array.isArray(providerJSON) || providerJSON.length === 0) {
+                document.getElementById("plugin-select-cluster").style.display = "none";
+                return;
+            }
             let providerhtml = "";
-            providerJSON = JSON.parse(R.responseText);
-            if (providerJSON.length > 1 || providerJSON[0].clusters.length > 1) {
+            if (providerJSON.length > 1 || (providerJSON[0].clusters && providerJSON[0].clusters.length > 1)) {
                 document.getElementById("plugin-select-cluster").style.display = "block";
             } else {
                 console.log("Only one cluster");
@@ -197,6 +217,9 @@
     }
 
     function setClusterList(idx) {
+        if (!providerJSON[idx] || !providerJSON[idx].clusters) {
+            return;
+        }
         let clusters = providerJSON[idx].clusters;
         let clusterhtml = "";
         for (let i = 0; i < clusters.length; i++) {
